@@ -81,5 +81,6 @@
     "canvas-confetti": "^1.9.4",
     "firebase": "^12.15.0",
     "qrcode.react": "^4.2.0"
-  }
+  },
+  "packageManager": "pnpm@10.26.1"
 }
