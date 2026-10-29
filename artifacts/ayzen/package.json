@@ -79,7 +79,8 @@
     "@supabase/supabase-js": "^2.108.2",
     "canvas-confetti": "^1.9.4",
     "firebase": "^12.15.0",
-    "qrcode.react": "^4.2.0"
+    "qrcode.react": "^4.2.0",
+    "@workspace/api-client-react": "workspace:*"
   },
   "packageManager": "pnpm@10.26.1"
 }
