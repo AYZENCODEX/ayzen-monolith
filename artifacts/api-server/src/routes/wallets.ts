@@ -16,10 +16,10 @@ import { postWithdrawalToFinance } from "../finance/integrations/wallet-bridge";
 
 // Public RPC endpoints — no API key required. Swap for a paid/private RPC in production.
 const RPC_URLS: Record<string, string> = {
-  ETH: "https://cloudflare-eth.com",
+  ETH: "https://eth.llamarpc.com",
   BASE: "https://mainnet.base.org",
-  MATIC: "https://polygon-rpc.com",
-  BSC: "https://bsc-dataseed.binance.org",
+  MATIC: "https://polygon.llamarpc.com",
+  BSC: "https://bsc.llamarpc.com",
   ARB: "https://arb1.arbitrum.io/rpc",
   OP: "https://mainnet.optimism.io",
   PLASMA: "https://rpc.plasma.to",

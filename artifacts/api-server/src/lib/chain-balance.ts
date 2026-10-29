@@ -20,10 +20,10 @@ export const CHAINS = ["ETH", "BASE", "MATIC", "BSC", "ARB", "OP"] as const;
 export type ChainSymbol = typeof CHAINS[number];
 
 const RPC_URLS: Record<ChainSymbol, string> = {
-  ETH: "https://cloudflare-eth.com",
+  ETH: "https://eth.llamarpc.com",
   BASE: "https://mainnet.base.org",
-  MATIC: "https://polygon-rpc.com",
-  BSC: "https://bsc-dataseed.binance.org",
+  MATIC: "https://polygon.llamarpc.com",
+  BSC: "https://bsc.llamarpc.com",
   ARB: "https://arb1.arbitrum.io/rpc",
   OP: "https://mainnet.optimism.io",
 };

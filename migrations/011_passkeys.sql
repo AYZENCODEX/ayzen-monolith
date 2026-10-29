@@ -3,7 +3,7 @@
 
 CREATE TABLE IF NOT EXISTS passkey_credentials (
   id            SERIAL PRIMARY KEY,
-  user_id       INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id       UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   credential_id TEXT NOT NULL,
   public_key    TEXT NOT NULL,
   counter       INTEGER NOT NULL DEFAULT 0,

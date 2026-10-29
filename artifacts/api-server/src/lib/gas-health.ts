@@ -30,10 +30,10 @@ import { logger } from "./logger";
 export type GasChain = "ETH" | "BASE" | "MATIC" | "BSC" | "ARB" | "OP" | "PLASMA";
 
 export const GAS_RPC_URLS: Record<GasChain, string> = {
-  ETH: "https://cloudflare-eth.com",
+  ETH: "https://eth.llamarpc.com",
   BASE: "https://mainnet.base.org",
-  MATIC: "https://polygon-rpc.com",
-  BSC: "https://bsc-dataseed.binance.org",
+  MATIC: "https://polygon.llamarpc.com",
+  BSC: "https://bsc.llamarpc.com",
   ARB: "https://arb1.arbitrum.io/rpc",
   OP: "https://mainnet.optimism.io",
   PLASMA: "https://rpc.plasma.to",

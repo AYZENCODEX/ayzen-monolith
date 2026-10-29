@@ -69,19 +69,19 @@ function erc20sFor(chain: string): { symbol: string; contract: string; decimals:
 // for a paid/private RPC (Alchemy/Infura/etc.) in production for reliability.
 export const VAULT_CHAINS: ChainConfig[] = [
   {
-    chain: "ETH", rpcUrl: "https://cloudflare-eth.com", chainId: 1,
+    chain: "ETH", rpcUrl: "https://eth.llamarpc.com", chainId: 1,
     nativeSymbol: "ETH", confirmationsRequired: 12, blockRangePerPoll: 20,
     tokens: erc20sFor("ETH"),
   },
   {
-    chain: "BSC", rpcUrl: "https://bsc-dataseed.binance.org", chainId: 56,
+    chain: "BSC", rpcUrl: "https://bsc.llamarpc.com", chainId: 56,
     nativeSymbol: "BNB", confirmationsRequired: 15, blockRangePerPoll: 40,
     tokens: erc20sFor("BSC"),
   },
   {
     // Chain id/RPC/addresses are unchanged from the "MATIC" days — Polygon's
     // 2024 rebrand only renamed the native-coin ticker to POL, same chain.
-    chain: "MATIC", rpcUrl: "https://polygon-rpc.com", chainId: 137,
+    chain: "MATIC", rpcUrl: "https://polygon.llamarpc.com", chainId: 137,
     nativeSymbol: "POL", confirmationsRequired: 40, blockRangePerPoll: 80,
     tokens: erc20sFor("MATIC"),
   },
