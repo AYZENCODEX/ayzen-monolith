@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "destructive staging restore",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "measured RTO/RPO",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

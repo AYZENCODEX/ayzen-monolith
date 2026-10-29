@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-10.1",
+  "phase": "ANTAS-10",
+  "name": "Extraction Order",
+  "generatedAt": "2026-09-29T06:06:06.718Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "docs/architecture/service-extraction-policy.md",
+    "infrastructure/deployment/service-catalog.json"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ayzen.internal/schemas/circuit/feature-circuit.v1.json",
+  "title": "AYZEN Feature Circuit",
+  "description": "Phase 03. One entry per production feature in infrastructure/platform/feature-circuits.json, mapping it across the target universal circuit (roadmap section 4: Feature -> Sub-feature -> Function -> Module -> API -> Gateway -> Identity/Auth -> Policy -> Service -> Data/DB -> Outbox -> EventBus -> Workflow -> Worker -> Scheduler -> Notification -> Audit -> Telemetry -> Intelligence -> Recovery -> Lifecycle -> Artifact/Deployment -> Runtime Graph -> Enforcement Gate). Not every stage is populated for every feature yet -- requiredStages are the ones the current source registries (Phase 01 component registry, endpoint registry, event catalog) can actually populate; the rest are tracked as optional until a later phase (Workflow Recovery Contract, Event Operations Plane, Observability Completeness Gate, ...) produces that data.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "feature", "componentId", "api", "service", "data", "audit", "stages", "source"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^circuit:[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$",
+      "description": "Stable id, convention 'circuit:<feature>'."
+    },
+    "feature": {
+      "type": "string",
+      "description": "Feature name, e.g. 'finance.post-transaction' or 'identity.post.api-auth-login'."
+    },
+    "componentId": {
+      "type": ["string", "null"],
+      "description": "The matching Phase 01 component registry id (kind: 'feature'), e.g. 'feature:finance.post-transaction'. Null when this circuit was auto-derived from the endpoint/event registries and has no curated Phase 01 feature component yet -- a missing-edge finding, not a schema violation, since the whole point of the registry is to surface that gap."
+    },
+    "domain": { "type": "string" },
+    "subFeature": { "type": "string" },
+    "function": { "type": "string" },
+    "module": { "type": "string" },
+    "api": { "type": "string", "description": "Owning API/gateway component, e.g. 'api-gateway'." },
+    "route": { "type": "string", "description": "'<METHOD> <path>' when this circuit is HTTP-route-derived." },
+    "auth": { "type": "string" },
+    "policy": { "type": "string", "description": "Policy/permission id this route or event is gated on." },
+    "service": { "type": "string", "description": "Owning service, matches a Phase 01 'service' kind component." },
+    "data": { "type": "string", "description": "Owning data/DB resource." },
+    "outbox": { "type": "boolean" },
+    "event": { "type": "string", "description": "Event type published, when this circuit is event-driven." },
+    "consumers": { "type": "array", "items": { "type": "string" } },
+    "workflow": { "type": "string" },
+    "worker": { "type": "string" },
+    "scheduler": { "type": "string" },
+    "notification": { "type": "string" },
+    "audit": { "type": "string", "description": "'none' is a valid, explicit value -- distinct from an unset/unknown audit stage." },
+    "telemetry": { "type": "string" },
+    "intelligence": { "type": "string" },
+    "recovery": { "type": "string" },
+    "lifecycle": { "type": "string" },
+    "artifact": { "type": "string" },
+    "deployment": { "type": "string" },
+    "adminTelegram": { "type": "string" },
+    "stages": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Which universal-circuit stage names this entry actually has data for."
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "registry"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["curated-feature-component", "endpoint-registry", "event-catalog"] },
+        "registry": { "type": "string" }
+      }
+    }
+  }
+}

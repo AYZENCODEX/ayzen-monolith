@@ -1,0 +1,172 @@
+import { encryptField, decryptRow, decryptRows } from "../../../lib/vault-crypto";
+import { chargeCredits } from "../../../services/credit-meter";
+import { KYC_SENSITIVE_FIELDS, KYC_ENTRY_BAN_STATUSES, isKycBanStatus } from "../../domain/kyc";
+import { d } from "../../domain/kyc-values";
+import {
+  fetchKycEntryWithData, selectKycEntries, insertKycEntry, selectKycEntryForUser, updateKycEntry,
+  updateKycEntryStatus, deleteKycEntry, selectKycEnrollments,
+} from "../../infrastructure/repositories/kyc-repository";
+
+/**
+ * KYC entry use-cases (list / create / read / update / ban-unban / delete /
+ * enrollments). Bodies extracted from the handlers of routes/kyc.ts
+ * (VLT-GAP-03-B): same validation order, same persistence calls in the same
+ * order, same encryption order, same status codes and response bodies. A
+ * use-case never touches req/res — it returns `{ status, body }` and the route
+ * adapter sends it.
+ */
+
+export type UseCaseResult = { status: number; body: unknown };
+
+export const dbError = (err: any): UseCaseResult => ({ status: 500, body: { error: "DB error", detail: err?.message } });
+
+// ─── GET /kyc-entries — list user's KYC entities ──────────────────────────────
+export async function listKycEntries(
+  userId: number,
+  q: { category?: unknown; platform?: unknown; unused?: unknown },
+): Promise<UseCaseResult> {
+  const category = (q.category as string) || null;
+  // Platform filter — used by the Exchange enroll-by-KYC-entity picker to
+  // narrow to e.g. category=Exchange&platform=Binance.
+  const platform = (q.platform as string) || null;
+  // unused=true excludes any KYC Entity already spent on an active
+  // project_enrollments row (kyc_entry_id) — same free/used idea as the
+  // Data Entity used/unused split, one KYC Entity backs one enrollment.
+  const unused = q.unused === "true";
+  try {
+    const result = await selectKycEntries(userId, { category, platform, unused });
+    return { status: 200, body: decryptRows(result.rows as any[], KYC_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── POST /kyc-entries — create KYC entity ─────────────────────────────────────
+export async function createKycEntry(userId: number, body: unknown): Promise<UseCaseResult> {
+  const b = body as any;
+  const category = d(b.category, "Other");
+  if (!category) return { status: 400, body: { error: "Category required" } };
+
+  try {
+    const result = await insertKycEntry(userId, {
+      category,
+      // Account · Main
+      username: d(b.username, null), accountPassword: encryptField(d(b.accountPassword, null) as any), notes: d(b.notes, null),
+      email: d(b.email, null), emailPassword: encryptField(d(b.emailPassword, null) as any),
+      email2fa: encryptField(d(b.email2fa, null) as any), emailBackupCode: encryptField(d(b.emailBackupCode, null) as any),
+      account2fa: encryptField(d(b.account2fa, null) as any), accountBackupCode: encryptField(d(b.accountBackupCode, null) as any),
+      // Account · Info
+      lastLoginAt: d(b.lastLoginAt, null), accountBuyDate: d(b.accountBuyDate, null), accountCreateDate: d(b.accountCreateDate, null),
+      accountBuyPrice: d(b.accountBuyPrice, 0), accountWorth: d(b.accountWorth, 0), kycFollowers: d(b.kycFollowers, null),
+      // Account · Recovery
+      emailRecovery: d(b.emailRecovery, null), emailRecoveryPassword: encryptField(d(b.emailRecoveryPassword, null) as any),
+      recovery2fa: encryptField(d(b.recovery2fa, null) as any), recoveryBackupCode: encryptField(d(b.recoveryBackupCode, null) as any),
+      // KYC identity — instead of raw nid/name/father/birthdate/photos, a KYC
+      // entity now links to a kyc_data_entities row (see kyc-data-entities.ts).
+      dataEntityId: d(b.dataEntityId, null),
+      // KYC · Seller
+      platform: d(b.platform, null), buyPrice: d(b.buyPrice, 0), location: d(b.location, null), connection: d(b.connection, null),
+      contactNumber: d(b.contactNumber, null), buyDate: d(b.buyDate, null), paid: d(b.paid, false), sellerName: d(b.sellerName, null), socialAccount: d(b.socialAccount, null),
+    });
+    const row = result.rows[0] as any;
+    const withData = row.data_entity_id ? await fetchKycEntryWithData(row.id) : row;
+    return { status: 201, body: decryptRow(withData as any, KYC_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── GET /kyc-entries/:id — fetch single KYC entity ───────────────────────────
+export async function getKycEntry(userId: number, idParam: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    const result = await selectKycEntryForUser(id, userId);
+    if (!result.rows.length) return { status: 404, body: { error: "Not found" } };
+    // Charge-on-success: only after the row was actually found — a 404 above
+    // never touches the ledger. Mirrors vault.ts's GET /vault/:id pattern.
+    const charge = await chargeCredits(userId, "sylo.kyc_entry_view");
+    return { status: 200, body: { ...decryptRow(result.rows[0] as any, KYC_SENSITIVE_FIELDS), _credits: charge.ok ? { charged: charge.charged, newBalance: charge.newBalance } : null } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── PUT /kyc-entries/:id — update KYC entity ─────────────────────────────────
+export async function editKycEntry(userId: number, idParam: unknown, body: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+
+  const b = body as any;
+
+  try {
+    const result = await updateKycEntry(id, userId, {
+      category: b.category, username: b.username,
+      accountPassword: encryptField(b.accountPassword), notes: b.notes,
+      email: b.email, emailPassword: encryptField(b.emailPassword),
+      email2fa: encryptField(b.email2fa), emailBackupCode: encryptField(b.emailBackupCode),
+      account2fa: encryptField(b.account2fa), accountBackupCode: encryptField(b.accountBackupCode),
+      lastLoginAt: b.lastLoginAt, accountBuyDate: b.accountBuyDate,
+      accountCreateDate: b.accountCreateDate,
+      accountBuyPrice: b.accountBuyPrice, accountWorth: b.accountWorth,
+      kycFollowers: b.kycFollowers,
+      emailRecovery: b.emailRecovery,
+      emailRecoveryPassword: encryptField(b.emailRecoveryPassword),
+      recovery2fa: encryptField(b.recovery2fa),
+      recoveryBackupCode: encryptField(b.recoveryBackupCode),
+      dataEntityId: b.dataEntityId,
+      platform: b.platform, buyPrice: b.buyPrice,
+      location: b.location, connection: b.connection,
+      contactNumber: b.contactNumber, buyDate: b.buyDate,
+      paid: b.paid,
+      sellerName: b.sellerName, socialAccount: b.socialAccount,
+    });
+    if (!result.rows.length) return { status: 404, body: { error: "Not found or forbidden" } };
+    const row = result.rows[0] as any;
+    const withData = row.data_entity_id ? await fetchKycEntryWithData(row.id) : row;
+    return { status: 200, body: decryptRow(withData as any, KYC_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── PATCH /kyc-entries/:id/status — ban / unban KYC entity ──────────────────
+export async function setKycEntryStatus(userId: number, idParam: unknown, body: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+
+  const status = (body as any).status;
+  if (!isKycBanStatus(status, KYC_ENTRY_BAN_STATUSES)) return { status: 400, body: { error: "status must be one of: active, banned" } };
+
+  try {
+    const result = await updateKycEntryStatus(id, userId, status);
+    if (!result.rows.length) return { status: 404, body: { error: "Not found or forbidden" } };
+    return { status: 200, body: decryptRow(result.rows[0] as any, KYC_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── DELETE /kyc-entries/:id — delete KYC entity ──────────────────────────────
+export async function removeKycEntry(userId: number, idParam: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    await deleteKycEntry(id, userId);
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── GET /kyc-entries/enrollments — Exchange projects enrolled via a KYC
+// Entity pick (Binance/Bitget/Kucoin/Bybit shortcut, no manual form) ────────
+// Powers the KYC sidebar's "Enrolled" page.
+export async function listKycEnrollments(userId: number): Promise<UseCaseResult> {
+  try {
+    const result = await selectKycEnrollments(userId);
+    return { status: 200, body: result.rows };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}

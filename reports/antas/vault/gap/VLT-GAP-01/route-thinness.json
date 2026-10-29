@@ -1,0 +1,676 @@
+{
+  "phase": "VLT-GAP-01",
+  "sub_phase": "VLT-GAP-01-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "15cc70d7cfef801f9993710ffe3618c0e59df1b52fb75a452e8f900ccae1b3d4",
+  "validator_version": "1.0.0",
+  "validator_sha256": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+  "description": "Per-route thinness of every GAP-01 route left in the old files",
+  "allowed_in_old_route": [
+    "request parsing",
+    "auth-context construction",
+    "compatibility mapping",
+    "response mapping",
+    "compatibility exports"
+  ],
+  "rejected_in_old_route": [
+    "db/sql/table access",
+    "provider/crypto/event/sync calls",
+    "domain calculations",
+    "decision trees",
+    "duplicated authorization/persistence"
+  ],
+  "routes": [
+    {
+      "file": "vault.ts",
+      "route": "GET /vault",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/gas-overview",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/:id/gas",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.gas.read\", (_req, res) => { res.status(404).json({ error: \"Vault entry"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "POST /vault",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/tags",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "PATCH /vault/bulk-tag",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 2,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "PATCH /vault/bulk-action",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 2,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/analytics",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/analytics/value-history",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/activity",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/trash",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/:id",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.read\", (_req, res) => { res.status(404).json({ error: \"Vault entry not",
+        "requireCreditBalance(\"sylo.vault_entity_view\")"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "PATCH /vault/:id",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.update\", (_req, res) => { res.status(404).json({ error: \"Vault entry n"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "PATCH /vault/:id/field",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.field.update\", (_req, res) => { res.status(404).json({ error: \"Vault e"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/:id/field-history",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.field_history.read\", (_req, res) => { res.status(404).json({ error: \"V"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "DELETE /vault/trash",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "DELETE /vault/:id",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.delete\", (_req, res) => { res.status(404).json({ message: \"Vault entry"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "POST /vault/:id/restore",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.restore\", (_req, res) => { res.status(404).json({ message: \"Trashed va"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "DELETE /vault/trash/:id",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.purge\", (_req, res) => { res.status(404).json({ message: \"Trashed vaul"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /admin/vault",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAdmin"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /admin/vault/full",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAdmin"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /admin/vault/local-accounts",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAdmin"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /admin/vault/users",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAdmin"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /admin/vault/users/:userId",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAdmin"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/:id/activity",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.activity.read\", (_req, res) => { res.status(404).json({ error: \"Vault "
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /admin/vault/activity",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAdmin"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "POST /vault/:id/receipt",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.receipt.create\", (_req, res) => { res.status(404).json({ error: \"Vault"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "DELETE /vault/:id/receipt",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership(\"vault_entry.receipt.delete\", (_req, res) => { res.status(404).json({ error: \"Vault"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/receipt/:token",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requirePublicAudit(\"vault_receipt.view\", { onDecision: pepDecisionObserver })"
+      ]
+    },
+    {
+      "file": "vault.ts",
+      "route": "GET /vault/receipt/:token/pdf",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 1,
+        "delegated_calls": 2,
+        "statements": 3
+      },
+      "middleware": [
+        "requirePublicAudit(\"vault_receipt.pdf\", { onDecision: pepDecisionObserver })"
+      ]
+    },
+    {
+      "file": "vault-entity-links.ts",
+      "route": "GET /vault/:id/links",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnershipOr404(\"vault_entry.links.read\")"
+      ]
+    },
+    {
+      "file": "vault-entity-links.ts",
+      "route": "POST /vault-entity-links",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "vault-entity-links.ts",
+      "route": "PATCH /vault-entity-links/:id",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntityLinkOwnership(\"vault_entity_link.update\")"
+      ]
+    },
+    {
+      "file": "vault-entity-links.ts",
+      "route": "DELETE /vault-entity-links/:id",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntityLinkOwnership(\"vault_entity_link.delete\")"
+      ]
+    },
+    {
+      "file": "vault-entity-links.ts",
+      "route": "GET /vault/links/all",
+      "owner_gap": "GAP-01",
+      "thin": true,
+      "violations": [],
+      "metrics": {
+        "db_chains": 0,
+        "tables": 0,
+        "sql_templates": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    }
+  ],
+  "summary": {
+    "routes": 35,
+    "thin": 35,
+    "not_thin": 0
+  }
+}

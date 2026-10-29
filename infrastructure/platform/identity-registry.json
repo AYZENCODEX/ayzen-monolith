@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "authority": "services/identity",
+  "serviceIdentity": "packages/service-auth",
+  "audience": "ayzen-internal",
+  "requiredConsumers": ["api-gateway", "event-fabric", "workflow-runtime", "scheduler", "notification", "admin", "worker"],
+  "rotation": { "issuer": "identity", "overlapRequired": true, "retirementRequiresEvidence": true },
+  "scopes": ["subject", "organization", "workspace", "service", "roles", "capabilities"],
+  "localAccountsRemainAppScoped": true
+}

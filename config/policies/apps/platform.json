@@ -1,0 +1,6 @@
+{
+  "app": "platform",
+  "roles": { "operator": ["service.read", "health.read"], "owner": ["service.read", "health.read", "service.manage"] },
+  "resources": ["service", "health", "config"],
+  "defaultDeny": true
+}

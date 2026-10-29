@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-12",
+  "sub_phase": "08-census",
+  "commit_sha": "e76a9d47c2210884d57afcec43a6afac231451f4",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "17271296bbf56f3a739ca1d17773bbe0c632535d1dad08f8437018b89d67d6a9",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/application/snapshot/sections.ts": "4f4254f938dd0baf90247d8150059b17de439e1ad99a07f919e1e2715395f2f0",
+    "artifacts/api-server/src/vault/application/snapshot/restore.ts": "f78ec7793b1ff594b43972865d151178de60423e7454db27f1ecbfe26feee168",
+    "artifacts/api-server/src/vault/application/entity/receipt.ts": "a5297f18cce294ca416c16a14071189dcca002524a5c00351764c84f6212829e",
+    "artifacts/api-server/src/vault/security/pin-guard.ts": "6cf7a898200612e84feee0d2c82e47a31b075c7cc89b0dcbe0b1f27adf61437d",
+    "artifacts/api-server/src/vault/security/kyc-ownership.ts": "8af586a462bec5104c8a57bb6cf6e06489aa8e636daf7a5b7f6b10a5ea28d1b4"
+  },
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/baseline/sources/artifacts__api__server__src__vault__application__snapshot__sections__ts",
+      "sha256": "4f4254f938dd0baf90247d8150059b17de439e1ad99a07f919e1e2715395f2f0",
+      "lines": 1053,
+      "symbols": 45,
+      "exported": 35
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/baseline/sources/artifacts__api__server__src__vault__application__snapshot__restore__ts",
+      "sha256": "f78ec7793b1ff594b43972865d151178de60423e7454db27f1ecbfe26feee168",
+      "lines": 699,
+      "symbols": 37,
+      "exported": 8
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/baseline/sources/artifacts__api__server__src__vault__application__entity__receipt__ts",
+      "sha256": "a5297f18cce294ca416c16a14071189dcca002524a5c00351764c84f6212829e",
+      "lines": 138,
+      "symbols": 9,
+      "exported": 5
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/baseline/sources/artifacts__api__server__src__vault__security__pin__guard__ts",
+      "sha256": "6cf7a898200612e84feee0d2c82e47a31b075c7cc89b0dcbe0b1f27adf61437d",
+      "lines": 97,
+      "symbols": 9,
+      "exported": 5
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/baseline/sources/artifacts__api__server__src__vault__security__kyc__ownership__ts",
+      "sha256": "8af586a462bec5104c8a57bb6cf6e06489aa8e636daf7a5b7f6b10a5ea28d1b4",
+      "lines": 72,
+      "symbols": 9,
+      "exported": 8
+    }
+  ],
+  "moves": {
+    "artifacts/api-server/src/vault/application/snapshot/sections.ts": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+  },
+  "status": "PASS"
+}

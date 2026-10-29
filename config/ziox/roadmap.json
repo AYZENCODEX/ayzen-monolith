@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "AYZEN ZIOX Public Production Readiness",
+  "sourceDocument": "attached_assets/AYZEN_ZIOX_Public_Production_Readiness_Roadmap_1790636953669.md",
+  "executionOrder": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
+  "completionContract": {
+    "requiredStatus": "PASS",
+    "blockedStatus": "BLOCKED",
+    "criticalStatuses": ["FAIL", "BLOCKED"]
+  },
+  "phases": [
+    { "id": "A", "name": "Dependency & Build Closure", "subphases": ["A1", "A2", "A3", "A4", "A5", "A6"], "focus": ["dependencies", "install", "typecheck", "build", "startup"] },
+    { "id": "B", "name": "Security & Enforcement Certification", "subphases": ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8"], "focus": ["security", "auth", "policy", "capabilities", "siora", "tenancy", "regression"] },
+    { "id": "C", "name": "Data & Migration Safety", "subphases": ["C1", "C2", "C3", "C4", "C5", "C6", "C7"], "focus": ["schema", "migrations", "backfill", "backup", "restore", "rollback"] },
+    { "id": "D", "name": "Runtime Reliability", "subphases": ["D1", "D2", "D3", "D4", "D5", "D6", "D7"], "focus": ["eventbus", "workflow", "scheduler", "workers", "dependencies", "idempotency"] },
+    { "id": "E", "name": "Observability, Audit & Admin Operations", "subphases": ["E1", "E2", "E3", "E4", "E5", "E6", "E7"], "focus": ["health", "metrics", "tracing", "audit", "intelligence", "alerts", "admin"] },
+    { "id": "F", "name": "Deployment & Cloud Production Hardening", "subphases": ["F1", "F2", "F3", "F4", "F5", "F6"], "focus": ["container", "configuration", "topology", "network", "deployment"] },
+    { "id": "G", "name": "Performance, Capacity & Abuse Readiness", "subphases": ["G1", "G2", "G3", "G4", "G5", "G6", "G7"], "focus": ["benchmark", "load", "backpressure", "abuse", "cost", "capacity"] },
+    { "id": "H", "name": "Full Product E2E Certification", "subphases": ["H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "H11"], "focus": ["identity", "tenant", "security", "projects", "runtime", "billing", "integrations", "intelligence", "notifications", "regression"] },
+    { "id": "I", "name": "Release Engineering & Incident Drills", "subphases": ["I1", "I2", "I3", "I4", "I5", "I6", "I7", "I8", "I9"], "focus": ["release", "governance", "rollout", "rollback", "drills", "oncall"] },
+    { "id": "J", "name": "Public Production Gate", "subphases": ["J1", "J2", "J3", "J4", "J5", "J6", "J7", "J8", "J9", "J10", "J11", "J12"], "focus": ["sweep", "blockers", "security", "data", "runtime", "observability", "performance", "e2e", "golive", "canary", "postlaunch"] }
+  ]
+}

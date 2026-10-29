@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "AYZEN ZIOX Public Production Readiness",
+  "phase": "C",
+  "name": "Data & Migration Safety",
+  "generatedAt": "2026-09-29T06:07:57.799Z",
+  "status": "PASS",
+  "implementation": "complete",
+  "subphases": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7"
+  ],
+  "checks": [
+    {
+      "id": "C1",
+      "description": "Schema and migration inventory",
+      "status": "PASS",
+      "migrationCount": 107,
+      "duplicatePrefixes": []
+    },
+    {
+      "id": "C2",
+      "description": "Migration safety runbook and ledger exist",
+      "status": "PASS",
+      "required": [
+        "docs/operations/migration-runbook.md",
+        "infrastructure/migrations/ledger.json"
+      ],
+      "missing": []
+    },
+    {
+      "id": "C3",
+      "description": "Backfill evidence contract exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/migration-runbook.md",
+        "tests/restore/restore-evidence.test.mjs"
+      ],
+      "missing": []
+    },
+    {
+      "id": "C4",
+      "description": "Backup policy and runbook exist",
+      "status": "PASS",
+      "required": [
+        "infra/backup/policy.json",
+        "docs/operations/backup-restore-runbook.md"
+      ],
+      "missing": []
+    },
+    {
+      "id": "C5",
+      "description": "Restore evidence regression",
+      "status": "PASS",
+      "command": "node --test tests/restore/restore-evidence.test.mjs",
+      "exitCode": 0,
+      "output": "✔ artifact digest verification is deterministic (1.014783ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 67.799501"
+    },
+    {
+      "id": "C6",
+      "description": "Rollback runbook exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/rollback-runbook.md",
+        "infrastructure/deployment/promotion-policy.json"
+      ],
+      "missing": []
+    },
+    {
+      "id": "C7",
+      "description": "ZIOX-C certification",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "evidence": {
+    "sourceDocument": "attached_assets/AYZEN_ZIOX_Public_Production_Readiness_Roadmap_1790636953669.md",
+    "validator": "scripts/validate-ziox.mjs"
+  }
+}

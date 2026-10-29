@@ -1,0 +1,45 @@
+{
+  "phase": "VLT-GAP-04",
+  "sub_phase": "VLT-GAP-04-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "123e12536a8b8cce0869075e26f4e01643e16a095e9f30cf686713268403722f",
+  "validator_version": "1.0.0",
+  "validator_sha256": "46f2283906076ae8603a1dba5db1fadd024e45b27431d89eea8396850e221b3d",
+  "description": "Frozen OLD routes vs extracted tree executed side by side (04-B differential on the reconstructed 04-B-certified tree) plus the 04-C consumer differential (re-executed on a temp copy reconstructed to the 04-C-certified state)",
+  "stubbed": "no network and no real database; deterministic stand-ins are identical for OLD and NEW",
+  "differential_04B": {
+    "differential_cases": 59,
+    "differential_passed": 59,
+    "security_checks": 20,
+    "security_passed": 20,
+    "unit_parity": 3,
+    "unit_passed": 3,
+    "mutations_seeded": 22,
+    "mutations_detected": 22
+  },
+  "consumer_differential_04C": {
+    "differential_cases": 36,
+    "differential_passed": 36,
+    "security_checks": 13,
+    "security_passed": 13,
+    "mutations_seeded": 21,
+    "mutations_detected": 13
+  },
+  "residue_fix_in_04D": {
+    "files": [
+      "artifacts/api-server/src/routes/marketplace-game.ts",
+      "artifacts/api-server/src/vault/security/game-ownership.ts"
+    ],
+    "what": "the seller-or-admin `decision.effect === \"ALLOW\"` comparison moved from routes/marketplace-game.ts into vault/security/game-ownership.ts#canCancelGameListing; DELETE /marketplace/game/listings/:id behavior (404/403/200 and the PDP call) is unchanged and proven by the 04-B differential (59 cases incl. cancel allow/deny/404/500) executed against the post-04-D bytes",
+    "note": "04-B ran on the post-04-D bytes of those two files; 04-C ran on their pre-04-D (04-C-certified) bytes. The cancel route is additionally pinned by the AST gate (callback must be a single call to vault/security)."
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build was NOT executed)",
+    "before_total": 26,
+    "after_total": 25,
+    "syntactic_errors": [],
+    "new_diagnostics": [],
+    "real_class_new": []
+  }
+}

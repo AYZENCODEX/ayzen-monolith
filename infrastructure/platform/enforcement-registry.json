@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "registryId": "ayzen-universal-enforcement",
+  "nodes": [
+    { "id": "dependency-graph", "type": "engine", "owner": "platform", "app": "ayzen", "version": "1.0.0", "policy": "enforcement.registry", "lifecycle": "ACTIVE" },
+    { "id": "state-sync", "type": "engine", "owner": "platform", "app": "ayzen", "version": "1.0.0", "policy": "enforcement.state", "lifecycle": "ACTIVE" },
+    { "id": "data-governance", "type": "engine", "owner": "platform", "app": "ayzen", "version": "1.0.0", "policy": "enforcement.data", "lifecycle": "ACTIVE" },
+    { "id": "resource-orchestration", "type": "engine", "owner": "platform", "app": "ayzen", "version": "1.0.0", "policy": "enforcement.resource", "lifecycle": "ACTIVE" },
+    { "id": "runtime-optimization", "type": "engine", "owner": "platform", "app": "ayzen", "version": "1.0.0", "policy": "enforcement.performance", "lifecycle": "ACTIVE" },
+    { "id": "policy-simulation", "type": "engine", "owner": "platform", "app": "ayzen", "version": "1.0.0", "policy": "enforcement.policy", "lifecycle": "ACTIVE" },
+    { "id": "recovery-reconciliation", "type": "engine", "owner": "platform", "app": "ayzen", "version": "1.0.0", "policy": "enforcement.recovery", "lifecycle": "ACTIVE" },
+    { "id": "lifecycle", "type": "engine", "owner": "platform", "app": "ayzen", "version": "1.0.0", "policy": "enforcement.lifecycle", "lifecycle": "ACTIVE" },
+    { "id": "enforcement-fabric", "type": "control-plane", "owner": "platform", "app": "ayzen", "version": "1.0.0", "policy": "enforcement.write", "lifecycle": "ACTIVE" }
+  ],
+  "edges": [
+    { "id": "dependency-state", "from": "dependency-graph", "to": "state-sync", "contract": "enforcement.engine.v1", "policy": "enforcement.state", "recovery": "local-retry", "audit": true, "trace": true },
+    { "id": "state-data", "from": "state-sync", "to": "data-governance", "contract": "enforcement.engine.v1", "policy": "enforcement.data", "recovery": "reconcile", "audit": true, "trace": true },
+    { "id": "data-resource", "from": "data-governance", "to": "resource-orchestration", "contract": "enforcement.engine.v1", "policy": "enforcement.resource", "recovery": "throttle", "audit": true, "trace": true },
+    { "id": "resource-runtime", "from": "resource-orchestration", "to": "runtime-optimization", "contract": "enforcement.engine.v1", "policy": "enforcement.performance", "recovery": "throttle", "audit": true, "trace": true },
+    { "id": "runtime-policy", "from": "runtime-optimization", "to": "policy-simulation", "contract": "enforcement.engine.v1", "policy": "enforcement.policy", "recovery": "deny", "audit": true, "trace": true },
+    { "id": "policy-recovery", "from": "policy-simulation", "to": "recovery-reconciliation", "contract": "enforcement.engine.v1", "policy": "enforcement.recovery", "recovery": "replay", "audit": true, "trace": true },
+    { "id": "recovery-lifecycle", "from": "recovery-reconciliation", "to": "lifecycle", "contract": "enforcement.engine.v1", "policy": "enforcement.lifecycle", "recovery": "operator-recovery", "audit": true, "trace": true },
+    { "id": "lifecycle-fabric", "from": "lifecycle", "to": "enforcement-fabric", "contract": "enforcement.engine.v1", "policy": "enforcement.write", "recovery": "quarantine", "audit": true, "trace": true }
+  ]
+}

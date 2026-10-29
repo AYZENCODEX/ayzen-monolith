@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "lease": {"required": true, "ttlMs": 30000, "fencingTokenRequired": true},
+  "idempotency": {"key": "scheduleId:scheduledAt", "required": true},
+  "missedRuns": {"default": "coalesce", "allowed": ["skip", "coalesce", "catch-up"]},
+  "safePauseResume": true,
+  "duplicateExecution": "deny",
+  "ownership": "explicit-service-owner"
+}

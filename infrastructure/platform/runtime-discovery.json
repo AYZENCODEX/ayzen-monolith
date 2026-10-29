@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "registry": "infrastructure/platform/service-registry.json",
+  "mode": "health-aware",
+  "staleInstanceAfterMs": 90000,
+  "routing": { "requiresReady": true, "avoidUnhealthy": true, "removeStale": true },
+  "probes": { "timeoutMs": 2000, "intervalMs": 15000, "failureThreshold": 3, "recoveryThreshold": 2 },
+  "auditEvents": ["service.health.changed", "service.instance.quarantined"],
+  "fallback": "gateway-compatibility-runtime"
+}

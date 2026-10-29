@@ -1,0 +1,6 @@
+{
+  "app": "ryft",
+  "roles": { "member": ["finance.read"], "owner": ["finance.read", "finance.write"] },
+  "resources": ["finance"],
+  "defaultDeny": true
+}

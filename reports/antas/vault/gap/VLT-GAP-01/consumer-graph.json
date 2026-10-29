@@ -1,0 +1,1187 @@
+{
+  "phase": "VLT-GAP-01",
+  "sub_phase": "VLT-GAP-01-C",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "00ecf5071f90c07f1de5f289763919ccd79d0462e875dc4889ad956f99c4eb83",
+  "validator_version": "1.0.0",
+  "validator_sha256": "765a3d1259a8dd043bdc0405289024dc0313dfc86d8ff1dbc4f8908a95345b9d",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/vault.ts": "d8c4b257cd4c9abec0cc56aabc7abe3481b1678c8af48261955704c76d7fdcec",
+    "artifacts/api-server/src/routes/vault-entity-links.ts": "60208e6af6ffb2e8f12a7d906ef8bd623db896724040218f52e574f65fe157b7",
+    "artifacts/api-server/src/vault/security/entity-ownership.ts": "7da2e892e29c3a5db08d510a4bb7da19d7af33088850b738278d005e3abf8328",
+    "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts": "1bac9901cc4f37e9dd50bcca3126fd5397605374a4c4176b1e50b178d26f0a8b",
+    "artifacts/api-server/src/vault/application/entity/activity.ts": "bc6d73f180041ef79aaa67f8d33b255d0e993e0dfff98c84b0b13b115fb33de2",
+    "artifacts/api-server/src/vault/application/entity/links.ts": "4b2c75abf91865eb58a011269028dfbb5e9228487347cfbcfa84ef1d8b1a466e",
+    "artifacts/api-server/src/vault/application/entity/lifecycle.ts": "c3ffea10dfbe6961bdd5970141b692a4415ff009cc33c5e14da95d324bce0978",
+    "artifacts/api-server/src/vault/application/entity/representation.ts": "3c6d1da46f30aeb69d06ac6f4936bb7c4a638f4c711b06d309a95b1b8356eca4",
+    "artifacts/api-server/src/vault/domain/entity/fields.ts": "2b3b4e7885317297d5a42755755fd85ebb014dcb0b139fc1efe8ffc961d280f5",
+    "artifacts/api-server/src/vault/domain/entity/calculations.ts": "e75603cafc8fbf9699af5740eac90ac14250012300dd98e30c22a1abf1260bbd",
+    "artifacts/api-server/src/vault/application/entity/create.ts": "a275844ac1ed1ccd80294a0b430d5a87ab360da4265ed52384edf11075b0611e",
+    "artifacts/api-server/src/vault/application/entity/update.ts": "d6d2955504ca60d8e8144dfe438022d138e1115f2c2a75f304c2268acbad731a",
+    "artifacts/api-server/src/vault/application/entity/bulk.ts": "882345a36355611eec126ef2144a8dd669ac358534984d4ccba0d23236b0bd7d",
+    "artifacts/api-server/src/vault/application/entity/analytics.ts": "47f9c349d5a32ffa239ec6e47e9f6a6fadabf8c3b18d9e379ed04592fb621a4d",
+    "artifacts/api-server/src/vault/application/entity/activity-feed.ts": "a4bf78776781b0e552e61121be1b9e94963dff76eadd86b2de664ab0aa98ce12",
+    "artifacts/api-server/src/vault/application/entity/admin.ts": "7c2b8519c9e22d492f6d4905daaac4f49d7172afbabd46fb7e1ab9f36f5d4869",
+    "artifacts/api-server/src/vault/application/entity/receipt.ts": "a5297f18cce294ca416c16a14071189dcca002524a5c00351764c84f6212829e",
+    "artifacts/api-server/src/routes/entities.ts": "c400596bdb9d73561750374296eb152aae6a4c6aa3d688367518cdaac00495aa",
+    "artifacts/api-server/src/routes/value-history.ts": "79948d6aff356fe6bbf61029ac25e65b9d285a1d1c1aa5a3553e1ee2f32916c3",
+    "artifacts/api-server/src/lib/vault-health-scan.ts": "544709220a6d99c0ca02a2b9c8fa843cbb6824325103fd7bb2375e82f375cef0",
+    "scripts/src/test-route-ownership-regression.ts": "1fafb8cbdf0dba4ecb15f7aa393e56cd160818dac86ca621a1b821b6d35601cd",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-B.mjs": "bf0a6a746e0680dbabf5aff4bb4217a68304cd7ee70e3e757831afff0d6c8153"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-01-B.mjs"
+  ],
+  "exit_codes": {
+    "01-B": 0,
+    "consumer_graph": 0,
+    "contract_tests": 0,
+    "self_tests": 0
+  },
+  "symbols_moved": [],
+  "consumers_migrated": [
+    {
+      "consumer": "artifacts/api-server/src/routes/entities.ts",
+      "before": [
+        {
+          "from": "express",
+          "names": [
+            "Router",
+            "Request",
+            "Response"
+          ]
+        },
+        {
+          "from": "@workspace/db",
+          "names": [
+            "db"
+          ]
+        },
+        {
+          "from": "drizzle-orm",
+          "names": [
+            "sql"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/middlewares/auth",
+          "names": [
+            "requireAuth",
+            "pepDecisionObserver"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/policy/pep/middleware",
+          "names": [
+            "requireOwnership"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/vault-entity-links",
+          "names": [
+            "vaultEntryResource"
+          ]
+        }
+      ],
+      "after": [
+        {
+          "from": "express",
+          "names": [
+            "Router"
+          ]
+        },
+        {
+          "from": "@workspace/db",
+          "names": [
+            "db"
+          ]
+        },
+        {
+          "from": "drizzle-orm",
+          "names": [
+            "sql"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/middlewares/auth",
+          "names": [
+            "requireAuth"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/vault/security/entity-ownership",
+          "names": [
+            "requireVaultEntryOwnership"
+          ]
+        }
+      ],
+      "statements_verified_identical": 8,
+      "passed": true
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/value-history.ts",
+      "before": [
+        {
+          "from": "express",
+          "names": [
+            "Router",
+            "Request",
+            "Response"
+          ]
+        },
+        {
+          "from": "@workspace/db",
+          "names": [
+            "db"
+          ]
+        },
+        {
+          "from": "drizzle-orm",
+          "names": [
+            "sql"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/middlewares/auth",
+          "names": [
+            "requireAuth",
+            "pepDecisionObserver"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/vault-crypto",
+          "names": [
+            "encryptField",
+            "decryptField",
+            "decryptRow"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/policy/pep/middleware",
+          "names": [
+            "requireOwnership"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/vault-entity-links",
+          "names": [
+            "vaultEntryResource"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/local-accounts",
+          "names": [
+            "requireLocalAccountOwnership"
+          ]
+        }
+      ],
+      "after": [
+        {
+          "from": "express",
+          "names": [
+            "Router"
+          ]
+        },
+        {
+          "from": "@workspace/db",
+          "names": [
+            "db"
+          ]
+        },
+        {
+          "from": "drizzle-orm",
+          "names": [
+            "sql"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/middlewares/auth",
+          "names": [
+            "requireAuth"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/vault-crypto",
+          "names": [
+            "encryptField",
+            "decryptField",
+            "decryptRow"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/vault/security/entity-ownership",
+          "names": [
+            "requireVaultEntryOwnership"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/local-accounts",
+          "names": [
+            "requireLocalAccountOwnership"
+          ]
+        }
+      ],
+      "statements_verified_identical": 11,
+      "passed": true
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "before": [
+        {
+          "from": "@workspace/db",
+          "names": [
+            "db",
+            "vaultEntriesTable",
+            "walletsTable",
+            "usersTable"
+          ]
+        },
+        {
+          "from": "drizzle-orm",
+          "names": [
+            "eq",
+            "and",
+            "inArray",
+            "sql"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/logger",
+          "names": [
+            "logger"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/log-bus",
+          "names": [
+            "logBus"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/vault",
+          "names": [
+            "formatRow",
+            "toHealthInput",
+            "selectAllVaultEntries"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/vault-health",
+          "names": [
+            "evalBackgroundHealthRules",
+            "severityEmoji",
+            "HealthRuleHit",
+            "evalKycBackgroundHealthRules",
+            "evalWalletBackgroundHealthRules",
+            "evalLocalAccountBackgroundHealthRules",
+            "evalDataEntityBackgroundHealthRules"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/notifications",
+          "names": [
+            "createNotification"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/telegram",
+          "names": [
+            "sendToUser"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/email",
+          "names": [
+            "sendVaultHealthDigestEmail"
+          ]
+        }
+      ],
+      "after": [
+        {
+          "from": "@workspace/db",
+          "names": [
+            "db",
+            "vaultEntriesTable",
+            "walletsTable",
+            "usersTable"
+          ]
+        },
+        {
+          "from": "drizzle-orm",
+          "names": [
+            "eq",
+            "and",
+            "inArray",
+            "sql"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/logger",
+          "names": [
+            "logger"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/log-bus",
+          "names": [
+            "logBus"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/vault/application/entity/representation",
+          "names": [
+            "formatVaultEntry"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository",
+          "names": [
+            "selectAllVaultEntries"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/vault",
+          "names": [
+            "toHealthInput"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/vault-health",
+          "names": [
+            "evalBackgroundHealthRules",
+            "severityEmoji",
+            "HealthRuleHit",
+            "evalKycBackgroundHealthRules",
+            "evalWalletBackgroundHealthRules",
+            "evalLocalAccountBackgroundHealthRules",
+            "evalDataEntityBackgroundHealthRules"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/notifications",
+          "names": [
+            "createNotification"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/telegram",
+          "names": [
+            "sendToUser"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/email",
+          "names": [
+            "sendVaultHealthDigestEmail"
+          ]
+        }
+      ],
+      "statements_verified_identical": 9,
+      "passed": true
+    },
+    {
+      "consumer": "scripts/src/test-route-ownership-regression.ts",
+      "before": [
+        {
+          "from": "@workspace/db",
+          "names": [
+            "db"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/policy/pep/middleware",
+          "names": [
+            "requireOwnership"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/vault-entity-links",
+          "names": [
+            "vaultEntryResource"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/kyc",
+          "names": [
+            "requireKycEntryOwnership"
+          ]
+        },
+        {
+          "from": "scripts/src/lib/ownership-route-test-kit",
+          "names": [
+            "runOwnershipRouteSuite",
+            "summarize",
+            "DRIZZLE_USER_ID_ROW",
+            "RAW_SQL_USER_ID_ROW",
+            "OwnershipRouteSpec"
+          ]
+        }
+      ],
+      "after": [
+        {
+          "from": "@workspace/db",
+          "names": [
+            "db"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/lib/policy/pep/middleware",
+          "names": [
+            "requireOwnership"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/vault/security/entity-ownership",
+          "names": [
+            "vaultEntryResource"
+          ]
+        },
+        {
+          "from": "artifacts/api-server/src/routes/kyc",
+          "names": [
+            "requireKycEntryOwnership"
+          ]
+        },
+        {
+          "from": "scripts/src/lib/ownership-route-test-kit",
+          "names": [
+            "runOwnershipRouteSuite",
+            "summarize",
+            "DRIZZLE_USER_ID_ROW",
+            "RAW_SQL_USER_ID_ROW",
+            "OwnershipRouteSpec"
+          ]
+        }
+      ],
+      "statements_verified_identical": 9,
+      "passed": true
+    }
+  ],
+  "old_business_symbols_remaining": [],
+  "duplicate_implementations": [],
+  "consumer_edges": [
+    {
+      "consumer": "artifacts/api-server/src/lib/dr-test-runner.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "verifyStoredChecksum",
+      "kind": "import",
+      "line": 38,
+      "status": "deferred:GAP-09",
+      "owner_gap": "GAP-09",
+      "behavior_domain": "snapshot",
+      "reason": "symbol belongs to GAP-09 (snapshot); rewired in that phase"
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "buildVaultSnapshotPayload",
+      "kind": "import",
+      "line": 50,
+      "status": "deferred:GAP-09",
+      "owner_gap": "GAP-09",
+      "behavior_domain": "snapshot",
+      "reason": "symbol belongs to GAP-09 (snapshot); rewired in that phase"
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "storeSnapshotRow",
+      "kind": "import",
+      "line": 50,
+      "status": "deferred:GAP-09",
+      "owner_gap": "GAP-09",
+      "behavior_domain": "snapshot",
+      "reason": "symbol belongs to GAP-09 (snapshot); rewired in that phase"
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "target": "artifacts/api-server/src/routes/vault.ts",
+      "symbol": "toHealthInput",
+      "kind": "import",
+      "line": 34,
+      "status": "deferred:GAP-11",
+      "owner_gap": "GAP-11",
+      "behavior_domain": "health",
+      "reason": "symbol belongs to GAP-11 (health); rewired in that phase"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "target": "artifacts/api-server/src/routes/vault.ts",
+      "symbol": "default",
+      "kind": "import",
+      "line": 11,
+      "status": "api-registration",
+      "reason": "Express router mounted in routes/index.ts — public route surface stays stable"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "symbol": "default",
+      "kind": "import",
+      "line": 142,
+      "status": "api-registration",
+      "reason": "Express router mounted in routes/index.ts — public route surface stays stable"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "target": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "symbol": "default",
+      "kind": "import",
+      "line": 143,
+      "status": "api-registration",
+      "reason": "Express router mounted in routes/index.ts — public route surface stays stable"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "default",
+      "kind": "import",
+      "line": 150,
+      "status": "api-registration",
+      "reason": "Express router mounted in routes/index.ts — public route surface stays stable"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/organizations.ts",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "symbol": "ENTITY_TABLES",
+      "kind": "import",
+      "line": 8,
+      "status": "deferred:GAP-10",
+      "owner_gap": "GAP-10",
+      "behavior_domain": "share",
+      "reason": "symbol belongs to GAP-10 (share); rewired in that phase"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/organizations.ts",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "symbol": "isValidType",
+      "kind": "import",
+      "line": 8,
+      "status": "deferred:GAP-10",
+      "owner_gap": "GAP-10",
+      "behavior_domain": "share",
+      "reason": "symbol belongs to GAP-10 (share); rewired in that phase"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/organizations.ts",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "symbol": "VALID_TYPES",
+      "kind": "import",
+      "line": 8,
+      "status": "deferred:GAP-10",
+      "owner_gap": "GAP-10",
+      "behavior_domain": "share",
+      "reason": "symbol belongs to GAP-10 (share); rewired in that phase"
+    },
+    {
+      "consumer": "artifacts/api-server/src/vault/api/index.ts",
+      "target": "artifacts/api-server/src/routes/vault.ts",
+      "symbol": "default",
+      "kind": "re-export",
+      "line": 5,
+      "status": "api-adapter-reexport",
+      "reason": "vault/api compatibility boundary re-exports the public router"
+    },
+    {
+      "consumer": "artifacts/api-server/src/vault/api/index.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "default",
+      "kind": "re-export",
+      "line": 7,
+      "status": "api-adapter-reexport",
+      "reason": "vault/api compatibility boundary re-exports the public router"
+    }
+  ],
+  "deferred_consumers": [
+    {
+      "consumer": "artifacts/api-server/src/lib/dr-test-runner.ts",
+      "symbol": "verifyStoredChecksum",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "owner_gap": "GAP-09",
+      "behavior_domain": "snapshot"
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "symbol": "buildVaultSnapshotPayload",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "owner_gap": "GAP-09",
+      "behavior_domain": "snapshot"
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "symbol": "storeSnapshotRow",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "owner_gap": "GAP-09",
+      "behavior_domain": "snapshot"
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "symbol": "toHealthInput",
+      "target": "artifacts/api-server/src/routes/vault.ts",
+      "owner_gap": "GAP-11",
+      "behavior_domain": "health"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/organizations.ts",
+      "symbol": "ENTITY_TABLES",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "owner_gap": "GAP-10",
+      "behavior_domain": "share"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/organizations.ts",
+      "symbol": "isValidType",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "owner_gap": "GAP-10",
+      "behavior_domain": "share"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/organizations.ts",
+      "symbol": "VALID_TYPES",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "owner_gap": "GAP-10",
+      "behavior_domain": "share"
+    }
+  ],
+  "direct_vault_entries_accessors_outside_vault_module_informational": [
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "references": 102
+    },
+    {
+      "file": "artifacts/api-server/src/routes/projects.ts",
+      "references": 22
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "references": 19
+    },
+    {
+      "file": "artifacts/api-server/src/routes/teams.ts",
+      "references": 14
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "references": 13
+    },
+    {
+      "file": "artifacts/api-server/src/routes/bulk.ts",
+      "references": 11
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "references": 10
+    },
+    {
+      "file": "artifacts/api-server/src/routes/value-history.ts",
+      "references": 10
+    },
+    {
+      "file": "artifacts/api-server/src/services/sync.ts",
+      "references": 10
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "references": 9
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "references": 8
+    },
+    {
+      "file": "artifacts/api-server/src/routes/sync.ts",
+      "references": 8
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ai.ts",
+      "references": 7
+    },
+    {
+      "file": "artifacts/api-server/src/routes/entities.ts",
+      "references": 7
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-migration.ts",
+      "references": 5
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-trash-purge.ts",
+      "references": 4
+    },
+    {
+      "file": "artifacts/api-server/src/routes/emergency-access.ts",
+      "references": 4
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "references": 4
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ai-actions.ts",
+      "references": 3
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "references": 3
+    },
+    {
+      "file": "artifacts/api-server/src/lib/activity-log.ts",
+      "references": 2
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "references": 2
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "references": 2
+    },
+    {
+      "file": "artifacts/api-server/src/lib/service-boundaries.ts",
+      "references": 1
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "references": 1
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts",
+      "references": 1
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "references": 1
+    },
+    {
+      "file": "artifacts/api-server/src/routes/leaderboard.ts",
+      "references": 1
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace.ts",
+      "references": 1
+    },
+    {
+      "file": "artifacts/api-server/src/routes/search.ts",
+      "references": 1
+    },
+    {
+      "file": "artifacts/api-server/src/routes/two-factor.ts",
+      "references": 1
+    },
+    {
+      "file": "artifacts/api-server/src/services/credit-meter.ts",
+      "references": 1
+    }
+  ],
+  "contract_tests": [
+    {
+      "name": "contract:routes/entities.ts:route table + middleware + ownership actions + deny bodies identical",
+      "passed": true,
+      "details": "6 routes"
+    },
+    {
+      "name": "contract:routes/entities.ts:every vault_entry route is still ownership-gated",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "contract:routes/entities.ts:ownership builder behaviour identical (owned/missing/NaN/array-param)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:routes/entities.ts:foreign-owner row is reported with the foreign ownerId",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "contract:routes/value-history.ts:route table + middleware + ownership actions + deny bodies identical",
+      "passed": true,
+      "details": "6 routes"
+    },
+    {
+      "name": "contract:routes/value-history.ts:every vault_entry route is still ownership-gated",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "contract:routes/value-history.ts:ownership builder behaviour identical (owned/missing/NaN/array-param)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:routes/value-history.ts:foreign-owner row is reported with the foreign ownerId",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "job:health-scan reads entries through the repository (vault_entries SELECT ... deleted_at IS NULL)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "job:health-scan formats rows through the representation owner",
+      "passed": true,
+      "details": "[1,2]"
+    },
+    {
+      "name": "job:health-scan touches routes/vault ONLY for toHealthInput (GAP-11 deferred)",
+      "passed": true,
+      "details": "[\"toHealthInput\"]"
+    },
+    {
+      "name": "job:health-scan persists flags per entry with owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "job:health-scan summary counts are correct",
+      "passed": true,
+      "details": "{\"entriesScanned\":2,\"entriesFlagged\":2,\"usersAlerted\":0}"
+    }
+  ],
+  "self_tests": [
+    {
+      "name": "selftest:moved-symbol-imported-from-old-module-is-BYPASS",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dynamic-import-consumer-discovered",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-copy-of-moved-function-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dangling-import-flagged",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:health-job-detects-rewire-reverted-to-old-owner",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "diff_audit": {
+    "changed": [
+      "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "artifacts/api-server/src/routes/entities.ts",
+      "artifacts/api-server/src/routes/value-history.ts",
+      "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "artifacts/api-server/src/routes/vault.ts",
+      "scripts/src/test-route-ownership-regression.ts"
+    ],
+    "added": [
+      "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "artifacts/api-server/src/vault/application/entity/activity.ts",
+      "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "artifacts/api-server/src/vault/application/entity/create.ts",
+      "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "artifacts/api-server/src/vault/application/entity/links.ts",
+      "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "artifacts/api-server/src/vault/application/entity/update.ts",
+      "artifacts/api-server/src/vault/domain/entity/calculations.ts",
+      "artifacts/api-server/src/vault/domain/entity/fields.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts",
+      "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "scripts/antas/vault/gap/gap-common.mjs",
+      "scripts/antas/vault/gap/harness.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-01-A.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-01-B.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-01-C.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-01-D.mjs"
+    ],
+    "removed": [],
+    "unexpected": []
+  },
+  "summary": {
+    "edges": 13,
+    "api_registration": 4,
+    "api_adapter_reexport": 2,
+    "deferred": 7,
+    "bypass": 0,
+    "consumers_rewired": 4,
+    "contract_cases": 13,
+    "self_tests": 6
+  },
+  "checks": [
+    {
+      "name": "prerequisite:01-B-executed-and-passed",
+      "passed": true,
+      "details": "VLT-GAP-01-B PASS — moved=24 handlers=13 diff-cases=47 unit=41 mutations=5/5 (20790ms)\n"
+    },
+    {
+      "name": "consumer-graph:no-bypass-or-dangling-or-unclassified",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "consumer-graph:all-edges-classified",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-graph:matches-independent-01-A-census",
+      "passed": true,
+      "details": "only-census= only-validator="
+    },
+    {
+      "name": "no-compat-reexports-of-moved-symbols-remain",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/entities.ts:no-gap01-symbol-from-old-module",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/entities.ts:baseline-really-consumed-old-owner",
+      "passed": true,
+      "details": "baseline had no old-owner import (nothing to rewire)"
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/entities.ts:imports-new-owner:vault/security/entity-ownership",
+      "passed": true,
+      "details": "missing "
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/entities.ts:new-owner-exports:vault/security/entity-ownership",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/entities.ts:local-duplicate-removed:requireVaultEntryOwnership",
+      "passed": true,
+      "details": "baseline had=true, still=false"
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/entities.ts:non-import-statements-identical-to-baseline",
+      "passed": true,
+      "details": "baseline 8 statements vs current 8"
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/value-history.ts:no-gap01-symbol-from-old-module",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/value-history.ts:baseline-really-consumed-old-owner",
+      "passed": true,
+      "details": "baseline had no old-owner import (nothing to rewire)"
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/value-history.ts:imports-new-owner:vault/security/entity-ownership",
+      "passed": true,
+      "details": "missing "
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/value-history.ts:new-owner-exports:vault/security/entity-ownership",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/value-history.ts:local-duplicate-removed:requireVaultEntryOwnership",
+      "passed": true,
+      "details": "baseline had=true, still=false"
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/routes/value-history.ts:non-import-statements-identical-to-baseline",
+      "passed": true,
+      "details": "baseline 11 statements vs current 11"
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/lib/vault-health-scan.ts:no-gap01-symbol-from-old-module",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/lib/vault-health-scan.ts:baseline-really-consumed-old-owner",
+      "passed": true,
+      "details": "baseline had no old-owner import (nothing to rewire)"
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/lib/vault-health-scan.ts:imports-new-owner:vault/application/entity/representation",
+      "passed": true,
+      "details": "missing "
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/lib/vault-health-scan.ts:new-owner-exports:vault/application/entity/representation",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/lib/vault-health-scan.ts:imports-new-owner:vault/infrastructure/repositories/entity-repository",
+      "passed": true,
+      "details": "missing "
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/lib/vault-health-scan.ts:new-owner-exports:vault/infrastructure/repositories/entity-repository",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:artifacts/api-server/src/lib/vault-health-scan.ts:non-import-statements-identical-to-baseline",
+      "passed": true,
+      "details": "baseline 9 statements vs current 9"
+    },
+    {
+      "name": "rewire:scripts/src/test-route-ownership-regression.ts:no-gap01-symbol-from-old-module",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:scripts/src/test-route-ownership-regression.ts:baseline-really-consumed-old-owner",
+      "passed": true,
+      "details": "baseline had no old-owner import (nothing to rewire)"
+    },
+    {
+      "name": "rewire:scripts/src/test-route-ownership-regression.ts:imports-new-owner:vault/security/entity-ownership",
+      "passed": true,
+      "details": "missing "
+    },
+    {
+      "name": "rewire:scripts/src/test-route-ownership-regression.ts:new-owner-exports:vault/security/entity-ownership",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rewire:scripts/src/test-route-ownership-regression.ts:non-import-statements-identical-to-baseline",
+      "passed": true,
+      "details": "baseline 9 statements vs current 9"
+    },
+    {
+      "name": "bypass-scan:no-duplicate-of-moved-implementation-outside-vault",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "contract:routes/entities.ts:route table + middleware + ownership actions + deny bodies identical",
+      "passed": true,
+      "details": "6 routes"
+    },
+    {
+      "name": "contract:routes/entities.ts:every vault_entry route is still ownership-gated",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "contract:routes/entities.ts:ownership builder behaviour identical (owned/missing/NaN/array-param)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:routes/entities.ts:foreign-owner row is reported with the foreign ownerId",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "contract:routes/value-history.ts:route table + middleware + ownership actions + deny bodies identical",
+      "passed": true,
+      "details": "6 routes"
+    },
+    {
+      "name": "contract:routes/value-history.ts:every vault_entry route is still ownership-gated",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "contract:routes/value-history.ts:ownership builder behaviour identical (owned/missing/NaN/array-param)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:routes/value-history.ts:foreign-owner row is reported with the foreign ownerId",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "job:health-scan reads entries through the repository (vault_entries SELECT ... deleted_at IS NULL)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "job:health-scan formats rows through the representation owner",
+      "passed": true,
+      "details": "[1,2]"
+    },
+    {
+      "name": "job:health-scan touches routes/vault ONLY for toHealthInput (GAP-11 deferred)",
+      "passed": true,
+      "details": "[\"toHealthInput\"]"
+    },
+    {
+      "name": "job:health-scan persists flags per entry with owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "job:health-scan summary counts are correct",
+      "passed": true,
+      "details": "{\"entriesScanned\":2,\"entriesFlagged\":2,\"usersAlerted\":0}"
+    },
+    {
+      "name": "selftest:moved-symbol-imported-from-old-module-is-BYPASS",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dynamic-import-consumer-discovered",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-copy-of-moved-function-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dangling-import-flagged",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:health-job-detects-rewire-reverted-to-old-owner",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:no-unrelated-changes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "contract:public-route-tables-stable (01-B differential executed)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:deferred-consumers-name-a-later-owner",
+      "passed": true,
+      "details": "[]"
+    }
+  ],
+  "status": "PASS",
+  "evidence_body_sha256": "ae344f9db52b88b0693a77fcba0799464b01726cc8e3795ec1b8e678b9c111e3",
+  "generated_at": "2026-09-30T03:20:58.996Z"
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "defaultDeny": true,
+  "edges": [
+    {"from": "ayzen", "to": "identity", "owner": "identity", "actions": ["authenticate", "issue-session"], "dataScopes": ["identity:profile", "identity:session"]},
+    {"from": "skarn", "to": "workflow", "owner": "workflow", "actions": ["start", "read", "cancel"], "dataScopes": ["workflow:execution"]},
+    {"from": "ryft", "to": "finance", "owner": "finance", "actions": ["read", "post"], "dataScopes": ["finance:account", "finance:transaction"]},
+    {"from": "admin", "to": "platform", "owner": "platform", "actions": ["read", "remediate"], "dataScopes": ["platform:operations"]},
+    {"from": "admin", "to": "identity", "owner": "identity", "actions": ["read", "revoke"], "dataScopes": ["identity:operations"]}
+  ],
+  "rules": {
+    "identityRequired": true,
+    "capabilityRequired": true,
+    "dataScopeRequired": true,
+    "auditRequired": true
+  }
+}

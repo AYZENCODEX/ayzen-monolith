@@ -1,0 +1,1428 @@
+{
+  "phase": "VLT-GAP-03",
+  "sub_phase": "VLT-GAP-03-C",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "676b2649160cf4e8e2cde174f4c4672a1f7a9345a9af183859619a160455bd59",
+  "validator_version": "1.0.0",
+  "validator_sha256": "c4967407d57b188b834f2bfac48d6aee5b55c26f54e9895ac0964cc6e9b36287",
+  "baseline": {
+    "mode": "write-once seal (verified, never written by this validator)",
+    "seal_file": "reports/antas/vault/gap/VLT-GAP-03/baseline-03c/SEAL.json",
+    "sealed_at": "2026-09-30T09:36:01.809Z",
+    "tree_manifest_sha256": "506ccc10bf12853406ef60f1e41162fa2d8168c4d89ece48285783ffb1d456dc",
+    "certified_by": {
+      "sub_phase": "VLT-GAP-03-B",
+      "source_tree_sha256": "06bced546dfe77f9a393973a34271eb13b104afae821c067548e2ba6f63a2f9b",
+      "commit_sha": null,
+      "validator_sha256": "2d5e688634fc2ec8684faa8fb01be101675b0979da309b974969248bd43f67b0",
+      "source_hashes_checked": 11
+    },
+    "frozen_consumers": {
+      "exchange-api.ts": {
+        "source": "artifacts/api-server/src/routes/exchange-api.ts",
+        "sha256": "443d1d6fac218e507a373a60521fe842d5189a07fe27bf546bde5bd140480f7a"
+      },
+      "projects.ts": {
+        "source": "artifacts/api-server/src/routes/projects.ts",
+        "sha256": "ffa072645c418b03bbd6d091cdb32ef7cdcb447134b846ce4a3570fb5e34c34c"
+      },
+      "kyc.route.ts": {
+        "source": "artifacts/api-server/src/routes/kyc.ts",
+        "sha256": "157f024deef8d4521ba937058e064a28ba244ed160e42f5d27f0a501e29c1b5c"
+      },
+      "kyc-data-entities.route.ts": {
+        "source": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+        "sha256": "18733afba6989a9d6456c7b072f2e056e052bd92647dd38ee66474fe03cda63b"
+      },
+      "kyc-ownership.ts": {
+        "source": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+        "sha256": "df4c0e8f566f6a79ece33b4dd63bb0bd1ebbea3a58cfe051a68f122e45fd01c1"
+      },
+      "entries.ts": {
+        "source": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+        "sha256": "59fabc73cf27749214b4597154993d6185952864fb39a8299f225320cbe4338b"
+      },
+      "test-route-ownership-regression.ts": {
+        "source": "scripts/src/test-route-ownership-regression.ts",
+        "sha256": "1fafb8cbdf0dba4ecb15f7aa393e56cd160818dac86ca621a1b821b6d35601cd"
+      },
+      "check-ownership-gate-coverage.ts": {
+        "source": "scripts/src/check-ownership-gate-coverage.ts",
+        "sha256": "db9ee44008a933f66fd18915621bf2a4ed9d6f2750dc99aa4cc6756c2472d9bb"
+      }
+    }
+  },
+  "source_hashes": {
+    "artifacts/api-server/src/routes/exchange-api.ts": "754c840c3546f1d80da976f4b2824294d392cd76e38c45c19bf56c5936990fa3",
+    "artifacts/api-server/src/routes/projects.ts": "fd28954bc2780e4fdd0fc065f79ba26b835fbfd4c2eec43419438f91ee4ea097",
+    "artifacts/api-server/src/routes/kyc.ts": "9788b5e5d94b225a8d8dfeb70b9993b980d5161f41eadb42c20511549c327d4b",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts": "18733afba6989a9d6456c7b072f2e056e052bd92647dd38ee66474fe03cda63b",
+    "artifacts/api-server/src/vault/security/kyc-ownership.ts": "8af586a462bec5104c8a57bb6cf6e06489aa8e636daf7a5b7f6b10a5ea28d1b4",
+    "artifacts/api-server/src/vault/application/kyc/entries.ts": "3e021b6a5c2ea876fbcde996d467c847cdc7e16fbbb5ee91e8945b1bf0cad3c4",
+    "scripts/src/test-route-ownership-regression.ts": "5adbd518112fb514a8ffb1936bab7a5d33036471201dd1735a2b21a3bcd46f94",
+    "scripts/src/check-ownership-gate-coverage.ts": "f70316788d149feddf79901b2dca4bd29682057e0d07f0bde84c1875396a795a",
+    "artifacts/api-server/src/vault/application/kyc/exchange.ts": "7855f1e9f16127ac3997e41033259358acaf4226aa71e58d87477b038fa05ecd",
+    "artifacts/api-server/src/vault/application/kyc/enrollment.ts": "b8987a668f5d899fa607c9329b14f125aec579d731dc1071295a5bc4c484cc16",
+    "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts": "179b186e3ba92e15ad1f6f23ae099cf2da4c74d2942cd17af3da54e98335c112",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-C-baseline.mjs": "1e522f3a1ba1755aeeb230acc1a8f3e2903de19adc149209679350c87496bb6b",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline-03c/SEAL.json": "2e037c78a9184da7e82573bf689bf7263eb7833c547ae16947cb6440518360a5",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline-03c/tree-manifest.json": "506ccc10bf12853406ef60f1e41162fa2d8168c4d89ece48285783ffb1d456dc"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-03-C.mjs",
+    "in-process differential suite (sealed 03-B consumers vs new source)",
+    "in-process seeded-mutation suite",
+    "tsx scripts/src/check-ownership-gate-coverage.ts (executed)",
+    "in-process differential typecheck"
+  ],
+  "exit_codes": {
+    "differential_suite": 0,
+    "security_suite": 0,
+    "mutation_suite": 0,
+    "ci_lint": 0,
+    "typecheck_differential": 0
+  },
+  "consumer_graph": {
+    "owner_modules": [
+      "vault/application/kyc/exchange.ts",
+      "vault/application/kyc/enrollment.ts",
+      "vault/infrastructure/repositories/kyc-consumer-repository.ts"
+    ],
+    "owner_symbols": [
+      {
+        "symbol": "loadKycExchangeCredentials",
+        "owner": "vault/application/kyc/exchange.ts",
+        "consumers": [
+          "routes/exchange-api.ts"
+        ]
+      },
+      {
+        "symbol": "setKycEntryExchangeKeys",
+        "owner": "vault/application/kyc/exchange.ts",
+        "consumers": [
+          "routes/exchange-api.ts"
+        ]
+      },
+      {
+        "symbol": "loadKycEntryForEnrollment",
+        "owner": "vault/application/kyc/enrollment.ts",
+        "consumers": [
+          "routes/projects.ts"
+        ]
+      },
+      {
+        "symbol": "buildEnrollmentAccountData",
+        "owner": "vault/application/kyc/enrollment.ts",
+        "consumers": [
+          "routes/projects.ts"
+        ]
+      },
+      {
+        "symbol": "kycEntryOwnerResource",
+        "owner": "vault/security/kyc-ownership.ts",
+        "consumers": [
+          "routes/projects.ts"
+        ]
+      },
+      {
+        "symbol": "kycEntryResource",
+        "owner": "vault/security/kyc-ownership.ts",
+        "consumers": [
+          "routes/exchange-api.ts"
+        ]
+      },
+      {
+        "symbol": "requireKycEntryOwnership",
+        "owner": "vault/security/kyc-ownership.ts",
+        "consumers": [
+          "routes/exchange-api.ts",
+          "routes/kyc.ts",
+          "scripts/src/test-route-ownership-regression.ts"
+        ]
+      }
+    ],
+    "rewired_consumers": [
+      {
+        "file": "routes/exchange-api.ts",
+        "imports_owner": true,
+        "kyc_table_sql_before": 2,
+        "kyc_table_sql_after": 0,
+        "route_table_unchanged": true,
+        "routes": 2
+      },
+      {
+        "file": "routes/projects.ts",
+        "imports_owner": true,
+        "kyc_table_sql_before": 2,
+        "kyc_table_sql_after": 0,
+        "route_table_unchanged": true,
+        "routes": 34
+      },
+      {
+        "file": "routes/kyc.ts",
+        "imports_owner": true,
+        "kyc_table_sql_before": 0,
+        "kyc_table_sql_after": 0,
+        "route_table_unchanged": true,
+        "routes": 7
+      },
+      {
+        "file": "routes/kyc-data-entities.ts",
+        "imports_owner": true,
+        "kyc_table_sql_before": 0,
+        "kyc_table_sql_after": 0,
+        "route_table_unchanged": true,
+        "routes": 6
+      }
+    ],
+    "kyc_repository_importers": [
+      {
+        "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+        "repo": "vault/infrastructure/repositories/kyc-data-entity-repository"
+      },
+      {
+        "file": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+        "repo": "vault/infrastructure/repositories/kyc-consumer-repository"
+      },
+      {
+        "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+        "repo": "vault/infrastructure/repositories/kyc-repository"
+      },
+      {
+        "file": "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+        "repo": "vault/infrastructure/repositories/kyc-consumer-repository"
+      }
+    ],
+    "moved_sql": [
+      {
+        "sql": "SELECT platform, username, name, exchange_api_key, exchange_api_secret FROM kyc_entries WHERE id = ${} AND user_id = ${} LIMIT 1",
+        "verbatim_in_frozen": true
+      },
+      {
+        "sql": "UPDATE kyc_entries SET ${}, updated_at = NOW() WHERE id = ${} AND user_id = ${}",
+        "verbatim_in_frozen": true
+      },
+      {
+        "sql": "SELECT * FROM kyc_entries WHERE id = ${} AND user_id = ${} LIMIT 1",
+        "verbatim_in_frozen": true
+      }
+    ]
+  },
+  "table_access_census": [
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "sql_access": 0,
+      "name_literals": 1,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read: mail-sync table registry"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "sql_access": 25,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "schema migrations (DDL)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "sql_access": 2,
+      "name_literals": 4,
+      "kind": "deferred",
+      "gap": "VLT-GAP-11",
+      "reason": "health scan reads all KYC entries / data entities and writes flag columns"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "sql_access": 1,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-09",
+      "reason": "snapshot export reads KYC data entities"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "sql_access": 2,
+      "name_literals": 2,
+      "kind": "deferred",
+      "gap": "VLT-GAP-09",
+      "reason": "snapshot restore writes KYC entries / data entities back"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "sql_access": 2,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-04",
+      "reason": "ownership transfer / copy of KYC entries on marketplace sale (marketplace boundary)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/search.ts",
+      "sql_access": 1,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read: global search over KYC entries"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "sql_access": 0,
+      "name_literals": 1,
+      "kind": "deferred",
+      "gap": "VLT-GAP-10",
+      "reason": "remaining read: share table registry (share lifecycle belongs to GAP-10)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "sql_access": 1,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-09",
+      "reason": "snapshot export reads KYC entries"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts",
+      "sql_access": 3,
+      "name_literals": 0,
+      "kind": "owner"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts",
+      "sql_access": 8,
+      "name_literals": 0,
+      "kind": "owner"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts",
+      "sql_access": 9,
+      "name_literals": 0,
+      "kind": "owner"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "sql_access": 2,
+      "name_literals": 0,
+      "kind": "owner"
+    },
+    {
+      "file": "scripts/src/reencrypt-vault.ts",
+      "sql_access": 0,
+      "name_literals": 1,
+      "kind": "deferred",
+      "gap": "VLT-GAP-07",
+      "reason": "re-encryption script rewrites ciphertext columns"
+    }
+  ],
+  "deferred_consumers": [
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read: mail-sync table registry"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "schema migrations (DDL)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "deferred_to": "VLT-GAP-11",
+      "reason": "health scan reads all KYC entries / data entities and writes flag columns"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "deferred_to": "VLT-GAP-09",
+      "reason": "snapshot export reads KYC data entities"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "deferred_to": "VLT-GAP-09",
+      "reason": "snapshot restore writes KYC entries / data entities back"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "deferred_to": "VLT-GAP-04",
+      "reason": "ownership transfer / copy of KYC entries on marketplace sale (marketplace boundary)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/search.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read: global search over KYC entries"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "deferred_to": "VLT-GAP-10",
+      "reason": "remaining read: share table registry (share lifecycle belongs to GAP-10)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "deferred_to": "VLT-GAP-09",
+      "reason": "snapshot export reads KYC entries"
+    },
+    {
+      "file": "scripts/src/reencrypt-vault.ts",
+      "deferred_to": "VLT-GAP-07",
+      "reason": "re-encryption script rewrites ciphertext columns"
+    }
+  ],
+  "deferred_behavior": [
+    {
+      "file": "artifacts/api-server/src/routes/exchange-api.ts",
+      "behavior": "exchange provider proxy (Binance/Bybit/KuCoin/Bitget balance calls, HMAC signing)",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "provider access is infrastructure/providers; 03-C moves only the KYC credential read/write"
+    }
+  ],
+  "duplicate_implementations": [],
+  "ci_lint": {
+    "staticOk": true,
+    "baselineUnchanged": true,
+    "executed": true,
+    "exit": 0,
+    "used_temp_typescript_link": true,
+    "tail": " | Ownership-gate baseline: 124 accepted, 124 unwired now, 0 new, 0 stale (baseline can only shrink). | OK — no new unwired param routes (124 pre-existing gap(s) in baseline, unchanged)."
+  },
+  "diff_audit": {
+    "changed": [
+      "artifacts/api-server/src/routes/exchange-api.ts",
+      "artifacts/api-server/src/routes/kyc.ts",
+      "artifacts/api-server/src/routes/projects.ts",
+      "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "scripts/src/check-ownership-gate-coverage.ts",
+      "scripts/src/test-route-ownership-regression.ts"
+    ],
+    "added": [
+      "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts"
+    ],
+    "removed": [],
+    "gap_added": [
+      "scripts/antas/vault/gap/freeze-vlt-gap-03-C-baseline.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-03-C.mjs"
+    ],
+    "unexpected": [],
+    "allowed_changed": [
+      "artifacts/api-server/src/routes/exchange-api.ts",
+      "artifacts/api-server/src/routes/projects.ts",
+      "artifacts/api-server/src/routes/kyc.ts",
+      "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "scripts/src/test-route-ownership-regression.ts",
+      "scripts/src/check-ownership-gate-coverage.ts"
+    ],
+    "allowed_added": [
+      "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts",
+      "scripts/antas/vault/gap/validate-vlt-gap-03-C.mjs",
+      "scripts/antas/vault/gap/freeze-vlt-gap-03-C-baseline.mjs"
+    ]
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build is NOT executed)",
+    "before_total": 132,
+    "after_total": 132,
+    "syntactic_errors": [],
+    "new_diagnostics": []
+  },
+  "tests": {
+    "differential_cases": 59,
+    "differential_passed": 59,
+    "security_checks": 7,
+    "security_passed": 7,
+    "mutation_tests": 22,
+    "mutation_detected": 22
+  },
+  "notes": [
+    "03-C rewires the KYC consumers that bypassed the Vault owner: exchange-api (credential read + key-pair write), projects (enroll-by-KYC lookup, owner re-fetch, private field-list copy, account_data mapping), the compat re-export in routes/kyc.ts, and the ownership regression suite import.",
+    "New owner modules: vault/application/kyc/exchange.ts, vault/application/kyc/enrollment.ts, vault/infrastructure/repositories/kyc-consumer-repository.ts; vault/security/kyc-ownership.ts gains kycEntryOwnerResource (moved from projects) and now shares one owner-lookup statement with kycEntryResource.",
+    "Every remaining KYC table access outside the owner is an explicit deferral to the gap that owns that behavior; the census FAILS on any unlisted access and on any stale deferral.",
+    "routes/exchange-api.ts still performs the exchange provider proxy; it holds no KYC table access after this phase and is recorded under deferred_behavior (VLT-GAP-12).",
+    "routes/kyc.ts and routes/kyc-data-entities.ts route tables are byte-identical in method/path/middleware to the sealed tree; only routes/kyc.ts lost its compat re-export (and a comment).",
+    "The frontend sources (components/kyc-entries.tsx, pages/user/vault-kyc-*.tsx) call the unchanged public API and are not API consumers of the owner modules; they are handled in the later GAP-03 phases.",
+    "The CI ownership-coverage lint is EXECUTED (a temporary node_modules link to the global TypeScript is created only when the upload has no node_modules, and removed afterwards). The ownership regression suite itself and the full tsc/build cannot run here (no @workspace packages / no DB); the differential suite and a degraded differential typecheck against the sealed baseline stand in and are recorded as such.",
+    "The exchange-balance handler's thrown/caught error semantics are preserved: credential load happens inside the route's existing try/catch and throws exactly what the inline code threw."
+  ],
+  "checks": [
+    {
+      "name": "seal:tree-manifest-hash-matches-seal",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:matches-03B-certified-state",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:frozen-consumers-intact-and-equal-to-manifest",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:03B-certified-hashes-equal-sealed-tree",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:earlier-validators-and-harness-unmodified (no weakened gate)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:frozen-baseline-shows-the-bypass (frozen exchange-api/projects still touch kyc_entries)",
+      "passed": true,
+      "details": "2/2"
+    },
+    {
+      "name": "destination-exists:vault/application/kyc/exchange.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/application/kyc/exchange.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/kyc/enrollment.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/application/kyc/enrollment.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/infrastructure/repositories/kyc-consumer-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/infrastructure/repositories/kyc-consumer-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/security/kyc-ownership.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/security/kyc-ownership.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/kyc/entries.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/application/kyc/entries.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "owner-exports-symbol:loadKycExchangeCredentials",
+      "passed": true,
+      "details": "vault/application/kyc/exchange.ts"
+    },
+    {
+      "name": "owner-exports-symbol:setKycEntryExchangeKeys",
+      "passed": true,
+      "details": "vault/application/kyc/exchange.ts"
+    },
+    {
+      "name": "owner-exports-symbol:loadKycEntryForEnrollment",
+      "passed": true,
+      "details": "vault/application/kyc/enrollment.ts"
+    },
+    {
+      "name": "owner-exports-symbol:buildEnrollmentAccountData",
+      "passed": true,
+      "details": "vault/application/kyc/enrollment.ts"
+    },
+    {
+      "name": "owner-exports-symbol:kycEntryOwnerResource",
+      "passed": true,
+      "details": "vault/security/kyc-ownership.ts"
+    },
+    {
+      "name": "owner-exports-symbol:kycEntryResource",
+      "passed": true,
+      "details": "vault/security/kyc-ownership.ts"
+    },
+    {
+      "name": "owner-exports-symbol:requireKycEntryOwnership",
+      "passed": true,
+      "details": "vault/security/kyc-ownership.ts"
+    },
+    {
+      "name": "repository-exports-symbol:selectKycEntryExchangeCredentials",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-exports-symbol:updateKycEntryExchangeKeys",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-exports-symbol:selectKycEntryForEnrollment",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-has-executable-sql",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "application-files-embed-no-sql-or-db (owner application modules go through the repository)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "application-exchange-owns-encryption-and-decryption",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "application-enrollment-decrypts-with-domain-field-list",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "03B-owner-passthrough-KYC_OWNERSHIP_RESOURCES-removed (dead re-export)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved-sql-is-verbatim-from-frozen-consumers",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved-escaper-`safe`-is-verbatim",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security-owner-sql-unchanged-vs-frozen-and-not-duplicated",
+      "passed": true,
+      "details": "SELECT user_id FROM kyc_entries WHERE id = ${} LIMIT 1 | SELECT user_id FROM kyc_data_entities WHERE id = ${} LIMIT 1"
+    },
+    {
+      "name": "owner-sentinel-equivalence (projects' private sentinel === KYC domain sentinel)",
+      "passed": true,
+      "details": "-1 vs -1"
+    },
+    {
+      "name": "decrypted-field-list-equivalence (projects' private copy === KYC domain list, same order)",
+      "passed": true,
+      "details": "10 vs 10"
+    },
+    {
+      "name": "consumer-imports-and-uses-owner:routes/exchange-api.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-kyc-table-sql:routes/exchange-api.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-kyc-table-name-literal:routes/exchange-api.ts",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "consumer-route-table-unchanged:routes/exchange-api.ts",
+      "passed": true,
+      "details": "method/path/middleware chain changed"
+    },
+    {
+      "name": "consumer-imports-and-uses-owner:routes/projects.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-kyc-table-sql:routes/projects.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-kyc-table-name-literal:routes/projects.ts",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "consumer-route-table-unchanged:routes/projects.ts",
+      "passed": true,
+      "details": "method/path/middleware chain changed"
+    },
+    {
+      "name": "consumer-imports-and-uses-owner:routes/kyc.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-kyc-table-sql:routes/kyc.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-kyc-table-name-literal:routes/kyc.ts",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "consumer-route-table-unchanged:routes/kyc.ts",
+      "passed": true,
+      "details": "method/path/middleware chain changed"
+    },
+    {
+      "name": "consumer-imports-and-uses-owner:routes/kyc-data-entities.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-kyc-table-sql:routes/kyc-data-entities.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-kyc-table-name-literal:routes/kyc-data-entities.ts",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "consumer-route-table-unchanged:routes/kyc-data-entities.ts",
+      "passed": true,
+      "details": "method/path/middleware chain changed"
+    },
+    {
+      "name": "exchange-api:PATCH-exchange-keys-is-thin-adapter",
+      "passed": true,
+      "details": "[[0,1,[\"setKycEntryExchangeKeys\"]]]"
+    },
+    {
+      "name": "exchange-api:GET-exchange-balance-has-no-db-and-uses-owner-loader",
+      "passed": true,
+      "details": "[[0,[\"String\",\"createHmac\",\"isNaN\",\"loadKycExchangeCredentials\",\"parseFloat\",\"parseInt\"]]]"
+    },
+    {
+      "name": "exchange-api:no-db-drizzle-or-crypto-imports-left",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "exchange-api:provider-proxy-still-here-and-recorded-as-deferral (GAP-12)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "projects:kyc-private-copies-removed (owner resource, field list, account_data mapper)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "projects:no-vault-crypto-decryptRow-import-left",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "projects:enroll-calls-owner-in-original-order (load → audit owner → mapping)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "kyc-route:compat-reexport-removed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "kyc-routes:still-thin-adapters (03-B state preserved)",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "no-file-imports-symbols-from-routes/kyc-or-routes/kyc-data-entities",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "ownership-regression-suite-imports-owner-not-route",
+      "passed": true,
+      "details": "../../artifacts/api-server/src/vault/security/kyc-ownership"
+    },
+    {
+      "name": "ownership-regression-suite-kyc-specs-preserved (5 kycEntrySpec cases)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "kyc-repositories-imported-only-by-the-kyc-application-layer (no route/lib bypass)",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "consumer-repository-imported-only-by-exchange-and-enrollment",
+      "passed": true,
+      "details": "[{\"file\":\"artifacts/api-server/src/vault/application/kyc/enrollment.ts\",\"repo\":\"vault/infrastructure/repositories/kyc-consumer-repository\"},{\"file\":\"artifacts/api-server/src/vault/application/kyc/exchange.ts\",\"repo\":\"vault/infrastructure/repositories/kyc-consumer-repository\"}]"
+    },
+    {
+      "name": "symbol-is-used:loadKycExchangeCredentials",
+      "passed": true,
+      "details": "[\"routes/exchange-api.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:setKycEntryExchangeKeys",
+      "passed": true,
+      "details": "[\"routes/exchange-api.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:loadKycEntryForEnrollment",
+      "passed": true,
+      "details": "[\"routes/projects.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:buildEnrollmentAccountData",
+      "passed": true,
+      "details": "[\"routes/projects.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:kycEntryOwnerResource",
+      "passed": true,
+      "details": "[\"routes/projects.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:kycEntryResource",
+      "passed": true,
+      "details": "[\"routes/exchange-api.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:requireKycEntryOwnership",
+      "passed": true,
+      "details": "[\"routes/exchange-api.ts\",\"routes/kyc.ts\",\"scripts/src/test-route-ownership-regression.ts\"]"
+    },
+    {
+      "name": "duplicate-scan:no-moved-sql-outside-owner",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicate-scan:detector-catches-the-frozen-private-copy (self-test)",
+      "passed": true,
+      "details": "1 hit(s) in the sealed projects.ts"
+    },
+    {
+      "name": "duplicate-scan:no-second-copy-of-KYC-sensitive-field-list",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "duplicate-scan:no-route-keeps-an-exchange-key-SQL-escaper",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:no-unclassified-kyc-table-access",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:no-stale-deferral (every deferral still accesses a KYC table)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:rewired-consumers-absent-from-census",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:every-deferral-names-a-later-gap",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: no such (owned) entry → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: entry without keys → hasKeys false (platform lower-cased)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: key but no secret → hasKeys false",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: binance with keys → proxied balances",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: bybit with keys",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: kucoin with keys",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: bitget with keys",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: unsupported exchange → note",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: null platform → empty exchange",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: exchange 401 → invalid key body",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: exchange network error → error body",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: db throws → error body (inside route try/catch)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: undecryptable secret → error body",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: non-numeric id → 400 (handler guard)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /exchange-balance/:id [routes/exchange-api.ts] — balance: query is scoped to the caller (other user)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: both key and secret saved encrypted",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: only apiKey",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: only apiSecret",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: empty apiKey → NULL (clear)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: null secret → NULL (clear)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: non-string key coerced as before",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: quote in secret stays escaped in SQL",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: nothing to update → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: non-numeric id → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: update throws → 500 DB error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /kyc-entries/:id/exchange-keys [routes/exchange-api.ts] — keys: update is scoped to the caller (other user)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: vault entity missing → 404 (KYC never reached)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: KYC entity not found / not owned → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: KYC entity already enrolled elsewhere → 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: KYC-backed re-enroll of a banned pair → 403",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: KYC-backed enroll already active → 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: KYC-backed fresh enrollment → 201 (account_data built from the KYC row)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: KYC-backed reactivation of a cancelled enrollment → 201",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: audit owner re-fetch finds no row → sentinel owner",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: string kycEntryId (JSON) → Number.isFinite guard → sentinel owner",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: fractional kycEntryId is bound as a parameter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: KYC lookup is scoped to the caller (other user)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: KYC lookup throws → propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: audit owner re-fetch throws → propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /projects/:id/enroll [routes/projects.ts] — enroll: no kycEntryId → KYC code never runs (manual account_data path)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryResource — kycEntryResource: owned id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryResource — kycEntryResource: unknown id → sentinel owner",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryResource — kycEntryResource: non-numeric id → sentinel, no db call",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryResource — kycEntryResource: db throws → propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryResource — kycEntryResource: other user's id resolves the real owner (PEP decides)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycDataEntityResource — kycDataEntityResource: owned id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycDataEntityResource — kycDataEntityResource: non-numeric id → sentinel",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryOwnerResource — kycEntryOwnerResource(5) owned",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryOwnerResource — kycEntryOwnerResource(5) no row → sentinel",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryOwnerResource — kycEntryOwnerResource(NaN) → sentinel, no db call",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryOwnerResource — kycEntryOwnerResource(Infinity) → sentinel, no db call",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryOwnerResource — kycEntryOwnerResource('5') string → sentinel (isFinite quirk preserved)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryOwnerResource — kycEntryOwnerResource(1.5) → queried as given",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryOwnerResource — kycEntryOwnerResource: db throws → propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL kycEntryOwnerResource — kycEntryOwnerResource: other owner returned as-is",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL buildEnrollmentAccountData — mapping: full row",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL buildEnrollmentAccountData — mapping: sparse row → empty strings, zero preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL buildEnrollmentAccountData — mapping: nulls fall back to empty strings",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL buildEnrollmentAccountData — mapping: sensitive fields are exactly the decrypt list (decryptRow argument logged)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:route-middleware-chains-identical:routes/exchange-api.ts",
+      "passed": true,
+      "details": "auth / ownership action / builder / deny body / credit-gate chain changed"
+    },
+    {
+      "name": "security:route-middleware-chains-identical:routes/projects.ts",
+      "passed": true,
+      "details": "auth / ownership action / builder / deny body / credit-gate chain changed"
+    },
+    {
+      "name": "security:route-middleware-chains-identical:routes/kyc.ts",
+      "passed": true,
+      "details": "auth / ownership action / builder / deny body / credit-gate chain changed"
+    },
+    {
+      "name": "security:route-middleware-chains-identical:routes/kyc-data-entities.ts",
+      "passed": true,
+      "details": "auth / ownership action / builder / deny body / credit-gate chain changed"
+    },
+    {
+      "name": "security:vault-security-owner-gate-is-callable",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:owner-gate-binds-the-KYC-entry-resource-builder",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:exchange-api-and-kyc-routes-share-one-ownership-builder",
+      "passed": true,
+      "details": "2+4 gated routes, 1 distinct builders"
+    },
+    {
+      "name": "mutation-detected:exchange SELECT drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:exchange UPDATE drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:enrollment lookup drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:SQL escaper removed (injection)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:apiKey stored in plaintext",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:apiSecret stored in plaintext",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:exchange secret no longer decrypted",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:platform no longer lower-cased",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:'Nothing to update' becomes 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:invalid id guard removed from key save",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:DB error swallowed as success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:enrollment mapping drops a field",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:enrollment mapping stops decrypting",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:enrollment decrypts with a shorter field list",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:numeric owner resource loses the isFinite guard",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:numeric owner resource returns caller-agnostic owner",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:kycEntryResource sentinel changed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:exchange-keys route ownership gate removed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:exchange-balance route ownership action renamed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:projects enroll skips the KYC ownership audit",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:projects enroll ignores the KYC-entity-in-use guard",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:projects enroll 404 body changed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:security",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:GET /exchange-balance/:id:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:GET /exchange-balance/:id:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:PATCH /kyc-entries/:id/exchange-keys:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:PATCH /kyc-entries/:id/exchange-keys:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:POST /projects/:id/enroll:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:POST /projects/:id/enroll:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:CALL kycEntryResource:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:CALL kycEntryResource:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:CALL kycEntryOwnerResource:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:CALL kycEntryOwnerResource:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:CALL buildEnrollmentAccountData:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:CALL buildEnrollmentAccountData:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:security-cases-on-every-rewired-consumer",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-skipped-tests",
+      "passed": true,
+      "details": "59/59"
+    },
+    {
+      "name": "differential-cases-executed-db-calls",
+      "passed": true,
+      "details": "51 cases recorded interactions"
+    },
+    {
+      "name": "differential-cases-exercise-the-rewired-code (some case ran past the old KYC code path to a 200/201)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:no-unrelated-changes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "ci-lint:check-ownership-gate-coverage-scans-vault-security",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "ci-lint:baseline-not-widened",
+      "passed": true,
+      "details": "ownership-gate-baseline.json must be unchanged (the rewire must not grandfather new gaps)"
+    },
+    {
+      "name": "ci-lint:executed-green",
+      "passed": true,
+      "details": " | Ownership-gate baseline: 124 accepted, 124 unwired now, 0 new, 0 stale (baseline can only shrink). | OK — no new unwired param routes (124 pre-existing gap(s) in baseline, unchanged)."
+    },
+    {
+      "name": "typecheck:no-syntax-errors",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-diagnostics-vs-baseline",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "status": "PASS",
+  "evidence_body_sha256": "2491ac68bd56efc982e07660c547f90dec4d2d282d288d6d4fa1f7f278cbd834",
+  "generated_at": "2026-09-30T10:41:56.185Z"
+}

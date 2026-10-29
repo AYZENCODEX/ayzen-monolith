@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "1.0.0",
+  "sourceCatalog": "infrastructure/deployment/service-catalog.json",
+  "services": [
+    { "id": "api-gateway", "owner": "platform", "kind": "api", "source": "apps/api-gateway", "port": 5000, "health": "/health", "readiness": "/ready", "deploymentTarget": "public-gateway" },
+    { "id": "monolith", "owner": "core", "kind": "compatibility-api", "source": "artifacts/api-server", "port": 8080, "health": "/health", "readiness": "/ready", "deploymentTarget": "compatibility-runtime" },
+    { "id": "event-worker", "owner": "platform", "kind": "worker", "source": "apps/worker", "port": 8110, "health": "/health", "readiness": "/ready", "deploymentTarget": "async-worker" },
+    { "id": "telegram-gateway", "owner": "telegram-platform", "kind": "telegram", "source": "apps/telegram-gateway", "port": 8120, "health": "/health", "readiness": "/ready", "deploymentTarget": "telegram-edge" },
+    { "id": "identity", "owner": "identity", "kind": "domain-service", "source": "services/identity", "port": 8100, "health": "/health", "readiness": "/ready", "deploymentTarget": "domain-runtime" },
+    { "id": "finance", "owner": "ryft", "kind": "domain-service", "source": "services/finance", "port": 8101, "health": "/health", "readiness": "/ready", "deploymentTarget": "domain-runtime" },
+    { "id": "vault", "owner": "sylo", "kind": "domain-service", "source": "services/vault", "port": 8102, "health": "/health", "readiness": "/ready", "deploymentTarget": "domain-runtime" },
+    { "id": "mail", "owner": "wisp", "kind": "domain-service", "source": "services/mail", "port": 8103, "health": "/health", "readiness": "/ready", "deploymentTarget": "domain-runtime" },
+    { "id": "notification", "owner": "platform", "kind": "domain-service", "source": "services/notification", "port": 8104, "health": "/health", "readiness": "/ready", "deploymentTarget": "domain-runtime" },
+    { "id": "workflow", "owner": "skarn", "kind": "domain-service", "source": "services/workflow", "port": 8105, "health": "/health", "readiness": "/ready", "deploymentTarget": "domain-runtime" },
+    { "id": "ai-agent", "owner": "zynth", "kind": "domain-service", "source": "services/ai", "port": 8106, "health": "/health", "readiness": "/ready", "deploymentTarget": "domain-runtime" },
+    { "id": "marketplace", "owner": "verve", "kind": "domain-service", "source": "services/marketplace", "port": 8107, "health": "/health", "readiness": "/ready", "deploymentTarget": "domain-runtime" },
+    { "id": "search", "owner": "platform", "kind": "domain-service", "source": "services/search", "port": 8108, "health": "/health", "readiness": "/ready", "deploymentTarget": "domain-runtime" },
+    { "id": "intelligence", "owner": "intelligence", "kind": "intelligence", "source": "services/intelligence", "port": 8109, "health": "/health", "readiness": "/ready", "deploymentTarget": "intelligence-runtime" },
+    { "id": "admin", "owner": "admin", "kind": "control-plane", "source": "services/admin", "port": 8111, "health": "/health", "readiness": "/ready", "deploymentTarget": "admin-runtime" }
+  ]
+}

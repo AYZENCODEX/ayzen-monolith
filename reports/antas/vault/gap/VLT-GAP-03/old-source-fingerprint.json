@@ -1,0 +1,1121 @@
+{
+  "phase": "VLT-GAP-03",
+  "sub_phase": "VLT-GAP-03-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "386d676b6ff44cc0732a2b5a451a7979a27ad4a74c8d9445124224e444169270",
+  "validator_version": "1.0.0",
+  "validator_sha256": "b7ce83bf8f53cb06c268ea3092740f096d8aaeb19dae761c541e96b7ada7342a",
+  "description": "Pre-extraction (sealed) vs current fingerprint and disposition of every top-level symbol in the old KYC sources",
+  "routes": [
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "metrics": {
+        "baseline_lines": 287,
+        "current_lines": 66,
+        "baseline_db_refs": 32,
+        "current_db_refs": 0,
+        "baseline_sql_literals": 10,
+        "current_sql_literals": 0,
+        "baseline_tokens": 2269,
+        "current_tokens": 609
+      },
+      "sha256": {
+        "baseline": "05201d5c50191aa0682f2e7425902f9f07f04d65c4e8743d7f2cf1052b881a69",
+        "current": "9788b5e5d94b225a8d8dfeb70b9993b980d5161f41eadb42c20511549c327d4b"
+      },
+      "symbols": [
+        {
+          "symbol": "router",
+          "kind": "const",
+          "lines": [
+            11,
+            11
+          ],
+          "baseline_fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49",
+          "disposition": "ADAPTER_WIRING"
+        },
+        {
+          "symbol": "val",
+          "kind": "const",
+          "lines": [
+            14,
+            14
+          ],
+          "baseline_fingerprint": "1ea4a7f7def0d6550e3d0c4086b13c651d56c24999bdd6fd3bcf5cf94101e2a4",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "numVal",
+          "kind": "const",
+          "lines": [
+            15,
+            15
+          ],
+          "baseline_fingerprint": "4af46399d7696c34fae062dd06defdcfc2231c1cd2712cbde76012472890b9a6",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "DATA_ENTITY_JOIN",
+          "kind": "const",
+          "lines": [
+            23,
+            25
+          ],
+          "baseline_fingerprint": "978157250dfc252922adc0c536c68d3a1460bfa46e2777304861bfffcfadff0e",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "DATA_ENTITY_SELECT",
+          "kind": "const",
+          "lines": [
+            26,
+            29
+          ],
+          "baseline_fingerprint": "e0181db199088da3d1a86d9cd5f30df9e8829b463da627b5a4d42ad4a2c9b9eb",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "fetchWithData",
+          "kind": "function",
+          "lines": [
+            33,
+            41
+          ],
+          "baseline_fingerprint": "1e43856927762bf6ea38718373999dbb587c3832b3c2b77cb908b68386781abb",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "kycEntryResource",
+          "kind": "const",
+          "lines": [
+            50,
+            56
+          ],
+          "baseline_fingerprint": "041311c15bef48c0c24bed31202d56d53254007b82caeeb628ceb5c9b464db8b",
+          "disposition": "MOVED_REFACTORED_WITH_EXECUTED_PROOF"
+        },
+        {
+          "symbol": "requireKycEntryOwnership",
+          "kind": "function",
+          "lines": [
+            57,
+            59
+          ],
+          "baseline_fingerprint": "4a468fa1679d1ecf2c5cd719ca75da9280b77dea4ab525276e8ac0326d02a736",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "GET /kyc-entries",
+          "kind": "route",
+          "lines": [
+            62,
+            90
+          ],
+          "baseline_fingerprint": "091232c5a87cfff0b71e700746529da269d1be308417406f560fe2a3867c65b4",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "POST /kyc-entries",
+          "kind": "route",
+          "lines": [
+            93,
+            147
+          ],
+          "baseline_fingerprint": "e57dd1090c36f281514e93441f116a2a673e15a5f76a719fd7956c3b4fa192ef",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "GET /kyc-entries/:id",
+          "kind": "route",
+          "lines": [
+            150,
+            167
+          ],
+          "baseline_fingerprint": "4a3ad9e3bf4970588e0d16fbbef847e373bd756e638e223a1aeceba46485a701",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "PUT /kyc-entries/:id",
+          "kind": "route",
+          "lines": [
+            170,
+            220
+          ],
+          "baseline_fingerprint": "9ab8cc13226fd75f8288c6bce88f2c837a1689e9188874eb2ffef070becfd141",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "PATCH /kyc-entries/:id/status",
+          "kind": "route",
+          "lines": [
+            223,
+            243
+          ],
+          "baseline_fingerprint": "1ad5d1809ccdd83028103f3073376bb5bc83215bade61ef2a28f0193b6c9f447",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "DELETE /kyc-entries/:id",
+          "kind": "route",
+          "lines": [
+            246,
+            256
+          ],
+          "baseline_fingerprint": "73897b6e6234bd20480a3cc13f1e0bbcc7c21e2d16c036b08aad88d99b44ab05",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "GET /kyc-entries/enrollments",
+          "kind": "route",
+          "lines": [
+            264,
+            284
+          ],
+          "baseline_fingerprint": "614b1971628194a6f0119ff41c4b88751ec02f30bdd1a0ea3b223d67af524fec",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "default",
+          "kind": "export-default",
+          "lines": [
+            286,
+            286
+          ],
+          "baseline_fingerprint": "445e7382cb36dfcc33fab57c8c6071c671a4062cb9629c93be8236ab7ad22ef1",
+          "disposition": "ADAPTER_WIRING"
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "metrics": {
+        "baseline_lines": 185,
+        "current_lines": 57,
+        "baseline_db_refs": 20,
+        "current_db_refs": 0,
+        "baseline_sql_literals": 11,
+        "current_sql_literals": 0,
+        "baseline_tokens": 1498,
+        "current_tokens": 498
+      },
+      "sha256": {
+        "baseline": "42558bc1c65cbdf067505479afb184853b2c39f79af1857067372c72e5f0d2bd",
+        "current": "18733afba6989a9d6456c7b072f2e056e052bd92647dd38ee66474fe03cda63b"
+      },
+      "symbols": [
+        {
+          "symbol": "router",
+          "kind": "const",
+          "lines": [
+            9,
+            9
+          ],
+          "baseline_fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49",
+          "disposition": "ADAPTER_WIRING"
+        },
+        {
+          "symbol": "DATA_ENTITY_SENSITIVE_FIELDS",
+          "kind": "const",
+          "lines": [
+            14,
+            14
+          ],
+          "baseline_fingerprint": "60f6bcfdb7743b555e4e782048dd321d4c183277032b7d2c028ccb4998d9d975",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "safe",
+          "kind": "const",
+          "lines": [
+            17,
+            17
+          ],
+          "baseline_fingerprint": "3f03bfb333b431d661531cdc00e5ae7603642f836705f7b6373908724f68c6d1",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "safeDate",
+          "kind": "const",
+          "lines": [
+            18,
+            18
+          ],
+          "baseline_fingerprint": "a10a155a68e1aa254f8b831e6630896b28c377888c4113957742d8bdf8b2be9b",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "USED_BY_KYC",
+          "kind": "const",
+          "lines": [
+            27,
+            27
+          ],
+          "baseline_fingerprint": "e15da57baf5e73d7d76e5cddf80fee4142079f6425e73cbbac61f529ec5ba04f",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "USED_BY_VAULT",
+          "kind": "const",
+          "lines": [
+            28,
+            28
+          ],
+          "baseline_fingerprint": "88d31f58ec8d0a9fae73ddb936613206bfbec18afcf59d0a8a043e00732ad03f",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "USED_EXPR",
+          "kind": "const",
+          "lines": [
+            29,
+            29
+          ],
+          "baseline_fingerprint": "3375e21077bafbfe7c3ff728509156337f36d0d7e81366c486d2c6570d1088c1",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "KYC_DATA_ENTITY_OWNER_SENTINEL_NONE",
+          "kind": "const",
+          "lines": [
+            35,
+            35
+          ],
+          "baseline_fingerprint": "aea81f568a14527da884a40fe91fdce92a30c68f71b9786a74ce631972c7a0cf",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "kycDataEntityResource",
+          "kind": "const",
+          "lines": [
+            36,
+            42
+          ],
+          "baseline_fingerprint": "1a2d7e81da8d6a6e4672e6073686a6cf3dc896ff6a247ff964a1f2718142ef6b",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "requireKycDataEntityOwnership",
+          "kind": "function",
+          "lines": [
+            43,
+            45
+          ],
+          "baseline_fingerprint": "845ee34fece3e1093135fe337002430c2ea27315d5406f233af6dbb329d189ae",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "GET /kyc-data-entities",
+          "kind": "route",
+          "lines": [
+            48,
+            69
+          ],
+          "baseline_fingerprint": "e48fc40e8f595e9bf5e829af126c27e3ebbfa7f46b872f3b59a878ef176c7263",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "GET /kyc-data-entities/overview",
+          "kind": "route",
+          "lines": [
+            72,
+            87
+          ],
+          "baseline_fingerprint": "e0fe3d3a6c709ab841bd8cae59c508c53bc0c400bac2f8d8e4dc660eaee4213d",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "POST /kyc-data-entities",
+          "kind": "route",
+          "lines": [
+            90,
+            110
+          ],
+          "baseline_fingerprint": "1ab9c3b098a01dff67a18d989b4f321fe7ae41edd2d34f6a40897761e72b7ace",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "GET /kyc-data-entities/:id",
+          "kind": "route",
+          "lines": [
+            113,
+            130
+          ],
+          "baseline_fingerprint": "77159b435b9b6ef2ed74fe5008ed90bed2d9a2429062ba4027d4119a5376f84e",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "PUT /kyc-data-entities/:id",
+          "kind": "route",
+          "lines": [
+            133,
+            157
+          ],
+          "baseline_fingerprint": "14cef096bf287251214b9dd0fd5a0c5c68f82504e5d6163409a473eb1a529486",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "DELETE /kyc-data-entities/:id",
+          "kind": "route",
+          "lines": [
+            162,
+            182
+          ],
+          "baseline_fingerprint": "b4c25299060dc9bf305c2b584ba390e763f7ec2fe2037eb0b4afc39639981ac7",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "default",
+          "kind": "export-default",
+          "lines": [
+            184,
+            184
+          ],
+          "baseline_fingerprint": "445e7382cb36dfcc33fab57c8c6071c671a4062cb9629c93be8236ab7ad22ef1",
+          "disposition": "ADAPTER_WIRING"
+        }
+      ]
+    }
+  ],
+  "disposition_summary": {
+    "ADAPTER_WIRING": 4,
+    "MOVED_VERBATIM": 15,
+    "MOVED_REFACTORED_WITH_EXECUTED_PROOF": 1,
+    "ADAPTER_THIN": 13
+  },
+  "frontend": [
+    {
+      "file": "artifacts/ayzen/src/components/kyc-entries.tsx",
+      "kind": "ui-component",
+      "disposition": "UI_ADAPTER",
+      "sha256": "276f35167d2c65459cd8aff508c1e003c1ca7b27dcc8a57e32a48d98d5f86e6e",
+      "baseline_sha256": "276f35167d2c65459cd8aff508c1e003c1ca7b27dcc8a57e32a48d98d5f86e6e",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 653,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "cross_domain_read_exceptions": [
+        {
+          "line": 177,
+          "url": "${MAIL_BASE}/api/email-accounts",
+          "method": "GET",
+          "note": "read-only call to the Mail Hub email-accounts endpoint (not a KYC resource); no request body, no mutation"
+        }
+      ],
+      "symbols": [
+        {
+          "symbol": "MAIL_BASE",
+          "lines": [
+            24,
+            24
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "KycEntry",
+          "lines": [
+            27,
+            67
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "EMPTY_FORM",
+          "lines": [
+            69,
+            85
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "rowToForm",
+          "lines": [
+            88,
+            116
+          ],
+          "disposition": "COMPAT_MAPPING_API_TO_FORM"
+        },
+        {
+          "symbol": "FORM_TABS",
+          "lines": [
+            118,
+            122
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "FormTab",
+          "lines": [
+            123,
+            123
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "AccountSubTab",
+          "lines": [
+            124,
+            124
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "KYC_SUBTABS",
+          "lines": [
+            126,
+            129
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "KycSubTab",
+          "lines": [
+            130,
+            130
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "SELLER_SCHEMA_FIELDS",
+          "lines": [
+            134,
+            134
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "KycDialog",
+          "lines": [
+            136,
+            141
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 0,
+          "db_refs": 0
+        },
+        {
+          "symbol": "CategoryBadge",
+          "lines": [
+            143,
+            154
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 0,
+          "db_refs": 0
+        },
+        {
+          "symbol": "KycDialogInner",
+          "lines": [
+            157,
+            440
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 2,
+          "branches": 49,
+          "db_refs": 0
+        },
+        {
+          "symbol": "KycEntries",
+          "lines": [
+            443,
+            652
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 3,
+          "branches": 39,
+          "db_refs": 0
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx",
+      "kind": "ui-page",
+      "disposition": "UI_ADAPTER_WITH_DEFERRED_DERIVATION",
+      "sha256": "960eeaa8726ec6af5417d732225218fe2d3ff39a6ceed18091a55d35f1d2729c",
+      "baseline_sha256": "960eeaa8726ec6af5417d732225218fe2d3ff39a6ceed18091a55d35f1d2729c",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 351,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "cross_domain_read_exceptions": [],
+      "symbols": [
+        {
+          "symbol": "KycEntryRow",
+          "lines": [
+            15,
+            26
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "calcROI",
+          "lines": [
+            28,
+            31
+          ],
+          "disposition": "DISPLAY_DERIVATION_DEFERRED_VLT-GAP-16",
+          "fingerprint": "79d705d980371d91436b45122432631aab857ee8efdaa83326ac16efa31f6896",
+          "branches": 2,
+          "no_server_call": true
+        },
+        {
+          "symbol": "ROIBadge",
+          "lines": [
+            33,
+            42
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 3,
+          "db_refs": 0
+        },
+        {
+          "symbol": "catStyle",
+          "lines": [
+            47,
+            53
+          ],
+          "disposition": "DISPLAY_STYLE"
+        },
+        {
+          "symbol": "OverviewTab",
+          "lines": [
+            56,
+            174
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 16,
+          "db_refs": 0
+        },
+        {
+          "symbol": "CategoryTab",
+          "lines": [
+            177,
+            294
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 22,
+          "db_refs": 0
+        },
+        {
+          "symbol": "VaultKycDashboard",
+          "lines": [
+            297,
+            350
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 1,
+          "branches": 5,
+          "db_refs": 0
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-detail.tsx",
+      "kind": "ui-page",
+      "disposition": "UI_ADAPTER",
+      "sha256": "35de32b5d9e7e56bbb332b69c96c9863bc98362a48aae48ee195ad76a07f0f3c",
+      "baseline_sha256": "35de32b5d9e7e56bbb332b69c96c9863bc98362a48aae48ee195ad76a07f0f3c",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 193,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "cross_domain_read_exceptions": [],
+      "symbols": [
+        {
+          "symbol": "VaultKycDataDetail",
+          "lines": [
+            22,
+            192
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 3,
+          "branches": 43,
+          "db_refs": 0
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-list.tsx",
+      "kind": "ui-page",
+      "disposition": "UI_ADAPTER",
+      "sha256": "e371ca8a091e4bb1e3416cc1b69018583d5ecc11fbee4506c033aa9549e33fee",
+      "baseline_sha256": "e371ca8a091e4bb1e3416cc1b69018583d5ecc11fbee4506c033aa9549e33fee",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 206,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "cross_domain_read_exceptions": [],
+      "symbols": [
+        {
+          "symbol": "DataEntity",
+          "lines": [
+            28,
+            43
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "EMPTY_FORM",
+          "lines": [
+            45,
+            45
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "CreateDataEntityDialog",
+          "lines": [
+            48,
+            91
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 1,
+          "branches": 6,
+          "db_refs": 0
+        },
+        {
+          "symbol": "VaultKycDataList",
+          "lines": [
+            93,
+            205
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 1,
+          "branches": 12,
+          "db_refs": 0
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-overview.tsx",
+      "kind": "ui-page",
+      "disposition": "UI_ADAPTER",
+      "sha256": "25297809f132960f4df49d79aeb68ccd0ff430df4471c17f5f44a46db7b79552",
+      "baseline_sha256": "25297809f132960f4df49d79aeb68ccd0ff430df4471c17f5f44a46db7b79552",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 6,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "cross_domain_read_exceptions": [],
+      "symbols": [
+        {
+          "symbol": "VaultKycDataOverview",
+          "lines": [
+            3,
+            5
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 0,
+          "db_refs": 0
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-unused.tsx",
+      "kind": "ui-page",
+      "disposition": "UI_ADAPTER",
+      "sha256": "ff95f0d8b43883d5559ec586fd8984a901de521544c94668a936c4ba87e4134b",
+      "baseline_sha256": "ff95f0d8b43883d5559ec586fd8984a901de521544c94668a936c4ba87e4134b",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 6,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "cross_domain_read_exceptions": [],
+      "symbols": [
+        {
+          "symbol": "VaultKycDataUnused",
+          "lines": [
+            3,
+            5
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 0,
+          "db_refs": 0
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-used.tsx",
+      "kind": "ui-page",
+      "disposition": "UI_ADAPTER",
+      "sha256": "51dd9db1182486331c96ce82e3711e7155eee5b2e8f740c63ba1c7c0b7c717d8",
+      "baseline_sha256": "51dd9db1182486331c96ce82e3711e7155eee5b2e8f740c63ba1c7c0b7c717d8",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 6,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "cross_domain_read_exceptions": [],
+      "symbols": [
+        {
+          "symbol": "VaultKycDataUsed",
+          "lines": [
+            3,
+            5
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 0,
+          "db_refs": 0
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+      "kind": "ui-page",
+      "disposition": "UI_ADAPTER_WITH_DEFERRED_DERIVATION",
+      "sha256": "8ae7b948d9b9acc569578d4cb72a1b5337a3fa48dc8efcdd6ce213a2b065db30",
+      "baseline_sha256": "8ae7b948d9b9acc569578d4cb72a1b5337a3fa48dc8efcdd6ce213a2b065db30",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 771,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "cross_domain_read_exceptions": [],
+      "symbols": [
+        {
+          "symbol": "ACCESS_TABS",
+          "lines": [
+            27,
+            31
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "AccessTab",
+          "lines": [
+            32,
+            32
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "TABS",
+          "lines": [
+            34,
+            40
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "KycDetailTab",
+          "lines": [
+            41,
+            41
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "KYC_HEALTH_CHECKS",
+          "lines": [
+            44,
+            57
+          ],
+          "disposition": "DISPLAY_DERIVATION_DEFERRED_VLT-GAP-11",
+          "fingerprint": "382cb59b4c409d046fcc27be3a78c5b9bfe1668216ee0e90f86e8b6aa953ea3b",
+          "branches": 1,
+          "no_server_call": true
+        },
+        {
+          "symbol": "kycHealthScore",
+          "lines": [
+            59,
+            62
+          ],
+          "disposition": "DISPLAY_DERIVATION_DEFERRED_VLT-GAP-11",
+          "fingerprint": "a91899a71cc531de3a59017dc7c943a84c17967f3628c0ce740513f26448835a",
+          "branches": 0,
+          "no_server_call": true
+        },
+        {
+          "symbol": "healthColor",
+          "lines": [
+            63,
+            67
+          ],
+          "disposition": "DISPLAY_DERIVATION_DEFERRED_VLT-GAP-11",
+          "fingerprint": "5d437cefda69599371e61d9996eaf51ed8bb50b938a53a284b5d6ad281ecd255",
+          "branches": 2,
+          "no_server_call": true
+        },
+        {
+          "symbol": "healthLabel",
+          "lines": [
+            68,
+            72
+          ],
+          "disposition": "DISPLAY_DERIVATION_DEFERRED_VLT-GAP-11",
+          "fingerprint": "ec9f56e4be25a16800dcec14cb38937db572cb62991ee2b340e55195830bf632",
+          "branches": 2,
+          "no_server_call": true
+        },
+        {
+          "symbol": "getRisks",
+          "lines": [
+            75,
+            84
+          ],
+          "disposition": "DISPLAY_DERIVATION_DEFERRED_VLT-GAP-11",
+          "fingerprint": "3f69fcb82d483a9b31a2f25993845a2fe1f732faee1c1b56054867bcfcd8bea0",
+          "branches": 6,
+          "no_server_call": true
+        },
+        {
+          "symbol": "calcAge",
+          "lines": [
+            86,
+            95
+          ],
+          "disposition": "DISPLAY_DERIVATION_DEFERRED_VLT-GAP-16",
+          "fingerprint": "67ff825341cb193c29c795183c7b906f58f286a7787c3c5ac2b898fafd4b09c3",
+          "branches": 4,
+          "no_server_call": true
+        },
+        {
+          "symbol": "SecretField",
+          "lines": [
+            97,
+            122
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 6,
+          "db_refs": 0
+        },
+        {
+          "symbol": "InfoRow",
+          "lines": [
+            124,
+            132
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 1,
+          "db_refs": 0
+        },
+        {
+          "symbol": "VaultKycDetail",
+          "lines": [
+            134,
+            770
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 6,
+          "branches": 123,
+          "db_refs": 0
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx",
+      "kind": "ui-page",
+      "disposition": "UI_ADAPTER",
+      "sha256": "52ec0de616bff76b0d747a4d16afd4d443d04f88626529efd7763524aaf8663e",
+      "baseline_sha256": "52ec0de616bff76b0d747a4d16afd4d443d04f88626529efd7763524aaf8663e",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 227,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "cross_domain_read_exceptions": [],
+      "symbols": [
+        {
+          "symbol": "EnrolledRow",
+          "lines": [
+            29,
+            42
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "KycEntryRow",
+          "lines": [
+            44,
+            50
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "STATUS_COLOR",
+          "lines": [
+            52,
+            58
+          ],
+          "disposition": "DISPLAY_STYLE"
+        },
+        {
+          "symbol": "STATUS_META",
+          "lines": [
+            60,
+            66
+          ],
+          "disposition": "DISPLAY_STYLE"
+        },
+        {
+          "symbol": "useEnrollmentData",
+          "lines": [
+            68,
+            90
+          ],
+          "disposition": "UI_ADAPTER_HOOK",
+          "api_calls": 2,
+          "db_refs": 0
+        },
+        {
+          "symbol": "StatCard",
+          "lines": [
+            92,
+            102
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 0,
+          "db_refs": 0
+        },
+        {
+          "symbol": "OverviewTab",
+          "lines": [
+            104,
+            162
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 10,
+          "db_refs": 0
+        },
+        {
+          "symbol": "ActiveTab",
+          "lines": [
+            164,
+            201
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 6,
+          "db_refs": 0
+        },
+        {
+          "symbol": "VaultKycEnrolled",
+          "lines": [
+            203,
+            226
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 0,
+          "db_refs": 0
+        }
+      ]
+    }
+  ],
+  "census_consistency_with_03A": [
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "records": 16,
+      "scan": 16,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "records": 17,
+      "scan": 17,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/kyc-entries.tsx",
+      "records": 14,
+      "scan": 14,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx",
+      "records": 7,
+      "scan": 7,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-detail.tsx",
+      "records": 1,
+      "scan": 1,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-list.tsx",
+      "records": 4,
+      "scan": 4,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-overview.tsx",
+      "records": 1,
+      "scan": 1,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-unused.tsx",
+      "records": 1,
+      "scan": 1,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-used.tsx",
+      "records": 1,
+      "scan": 1,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+      "records": 13,
+      "scan": 13,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx",
+      "records": 9,
+      "scan": 9,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    }
+  ]
+}

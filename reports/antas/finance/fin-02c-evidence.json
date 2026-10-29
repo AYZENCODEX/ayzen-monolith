@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-02C",
+  "title": "Extract pure schedule/recurrence calendar math into finance/domain",
+  "timestamp": "2026-10-16T00:00:00Z",
+  "status": "PASS",
+  "statusReason": "FIN-02C behavior-preservation evidence from the original run is unchanged; the previously unrun typecheck, build, consumer and database checks were later run with exit 0 in the FIN-02D full verification (see promotion).",
+  "commit": {
+    "sha": "UNAVAILABLE",
+    "workingTreeAtStart": "Uploaded archive without .git; cannot be bound to a revision.",
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "baseShaSource": "fin-02d-evidence.json"
+  },
+  "objective": "Make one canonical owner for month-clamping date arithmetic that existed as two identical private copies, without changing behavior.",
+  "oldToNewMapping": [
+    {
+      "symbol": "addMonths",
+      "from": "artifacts/api-server/src/lib/finance-accounting.ts",
+      "to": "artifacts/api-server/src/finance/domain/recurrence-dates.ts#addMonthsClamped",
+      "compatibility": "private function; sole callers (2 amortization/depreciation sites) now import the owner"
+    },
+    {
+      "symbol": "setMonthClamped + advance",
+      "from": "artifacts/api-server/src/lib/finance-recurring-cron.ts",
+      "to": "artifacts/api-server/src/finance/domain/recurrence-dates.ts#advanceRecurringDate",
+      "compatibility": "private functions; sole caller (runFinanceRecurringSweep) now imports the owner"
+    }
+  ],
+  "migratedConsumers": [
+    "lib/finance-accounting.ts",
+    "lib/finance-recurring-cron.ts"
+  ],
+  "filesCreated": [
+    "artifacts/api-server/src/finance/domain/recurrence-dates.ts",
+    "artifacts/api-server/src/finance/domain/recurrence-dates.test.ts"
+  ],
+  "filesChanged": [
+    "artifacts/api-server/src/lib/finance-accounting.ts",
+    "artifacts/api-server/src/lib/finance-recurring-cron.ts",
+    "scripts/antas/finance/validate-boundaries.mjs",
+    "docs/antas/finance/finance-boundaries.md",
+    "reports/antas/finance/fin-01-dependency-scan.json (regenerated)"
+  ],
+  "filesDeleted": [],
+  "commands": [
+    {
+      "command": "differential old-vs-new (verbatim old code vs new module), 2019-2030 daily-ish x n in -14..30 x 6 frequencies, TZ in UTC, Asia/Dhaka, America/New_York, Europe/London, Australia/Lord_Howe, Pacific/Apia",
+      "exitCode": 0,
+      "result": "1,069,112 comparisons per timezone, 0 mismatches; invalid-date inputs also identical."
+    },
+    {
+      "command": "node --test --import tsx src/finance/domain/*.test.ts",
+      "exitCode": 0,
+      "tests": 11,
+      "passed": 11,
+      "failed": 0,
+      "result": "7 pre-existing + 4 new (fixtures captured from old implementation)."
+    },
+    {
+      "command": "node --experimental-strip-types --check on finance-accounting.ts and finance-recurring-cron.ts",
+      "exitCode": 0,
+      "result": "Syntax only; not a type check."
+    },
+    {
+      "command": "tsc --ignoreConfig --noEmit --strict recurrence-dates.ts",
+      "exitCode": 0,
+      "result": "New module type-checks in isolation (no imports)."
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 20 Finance sources, 0 findings; one owner each for addMonthsClamped/advanceRecurringDate; retired copies absent; both consumers import owner."
+    },
+    {
+      "command": "validator negative tests on throwaway copy (re-added addMonths copy, consumer drops owner import, impure import in owner, owner removed)",
+      "exitCode": 1,
+      "result": "All 4 regressions detected."
+    }
+  ],
+  "preservedQuirks": [
+    "Arithmetic uses process-local timezone, as the originals did.",
+    "Unknown frequency strings fall back to monthly.",
+    "Invalid Date in gives invalid Date out."
+  ],
+  "notRun": [
+    "pnpm install, pnpm typecheck, pnpm run build (no pnpm/network).",
+    "Type check of finance-accounting.ts and finance-recurring-cron.ts against workspace types.",
+    "test:finance-db and any route/cron integration test (no database).",
+    "Amortization/depreciation schedule output comparison against a real database."
+  ],
+  "diffReview": "Removed two private duplicate implementations and two stale bug-fix comments (replaced by pointers to the owner); added one import line to each consumer; renamed 2 call sites addMonths->addMonthsClamped and 1 advance->advanceRecurringDate. No route, schema, money, rounding or authorization logic touched.",
+  "limitations": [
+    "No commit SHA; evidence cannot be bound to a revision.",
+    "Does not close FIN-03/FIN-04 blockers (rollback, idempotency, authorization, provider parity, service route parity).",
+    "Differential test proves equivalence for the sampled input space, not every possible Date."
+  ],
+  "nextSafeStep": "In a real checkout: pnpm install --frozen-lockfile; pnpm --filter @workspace/api-server typecheck; pnpm --filter @workspace/api-server exec node --test --import tsx src/finance/domain/*.test.ts; pnpm validate:finance-boundaries; pnpm --filter @workspace/api-server test:finance-db. If all pass, set FIN-02B and FIN-02C to PASS. Then FIN-03 route-level rollback/idempotency/authorization tests.",
+  "previousStatus": "BLOCKED",
+  "previousStatusReason": "Behavior-preservation (differential + fixture tests), strict isolated type check of the new module, boundary scan and negative tests pass. Workspace typecheck/build, API-server consumer tests and DB-backed tests could not run here (no pnpm, no node_modules, no network, no database, no Git history). PASS is withheld until they run in a real checkout.",
+  "promotion": {
+    "promotedBy": "reports/antas/finance/fin-02d-evidence.json",
+    "promotedIn": "FIN-WP-0",
+    "basis": "FIN-02D ran in the Replit checkout on a tree that already contains this phase's code and tests: pnpm install --frozen-lockfile, pnpm validate:finance-boundaries, pnpm --filter @workspace/api-server typecheck, build, the finance/domain test suite (11/11, includes this phase's tests) and test:finance-db (7/7) all exited 0, with baseSha 93ed60540127c1a4819cf957bfc4ba415199bf48.",
+    "caveat": "Indirect proof: no dedicated run was recorded for this phase alone, and the base SHA describes the checkout, not a commit that contains this work (still uncommitted). Re-run the same commands after committing to bind exact evidence to a SHA."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "@ayzen/incident-correlation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.mjs" },
+  "dependencies": { "@ayzen/enforcement-core": "workspace:*" }
+}

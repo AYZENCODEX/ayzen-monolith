@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-10",
+  "sub_phase": "08-rewire",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "3b143d1a4ed9e99ba76e2a775e1ad309957953ab18d9983823fcdfb9d52b7f4c",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/application/share/use-cases.ts": "09fff2dab4652d3dc4271732cb2ae36c73462b622fa0c1661f67e2bca5278d2a",
+    "artifacts/api-server/src/vault/application/attachment/use-cases.ts": "37b5d2ed7e4030e933da2609e7adf2fcd45a44137fe4ad769172902e1fc4fced",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-share-repository.ts": "6397e64412fc427347f233a50f581f4540ed2df75f3b771df88a731e4e7be6d2",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-attachment-repository.ts": "2d43048f47dfc9cdcbace5bb00cabbb9426657baab89f4bed55af9e028fe066b",
+    "artifacts/api-server/src/vault/application/share/entity-types.ts": "ba0dc205857267e23fb418ad85c839b7bd4d0ba1d08db0f7d282f53e2b5d650a",
+    "artifacts/api-server/src/vault/application/share/field-permissions.ts": "cbd26a8efd8ba6288b0fd8d7761f73b947dbff24b188be0853d66cc319af131a",
+    "artifacts/api-server/src/vault/security/share-ownership.ts": "415fd1e25cbd044e4d92f2b24a74201d0d6afd1a3133d84ac232525053f0fe2b",
+    "artifacts/api-server/src/vault/security/attachment-ownership.ts": "64457cf6a91fb5bce72316e15747a084f08641705411a95c394eff251b51d714"
+  },
+  "graph": [],
+  "old_path_importers_remaining": [],
+  "status": "PASS"
+}

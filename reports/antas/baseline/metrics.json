@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-29T06:06:06.484Z",
+  "sourceFiles": 1615,
+  "sourceDirectories": 43,
+  "anyOccurrences": 2003,
+  "todoFixmeOccurrences": 1,
+  "largeFiles": [],
+  "routeDeclarations": 1370,
+  "migrations": 108,
+  "dependencies": 3,
+  "tests": 296,
+  "buildDurationMs": null,
+  "typecheckDurationMs": null,
+  "note": "Build and typecheck timings are captured by CI; no fabricated timing is recorded locally.",
+  "inventoryImplementationSize": 5813
+}

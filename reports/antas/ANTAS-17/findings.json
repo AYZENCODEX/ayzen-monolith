@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "production-like journey test",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "accessibility audit",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

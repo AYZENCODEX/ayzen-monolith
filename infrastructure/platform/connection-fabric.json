@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "rules": {
+    "allowedTransports": ["api", "eventbus"],
+    "directDatabaseAccess": false,
+    "crossAppCallsRequire": ["audience", "scope", "resource", "traceId", "correlationId", "audit"],
+    "sharedWorkspaceReference": "canonical-workspace-id",
+    "crossChannelRequires": ["tenantScope", "traceContext", "consentOrPolicy"],
+    "botCallsRequire": ["registeredBot", "registeredApp", "scope", "audit"],
+    "unknownCapability": "create-technical-gap"
+  },
+  "channels": ["web", "mobile", "telegram", "email", "internal"],
+  "apps": [
+    "platform", "api-gateway", "api-server", "admin", "ai", "finance",
+    "identity", "mail", "notification", "search", "vault", "workflow",
+    "worker", "central-website"
+  ],
+  "bots": ["admin-bot", "assistant-bot", "telegram-bot"],
+  "connections": [
+    {"from": "telegram", "to": "api-gateway", "transport": "api", "scopes": ["telegram:update"], "resources": ["tenant"]},
+    {"from": "web", "to": "api-gateway", "transport": "api", "scopes": ["web:request"], "resources": ["tenant"]},
+    {"from": "mobile", "to": "api-gateway", "transport": "api", "scopes": ["mobile:request"], "resources": ["tenant"]},
+    {"from": "email", "to": "notification", "transport": "api", "scopes": ["notification:send"], "resources": ["tenant"]},
+    {"from": "admin", "to": "platform", "transport": "api", "scopes": ["admin:read", "admin:audit", "admin:remediate", "admin:deploy"], "resources": ["tenant", "platform"]},
+    {"from": "admin-bot", "to": "admin", "transport": "api", "scopes": ["admin:read", "admin:audit"], "resources": ["tenant", "platform"]},
+    {"from": "assistant-bot", "to": "finance", "transport": "api", "scopes": ["finance:read"], "resources": ["tenant"]},
+    {"from": "telegram-bot", "to": "notification", "transport": "api", "scopes": ["notification:send"], "resources": ["tenant"]},
+    {"from": "api-gateway", "to": "identity", "transport": "api", "scopes": ["identity:read"], "resources": ["tenant"]},
+    {"from": "api-gateway", "to": "finance", "transport": "api", "scopes": ["finance:read"], "resources": ["tenant"]},
+    {"from": "api-gateway", "to": "notification", "transport": "eventbus", "scopes": ["notification:request"], "events": ["notification.requested"], "resources": ["tenant"]},
+    {"from": "notification", "to": "telegram", "transport": "api", "scopes": ["notification:send"], "resources": ["tenant"]},
+    {"from": "notification", "to": "email", "transport": "api", "scopes": ["notification:send"], "resources": ["tenant"]},
+    {"from": "notification", "to": "web", "transport": "api", "scopes": ["notification:send"], "resources": ["tenant"]},
+    {"from": "notification", "to": "mobile", "transport": "api", "scopes": ["notification:send"], "resources": ["tenant"]},
+    {"from": "workflow", "to": "notification", "transport": "eventbus", "scopes": ["notification:request"], "events": ["workflow.completed", "workflow.failed"], "resources": ["tenant"]},
+    {"from": "finance", "to": "notification", "transport": "eventbus", "scopes": ["notification:request"], "events": ["finance.transaction.created"], "resources": ["tenant"]},
+    {"from": "mail", "to": "notification", "transport": "eventbus", "scopes": ["notification:request"], "events": ["wisp.message.received"], "resources": ["tenant"]},
+    {"from": "central-website", "to": "api-gateway", "transport": "api", "scopes": ["web:request"], "resources": ["tenant"]}
+  ]
+}

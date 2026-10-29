@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-29T06:07:09.762Z",
+  "status": "READY",
+  "completeness": {
+    "totalComponents": 195,
+    "totalSourceRegistries": 7,
+    "representedSourceRegistries": 7,
+    "ratio": 1,
+    "byKind": {
+      "app": 0,
+      "domain": 4,
+      "feature": 87,
+      "sub-feature": 0,
+      "function": 0,
+      "module": 0,
+      "api": 0,
+      "service": 15,
+      "database": 0,
+      "event": 0,
+      "workflow": 3,
+      "worker-pool": 5,
+      "scheduler-job": 0,
+      "notification-channel": 0,
+      "telegram-command": 72,
+      "ui-route": 0,
+      "artifact": 0,
+      "engine": 8,
+      "control-plane": 1
+    }
+  },
+  "findings": [],
+  "registry": "infrastructure/platform/component-registry.json"
+}

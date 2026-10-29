@@ -1,0 +1,17 @@
+{
+  "name": "@ayzen/circuit-registry",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "scripts": {
+    "test": "node --test",
+    "build": "node src/build.mjs",
+    "check": "node src/build.mjs --check"
+  },
+  "dependencies": {
+    "@ayzen/platform-governance": "workspace:*"
+  }
+}

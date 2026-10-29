@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "worker crash and replay drill",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "DLQ recovery drill",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

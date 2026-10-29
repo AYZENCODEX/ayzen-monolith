@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "defaultDeny": true,
+  "adminOperations": [
+    {"capability": "admin.read", "scope": "platform:operations", "owner": "admin", "audit": true},
+    {"capability": "admin.audit", "scope": "platform:audit", "owner": "admin", "audit": true},
+    {"capability": "admin.data-read", "scope": "domain:data:read", "owner": "owning-service", "audit": true},
+    {"capability": "admin.data-write", "scope": "domain:data:write", "owner": "owning-service", "audit": true},
+    {"capability": "admin.break-glass", "scope": "platform:break-glass", "owner": "admin", "audit": true},
+    {"capability": "admin.remediate", "scope": "platform:remediate", "owner": "owning-service", "audit": true}
+  ],
+  "rules": {"adminCannotWriteOwnedDataDirectly": true, "serviceContractRequired": true}
+}

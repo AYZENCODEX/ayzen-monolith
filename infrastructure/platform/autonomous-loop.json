@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "stages": ["design", "build", "verify", "deploy", "execute", "observe", "audit", "analyze", "recover", "optimize"],
+  "healthScorecard": "packages/architecture/src/index.mjs",
+  "findingsToPlanning": true,
+  "criticalChanges": {
+    "silentMutation": false,
+    "approvalRequired": true,
+    "auditRequired": true
+  }
+}

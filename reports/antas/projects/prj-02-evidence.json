@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "phase": "PRJ-02",
+  "title": "Extract dates",
+  "timestamp": "2026-10-20T18:49:00.440Z",
+  "status": "PASS",
+  "statusScope": "PRJ-02 gate: real implementation moved, routes/project-dates.ts is a pure adapter, behavior matches baseline. Behavior parity was shown by a differential test against a fake in-memory DB (30 requests), not against a real database. typecheck, build and DB-backed tests did NOT run (see notRun), so TypeScript compilation of the new files is unverified.",
+  "commit": {
+    "sha": "UNAVAILABLE",
+    "reason": "Uploaded snapshot has no .git directory."
+  },
+  "workingTreeAtStart": "Snapshot after PRJ-01 (decisions D1/D2 confirmed). Original upload kept in /tmp/orig for diffing.",
+  "dependsOn": "reports/antas/projects/prj-01-evidence.json",
+  "oldToNewMapping": [
+    {
+      "old": "routes/project-dates.ts formatDate",
+      "new": "projects/domain/project-date.ts formatProjectDate"
+    },
+    {
+      "old": "routes/project-dates.ts inline validation and update building",
+      "new": "projects/domain/project-date.ts validateNewProjectDate, normalizeNewProjectDate, buildProjectDateUpdates"
+    },
+    {
+      "old": "routes/project-dates.ts inline drizzle queries (6 shapes)",
+      "new": "projects/infrastructure/repositories/dates-repo.ts"
+    },
+    {
+      "old": "routes/project-dates.ts handler bodies",
+      "new": "projects/application/dates.ts listCalendar, listProjectDates, createProjectDate, updateProjectDate, deleteProjectDate"
+    },
+    {
+      "old": "lib/airdrop-reminder-cron.ts direct project_dates select and two updates",
+      "new": "dates-repo.ts findDueReminderDates, markDateReminded"
+    }
+  ],
+  "filesChangedThisPhase": [
+    "artifacts/api-server/src/projects/domain/project-date.ts (new)",
+    "artifacts/api-server/src/projects/domain/project-date.test.ts (new)",
+    "artifacts/api-server/src/projects/application/dates.ts (new)",
+    "artifacts/api-server/src/projects/infrastructure/repositories/dates-repo.ts (new)",
+    "artifacts/api-server/src/routes/project-dates.ts (rewritten as adapter; 161 -> 84 lines)",
+    "artifacts/api-server/src/lib/airdrop-reminder-cron.ts (queries replaced by repo calls)",
+    "artifacts/api-server/package.json (script test:projects-static)",
+    "scripts/antas/projects/boundaries.manifest.json, validate-boundaries.mjs (PRJ-02 rules)",
+    "scripts/antas/projects/differential/* (harness + README)",
+    "docs/antas/projects/projects-boundaries.md (PRJ-02 section)",
+    "reports/antas/projects/prj-02-* (generated + this file)"
+  ],
+  "behaviorPreserved": [
+    "All 5 route paths, methods, middleware chains and registration order unchanged (frozen surface check passes).",
+    "GET /projects/:id/dates and DELETE /project-dates/:id still have no try/catch.",
+    "400 messages, 404 message, 500 bodies with detail, and the log line on create are unchanged.",
+    "PATCH with an empty body still reaches the DB layer and returns 500, as before.",
+    "Changing eventDate still clears remindedAt."
+  ],
+  "commands": [
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs --self-test",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS: 47 routes, 0 findings"
+    },
+    {
+      "command": "negative tests N1-N5 on a scratch copy (db import in adapter, cron queries project_dates, domain imports infrastructure, repo imports application, delete auth changed)",
+      "exitCode": 0,
+      "result": "Each produced FAIL with the expected finding; restored copy PASS."
+    },
+    {
+      "command": "node --test project-date.test.ts (scratch copy with .ts import extensions)",
+      "exitCode": 0,
+      "result": "4 tests, 4 pass"
+    },
+    {
+      "command": "differential test: original project-dates.ts vs new adapter, express@4.21.2, esbuild bundle, fake DB (scripts/antas/projects/differential)",
+      "exitCode": 0,
+      "result": "30 scenarios, 30 identical (status, body, log lines, resulting rows). Sanity: a deliberately changed message in the new bundle was detected (29/30)."
+    }
+  ],
+  "notRun": [
+    {
+      "check": "pnpm typecheck",
+      "status": "NOT_RUN",
+      "reason": "pnpm install --frozen-lockfile fails on this snapshot (ERR_PNPM_LOCKFILE_CONFIG_MISMATCH); no node_modules. New files were reviewed against lib/db/src/schema/projects.ts column types only."
+    },
+    {
+      "check": "pnpm build",
+      "status": "NOT_RUN",
+      "reason": "Same."
+    },
+    {
+      "check": "test:projects-static via tsx",
+      "status": "NOT_RUN",
+      "reason": "tsx not installed; the same tests passed under plain node in a scratch copy."
+    },
+    {
+      "check": "DB-backed tests / real database parity",
+      "status": "NOT_RUN",
+      "reason": "No test database in this environment."
+    },
+    {
+      "check": "airdrop reminder cron end-to-end",
+      "status": "NOT_RUN",
+      "reason": "Only the diff was reviewed: two queries and two updates replaced by equivalent repo functions."
+    },
+    {
+      "check": "CI wiring for test:projects-static",
+      "status": "NOT_DONE",
+      "reason": "The repo's CI does not run test:finance-static either; left consistent."
+    }
+  ],
+  "risks": [
+    "Typecheck has not been run. Expect it to pass (types match the schema) but it is unproven.",
+    "The differential fake DB covers only the query shapes these routes use."
+  ],
+  "nextSafeStep": "Fix the install (lockfile overrides) and run pnpm typecheck / build / test:projects-static before PRJ-03, so the PRJ-00 baseline finally exists. Then PRJ-03: ratings and templates.",
+  "addendum": "Added in PRJ-03: the same PRJ-02 code was later typechecked (0 errors) and built in a scratch copy, and its domain tests passed under tsx. See prj-03-evidence.json baselineNote."
+}

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "workerPools": [
+    { "id": "event-consumers", "concurrency": 20, "leaseSeconds": 60, "priority": "normal" },
+    { "id": "workflow-workers", "concurrency": 10, "leaseSeconds": 120, "priority": "high" },
+    { "id": "integration-workers", "concurrency": 10, "leaseSeconds": 60, "priority": "normal" }
+  ],
+  "isolation": "pool-per-trust-boundary"
+}

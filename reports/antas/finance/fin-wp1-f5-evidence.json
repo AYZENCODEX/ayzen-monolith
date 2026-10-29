@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-1-F5",
+  "title": "Fix F5: atomic journal deletion and entry delete cascade",
+  "timestamp": "2026-10-17T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Statically verified (syntax, 23/23 static tests, boundary scan, mutation test). The four database tests that prove atomicity use a Postgres trigger to force a mid-delete failure and could not run here: no Postgres, pnpm or node_modules. PASS requires the Replit run under nextSafeStep.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; bound by content via fin-provenance-manifest.json."
+  },
+  "behaviorChanges": [
+    "deleteJournalForEntry: one transaction; lines and headers deleted by the same journal id set.",
+    "New deleteLedgerEntryCascade(entryId, userId): repayments, amortization, journals and the entry are deleted in one transaction; ownership is re-checked inside; returns false (nothing deleted) for a missing or foreign entry.",
+    "DELETE /finance/entries/:id uses the cascade. Responses unchanged ({success:true} / 404). A failure part-way now rolls everything back and surfaces as an error instead of leaving a partially deleted entry."
+  ],
+  "notChanged": [
+    "Invoice lines and attachments are still not deleted with the entry (previous behavior).",
+    "No lock against a journal posted concurrently for the same entry.",
+    "deleteJournalForEntry remains exported; the route no longer imports it."
+  ],
+  "filesChanged": [
+    "artifacts/api-server/src/lib/finance-accounting.ts",
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/finance/ledger-invariants.db.test.ts",
+    "artifacts/api-server/src/finance/route-security.test.ts (ratchet 80 -> 79, F5 route test)",
+    "docs/antas/finance/finance-safety-findings.md",
+    "docs/antas/finance/finance-remaining-scope.md",
+    "docs/antas/finance/finance-target-tree-status.md",
+    "reports/antas/finance/fin-wp1-evidence.json",
+    "reports/antas/finance/fin-01-dependency-scan.json (regenerated)",
+    "reports/antas/finance/fin-provenance-manifest.json (regenerated)"
+  ],
+  "filesCreated": [
+    "reports/antas/finance/fin-wp1-f5-evidence.json"
+  ],
+  "commands": [
+    {
+      "command": "node --test --import tsx src/finance/domain/*.test.ts src/finance/route-security.test.ts",
+      "exitCode": 0,
+      "tests": 23,
+      "passed": 23,
+      "failed": 0
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 28 Finance sources, 0 findings"
+    },
+    {
+      "command": "mutation: re-add a separate db.delete in the route (copy)",
+      "exitCode": 1,
+      "result": "Both the ratchet and the F5 route test fail as intended"
+    },
+    {
+      "command": "node --experimental-strip-types --check on changed files",
+      "exitCode": 0,
+      "result": "syntax only"
+    }
+  ],
+  "notRun": [
+    "pnpm typecheck / build (DbTransaction type derived from db.transaction's callback parameter; inArray import)",
+    "pnpm test:finance-db (4 new atomic-delete tests use a temporary plpgsql trigger; requires CREATE FUNCTION/TRIGGER in the isolated schema)",
+    "Authenticated HTTP test of DELETE /finance/entries/:id"
+  ],
+  "risks": [
+    "If the isolated schema role cannot create functions or triggers, the two trigger-based tests fail for environment reasons, not product reasons; the trigger is dropped in a finally block."
+  ],
+  "nextSafeStep": "In Replit: pnpm --filter @workspace/api-server typecheck, build, test:finance-static, test:finance-db; send the output. If green, F1-F5 fixes and WP-1a become PASS."
+}

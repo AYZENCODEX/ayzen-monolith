@@ -1,0 +1,55 @@
+{
+  "gap": "VLT-GAP-16",
+  "sub_phase": "VLT-GAP-16-C",
+  "checked_at": "2026-10-12T17:33:25.606Z",
+  "validator_version": "16-C.1",
+  "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "339e0071b4f134e66ab99098b578708b8f7751f2c5d5399de2b6bd49a3e5d9d2",
+  "package_scripts": {
+    "validate:vault-duplicates": "node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "validate:vault-duplicates:self-test": "node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --self-test",
+    "validate:vault-duplicates:ci-wiring": "node scripts/antas/vault/gap/validate-vlt-gap-16-C.mjs",
+    "validate:vault-duplicates:gate": "node scripts/antas/vault/gap/validate-vlt-gap-16-D.mjs"
+  },
+  "workflows": {
+    ".github/workflows/ci.yml": {
+      "validate:vault-duplicates": {
+        "line": 55,
+        "job": "validation"
+      },
+      "validate:vault-duplicates:self-test": {
+        "line": 56,
+        "job": "validation"
+      },
+      "validate:vault-duplicates:ci-wiring": {
+        "line": 57,
+        "job": "validation"
+      },
+      "validate:vault-duplicates:gate": {
+        "line": 58,
+        "job": "validation"
+      }
+    },
+    "ci/enforcement-pipeline.yml": {
+      "validate:vault-duplicates": {
+        "line": 36,
+        "job": "blocking-gates"
+      },
+      "validate:vault-duplicates:self-test": {
+        "line": 37,
+        "job": "blocking-gates"
+      },
+      "validate:vault-duplicates:ci-wiring": {
+        "line": 38,
+        "job": "blocking-gates"
+      },
+      "validate:vault-duplicates:gate": {
+        "line": 39,
+        "job": "blocking-gates"
+      }
+    }
+  },
+  "errors": [],
+  "status": "PASS"
+}

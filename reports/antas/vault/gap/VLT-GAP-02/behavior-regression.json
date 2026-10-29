@@ -1,0 +1,44 @@
+{
+  "phase": "VLT-GAP-02",
+  "sub_phase": "VLT-GAP-02-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "75275a30a699f7482fc7f1c024e2dd2a84c11b9c34cbc6e1c5e7e4ba61066ee3",
+  "validator_version": "1.0.0",
+  "validator_sha256": "a51059099be8c41fd9ef6f681b2598b189a1ec78efc516ed77c2d5161f9d8ce2",
+  "description": "Old sealed baseline route vs current route executed side by side (02-B differential, run in a temp copy) plus 02-C consumer differential (run in place)",
+  "stubbed": "no network and no real database; deterministic stand-ins are identical for OLD and NEW",
+  "differential_02B": {
+    "differential_cases": 115,
+    "differential_passed": 115,
+    "security_checks": 14,
+    "security_passed": 13,
+    "unit_parity": 16,
+    "unit_passed": 16,
+    "mutation_tests": 11,
+    "mutation_detected": 11
+  },
+  "superseded_02B_checks": {
+    "route-keeps-compat-export-requireLocalAccountOwnership": "02-C removed the compat re-export (re-proven: check compat:reexport-removed)",
+    "security:exported-requireLocalAccountOwnership-identical": "the export no longer exists on the route (re-proven: check compat:reexport-removed and route imports the owner gate)",
+    "diff-audit:no-unrelated-changes": "02-B audited against the pre-02-C tree; 02-C changed consumers by design (re-proven: check diff-audit:no-change-since-02C-seal)"
+  },
+  "consumer_differential_02C": {
+    "differential_cases": 36,
+    "differential_passed": 36,
+    "security_checks": 4,
+    "security_passed": 4,
+    "mutation_tests": 14,
+    "mutation_detected": 14
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build was NOT executed)",
+    "before_total": 52,
+    "after_total": 58,
+    "syntactic_errors": [],
+    "new_diagnostics": [
+      "2584: Cannot find name '…'. Do you need to change your target library? Try changing the '…' comp (+1)"
+    ],
+    "real_class_new": []
+  }
+}

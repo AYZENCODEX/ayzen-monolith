@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-03",
+  "status": "PASS_STATIC_AND_UNIT_ONLY",
+  "date": "2026-10-23",
+  "commitSha": "UNAVAILABLE",
+  "done": [
+    "kernel created: marketplace/kernel/{domain: fee-policy, money; ports: credits, token-wallet, notifier, vault-ownership; infrastructure: pool, tx, market-config-repo, fee-settings-repo, credits-adapter, token-wallet-adapter, notifier-adapter, vault-ownership-adapter}",
+    "fee constants removed from the 8 route files: each now binds DEFAULT_FEE_PCT.<market> from the kernel (same values 5, 5, 5, 5, 2.5, 2.5, 3, 0.1)",
+    "inline fee arithmetic replaced by feeByFraction / feeByProduct / feeRounded4 at 7 call sites; the helpers are checked bit-for-bit against the old inline expressions on about 2,100 inputs each",
+    "lib/market-config.ts moved verbatim to the kernel; the old path is a one-line re-export, no importer changed",
+    "pins re-written and the diff reviewed by script: only fee constants, kernel bindings and replaced expressions changed; write order, transaction/lock order and response shapes of all 60 routes are identical to MKT-01a",
+    "20 kernel unit tests, 26 static pins, 23 validator self-tests, boundary validator PASS (143 routes frozen, layering checks now active), import integrity 810 files 0 findings, Projects and Finance gates PASS",
+    "frozen route order made line-independent (registration index + ordinal in file); a line shift passes, a reorder fails"
+  ],
+  "notDone": [
+    "no handler was executed: no Postgres, pg driver or express in the sandbox; typecheck/build UNAVAILABLE, so the new TypeScript was only syntax-checked (node module.stripTypeScriptTypes) and import-checked",
+    "BC-1 is implemented (resolveFeePct, loadFeeSources, effectiveFeePct behind MARKETPLACE_FEE_FROM_CONFIG=1) but NOT wired into any route and NOT enabled; the database check of stored marketplace_settings / marketplace_market_configs values was not possible",
+    "withTransaction, the ports and the adapters exist and are tested against fakes; no handler uses them yet (each later phase switches its own handlers)"
+  ],
+  "bc1WiringSites": [
+    "routes/marketplace.ts: GET/PATCH /marketplace/settings defaults (lines 23, 24, 35), POST /marketplace/listings/:id/buy insert (337), admin manual order insert (655); lines 523 and 714 read the fee stored on the order and need no change",
+    "routes/marketplace-cart.ts: totals quote (64, 69) and checkout insert (225)",
+    "routes/marketplace-bundles.ts: bundle buy insert (120)",
+    "routes/marketplace-offers.ts: offer accept insert (156)"
+  ],
+  "nextPhase": "MKT-04 wallet module and contract (and MKT-01b DB suite on the real checkout, before any money handler is switched to the kernel)"
+}

@@ -1,0 +1,450 @@
+{
+  "phase": "VLT-GAP-14",
+  "sub_phase": "VLT-GAP-14-D",
+  "validator_version": "14-D.1",
+  "checked_at": "2026-10-09T04:30:30.840Z",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "0dc0bd3d167de8ac34403382ac5ec7dc92d72ba8f282e95b7fbecc120841b27e",
+  "source_hashes": {
+    "scripts/antas/vault/gap/validate-vlt-gap-14.mjs": "e59c5352d87df75e69ad1878136dbc6910f3f65ec4312b064777430f5a72bee6",
+    "scripts/antas/vault/gap/validate-vlt-gap-14-C.mjs": "2a9d1d3d4ce543872cb17c5d525680fa1aae3bd8e5c71533546288e5ed040ab2",
+    "scripts/antas/vault/gap/validate-vlt-gap-14-D.mjs": "f93a1eee0645295927d4fc8297ef4e5230ea4a7f0716f8ef8b1df977bb960c04",
+    "scripts/antas/vault/gap/gap-configs/vault-architecture.json": "52ed84cb4393ae86153857cc36ef37854cabf3a816cf5dece12ac457bef9fff2"
+  },
+  "commands": [
+    "real-scan: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs",
+    "control-unmodified-copy: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A2a: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A2b: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A3a: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A3b: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A4a: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A4b: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A4c: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A4d: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A4e: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A4f: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A4g: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A5a: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A5b: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A5c: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A6: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A7a: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A7b: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A8: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A0: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "plant-A1: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "type-only-cycle-accepted: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <tmp>",
+    "bypass-arg--force: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --force",
+    "bypass-arg--skip: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --skip",
+    "bypass-arg--skip-validation: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --skip-validation",
+    "bypass-arg--continue-on-error: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --continue-on-error",
+    "bypass-arg--ignore-failures: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --ignore-failures",
+    "bypass-env-VALIDATION_DISABLED: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs",
+    "bypass-env-ANTAS_BYPASS: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs",
+    "fail-closed-root-no-value: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root",
+    "fail-closed-empty-scope: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <empty>",
+    "fail-closed-empty-vault: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <empty-vault>",
+    "fail-closed-missing-dir: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --root <missing>",
+    "scanner-self-test: node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --self-test",
+    "ci-wiring-14-C: node scripts/antas/vault/gap/validate-vlt-gap-14-C.mjs"
+  ],
+  "exit_codes": {
+    "real-scan": 0,
+    "control-unmodified-copy": 0,
+    "plant-A2a": 1,
+    "plant-A2b": 1,
+    "plant-A3a": 1,
+    "plant-A3b": 1,
+    "plant-A4a": 1,
+    "plant-A4b": 1,
+    "plant-A4c": 1,
+    "plant-A4d": 1,
+    "plant-A4e": 1,
+    "plant-A4f": 1,
+    "plant-A4g": 1,
+    "plant-A5a": 1,
+    "plant-A5b": 1,
+    "plant-A5c": 1,
+    "plant-A6": 1,
+    "plant-A7a": 1,
+    "plant-A7b": 1,
+    "plant-A8": 1,
+    "plant-A0": 1,
+    "plant-A1": 1,
+    "type-only-cycle-accepted": 0,
+    "bypass-arg--force": 1,
+    "bypass-arg--skip": 1,
+    "bypass-arg--skip-validation": 1,
+    "bypass-arg--continue-on-error": 1,
+    "bypass-arg--ignore-failures": 1,
+    "bypass-env-VALIDATION_DISABLED": 1,
+    "bypass-env-ANTAS_BYPASS": 1,
+    "fail-closed-root-no-value": 1,
+    "fail-closed-empty-scope": 1,
+    "fail-closed-empty-vault": 1,
+    "fail-closed-missing-dir": 1,
+    "scanner-self-test": 0,
+    "ci-wiring-14-C": 0
+  },
+  "vault_files": 138,
+  "vault_files_on_disk": 138,
+  "violations_in_real_tree": 0,
+  "cycles_in_real_tree": 0,
+  "ci_fail_proof": {
+    "control_copy_exit": 0,
+    "planted_cases": 21,
+    "all_caught_at_planted_line": true,
+    "proofs": [
+      {
+        "id": "A2a",
+        "file": "artifacts/api-server/src/vault/infrastructure/index.ts",
+        "rule": "A2-layer-direction",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A2-layer-direction"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A2b",
+        "file": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+        "rule": "A2-layer-direction",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A2-layer-direction"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A3a",
+        "file": "artifacts/api-server/src/vault/domain/entity-links.ts",
+        "rule": "A3-domain-purity",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A3-domain-purity"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A3b",
+        "file": "artifacts/api-server/src/vault/domain/serial.ts",
+        "rule": "A3-domain-purity",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A3-domain-purity"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A4a",
+        "file": "artifacts/api-server/src/vault/application/entity/create.ts",
+        "rule": "A4-db-import",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A4-db-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A4b",
+        "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+        "rule": "A4-db-import",
+        "planted_line": 1,
+        "type_only": true,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A4-db-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A4c",
+        "file": "artifacts/api-server/src/vault/application/entity/bulk.ts",
+        "rule": "A4-db-import",
+        "planted_line": 162,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 162,
+            "rule": "A4-db-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A4d",
+        "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+        "rule": "A4-http-import",
+        "planted_line": 1,
+        "type_only": true,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A4-http-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A4e",
+        "file": "artifacts/api-server/src/vault/application/backup/schedule.ts",
+        "rule": "A4-provider-import",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A4-provider-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A4f",
+        "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+        "rule": "A4-frontend-import",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A4-frontend-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A4g",
+        "file": "artifacts/api-server/src/vault/infrastructure/index.ts",
+        "rule": "A4-http-import",
+        "planted_line": 1,
+        "type_only": true,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A4-http-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A5a",
+        "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+        "rule": "A5-route-import",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A5-route-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A5b",
+        "file": "artifacts/api-server/src/vault/infrastructure/jobs/cron-scheduler.ts",
+        "rule": "A5-route-import",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A5-route-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A5c",
+        "file": "artifacts/api-server/src/vault/application/entity/create.ts",
+        "rule": "A5-middleware-import",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A5-middleware-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A6",
+        "file": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+        "rule": "A6-cross-feature-private",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A6-cross-feature-private"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A7a",
+        "file": "artifacts/api-server/src/routes/kyc.ts",
+        "rule": "A7-legacy-import",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A7-legacy-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A7b",
+        "file": "artifacts/api-server/src/vault/security/lockout.ts",
+        "rule": "A7-legacy-import",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A7-legacy-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A8",
+        "file": "artifacts/api-server/src/routes/kyc.ts",
+        "rule": "A8-outside-deep-import",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A8-outside-deep-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A0",
+        "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+        "rule": "A0-unresolved",
+        "planted_line": 1,
+        "type_only": false,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "A0-unresolved"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "A1",
+        "file": "artifacts/api-server/src/vault/application/entity/index.ts <-> artifacts/api-server/src/vault/application/entity/create.ts",
+        "rule": "A1-cycle",
+        "planted_line": 1,
+        "scanner_exit": 1,
+        "ok": true,
+        "preexisting_edge": false
+      },
+      {
+        "id": "A1-typeonly-ok",
+        "rule": "none",
+        "scanner_exit": 0,
+        "ok": true
+      }
+    ]
+  },
+  "bypass_and_fail_closed": [
+    {
+      "via": "--force",
+      "ok": true
+    },
+    {
+      "via": "--skip",
+      "ok": true
+    },
+    {
+      "via": "--skip-validation",
+      "ok": true
+    },
+    {
+      "via": "--continue-on-error",
+      "ok": true
+    },
+    {
+      "via": "--ignore-failures",
+      "ok": true
+    },
+    {
+      "via": "VALIDATION_DISABLED=true",
+      "ok": true
+    },
+    {
+      "via": "ANTAS_BYPASS=true",
+      "ok": true
+    },
+    {
+      "via": "--root without value",
+      "ok": true
+    },
+    {
+      "via": "empty scope",
+      "ok": true
+    },
+    {
+      "via": "empty vault root",
+      "ok": true
+    },
+    {
+      "via": "missing scope dir",
+      "ok": true
+    }
+  ],
+  "errors": [],
+  "status": "PASS"
+}

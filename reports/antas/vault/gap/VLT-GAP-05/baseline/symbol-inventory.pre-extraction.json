@@ -1,0 +1,703 @@
+[
+  {
+    "id": "services/vault/src/index.mjs#allowMemoryState",
+    "kind": "constant",
+    "fingerprint_sha256": "6a5e4404fcd0aff5ade7b01c64d3298754401b01cd1f7f4bfed90d9e586a4c6c",
+    "line_start": 16,
+    "line_end": 16,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/index.mjs#dependencies",
+    "kind": "constant",
+    "fingerprint_sha256": "1837c37ec699d5c05235498fef442d5c77974fa51c34b9551ce0e2e7f2b6ac4b",
+    "line_start": 17,
+    "line_end": 17,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/index.mjs#vaultCrypto",
+    "kind": "constant",
+    "fingerprint_sha256": "c8f7e6980802039c49d72a06134b7d8f4821c456ac7aa151d6b53d5ed39ad433",
+    "line_start": 18,
+    "line_end": 18,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/index.mjs#vaultAccess",
+    "kind": "constant",
+    "fingerprint_sha256": "489b49571ce16d1fd07857e6ebbcf3eb0c5111f1287965289225a7334f2b6bac",
+    "line_start": 19,
+    "line_end": 19,
+    "classification": "adapter",
+    "behaviors": [
+      "step-up"
+    ]
+  },
+  {
+    "id": "services/vault/src/index.mjs#handle",
+    "kind": "constant",
+    "fingerprint_sha256": "dd87c455ab432e878d66e4d6debf542f404b3f2c9dfe346140237ef8565ddd3c",
+    "line_start": 20,
+    "line_end": 20,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/index.mjs#service-bootstrap",
+    "kind": "service-bootstrap",
+    "fingerprint_sha256": "5291ab06137dadff56ec43c03fee62c122d82252c27761432cb0eb2206785461",
+    "line_start": 22,
+    "line_end": 35,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#router",
+    "kind": "router-instance",
+    "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+    "line_start": 35,
+    "line_end": 35,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#lifecycleDeps",
+    "kind": "constant",
+    "fingerprint_sha256": "ce5dda9fd0894332d8934ca5540323432a365dfb39e5aacfe52b7b4f0ae992bd",
+    "line_start": 39,
+    "line_end": 39,
+    "classification": "adapter",
+    "behaviors": [
+      "events"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#updateDeps",
+    "kind": "constant",
+    "fingerprint_sha256": "7c8c8523d7925dea95dba923332dd1f7fc0b0c39d940bb2c57aada505422d26c",
+    "line_start": 43,
+    "line_end": 43,
+    "classification": "adapter",
+    "behaviors": [
+      "events"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#toHealthInput",
+    "kind": "function",
+    "fingerprint_sha256": "5af75d1d4d46f8704ebaf9e885745e4d5f386ba1b425e59f5da91ad191c5b088",
+    "line_start": 76,
+    "line_end": 89,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#runHealthCheck",
+    "kind": "function",
+    "fingerprint_sha256": "e769bf1ef09891dd461399bbc1267c0d08dfa56bf9366034aeb2d76b6b85e738",
+    "line_start": 91,
+    "line_end": 150,
+    "classification": "application",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault@156",
+    "kind": "route-handler",
+    "fingerprint_sha256": "259157f99945a56c6f41440365fe359f741121fad1fb807a1a15cb78725fc747",
+    "line_start": 156,
+    "line_end": 159,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/gas-overview@167",
+    "kind": "route-handler",
+    "fingerprint_sha256": "325bccaf06e3d7a940637eba1e9f9bee54f02aa438af1fa8a301b4f3c9c23bf2",
+    "line_start": 167,
+    "line_end": 170,
+    "classification": "API",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/:id/gas@176",
+    "kind": "route-handler",
+    "fingerprint_sha256": "40b3cd01a8e0b863623e2442bb129f1688051b779c1ab4c45b0e874eb09ba380",
+    "line_start": 176,
+    "line_end": 179,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:POST /vault@182",
+    "kind": "route-handler",
+    "fingerprint_sha256": "9cefc6c1ecce5b06cffc9a451d06bf98173323e16f84c0a1055baa9937a3095a",
+    "line_start": 182,
+    "line_end": 185,
+    "classification": "API",
+    "behaviors": [
+      "secret-creation",
+      "events"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/tags@188",
+    "kind": "route-handler",
+    "fingerprint_sha256": "d3fd9a3fe0d95aa0b07df5a7a7e4f38782a85048eb78473bca5a4576208eed6a",
+    "line_start": 188,
+    "line_end": 191,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:PATCH /vault/bulk-tag@208",
+    "kind": "route-handler",
+    "fingerprint_sha256": "dd08fb06754eedd969ed331173d42cd9057ed6ab5ae8ce8dbd50a02edc883e39",
+    "line_start": 208,
+    "line_end": 211,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope",
+      "events"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:PATCH /vault/bulk-action@221",
+    "kind": "route-handler",
+    "fingerprint_sha256": "2844c3bf7e1e8a497ba585faa258f796e65f1ef8b8035838793e7c30bca3b31c",
+    "line_start": 221,
+    "line_end": 224,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope",
+      "events"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/health-report@227",
+    "kind": "route-handler",
+    "fingerprint_sha256": "9a0759ab42a586e8b75893fc77585ca0c0662ea55ce09c03a735e317959cf30f",
+    "line_start": 227,
+    "line_end": 262,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:POST /vault/health-check@267",
+    "kind": "route-handler",
+    "fingerprint_sha256": "e7df8725a7cce9f4b4f95a65e2d75d463ce583eb047a2d96df2531cd5b5e3132",
+    "line_start": 267,
+    "line_end": 276,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/analytics@280",
+    "kind": "route-handler",
+    "fingerprint_sha256": "12d925cfd875ca0c37656d974505793ae6fccdf04ab3d2b007ba95a2683c333f",
+    "line_start": 280,
+    "line_end": 283,
+    "classification": "API",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/analytics/value-history@286",
+    "kind": "route-handler",
+    "fingerprint_sha256": "d35f5dd38757f2da563619725c2ef3c8784e5296a5201a4f55ecd82b2c37d415",
+    "line_start": 286,
+    "line_end": 289,
+    "classification": "API",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/activity@302",
+    "kind": "route-handler",
+    "fingerprint_sha256": "02b263a798d7bed9cab23256fa9f7bcbef673a6ac107173b93901637b84beaa2",
+    "line_start": 302,
+    "line_end": 305,
+    "classification": "API",
+    "behaviors": [
+      "audit"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/trash@312",
+    "kind": "route-handler",
+    "fingerprint_sha256": "f530a7745028a24e7ef5b001311fff53f42b6986cd5b9f8ba5f0c7ee9a864c01",
+    "line_start": 312,
+    "line_end": 315,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/:id@321",
+    "kind": "route-handler",
+    "fingerprint_sha256": "b7681492cc45c5580c8cc798ec5d6522d860bdfc9d9688df98ebf355e6f9d4b1",
+    "line_start": 321,
+    "line_end": 324,
+    "classification": "API",
+    "behaviors": [
+      "secret-reveal",
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/:id/seed@340",
+    "kind": "route-handler",
+    "fingerprint_sha256": "cd9772ca79a491e429b50847a67c97070bbb199989a084b94c1e85b9da77a983",
+    "line_start": 340,
+    "line_end": 392,
+    "classification": "API",
+    "behaviors": [
+      "secret-reveal",
+      "tenant-scope",
+      "step-up",
+      "audit"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:PATCH /vault/:id/drive-wallet@397",
+    "kind": "route-handler",
+    "fingerprint_sha256": "767ebc0fb9034aef516865775d143723bdefbcf8a0e6e980ffffc6de9e9db7d6",
+    "line_start": 397,
+    "line_end": 425,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope",
+      "audit"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:POST /vault/validate-key@435",
+    "kind": "route-handler",
+    "fingerprint_sha256": "868517713f33bca9cadc06a62dff994503beeb51fc2a8c3e2698c44707c5bf1f",
+    "line_start": 435,
+    "line_end": 443,
+    "classification": "API",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:POST /vault/:id/refresh-wallet-worth@450",
+    "kind": "route-handler",
+    "fingerprint_sha256": "691e6d0aa9681fe8279c6f18d8ca87687bdbf8d435e1b05fc41e4c01e21cfa21",
+    "line_start": 450,
+    "line_end": 490,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope",
+      "audit"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:PATCH /vault/:id@493",
+    "kind": "route-handler",
+    "fingerprint_sha256": "09a7ea91eb70f7935345e15b542ec5f0392faf9ac5bacc004a1eb5f58693f103",
+    "line_start": 493,
+    "line_end": 496,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:PATCH /vault/:id/field@504",
+    "kind": "route-handler",
+    "fingerprint_sha256": "2252681ec848718d9f65d081511c197d5ba1762b603ab732e3bebd57af73158d",
+    "line_start": 504,
+    "line_end": 507,
+    "classification": "API",
+    "behaviors": [
+      "versioning",
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/:id/field-history@512",
+    "kind": "route-handler",
+    "fingerprint_sha256": "9ba3b8c4e16891ff52857dfc2a3399b005b0e990f896dfa09364b63ac9cf0080",
+    "line_start": 512,
+    "line_end": 515,
+    "classification": "API",
+    "behaviors": [
+      "versioning",
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:DELETE /vault/trash@521",
+    "kind": "route-handler",
+    "fingerprint_sha256": "bcbcb203aea1615e87262b4afe08c313ea03e542917c4b353d11e5f8a0901a93",
+    "line_start": 521,
+    "line_end": 524,
+    "classification": "API",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:DELETE /vault/:id@530",
+    "kind": "route-handler",
+    "fingerprint_sha256": "e2176d24544107d7d3b702f10275996bbb48cacee1288d95f415f4e09d2d8a04",
+    "line_start": 530,
+    "line_end": 533,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:POST /vault/:id/restore@539",
+    "kind": "route-handler",
+    "fingerprint_sha256": "d31fe44c6d4e11542793e64927297fe59f3f5d9de04621bd7423f7f3cbdf9cae",
+    "line_start": 539,
+    "line_end": 542,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:DELETE /vault/trash/:id@548",
+    "kind": "route-handler",
+    "fingerprint_sha256": "fd7e0e7483dc8c23e291e8c8f87855eab6975c68f64761fef217bacad844878c",
+    "line_start": 548,
+    "line_end": 551,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /admin/vault@554",
+    "kind": "route-handler",
+    "fingerprint_sha256": "d108d0e4f233c82339672adc80c513ee07ad87afb77811b97263cbf037b05f23",
+    "line_start": 554,
+    "line_end": 557,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /admin/vault/full@560",
+    "kind": "route-handler",
+    "fingerprint_sha256": "24e007948b5afd5c3d2498be0c1a74b94c94dfba5511180e1f9ba0a3956e0181",
+    "line_start": 560,
+    "line_end": 563,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /admin/vault/local-accounts@566",
+    "kind": "route-handler",
+    "fingerprint_sha256": "6cc26020d7bfb2191ecb891406ac8186bcd291807ab4213e454fc139d04c6b4b",
+    "line_start": 566,
+    "line_end": 569,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /admin/vault/users@572",
+    "kind": "route-handler",
+    "fingerprint_sha256": "decd0e8019d56199dfcb64d72989ab598e9a5878cf41d546c59b6d9b60a0e43d",
+    "line_start": 572,
+    "line_end": 575,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /admin/vault/users/:userId@578",
+    "kind": "route-handler",
+    "fingerprint_sha256": "78ef2018d656448eebf40381503055a75b6133b24d921ffac158b5b61ca54410",
+    "line_start": 578,
+    "line_end": 581,
+    "classification": "API",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/:id/activity@584",
+    "kind": "route-handler",
+    "fingerprint_sha256": "91d03fcb6bed0acd2f3be1ae1b92cc31ee40b357ec074be56fda9c92d66f35e7",
+    "line_start": 584,
+    "line_end": 587,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope",
+      "audit"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /admin/vault/activity@590",
+    "kind": "route-handler",
+    "fingerprint_sha256": "78aecabc4c94809292d344e5dd41f37ddcf33e9c84f709d6609d5b63ba929947",
+    "line_start": 590,
+    "line_end": 593,
+    "classification": "API",
+    "behaviors": [
+      "audit"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:POST /vault/:id/receipt@604",
+    "kind": "route-handler",
+    "fingerprint_sha256": "bd55ee7f53e706071601a34b4777491ec89cac79c92c73a1a1be4cda43c410bf",
+    "line_start": 604,
+    "line_end": 607,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:DELETE /vault/:id/receipt@610",
+    "kind": "route-handler",
+    "fingerprint_sha256": "1bfd8b7ac643a593b9cb7e130960abb5026f926df3b894822e409e5d39d662e5",
+    "line_start": 610,
+    "line_end": 613,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/receipt/:token@616",
+    "kind": "route-handler",
+    "fingerprint_sha256": "97907289f99a478b3d0cb65f8f293716dd2fa54fc98ee5070ce56f0ae645158e",
+    "line_start": 616,
+    "line_end": 619,
+    "classification": "API",
+    "behaviors": [
+      "audit"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#route:GET /vault/receipt/:token/pdf@622",
+    "kind": "route-handler",
+    "fingerprint_sha256": "7a4d0b7635b8463bd008a1cb6bda34593f51ffc1e100db21791ece7099086bbf",
+    "line_start": 622,
+    "line_end": 626,
+    "classification": "API",
+    "behaviors": [
+      "audit"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault.ts#export-default",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+    "line_start": 628,
+    "line_end": 628,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-crypto.ts#export-decl@5",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "5e538b707c357fed77c0f93841a76e026edb2136ad41b11fef98158e541dfe5f",
+    "line_start": 5,
+    "line_end": 13,
+    "classification": "adapter",
+    "behaviors": [
+      "secret-creation",
+      "secret-reveal"
+    ]
+  },
+  {
+    "id": "services/vault/src/access.mjs#export-decl@2",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "c404bf7e998a88527d278448cf027f13a7b0bbe951baaa24c958074a75705da3",
+    "line_start": 2,
+    "line_end": 2,
+    "classification": "adapter",
+    "behaviors": [
+      "step-up"
+    ]
+  },
+  {
+    "id": "services/vault/src/api/contracts.mjs#VAULT_CONTRACT",
+    "kind": "constant",
+    "fingerprint_sha256": "2bd1318cd9b8b275ea8507cb5be7ce287ac1d14a2225d09776efa1b6d446da55",
+    "line_start": 1,
+    "line_end": 13,
+    "classification": "API",
+    "behaviors": [
+      "step-up",
+      "events"
+    ]
+  },
+  {
+    "id": "services/vault/src/api/http-handler.mjs#createVaultHttpHandler",
+    "kind": "function",
+    "fingerprint_sha256": "fb1491d5c05ba10fb744ec6c90e5116cc630b1babb65fb98dc6868ad57f23507",
+    "line_start": 9,
+    "line_end": 38,
+    "classification": "API",
+    "behaviors": [
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "services/vault/src/api/index.mjs#export-decl@1",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "3505d73ea917effa7291ebde987107ec0800ecfe4a9e6d0c218cb7a71a24ac63",
+    "line_start": 1,
+    "line_end": 1,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/api/index.mjs#export-decl@2",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "6cfd57159bef34713ef15ef1cb30d801367a875c281ca2217dd18f08142408a5",
+    "line_start": 2,
+    "line_end": 2,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/application/secret-service.mjs#createSecretApplication",
+    "kind": "function",
+    "fingerprint_sha256": "6c91b5a46f70ddbed41ff3bc5ff89c0c2fce976ecf7c883c61fc2ed997118cb1",
+    "line_start": 4,
+    "line_end": 54,
+    "classification": "security",
+    "behaviors": [
+      "secret-creation",
+      "secret-listing",
+      "secret-reveal",
+      "versioning",
+      "tenant-scope",
+      "step-up",
+      "audit",
+      "events"
+    ]
+  },
+  {
+    "id": "services/vault/src/contracts.mjs#export-decl@2",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "309932c0349274d6f7a2e3c762dd8248dd08236e72e034b9c9fde292f5dce5e2",
+    "line_start": 2,
+    "line_end": 2,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/crypto.mjs#export-decl@3",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "b7d64c6bcb3195a452ea63368fd6872666bcf70c4d02443de1409f6e237fa63f",
+    "line_start": 3,
+    "line_end": 3,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/crypto/envelope.mjs#createVaultCrypto",
+    "kind": "function",
+    "fingerprint_sha256": "67cb8591fb08d4f48df0e2c36bfa8a6cf30ac96af6566ddbd2a08f00cf5386bd",
+    "line_start": 7,
+    "line_end": 35,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/domain.mjs#export-decl@2",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "19ac1d8af0f496543779831008be4f4498d95c3843a3addeba7a6d9e68ceaf43",
+    "line_start": 2,
+    "line_end": 2,
+    "classification": "adapter",
+    "behaviors": [
+      "secret-creation",
+      "secret-listing",
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "services/vault/src/domain/secret.mjs#tenantMatches",
+    "kind": "function",
+    "fingerprint_sha256": "edcc8f35a00ca80ca9d53a3fc5ae40f231bfe3104e1dcbe3511b1459ad31c2d0",
+    "line_start": 1,
+    "line_end": 4,
+    "classification": "domain",
+    "behaviors": [
+      "tenant-scope"
+    ]
+  },
+  {
+    "id": "services/vault/src/domain/secret.mjs#metadataOnly",
+    "kind": "function",
+    "fingerprint_sha256": "bef5b79b10fef644e5ab85610b6e56095583950c79eafca21ff2b3b9db3e870f",
+    "line_start": 6,
+    "line_end": 9,
+    "classification": "domain",
+    "behaviors": [
+      "secret-listing"
+    ]
+  },
+  {
+    "id": "services/vault/src/domain/secret.mjs#createSecretRecord",
+    "kind": "function",
+    "fingerprint_sha256": "ea2d0ba96a704c6e300e9d198e86891b752f3fb097df77447dbdd81b3cc68942",
+    "line_start": 11,
+    "line_end": 21,
+    "classification": "domain",
+    "behaviors": [
+      "secret-creation",
+      "versioning"
+    ]
+  },
+  {
+    "id": "services/vault/src/infrastructure/dependencies.mjs#createVaultDependencies",
+    "kind": "function",
+    "fingerprint_sha256": "de3dfa20af5fcbf70bf1073307f2420497f213235493fad8986c6fbc75578bc6",
+    "line_start": 7,
+    "line_end": 26,
+    "classification": "infrastructure",
+    "behaviors": [
+      "audit",
+      "events"
+    ]
+  },
+  {
+    "id": "services/vault/src/security/access.mjs#actorFrom",
+    "kind": "function",
+    "fingerprint_sha256": "2d2a54d46e188254629e9f0c82b529795eed5567f29925d31676fcb9080a875d",
+    "line_start": 3,
+    "line_end": 5,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "services/vault/src/security/access.mjs#createVaultAccess",
+    "kind": "function",
+    "fingerprint_sha256": "fd1c733521cf8d5962543081c2c21d4a514a23a298bfbb0596ef905f0c5f1873",
+    "line_start": 7,
+    "line_end": 22,
+    "classification": "security",
+    "behaviors": [
+      "tenant-scope",
+      "step-up"
+    ]
+  }
+]

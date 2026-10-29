@@ -1,0 +1,703 @@
+{
+  "phase": "VLT-GAP-19",
+  "sub_phase": "VLT-GAP-19",
+  "validator_version": "19.1",
+  "checked_at": "2026-10-11T03:22:22.612Z",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "6150f479482910ec061f4d3b8a82a414d5417072813e3dee2c88880e2ce5ea5c",
+  "source_hashes": {
+    "scripts/antas/vault/gap/validate-vlt-gap-19.mjs": "ec6619dfb5ecbe58809c3e6328554cd9fdc64d8e415e1ebd252fd93ed59160b1",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/harness.mjs": "5d5ee87633aa75ec673aff72e137093c32b2bdfcccf304a4e138216fa23964c4",
+    "artifacts/ayzen/src/pages/user/vault.tsx": "1126ab6629abb6e0b8e528230435347a41f46f8227412994799f685963c9a9d8",
+    "artifacts/api-server/src/vault/application/backup/schedule-cron.ts": "b9e8d9b2a7e4c2fe7f479723abd1ebe596d93bdd2d55e112f1006237721ffa44",
+    "artifacts/api-server/src/vault/application/backup/key.ts": "e4037ac80d22cbe1dbe596e590e7377fd06207bff5af0df3fb25edd4644b9ab5",
+    "artifacts/api-server/src/vault/application/entity/create.ts": "ad4887dbcf2ac51cc1f6223372e796331abd764c727205d963af7537fd951de4",
+    "artifacts/api-server/src/vault/application/entity/update.ts": "2d213810c9a25a595e34d8ec6c7302b0fc7dfe9c853636095046f01645eb8799",
+    "artifacts/api-server/src/vault/application/entity/activity.ts": "8cee0937e040e86b13b710f6031239bc60ccc828ea6a9fca93e14fd4962fa635",
+    "artifacts/api-server/src/vault/application/secret/reveal.ts": "87ae5078be0db9adfe1613a62753945dfd4906159a9accbd54403371e769614e",
+    "artifacts/api-server/src/vault/application/snapshot/restore.ts": "8f136495da3593477b9115a2685e5cfdd04224695135a9d73b97786a4ada8033",
+    "artifacts/api-server/src/vault/application/snapshot/store.ts": "c9fe1b48781ba47991fa5e588228ab457ed68a796187196ed971f3ce6557fa85",
+    "artifacts/api-server/src/vault/crypto/backup-envelope.ts": "dec7cd169a84dd45151ef24f32e97cd62d4fb8d25e84774f5c370b9c727614c4",
+    "artifacts/api-server/src/vault/crypto/key-store-port.ts": "7fd62a0e2150e046d58ee11bae420becbf7b754cb2bf3ddd0a92db2c611976f4",
+    "artifacts/api-server/src/vault/domain/db-errors.ts": "973dcef15149df20cb9980a3bb3ce57106edc66cd8c7bb17e2bc7affdd9193b1",
+    "artifacts/api-server/src/vault/infrastructure/backup/audit.ts": "b205da45f2a75e4c7fc2df8406d9fbb1caf9672038fa0f9d4d990728e26e7592",
+    "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts": "5ca8bf37abb130fab7eb074ef8ce405990c5a73631ee43d43277c18191878a9f",
+    "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts": "610338d0f11597461cf1e51f7e304c779ac1504b32e220854e5ab66aa62cd66b",
+    "artifacts/api-server/src/services/credit-meter.ts": "92dfe330aba122f5aca827a56d5735300ae9904cafefd5bb515cf375efc876e5",
+    "artifacts/api-server/src/routes/vault.ts": "8102609fcf8845202b1b8a295443ba3f4d07267e0d9c8e27725b280ee27c3fed",
+    "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts": "cc070b7d3fb2917186f90770e3dd660be890d80b8a293db00656e90bf9f5bfe3",
+    "artifacts/api-server/src/vault/infrastructure/crypto-key-stores.ts": "710920d29ff42cd56c42813ac10e075f9f9c85b5bd2f74d8a851b3798fd1e29a",
+    "artifacts/api-server/src/vault/infrastructure/repositories/encryption-key-repository.ts": "b804bc6f7ca935fc8a6ea7153ee0a9eff8c40b2d3ab194e13720566d126808a6",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-schedule-repository.ts": "ee0c252f4c9ed33fa882480b7f7771518ae28e0831a89230e20f63c093c445e9",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-repository.ts": "36630a012f6285ec2ee0883a52d6a3bab97478e07297c4143f97e34de0a54264",
+    "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts": "39a6e75cef816e213e415f25b1c6a00c648ba5fb181d882cad89dc21689e0fe6"
+  },
+  "duration_ms": 24754,
+  "method": "real Vault TypeScript executed against an in-memory database/network/clock; a crash (process dies, later I/O refused) or a transient error injected at every I/O point, before and after the operation applies; restart = fresh module graph over surviving state 61 minutes later, then the normal recovery path/client retry; invariants checked after every run",
+  "tasks_covered": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "invariants": [
+    "no corruption (stored data intact, decryptable, checksum-valid, all-or-nothing)",
+    "no duplicate critical side effect (delivery, charge, key version, restore row, entity row)",
+    "no plaintext leak (logs, alerts, audit, state, stored blobs)",
+    "no missing critical audit event (key rotation)",
+    "no unrecoverable state (restart + retry converges)",
+    "no unhandled promise rejection"
+  ],
+  "scenarios": [
+    {
+      "name": "seed-reveal-request",
+      "tasks": [
+        1,
+        9,
+        10,
+        11
+      ],
+      "io_points": 8,
+      "fault_runs": 17,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "seed-reveal-later",
+      "tasks": [
+        1
+      ],
+      "io_points": 8,
+      "fault_runs": 1,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "credit-charge-ledger",
+      "tasks": [
+        1,
+        4,
+        9,
+        12
+      ],
+      "io_points": 16,
+      "fault_runs": 33,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "credit-charge-later",
+      "tasks": [
+        1
+      ],
+      "io_points": 16,
+      "fault_runs": 1,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "backup-worker:store",
+      "tasks": [
+        2,
+        9,
+        10,
+        11,
+        12
+      ],
+      "io_points": 28,
+      "fault_runs": 57,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "backup-worker:webhook",
+      "tasks": [
+        2,
+        9,
+        10,
+        11,
+        12
+      ],
+      "io_points": 32,
+      "fault_runs": 65,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {},
+      "stats": {
+        "redeliveries_carrying_the_same_identity": 2
+      }
+    },
+    {
+      "name": "backup-worker:email",
+      "tasks": [
+        2,
+        9,
+        10,
+        11,
+        12
+      ],
+      "io_points": 32,
+      "fault_runs": 65,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {},
+      "stats": {
+        "redeliveries_carrying_the_same_identity": 2
+      }
+    },
+    {
+      "name": "backup-worker:webhook:db-outage",
+      "tasks": [
+        5,
+        9,
+        12
+      ],
+      "io_points": 0,
+      "fault_runs": 1,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "backup-worker:store:db-outage",
+      "tasks": [
+        5,
+        9,
+        12
+      ],
+      "io_points": 0,
+      "fault_runs": 1,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "cloud-delivery:google_drive",
+      "tasks": [
+        6,
+        9,
+        10,
+        12
+      ],
+      "io_points": 8,
+      "fault_runs": 17,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "cloud-delivery:dropbox",
+      "tasks": [
+        6,
+        9,
+        10,
+        12
+      ],
+      "io_points": 6,
+      "fault_runs": 13,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "backup-worker:webhook:net-outage",
+      "tasks": [
+        6,
+        9,
+        10,
+        12
+      ],
+      "io_points": 28,
+      "fault_runs": 1,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "backup-worker:email:net-outage",
+      "tasks": [
+        6,
+        9,
+        10,
+        12
+      ],
+      "io_points": 28,
+      "fault_runs": 1,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "entity-create",
+      "tasks": [
+        3,
+        9,
+        11,
+        12
+      ],
+      "io_points": 6,
+      "fault_runs": 13,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {
+        "create-client-retry-duplicate": 2
+      }
+    },
+    {
+      "name": "entity-create:event-faults",
+      "tasks": [
+        4,
+        9,
+        12
+      ],
+      "io_points": 6,
+      "fault_runs": 13,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {
+        "create-client-retry-duplicate": 2
+      }
+    },
+    {
+      "name": "entity-create:idempotency-key",
+      "tasks": [
+        3,
+        9,
+        11,
+        12
+      ],
+      "io_points": 10,
+      "fault_runs": 21,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "entity-update",
+      "tasks": [
+        3,
+        9,
+        11,
+        12
+      ],
+      "io_points": 6,
+      "fault_runs": 13,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "key-rotation:automatic-cron",
+      "tasks": [
+        7,
+        9,
+        10,
+        12
+      ],
+      "io_points": 12,
+      "fault_runs": 25,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "key-rotation:manual-admin",
+      "tasks": [
+        7,
+        9,
+        10,
+        12
+      ],
+      "io_points": 12,
+      "fault_runs": 25,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    },
+    {
+      "name": "snapshot-restore",
+      "tasks": [
+        8,
+        9,
+        11,
+        12
+      ],
+      "io_points": 46,
+      "fault_runs": 93,
+      "violations": 0,
+      "violation_sample": [],
+      "residuals": {}
+    }
+  ],
+  "client_wiring": {
+    "file": "artifacts/ayzen/src/pages/user/vault.tsx",
+    "sends_idempotency_key_on_create": true,
+    "kept_until_success_and_per_distinct_payload": true,
+    "note": "static check; the browser code is not executed by this gate"
+  },
+  "fixes_driven_by_this_gate": [
+    "entity create/update fell back to a reduced insert/update on ANY database error: a transient error stored an entity without its seed phrase and credentials (or inserted a second row when the first had committed) and still answered success — now only on a missing-column error (domain/db-errors.ts)",
+    "entity create/update turned a failing event hub into an error response after the write had committed (client retry then duplicates) — broadcast is now best-effort",
+    "a key rotation interrupted between deactivate and insert left a key chain with no active row that the rotation sweep ignored forever — the sweep now rotates to restore one active key",
+    "a seed reveal whose response was lost after the credit charge was charged again on the retry — chargeCredits now takes a (referenceId, window), debits and writes its ledger row in ONE transaction, and a retry inside 5 minutes finds the ledger row and is not charged (a deliberate reveal later is charged normally)",
+    "a backup redelivered after a crash between the receiver accepting it and the delivery being recorded was indistinguishable from a new backup: webhook now carries Idempotency-Key, email a stable Message-ID, Dropbox overwrites the same file name and Drive skips a file already in the folder (it used to add an auto-renamed copy / a second file)",
+    "the web client did not send the Idempotency-Key the server already honours, so a create whose response was lost was retried into a duplicate — the create flow now sends one per distinct payload and drops it after success",
+    "a key rotation interrupted between the key commit and its audit row left a key with no key_rotated audit event, never repaired — the sweep now reconciles the missing audit row (marked trigger=reconciled)"
+  ],
+  "accepted_residuals": {
+    "create-client-retry-duplicate": {
+      "measured_occurrences": 4,
+      "why": "A POST /vault WITHOUT an Idempotency-Key header that committed but whose response was lost is retried by the caller into a second entity. The web client now sends a key on every create (checked statically below) and with a key there is no duplicate in any fault run, but the server cannot tell a header-less retry from a new create, so other API callers that omit the header keep this behaviour. One request never produces two rows."
+    }
+  },
+  "mutations": [
+    {
+      "mutation": "revert fix: create falls back to a reduced insert on ANY error",
+      "file": "vault/application/entity/create.ts",
+      "scenario": "entity-create",
+      "must_be_caught_by_any_of": [
+        "corruption",
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "corruption",
+        "duplicate-side-effect"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: update strips seed/credentials on ANY error and answers 200",
+      "file": "vault/application/entity/update.ts",
+      "scenario": "entity-update",
+      "must_be_caught_by_any_of": [
+        "corruption"
+      ],
+      "caught_by": [
+        "corruption"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: a failing event hub fails the committed create",
+      "file": "vault/application/entity/create.ts",
+      "scenario": "entity-create:event-faults",
+      "must_be_caught_by_any_of": [
+        "event-failure-breaks-write"
+      ],
+      "caught_by": [
+        "event-failure-breaks-write",
+        "residual-without-fault"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: rotation sweep no longer reconciles a missing rotation audit",
+      "file": "vault/infrastructure/backup/key-rotation-cron.ts",
+      "scenario": "key-rotation:manual-admin",
+      "must_be_caught_by_any_of": [
+        "missing-audit"
+      ],
+      "caught_by": [
+        "missing-audit"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: sweep gives up when an interrupted rotation left no active key",
+      "file": "vault/infrastructure/backup/key-rotation-cron.ts",
+      "scenario": "key-rotation:automatic-cron",
+      "must_be_caught_by_any_of": [
+        "unrecoverable"
+      ],
+      "caught_by": [
+        "unrecoverable"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "key manager loses its fallback to the newest version when none is active",
+      "file": "vault/crypto/backup-envelope.ts",
+      "scenario": "key-rotation:automatic-cron",
+      "must_be_caught_by_any_of": [
+        "unrecoverable"
+      ],
+      "caught_by": [
+        "unrecoverable"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "restore applies rows straight to the pool instead of one transaction",
+      "file": "vault/application/snapshot/restore.ts",
+      "scenario": "snapshot-restore",
+      "must_be_caught_by_any_of": [
+        "corruption"
+      ],
+      "caught_by": [
+        "corruption",
+        "misreported-restore"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "restore row inserts lose their savepoint (aborted transaction misreports counts)",
+      "file": "vault/application/snapshot/restore.ts",
+      "scenario": "snapshot-restore",
+      "must_be_caught_by_any_of": [
+        "misreported-restore"
+      ],
+      "caught_by": [
+        "misreported-restore"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: seed reveal audit is fire-and-forget again",
+      "file": "vault/application/secret/reveal.ts",
+      "scenario": "seed-reveal-request",
+      "must_be_caught_by_any_of": [
+        "missing-audit"
+      ],
+      "caught_by": [
+        "missing-audit"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: an interrupted backup run is re-run from scratch (extra snapshot)",
+      "file": "vault/application/backup/schedule-cron.ts",
+      "scenario": "backup-worker:store",
+      "must_be_caught_by_any_of": [
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "duplicate-side-effect",
+        "missing-audit"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: Idempotency-Key no longer pins the serial (retry creates a second entity)",
+      "file": "vault/application/entity/create.ts",
+      "scenario": "entity-create:idempotency-key",
+      "must_be_caught_by_any_of": [
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "duplicate-side-effect"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: scheduled-run activity entry is written once with no retry",
+      "file": "vault/application/backup/schedule-cron.ts",
+      "scenario": "backup-worker:store",
+      "must_be_caught_by_any_of": [
+        "missing-audit"
+      ],
+      "caught_by": [
+        "missing-audit"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: seed reveal is charged again on every retry (no charge reference)",
+      "file": "vault/application/secret/reveal.ts",
+      "scenario": "seed-reveal-request",
+      "must_be_caught_by_any_of": [
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "duplicate-side-effect"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: charge dedupe lookup removed from chargeCredits",
+      "file": "services/credit-meter.ts",
+      "scenario": "credit-charge-ledger",
+      "must_be_caught_by_any_of": [
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "duplicate-side-effect"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "charge dedupe ignores the retry window (a later reveal is free)",
+      "file": "services/credit-meter.ts",
+      "scenario": "credit-charge-later",
+      "must_be_caught_by_any_of": [
+        "corruption"
+      ],
+      "caught_by": [
+        "corruption"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "revert fix: balance debit and ledger row are separate statements again",
+      "file": "services/credit-meter.ts",
+      "scenario": "credit-charge-ledger",
+      "must_be_caught_by_any_of": [
+        "corruption",
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "corruption"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "webhook delivery loses its Idempotency-Key (a redelivery is indistinguishable)",
+      "file": "vault/infrastructure/backup/delivery.ts",
+      "scenario": "backup-worker:webhook",
+      "must_be_caught_by_any_of": [
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "duplicate-side-effect"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "email delivery loses its stable Message-ID",
+      "file": "vault/infrastructure/backup/delivery.ts",
+      "scenario": "backup-worker:email",
+      "must_be_caught_by_any_of": [
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "duplicate-side-effect"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "Dropbox upload adds an auto-renamed copy on every redelivery",
+      "file": "vault/infrastructure/backup/cloud.ts",
+      "scenario": "cloud-delivery:dropbox",
+      "must_be_caught_by_any_of": [
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "duplicate-side-effect"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "Drive upload no longer checks for the file before creating it",
+      "file": "vault/infrastructure/backup/cloud.ts",
+      "scenario": "cloud-delivery:google_drive",
+      "must_be_caught_by_any_of": [
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "duplicate-side-effect"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "reveal logs the decrypted seed phrase",
+      "file": "vault/application/secret/reveal.ts",
+      "scenario": "seed-reveal-request",
+      "must_be_caught_by_any_of": [
+        "plaintext-leak"
+      ],
+      "caught_by": [
+        "plaintext-leak"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "backup claim guard removed (overlapping ticks both run)",
+      "file": "vault/application/backup/schedule-cron.ts",
+      "scenario": "backup-worker:store",
+      "must_be_caught_by_any_of": [
+        "duplicate-side-effect"
+      ],
+      "caught_by": [
+        "duplicate-side-effect",
+        "missing-audit",
+        "vacuous"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "stored backup checksum no longer matches the blob",
+      "file": "vault/application/snapshot/store.ts",
+      "scenario": "backup-worker:store",
+      "must_be_caught_by_any_of": [
+        "corruption"
+      ],
+      "caught_by": [
+        "corruption"
+      ],
+      "caught": true,
+      "error": null
+    },
+    {
+      "mutation": "backup blob stored without encryption",
+      "file": "vault/application/backup/schedule-cron.ts",
+      "scenario": "backup-worker:store",
+      "must_be_caught_by_any_of": [
+        "corruption",
+        "plaintext-leak"
+      ],
+      "caught_by": [
+        "corruption",
+        "plaintext-leak"
+      ],
+      "caught": true,
+      "error": null
+    }
+  ],
+  "limits": [
+    "The database is an in-memory model of the Drizzle query subset and the SQL the repositories issue, with Postgres-style aborted-transaction semantics; no real Postgres, locks, isolation levels or replication are exercised.",
+    "Process death is injected at I/O boundaries only (a kill between two statements); a kill inside CPU work or mid-write of a single statement is modelled as that statement applied or not applied.",
+    "The snapshot payload builder, alert channels, SMTP/webhook/cloud transports and the SSE hub are fakes; their own failure modes are not part of this gate (the vault code's handling of their failures is).",
+    "Covered: seed reveal and the real credit ledger, scheduled backup worker (store/email/webhook, overlapping ticks), real Drive/Dropbox delivery against a provider model, entity create/update, automatic and manual key rotation, snapshot restore. Not covered: share/attachment/KYC/game write paths, health cron, field-key rotation (rotateKey), cloud OAuth flows.",
+    "A backup can still be SENT twice (exactly-once to an external system is impossible from this side). Every channel now carries a stable identity so the duplicate is recognisable and harmless IF the receiver honours it: webhook Idempotency-Key, email Message-ID (nodemailer/Resend behaviour on a custom Message-ID is not exercised here), Dropbox same-name overwrite and Drive skip-if-present are modelled, not run against the real providers.",
+    "A POST /vault without an Idempotency-Key still duplicates on a lost-response retry; only the web client is wired. The reveal retry window is 5 minutes: a second reveal of the same seed inside it is not charged.",
+    "Interrupted rotation is repaired by the daily sweep, not atomically: making deactivate+insert a single transaction needs a key-store port change and re-baselining the 15-backup differential."
+  ],
+  "findings": [],
+  "status": "PASS"
+}

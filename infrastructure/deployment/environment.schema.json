@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "profiles": {
+    "development": {
+      "required": [],
+      "requiredAnyOf": [],
+      "defaults": {
+        "NODE_ENV": "development",
+        "GATEWAY_REQUEST_TIMEOUT_MS": "15000",
+        "SERVICE_REQUEST_TIMEOUT_MS": "15000"
+      }
+    },
+    "staging": {
+      "required": ["MONOLITH_URL", "AYZEN_CONTAINER_REGISTRY"],
+      "requiredAnyOf": [["AYZEN_SERVICE_AUTH_SECRET", "SERVICE_TO_SERVICE_SECRET"]],
+      "forbidden": ["SESSION_SECRET=local-development-only", "POSTGRES_PASSWORD=local-development-only"]
+    },
+    "production": {
+      "required": ["MONOLITH_URL", "AYZEN_CONTAINER_REGISTRY"],
+      "requiredAnyOf": [["AYZEN_SERVICE_AUTH_SECRET", "SERVICE_TO_SERVICE_SECRET"], ["SESSION_SECRET"]],
+      "forbidden": ["SESSION_SECRET=local-development-only", "POSTGRES_PASSWORD=local-development-only"]
+    }
+  },
+  "secretNames": [
+    "SESSION_SECRET",
+    "AYZEN_SERVICE_AUTH_SECRET",
+    "SERVICE_TO_SERVICE_SECRET",
+    "POSTGRES_PASSWORD",
+    "SYLO_MASTER_KEY",
+    "TELEGRAM_BOT_TOKEN",
+    "TELEGRAM_ADMIN_BOT_TOKEN",
+    "SERVICE_JWT_PRIVATE_KEY"
+  ]
+}

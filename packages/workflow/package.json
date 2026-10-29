@@ -1,0 +1,17 @@
+{
+  "name": "@ayzen/workflow",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@ayzen/authorization": "workspace:*",
+    "@ayzen/events": "workspace:*",
+    "@ayzen/policy-contract": "workspace:*"
+  },
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  }
+}

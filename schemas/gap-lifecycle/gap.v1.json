@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ayzen.gap.lifecycle.v1",
+  "type": "object",
+  "required": ["id", "findingCode", "severity", "owner", "slaHours", "status", "remediationWorkflow"],
+  "properties": {
+    "id": {"type": "string"},
+    "findingCode": {"type": "string"},
+    "severity": {"enum": ["critical", "high", "medium", "low", "info"]},
+    "owner": {"type": "string"},
+    "slaHours": {"type": "number", "exclusiveMinimum": 0},
+    "status": {"enum": ["open", "in_progress", "blocked", "closed"]},
+    "remediationWorkflow": {"type": "string"}
+  },
+  "additionalProperties": true
+}

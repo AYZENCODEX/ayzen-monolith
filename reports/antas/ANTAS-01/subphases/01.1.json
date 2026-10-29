@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-01.1",
+  "phase": "ANTAS-01",
+  "name": "Toolchain",
+  "generatedAt": "2026-09-29T06:06:06.715Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    ".nvmrc",
+    "package.json",
+    "scripts/antas/verify-toolchain.mjs",
+    "docs/antas/build/reproducibility.md"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

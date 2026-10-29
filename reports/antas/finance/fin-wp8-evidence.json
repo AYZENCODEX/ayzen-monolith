@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-8",
+  "title": "Retire the lib/finance-* shims; routes import application/* only",
+  "timestamp": "2026-10-20T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Static and boundary checks pass, but nothing that needs a database driver, tsx or tsc could run (package registry unreachable in the session): the WP-7 and WP-8 changes are not type-checked and the DB suite was not run. Also no commit SHA and no Replit checkout run.",
+  "commit": { "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48", "workingTree": "Uncommitted; cumulative; bound by content in fin-provenance-manifest.json." },
+  "removed": [
+    "lib/finance-accounting.ts", "lib/finance-ai.ts", "lib/finance-digest-cron.ts", "lib/finance-invoice.ts",
+    "lib/finance-invoice-reminder-cron.ts", "lib/finance-late-fee-cron.ts", "lib/finance-networth.ts",
+    "lib/finance-networth-cron.ts", "lib/finance-notify.ts", "lib/finance-recurring-cron.ts",
+    "lib/finance-reminder-cron.ts", "lib/finance-report-schedule-cron.ts", "lib/finance-wallet-bridge.ts", "lib/invoice-pdf.ts"
+  ],
+  "importersRewired": {
+    "index.ts": "finance/jobs/recurring",
+    "finance/ledger-invariants.db.test.ts": "finance/ledger/*",
+    "finance/application/reports.db.test.ts": "finance/ledger/books",
+    "lib/finance-accounting.db.test.ts": "finance/ledger/*",
+    "routes/finance.ts": "application/networth, application/ai, application/assets (payAmortizationInstallment); unused resolveBookId import dropped",
+    "routes/finance-invoices.ts": "application/payment-methods, application/invoices (iso)"
+  },
+  "newApplicationEntryPoints": ["application/networth.ts", "application/payment-methods.ts", "re-exports in application/ai.ts, assets.ts, invoices.ts"],
+  "behaviorChanges": [],
+  "ran": [
+    { "check": "node scripts/antas/finance/validate-boundaries.mjs", "result": "PASS, 55 Finance sources, 0 findings" },
+    { "check": "validator mutations: a shim file recreated, a route importing ledger/books, index.ts importing the old recurring path", "result": "wp8-shims-removed, wp8-routes-import-application-only, wp8-no-legacy-importers fired respectively; restored" },
+    { "check": "finance/route-security.test.ts + finance/ledger-compat.test.ts (static, strip-types loader)", "result": "62/62 pass (4 new WP-8 gates)" },
+    { "check": "mutation: index.ts imports the removed recurring shim path", "result": "WP-8 importer gate failed, restored" },
+    { "check": "TypeScript syntax parse of every touched file", "result": "0 syntax errors (not a type check)" },
+    { "check": "grep for imports of any removed path across artifacts, services, scripts, lib", "result": "none" }
+  ],
+  "notRun": [
+    "tsc -p artifacts/api-server --noEmit and pnpm typecheck / pnpm build (a wrong re-export name or a missing import would only show here)",
+    "pnpm test:finance-db (WP-7 and WP-8 DB tests and the rewired older suites)",
+    "full pnpm test:finance-static with tsx",
+    "Replit checkout, commit SHA, staging walk-through"
+  ],
+  "next": "Run tsc and pnpm test:finance-db in the checkout, then WP-9 close-out (final boundary scan, evidence index, remaining-risk register)."
+}

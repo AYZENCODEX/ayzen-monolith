@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-08",
+  "sub_phase": "08-census",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "e73a8fd7fd71b86b6667ec4bb997cd746e17bc2695cf3870b3608589ae189806",
+  "source_hashes": {
+    "artifacts/api-server/src/lib/vault-backup-envelope.ts": "e8b25d6f4c57dff81bb26e7cc99209dd59ba8d463d20181101f4fcbd56e8c0bc",
+    "artifacts/api-server/src/lib/vault-backup-audit.ts": "83cf31bcfc5bb860b06a776ca2d22270f62c492753b49b7578e0193b11b5ecfb",
+    "artifacts/api-server/src/lib/vault-backup-cloud.ts": "dbfe8c9092e9969b89b992995217597aa1e89138db91b5acd032be2eaac5e239",
+    "artifacts/api-server/src/lib/vault-backup-delivery.ts": "0a3af1f565dae24df43cdd7ebedbea3231a500f6be2163e664abd39fdce8165f",
+    "artifacts/api-server/src/lib/vault-backup-alerts.ts": "5e703944cc34142497a35c27ccd954218d4f75e1a54747331ba10c4b393783fe",
+    "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts": "b5dca0f651b7ec1398a5925ef50983e0433672dee644eeb3ef2521f33bdfd7bb",
+    "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts": "acc8cbb04cdee1664b53e661bf289cfa902b7a0022bf18498ab62339b4b4e956",
+    "artifacts/api-server/src/routes/vault-backup-key.ts": "ff5908a46d2cd4417bb8c798f569ec6ca2ea5135c5e89c9a1782f0bb0f9f25a2",
+    "artifacts/api-server/src/routes/vault-backup-cloud.ts": "c15246b957ba6a00831d5fad1cf3b16cf00e4fd42237c3c45bd8bcc0a151b20d",
+    "artifacts/api-server/src/routes/vault-backup-schedule.ts": "11c791b6a6cbbc6845c42e282a4df6f740c34319d4842fabdd22ef8d1ad423a2"
+  },
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__envelope__ts",
+      "sha256": "e8b25d6f4c57dff81bb26e7cc99209dd59ba8d463d20181101f4fcbd56e8c0bc",
+      "lines": 227,
+      "symbols": 24,
+      "exported": 5
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__audit__ts",
+      "sha256": "83cf31bcfc5bb860b06a776ca2d22270f62c492753b49b7578e0193b11b5ecfb",
+      "lines": 134,
+      "symbols": 7,
+      "exported": 5
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__cloud__ts",
+      "sha256": "dbfe8c9092e9969b89b992995217597aa1e89138db91b5acd032be2eaac5e239",
+      "lines": 317,
+      "symbols": 29,
+      "exported": 9
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__delivery__ts",
+      "sha256": "0a3af1f565dae24df43cdd7ebedbea3231a500f6be2163e664abd39fdce8165f",
+      "lines": 203,
+      "symbols": 5,
+      "exported": 4
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__alerts__ts",
+      "sha256": "5e703944cc34142497a35c27ccd954218d4f75e1a54747331ba10c4b393783fe",
+      "lines": 260,
+      "symbols": 4,
+      "exported": 4
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__key__rotation__cron__ts",
+      "sha256": "b5dca0f651b7ec1398a5925ef50983e0433672dee644eeb3ef2521f33bdfd7bb",
+      "lines": 123,
+      "symbols": 5,
+      "exported": 1
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__schedule__cron__ts",
+      "sha256": "acc8cbb04cdee1664b53e661bf289cfa902b7a0022bf18498ab62339b4b4e956",
+      "lines": 323,
+      "symbols": 12,
+      "exported": 4
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__routes__vault__backup__key__ts",
+      "sha256": "ff5908a46d2cd4417bb8c798f569ec6ca2ea5135c5e89c9a1782f0bb0f9f25a2",
+      "lines": 108,
+      "symbols": 2,
+      "exported": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__routes__vault__backup__cloud__ts",
+      "sha256": "c15246b957ba6a00831d5fad1cf3b16cf00e4fd42237c3c45bd8bcc0a151b20d",
+      "lines": 124,
+      "symbols": 3,
+      "exported": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__routes__vault__backup__schedule__ts",
+      "sha256": "11c791b6a6cbbc6845c42e282a4df6f740c34319d4842fabdd22ef8d1ad423a2",
+      "lines": 185,
+      "symbols": 3,
+      "exported": 0
+    }
+  ],
+  "moves": {
+    "artifacts/api-server/src/lib/vault-backup-envelope.ts": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+    "artifacts/api-server/src/lib/vault-backup-audit.ts": "artifacts/api-server/src/vault/infrastructure/backup/audit.ts",
+    "artifacts/api-server/src/lib/vault-backup-cloud.ts": "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts",
+    "artifacts/api-server/src/lib/vault-backup-delivery.ts": "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts",
+    "artifacts/api-server/src/lib/vault-backup-alerts.ts": "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts",
+    "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts": "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts",
+    "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts"
+  },
+  "status": "PASS"
+}

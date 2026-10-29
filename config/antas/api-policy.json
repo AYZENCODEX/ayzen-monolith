@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "requiredRouteContract": ["requestSchema", "responseSchema", "authentication", "authorization", "rateLimit", "timeout", "idempotency", "audit", "errorContract"],
+  "errorRedaction": ["stackTrace", "sql", "secret", "jwt", "internalHostname", "internalFilesystemPath"],
+  "abuseCases": ["oversized-body", "malformed-json", "parameter-pollution", "slow-request", "retry-storm", "rate-limit-bypass", "method-abuse"]
+}

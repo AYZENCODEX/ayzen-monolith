@@ -1,0 +1,371 @@
+{
+  "gap": "VLT-GAP-13",
+  "sub_phase": "VLT-GAP-13-E",
+  "kind": "differential (old route fixture vs extracted modules, identical fake DB)",
+  "checked_at": "2026-10-12T16:38:24.256Z",
+  "old_fixture_sha256": "87fc9ff5ba7fb74f9d163ab7970b9c2ab514d65f2973387f01168ed3c2bb0baa",
+  "route_table_equal": true,
+  "routes": [
+    "GET /marketplace/vault/listings",
+    "POST /marketplace/vault/listings",
+    "POST /marketplace/vault/buy",
+    "DELETE /marketplace/vault/listings/:id",
+    "GET /marketplace/vault/stats"
+  ],
+  "scenarios": 49,
+  "statuses_exercised": [
+    200,
+    400,
+    403,
+    404,
+    409,
+    500
+  ],
+  "failed": 0,
+  "results": [
+    {
+      "scenario": "list: no filters",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 2
+    },
+    {
+      "scenario": "list: all filters + official=true",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 2
+    },
+    {
+      "scenario": "list: official=false",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 2
+    },
+    {
+      "scenario": "list: official=other",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 2
+    },
+    {
+      "scenario": "list: db error -> 500",
+      "equal": true,
+      "old_status": 500,
+      "new_status": 500,
+      "queries": 1
+    },
+    {
+      "scenario": "create: sell without price -> 400",
+      "equal": true,
+      "old_status": 400,
+      "new_status": 400,
+      "queries": 0
+    },
+    {
+      "scenario": "create: buy without account_type -> 400",
+      "equal": true,
+      "old_status": 400,
+      "new_status": 400,
+      "queries": 0
+    },
+    {
+      "scenario": "create: market disabled -> 403",
+      "equal": true,
+      "old_status": 403,
+      "new_status": 403,
+      "queries": 0
+    },
+    {
+      "scenario": "create: entity ok",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 2
+    },
+    {
+      "scenario": "create: entity not owned -> 403",
+      "equal": true,
+      "old_status": 403,
+      "new_status": 403,
+      "queries": 1
+    },
+    {
+      "scenario": "create: local ok",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 2
+    },
+    {
+      "scenario": "create: local not owned -> 403",
+      "equal": true,
+      "old_status": 403,
+      "new_status": 403,
+      "queries": 1
+    },
+    {
+      "scenario": "create: kyc ok",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 2
+    },
+    {
+      "scenario": "create: kyc not owned -> 403",
+      "equal": true,
+      "old_status": 403,
+      "new_status": 403,
+      "queries": 1
+    },
+    {
+      "scenario": "create: game ok",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 2
+    },
+    {
+      "scenario": "create: game not owned -> 403",
+      "equal": true,
+      "old_status": 403,
+      "new_status": 403,
+      "queries": 1
+    },
+    {
+      "scenario": "create: no asset ref",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 1
+    },
+    {
+      "scenario": "create: buy order defaults + price_min/max",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 1
+    },
+    {
+      "scenario": "create: official + admin",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 1
+    },
+    {
+      "scenario": "create: official + non-admin",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 1
+    },
+    {
+      "scenario": "create: official 'true' string + admin",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 1
+    },
+    {
+      "scenario": "create: insert error -> 500",
+      "equal": true,
+      "old_status": 500,
+      "new_status": 500,
+      "queries": 1
+    },
+    {
+      "scenario": "buy: no listing_id -> 400",
+      "equal": true,
+      "old_status": 400,
+      "new_status": 400,
+      "queries": 0
+    },
+    {
+      "scenario": "buy: listing missing -> 404",
+      "equal": true,
+      "old_status": 404,
+      "new_status": 404,
+      "queries": 1
+    },
+    {
+      "scenario": "buy: own listing -> 400",
+      "equal": true,
+      "old_status": 400,
+      "new_status": 400,
+      "queries": 1
+    },
+    {
+      "scenario": "buy: precheck insufficient -> 400",
+      "equal": true,
+      "old_status": 400,
+      "new_status": 400,
+      "queries": 3
+    },
+    {
+      "scenario": "buy: success entity",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 12
+    },
+    {
+      "scenario": "buy: entity ownership conflict -> 409",
+      "equal": true,
+      "old_status": 409,
+      "new_status": 409,
+      "queries": 11
+    },
+    {
+      "scenario": "buy: success local",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 12
+    },
+    {
+      "scenario": "buy: local ownership conflict -> 409",
+      "equal": true,
+      "old_status": 409,
+      "new_status": 409,
+      "queries": 11
+    },
+    {
+      "scenario": "buy: success kyc",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 12
+    },
+    {
+      "scenario": "buy: kyc ownership conflict -> 409",
+      "equal": true,
+      "old_status": 409,
+      "new_status": 409,
+      "queries": 11
+    },
+    {
+      "scenario": "buy: success game",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 12
+    },
+    {
+      "scenario": "buy: game ownership conflict -> 409",
+      "equal": true,
+      "old_status": 409,
+      "new_status": 409,
+      "queries": 11
+    },
+    {
+      "scenario": "buy: success no asset",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 11
+    },
+    {
+      "scenario": "buy: success unknown vault_type",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 11
+    },
+    {
+      "scenario": "buy: success fee maths (price 33.33)",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 12
+    },
+    {
+      "scenario": "buy: atomic debit fails -> 400",
+      "equal": true,
+      "old_status": 400,
+      "new_status": 400,
+      "queries": 8
+    },
+    {
+      "scenario": "buy: already sold race -> 409",
+      "equal": true,
+      "old_status": 409,
+      "new_status": 409,
+      "queries": 10
+    },
+    {
+      "scenario": "buy: error mid-transaction -> rollback + 500",
+      "equal": true,
+      "old_status": 500,
+      "new_status": 500,
+      "queries": 12
+    },
+    {
+      "scenario": "buy: db error before tx -> 500",
+      "equal": true,
+      "old_status": 500,
+      "new_status": 500,
+      "queries": 1
+    },
+    {
+      "scenario": "cancel: missing -> 404",
+      "equal": true,
+      "old_status": 404,
+      "new_status": 404,
+      "queries": 1
+    },
+    {
+      "scenario": "cancel: forbidden -> 403",
+      "equal": true,
+      "old_status": 403,
+      "new_status": 403,
+      "queries": 2
+    },
+    {
+      "scenario": "cancel: ok",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 3
+    },
+    {
+      "scenario": "cancel: array id param",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 3
+    },
+    {
+      "scenario": "cancel: db error -> 500",
+      "equal": true,
+      "old_status": 500,
+      "new_status": 500,
+      "queries": 1
+    },
+    {
+      "scenario": "stats: ok",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 3
+    },
+    {
+      "scenario": "stats: nulls",
+      "equal": true,
+      "old_status": 200,
+      "new_status": 200,
+      "queries": 3
+    },
+    {
+      "scenario": "stats: db error -> 500",
+      "equal": true,
+      "old_status": 500,
+      "new_status": 500,
+      "queries": 1
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "1.0.0",
+  "policy": {
+    "defaultDeny": true,
+    "databaseAccess": "owner-mediated",
+    "cookieScope": "declared-per-domain",
+    "cors": "allowlisted-origins-only"
+  },
+  "domains": [
+    { "id": "ayzen-public", "domain": "ayzen.app", "environment": "production", "target": "api-gateway", "owner": "platform", "entryPoint": "frontend" },
+    { "id": "ayzen-staging", "domain": "staging.ayzen.app", "environment": "staging", "target": "api-gateway", "owner": "platform", "entryPoint": "frontend" },
+    { "id": "ayzen-admin", "domain": "admin.ayzen.app", "environment": "production", "target": "admin", "owner": "admin", "entryPoint": "admin" },
+    { "id": "ayzen-api", "domain": "api.ayzen.app", "environment": "production", "target": "api-gateway", "owner": "platform", "entryPoint": "api" }
+  ]
+}

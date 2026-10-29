@@ -1,0 +1,27 @@
+import type { AuthStepPolicy } from "../../infrastructure/repositories/vault-security-repository";
+import { getRow } from "../../infrastructure/repositories/vault-security-repository";
+
+export interface VaultSecurityResult { status: number; body: unknown }
+
+/**
+ * GET /vault/security/status. Moved unchanged from routes/vault-security.ts
+ * (VLT-GAP-06-B) — same flags, same authStepPolicy default of "any".
+ */
+export async function getVaultSecurityStatus(userId: number): Promise<VaultSecurityResult> {
+  const row = await getRow(userId);
+  return {
+    status: 200,
+    body: {
+      vaultPinSet: !!row?.vaultPinHash,
+      entityPinSet: !!row?.entityPinHash,
+      vaultPasswordSet: !!row?.vaultPasswordHash,
+      // The Vault Security PIN is mandatory — this flag is what the frontend
+      // uses to force the setup wizard before letting the person touch 2FA,
+      // passkeys, the Vault password, or the auth-step policy (all of which
+      // requireVaultPin() gates once this is true).
+      vaultPinMandatorySetupDone: !!row?.vaultPinHash,
+      authStepPolicy: (row?.authStepPolicy ?? "any") as AuthStepPolicy,
+      updatedAt: row?.updatedAt ?? null,
+    },
+  };
+}

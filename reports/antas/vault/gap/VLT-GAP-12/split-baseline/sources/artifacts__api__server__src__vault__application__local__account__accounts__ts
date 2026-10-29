@@ -1,0 +1,265 @@
+import { syncOnLocalAccountUpdate, syncOnLocalAccountDelete } from "../../../services/sync";
+import { encryptField, decryptRow, decryptRows } from "../../crypto/field-encryption";
+import { chargeCredits } from "../../../services/credit-meter";
+import { LOCAL_SENSITIVE_FIELDS, DEFAULT_LOCAL_ACCOUNT_CATEGORIES } from "../../domain/local-account";
+import { safeScore } from "../../domain/local-account-values";
+import {
+  selectLocalAccounts, insertLocalAccount, updateLocalAccount, updateLocalAccountStatus,
+  deleteLocalAccount, deleteLocalAccountValueHistory, linkLocalAccountToVault, unlinkLocalAccountFromVault,
+  findLocalAccountById, selectLocalAccountCategories, insertLocalAccountCategory, deleteLocalAccountCategory,
+  selectLocalAccountPoints, insertLocalAccountPoint, deleteLocalAccountPoint,
+} from "../../infrastructure/repositories/local-account-repository";
+
+/**
+ * Local account use-cases (create / update / lifecycle / link / categories /
+ * points). Bodies extracted from the handlers of routes/local-accounts.ts
+ * (VLT-GAP-02-B): same validation order, same persistence calls in the same
+ * order, same status codes and response bodies. A use-case never touches
+ * req/res — it returns `{ status, body }` and the route adapter sends it.
+ */
+
+export type UseCaseResult = { status: number; body: unknown; streamed?: boolean };
+
+export const dbError = (err: any): UseCaseResult => ({ status: 500, body: { error: "DB error", detail: err?.message } });
+
+// Mirrors the destructuring defaults the old handler applied (`x = default` only fires on undefined).
+const d = (v: unknown, dflt: unknown): any => (v === undefined ? dflt : v);
+
+// ─── GET /local-accounts — list user's accounts ───────────────────────────────
+// Supports ?category=twitter&linked=false (unlinked only) or ?vaultEntryId=123
+export async function listLocalAccounts(
+  userId: number,
+  q: { category?: unknown; linked?: unknown; vaultEntryId?: unknown },
+): Promise<UseCaseResult> {
+  const category = (q.category as string) || null;
+  const linkedParam = q.linked as string | undefined;   // "false" = only unlinked
+  const vaultEntryId = q.vaultEntryId ? parseInt(q.vaultEntryId as string) : null;
+  try {
+    const result = await selectLocalAccounts(userId, { category, onlyUnlinked: linkedParam === "false", vaultEntryId });
+    return { status: 200, body: decryptRows(result.rows as any[], LOCAL_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── POST /local-accounts — create account ────────────────────────────────────
+export async function createLocalAccount(userId: number, body: unknown): Promise<UseCaseResult> {
+  const b = body as any;
+  const category = d(b.category, "Other");
+  if (!category) return { status: 400, body: { error: "Category required" } };
+
+  try {
+    const result = await insertLocalAccount(userId, {
+      category,
+      label: d(b.label, null),
+      username: d(b.username, null),
+      email: d(b.email, null),
+      password: encryptField(d(b.password, null) as any),
+      recoveryEmail: d(b.recoveryEmail, null),
+      recoveryEmailPassword: encryptField(d(b.recoveryEmailPassword, null) as any),
+      backupCodes: encryptField(d(b.backupCodes, null) as any),
+      twofa: encryptField(d(b.twofa, null) as any),
+      recoveryEmailTwofa: encryptField(d(b.recoveryEmailTwofa, null) as any),
+      followers: d(b.followers, null),
+      accountWorth: d(b.accountWorth, 0),
+      buyPrice: d(b.buyPrice, 0),
+      accountCreateDate: d(b.accountCreateDate, null),
+      accountBuyDate: d(b.accountBuyDate, null),
+      accountLastLoginDate: d(b.accountLastLoginDate, null),
+      notes: d(b.notes, null),
+      score: safeScore(d(b.score, 5)),
+    });
+    return { status: 201, body: decryptRow(result.rows[0] as any, LOCAL_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── PUT /local-accounts/:id — update account ────────────────────────────────
+export async function editLocalAccount(userId: number, idParam: unknown, body: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+
+  const {
+    category, label, username, email, password,
+    recoveryEmail, recoveryEmailPassword,
+    backupCodes, twofa, recoveryEmailTwofa,
+    followers, accountWorth, buyPrice,
+    accountCreateDate, accountBuyDate, accountLastLoginDate, notes, score,
+  } = body as any;
+
+  try {
+    const result = await updateLocalAccount(id, userId, {
+      category, label, username, email,
+      password: encryptField(password),
+      recoveryEmail,
+      recoveryEmailPassword: encryptField(recoveryEmailPassword),
+      backupCodes: encryptField(backupCodes),
+      twofa: encryptField(twofa),
+      recoveryEmailTwofa: encryptField(recoveryEmailTwofa),
+      followers, accountWorth, buyPrice,
+      accountCreateDate, accountBuyDate, accountLastLoginDate, notes,
+      score: score !== undefined ? safeScore(score) : undefined,
+    });
+    if (!result.rows.length) return { status: 404, body: { error: "Not found or forbidden" } };
+    syncOnLocalAccountUpdate(id).catch(() => {});
+    return { status: 200, body: decryptRow(result.rows[0] as any, LOCAL_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── PATCH /local-accounts/:id/status — ban / unban account ─────────────────
+export async function setLocalAccountStatus(userId: number, idParam: unknown, body: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+
+  const allowed = ["active", "banned"];
+  const status = (body as any).status;
+  if (!allowed.includes(status)) return { status: 400, body: { error: "status must be one of: active, banned" } };
+
+  try {
+    const result = await updateLocalAccountStatus(id, userId, status);
+    if (!result.rows.length) return { status: 404, body: { error: "Not found or forbidden" } };
+    syncOnLocalAccountUpdate(id).catch(() => {});
+    return { status: 200, body: decryptRow(result.rows[0] as any, LOCAL_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── DELETE /local-accounts/:id — delete account ─────────────────────────────
+export async function removeLocalAccount(userId: number, idParam: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    await deleteLocalAccount(id, userId);
+    // Purge all value history so P&L for this account disappears immediately
+    await deleteLocalAccountValueHistory(id, userId);
+    syncOnLocalAccountDelete(id).catch(() => {});
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── PATCH /local-accounts/:id/link-vault — link to a vault entry ────────────
+export async function linkLocalAccount(userId: number, idParam: unknown, body: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  const { vaultEntryId } = body as { vaultEntryId: number };
+  if (!vaultEntryId || isNaN(Number(vaultEntryId))) return { status: 400, body: { error: "vaultEntryId required" } };
+  try {
+    const result = await linkLocalAccountToVault(id, userId, vaultEntryId);
+    if (!result.rows.length) return { status: 404, body: { error: "Not found" } };
+    return { status: 200, body: decryptRow(result.rows[0] as any, LOCAL_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── PATCH /local-accounts/:id/unlink-vault — remove vault link ──────────────
+export async function unlinkLocalAccount(userId: number, idParam: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    const result = await unlinkLocalAccountFromVault(id, userId);
+    if (!result.rows.length) return { status: 404, body: { error: "Not found" } };
+    return { status: 200, body: decryptRow(result.rows[0] as any, LOCAL_SENSITIVE_FIELDS) };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── GET /local-accounts/categories — list categories ────────────────────────
+export async function listLocalAccountCategories(userId: number): Promise<UseCaseResult> {
+  try {
+    const result = await selectLocalAccountCategories(userId);
+    return { status: 200, body: { defaults: DEFAULT_LOCAL_ACCOUNT_CATEGORIES, custom: result.rows } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── POST /local-accounts/categories — create category ───────────────────────
+export async function createLocalAccountCategory(userId: number, body: unknown): Promise<UseCaseResult> {
+  const { name } = body as any;
+  if (!name?.trim()) return { status: 400, body: { error: "Category name required" } };
+  try {
+    const result = await insertLocalAccountCategory(userId, name.trim());
+    return { status: 201, body: result.rows[0] };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── DELETE /local-accounts/categories/:id — delete category ─────────────────
+export async function removeLocalAccountCategory(userId: number, idParam: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    await deleteLocalAccountCategory(id, userId);
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── GET /local-accounts/:id — fetch single account ──────────────────────────
+export async function getLocalAccount(userId: number, idParam: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    const result = await findLocalAccountById(id, userId);
+    if (!result.rows.length) return { status: 404, body: { error: "Account not found" } };
+    // Charge-on-success: only after the row was actually found — a 404 above
+    // never touches the ledger. Mirrors vault.ts's GET /vault/:id pattern.
+    const charge = await chargeCredits(userId, "sylo.local_account_view");
+    return { status: 200, body: { ...decryptRow(result.rows[0] as any, LOCAL_SENSITIVE_FIELDS), _credits: charge.ok ? { charged: charge.charged, newBalance: charge.newBalance } : null } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── GET /local-accounts/:id/points ──────────────────────────────────────────
+export async function listLocalAccountPoints(userId: number, idParam: unknown): Promise<UseCaseResult> {
+  const accountId = parseInt(idParam as string);
+  if (isNaN(accountId)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    const result = await selectLocalAccountPoints(accountId, userId);
+    const rows = result.rows as any[];
+    const total = rows.reduce((s: number, r: any) => s + Number(r.amount ?? 0), 0);
+    return { status: 200, body: { entries: rows, total } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── POST /local-accounts/:id/points ─────────────────────────────────────────
+// NOTE: this route previously had NO ownership check before its INSERT; the
+// requireLocalAccountOwnership gate on the route is a genuine behavior change
+// from Season C (Phase C15), preserved as-is by this extraction.
+export async function createLocalAccountPoint(userId: number, idParam: unknown, body: unknown): Promise<UseCaseResult> {
+  const accountId = parseInt(idParam as string);
+  if (isNaN(accountId)) return { status: 400, body: { error: "Invalid ID" } };
+  const { amount, notes = null } = body as any;
+  if (!amount || isNaN(Number(amount))) return { status: 400, body: { error: "amount required" } };
+  try {
+    const result = await insertLocalAccountPoint(accountId, userId, amount, notes);
+    return { status: 201, body: result.rows[0] };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── DELETE /local-accounts/points/:pointId ──────────────────────────────────
+export async function removeLocalAccountPoint(userId: number, pointIdParam: unknown): Promise<UseCaseResult> {
+  const pointId = parseInt(pointIdParam as string);
+  if (isNaN(pointId)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    await deleteLocalAccountPoint(pointId, userId);
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}

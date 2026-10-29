@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "environment": "staging-only",
+  "requiresSyntheticData": true,
+  "requiresApproval": true,
+  "scenarios": [
+    {
+      "id": "worker-interruption",
+      "target": "event-worker",
+      "action": "stop-and-restart",
+      "expected": ["outbox-preserved", "stale-lease-recovered", "no-duplicate-consumer-effect", "audit-recorded"]
+    },
+    {
+      "id": "eventbus-delay",
+      "target": "event-bus",
+      "action": "inject-delay",
+      "expected": ["consumer-lag-alert", "retry-bounded", "dead-letter-policy-preserved"]
+    },
+    {
+      "id": "dependency-outage",
+      "target": "finance",
+      "action": "return-503",
+      "expected": ["safe-upstream-error", "gateway-fallback-for-reads", "writes-not-fabricated"]
+    },
+    {
+      "id": "telegram-webhook-failure",
+      "target": "telegram-gateway",
+      "action": "reject-forwarding",
+      "expected": ["update-receipt-preserved", "retry-or-replay-available", "admin-alert-created"]
+    },
+    {
+      "id": "bad-release",
+      "target": "api-gateway",
+      "action": "deploy-known-bad-staging-image",
+      "expected": ["health-fails", "promotion-stops", "previous-digest-restored", "incident-audited"]
+    }
+  ],
+  "forbidden": ["production", "real-user-data", "unapproved-credential-expiry", "destructive-database-delete"]
+}

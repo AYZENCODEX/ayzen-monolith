@@ -1,0 +1,127 @@
+{
+  "phase": "VLT-GAP-04",
+  "sub_phase": "VLT-GAP-04-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "123e12536a8b8cce0869075e26f4e01643e16a095e9f30cf686713268403722f",
+  "validator_version": "1.0.0",
+  "validator_sha256": "46f2283906076ae8603a1dba5db1fadd024e45b27431d89eea8396850e221b3d",
+  "description": "Duplicate implementation scan (name-agnostic token fingerprints + normalized SQL)",
+  "added_copies_outside_owner": [
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "symbol": "dbError",
+      "duplicates": "artifacts/api-server/src/vault/application/game/entries.ts#dbError",
+      "tokens": 31
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "dbError",
+      "duplicates": "artifacts/api-server/src/vault/application/game/entries.ts#dbError",
+      "tokens": 31
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "d",
+      "duplicates": "artifacts/api-server/src/vault/application/game/entries.ts#d",
+      "tokens": 23
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts",
+      "symbol": "safe",
+      "duplicates": "baseline#safe",
+      "tokens": 35
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "symbol": "denyKycNotFound",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFound",
+      "tokens": 30
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "symbol": "denyKycNotFoundOrForbidden",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFoundOrForbidden",
+      "tokens": 30
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "symbol": "denyKycSilentSuccess",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntrySilentSuccess",
+      "tokens": 25
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "symbol": "denyNotFoundOrForbidden",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFoundOrForbidden",
+      "tokens": 30
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "symbol": "denyNotFound",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFound",
+      "tokens": 30
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "symbol": "denySilentSuccess",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntrySilentSuccess",
+      "tokens": 25
+    },
+    {
+      "file": "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+      "symbol": "err500",
+      "duplicates": "artifacts/api-server/src/vault/application/game/marketplace.ts#err500",
+      "tokens": 27
+    }
+  ],
+  "added_sql_outside_repositories": [],
+  "baseline_bodies_surviving_in_old_routes": [],
+  "owner_module_duplicates": [],
+  "pre_existing_function_overlaps_reported_to_GAP_16": [
+    {
+      "file": "artifacts/api-server/src/vault/domain/kyc-values.ts",
+      "symbol": "safe",
+      "duplicates": "baseline#safe",
+      "tokens": 35,
+      "reason": "file unchanged since the 04-C seal; pre-dates GAP-04 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/kyc-values.ts",
+      "symbol": "d",
+      "duplicates": "artifacts/api-server/src/vault/application/game/entries.ts#d",
+      "tokens": 23,
+      "reason": "file unchanged since the 04-C seal; pre-dates GAP-04 (independent idiom, reported to GAP-16)"
+    }
+  ],
+  "pre_existing_sql_overlaps_with_deferred_consumers": [],
+  "corpus": {
+    "baseline_fingerprints": 16,
+    "owner_functions_fingerprinted": 41,
+    "owner_sql_statements": 22
+  },
+  "hidden_import_edges": [
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "module": "./game-entries",
+      "symbols": [
+        "default"
+      ],
+      "kind": "import",
+      "line": 87,
+      "verdict": "router-mount"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "module": "./marketplace-game",
+      "symbols": [
+        "default"
+      ],
+      "kind": "import",
+      "line": 125,
+      "verdict": "router-mount"
+    }
+  ],
+  "hidden_import_violations": [],
+  "layering_violations": []
+}

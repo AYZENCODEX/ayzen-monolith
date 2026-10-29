@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "runtime": "services/admin",
+  "surfaces": [
+    "service-registry",
+    "event-consumers",
+    "dead-letters",
+    "workflows",
+    "schedules",
+    "notifications",
+    "policy-decisions",
+    "integration-graph",
+    "platform-health"
+  ],
+  "mutations": {
+    "default": "deny",
+    "requiresPolicy": true,
+    "requiresAudit": true,
+    "requiresReason": true,
+    "breakGlass": "single-use-and-expiring",
+    "reversibleOnly": true
+  },
+  "readOnlyProvider": "ADMIN_DATA_PROVIDER_URL"
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ayzen.internal/schemas/ui-circuit/frontend-route-entry.v1.json",
+  "title": "AYZEN Frontend Route Circuit Entry",
+  "description": "Phase 05 (UI-to-Backend Circuit). One entry per authenticated or public route declared in artifacts/ayzen/src/lib/route-config.tsx (ADMIN_ROUTES, USER_ROUTES) or artifacts/ayzen/src/App.tsx's literal <Route> JSX. Built by static regex-based scanning -- not a full TypeScript/JSX AST parse -- so 'resolved' means a lazy import or JSX route mapped cleanly to a page file on disk, and each apiCalls[].backend is a best-effort match against reports/lineage/lineage.json, not a guarantee that the call is the page's only backend dependency. See tools/ui-circuit-validator/build.mjs's header for the heuristic's exact limits.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["path", "component", "source", "adminOnly", "allowedRoles", "resolution"],
+  "properties": {
+    "path": { "type": "string", "description": "Route path as declared, e.g. '/admin/vault' or '/finance/receipt/:token'." },
+    "component": { "type": "string", "description": "Component identifier referenced by the route declaration." },
+    "source": { "type": "string", "enum": ["ADMIN_ROUTES", "USER_ROUTES", "App.tsx (public)"] },
+    "adminOnly": { "type": "boolean" },
+    "allowedRoles": { "type": "array", "items": { "type": "string" } },
+    "pageFile": { "type": ["string", "null"], "description": "Page file path relative to artifacts/ayzen/src, e.g. 'pages/admin/vault.tsx'. Null when no lazy import resolved the component." },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string", "enum": ["resolved", "unresolved-page"] },
+        "reason": { "type": "string", "description": "Present only when status is 'unresolved-page'." },
+        "classification": {
+          "type": "string",
+          "enum": ["OK", "HAS_ORPHAN_CALLS", "MOCK_OR_STATIC_PAGE"],
+          "description": "Present only when status is 'resolved'. OK: every discovered API call resolved to a backend endpoint. HAS_ORPHAN_CALLS: at least one discovered call did not resolve. MOCK_OR_STATIC_PAGE: no /api/* fetch() call was discovered at all -- heuristic, may be a genuinely static page or a call pattern this scanner does not recognize (see schema description)."
+        },
+        "apiCalls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["method", "path", "raw", "backend"],
+            "properties": {
+              "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+              "path": { "type": "string", "description": "Normalized path with ${...} template segments replaced by ':param'." },
+              "raw": { "type": "string", "description": "Path exactly as it appeared in the source fetch() call, before normalization." },
+              "backend": {
+                "description": "The matching reports/lineage/lineage.json entry, or null if unresolved.",
+                "oneOf": [
+                  { "type": "null" },
+                  {
+                    "type": "object",
+                    "required": ["method", "path"],
+                    "properties": {
+                      "method": { "type": "string" },
+                      "path": { "type": "string" }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

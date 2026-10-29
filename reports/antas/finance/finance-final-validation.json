@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-06 / FIN-WP-9",
+  "title": "Finance extraction: final validation pack",
+  "timestamp": "2026-10-20T07:04:42Z",
+  "status": "BLOCKED",
+  "statusReason": "The extraction is complete in code, but the required checks (typecheck, build, DB suite, lint) could not run: no package registry and no Postgres in the session. By the FIN-06 gate a PASS needs those to pass against the current revision, and no commit SHA exists. Unrun checks are marked NOT VERIFIED, not failed.",
+  "extraction": {
+    "inCode": "COMPLETE",
+    "verifiedAtThisRevision": false,
+    "workPackages": "WP-0 to WP-9 done in code; WP-10 optional and not started"
+  },
+  "sourceRevision": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "commit": "UNAVAILABLE (no .git)",
+    "workingTree": "Uncommitted; cumulative; bound by content in fin-provenance-manifest.json"
+  },
+  "gates": [
+    {
+      "id": "G1",
+      "requirement": "Required unit, integration, contract and security tests run and pass",
+      "result": "PARTIAL",
+      "detail": "Static suite 85/85 pass. DB, HTTP-contract and three package-dependent tests NOT VERIFIED."
+    },
+    {
+      "id": "G2",
+      "requirement": "Typecheck, lint and build",
+      "result": "NOT VERIFIED",
+      "detail": "None could run. Partial import-integrity check is clean (0 findings, 740 files)."
+    },
+    {
+      "id": "G3",
+      "requirement": "Migration and rollback safety for approved schema changes",
+      "result": "PARTIAL",
+      "detail": "122 and 123 reviewed statically and are registered; not applied; 123 is irreversible (rounds data). Rollback is backup restore. Risks R-04, R-05."
+    },
+    {
+      "id": "G4",
+      "requirement": "Staging smoke tests",
+      "result": "NOT VERIFIED",
+      "detail": "No staging available."
+    },
+    {
+      "id": "G5",
+      "requirement": "Full diff inspected for unrelated changes",
+      "result": "NOT VERIFIED",
+      "detail": "No .git. WP-9 own diff against the WP-8 archive was reviewed: docs, reports, two new scripts, one memory note, and no source, CI or package file. Cumulative diff against the base SHA could not be made; files outside Finance were changed earlier (risk R-12)."
+    },
+    {
+      "id": "G6",
+      "requirement": "Evidence matches the current source revision",
+      "result": "PARTIAL",
+      "detail": "Finance-owned files are bound by content to fin-provenance-manifest.json (0 drift). No commit SHA exists; WP-1 to WP-8 evidence files are BLOCKED."
+    },
+    {
+      "id": "G7",
+      "requirement": "No duplicate owner or unexplained legacy consumer",
+      "result": "PASS",
+      "detail": "Boundary scan PASS; 0 legacy lib files; 0 real importers; one approved route edge documented (R-09)."
+    },
+    {
+      "id": "G8",
+      "requirement": "Deliver finance-final-validation.json, logs and final migration map",
+      "result": "PASS",
+      "detail": "This file, reports/antas/finance/wp9-logs/, reports/antas/finance/fin-final-migration-map.csv."
+    },
+    {
+      "id": "G9",
+      "requirement": "Financial invariants: only claim what a test ran",
+      "result": "PARTIAL",
+      "detail": "Invariant tests for F1 to F22 ran on a local Postgres at WP-6b (176/176). F23 to F26 (late fees, reminders, wallet bridge) have tests that were never run. No invariant is claimed for this revision."
+    }
+  ],
+  "checksRun": [
+    {
+      "check": "Finance boundary scan",
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exit": 0,
+      "result": "PASS, 55 Finance sources, 0 findings, no import cycles; 37 distinct check ids; one approved legacy route edge",
+      "log": "reports/antas/finance/wp9-logs/boundary-scan.log"
+    },
+    {
+      "check": "Static Finance tests (strip-types via tsx)",
+      "command": "node --test --import tsx src/finance/domain/*.test.ts src/finance/route-security.test.ts src/finance/ledger-compat.test.ts",
+      "exit": 0,
+      "result": "85/85 pass (domain 23 across 5 files, route-security 59, ledger-compat 3)",
+      "log": "reports/antas/finance/wp9-logs/static-tests.tap.log"
+    },
+    {
+      "check": "Provenance verify (after the WP-9 docs and scripts were written)",
+      "command": "node scripts/antas/finance/provenance.mjs --verify",
+      "exit": 0,
+      "result": "0 changed, 0 missing, 92 files (88 at WP-9 start, also 0 drift; manifest regenerated to include the 4 new docs and scripts)",
+      "log": "reports/antas/finance/wp9-logs/provenance-verify.log"
+    },
+    {
+      "check": "Import and re-export integrity (partial; not a typecheck)",
+      "command": "node scripts/antas/finance/check-import-integrity.mjs",
+      "exit": 0,
+      "result": "0 findings over 740 files; mutation-checked (renamed re-export, deleted imported file)",
+      "log": "reports/antas/finance/wp9-logs/import-integrity.log"
+    },
+    {
+      "check": "Final-state measurement",
+      "command": "node scripts/antas/finance/measure-final-state.mjs",
+      "exit": 0,
+      "result": "109 handlers, 0 route write lines, 51 target-tree source files, 0 legacy lib files, 0 importers of removed modules",
+      "log": "reports/antas/finance/wp9-logs/measure-final-state.json"
+    },
+    {
+      "check": "Mutation checks of the two new tools",
+      "command": "throwaway copies",
+      "exit": 0,
+      "result": "all mutations detected, baselines clean",
+      "log": "reports/antas/finance/wp9-logs/mutation-checks.log"
+    },
+    {
+      "check": "Migration 122/123 static review",
+      "command": "inline node scripts (see risk register R-04, R-05)",
+      "exit": 0,
+      "result": "16 DO blocks in 123.sql verbatim in schema-migrations.ts; 43 converted columns equal the 43 doublePrecision columns declared in lib/db schema; no REAL finance column in DDL is left unconverted; 122 statements present in the startup MIGRATIONS array. Static only: not applied to any database in WP-9",
+      "log": null
+    }
+  ],
+  "notVerified": [
+    "pnpm install --frozen-lockfile (registry unreachable)",
+    "pnpm typecheck and tsc -p artifacts/api-server --noEmit at this revision (last clean run: WP-6b)",
+    "pnpm build",
+    "lint (no lint script is defined at the root)",
+    "pnpm test:finance-db at this revision (last: 176/176 on local Postgres 16.15 at WP-6b; WP-7 tests never run; no Postgres in the session)",
+    "static tests that import drizzle-orm, express or pino: finance-ai.test.ts, express-async-errors.test.ts, process-guards.test.ts (fail here only with Cannot find package)",
+    "HTTP-level authenticated contract and cross-user tests (WP-1b was never written)",
+    "migrations 122 and 123 applied to a database and the information_schema check query",
+    "run of pnpm repair:finance-wallet-journals",
+    "real WebAuthn, SMTP and Telegram behavior",
+    "staging smoke test and staging walk-through (none available)",
+    "production behavior",
+    "cumulative diff against base SHA for unrelated edits (no .git)"
+  ],
+  "measurements": {
+    "routeHandlers": 109,
+    "routeDirectDbLines": 6,
+    "routeDirectDbWriteLines": 0,
+    "targetTreeSourceFiles": 51,
+    "targetTreeSourceLines": 7079,
+    "targetTreeDirectories": 13,
+    "legacyLibFinanceFiles": [
+      "finance-accounting.db-runner.mjs",
+      "finance-accounting.db.test.ts"
+    ],
+    "importersOfRemovedModules": 0
+  },
+  "safetyFindings": {
+    "total": "F1 to F26 (F10 has a, b, c)",
+    "open": 0,
+    "provenByRunDbTests": "F11 to F22 and earlier fixes (local Postgres, WP-6b)",
+    "fixedInCodeDbTestsNeverRun": "F23, F24, F25, F26"
+  },
+  "evidence": {
+    "files": "31 evidence files including fin-wp9-evidence.json",
+    "pass": 7,
+    "blocked": 24,
+    "index": "docs/antas/finance/finance-evidence-index.md"
+  },
+  "riskRegister": {
+    "file": "docs/antas/finance/finance-risk-register.md",
+    "items": 19,
+    "high": 4,
+    "medium": 10,
+    "low": 5,
+    "blockingAPass": [
+      "R-01",
+      "R-02",
+      "R-03",
+      "R-11",
+      "R-12",
+      "R-13"
+    ]
+  },
+  "deliverables": [
+    "reports/antas/finance/finance-final-validation.json",
+    "reports/antas/finance/fin-wp9-evidence.json",
+    "reports/antas/finance/fin-final-migration-map.csv",
+    "reports/antas/finance/wp9-logs/",
+    "docs/antas/finance/finance-evidence-index.md",
+    "docs/antas/finance/finance-risk-register.md",
+    "docs/antas/finance/finance-target-tree-status.md (final)",
+    "docs/antas/finance/finance-remaining-scope.md (updated)",
+    "scripts/antas/finance/measure-final-state.mjs",
+    "scripts/antas/finance/check-import-integrity.mjs",
+    ".agents/memory/finance-extraction-evidence.md"
+  ],
+  "next": "In a real checkout: pnpm install --frozen-lockfile, pnpm typecheck, pnpm build, pnpm --filter @workspace/api-server test:finance-static and test:finance-db; commit; regenerate the provenance manifest; then the staging checklist in the risk register. Only then re-issue this file with real exit codes."
+}

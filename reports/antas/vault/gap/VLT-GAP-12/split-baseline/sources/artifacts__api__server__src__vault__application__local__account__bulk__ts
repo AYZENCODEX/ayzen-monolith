@@ -1,0 +1,37 @@
+import {
+  deleteLocalAccountsByIds, updateLocalAccountsCategoryByIds, selectLocalAccountsForExport,
+} from "../../infrastructure/repositories/local-account-consumer-repository";
+import type { UseCaseResult } from "./accounts";
+
+/**
+ * Local-account bulk + CSV-export use-cases (VLT-GAP-02-C). Moved from
+ * routes/bulk.ts. The per-row ownership AUDIT (authorizeMany / PDP observer)
+ * stays in the route: it is request-scoped policy wiring, not persistence.
+ * Same switch, same category escaping, same responses.
+ */
+export async function applyLocalAccountBulk(
+  userId: number,
+  safeIdList: number[],
+  action: unknown,
+  payload: Record<string, unknown>,
+): Promise<UseCaseResult> {
+  const idList = safeIdList.join(",");
+  switch (action) {
+    case "delete":
+      await deleteLocalAccountsByIds(userId, idList);
+      return { status: 200, body: { ok: true, affected: safeIdList.length } };
+    case "update_category": {
+      const cat = String(payload.category ?? "").replace(/'/g, "''");
+      if (!cat) return { status: 400, body: { error: "category required" } };
+      await updateLocalAccountsCategoryByIds(userId, idList, cat);
+      return { status: 200, body: { ok: true, affected: safeIdList.length } };
+    }
+    default:
+      return { status: 400, body: { error: `Unknown action: ${action}` } };
+  }
+}
+
+export async function exportLocalAccountRows(userId: number): Promise<any[]> {
+  const result = await selectLocalAccountsForExport(userId);
+  return result.rows as any[];
+}

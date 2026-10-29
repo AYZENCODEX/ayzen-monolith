@@ -1,0 +1,1331 @@
+{
+  "phase": "VLT-GAP-05",
+  "sub_phase": "VLT-GAP-05-C",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "f88ec414fa2f82892d4c5b15016a583d980ce2a1eb5241fdbc2f672a29f1ff8b",
+  "validator_version": "1.0.0",
+  "validator_sha256": "32ee87533eb7c19aaeecd588243ff396a752d35b1c67dca4cd4005a50c7dacd3",
+  "source_hashes": {
+    "artifacts/api-server/src/index.ts": "74529ec577756830447caf6fe4fd70cf1932e7134249ec54fa800507bb5f8491",
+    "artifacts/api-server/src/lib/mail-attachment-content.ts": "e697a303b5db0cb55ba795252d8f9c1d2afd7818cb681c3523837dc3964782f1",
+    "artifacts/api-server/src/lib/mail-send-queue.ts": "3219d427de8bb53a56877ef192af2919d3afb85165f6eb31af59939fb4d8405f",
+    "artifacts/api-server/src/lib/mail-sync.ts": "74338950b7e9bddef70b86aa190da758965504198b1fd45314c3000d29f20b5a",
+    "artifacts/api-server/src/lib/vault-backup-cloud.ts": "dbfe8c9092e9969b89b992995217597aa1e89138db91b5acd032be2eaac5e239",
+    "artifacts/api-server/src/lib/vault-snapshot-extra.ts": "a653f7e3aaab3005eda1b4eb1de83a063dfc94752c62cf272d3f0ed18d3be737",
+    "artifacts/api-server/src/lib/vault-snapshot-restore.ts": "817d33707c22e1ef93167ad1f843f1d45bf601f6ae6fca8877efde1c34d2d7e0",
+    "artifacts/api-server/src/routes/ayzen-mailbox.ts": "6e9db9c278666458b28185ee902cdbf4f4c1a954e748376ec5686637035d6f96",
+    "artifacts/api-server/src/routes/email-accounts.ts": "ea794c905f818918e5b614978d772b55b2972be42ed64556d65fbb4e09b68327",
+    "artifacts/api-server/src/routes/emergency-access.ts": "e585f7df7be03bdb657d710aff9274b44cfed5c02814ae18333fd882e64ee114",
+    "artifacts/api-server/src/routes/organizations.ts": "82171aae0a6bf65e9b3cd9502f52c777c3867af8611d7a43aa4cf4c3a8d6b3a1",
+    "artifacts/api-server/src/routes/resend-webhook.ts": "494c52fab12a7cbe197ce580d617e0fccc48a97c70405af4be136a82b7243992",
+    "artifacts/api-server/src/routes/teams.ts": "3206f51ebfe5c38834bd1d8b0f8d4dbeae591ec437d4012d970cfc9736543034",
+    "artifacts/api-server/src/routes/two-factor.ts": "0c1ad1037eba13fb57bc068fa6de5ccb10c72337d2bc555b2b027b07473f479b",
+    "artifacts/api-server/src/routes/value-history.ts": "0899fc00226a547574a0c05c0c2ce6facc0c6ea826bd476c25a8f89c1e4faca0",
+    "artifacts/api-server/src/routes/vault-attachments.ts": "2f700c2dfbb078972cd25c84c557fab1b16b02327afc53e1102b2a134d128cea",
+    "artifacts/api-server/src/routes/vault-migration.ts": "0695e1de47e3dd102c44bef5650c9e108bbb24d62be768791dc4f780acb21922",
+    "artifacts/api-server/src/routes/vault-shares.ts": "9b33fa8f0d1276debe9e58d8204a9f1b0504f5f9f24506798b651b8adf151758",
+    "artifacts/api-server/src/routes/vault-snapshot.ts": "b076525cfcd4ec6512d2eba2b345606220aee49ff9f644a7f29e026e9edb38b2",
+    "artifacts/api-server/src/vault/application/game/entries.ts": "018a001799a4591d08905b284e9181b05022c7dd3035881d616e350c74a10561",
+    "artifacts/api-server/src/vault/application/kyc/data-entities.ts": "e60392ea287860fcc8335c79ededdcc09686dd3e8bec8e54e42b7e6113613cb9",
+    "artifacts/api-server/src/vault/application/kyc/enrollment.ts": "40d35a9902fa857a53fa765c0fb17dd8004d56c0054f7b00b479d7d42b42e1e8",
+    "artifacts/api-server/src/vault/application/kyc/entries.ts": "8498aecb688c66e1dd619a88e0797ee599f4570ef03c0ecc5861802792eacc02",
+    "artifacts/api-server/src/vault/application/kyc/exchange.ts": "432226a75663b50562d5ce4a4c3771e185db9833179c7fb5ccd6cd1a29f7d7f7",
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts": "d5cf1e627c46b96b5d213000ad55af0ef5875bcc4eb51b793dac30c0d22d5201",
+    "artifacts/api-server/src/vault/application/local-account/bridge.ts": "d2db4530fab07c7182f018821e2a9bbedbe19cb20a8b1f4fd737942b61361a38",
+    "artifacts/api-server/src/vault/application/local-account/value.ts": "94d13e707401e21d391697df34cabfcc38392acafd7a06b53bac362fd4cfe097",
+    "artifacts/api-server/src/lib/vault-crypto.ts": "e60ad62262d6fa3c5da4ba86097285dc0861f5329b20fc7e6cf22c1c23d29f43",
+    "artifacts/api-server/src/vault/crypto/field-encryption.ts": "ef6ae643860ec4d4e8339b1467869798fb4a97baf9496cc430c0065d73a14057",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/freeze-vlt-gap-05-C-baseline.mjs": "4f525c2f195574f6ea8e47de1883d29c8678a4991a5f4030259875976ad1e66a",
+    "reports/antas/vault/gap/VLT-GAP-05/baseline-05c/SEAL.json": "76213b090925f01750190b2cc7a43981e0c1770e7e0dd65a3f72f3dd359ea57d",
+    "reports/antas/vault/gap/VLT-GAP-05/baseline-05c/tree-manifest.json": "bfdd6df19750c083482effc9c3079d1d956f40b4817f6a480d88605eb1ad5acb"
+  },
+  "baseline": {
+    "mode": "write-once seal (verified, never written by this validator)",
+    "seal_file": "reports/antas/vault/gap/VLT-GAP-05/baseline-05c/SEAL.json",
+    "sealed_at": "2026-10-03T05:21:30.958Z",
+    "tree_manifest_sha256": "bfdd6df19750c083482effc9c3079d1d956f40b4817f6a480d88605eb1ad5acb",
+    "certified_by": {
+      "sub_phase": "VLT-GAP-05-B",
+      "source_tree_sha256": "bab469c5a9a5c50ab657c6e6383959e61f44519ccfe10c63b69d838e350c3371",
+      "commit_sha": null,
+      "validator_sha256": "e238798541ef3019ccb10e4ef88acdbf796d36bd9b27660e062547e3ef818934",
+      "source_hashes_checked": 6
+    },
+    "frozen_consumers": 27
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-05-C.mjs",
+    "node scripts/antas/vault/gap/validate-vlt-gap-05-B.mjs --verify (in place)",
+    "node scripts/antas/vault/gap/validate-vlt-gap-05-B.mjs (full run on a temp copy with the rewire undone)",
+    "node scripts/antas/vault/gap/validate-vlt-gap-NN-X.mjs --verify (every earlier validator, informational)",
+    "in-process AST delta/identity/graph proof, mutation self-tests, differential typecheck, child-process bypass attempts"
+  ],
+  "exit_codes": {
+    "05-B(verify,in-place)": 0,
+    "identity_proof": 0,
+    "mutation_self_tests": 0,
+    "bypass_attempts": 0,
+    "typecheck_degraded": 0
+  },
+  "old_boundary": {
+    "module": "artifacts/api-server/src/lib/vault-crypto.ts",
+    "role": "compatibility adapter (pure re-export)",
+    "new_owner": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+    "exported_bindings": [
+      "decryptField",
+      "decryptRow",
+      "decryptRows",
+      "encryptField",
+      "getActiveVersion",
+      "loadKeyManager",
+      "rotateKey"
+    ]
+  },
+  "consumers_migrated": [
+    {
+      "file": "artifacts/api-server/src/index.ts",
+      "edit": "dynamic-import",
+      "rewired": [
+        {
+          "line": 71,
+          "kind": "dynamic-import",
+          "from": "./lib/vault-crypto",
+          "to": "./vault/crypto/field-encryption",
+          "names": [
+            "loadKeyManager",
+            "getActiveVersion"
+          ]
+        }
+      ],
+      "old_sha256": "dcdedd202ccc921ce56dc7635073c59a8f49c3304ce85a2fbab89761891d764f",
+      "new_sha256": "74529ec577756830447caf6fe4fd70cf1932e7134249ec54fa800507bb5f8491"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-attachment-content.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 12,
+          "kind": "import",
+          "from": "./vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "ccaf2a8618e49b5fca493e2e0d152f34a931721a28da7adee2754f688a32e79a",
+      "new_sha256": "e697a303b5db0cb55ba795252d8f9c1d2afd7818cb681c3523837dc3964782f1"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-send-queue.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 83,
+          "kind": "import",
+          "from": "./vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "9bcb40ee0211f9f4043a14c35cd2df9e2f2b3eca9fd99e30d7717bcd8eae631d",
+      "new_sha256": "3219d427de8bb53a56877ef192af2919d3afb85165f6eb31af59939fb4d8405f"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 11,
+          "kind": "import",
+          "from": "./vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "5b4a5ddc38ed3c512ef60eb7a0a63962086c522d3c758424606fc7bb6bb351a6",
+      "new_sha256": "74338950b7e9bddef70b86aa190da758965504198b1fd45314c3000d29f20b5a"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 50,
+          "kind": "import",
+          "from": "./vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "d5d9fee64b7774bdf8e274b1a48f125ffa289168e5cbbd153371daa715805f25",
+      "new_sha256": "dbfe8c9092e9969b89b992995217597aa1e89138db91b5acd032be2eaac5e239"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 55,
+          "kind": "import",
+          "from": "./vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "decryptField",
+            "encryptField"
+          ]
+        }
+      ],
+      "old_sha256": "a18608a98c7b724b0b458d0c3f02c694638940133b3846d80b611b5821b0cf07",
+      "new_sha256": "a653f7e3aaab3005eda1b4eb1de83a063dfc94752c62cf272d3f0ed18d3be737"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 105,
+          "kind": "import",
+          "from": "./vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField"
+          ]
+        }
+      ],
+      "old_sha256": "880e85c2f9162bb1ac5175f9fbd88a8f572fd837d456024e76644b11a2962479",
+      "new_sha256": "817d33707c22e1ef93167ad1f843f1d45bf601f6ae6fca8877efde1c34d2d7e0"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 31,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "2729ce8b153ee6c18d7e64b0337ae9a3308aa302253eb56ae69b14d92994a067",
+      "new_sha256": "6e9db9c278666458b28185ee902cdbf4f4c1a954e748376ec5686637035d6f96"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/email-accounts.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 9,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "d92d465ced2111e4d857aa2ebb66053cad79eb371d933ab76c3bbe1e1556522d",
+      "new_sha256": "ea794c905f818918e5b614978d772b55b2972be42ed64556d65fbb4e09b68327"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/emergency-access.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 35,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "873fa426447e886a887471ee928de399e94f1ba42830e14f05f11e922c428908",
+      "new_sha256": "e585f7df7be03bdb657d710aff9274b44cfed5c02814ae18333fd882e64ee114"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/organizations.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 5,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "decryptRow"
+          ]
+        }
+      ],
+      "old_sha256": "6f0564e192cb3621d0c85d483c9ff24f243a253e17344536b8ddb6f315d32e84",
+      "new_sha256": "82171aae0a6bf65e9b3cd9502f52c777c3867af8611d7a43aa4cf4c3a8d6b3a1"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/resend-webhook.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 35,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField"
+          ]
+        }
+      ],
+      "old_sha256": "4cf43a8743dcc06ce2b50d61063c09fb2a039528a08286ff447e1826964dfb19",
+      "new_sha256": "494c52fab12a7cbe197ce580d617e0fccc48a97c70405af4be136a82b7243992"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/teams.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 21,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "6c2d41a5eca7946909d853c499c621ead8aa3c1577ee9bb1329ca372e20131b9",
+      "new_sha256": "3206f51ebfe5c38834bd1d8b0f8d4dbeae591ec437d4012d970cfc9736543034"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/two-factor.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 5,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "1c456558f92fc6d130dd51dff74f077057929a8443bff79dc7fc062592038456",
+      "new_sha256": "0c1ad1037eba13fb57bc068fa6de5ccb10c72337d2bc555b2b027b07473f479b"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/value-history.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 5,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "aff03450348d25b8eb00056eae8aec6a35d30df140638bad20f3dbef5596db6a",
+      "new_sha256": "0899fc00226a547574a0c05c0c2ce6facc0c6ea826bd476c25a8f89c1e4faca0"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 25,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "88c182aac4943fbc4e6c3966585dfd4b615b80e263cfd9ca5bbe3a36b1ca1f2f",
+      "new_sha256": "2f700c2dfbb078972cd25c84c557fab1b16b02327afc53e1102b2a134d128cea"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-migration.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 31,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "8e547ca701003aa9e449425d57b37c955e7ae462f3c2bb0b93a05b22c2f6776a",
+      "new_sha256": "0695e1de47e3dd102c44bef5650c9e108bbb24d62be768791dc4f780acb21922"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 11,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "decryptRow"
+          ]
+        }
+      ],
+      "old_sha256": "0e48c9fe8fea7ef89002e96ad50fcb1e854cf9d487434e9a627b57c114f8f212",
+      "new_sha256": "9b33fa8f0d1276debe9e58d8204a9f1b0504f5f9f24506798b651b8adf151758"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 77,
+          "kind": "import",
+          "from": "../lib/vault-crypto",
+          "to": "../vault/crypto/field-encryption",
+          "names": [
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "62d41bf7504052ddcada8a8e00f96d2e11f3be77262fa559976521713eedcb4c",
+      "new_sha256": "b076525cfcd4ec6512d2eba2b345606220aee49ff9f644a7f29e026e9edb38b2"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 1,
+          "kind": "import",
+          "from": "../../../lib/vault-crypto",
+          "to": "../../crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptRow",
+            "decryptRows"
+          ]
+        }
+      ],
+      "old_sha256": "6c8678b94985b66049ec09b9c2fcb95882c6df9c1652e69c5a16523a989bfe25",
+      "new_sha256": "018a001799a4591d08905b284e9181b05022c7dd3035881d616e350c74a10561"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 1,
+          "kind": "import",
+          "from": "../../../lib/vault-crypto",
+          "to": "../../crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptRow",
+            "decryptRows"
+          ]
+        }
+      ],
+      "old_sha256": "2c16402277b19dc90c79cbefdc9ece39ea3b6b05ad90e4ed41a9005d657a4901",
+      "new_sha256": "e60392ea287860fcc8335c79ededdcc09686dd3e8bec8e54e42b7e6113613cb9"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 1,
+          "kind": "import",
+          "from": "../../../lib/vault-crypto",
+          "to": "../../crypto/field-encryption",
+          "names": [
+            "decryptRow"
+          ]
+        }
+      ],
+      "old_sha256": "b8987a668f5d899fa607c9329b14f125aec579d731dc1071295a5bc4c484cc16",
+      "new_sha256": "40d35a9902fa857a53fa765c0fb17dd8004d56c0054f7b00b479d7d42b42e1e8"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 1,
+          "kind": "import",
+          "from": "../../../lib/vault-crypto",
+          "to": "../../crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptRow",
+            "decryptRows"
+          ]
+        }
+      ],
+      "old_sha256": "3e021b6a5c2ea876fbcde996d467c847cdc7e16fbbb5ee91e8945b1bf0cad3c4",
+      "new_sha256": "8498aecb688c66e1dd619a88e0797ee599f4570ef03c0ecc5861802792eacc02"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 1,
+          "kind": "import",
+          "from": "../../../lib/vault-crypto",
+          "to": "../../crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptField"
+          ]
+        }
+      ],
+      "old_sha256": "7855f1e9f16127ac3997e41033259358acaf4226aa71e58d87477b038fa05ecd",
+      "new_sha256": "432226a75663b50562d5ce4a4c3771e185db9833179c7fb5ccd6cd1a29f7d7f7"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 2,
+          "kind": "import",
+          "from": "../../../lib/vault-crypto",
+          "to": "../../crypto/field-encryption",
+          "names": [
+            "encryptField",
+            "decryptRow",
+            "decryptRows"
+          ]
+        }
+      ],
+      "old_sha256": "bcb8cff17e632716682a24f1002c3f8f4dd805ed04a7925a0e1fd815d36aa8c8",
+      "new_sha256": "d5cf1e627c46b96b5d213000ad55af0ef5875bcc4eb51b793dac30c0d22d5201"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 1,
+          "kind": "import",
+          "from": "../../../lib/vault-crypto",
+          "to": "../../crypto/field-encryption",
+          "names": [
+            "encryptField"
+          ]
+        }
+      ],
+      "old_sha256": "1ab2d0574939de6162eccfbf78ef50deb191760d2d2ad7a1e7bdc160bb61ff41",
+      "new_sha256": "d2db4530fab07c7182f018821e2a9bbedbe19cb20a8b1f4fd737942b61361a38"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "edit": "import",
+      "rewired": [
+        {
+          "line": 1,
+          "kind": "import",
+          "from": "../../../lib/vault-crypto",
+          "to": "../../crypto/field-encryption",
+          "names": [
+            "decryptRow"
+          ]
+        }
+      ],
+      "old_sha256": "147cdbf41162308df32933ea41139761fcab29354b2e61d4c586d46b1698ea03",
+      "new_sha256": "94d13e707401e21d391697df34cabfcc38392acafd7a06b53bac362fd4cfe097"
+    }
+  ],
+  "symbols_moved": [],
+  "old_adapter_importers_remaining": [],
+  "old_adapter_string_references_remaining": [],
+  "duplicate_implementations": [],
+  "identity_proof": {
+    "ok": true,
+    "details": "7 bindings identical",
+    "names": [
+      {
+        "name": "decryptField",
+        "owner_is_function": true,
+        "same_binding": true
+      },
+      {
+        "name": "decryptRow",
+        "owner_is_function": true,
+        "same_binding": true
+      },
+      {
+        "name": "decryptRows",
+        "owner_is_function": true,
+        "same_binding": true
+      },
+      {
+        "name": "encryptField",
+        "owner_is_function": true,
+        "same_binding": true
+      },
+      {
+        "name": "getActiveVersion",
+        "owner_is_function": true,
+        "same_binding": true
+      },
+      {
+        "name": "loadKeyManager",
+        "owner_is_function": true,
+        "same_binding": true
+      },
+      {
+        "name": "rotateKey",
+        "owner_is_function": true,
+        "same_binding": true
+      }
+    ]
+  },
+  "graph": {
+    "owner_reachable_modules": 1,
+    "owner_imports": "crypto, @workspace/db, drizzle-orm only"
+  },
+  "deferred_consumers": [
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "behavior": "health scan reads toHealthInput from routes/vault.ts",
+      "deferred_to": "VLT-GAP-11",
+      "still_present": true
+    },
+    {
+      "file": "artifacts/api-server/src/routes/wallets.ts",
+      "behavior": "wallet-recovery reveal gate uses consumeRevealToken/hasNoEntityPin from routes/vault-security (step-up token store)",
+      "deferred_to": "VLT-GAP-06",
+      "still_present": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "behavior": "snapshot restore writes secret columns back to vault_entries",
+      "deferred_to": "VLT-GAP-09",
+      "still_present": true
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "behavior": "snapshot export reads secret columns",
+      "deferred_to": "VLT-GAP-09",
+      "still_present": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "behavior": "DDL for drive_wallet_* / wallet_worth_* columns",
+      "deferred_to": "VLT-GAP-12",
+      "still_present": true
+    },
+    {
+      "file": "scripts/src/reencrypt-seed-phrases.ts",
+      "behavior": "key-rotation script rewrites encrypted_seed_phrase",
+      "deferred_to": "VLT-GAP-07",
+      "still_present": true
+    },
+    {
+      "file": "scripts/src/reencrypt-vault.ts",
+      "behavior": "key-rotation script rewrites vault_entries ciphertext columns",
+      "deferred_to": "VLT-GAP-07",
+      "still_present": true
+    },
+    {
+      "file": "artifacts/api-server/src/routes/entities.ts",
+      "behavior": "health-rule evaluation reads encrypted_seed_phrase as a presence flag only",
+      "deferred_to": "VLT-GAP-11",
+      "still_present": true
+    }
+  ],
+  "provider_adapters": [
+    {
+      "file": "artifacts/api-server/src/lib/chain-balance.ts",
+      "consumed_by": "artifacts/api-server/src/vault/application/secret/wallet.ts",
+      "role": "RPC provider adapter (stays in lib/, invoked by the secret owner via dynamic import)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/wallet-key-validation.ts",
+      "consumed_by": "artifacts/api-server/src/vault/application/secret/wallet.ts",
+      "role": "offline key validator (stays in lib/, invoked by the secret owner)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/entity-worth.ts",
+      "consumed_by": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "role": "pure worth calculation"
+    }
+  ],
+  "carry_over": [
+    {
+      "file": "artifacts/api-server/src/routes/organizations.ts",
+      "what": "writer of organization_extension_policies.disable_seed_reveal (the flag the reveal gate reads)",
+      "note": "no GAP in 05 owns org extension policy; the reader moved into secret-repository in 05-B, the writer remains a route-level SQL block"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-security.ts",
+      "what": "single-use reveal-token store (mint/consume) injected into the reveal use-case as a port",
+      "note": "GAP-06 owns the security/access surface; 05-B/05-C keep the port"
+    }
+  ],
+  "adapter_status": {
+    "importers": 0,
+    "retained": true,
+    "byte_identical_to_seal": true,
+    "decision": "NOT retired in 05-C: it is the pre-extraction public import path and is kept byte-identical until 05-D's retirement gate rules on it (it now has zero importers)."
+  },
+  "diff_audit": {
+    "changed": [
+      "artifacts/api-server/src/index.ts",
+      "artifacts/api-server/src/lib/mail-attachment-content.ts",
+      "artifacts/api-server/src/lib/mail-send-queue.ts",
+      "artifacts/api-server/src/lib/mail-sync.ts",
+      "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+      "artifacts/api-server/src/routes/email-accounts.ts",
+      "artifacts/api-server/src/routes/emergency-access.ts",
+      "artifacts/api-server/src/routes/organizations.ts",
+      "artifacts/api-server/src/routes/resend-webhook.ts",
+      "artifacts/api-server/src/routes/teams.ts",
+      "artifacts/api-server/src/routes/two-factor.ts",
+      "artifacts/api-server/src/routes/value-history.ts",
+      "artifacts/api-server/src/routes/vault-attachments.ts",
+      "artifacts/api-server/src/routes/vault-migration.ts",
+      "artifacts/api-server/src/routes/vault-shares.ts",
+      "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "artifacts/api-server/src/vault/application/game/entries.ts",
+      "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "artifacts/api-server/src/vault/application/local-account/value.ts"
+    ],
+    "added": [],
+    "removed": [],
+    "unexpected": [],
+    "files_compared": 2217
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build was NOT executed)",
+    "files": 27,
+    "before_total": 602,
+    "after_total": 602,
+    "syntactic_errors": [],
+    "new_diagnostics": [],
+    "new_unresolved_module_or_export_classes": []
+  },
+  "earlier_evidence_status": {
+    "informational": "Evidence of earlier sub-phases is bound to source hashes of the files they certified. 05-C legitimately edits the import specifier of 27 files, 8 of which sit in vault/application/{game,kyc,local-account} certified by GAP-02/03/04. Those evidence files therefore no longer verify in place; their validators cannot be re-executed unchanged on the current tree (their harness stubs the old module path). Each is listed with the rewired files it covers.",
+    "verify_results": [
+      {
+        "validator": "validate-vlt-gap-01-A.mjs",
+        "sub_phase": "VLT-GAP-01-A",
+        "verifies_now": false,
+        "reason": "source tree changed since evidence was generated (stale); inventory content does not match a fresh census (tampered or s",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/routes/vault-snapshot.ts",
+          "artifacts/api-server/src/routes/vault-shares.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-01/symbol-inventory.json"
+      },
+      {
+        "validator": "validate-vlt-gap-01-B.mjs",
+        "sub_phase": "VLT-GAP-01-B",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-01/extraction-proof.json"
+      },
+      {
+        "validator": "validate-vlt-gap-01-C.mjs",
+        "sub_phase": "VLT-GAP-01-C",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/routes/value-history.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-01/consumer-graph.json"
+      },
+      {
+        "validator": "validate-vlt-gap-01-D.mjs",
+        "sub_phase": "VLT-GAP-01-D",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/routes/vault-snapshot.ts",
+          "artifacts/api-server/src/routes/vault-shares.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-01/gate.json"
+      },
+      {
+        "validator": "validate-vlt-gap-02-A.mjs",
+        "sub_phase": "VLT-GAP-02-A",
+        "verifies_now": false,
+        "reason": "source tree changed since evidence was generated (stale); inventory content does not match a fresh census (tampered or s",
+        "touches_rewired_files": [],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-02/symbol-inventory.json"
+      },
+      {
+        "validator": "validate-vlt-gap-02-B.mjs",
+        "sub_phase": "VLT-GAP-02-B",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/vault/application/local-account/accounts.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-02/extraction-proof.json"
+      },
+      {
+        "validator": "validate-vlt-gap-02-C.mjs",
+        "sub_phase": "VLT-GAP-02-C",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/routes/value-history.ts",
+          "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+          "artifacts/api-server/src/vault/application/local-account/value.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-02/consumer-graph.json"
+      },
+      {
+        "validator": "validate-vlt-gap-02-D.mjs",
+        "sub_phase": "VLT-GAP-02-D",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+          "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+          "artifacts/api-server/src/vault/application/local-account/value.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-02/gate.json"
+      },
+      {
+        "validator": "validate-vlt-gap-03-A.mjs",
+        "sub_phase": "VLT-GAP-03-A",
+        "verifies_now": false,
+        "reason": "source tree changed since evidence was generated (stale); inventory content does not match a fresh census (tampered or s",
+        "touches_rewired_files": [],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-03/symbol-inventory.json"
+      },
+      {
+        "validator": "validate-vlt-gap-03-B.mjs",
+        "sub_phase": "VLT-GAP-03-B",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/vault/application/kyc/entries.ts",
+          "artifacts/api-server/src/vault/application/kyc/data-entities.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-03/extraction-proof.json"
+      },
+      {
+        "validator": "validate-vlt-gap-03-C.mjs",
+        "sub_phase": "VLT-GAP-03-C",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/vault/application/kyc/entries.ts",
+          "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+          "artifacts/api-server/src/vault/application/kyc/enrollment.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-03/consumer-graph.json"
+      },
+      {
+        "validator": "validate-vlt-gap-03-D.mjs",
+        "sub_phase": "VLT-GAP-03-D",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/vault/application/kyc/entries.ts",
+          "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+          "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+          "artifacts/api-server/src/vault/application/kyc/exchange.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-03/gate.json"
+      },
+      {
+        "validator": "validate-vlt-gap-04-A.mjs",
+        "sub_phase": "VLT-GAP-04-A",
+        "verifies_now": false,
+        "reason": "source tree changed since evidence was generated (stale); inventory content does not match a fresh census (tampered or s",
+        "touches_rewired_files": [],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-04/symbol-inventory.json"
+      },
+      {
+        "validator": "validate-vlt-gap-04-B.mjs",
+        "sub_phase": "VLT-GAP-04-B",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/vault/application/game/entries.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-04/extraction-proof.json"
+      },
+      {
+        "validator": "validate-vlt-gap-04-C.mjs",
+        "sub_phase": "VLT-GAP-04-C",
+        "verifies_now": true
+      },
+      {
+        "validator": "validate-vlt-gap-04-D.mjs",
+        "sub_phase": "VLT-GAP-04-D",
+        "verifies_now": false,
+        "reason": "source changed since evidence (stale)",
+        "touches_rewired_files": [
+          "artifacts/api-server/src/vault/application/game/entries.ts"
+        ],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-04/gate.json"
+      },
+      {
+        "validator": "validate-vlt-gap-05-A.mjs",
+        "sub_phase": "VLT-GAP-05-A",
+        "verifies_now": false,
+        "reason": "source tree changed since evidence was generated (stale); inventory content does not match a fresh census (tampered or s",
+        "touches_rewired_files": [],
+        "evidence_file": "reports/antas/vault/gap/VLT-GAP-05/symbol-inventory.json"
+      },
+      {
+        "validator": "validate-vlt-gap-05-B.mjs",
+        "sub_phase": "VLT-GAP-05-B",
+        "verifies_now": true
+      }
+    ],
+    "stale_count": 16,
+    "stale_explained_by_rewire": [
+      "VLT-GAP-01-A",
+      "VLT-GAP-01-C",
+      "VLT-GAP-01-D",
+      "VLT-GAP-02-B",
+      "VLT-GAP-02-C",
+      "VLT-GAP-02-D",
+      "VLT-GAP-03-B",
+      "VLT-GAP-03-C",
+      "VLT-GAP-03-D",
+      "VLT-GAP-04-B",
+      "VLT-GAP-04-D"
+    ],
+    "stale_not_covering_any_rewired_file": [
+      {
+        "sub_phase": "VLT-GAP-01-B",
+        "reason": "source changed since evidence (stale)"
+      },
+      {
+        "sub_phase": "VLT-GAP-02-A",
+        "reason": "source tree changed since evidence was generated (stale); inventory content does not match a fresh census (tampered or s"
+      },
+      {
+        "sub_phase": "VLT-GAP-03-A",
+        "reason": "source tree changed since evidence was generated (stale); inventory content does not match a fresh census (tampered or s"
+      },
+      {
+        "sub_phase": "VLT-GAP-04-A",
+        "reason": "source tree changed since evidence was generated (stale); inventory content does not match a fresh census (tampered or s"
+      },
+      {
+        "sub_phase": "VLT-GAP-05-A",
+        "reason": "source tree changed since evidence was generated (stale); inventory content does not match a fresh census (tampered or s"
+      }
+    ]
+  },
+  "tests": {
+    "mutation_self_tests": 33,
+    "mutation_self_tests_passed": 33,
+    "bypass_attempts_rejected": 7,
+    "prerequisite_05B": {
+      "differential_cases": 51,
+      "differential_passed": 51,
+      "security_checks": 19,
+      "security_passed": 19,
+      "mutations_seeded": 34,
+      "mutations_detected": 34
+    }
+  },
+  "notes": [
+    "05-C rewires one thing: the module specifier of every importer of the compatibility adapter lib/vault-crypto.ts (27 files: 19 api-server routes/libs/startup, 8 vault application modules) to vault/crypto/field-encryption.ts. The set is derived by an AST scan frozen in the seal; the token-level proof shows nothing else in those files changed.",
+    "Behavior is preserved by construction and by executed proof: the adapter is `export { … } from owner`, so each name resolves to the identical function object (identity_proof). No cipher, key, envelope format or call site changed.",
+    "Public routes are unchanged: every rewired route file keeps an identical route table (method, path, middleware chain) and no frontend/extension caller changed.",
+    "The adapter lib/vault-crypto.ts is deliberately kept (byte-identical, zero importers). Deleting it is a retirement decision for 05-D.",
+    "The step-up token store, org-policy writer, health scan and snapshot/key-rotation consumers are NOT rewired here: each is an explicit, verified deferral to the gap that owns it or a recorded carry-over (deferred_consumers, carry_over).",
+    "Comment-only mentions of lib/vault-crypto.ts in scripts/ and lib/db/ schema docs are not code references and were left untouched; they should be refreshed when 05-D retires the adapter.",
+    "services/vault/src is a separate service with its own crypto envelope and was never a consumer of the adapter; it is untouched.",
+    "The project's own test suites and full tsc/build cannot run in this environment (dependencies are not installed); the differential typecheck over all 27 consumers compares diagnostics against the sealed originals and the identity proof is executed through the harness loader. Run the repo's build and tests in CI before certifying."
+  ],
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "seal:manifest-hash-matches-seal",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:certified-by-05B-and-sub-phase-is-05C",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:frozen-consumers-intact-and-equal-to-manifest",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:frozen-adapter-intact",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:earlier-validators-and-harness-byte-identical-since-freeze",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:no-unexpected-new-validator-scripts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "prerequisite:05-B-passes-on-a-copy-with-the-rewire-undone-and-evidence-verifies-in-place",
+      "passed": true,
+      "details": "05-B: verify in place ok; reconstructed run PASS (51 differential, 19 security, 34/34 mutations)"
+    },
+    {
+      "name": "consumers:every-frozen-consumer-differs-only-by-the-adapter-specifier-which-now-points-at-the-owner",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumers:rewired-count-matches-the-derived-consumer-set (static, dynamic-import and re-export all covered)",
+      "passed": true,
+      "details": "27/27"
+    },
+    {
+      "name": "consumers:edit-kinds-cover-static-and-dynamic-import (index.ts startup key-manager load is dynamic)",
+      "passed": true,
+      "details": "[\"dynamic-import\",\"import\"]"
+    },
+    {
+      "name": "scan:no-importer-of-the-adapter-remains (static import, re-export, dynamic import, require) anywhere in the repo",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "scan:no-mock-resolve-or-require-by-string-of-the-adapter",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "owner:exports-every-name-the-adapter-re-exports (loadKeyManager, getActiveVersion, rotateKey, encryptField, decryptField, decryptRow, decryptRows)",
+      "passed": true,
+      "details": "adapter=decryptField,decryptRow,decryptRows,encryptField,getActiveVersion,loadKeyManager,rotateKey"
+    },
+    {
+      "name": "adapter:is-a-pure-re-export-of-the-owner-and-byte-identical-to-the-seal",
+      "passed": true,
+      "details": "specs=[\"../vault/crypto/field-encryption\"]"
+    },
+    {
+      "name": "graph:the-owner-does-not-reach-any-consumer (no import cycle introduced by the rewire)",
+      "passed": true,
+      "details": "{\"reachable\":1,\"cycle_through\":[]}"
+    },
+    {
+      "name": "graph:the-owner-imports-only-external-packages (lowest layer: crypto, @workspace/db, drizzle-orm)",
+      "passed": true,
+      "details": "[\"crypto\",\"@workspace/db\",\"drizzle-orm\"]"
+    },
+    {
+      "name": "layering:vault-application-modules-no-longer-depend-on-lib/ for crypto (game, kyc, local-account)",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "layering:no-file-under-vault/-imports-the-adapter",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "contract:route-tables-of-every-rewired-route-file-identical-to-the-seal (method, path, middleware chain)",
+      "passed": true,
+      "details": "12 route files, 202 routes, diff=[]"
+    },
+    {
+      "name": "contract:frontend-and-extension-callers-of-the-vault-routes-unchanged",
+      "passed": true,
+      "details": "{\"callers\":72,\"changed\":[]}"
+    },
+    {
+      "name": "contract:the-four-05B-secret-routes-still-registered-and-delegating",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "required-consumer:seed-reveal use-case imports the seed-phrase crypto owner (not lib/)",
+      "passed": true,
+      "details": "artifacts/api-server/src/vault/application/secret/reveal.ts"
+    },
+    {
+      "name": "required-consumer:entity admin export uses the seed-phrase crypto owner",
+      "passed": true,
+      "details": "artifacts/api-server/src/vault/application/entity/admin.ts"
+    },
+    {
+      "name": "required-consumer:entity representation uses the seed-phrase crypto owner",
+      "passed": true,
+      "details": "artifacts/api-server/src/vault/application/entity/representation.ts"
+    },
+    {
+      "name": "required-consumer:vault.ts delegates seed reveal to the secret application owner",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts"
+    },
+    {
+      "name": "required-consumer:vault.ts delegates wallet use-cases to the secret application owner",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts"
+    },
+    {
+      "name": "deferrals:every-deferral-is-still-real-and-names-a-later-gap (no stale deferral)",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "providers:provider-adapters-are-consumed-by-the-new-owner-not-by-routes",
+      "passed": true,
+      "details": "[\"artifacts/api-server/src/lib/chain-balance.ts\",\"artifacts/api-server/src/lib/wallet-key-validation.ts\",\"artifacts/api-server/src/lib/entity-worth.ts\"]"
+    },
+    {
+      "name": "carry-over:recorded-carry-overs-are-real",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "identity:adapter-and-owner-export-the-very-same-function-objects (executed through the harness loader)",
+      "passed": true,
+      "details": "7 bindings identical"
+    },
+    {
+      "name": "diff-audit:only-the-derived-consumer-set-changed (no other file, none added or removed)",
+      "passed": true,
+      "details": "{\"unexpected\":[],\"changed\":27,\"consumers\":27}"
+    },
+    {
+      "name": "typecheck:no-syntax-errors-in-rewired-consumers",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-diagnostics-and-no-new-unresolved-module-or-export-vs-sealed-consumers",
+      "passed": true,
+      "details": "{\"new\":[],\"unresolved\":[]}"
+    },
+    {
+      "name": "earlier-evidence:status-of-every-earlier-validator-reported (informational: later phases legitimately stale earlier source-bound evidence)",
+      "passed": true,
+      "details": "2/18 still verify"
+    },
+    {
+      "name": "selftest:mutation-anchor-a1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:consumer-reverted-to-adapter-is-detected-by-delta",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:consumer-reverted-to-adapter-is-detected-by-repo-scan",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dynamic-import-reverted-to-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:vault-layer-consumer-reverted-is-detected-by-layering",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:no-file-under-vault-may-import-the-adapter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:rewire-to-the-wrong-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:logic-appended-to-a-consumer-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-named-import-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-middleware-chain-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:new-static-importer-of-the-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:new-reexport-of-the-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:new-dynamic-import-of-the-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:new-require-of-the-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mock-by-string-of-the-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:negative-control-comment-and-lookalike-module-are-not-flagged",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:modified-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:deleted-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:owner-importing-a-consumer-is-detected-as-a-cycle",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-c1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:owner-missing-a-name-a-consumer-or-the-adapter-needs-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unlisted-file-change-is-detected-by-diff-audit",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unlisted-new-file-is-detected-by-diff-audit",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:stale-health-deferral-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:stale-step-up-deferral-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:secret-route-no-longer-delegating-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:tampered-seal-manifest-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:coverage-at-least-25-mutations-executed",
+      "passed": true,
+      "details": "33"
+    },
+    {
+      "name": "bypass:every-bypass-attempt-is-rejected-by-the-validator-itself",
+      "passed": true,
+      "details": "[]"
+    }
+  ],
+  "generated_at": "2026-10-03T05:54:10.847Z",
+  "evidence_body_sha256": "8411287bad6296a56113abbd2cde8a2f9a8de3948294a290d2db4e936816e3e7"
+}

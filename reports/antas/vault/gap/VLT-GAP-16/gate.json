@@ -1,0 +1,562 @@
+{
+  "phase": "VLT-GAP-16",
+  "sub_phase": "VLT-GAP-16-D",
+  "validator_version": "16-D.1",
+  "checked_at": "2026-10-09T06:59:20.133Z",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "4be607bbd76b6c94965631bb9ece6dc781dc7fb25fec47e8e6615ce664a48e27",
+  "source_hashes": {
+    "scripts/antas/vault/gap/validate-vlt-gap-16.mjs": "d87a9c87b8141039308929d8f4f2abea95e36abaa9aecadc93d94df3deb2ac56",
+    "scripts/antas/vault/gap/validate-vlt-gap-16-C.mjs": "e1b09e05abbd6ef6f8e977c6b2f9ac1fb410a324915c3bdfb53a21c1d35c19e5",
+    "scripts/antas/vault/gap/validate-vlt-gap-16-D.mjs": "cbf883aba4bfe6ca6c1d08033a28fb59b46629d4e6465ec426625f8a21300d6c",
+    "scripts/antas/vault/gap/gap-configs/vault-duplicates.json": "cb280d8a9866c5e2d5e72aa5b0c0d3eb6e381801d6f7bf1c0bf64208e7ae0063"
+  },
+  "commands": [
+    "real-scan: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "control-unmodified-copy: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-D1a: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-D1b: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-D1c: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-L2a: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-L2b: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-L1a: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-L1b: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-C1a: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-C1b: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-S1a: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-S1b: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-S1c-cap-seed: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "plant-S1d-cap-blob: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "negative-N1-near-duplicate-different-literal: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "negative-N2-aliased-approved-owner-import: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --root <tmp>",
+    "bypass-arg--force: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "bypass-arg--skip: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "bypass-arg--skip-validation: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "bypass-arg--continue-on-error: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "bypass-arg--ignore-failures: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "bypass-env-VALIDATION_DISABLED: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "bypass-env-ANTAS_BYPASS: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "fail-closed-root-no-value: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "fail-closed-empty-scope: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "fail-closed-no-vault-dir: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "fail-closed-missing-dir: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+    "scanner-self-test: node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --self-test",
+    "ci-wiring-16-C: node scripts/antas/vault/gap/validate-vlt-gap-16-C.mjs"
+  ],
+  "exit_codes": {
+    "real-scan": 0,
+    "control-unmodified-copy": 0,
+    "plant-D1a": 1,
+    "plant-D1b": 1,
+    "plant-D1c": 1,
+    "plant-L2a": 1,
+    "plant-L2b": 1,
+    "plant-L1a": 1,
+    "plant-L1b": 1,
+    "plant-C1a": 1,
+    "plant-C1b": 1,
+    "plant-S1a": 1,
+    "plant-S1b": 1,
+    "plant-S1c-cap-seed": 1,
+    "plant-S1d-cap-blob": 1,
+    "negative-N1-near-duplicate-different-literal": 0,
+    "negative-N2-aliased-approved-owner-import": 0,
+    "bypass-arg--force": 1,
+    "bypass-arg--skip": 1,
+    "bypass-arg--skip-validation": 1,
+    "bypass-arg--continue-on-error": 1,
+    "bypass-arg--ignore-failures": 1,
+    "bypass-env-VALIDATION_DISABLED": 1,
+    "bypass-env-ANTAS_BYPASS": 1,
+    "fail-closed-root-no-value": 1,
+    "fail-closed-empty-scope": 1,
+    "fail-closed-no-vault-dir": 1,
+    "fail-closed-missing-dir": 1,
+    "scanner-self-test": 0,
+    "ci-wiring-16-C": 0
+  },
+  "files_scanned": 666,
+  "files_on_disk": 666,
+  "vault_files": 138,
+  "totals_in_real_tree": {
+    "duplicate_business_implementations": 0,
+    "unexpected_legacy_consumers": 0,
+    "old_source_of_truth_modules": 0
+  },
+  "route_scope": [
+    {
+      "file": "routes/game-entries.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/kyc-data-entities.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/kyc.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/local-accounts.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/marketplace-alerts.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-analytics.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-azn.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-bundles.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-cart.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-coupons.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-discovery.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-game.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/marketplace-market-config.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-nft.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-offers.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-reports.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-reviews.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-spot.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-usdt.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace-vault.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/marketplace-wallet.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/marketplace.ts",
+      "in_scope": false,
+      "exclusion": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, …) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    },
+    {
+      "file": "routes/vault-attachments.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault-backup-cloud.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault-backup-key.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault-backup-schedule.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault-entity-links.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault-migration.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault-reauth.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault-security.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault-shares.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault-snapshot.ts",
+      "in_scope": true,
+      "exclusion": null
+    },
+    {
+      "file": "routes/vault.ts",
+      "in_scope": true,
+      "exclusion": null
+    }
+  ],
+  "pinned": {
+    "min_statements": 1,
+    "min_normalized_chars": 60,
+    "allowed_shims": 1,
+    "security_primitive_allow": 3
+  },
+  "ci_fail_proof": {
+    "control_copy_exit": 0,
+    "planted_cases": 13,
+    "negative_controls": 2,
+    "all_ok": true,
+    "proofs": [
+      {
+        "id": "D1a",
+        "rule": "D1-duplicate-implementation",
+        "planted": [
+          {
+            "file": "vault/security/zz-planted-respond.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "D1-duplicate-implementation"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "D1b",
+        "rule": "D1-duplicate-implementation",
+        "planted": [
+          {
+            "file": "vault/infrastructure/repositories/zz-planted-keys.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "D1-duplicate-implementation"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "D1c",
+        "rule": "D1-duplicate-implementation",
+        "planted": [
+          {
+            "file": "vault/security/lockout.ts",
+            "line": 62
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 62,
+            "rule": "D1-duplicate-implementation"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "L2a",
+        "rule": "L2-legacy-source-of-truth",
+        "planted": [
+          {
+            "file": "lib/vault-planted-legacy.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "L2-legacy-source-of-truth"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "L2b",
+        "rule": "L2-legacy-source-of-truth",
+        "planted": [
+          {
+            "file": "lib/vault-planted-shim.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "L2-legacy-source-of-truth"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "L1a",
+        "rule": "L1-unexpected-legacy-consumer",
+        "planted": [
+          {
+            "file": "routes/kyc.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "L1-unexpected-legacy-consumer"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "L1b",
+        "rule": "L1-unexpected-legacy-consumer",
+        "planted": [
+          {
+            "file": "routes/local-accounts.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "L1-unexpected-legacy-consumer"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "C1a",
+        "rule": "C1-duplicate-crypto-logic",
+        "planted": [
+          {
+            "file": "vault/application/entity/create.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "C1-duplicate-crypto-logic"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "C1b",
+        "rule": "C1-duplicate-crypto-logic",
+        "planted": [
+          {
+            "file": "vault/application/entity/bulk.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "C1-duplicate-crypto-logic"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "S1a",
+        "rule": "S1-duplicate-security-logic",
+        "planted": [
+          {
+            "file": "vault/application/entity/update.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "S1-duplicate-security-logic"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "S1b",
+        "rule": "S1-duplicate-security-logic",
+        "planted": [
+          {
+            "file": "vault/application/entity/admin.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "S1-duplicate-security-logic"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "S1c-cap-seed",
+        "rule": "S1-duplicate-security-logic",
+        "planted": [
+          {
+            "file": "vault/crypto/seed-phrase.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "S1-duplicate-security-logic"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "S1d-cap-blob",
+        "rule": "S1-duplicate-security-logic",
+        "planted": [
+          {
+            "file": "vault/application/snapshot/blob.ts",
+            "line": 1
+          }
+        ],
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 1,
+            "rule": "S1-duplicate-security-logic"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "N1-near-duplicate-different-literal",
+        "rule": "none (must pass)",
+        "scanner_exit": 0,
+        "ok": true
+      },
+      {
+        "id": "N2-aliased-approved-owner-import",
+        "rule": "none (must pass)",
+        "scanner_exit": 0,
+        "ok": true
+      }
+    ]
+  },
+  "bypass_and_fail_closed": [
+    {
+      "via": "--force",
+      "ok": true
+    },
+    {
+      "via": "--skip",
+      "ok": true
+    },
+    {
+      "via": "--skip-validation",
+      "ok": true
+    },
+    {
+      "via": "--continue-on-error",
+      "ok": true
+    },
+    {
+      "via": "--ignore-failures",
+      "ok": true
+    },
+    {
+      "via": "VALIDATION_DISABLED=true",
+      "ok": true
+    },
+    {
+      "via": "ANTAS_BYPASS=true",
+      "ok": true
+    },
+    {
+      "via": "--root without value",
+      "ok": true
+    },
+    {
+      "via": "empty scope",
+      "ok": true
+    },
+    {
+      "via": "scope without vault/",
+      "ok": true
+    },
+    {
+      "via": "missing scope dir",
+      "ok": true
+    }
+  ],
+  "errors": [],
+  "status": "PASS"
+}

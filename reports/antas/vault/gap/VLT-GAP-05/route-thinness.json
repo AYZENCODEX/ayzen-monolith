@@ -1,0 +1,562 @@
+{
+  "phase": "VLT-GAP-05",
+  "sub_phase": "VLT-GAP-05-D",
+  "commit_sha": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "24632c57068a52091de19e44d6e60f5987ca10e846739f920d68908e43c7399c",
+  "validator_version": "1.0.0",
+  "validator_sha256": "dd4837fd94acabb481411b49bfbe09403108fff0368208e37f997e9d91f20406",
+  "file": "artifacts/api-server/src/routes/vault.ts",
+  "summary": {
+    "handlers": 36,
+    "thin_adapters": 33,
+    "deferred": 2,
+    "response_mapping": 1,
+    "lines": 517,
+    "db_sites": 2,
+    "db_sites_outside_deferred_runner": 0
+  },
+  "handlers": [
+    {
+      "route": "GET /vault",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "listEntities",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/gas-overview",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "getGasOverviewForUser",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/:id/gas",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.gas.read"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "getEntityGas",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "POST /vault",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "createEntity",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/tags",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "listEntityTags",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "PATCH /vault/bulk-tag",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "bulkTagEntities",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "PATCH /vault/bulk-action",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "bulkActionEntities",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/health-report",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 7,
+      "forbidden_refs": [],
+      "use_case": null,
+      "classification": "deferred:VLT-GAP-11"
+    },
+    {
+      "route": "POST /vault/health-check",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 1,
+      "forbidden_refs": [],
+      "use_case": null,
+      "classification": "deferred:VLT-GAP-11"
+    },
+    {
+      "route": "GET /vault/analytics",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "getEntityAnalytics",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/analytics/value-history",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "getEntityValueHistory",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/activity",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "listMyVaultActivity",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/trash",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "listTrashedEntities",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/:id",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.read",
+        "requireCreditBalance:sylo.vault_entity_view"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "getEntity",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/:id/seed",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.seed.read",
+        "requireCreditBalance:sylo.credential_access"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "revealSeedPhrase",
+      "classification": "secret-adapter"
+    },
+    {
+      "route": "PATCH /vault/:id/drive-wallet",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.drive_wallet.update"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "setDriveWallet",
+      "classification": "secret-adapter"
+    },
+    {
+      "route": "POST /vault/validate-key",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "validateSecretKey",
+      "classification": "secret-adapter"
+    },
+    {
+      "route": "POST /vault/:id/refresh-wallet-worth",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.wallet_worth.update"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "refreshWalletWorth",
+      "classification": "secret-adapter"
+    },
+    {
+      "route": "PATCH /vault/:id",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.update"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "updateEntity",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "PATCH /vault/:id/field",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.field.update"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "updateEntityField",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/:id/field-history",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.field_history.read"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "listEntityFieldHistory",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "DELETE /vault/trash",
+      "middleware": [
+        "requireAuth"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "emptyTrash",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "DELETE /vault/:id",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.delete"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "trashEntity",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "POST /vault/:id/restore",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.restore"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "restoreEntity",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "DELETE /vault/trash/:id",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.purge"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "purgeTrashedEntity",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /admin/vault",
+      "middleware": [
+        "requireAdmin"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "adminListEntities",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /admin/vault/full",
+      "middleware": [
+        "requireAdmin"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "adminFullVault",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /admin/vault/local-accounts",
+      "middleware": [
+        "requireAdmin"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "adminListLocalAccounts",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /admin/vault/users",
+      "middleware": [
+        "requireAdmin"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "adminListVaultUsers",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /admin/vault/users/:userId",
+      "middleware": [
+        "requireAdmin"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "adminGetUserVault",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/:id/activity",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.activity.read"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "listEntityActivity",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /admin/vault/activity",
+      "middleware": [
+        "requireAdmin"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "adminVaultActivityFeed",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "POST /vault/:id/receipt",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.receipt.create"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "createReceiptLink",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "DELETE /vault/:id/receipt",
+      "middleware": [
+        "requireAuth",
+        "requireVaultEntryOwnership:vault_entry.receipt.delete"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "revokeReceiptLink",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/receipt/:token",
+      "middleware": [
+        "requirePublicAudit:vault_receipt.view"
+      ],
+      "statements": 2,
+      "branches": 0,
+      "forbidden_refs": [],
+      "use_case": "resolvePublicReceipt",
+      "classification": "thin-adapter"
+    },
+    {
+      "route": "GET /vault/receipt/:token/pdf",
+      "middleware": [
+        "requirePublicAudit:vault_receipt.pdf"
+      ],
+      "statements": 3,
+      "branches": 1,
+      "forbidden_refs": [],
+      "use_case": "resolvePublicReceipt",
+      "classification": "response-mapping"
+    }
+  ],
+  "top_level_symbols": [
+    {
+      "kind": "const",
+      "name": "router"
+    },
+    {
+      "kind": "const",
+      "name": "lifecycleDeps"
+    },
+    {
+      "kind": "const",
+      "name": "updateDeps"
+    },
+    {
+      "kind": "const",
+      "name": "secretDeps"
+    },
+    {
+      "kind": "function",
+      "name": "toHealthInput",
+      "lines": [
+        80,
+        93
+      ],
+      "deferred_to": "VLT-GAP-11"
+    },
+    {
+      "kind": "function",
+      "name": "runHealthCheck",
+      "lines": [
+        95,
+        154
+      ],
+      "deferred_to": "VLT-GAP-11"
+    }
+  ],
+  "db_sites": [
+    {
+      "line": 125,
+      "in_deferred_health_runner": true
+    },
+    {
+      "line": 146,
+      "in_deferred_health_runner": true
+    }
+  ],
+  "deferrals": [
+    {
+      "route": "GET /vault/health-report",
+      "deferred_to": "VLT-GAP-11",
+      "reason": "health evaluation is owned by the GAP-11 health module; verified free of every secret identifier and column"
+    },
+    {
+      "route": "POST /vault/health-check",
+      "deferred_to": "VLT-GAP-11",
+      "reason": "health evaluation is owned by the GAP-11 health module; verified free of every secret identifier and column"
+    }
+  ],
+  "service_composition_root": {
+    "violations": [],
+    "statements": [
+      {
+        "kind": "import",
+        "spec": "@ayzen/service-runtime"
+      },
+      {
+        "kind": "import",
+        "spec": "./crypto/envelope.mjs"
+      },
+      {
+        "kind": "import",
+        "spec": "./security/access.mjs"
+      },
+      {
+        "kind": "import",
+        "spec": "./infrastructure/dependencies.mjs"
+      },
+      {
+        "kind": "import",
+        "spec": "./api/http-handler.mjs"
+      },
+      {
+        "kind": "import",
+        "spec": "./api/contracts.mjs"
+      },
+      {
+        "kind": "wiring-const",
+        "name": "allowMemoryState"
+      },
+      {
+        "kind": "wiring-const",
+        "name": "dependencies"
+      },
+      {
+        "kind": "wiring-const",
+        "name": "vaultCrypto"
+      },
+      {
+        "kind": "wiring-const",
+        "name": "vaultAccess"
+      },
+      {
+        "kind": "wiring-const",
+        "name": "handle"
+      },
+      {
+        "kind": "bootstrap"
+      }
+    ],
+    "shims": [
+      {
+        "file": "services/vault/src/crypto.mjs",
+        "pure_reexport": true
+      },
+      {
+        "file": "services/vault/src/access.mjs",
+        "pure_reexport": true
+      },
+      {
+        "file": "services/vault/src/domain.mjs",
+        "pure_reexport": true
+      },
+      {
+        "file": "services/vault/src/contracts.mjs",
+        "pure_reexport": true
+      }
+    ]
+  },
+  "violations": []
+}

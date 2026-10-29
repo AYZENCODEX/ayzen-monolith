@@ -1,0 +1,425 @@
+import { ENTITY_TABLES, type FieldPermissionMap, VALID_TYPES, isValidType, safe } from "../../infrastructure/repositories/share-entity-types";
+import { type VaultRequest } from "../../security/request-context";
+import { auditVaultShareBulkOwnership, auditVaultShareCreateOwnership } from "../../security/share-ownership";
+import { bulkDeleteShareRows, bulkUpdateShareRows, deleteShareRows, findOwnedEntityIdRows, findShareTarget, getActiveShareFor, getEntityRows, getOwnedEntityRows, getOwnedShareRow, listEntityRowsByIds, listReceivedShareRows, listSentShareRows, updateShareRows, upsertShareRow } from "../../infrastructure/repositories/vault-share-repository";
+import { decryptRow } from "../../crypto/field-encryption";
+import { filterToAllowedFields, parseFieldPermissions, shareableColumns } from "./field-permissions";
+import { createNotificationProvider, publishAyzenDomainEventPort } from "../../infrastructure/providers/provider-ports";
+
+export interface ShareResult { status: number; body: unknown }
+
+/**
+ * Vault share use cases. Moved unchanged from routes/vault-shares.ts (VLT-GAP-10):
+ * validation, status codes, error bodies, notifications, domain events and the
+ * "access moves, ownership never does" semantics are identical. The route keeps
+ * auth middleware, the ownership gate and response mapping; queries live in
+ * the share repository.
+ */
+
+const dbError = (err: any): ShareResult => ({ status: 500, body: { error: "DB error", detail: err?.message } });
+
+/** POST /vault-shares — grant one entity to another user. */
+export async function createShare(userId: number, body: any): Promise<ShareResult> {
+  const { entityType, entityId, username, permission = "view", fieldPermissions } = body;
+
+  if (!isValidType(entityType)) return { status: 400, body: { error: `entityType must be one of: ${VALID_TYPES.join(", ")}` } };
+  const id = parseInt(entityId, 10);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid entityId" } };
+  if (!username || typeof username !== "string" || !username.trim()) return { status: 400, body: { error: "username is required" } };
+  if (!["view", "edit"].includes(permission)) return { status: 400, body: { error: "permission must be 'view' or 'edit'" } };
+
+  const cfg = ENTITY_TABLES[entityType];
+
+  let parsedFieldPermissions: FieldPermissionMap | null;
+  try {
+    parsedFieldPermissions = await parseFieldPermissions(entityType, fieldPermissions);
+  } catch (err: any) {
+    return { status: 400, body: { error: err.message } };
+  }
+
+  try {
+    if (!(await findOwnedEntityIdRows(cfg, id, userId)).length) return { status: 404, body: { error: "Entity not found, not owned by you, or in trash" } };
+
+    const target = await findShareTarget(username.trim());
+    if (!target) return { status: 404, body: { error: "User not found" } };
+    if (Number(target.id) === userId) return { status: 400, body: { error: "You already own this — can't share with yourself" } };
+
+    const share = await upsertShareRow({ entityType, entityId: id, ownerId: userId, sharedWithUserId: Number(target.id), permission, fieldPermissions: parsedFieldPermissions });
+    void publishAyzenDomainEventPort({
+      type: "vault.share.created",
+      actorUserId: userId,
+      aggregate: { type: "vault_share", id: String(share.id) },
+      payload: {
+        shareId: Number(share.id),
+        entityType: String(entityType),
+        entityId: id,
+        sharedWithUserId: Number(target.id),
+        permission: String(permission),
+      },
+    }).catch(() => {});
+
+    createNotificationProvider(
+      Number(target.id),
+      "vault_share",
+      "New vault item shared with you",
+      `Someone shared a ${entityType} vault item with you (${parsedFieldPermissions ? `${Object.keys(parsedFieldPermissions).length} field(s)` : permission} access).`,
+      { entityType, entityId: id, shareId: share.id }
+    ).catch(() => {});
+
+    return {
+      status: 201,
+      body: {
+        id: share.id,
+        entityType: share.entity_type,
+        entityId: share.entity_id,
+        ownerId: share.owner_id,
+        sharedWithUserId: share.shared_with_user_id,
+        sharedWithUsername: target.username,
+        permission: share.permission,
+        fieldPermissions: parsedFieldPermissions,
+        isActive: share.is_active,
+        createdAt: share.created_at,
+      },
+    };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+/** GET /vault-shares/fields/:entityType — shareable columns + sensitive field list. */
+export async function listShareableFields(entityType: string): Promise<ShareResult> {
+  if (!isValidType(entityType)) return { status: 400, body: { error: `entityType must be one of: ${VALID_TYPES.join(", ")}` } };
+  try {
+    const fields = await shareableColumns(entityType);
+    return { status: 200, body: { entityType, fields, sensitiveFields: ENTITY_TABLES[entityType].sensitive } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+/** POST /vault-shares/bulk — grant many entities to one user. */
+export async function bulkCreateShares(userId: number, req: VaultRequest, body: any): Promise<ShareResult> {
+  const { items, username, permission = "view", fieldPermissions } = body;
+
+  if (!Array.isArray(items) || !items.length) return { status: 400, body: { error: "items must be a non-empty array of { entityType, entityId }" } };
+  if (items.length > 200) return { status: 400, body: { error: "Too many items in one batch (max 200)" } };
+  if (!username || typeof username !== "string" || !username.trim()) return { status: 400, body: { error: "username is required" } };
+  if (!["view", "edit"].includes(permission)) return { status: 400, body: { error: "permission must be 'view' or 'edit'" } };
+
+  const fieldPermCache = new Map<string, FieldPermissionMap | null>();
+  async function fieldPermissionsFor(entityType: keyof typeof ENTITY_TABLES): Promise<FieldPermissionMap | null> {
+    if (fieldPermCache.has(entityType)) return fieldPermCache.get(entityType)!;
+    const parsed = await parseFieldPermissions(entityType, fieldPermissions);
+    fieldPermCache.set(entityType, parsed);
+    return parsed;
+  }
+
+  try {
+    const target = await findShareTarget(username.trim());
+    if (!target) return { status: 404, body: { error: "User not found" } };
+    if (Number(target.id) === userId) return { status: 400, body: { error: "You already own this — can't share with yourself" } };
+
+    await auditVaultShareCreateOwnership(req, items);
+
+    const shared: any[] = [];
+    const failed: { entityType: string; entityId: number; reason: string }[] = [];
+
+    for (const item of items) {
+      const entityType = item?.entityType;
+      const entityId = parseInt(item?.entityId, 10);
+      if (!isValidType(entityType) || isNaN(entityId)) {
+        failed.push({ entityType: String(entityType), entityId: Number(item?.entityId), reason: "Invalid entityType/entityId" });
+        continue;
+      }
+      const cfg = ENTITY_TABLES[entityType];
+      try {
+        const itemFieldPerms = await fieldPermissionsFor(entityType);
+        if (!(await findOwnedEntityIdRows(cfg, entityId, userId)).length) {
+          failed.push({ entityType, entityId, reason: "Not found, not owned by you, or in trash" });
+          continue;
+        }
+        shared.push(await upsertShareRow({ entityType, entityId, ownerId: userId, sharedWithUserId: Number(target.id), permission, fieldPermissions: itemFieldPerms }));
+      } catch (err: any) {
+        failed.push({ entityType, entityId, reason: err?.message ?? "DB error" });
+      }
+    }
+
+    if (shared.length) {
+      const byType: Record<string, number> = {};
+      for (const s of shared as any[]) byType[s.entity_type] = (byType[s.entity_type] ?? 0) + 1;
+      const summary = Object.entries(byType).map(([t, n]) => `${n} ${t}`).join(", ");
+      createNotificationProvider(
+        Number(target.id),
+        "vault_share",
+        "New vault items shared with you",
+        `Someone shared ${shared.length} vault item(s) with you (${summary}).`,
+        { count: shared.length }
+      ).catch(() => {});
+    }
+
+    return {
+      status: shared.length ? 201 : 400,
+      body: {
+        sharedCount: shared.length,
+        failedCount: failed.length,
+        shared: shared.map((s: any) => ({
+          id: s.id, entityType: s.entity_type, entityId: s.entity_id, permission: s.permission, isActive: s.is_active,
+        })),
+        failed,
+      },
+    };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+/** Display labels for a set of share rows, one grouped lookup per entity type. */
+async function labelsFor(rows: any[]): Promise<Record<string, Record<number, string>>> {
+  const byType: Record<string, number[]> = {};
+  for (const r of rows) (byType[r.entity_type] ??= []).push(r.entity_id);
+
+  const labels: Record<string, Record<number, string>> = {};
+  for (const [type, ids] of Object.entries(byType)) {
+    const cfg = ENTITY_TABLES[type];
+    if (!cfg || !ids.length) continue;
+    labels[type] = {};
+    for (const row of await listEntityRowsByIds(cfg, ids)) labels[type][row.id] = cfg.label(row);
+  }
+  return labels;
+}
+
+/** GET /vault-shares/sent */
+export async function listSentShares(userId: number, entityType: string | undefined): Promise<ShareResult> {
+  try {
+    const rows = await listSentShareRows(userId, entityType);
+    const labels = await labelsFor(rows);
+
+    return {
+      status: 200,
+      body: rows.map(r => ({
+        id: r.id,
+        entityType: r.entity_type,
+        entityId: r.entity_id,
+        entityLabel: labels[r.entity_type]?.[r.entity_id] ?? `#${r.entity_id}`,
+        sharedWithUserId: r.shared_with_user_id,
+        sharedWithUsername: r.recipient_username,
+        permission: r.permission,
+        fieldPermissions: r.field_permissions ? JSON.parse(r.field_permissions) : null,
+        isActive: r.is_active,
+        createdAt: r.created_at,
+        revokedAt: r.revoked_at,
+      })),
+    };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+/** GET /vault-shares/received */
+export async function listReceivedShares(userId: number, entityType: string | undefined, activeOnly: boolean): Promise<ShareResult> {
+  try {
+    const rows = await listReceivedShareRows(userId, entityType, activeOnly);
+    const labels = await labelsFor(rows);
+
+    return {
+      status: 200,
+      body: rows.map(r => ({
+        id: r.id,
+        entityType: r.entity_type,
+        entityId: r.entity_id,
+        entityLabel: labels[r.entity_type]?.[r.entity_id] ?? `#${r.entity_id}`,
+        ownerId: r.owner_id,
+        ownerUsername: r.owner_username,
+        permission: r.permission,
+        fieldPermissions: r.field_permissions ? JSON.parse(r.field_permissions) : null,
+        isActive: r.is_active,
+        createdAt: r.created_at,
+        revokedAt: r.revoked_at,
+      })),
+    };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+/** GET /vault-shares/entity/:entityType/:entityId — the entity as the caller may see it (owner or shared). */
+export async function getEntityAccess(userId: number, entityType: string, entityId: number): Promise<ShareResult> {
+  if (!isValidType(entityType)) return { status: 400, body: { error: `entityType must be one of: ${VALID_TYPES.join(", ")}` } };
+  if (isNaN(entityId)) return { status: 400, body: { error: "Invalid entityId" } };
+
+  const cfg = ENTITY_TABLES[entityType];
+
+  try {
+    const ownRows = await getOwnedEntityRows(cfg, entityId, userId);
+    if (ownRows.length) {
+      return { status: 200, body: { access: "owner", permission: "edit", fieldPermissions: null, entity: decryptRow(ownRows[0] as any, cfg.sensitive as any) } };
+    }
+
+    const share = await getActiveShareFor(entityType, entityId, userId);
+    if (!share) return { status: 403, body: { error: "Not shared with you" } };
+
+    const entRows = await getEntityRows(cfg, entityId);
+    if (!entRows.length) return { status: 404, body: { error: "Entity no longer exists" } };
+
+    const decrypted = decryptRow(entRows[0] as any, cfg.sensitive as any);
+    const fieldPermissions: FieldPermissionMap | null = share.field_permissions ? JSON.parse(share.field_permissions) : null;
+
+    if (fieldPermissions) {
+      return {
+        status: 200,
+        body: {
+          access: "shared",
+          permission: share.permission,
+          fieldPermissions,
+          entity: filterToAllowedFields(decrypted, fieldPermissions),
+        },
+      };
+    }
+
+    return { status: 200, body: { access: "shared", permission: share.permission, fieldPermissions: null, entity: decrypted } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+/** PATCH /vault-shares/bulk */
+export async function bulkUpdateShares(userId: number, req: VaultRequest, body: any): Promise<ShareResult> {
+  const { ids, isActive, permission } = body;
+  if (!Array.isArray(ids) || !ids.length) return { status: 400, body: { error: "ids must be a non-empty array" } };
+  const cleanIds = ids.map((i: unknown) => parseInt(i as string, 10)).filter((n: number) => !isNaN(n));
+  if (!cleanIds.length) return { status: 400, body: { error: "No valid ids provided" } };
+  if (permission !== undefined && !["view", "edit"].includes(permission)) return { status: 400, body: { error: "permission must be 'view' or 'edit'" } };
+
+  await auditVaultShareBulkOwnership(req, cleanIds, "vault_share.bulk.update");
+
+  const sets: string[] = ["updated_at = NOW()"];
+  if (typeof isActive === "boolean") {
+    sets.push(`is_active = ${isActive ? "TRUE" : "FALSE"}`);
+    sets.push(`revoked_at = ${isActive ? "NULL" : "NOW()"}`);
+  }
+  if (permission !== undefined) sets.push(`permission = ${safe(permission)}`);
+
+  try {
+    const rows = await bulkUpdateShareRows(sets, cleanIds, userId);
+
+    if (typeof isActive === "boolean" && !isActive) {
+      for (const share of rows) {
+        createNotificationProvider(
+          Number(share.shared_with_user_id),
+          "vault_share",
+          "Shared access removed",
+          `Access to a shared ${share.entity_type} vault item was turned off.`,
+          { entityType: share.entity_type, entityId: share.entity_id }
+        ).catch(() => {});
+      }
+    }
+
+    return { status: 200, body: { updatedCount: rows.length, updated: rows.map(s => ({ id: s.id, isActive: s.is_active, permission: s.permission })) } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+/** DELETE /vault-shares/bulk */
+export async function bulkDeleteShares(userId: number, req: VaultRequest, body: any): Promise<ShareResult> {
+  const { ids } = body;
+  if (!Array.isArray(ids) || !ids.length) return { status: 400, body: { error: "ids must be a non-empty array" } };
+  const cleanIds = ids.map((i: unknown) => parseInt(i as string, 10)).filter((n: number) => !isNaN(n));
+  if (!cleanIds.length) return { status: 400, body: { error: "No valid ids provided" } };
+
+  await auditVaultShareBulkOwnership(req, cleanIds, "vault_share.bulk.delete");
+
+  try {
+    const rows = await bulkDeleteShareRows(cleanIds, userId);
+    return { status: 200, body: { deletedCount: rows.length } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+/** PATCH /vault-shares/:id — toggle active, change permission or field permissions. */
+export async function updateShare(userId: number, id: number, body: any): Promise<ShareResult> {
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  const { isActive, permission, fieldPermissions } = body;
+
+  const existing = await getOwnedShareRow(id, userId);
+  if (!existing) return { status: 404, body: { error: "Not found or not yours to manage" } };
+
+  const sets: string[] = ["updated_at = NOW()"];
+  if (typeof isActive === "boolean") {
+    sets.push(`is_active = ${isActive ? "TRUE" : "FALSE"}`);
+    sets.push(`revoked_at = ${isActive ? "NULL" : "NOW()"}`);
+  }
+  if (permission !== undefined) {
+    if (!["view", "edit"].includes(permission)) return { status: 400, body: { error: "permission must be 'view' or 'edit'" } };
+    sets.push(`permission = ${safe(permission)}`);
+  }
+  if (fieldPermissions !== undefined) {
+    if (fieldPermissions === null) {
+      sets.push(`field_permissions = NULL`);
+    } else {
+      let parsed: FieldPermissionMap | null;
+      try {
+        parsed = await parseFieldPermissions(existing.entity_type, fieldPermissions);
+      } catch (err: any) {
+        return { status: 400, body: { error: err.message } };
+      }
+      sets.push(`field_permissions = ${safe(parsed ? JSON.stringify(parsed) : null)}`);
+    }
+  }
+
+  try {
+    const rows = await updateShareRows(sets, id, userId);
+    if (!rows.length) return { status: 404, body: { error: "Not found or not yours to manage" } };
+    const share = rows[0] as any;
+
+    if (typeof isActive === "boolean" && !isActive) {
+      void publishAyzenDomainEventPort({
+        type: "vault.share.revoked",
+        actorUserId: userId,
+        aggregate: { type: "vault_share", id: String(share.id) },
+        payload: { shareId: Number(share.id) },
+      }).catch(() => {});
+      createNotificationProvider(
+        Number(share.shared_with_user_id),
+        "vault_share",
+        "Shared access removed",
+        `Access to a shared ${share.entity_type} vault item was turned off.`,
+        { entityType: share.entity_type, entityId: share.entity_id }
+      ).catch(() => {});
+    }
+
+    return {
+      status: 200,
+      body: {
+        id: share.id,
+        entityType: share.entity_type,
+        entityId: share.entity_id,
+        isActive: share.is_active,
+        permission: share.permission,
+        fieldPermissions: share.field_permissions ? JSON.parse(share.field_permissions) : null,
+        revokedAt: share.revoked_at,
+      },
+    };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+/** DELETE /vault-shares/:id */
+export async function deleteShare(userId: number, id: number): Promise<ShareResult> {
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    const rows = await deleteShareRows(id, userId);
+    if (!rows.length) return { status: 404, body: { error: "Not found or not yours to manage" } };
+    void publishAyzenDomainEventPort({
+      type: "vault.share.revoked",
+      actorUserId: userId,
+      aggregate: { type: "vault_share", id: String(id) },
+      payload: { shareId: Number(id) },
+    }).catch(() => {});
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}

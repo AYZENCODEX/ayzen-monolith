@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ayzen.internal/schemas/lineage/lineage-entry.v1.json",
+  "title": "AYZEN Function/Module/API Lineage Entry",
+  "description": "Phase 04. One entry per ENDPOINT_REGISTRY definition (packages/endpoint-registry), reverse-traced to the Express route file/line that declares it and the lib/service module functions its handler body calls. Built by static regex-based scanning of artifacts/api-server/src/routes/*.ts -- not a full TypeScript AST parse -- so 'resolved' means a route declaration matching method+path was found, not that every function call in the handler was captured with 100% precision. See tools/lineage-builder/build.mjs's header for the heuristic's exact limits.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["method", "path", "owner", "auth", "critical", "resolution"],
+  "properties": {
+    "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+    "path": { "type": "string", "description": "Full path as declared in ENDPOINT_REGISTRY, e.g. '/api/finance/books/:id'." },
+    "owner": { "type": "string" },
+    "auth": { "type": "string", "enum": ["public", "user", "service", "admin"] },
+    "critical": { "type": "boolean", "description": "auth !== 'public' -- an endpoint where knowing the owning module/function actually matters for security triage." },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string", "enum": ["resolved", "unresolved"] },
+        "file": { "type": "string" },
+        "line": { "type": "integer" },
+        "module": { "type": "string", "description": "Route file path relative to artifacts/api-server/src/, treated as the owning module." },
+        "functions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Imported lib/service function names referenced inside the handler body span (heuristic identifier scan, not a call graph)."
+        },
+        "reason": { "type": "string", "description": "Present only when status is 'unresolved' -- why no static route declaration matched." }
+      }
+    }
+  }
+}

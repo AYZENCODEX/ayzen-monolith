@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "requiredFields": ["eventId", "eventType", "schemaVersion", "producer", "tenant", "subject", "timestamp", "correlationId", "causationId", "payload"],
+  "delivery": "at-least-once",
+  "consumerRequirement": "idempotent",
+  "replayRequired": true,
+  "deadLetterRequired": true
+}

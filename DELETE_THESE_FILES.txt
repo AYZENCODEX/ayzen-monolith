@@ -1,0 +1,7 @@
+# VLT-GAP-09: delete these 6 files after unzipping over the repo root (their content moved unchanged).
+artifacts/api-server/src/lib/vault-snapshot-restore.ts
+artifacts/api-server/src/lib/vault-snapshot-extra.ts
+artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts
+artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts
+artifacts/api-server/src/lib/vault-trash-purge.ts
+artifacts/api-server/src/lib/vault-trash-cron.ts

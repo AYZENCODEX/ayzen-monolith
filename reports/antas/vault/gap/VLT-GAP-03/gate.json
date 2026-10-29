@@ -1,0 +1,879 @@
+{
+  "phase": "VLT-GAP-03",
+  "sub_phase": "VLT-GAP-03-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "386d676b6ff44cc0732a2b5a451a7979a27ad4a74c8d9445124224e444169270",
+  "validator_version": "1.0.0",
+  "validator_sha256": "b7ce83bf8f53cb06c268ea3092740f096d8aaeb19dae761c541e96b7ada7342a",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/kyc.ts": "9788b5e5d94b225a8d8dfeb70b9993b980d5161f41eadb42c20511549c327d4b",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts": "18733afba6989a9d6456c7b072f2e056e052bd92647dd38ee66474fe03cda63b",
+    "artifacts/ayzen/src/components/kyc-entries.tsx": "276f35167d2c65459cd8aff508c1e003c1ca7b27dcc8a57e32a48d98d5f86e6e",
+    "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx": "960eeaa8726ec6af5417d732225218fe2d3ff39a6ceed18091a55d35f1d2729c",
+    "artifacts/ayzen/src/pages/user/vault-kyc-data-detail.tsx": "35de32b5d9e7e56bbb332b69c96c9863bc98362a48aae48ee195ad76a07f0f3c",
+    "artifacts/ayzen/src/pages/user/vault-kyc-data-list.tsx": "e371ca8a091e4bb1e3416cc1b69018583d5ecc11fbee4506c033aa9549e33fee",
+    "artifacts/ayzen/src/pages/user/vault-kyc-data-overview.tsx": "25297809f132960f4df49d79aeb68ccd0ff430df4471c17f5f44a46db7b79552",
+    "artifacts/ayzen/src/pages/user/vault-kyc-data-unused.tsx": "ff95f0d8b43883d5559ec586fd8984a901de521544c94668a936c4ba87e4134b",
+    "artifacts/ayzen/src/pages/user/vault-kyc-data-used.tsx": "51dd9db1182486331c96ce82e3711e7155eee5b2e8f740c63ba1c7c0b7c717d8",
+    "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx": "8ae7b948d9b9acc569578d4cb72a1b5337a3fa48dc8efcdd6ce213a2b065db30",
+    "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx": "52ec0de616bff76b0d747a4d16afd4d443d04f88626529efd7763524aaf8663e",
+    "artifacts/api-server/src/vault/domain/kyc.ts": "19ce1058dd84efa5e68076c51e0e5cf1a3d27789f797788cf9b7e1a146168c18",
+    "artifacts/api-server/src/vault/domain/kyc-values.ts": "476cad2f092fd3accd4e2c000bb5c02a17ad394b9937afe5a3c1a528e8fe4277",
+    "artifacts/api-server/src/vault/security/kyc-ownership.ts": "8af586a462bec5104c8a57bb6cf6e06489aa8e636daf7a5b7f6b10a5ea28d1b4",
+    "artifacts/api-server/src/vault/application/kyc/entries.ts": "3e021b6a5c2ea876fbcde996d467c847cdc7e16fbbb5ee91e8945b1bf0cad3c4",
+    "artifacts/api-server/src/vault/application/kyc/data-entities.ts": "2c16402277b19dc90c79cbefdc9ece39ea3b6b05ad90e4ed41a9005d657a4901",
+    "artifacts/api-server/src/vault/application/kyc/enrollment.ts": "b8987a668f5d899fa607c9329b14f125aec579d731dc1071295a5bc4c484cc16",
+    "artifacts/api-server/src/vault/application/kyc/exchange.ts": "7855f1e9f16127ac3997e41033259358acaf4226aa71e58d87477b038fa05ecd",
+    "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts": "5571d448c9a391dc03c28a3c3fec341182226f4f9b6aec4c6ef727f811cc47a1",
+    "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts": "ed84865e38eeff6e81da6042e58ef69700a8cf62ca291fe701311cde66120fdf",
+    "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts": "179b186e3ba92e15ad1f6f23ae099cf2da4c74d2942cd17af3da54e98335c112",
+    "artifacts/api-server/src/routes/index.ts": "d8db8b5357ab4a6216b5ac6d080fcbc9d41495ca553f1a306e140ab7d19b5619",
+    "artifacts/api-server/src/routes/exchange-api.ts": "754c840c3546f1d80da976f4b2824294d392cd76e38c45c19bf56c5936990fa3",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-D-baseline.mjs": "f1db2ed08722cd8ddcb7468d997029d63a9331a0f822bda86b5bfa18d7f256b9",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline-03d/SEAL.json": "e636d728c4f1a25e47f847dc99c047e3d7a583609db7a43ec3ac9dc2f63c4274",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline-03d/tree-manifest.json": "114e8181a6999a816934a9ab43fb429f3484c893b902232475b4e7a4ff062f5d",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__api-server__src__routes__kyc.ts": "05201d5c50191aa0682f2e7425902f9f07f04d65c4e8743d7f2cf1052b881a69",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__api-server__src__routes__kyc-data-entities.ts": "42558bc1c65cbdf067505479afb184853b2c39f79af1857067372c72e5f0d2bd",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__components__kyc-entries.tsx": "276f35167d2c65459cd8aff508c1e003c1ca7b27dcc8a57e32a48d98d5f86e6e",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-dashboard.tsx": "960eeaa8726ec6af5417d732225218fe2d3ff39a6ceed18091a55d35f1d2729c",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-detail.tsx": "35de32b5d9e7e56bbb332b69c96c9863bc98362a48aae48ee195ad76a07f0f3c",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-list.tsx": "e371ca8a091e4bb1e3416cc1b69018583d5ecc11fbee4506c033aa9549e33fee",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-overview.tsx": "25297809f132960f4df49d79aeb68ccd0ff430df4471c17f5f44a46db7b79552",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-unused.tsx": "ff95f0d8b43883d5559ec586fd8984a901de521544c94668a936c4ba87e4134b",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-used.tsx": "51dd9db1182486331c96ce82e3711e7155eee5b2e8f740c63ba1c7c0b7c717d8",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-detail.tsx": "8ae7b948d9b9acc569578d4cb72a1b5337a3fa48dc8efcdd6ce213a2b065db30",
+    "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-enrolled.tsx": "52ec0de616bff76b0d747a4d16afd4d443d04f88626529efd7763524aaf8663e"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-03-C.mjs --verify (in place)",
+    "node scripts/antas/vault/gap/validate-vlt-gap-03-C.mjs (full run, temp copy of the current tree)",
+    "node scripts/antas/vault/gap/validate-vlt-gap-03-B.mjs (temp copy reconstructed to the 03-B-certified state)",
+    "in-process AST retirement gate / duplicate scan / layering / frontend classification",
+    "in-process mutation self-tests",
+    "child-process bypass attempts against this validator"
+  ],
+  "exit_codes": {
+    "03-C(verify,in-place)": 0,
+    "03-C(temp)": 0,
+    "03-B(temp,reconstructed)": 1,
+    "retirement_gate": 0,
+    "mutation_self_tests": 0,
+    "bypass_attempts": 0,
+    "typecheck_degraded": 0
+  },
+  "baseline": {
+    "mode": "write-once seal (verified, never written by this validator)",
+    "seal_file": "reports/antas/vault/gap/VLT-GAP-03/baseline-03d/SEAL.json",
+    "sealed_at": "2026-09-30T10:41:56.741Z",
+    "certified_by": {
+      "sub_phase": "VLT-GAP-03-C",
+      "source_tree_sha256": "676b2649160cf4e8e2cde174f4c4672a1f7a9345a9af183859619a160455bd59",
+      "commit_sha": null,
+      "validator_sha256": "c4967407d57b188b834f2bfac48d6aee5b55c26f54e9895ac0964cc6e9b36287"
+    }
+  },
+  "symbols_moved": [
+    "artifacts/api-server/src/routes/kyc.ts#val -> artifacts/api-server/src/vault/domain/kyc-values.ts#val",
+    "artifacts/api-server/src/routes/kyc.ts#numVal -> artifacts/api-server/src/vault/domain/kyc-values.ts#numVal",
+    "artifacts/api-server/src/routes/kyc.ts#DATA_ENTITY_JOIN -> artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts#DATA_ENTITY_JOIN",
+    "artifacts/api-server/src/routes/kyc.ts#DATA_ENTITY_SELECT -> artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts#DATA_ENTITY_SELECT",
+    "artifacts/api-server/src/routes/kyc.ts#fetchWithData -> artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts#fetchKycEntryWithData",
+    "artifacts/api-server/src/routes/kyc.ts#kycEntryResource -> artifacts/api-server/src/vault/security/kyc-ownership.ts#kycEntryResource",
+    "artifacts/api-server/src/routes/kyc.ts#requireKycEntryOwnership -> artifacts/api-server/src/vault/security/kyc-ownership.ts#requireKycEntryOwnership",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts#DATA_ENTITY_SENSITIVE_FIELDS -> artifacts/api-server/src/vault/domain/kyc.ts#KYC_DATA_ENTITY_SENSITIVE_FIELDS",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts#safe -> artifacts/api-server/src/vault/domain/kyc-values.ts#safe",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts#safeDate -> artifacts/api-server/src/vault/domain/kyc-values.ts#safeDate",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts#USED_BY_KYC -> artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_BY_KYC",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts#USED_BY_VAULT -> artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_BY_VAULT",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts#USED_EXPR -> artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_EXPR",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts#KYC_DATA_ENTITY_OWNER_SENTINEL_NONE -> artifacts/api-server/src/vault/domain/kyc.ts#KYC_DATA_ENTITY_OWNER_SENTINEL_NONE",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts#kycDataEntityResource -> artifacts/api-server/src/vault/security/kyc-ownership.ts#kycDataEntityResource",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts#requireKycDataEntityOwnership -> artifacts/api-server/src/vault/security/kyc-ownership.ts#requireKycDataEntityOwnership"
+  ],
+  "consumers_migrated": [
+    "routes/exchange-api.ts",
+    "routes/projects.ts",
+    "routes/kyc.ts",
+    "routes/kyc-data-entities.ts"
+  ],
+  "old_business_symbols_remaining": [],
+  "duplicate_implementations": [],
+  "disposition_summary": {
+    "ADAPTER_WIRING": 4,
+    "MOVED_VERBATIM": 15,
+    "MOVED_REFACTORED_WITH_EXECUTED_PROOF": 1,
+    "ADAPTER_THIN": 13
+  },
+  "module_status": {
+    "routes/kyc.ts": "ADAPTER",
+    "routes/kyc-data-entities.ts": "ADAPTER",
+    "vault/{domain,security,application,infrastructure}/kyc*": "MIGRATED",
+    "components/kyc-entries.tsx + pages/user/vault-kyc-*.tsx": "DISCOVERED (UI adapters; client-side derivations deferred by name)",
+    "promotion_ceiling": "VERIFIED/RETIRED are withheld: GAP-15 (behavioral equivalence), GAP-16 (duplicate elimination) and GAP-17 (migration-map truth) have not run; the old routes are retained as the public HTTP adapters, so they are ADAPTER, not RETIRED.",
+    "assigned_by": "validator (this run), not manually"
+  },
+  "frontend": {
+    "files": [
+      {
+        "file": "artifacts/ayzen/src/components/kyc-entries.tsx",
+        "disposition": "UI_ADAPTER"
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx",
+        "disposition": "UI_ADAPTER_WITH_DEFERRED_DERIVATION"
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-detail.tsx",
+        "disposition": "UI_ADAPTER"
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-list.tsx",
+        "disposition": "UI_ADAPTER"
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-overview.tsx",
+        "disposition": "UI_ADAPTER"
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-unused.tsx",
+        "disposition": "UI_ADAPTER"
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-used.tsx",
+        "disposition": "UI_ADAPTER"
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+        "disposition": "UI_ADAPTER_WITH_DEFERRED_DERIVATION"
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx",
+        "disposition": "UI_ADAPTER"
+      }
+    ],
+    "residual_client_side_derivations_deferred": [
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx",
+        "symbol": "calcROI",
+        "deferred_to": "VLT-GAP-16",
+        "server_owner_exists": false
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+        "symbol": "KYC_HEALTH_CHECKS",
+        "deferred_to": "VLT-GAP-11",
+        "server_owner_exists": false
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+        "symbol": "kycHealthScore",
+        "deferred_to": "VLT-GAP-11",
+        "server_owner_exists": false
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+        "symbol": "healthColor",
+        "deferred_to": "VLT-GAP-11",
+        "server_owner_exists": false
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+        "symbol": "healthLabel",
+        "deferred_to": "VLT-GAP-11",
+        "server_owner_exists": false
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+        "symbol": "getRisks",
+        "deferred_to": "VLT-GAP-11",
+        "server_owner_exists": false
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+        "symbol": "calcAge",
+        "deferred_to": "VLT-GAP-16",
+        "server_owner_exists": false
+      }
+    ],
+    "deferral_detail": [
+      {
+        "symbol": "calcAge",
+        "deferred_to": "VLT-GAP-16",
+        "copies": 3,
+        "files": [
+          "artifacts/ayzen/src/components/local-accounts.tsx",
+          "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+          "artifacts/ayzen/src/pages/user/vault-local-detail.tsx"
+        ],
+        "distinct_bodies": 3
+      },
+      {
+        "symbol": "calcROI",
+        "deferred_to": "VLT-GAP-16",
+        "copies": 4,
+        "files": [
+          "artifacts/ayzen/src/components/local-accounts.tsx",
+          "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx",
+          "artifacts/ayzen/src/pages/user/vault-local-dashboard.tsx",
+          "artifacts/ayzen/src/pages/user/vault-local-detail.tsx"
+        ],
+        "distinct_bodies": 2
+      },
+      {
+        "symbol": "kycHealthScore",
+        "deferred_to": "VLT-GAP-11",
+        "copies": 1,
+        "files": [
+          "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+        ],
+        "distinct_bodies": 1
+      },
+      {
+        "symbol": "getRisks",
+        "deferred_to": "VLT-GAP-11",
+        "copies": 1,
+        "files": [
+          "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+        ],
+        "distinct_bodies": 1
+      },
+      {
+        "symbol": "KYC_HEALTH_CHECKS",
+        "deferred_to": "VLT-GAP-11",
+        "copies": 1,
+        "files": [
+          "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+        ],
+        "distinct_bodies": 1
+      },
+      {
+        "symbol": "healthLabel",
+        "deferred_to": "VLT-GAP-11",
+        "copies": 3,
+        "files": [
+          "artifacts/ayzen/src/components/vault/health-checklist.tsx",
+          "artifacts/ayzen/src/pages/user/vault-entity-detail.tsx",
+          "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+        ],
+        "distinct_bodies": 2
+      },
+      {
+        "symbol": "healthColor",
+        "deferred_to": "VLT-GAP-11",
+        "copies": 4,
+        "files": [
+          "artifacts/ayzen/src/components/finance/finance-insights.tsx",
+          "artifacts/ayzen/src/components/vault/health-checklist.tsx",
+          "artifacts/ayzen/src/pages/user/vault-entity-detail.tsx",
+          "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+        ],
+        "distinct_bodies": 2
+      }
+    ],
+    "server_owner_exists": {
+      "calcAge": false,
+      "calcROI": false,
+      "kycHealthScore": false,
+      "getRisks": false,
+      "KYC_HEALTH_CHECKS": false,
+      "healthLabel": false,
+      "healthColor": false
+    }
+  },
+  "deferred_consumers_from_03C": [
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "deferred_to": "VLT-GAP-11"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "deferred_to": "VLT-GAP-09"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "deferred_to": "VLT-GAP-09"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "deferred_to": "VLT-GAP-04"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/search.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "deferred_to": "VLT-GAP-10"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "deferred_to": "VLT-GAP-09"
+    },
+    {
+      "file": "scripts/src/reencrypt-vault.ts",
+      "deferred_to": "VLT-GAP-07"
+    }
+  ],
+  "summary": {
+    "old_route_thin_handlers": 13,
+    "old_route_total_handlers": 13,
+    "route_db_refs_before": 52,
+    "route_db_refs_after": 0,
+    "old_route_lines_before": 472,
+    "old_route_lines_after": 123,
+    "use_cases_verified": 13,
+    "symbols_moved": 16,
+    "differential_cases_03B": 64,
+    "mutation_self_tests": 60,
+    "mutation_self_tests_passed": 60,
+    "bypass_attempts_rejected": 7
+  },
+  "limitations": [
+    "Full tsc/build was NOT executed: project dependencies are not installed in the upload; a differential typecheck against the sealed baseline routes is used and recorded as degraded.",
+    "No git repository is present in the upload; evidence is bound to a source-tree hash instead of a commit SHA (commit_sha is null).",
+    "Behavioral equivalence runs against stubbed DB/provider/event layers, not a live database.",
+    "03-B cannot run on the current tree (03-C removed the compat re-export its security suite imports); it is executed on a temp copy reconstructed from the sealed 03-B-certified bytes of the eight files 03-C touched. Current-tree behavior is proven by 03-C's differential (re-executed) and this gate's own AST checks.",
+    "components/kyc-entries.tsx performs one read-only fetch to the Mail Hub email-accounts endpoint (not a KYC resource); it is the only raw fetch permitted and is AST-verified as GET without body.",
+    "Client-side KYC derivations remain in the UI and are NOT retired: kycHealthScore/getRisks/KYC_HEALTH_CHECKS/healthLabel/healthColor (deferred to VLT-GAP-11; no server owner exists yet) and calcAge/calcROI (deferred to VLT-GAP-16, duplicated across local-account and KYC pages). None feeds a request payload.",
+    "03-A cannot be re-executed on the extracted tree (it regenerates its own baseline and censuses the pre-extraction routes); its census is instead cross-checked line-by-line against an independent scan of the sealed baseline."
+  ],
+  "companion_evidence_sha256": {
+    "old-source-fingerprint.json": "2c1e81ab42c0e1844f6947621b9a30477d747f96eb3303d23aecf258116089a8",
+    "new-source-fingerprint.json": "6b3d75c1e5648999e9b6628abc7e3fd5d7480f1d5c5ccefdaea2dd271e12b6f3",
+    "route-thinness.json": "641315431f6504a96e6ca074eb8d45c323cbf7d1a2aa6258a4cf9f7d4b3c8744",
+    "duplicate-implementation.json": "b023842a90d6ef791b1481e7dee8810db9f768420d7715d970f73d29f886843b",
+    "behavior-regression.json": "b3b04977447e8dcb9fea4f4ee43beef332ca67080e6fe6c734a43f0de9eb1781",
+    "security-regression.json": "f3216a3ad173baf1cf767504bce03558859b276d0790ec1f94e6b8a5c9b4d137"
+  },
+  "checks": [
+    {
+      "name": "prerequisite:03-C-evidence-verifies-in-place",
+      "passed": true,
+      "details": "VLT-GAP-03-C evidence verified (source-tree-hash (no git repository available))\n"
+    },
+    {
+      "name": "prerequisite:03-C-re-executed-and-passed (consumer rewire, differential vs sealed 03-B consumers, mutation tests, CI lint)",
+      "passed": true,
+      "details": "VLT-GAP-03-C PASS — consumers=4 census=14 deferred=10 diff-cases=59 security=7 mutations=22/22 (16842ms)\n"
+    },
+    {
+      "name": "prerequisite:03-C-census-has-no-unclassified-table-access",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "prerequisite:03-C-deferrals-all-name-a-later-gap",
+      "passed": true,
+      "details": "VLT-GAP-12,VLT-GAP-12,VLT-GAP-11,VLT-GAP-09,VLT-GAP-09,VLT-GAP-04,VLT-GAP-12,VLT-GAP-10,VLT-GAP-09,VLT-GAP-07"
+    },
+    {
+      "name": "prerequisite:03-B-executed-and-produced-evidence (reconstructed 03-B-certified tree)",
+      "passed": true,
+      "details": "s/api-server/src/vault/application/kyc/enrollment.ts, artifacts/api-server/src/vault/application/kyc/exchange.ts, artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts\n"
+    },
+    {
+      "name": "prerequisite:03-B-every-check-passes-except-the-audit-of-files-03-C-added",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "prerequisite:03-B-differential-64-cases-all-identical (frozen OLD routes vs extracted tree, no skips)",
+      "passed": true,
+      "details": "{\"differential_cases\":64,\"differential_passed\":64,\"security_checks\":29,\"security_passed\":29,\"unit_parity\":4,\"unit_passed\":4,\"mutations_seeded\":18,\"mutations_detected\":18}"
+    },
+    {
+      "name": "prerequisite:03-B-security-unit-and-mutation-suites-complete",
+      "passed": true,
+      "details": "{\"differential_cases\":64,\"differential_passed\":64,\"security_checks\":29,\"security_passed\":29,\"unit_parity\":4,\"unit_passed\":4,\"mutations_seeded\":18,\"mutations_detected\":18}"
+    },
+    {
+      "name": "seal:tree-manifest-hash-matches-seal",
+      "passed": true,
+      "details": "tree-manifest.json edited after sealing"
+    },
+    {
+      "name": "seal:certified-by-03C-and-bound-to-fresh-03C-run",
+      "passed": true,
+      "details": "seal=676b2649160c fresh-03C=676b2649160c"
+    },
+    {
+      "name": "seal:earlier-validators-and-harness-byte-identical-since-freeze",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:no-unexpected-new-validator-scripts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:no-change-since-03C-seal (application source, frontend, configs, manifests all byte-identical)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:every-03A-pre-extraction-symbol-is-in-the-independent-scan (routes + 9 frontend files)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:scan-found-no-baseline-symbol-outside-the-03A-inventory",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:every-baseline-symbol-has-a-proven-disposition",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:no-business-symbol-remains-authoritative-in-old-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:all-13-route-handlers-are-thin-adapters",
+      "passed": true,
+      "details": "13/13 thin"
+    },
+    {
+      "name": "retirement:route-census-equals-baseline (no route added or dropped)",
+      "passed": true,
+      "details": "13 vs 13"
+    },
+    {
+      "name": "retirement:route-table-order-and-middleware-chains-identical-to-baseline",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:old-routes-have-zero-db-sql-crypto (measured)",
+      "passed": true,
+      "details": "[{\"baseline_lines\":287,\"current_lines\":66,\"baseline_db_refs\":32,\"current_db_refs\":0,\"baseline_sql_literals\":10,\"current_sql_literals\":0,\"baseline_tokens\":2269,\"current_tokens\":609},{\"baseline_lines\":185,\"current_lines\":57,\"baseline_db_refs\":20,\"current_db_refs\":0,\"baseline_sql_literals\":11,\"current_sql_literals\":0,\"baseline_tokens\":1498,\"current_tokens\":498}]"
+    },
+    {
+      "name": "retirement:old-routes-only-import-adapter-dependencies",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "compat:reexports-removed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:ownership-and-deny-gates-are-imported-from-vault-security (no local or legacy copy)",
+      "passed": true,
+      "details": "[[{\"gate\":\"requireKycEntryOwnership\",\"imported_from\":\"../vault/security/kyc-ownership\",\"exported_by_owner\":true},{\"gate\":\"denyKycNotFound\",\"imported_from\":\"../vault/security/kyc-ownership\",\"exported_by_owner\":true},{\"gate\":\"denyKycNotFoundOrForbidden\",\"imported_from\":\"../vault/security/kyc-ownership\",\"exported_by_owner\":true},{\"gate\":\"denyKycSilentSuccess\",\"imported_from\":\"../vault/security/kyc-ownership\",\"exported_by_owner\":true}],[{\"gate\":\"requireKycDataEntityOwnership\",\"imported_from\":\"../vault/security/kyc-ownership\",\"exported_by_owner\":true},{\"gate\":\"denyKycNotFound\",\"imported_from\":\"../vault/security/kyc-ownership\",\"exported_by_owner\":true},{\"gate\":\"denyKycNotFoundOrForbidden\",\"imported_from\":\"../vault/security/kyc-ownership\",\"exported_by_owner\":true},{\"gate\":\"denyKycSilentSuccess\",\"imported_from\":\"../vault/security/kyc-ownership\",\"exported_by_owner\":true}]]"
+    },
+    {
+      "name": "retirement:every-delegate-target-is-an-exported-executable-use-case",
+      "passed": true,
+      "details": "13 use-cases"
+    },
+    {
+      "name": "retirement:every-non-verbatim-move-has-executed-proof-from-the-reconstructed-03B-run",
+      "passed": true,
+      "details": "16/16 moved"
+    },
+    {
+      "name": "retirement:03B-move-claims-equal-the-declared-move-table",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:status-vocabulary-owned-by-domain-and-used-by-application",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "imports:no-hidden-import-keeps-old-code-authoritative",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "duplicates:no-copy-of-extracted-implementation-added-outside-owner",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-moved-sql-added-outside-repositories",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:every-pre-existing-sql-overlap-is-a-named-03C-deferral",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-baseline-implementation-survives-in-old-routes",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-two-owner-modules-implement-the-same-function",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:fingerprint-corpus-is-non-trivial",
+      "passed": true,
+      "details": "22 baseline / 55 owner fingerprints"
+    },
+    {
+      "name": "layering:owner-modules-do-not-reach-the-API-layer-or-bypass-repositories",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "frontend:files-classified-unchanged-and-free-of-db-sql-crypto-and-raw-provider-calls",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "frontend:every-kyc-api-call-resolves-to-a-registered-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "frontend:client-side-derivation-deferrals-are-current-and-name-a-later-gap",
+      "passed": true,
+      "details": "[{\"symbol\":\"calcAge\",\"deferred_to\":\"VLT-GAP-16\",\"copies\":3,\"files\":[\"artifacts/ayzen/src/components/local-accounts.tsx\",\"artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx\",\"artifacts/ayzen/src/pages/user/vault-local-detail.tsx\"],\"distinct_bodies\":3},{\"symbol\":\"calcROI\",\"deferred_to\":\"VLT-GAP-16\",\"copies\":4,\"files\":[\"artifacts/ayzen/src/components/local-accounts.tsx\",\"artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx\",\"artifacts/ayzen/src/pages/user/vault-local-dashboard.tsx\",\"artifacts/ayzen/src/pages/user/vault-local-detail.tsx\"],\"distinct_bodies\":2},{\"symbol\":\"kycHealthScore\",\"deferred_to\":\"VLT-GAP-11\",\"copies\":1,\"files\":[\"artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx\"],\"distinct_bodies\":1},{\"symbol\":\"getRisks\",\"deferred_to\":\"VLT-GAP-11\",\"copies\":1,\"files\":[\"artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx\"],\"distinct_bodies\":1},{\"symbol\":\"KYC_HEALTH_CHECKS\",\"deferred_to\":\"VLT-GAP-11\",\"copies\":1,\"files\":[\"artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx\"],\"distinct_bodies\":1},{\"symbol\":\"healthLabel\",\"deferred_to\":\"VLT-GAP-11\",\"copies\":3,\"files\":[\"artifacts/ayzen/src/components/vault/health-checklist.tsx\",\"artifacts/ayzen/src/pages/user/vault-entity-detail.tsx\",\"artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx\"],\"distinct_bodies\":2},{\"symbol\":\"healthColor\",\"deferred_to\":\"VLT-GAP-11\",\"copies\":4,\"files\":[\"artifacts/ayzen/src/components/finance/finance-insights.tsx\",\"artifacts/ayzen/src/components/vault/health-checklist.tsx\",\"artifacts/ayzen/src/pages/user/vault-entity-detail.tsx\",\"artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx\"],\"distinct_bodies\":2}]"
+    },
+    {
+      "name": "typecheck:no-syntax-errors-in-route-or-owner-files",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-real-class-diagnostics-vs-baseline-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-query-in-kyc-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-query-in-data-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:decision-tree-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:if-branch-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-c1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:altered-response-mapping-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-c2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:non-canonical-response-mapping-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-e",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-import-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-ownership-middleware-kyc-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-ownership-middleware-data-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-deny-behavior-on-delete-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f5",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unresolvable-deny-handler-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-credit-middleware-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-g",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:route-reorder-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:compat-reexport-restored-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-listKycEntries-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-createKycDataEntity-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:hidden-import-of-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:compat-import-of-ownership-gate-from-old-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dynamic-import-of-old-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-copy-outside-vault-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-l",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:moved-sql-pasted-outside-repository-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-routes-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:express-runtime-import-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:req-res-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:domain-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:infrastructure-importing-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:sql-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:provider-call-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-n1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mail-read-exception-cannot-be-widened-to-a-write",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unknown-kyc-endpoint-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:display-roi-feeding-request-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:client-health-score-feeding-request-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unclassified-ui-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:modified-ui-file-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-n2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:stale-deferral-is-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ownership-gate-from-wrong-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:tampered-seal-manifest-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:refactored-move-without-executed-proof-is-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:coverage-at-least-40-mutations-executed",
+      "passed": true,
+      "details": "60"
+    },
+    {
+      "name": "bypass:every-bypass-attempt-is-rejected-by-the-validator-itself",
+      "passed": true,
+      "details": "[]"
+    }
+  ],
+  "status": "PASS",
+  "evidence_body_sha256": "505b465fec08255a84cd81e84048416e3a652de8bec3d18929da0c47cbf45cb0",
+  "generated_at": "2026-09-30T10:48:29.070Z"
+}

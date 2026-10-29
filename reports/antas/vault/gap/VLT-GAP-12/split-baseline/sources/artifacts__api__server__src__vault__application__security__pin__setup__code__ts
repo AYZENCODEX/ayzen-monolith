@@ -1,0 +1,58 @@
+import { db, usersTable } from "@workspace/db";
+import { eq } from "drizzle-orm";
+import { generateOtp, storeOtp } from "../../../lib/otp-store";
+import { sendEmail } from "../../../lib/email";
+
+export interface VaultSecurityResult { status: number; body: unknown }
+
+// OTP store key for the Vault Security PIN's mandatory setup/change email
+// code — namespaced separately from every other otp-store key (account
+// signup/login codes, password reset, step-up) so a code issued for one
+// can never be replayed against another. Also used by pin.ts to verify the
+// code on PUT /vault/security/pin (kind="vault").
+export function vaultPinOtpKey(userId: number): string {
+  return `vault-pin-setup:${userId}`;
+}
+
+/**
+ * POST /vault/security/pin/request-code — step 1 of setting/changing the
+ * mandatory Vault Security PIN. Moved unchanged from routes/vault-security.ts
+ * (VLT-GAP-06-B), including the email template.
+ */
+export async function sendVaultPinSetupCode(userId: number): Promise<VaultSecurityResult> {
+  const [user] = await db.select({ email: usersTable.email }).from(usersTable).where(eq(usersTable.id, userId)).limit(1);
+  if (!user) return { status: 404, body: { error: "User not found" } };
+
+  const code = generateOtp();
+  await storeOtp(vaultPinOtpKey(userId), code);
+
+  const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><style>
+  body{margin:0;padding:0;background:#0a0d12;font-family:'Courier New',monospace;color:#e0f7f7;}
+  .wrap{max-width:520px;margin:40px auto;background:#0d1117;border:1px solid #1a3a3a;border-radius:8px;overflow:hidden;}
+  .header{padding:24px 32px;border-bottom:1px solid #1a3a3a;background:#070a0f;}
+  .logo{font-size:20px;font-weight:bold;letter-spacing:4px;color:#00d4cc;}
+  .sub{font-size:10px;letter-spacing:3px;color:#4a8080;margin-top:4px;text-transform:uppercase;}
+  .body{padding:32px;}
+  h2{color:#00d4cc;font-size:16px;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;}
+  p{color:#a0c8c8;font-size:13px;line-height:1.7;margin:0 0 12px;}
+  .otp{display:block;font-size:36px;font-weight:bold;letter-spacing:12px;color:#00d4cc;margin:24px 0;text-align:center;background:#070a0f;padding:20px;border-radius:6px;border:1px solid #1a3a3a;}
+  .footer{padding:20px 32px;border-top:1px solid #1a3a3a;font-size:10px;color:#2a5050;letter-spacing:1px;}
+</style></head>
+<body><div class="wrap">
+  <div class="header"><div class="logo">&gt;_ AYZEN</div><div class="sub">Vault Security</div></div>
+  <div class="body">
+    <h2>Vault PIN Setup Code</h2>
+    <p>Use this code to set or change your Vault Security PIN:</p>
+    <span class="otp">${code}</span>
+    <p>This code expires in <strong>10 minutes</strong>. If you didn't request this, secure your account immediately.</p>
+  </div>
+  <div class="footer">&copy; 2026 AYZEN &mdash; Vault Security PIN setup.</div>
+</div></body></html>`;
+
+  const result = await sendEmail({ to: user.email, subject: "AYZEN — Vault PIN Setup Code", html, text: `Your Vault PIN setup code: ${code} (expires in 10 minutes)` });
+  if (!result.success) {
+    return { status: 503, body: { error: "Failed to send email. Please check email config.", detail: result.error } };
+  }
+  return { status: 200, body: { message: "Verification code sent to your email." } };
+}

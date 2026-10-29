@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "runtime": "managed-container",
+  "provider": "provider-input",
+  "costPolicy": {
+    "allowSharedRuntime": true,
+    "scaleToZeroAllowedFor": ["preview", "staging", "search", "intelligence"],
+    "neverAssumeOneServerPerService": true
+  },
+  "network": {
+    "publicWorkloads": ["api-gateway", "telegram-gateway"],
+    "privateWorkloads": ["monolith", "event-worker", "identity", "finance", "vault", "mail", "notification", "workflow", "ai-agent", "marketplace", "search", "intelligence", "admin"],
+    "internalTrafficRequiresServiceAuth": true
+  },
+  "coLocatedGroups": [
+    {
+      "name": "core-runtime",
+      "workloads": ["api-gateway", "monolith", "event-worker", "telegram-gateway"],
+      "reason": "Reference deployment unit for low-cost staging and initial cloud rollout"
+    },
+    {
+      "name": "domain-runtime",
+      "workloads": ["identity", "finance", "vault", "mail", "notification", "workflow", "ai-agent", "marketplace", "search", "intelligence", "admin"],
+      "reason": "Logical service isolation with shared managed compute until measured scaling requires separation"
+    }
+  ],
+  "requiredPerWorkload": ["owner", "imageDigest", "port", "health", "readiness", "secrets", "rollback", "logs"],
+  "promotion": {
+    "buildOncePromoteDigest": true,
+    "stagingBeforeProduction": true,
+    "approvalBeforeProduction": true,
+    "failedHealthCheckBlocksPromotion": true
+  }
+}

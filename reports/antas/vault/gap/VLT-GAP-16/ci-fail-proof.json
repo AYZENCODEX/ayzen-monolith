@@ -1,0 +1,129 @@
+{
+  "gap": "VLT-GAP-16",
+  "kind": "intentional-duplicate-self-test",
+  "cases": [
+    {
+      "case": "D1 renamed duplicate",
+      "expected": [
+        "D1-duplicate-implementation"
+      ],
+      "caught": [
+        "D1-duplicate-implementation"
+      ],
+      "ok": true
+    },
+    {
+      "case": "D1 literal change is not a duplicate",
+      "expected": [],
+      "caught": [],
+      "ok": true
+    },
+    {
+      "case": "L2 legacy file owns logic",
+      "expected": [
+        "L2-legacy-source-of-truth"
+      ],
+      "caught": [
+        "L2-legacy-source-of-truth"
+      ],
+      "ok": true
+    },
+    {
+      "case": "L2 unlisted shim",
+      "expected": [
+        "L2-legacy-source-of-truth"
+      ],
+      "caught": [
+        "L2-legacy-source-of-truth"
+      ],
+      "ok": true
+    },
+    {
+      "case": "L1 consumer of logic-owning legacy",
+      "expected": [
+        "L1-unexpected-legacy-consumer",
+        "L2-legacy-source-of-truth"
+      ],
+      "caught": [
+        "L2-legacy-source-of-truth",
+        "L1-unexpected-legacy-consumer"
+      ],
+      "ok": true
+    },
+    {
+      "case": "C1 inline cipher",
+      "expected": [
+        "C1-duplicate-crypto-logic"
+      ],
+      "caught": [
+        "C1-duplicate-crypto-logic"
+      ],
+      "ok": true
+    },
+    {
+      "case": "S1 inline timing-safe compare",
+      "expected": [
+        "S1-duplicate-security-logic"
+      ],
+      "caught": [
+        "S1-duplicate-security-logic"
+      ],
+      "ok": true
+    },
+    {
+      "case": "S1 approved shared-owner import is not duplication",
+      "expected": [],
+      "caught": [],
+      "ok": true
+    },
+    {
+      "case": "S1 aliased approved-owner import is not duplication",
+      "expected": [],
+      "caught": [],
+      "ok": true
+    },
+    {
+      "case": "S1 unlisted scrypt",
+      "expected": [
+        "S1-duplicate-security-logic"
+      ],
+      "caught": [
+        "S1-duplicate-security-logic"
+      ],
+      "ok": true
+    },
+    {
+      "case": "S1 allowlisted primitive over its cap",
+      "expected": [
+        "S1-duplicate-security-logic"
+      ],
+      "caught": [
+        "S1-duplicate-security-logic"
+      ],
+      "ok": true
+    },
+    {
+      "case": "L1 allowed shim gains a consumer",
+      "expected": [
+        "L1-unexpected-legacy-consumer"
+      ],
+      "caught": [
+        "L1-unexpected-legacy-consumer"
+      ],
+      "ok": true
+    },
+    {
+      "case": "allowed zero-consumer shim is accepted",
+      "expected": [],
+      "caught": [],
+      "ok": true
+    },
+    {
+      "case": "clean tree",
+      "expected": [],
+      "caught": [],
+      "ok": true
+    }
+  ],
+  "status": "PASS"
+}

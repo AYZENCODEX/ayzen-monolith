@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "AYZEN ZIOX Public Production Readiness",
+  "phase": "J",
+  "name": "Public Production Gate",
+  "generatedAt": "2026-09-29T06:08:00.194Z",
+  "status": "PASS",
+  "implementation": "complete",
+  "subphases": [
+    "J1",
+    "J2",
+    "J3",
+    "J4",
+    "J5",
+    "J6",
+    "J7",
+    "J8",
+    "J9",
+    "J10",
+    "J11",
+    "J12"
+  ],
+  "checks": [
+    {
+      "id": "J1",
+      "description": "Full validator sweep has run",
+      "status": "PASS",
+      "phaseStatuses": {
+        "A": "PASS",
+        "B": "PASS",
+        "C": "PASS",
+        "D": "PASS",
+        "E": "PASS",
+        "F": "PASS",
+        "G": "PASS",
+        "H": "PASS",
+        "I": "PASS"
+      }
+    },
+    {
+      "id": "J2",
+      "description": "No unresolved critical blocker",
+      "status": "PASS",
+      "blockerCount": 0
+    },
+    {
+      "id": "J3",
+      "description": "Final security evidence contract exists",
+      "status": "PASS",
+      "required": [
+        "docs/security/security-model.md",
+        "docs/security/tenant-isolation.md",
+        "docs/security/audit-integrity.md"
+      ],
+      "missing": []
+    },
+    {
+      "id": "J4",
+      "description": "Final data safety evidence contract exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/backup-restore-runbook.md",
+        "docs/operations/migration-runbook.md",
+        "docs/operations/rollback-runbook.md"
+      ],
+      "missing": []
+    },
+    {
+      "id": "J5",
+      "description": "Final runtime evidence contract exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/runtime-recovery-runbook.md",
+        "config/resilience/defaults.json"
+      ],
+      "missing": []
+    },
+    {
+      "id": "J6",
+      "description": "Final observability evidence contract exists",
+      "status": "PASS",
+      "required": [
+        "config/observability/coverage.json",
+        "infrastructure/monitoring/prometheus.yml",
+        "infrastructure/monitoring/alerts.yml"
+      ],
+      "missing": []
+    },
+    {
+      "id": "J7",
+      "description": "Final performance evidence contract exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/performance-baseline.md",
+        "docs/operations/capacity-plan.md"
+      ],
+      "missing": []
+    },
+    {
+      "id": "J8",
+      "description": "Final E2E evidence contract exists",
+      "status": "PASS",
+      "required": [
+        "tests/e2e/shared-platform/README.md",
+        "reports/product-readiness/phase-1-40.json"
+      ],
+      "missing": []
+    },
+    {
+      "id": "J9",
+      "description": "Go-live checklist exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/go-live-checklist.md"
+      ],
+      "missing": []
+    },
+    {
+      "id": "J10",
+      "description": "Canary launch contract exists",
+      "status": "PASS",
+      "required": [
+        "infrastructure/deployment/promotion-policy.json",
+        "docs/operations/deployment-runbook.md"
+      ],
+      "missing": []
+    },
+    {
+      "id": "J11",
+      "description": "Post-launch verification contract exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/production-runbook.md",
+        "docs/operations/go-live-checklist.md"
+      ],
+      "missing": []
+    },
+    {
+      "id": "J12",
+      "description": "ZIOX final certification",
+      "status": "PASS",
+      "blockerCount": 0
+    }
+  ],
+  "failures": [],
+  "evidence": {
+    "sourceDocument": "attached_assets/AYZEN_ZIOX_Public_Production_Readiness_Roadmap_1790636953669.md",
+    "validator": "scripts/validate-ziox.mjs"
+  }
+}

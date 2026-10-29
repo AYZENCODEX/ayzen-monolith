@@ -1,0 +1,21 @@
+{
+  "name": "@ayzen/service-runtime",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@ayzen/auth-client": "workspace:*",
+    "@ayzen/authorization": "workspace:*",
+    "@ayzen/policy-service": "workspace:*",
+    "@ayzen/rate-limit": "workspace:*",
+    "@ayzen/service-state": "workspace:*",
+    "@ayzen/security": "workspace:*",
+    "@ayzen/tracing": "workspace:*"
+  },
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}

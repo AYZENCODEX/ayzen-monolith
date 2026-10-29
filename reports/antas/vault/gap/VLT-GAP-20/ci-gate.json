@@ -1,0 +1,456 @@
+{
+  "gap": "VLT-GAP-20",
+  "sub": "VLT-GAP-20-D",
+  "stage": "ci-gate",
+  "checked_at": "2026-10-11T11:33:18.931Z",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "5c3f5b1db957e88c91c93894199fcab7bea87d5e38220bbb05b3d8debb569eae",
+  "duration_ms": 345744,
+  "real_gate": {
+    "status": "PASS",
+    "cells_profiled": 663,
+    "statements": {
+      "old": 855,
+      "current": 855
+    },
+    "regressions": {
+      "more_queries": 0,
+      "new_query_shapes": 0,
+      "more_boundary_calls": 0,
+      "n_plus_one_introduced": 0,
+      "n_plus_one_worsened": 0,
+      "violations": 0
+    },
+    "pre_existing_n_plus_one": [
+      "entity-secret: DELETE /vault/trash",
+      "entity-secret: POST /vault/health-check"
+    ]
+  },
+  "scope": {
+    "groups": [
+      "entity-secret",
+      "local-account",
+      "kyc",
+      "game-marketplace",
+      "security-access",
+      "backup-restore",
+      "snapshot-trash",
+      "share-attachment"
+    ],
+    "route_files": [
+      {
+        "file": "routes/game-entries.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/kyc-data-entities.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/kyc.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/local-accounts.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/marketplace-game.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-attachments.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-backup-cloud.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-backup-key.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-backup-schedule.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-entity-links.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-migration.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-reauth.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-security.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-shares.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault-snapshot.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      },
+      {
+        "file": "routes/vault.ts",
+        "in_perf_scope": true,
+        "exclusion": null
+      }
+    ],
+    "pins": {
+      "timing_max": {
+        "p50_factor": 1.5,
+        "p95_factor": 1.5,
+        "p99_factor": 2,
+        "total_factor": 1.35,
+        "abs_slack_ms": 2,
+        "p99_abs_slack_ms": 10,
+        "total_abs_slack_ms": 5,
+        "retries": 2
+      },
+      "min_reps": 5,
+      "required_scenarios": [
+        "row-db",
+        "row-db-two-rows",
+        "row-db-linked",
+        "row-db-import"
+      ],
+      "max_intentional_changes": 0,
+      "max_unmeasurable_routes": 1,
+      "route_groups_expected": [
+        "entity-secret",
+        "local-account",
+        "kyc",
+        "game-marketplace",
+        "security-access",
+        "backup-restore",
+        "snapshot-trash",
+        "share-attachment"
+      ],
+      "scenario_groups": {
+        "row-db-linked": [
+          "kyc",
+          "entity-secret",
+          "snapshot-trash"
+        ],
+        "row-db-import": [
+          "migration"
+        ]
+      },
+      "current_only_groups": {
+        "migration": [
+          "routes/vault-migration.ts"
+        ]
+      }
+    }
+  },
+  "planted_regressions": [
+    {
+      "id": "Q1-extra-query",
+      "what": "GET /kyc-entries/:id runs its select twice",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V2_MORE_QUERIES"
+      ],
+      "reported_rules": [
+        "V2_MORE_QUERIES",
+        "V3_NEW_QUERY_SHAPE",
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 44.3
+    },
+    {
+      "id": "Q2-n-plus-one",
+      "what": "GET /kyc-entries re-reads every row one by one",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V2_MORE_QUERIES",
+        "V5_N_PLUS_ONE_INTRODUCED"
+      ],
+      "reported_rules": [
+        "V2_MORE_QUERIES",
+        "V3_NEW_QUERY_SHAPE",
+        "V6_BASELINE_DRIFT",
+        "V5_N_PLUS_ONE_INTRODUCED",
+        "mutation"
+      ],
+      "seconds": 44.6
+    },
+    {
+      "id": "Q3-extra-boundary-call",
+      "what": "GET /kyc-entries/:id charges credits twice",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V4_MORE_BOUNDARY_CALLS"
+      ],
+      "reported_rules": [
+        "V4_MORE_BOUNDARY_CALLS",
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 44.9
+    },
+    {
+      "id": "Q4-extra-decrypt",
+      "what": "GET /kyc-entries decrypts the rows twice",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V4_MORE_BOUNDARY_CALLS"
+      ],
+      "reported_rules": [
+        "V4_MORE_BOUNDARY_CALLS",
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 42.3
+    },
+    {
+      "id": "Q5-route-dropped",
+      "what": "GET /kyc-entries no longer served on that path",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V1_ROUTE_MISSING"
+      ],
+      "reported_rules": [
+        "V1_ROUTE_MISSING",
+        "mutation"
+      ],
+      "seconds": 43.8
+    },
+    {
+      "id": "Q6-latency",
+      "what": "GET /kyc-entries spins 40ms on every call",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V7_LATENCY_TOTAL"
+      ],
+      "reported_rules": [
+        "V7_LATENCY_P95",
+        "V7_LATENCY_P99",
+        "V7_LATENCY_TOTAL",
+        "mutation"
+      ],
+      "seconds": 104.9
+    },
+    {
+      "id": "Q7-silent-improvement",
+      "what": "a charge call is removed: fewer calls than the capture must NOT pass silently",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V6_BASELINE_DRIFT"
+      ],
+      "reported_rules": [
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 39
+    },
+    {
+      "id": "Q8-local-account",
+      "what": "GET /local-accounts runs its select twice (second group)",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V2_MORE_QUERIES"
+      ],
+      "reported_rules": [
+        "V2_MORE_QUERIES",
+        "V3_NEW_QUERY_SHAPE",
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 38.4
+    },
+    {
+      "id": "Q9-entity",
+      "what": "GET /vault runs its select twice (third group)",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V2_MORE_QUERIES"
+      ],
+      "reported_rules": [
+        "V2_MORE_QUERIES",
+        "V3_NEW_QUERY_SHAPE",
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 39
+    },
+    {
+      "id": "L1-linked-branch",
+      "what": "extra query inside the `row.data_entity_id` re-read branch of POST /kyc-entries (formerly an unreached blind spot)",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V2_MORE_QUERIES",
+        "V6_BASELINE_DRIFT"
+      ],
+      "reported_rules": [
+        "V2_MORE_QUERIES",
+        "V3_NEW_QUERY_SHAPE",
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 39
+    },
+    {
+      "id": "M1-migration-export-extra-query",
+      "what": "GET /vault/export selects twice (current-only group: no OLD side, only drift)",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V6_BASELINE_DRIFT"
+      ],
+      "reported_rules": [
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 34.5
+    },
+    {
+      "id": "M2-migration-import-extra-insert",
+      "what": "POST /vault/import inserts every entry twice",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V6_BASELINE_DRIFT"
+      ],
+      "reported_rules": [
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 39.4
+    },
+    {
+      "id": "M3-migration-route-dropped",
+      "what": "GET /vault/export removed from both sides: a captured cell must not vanish silently",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V6_BASELINE_DRIFT"
+      ],
+      "reported_rules": [
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 39.5
+    },
+    {
+      "id": "G1-tolerance-loosened",
+      "what": "p95/p99/total tolerances raised to hide a slowdown without re-capturing",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "capture-stale"
+      ],
+      "reported_rules": [
+        "capture-stale"
+      ],
+      "seconds": 34.4
+    },
+    {
+      "id": "G2-capture-hand-edited",
+      "what": "baseline.json edited by hand to match a planted extra query",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [
+        "V6_BASELINE_DRIFT"
+      ],
+      "reported_rules": [
+        "V2_MORE_QUERIES",
+        "V3_NEW_QUERY_SHAPE",
+        "V6_BASELINE_DRIFT",
+        "mutation"
+      ],
+      "seconds": 34.8
+    },
+    {
+      "id": "G3-capture-deleted",
+      "what": "baseline.json deleted: the gate must fail closed, not skip",
+      "caught": true,
+      "exit_code": 1,
+      "expected_rules": [],
+      "reported_rules": [],
+      "seconds": 0.8
+    }
+  ],
+  "negative_controls": [
+    {
+      "id": "N1-unmodified-copy",
+      "what": "unmodified copy of the real tree",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 33.7
+    },
+    {
+      "id": "N2-behaviour-preserving-edit",
+      "what": "comment + dead local added to GET /kyc-entries (no query, call or route change)",
+      "passed": true,
+      "exit_code": 0,
+      "seconds": 33.6
+    }
+  ],
+  "bypass_attempts": [
+    {
+      "attempt": "flag --force",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "flag --skip-validation",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "env VALIDATION_DISABLED=true",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "env VAULT_BYPASS=1",
+      "exit_code": 1,
+      "rejected": true
+    }
+  ],
+  "open_residuals": [
+    "routes/vault-migration.ts has no frozen pre-extraction original, so it is profiled CURRENT-ONLY (pinned in vault-perf.json + this gate): drift and vanished routes are caught (M1-M3), but OLD-vs-current parity cannot be proven for it.",
+    "Branches gated on request/row data the scenarios do not provide are still unprofiled; data_entity_id (kyc, entity-secret, snapshot-trash) is now covered by the perf-only row-db-linked scenario.",
+    "Counts are exact for exercised paths; latency is in-memory code-path cost, not Postgres. Plant Q6 proves a 40ms slowdown is seen, not that a 5% one is.",
+    "GET /vault/gas-overview never answers under the replay fakes (identical OLD/current, declared in allowed_unmeasurable) and the db-throws scenario is not profiled.",
+    "Pre-existing per-row query loops (DELETE /vault/trash, POST /vault/health-check) are unchanged by the extraction and are a performance backlog, not gated here."
+  ],
+  "errors": [],
+  "status": "PASS"
+}

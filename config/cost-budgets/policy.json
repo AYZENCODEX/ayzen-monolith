@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "currency": "provider-metered",
+  "budgets": {"api-gateway": 100, "event-fabric": 250, "workflow-runtime": 250, "notification": 100},
+  "duplicatePhysicalEngine": "block",
+  "anomalyAction": "create-technical-gap"
+}

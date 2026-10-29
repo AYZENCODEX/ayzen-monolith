@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "workstream": "cloud-compute-fabric",
+  "environmentSchema": "infrastructure/deployment/environment.schema.json",
+  "runtimeDefinition": "infrastructure/deployment/runtime-definition.json",
+  "serviceCatalog": "infrastructure/deployment/service-catalog.json",
+  "topology": "infrastructure/deployment/topology.yaml",
+  "workers": "infrastructure/platform/worker-pools.json",
+  "eventAndWorkflowContracts": [
+    "infrastructure/platform/event-taxonomy.json",
+    "infrastructure/platform/workflow-registry.json"
+  ],
+  "security": {
+    "secrets": "workspace-secret-manager-or-provider-secret-manager",
+    "network": "private-workloads-require-service-auth",
+    "environmentIsolation": "staging-before-production"
+  },
+  "resilience": {
+    "scaling": "measured-queue-age-and-utilization",
+    "promotion": "build-once-promote-digest",
+    "observability": "infrastructure/platform/runtime-execution-graph.json",
+    "backup": "infrastructure/platform/backup-policy.json"
+  },
+  "providerState": "contracts-and-gates-present-provider-backed-deployment-remains-environment-specific"
+}

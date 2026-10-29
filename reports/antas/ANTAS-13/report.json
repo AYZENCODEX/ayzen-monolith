@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": "ANTAS-13",
+  "name": "Disaster Recovery / Business Continuity",
+  "owner": "platform",
+  "priority": "P0",
+  "generatedAt": "2026-09-29T06:06:07.462Z",
+  "status": "PASS",
+  "required": 5,
+  "passed": 5,
+  "failed": 0,
+  "waived": 0,
+  "criticalFailures": 0,
+  "productionReady": false,
+  "externalGates": [
+    {
+      "gate": "destructive staging restore",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "measured RTO/RPO",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "findings": [],
+  "note": "PASS means repository evidence and static controls are present; it does not certify runtime or production behavior."
+}

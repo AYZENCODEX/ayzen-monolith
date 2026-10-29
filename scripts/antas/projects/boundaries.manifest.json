@@ -1,0 +1,1255 @@
+{
+  "schemaVersion": 1,
+  "phase": "PRJ-01",
+  "title": "Projects module boundaries and cross-module contract",
+  "sources": {
+    "routes": [
+      "artifacts/api-server/src/routes/projects.ts",
+      "artifacts/api-server/src/routes/project-dates.ts",
+      "artifacts/api-server/src/routes/project-templates.ts"
+    ],
+    "routeIndex": "artifacts/api-server/src/routes/index.ts",
+    "moduleRoot": "artifacts/api-server/src/projects",
+    "expectedRouteCounts": {
+      "projects": 34,
+      "project-dates": 5,
+      "project-templates": 8
+    }
+  },
+  "tableOwnership": {
+    "projects": {
+      "projects": [
+        "projectsTable"
+      ],
+      "user_projects": [
+        "userProjectsTable"
+      ],
+      "project_enrollments": [
+        "projectEnrollmentsTable"
+      ],
+      "entity_project_roi": [
+        "entityProjectRoiTable"
+      ],
+      "project_ratings": [
+        "projectRatingsTable"
+      ],
+      "project_dates": [
+        "projectDatesTable"
+      ],
+      "project_pnl_receipts": [
+        "projectPnlReceiptsTable"
+      ],
+      "ayzen_project_templates": [
+        "projectTemplatesTable"
+      ]
+    },
+    "vault": {
+      "vault_entries": [
+        "vaultEntriesTable"
+      ]
+    },
+    "finance": {
+      "finance_ledger_entries": [
+        "financeLedgerEntriesTable"
+      ]
+    },
+    "unmodularized-siblings": {
+      "tasks": [
+        "tasksTable"
+      ],
+      "task_submissions": [
+        "taskSubmissionsTable"
+      ],
+      "users": [
+        "usersTable"
+      ]
+    }
+  },
+  "routeOwners": [
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/entity/:vaultEntryId/overview",
+      "owner": "application/entity-overview.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/enrolled",
+      "owner": "application/enrollment-overview.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id/enrolled-entities",
+      "owner": "application/enrollment-overview.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/entity-leaderboard",
+      "owner": "application/entity-overview.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects",
+      "owner": "application/projects.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "POST",
+      "path": "/projects",
+      "owner": "application/projects.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id",
+      "owner": "application/projects.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "PATCH",
+      "path": "/projects/:id",
+      "owner": "application/projects.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "DELETE",
+      "path": "/projects/:id",
+      "owner": "application/projects.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "POST",
+      "path": "/projects/:id/join",
+      "owner": "application/enrollment.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "POST",
+      "path": "/projects/:id/enroll",
+      "owner": "application/enrollment.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "PATCH",
+      "path": "/projects/:id/enrollments/:enrollmentId/status",
+      "owner": "application/enrollment.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/admin/projects/:id/entity-enrollments",
+      "owner": "application/enrollment.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id/enrollments",
+      "owner": "application/enrollment.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/mine/enrolled",
+      "owner": "application/enrollment-overview.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/mine/enrolled-entities",
+      "owner": "application/enrollment-overview.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/mine/overview",
+      "owner": "application/enrollment-overview.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/mine/entities-overview",
+      "owner": "application/enrollment-overview.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id/enrollments/overview",
+      "owner": "application/enrollment-overview.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "DELETE",
+      "path": "/projects/:id/enrollments/:enrollmentId",
+      "owner": "application/enrollment.ts",
+      "pepOwner": "security/enrollment-ownership.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/enrollments/:enrollmentId/activity",
+      "owner": "application/enrollment.ts",
+      "pepOwner": "security/enrollment-ownership.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id/members",
+      "owner": "application/members.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id/stats",
+      "owner": "application/members.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id/entity-tasks",
+      "owner": "application/members.ts",
+      "extractedIn": "PRJ-05"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id/ratings",
+      "owner": "application/ratings.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id/ratings/me",
+      "owner": "application/ratings.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "POST",
+      "path": "/projects/:id/ratings",
+      "owner": "application/ratings.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "DELETE",
+      "path": "/projects/:id/ratings/me",
+      "owner": "application/ratings.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "DELETE",
+      "path": "/admin/projects/:id/ratings/:ratingId",
+      "owner": "application/ratings.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/:id/roi-summary",
+      "owner": "application/roi-receipts.ts",
+      "extractedIn": "PRJ-04"
+    },
+    {
+      "file": "projects",
+      "method": "POST",
+      "path": "/projects/:id/pnl-receipt",
+      "owner": "application/roi-receipts.ts",
+      "extractedIn": "PRJ-04"
+    },
+    {
+      "file": "projects",
+      "method": "DELETE",
+      "path": "/projects/:id/pnl-receipt",
+      "owner": "application/roi-receipts.ts",
+      "extractedIn": "PRJ-04"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/pnl-receipt/:token",
+      "owner": "application/roi-receipts.ts",
+      "extractedIn": "PRJ-04"
+    },
+    {
+      "file": "projects",
+      "method": "GET",
+      "path": "/projects/pnl-receipt/:token/pdf",
+      "owner": "application/roi-receipts.ts",
+      "extractedIn": "PRJ-04"
+    },
+    {
+      "file": "project-dates",
+      "method": "GET",
+      "path": "/project-dates",
+      "owner": "application/dates.ts",
+      "extractedIn": "PRJ-02"
+    },
+    {
+      "file": "project-dates",
+      "method": "GET",
+      "path": "/projects/:id/dates",
+      "owner": "application/dates.ts",
+      "extractedIn": "PRJ-02"
+    },
+    {
+      "file": "project-dates",
+      "method": "POST",
+      "path": "/projects/:id/dates",
+      "owner": "application/dates.ts",
+      "extractedIn": "PRJ-02"
+    },
+    {
+      "file": "project-dates",
+      "method": "PATCH",
+      "path": "/project-dates/:id",
+      "owner": "application/dates.ts",
+      "extractedIn": "PRJ-02"
+    },
+    {
+      "file": "project-dates",
+      "method": "DELETE",
+      "path": "/project-dates/:id",
+      "owner": "application/dates.ts",
+      "extractedIn": "PRJ-02"
+    },
+    {
+      "file": "project-templates",
+      "method": "GET",
+      "path": "/project-templates",
+      "owner": "application/templates.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "project-templates",
+      "method": "GET",
+      "path": "/project-templates/:id",
+      "owner": "application/templates.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "project-templates",
+      "method": "POST",
+      "path": "/project-templates",
+      "owner": "application/templates.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "project-templates",
+      "method": "PATCH",
+      "path": "/project-templates/:id",
+      "owner": "application/templates.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "project-templates",
+      "method": "DELETE",
+      "path": "/project-templates/:id",
+      "owner": "application/templates.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "project-templates",
+      "method": "POST",
+      "path": "/project-templates/:id/apply",
+      "owner": "application/templates.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "project-templates",
+      "method": "POST",
+      "path": "/project-templates/:id/duplicate",
+      "owner": "application/templates.ts",
+      "extractedIn": "PRJ-03"
+    },
+    {
+      "file": "project-templates",
+      "method": "POST",
+      "path": "/project-templates/from-project/:projectId",
+      "owner": "application/templates.ts",
+      "extractedIn": "PRJ-03"
+    }
+  ],
+  "frozenRouteSurface": {
+    "note": "Method, path, middleware chain and registration order of every route. Any drift is a public-API or authorization change and fails the gate until a later phase deliberately re-baselines it.",
+    "projects": [
+      "GET /projects/entity/:vaultEntryId/overview | requireAuth,requireProjectsVaultEntryOwnership",
+      "GET /projects/enrolled | requireAuth",
+      "GET /projects/mine/enrolled-entities | requireAuth",
+      "GET /projects/:id/enrolled-entities | requireAuth",
+      "GET /projects/entity-leaderboard | requireAuth",
+      "GET /projects | ",
+      "POST /projects | requireRoles",
+      "GET /projects/:id | ",
+      "PATCH /projects/:id | requireAdmin",
+      "DELETE /projects/:id | requireAdmin",
+      "POST /projects/:id/join | requireAuth",
+      "POST /projects/:id/enroll | requireAuth,requireProjectsVaultEntryOwnership,requireCreditBalance",
+      "PATCH /projects/:id/enrollments/:enrollmentId/status | requireRoles",
+      "GET /admin/projects/:id/entity-enrollments | requireRoles",
+      "GET /projects/:id/enrollments | requireAuth",
+      "GET /projects/mine/enrolled | requireAuth",
+      "GET /projects/mine/overview | requireAuth",
+      "GET /projects/mine/entities-overview | requireAuth",
+      "GET /projects/:id/enrollments/overview | requireAuth",
+      "DELETE /projects/:id/enrollments/:enrollmentId | requireAuth,requireProjectEnrollmentOwnership",
+      "GET /projects/enrollments/:enrollmentId/activity | requireAuth,requireProjectEnrollmentOwnership",
+      "GET /projects/:id/members | requireRoles",
+      "GET /projects/:id/stats | ",
+      "GET /projects/:id/entity-tasks | requireAuth",
+      "GET /projects/:id/ratings | ",
+      "GET /projects/:id/ratings/me | requireAuth",
+      "POST /projects/:id/ratings | requireAuth",
+      "DELETE /projects/:id/ratings/me | requireAuth",
+      "DELETE /admin/projects/:id/ratings/:ratingId | requireAdmin",
+      "GET /projects/:id/roi-summary | requireAuth",
+      "POST /projects/:id/pnl-receipt | requireAuth",
+      "DELETE /projects/:id/pnl-receipt | requireAuth",
+      "GET /projects/pnl-receipt/:token | requirePublicAudit",
+      "GET /projects/pnl-receipt/:token/pdf | requirePublicAudit"
+    ],
+    "project-dates": [
+      "GET /project-dates | requireAuth",
+      "GET /projects/:id/dates | requireAuth",
+      "POST /projects/:id/dates | requireAdmin",
+      "PATCH /project-dates/:id | requireAdmin",
+      "DELETE /project-dates/:id | requireAdmin"
+    ],
+    "project-templates": [
+      "GET /project-templates | requireRoles",
+      "GET /project-templates/:id | requireRoles",
+      "POST /project-templates | requireRoles",
+      "PATCH /project-templates/:id | requireRoles",
+      "DELETE /project-templates/:id | requireRoles",
+      "POST /project-templates/:id/apply | requireRoles",
+      "POST /project-templates/:id/duplicate | requireRoles",
+      "POST /project-templates/from-project/:projectId | requireRoles"
+    ],
+    "mountOrder": [
+      "./projects",
+      "./project-dates",
+      "./project-templates"
+    ]
+  },
+  "knownShadowedRoutes": [],
+  "protectedSymbols": [
+    {
+      "name": "projectEnrollmentResource",
+      "currentOwner": "artifacts/api-server/src/projects/security/enrollment-ownership.ts",
+      "targetOwner": "security/enrollment-ownership.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "requireProjectEnrollmentOwnership",
+      "currentOwner": "artifacts/api-server/src/projects/security/enrollment-ownership.ts",
+      "targetOwner": "security/enrollment-ownership.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "vaultEntryOwnerResource",
+      "currentOwner": "artifacts/api-server/src/projects/security/entity-ownership.ts",
+      "targetOwner": "security/entity-ownership.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "requireProjectsVaultEntryOwnership",
+      "currentOwner": "artifacts/api-server/src/projects/security/entity-ownership.ts",
+      "targetOwner": "security/entity-ownership.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "auditProjectsOwnership",
+      "currentOwner": "artifacts/api-server/src/projects/security/entity-ownership.ts",
+      "targetOwner": "security/entity-ownership.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "generateProjectReceiptToken",
+      "currentOwner": "artifacts/api-server/src/projects/security/receipt-token.ts",
+      "targetOwner": "security/receipt-token.ts",
+      "phase": "PRJ-04 (done)"
+    },
+    {
+      "name": "projectReceiptUrl",
+      "currentOwner": "artifacts/api-server/src/projects/security/receipt-token.ts",
+      "targetOwner": "security/receipt-token.ts",
+      "phase": "PRJ-04 (done)"
+    },
+    {
+      "name": "computeProjectPnlSummary",
+      "currentOwner": "artifacts/api-server/src/projects/application/roi-receipts.ts",
+      "targetOwner": "application/roi-receipts.ts",
+      "phase": "PRJ-04 (done)"
+    },
+    {
+      "name": "findProjectReceiptByToken",
+      "currentOwner": "artifacts/api-server/src/projects/application/roi-receipts.ts",
+      "targetOwner": "application/roi-receipts.ts",
+      "phase": "PRJ-04 (done)"
+    },
+    {
+      "name": "formatPublicReceipt",
+      "currentOwner": "artifacts/api-server/src/projects/domain/pnl-receipt.ts",
+      "targetOwner": "domain/pnl-receipt.ts",
+      "phase": "PRJ-04 (done)"
+    },
+    {
+      "name": "formatProject",
+      "currentOwner": "artifacts/api-server/src/projects/domain/project.ts",
+      "targetOwner": "domain/project.ts",
+      "phase": "PRJ-03 (done)"
+    },
+    {
+      "name": "formatTemplate",
+      "currentOwner": "artifacts/api-server/src/projects/domain/template.ts",
+      "targetOwner": "domain/template.ts",
+      "phase": "PRJ-03 (done)"
+    },
+    {
+      "name": "formatProjectDate",
+      "currentOwner": "artifacts/api-server/src/projects/domain/project-date.ts",
+      "targetOwner": "domain/project-date.ts",
+      "phase": "PRJ-02 (done)"
+    },
+    {
+      "name": "parseRatingValue",
+      "currentOwner": "artifacts/api-server/src/projects/domain/rating.ts",
+      "targetOwner": "domain/rating.ts",
+      "phase": "PRJ-03 (done)"
+    },
+    {
+      "name": "summarizeRatings",
+      "currentOwner": "artifacts/api-server/src/projects/domain/rating.ts",
+      "targetOwner": "domain/rating.ts",
+      "phase": "PRJ-03 (done)"
+    },
+    {
+      "name": "pickTemplateData",
+      "currentOwner": "artifacts/api-server/src/projects/domain/template.ts",
+      "targetOwner": "domain/template.ts",
+      "phase": "PRJ-03 (done)"
+    },
+    {
+      "name": "buildCreateValues",
+      "currentOwner": "artifacts/api-server/src/projects/domain/project.ts",
+      "targetOwner": "domain/project.ts",
+      "phase": "PRJ-03 (done)"
+    },
+    {
+      "name": "buildRawCreateSets",
+      "currentOwner": "artifacts/api-server/src/projects/infrastructure/sql/project-raw-sets.ts",
+      "targetOwner": "infrastructure/sql/project-raw-sets.ts",
+      "phase": "PRJ-03 (done)"
+    },
+    {
+      "name": "buildRawUpdateSets",
+      "currentOwner": "artifacts/api-server/src/projects/infrastructure/sql/project-raw-sets.ts",
+      "targetOwner": "infrastructure/sql/project-raw-sets.ts",
+      "phase": "PRJ-03 (done)"
+    },
+    {
+      "name": "computeProjectPnl",
+      "currentOwner": "artifacts/api-server/src/projects/domain/roi.ts",
+      "targetOwner": "domain/roi.ts",
+      "phase": "PRJ-04 (done)"
+    },
+    {
+      "name": "summarizeRoi",
+      "currentOwner": "artifacts/api-server/src/projects/domain/roi.ts",
+      "targetOwner": "domain/roi.ts",
+      "phase": "PRJ-04 (done)"
+    },
+    {
+      "name": "buildProjectReceiptPdfSpec",
+      "currentOwner": "artifacts/api-server/src/projects/domain/pnl-receipt.ts",
+      "targetOwner": "domain/pnl-receipt.ts",
+      "phase": "PRJ-04 (done)"
+    },
+    {
+      "name": "decideEnrollment",
+      "currentOwner": "artifacts/api-server/src/projects/domain/enrollment-status.ts",
+      "targetOwner": "domain/enrollment-status.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "enrollEntity",
+      "currentOwner": "artifacts/api-server/src/projects/application/enrollment.ts",
+      "targetOwner": "application/enrollment.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "buildEntityOverview",
+      "currentOwner": "artifacts/api-server/src/projects/domain/entity-overview.ts",
+      "targetOwner": "domain/entity-overview.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "buildEntityLeaderboard",
+      "currentOwner": "artifacts/api-server/src/projects/domain/entity-overview.ts",
+      "targetOwner": "domain/entity-overview.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "groupEnrolledEntities",
+      "currentOwner": "artifacts/api-server/src/projects/domain/enrollment-overview.ts",
+      "targetOwner": "domain/enrollment-overview.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "mapMembers",
+      "currentOwner": "artifacts/api-server/src/projects/domain/members.ts",
+      "targetOwner": "domain/members.ts",
+      "phase": "PRJ-05 (done)"
+    },
+    {
+      "name": "checkEnrollCredits",
+      "currentOwner": "artifacts/api-server/src/projects/application/enrollment-billing.ts",
+      "targetOwner": "application/enrollment-billing.ts",
+      "phase": "PRJ-07 (done)"
+    },
+    {
+      "name": "chargeEnrollCredits",
+      "currentOwner": "artifacts/api-server/src/projects/application/enrollment-billing.ts",
+      "targetOwner": "application/enrollment-billing.ts",
+      "phase": "PRJ-07 (done)"
+    }
+  ],
+  "allowedCrossModuleImports": [
+    {
+      "from": "artifacts/api-server/src/projects/application/enrollment.ts",
+      "specifier": "../../vault/application/kyc/enrollment",
+      "symbols": [
+        "loadKycEntryForEnrollment",
+        "buildEnrollmentAccountData"
+      ],
+      "targetModule": "vault",
+      "contract": "VAULT-PUBLIC-1",
+      "usedBy": "POST /projects/:id/enroll (via application/enrollment.ts#enrollEntity)"
+    },
+    {
+      "from": "artifacts/api-server/src/projects/application/enrollment.ts",
+      "specifier": "../../vault/security/kyc-ownership",
+      "symbols": [
+        "kycEntryOwnerResource"
+      ],
+      "targetModule": "vault",
+      "contract": "VAULT-PUBLIC-2",
+      "usedBy": "POST /projects/:id/enroll (via application/enrollment.ts#enrollEntity)"
+    }
+  ],
+  "knownForeignTableEdges": [
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/ratings-repo.ts",
+      "table": "users",
+      "kind": "read",
+      "resolvePhase": "PRJ-05",
+      "reason": "Left join for the rating author's username. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/projects-repo.ts",
+      "table": "tasks",
+      "kind": "read",
+      "resolvePhase": "PRJ-05",
+      "reason": "Task count and task list for project list/detail. Moved from routes/projects.ts unchanged; no tasks module exists to own a contract."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/project-ledger-reader.ts",
+      "table": "finance_ledger_entries",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-04 decision D2')",
+      "reason": "The one place Projects reads Finance's ledger: raw SUM per kind for (user, project), no conversion. Kept in Projects on purpose; see projects-cross-module-contract.md."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/roi-repo.ts",
+      "table": "vault_entries",
+      "kind": "read",
+      "resolvePhase": "PRJ-05",
+      "reason": "Left join for entity serial and name in roi-summary. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/pnl-receipts-repo.ts",
+      "table": "users",
+      "kind": "read",
+      "resolvePhase": "PRJ-05",
+      "reason": "Issuer username on the public receipt. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/enrollment-overview-repo.ts",
+      "table": "vault_entries",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "Vault exposes no read contract for these lookups; Projects reads the table directly. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/enrollments-repo.ts",
+      "table": "vault_entries",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "Vault exposes no read contract for these lookups; Projects reads the table directly. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/enrollments-repo.ts",
+      "table": "users",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "No users module exists to own a contract. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/entity-overview-repo.ts",
+      "table": "tasks",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "No tasks module exists to own a contract. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/entity-overview-repo.ts",
+      "table": "task_submissions",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "No tasks module exists to own a contract. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/entity-overview-repo.ts",
+      "table": "vault_entries",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "Vault exposes no read contract for these lookups; Projects reads the table directly. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/members-repo.ts",
+      "table": "tasks",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "No tasks module exists to own a contract. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/members-repo.ts",
+      "table": "task_submissions",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "No tasks module exists to own a contract. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/members-repo.ts",
+      "table": "users",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "No users module exists to own a contract. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/members-repo.ts",
+      "table": "vault_entries",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "Vault exposes no read contract for these lookups; Projects reads the table directly. Moved from routes/projects.ts unchanged."
+    },
+    {
+      "file": "artifacts/api-server/src/projects/infrastructure/repositories/vault-entries-reader.ts",
+      "table": "vault_entries",
+      "kind": "read",
+      "resolvePhase": "ACCEPTED (PRJ-05)",
+      "reason": "Vault exposes no read contract for these lookups; Projects reads the table directly. Moved from routes/projects.ts unchanged."
+    }
+  ],
+  "knownExternalConsumers": [
+    {
+      "file": "artifacts/api-server/src/finance/application/reports.ts",
+      "access": "read",
+      "tables": [
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "UNDECIDED (kept as is)",
+      "risk": "Finance reads project names for per-project rollups: a Finance-to-Projects edge in the opposite direction. PRJ-04 does not change this edge: Finance keeps reading project names directly."
+    },
+    {
+      "file": "artifacts/api-server/src/lib/activity-log.ts",
+      "access": "read",
+      "tables": [
+        "project_enrollments",
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Holds the SQL behind getUserEnrollmentsOverview, getProjectEnrollmentsOverview and getUserEntitiesOverview, which projects.ts imports. The enrollment-overview cluster's queries are not in the route file."
+    },
+    {
+      "file": "artifacts/api-server/src/lib/airdrop-reminder-cron.ts",
+      "access": "read",
+      "tables": [
+        "project_enrollments"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "After PRJ-02 the cron reads project_dates only through dates-repo. It still reads project_enrollments directly to find who to notify."
+    },
+    {
+      "file": "artifacts/api-server/src/lib/telegram.ts",
+      "access": "read",
+      "tables": [
+        "project_enrollments",
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Bot summaries read project rows directly."
+    },
+    {
+      "file": "artifacts/api-server/src/mcp/skills.ts",
+      "access": "read",
+      "tables": [
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Raw count of active projects."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ai-actions.ts",
+      "access": "write",
+      "tables": [
+        "projects"
+      ],
+      "writes": [
+        "projects"
+      ],
+      "resolvePhase": "ACCEPTED (PRJ-06 decision)",
+      "risk": "Second project-creation path (POST /ai/actions/create-project) with its own insert, plus a raw UPDATE of projects.total_roi_distributed. Bypasses core CRUD handling. PRJ-03 left it untouched on purpose: unifying it with POST /projects (broadcast, Telegram alert) is a behavior change that needs a decision."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ai-agent.ts",
+      "access": "read",
+      "tables": [
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Raw count of active projects."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ai.ts",
+      "access": "read",
+      "tables": [
+        "project_enrollments",
+        "projects",
+        "user_projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "AI context assembly."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/content.ts",
+      "access": "read",
+      "tables": [
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Project reads."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/entities.ts",
+      "access": "write",
+      "tables": [
+        "entity_project_roi",
+        "project_enrollments",
+        "projects"
+      ],
+      "writes": [
+        "entity_project_roi"
+      ],
+      "resolvePhase": "PRJ-04",
+      "risk": "Writes entity_project_roi, the table GET /projects/:id/roi-summary reads. The ROI writer lives outside Projects."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/finance.ts",
+      "access": "read",
+      "tables": [
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "UNDECIDED (kept as is)",
+      "risk": "Imports projectsTable. PRJ-04 does not change this edge: Finance keeps reading project names directly."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/leaderboard.ts",
+      "access": "read",
+      "tables": [
+        "project_enrollments"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Enrollment reads."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/search.ts",
+      "access": "read",
+      "tables": [
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Project search reads."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/sync.ts",
+      "access": "read",
+      "tables": [
+        "entity_project_roi",
+        "project_enrollments",
+        "projects",
+        "user_projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Sync routes read project, enrollment, ROI and user_projects rows."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/tasks.ts",
+      "access": "read",
+      "tables": [
+        "project_enrollments",
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Project name and enrollment lookups."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/teams.ts",
+      "access": "read",
+      "tables": [
+        "projects",
+        "user_projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-08b: enrollment write moved to projects/application/team-enrollment.ts",
+      "risk": "Only a read-only project list with a participant count (raw SQL over projects and user_projects) remains. The team enrollment writer moved into the Projects module in PRJ-08b."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/users.ts",
+      "access": "read",
+      "tables": [
+        "user_projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Project counts on user profiles."
+    },
+    {
+      "file": "artifacts/api-server/src/routes/watchlist.ts",
+      "access": "read",
+      "tables": [
+        "projects",
+        "user_projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Project and user_projects reads."
+    },
+    {
+      "file": "artifacts/api-server/src/services/sync.ts",
+      "access": "write",
+      "tables": [
+        "entity_project_roi",
+        "project_enrollments",
+        "user_projects"
+      ],
+      "writes": [
+        "entity_project_roi",
+        "project_enrollments",
+        "user_projects"
+      ],
+      "resolvePhase": "ACCEPTED (PRJ-06 decision)",
+      "risk": "Project-delete cascade (syncOnProjectDelete, called fire-and-forget by DELETE /projects/:id) and ROI/enrollment pruning. Deletes user_projects, project_enrollments, entity_project_roi only. Project-delete cascade and ROI/enrollment pruning. Left as is; its coverage of related tables is unverified at the database level."
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts",
+      "access": "read",
+      "tables": [
+        "project_enrollments",
+        "projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Vault reads project_enrollments and projects (KYC unused-entry filter and usage listing): a Vault-to-Projects table edge, the reverse of the enroll import."
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts",
+      "access": "read",
+      "tables": [
+        "ayzen_project_templates",
+        "entity_project_roi",
+        "project_enrollments",
+        "project_pnl_receipts",
+        "project_ratings",
+        "user_projects"
+      ],
+      "writes": [],
+      "resolvePhase": "PRJ-05",
+      "risk": "Vault snapshot/backup reads six Projects tables with SELECT *. Column changes in any PRJ phase must keep this valid."
+    }
+  ],
+  "financeContract": {
+    "currentUseCase": {
+      "symbol": "getProjectInvestments",
+      "file": "artifacts/api-server/src/finance/application/reports.ts",
+      "route": "GET /finance/investments"
+    },
+    "equivalentToComputeProjectPnlSummary": false,
+    "differences": [
+      "getProjectInvestments takes only userId and returns every project; computeProjectPnlSummary takes (userId, projectId).",
+      "getProjectInvestments groups by currency and converts to the user's base currency with getRateMap/toBase; computeProjectPnlSummary sums raw amounts across currencies with no conversion.",
+      "getProjectInvestments also returns interestOwed; computeProjectPnlSummary does not.",
+      "computeProjectPnlSummary returns roiPct; getProjectInvestments does not."
+    ],
+    "decision": {
+      "id": "D2-prime",
+      "supersedes": "D2",
+      "phase": "PRJ-04",
+      "summary": "Projects owns project-level ROI and P&L and public receipts end to end (domain/roi.ts, domain/pnl-receipt.ts, application/roi-receipts.ts, security/receipt-token.ts). Its single read of finance_ledger_entries is isolated in infrastructure/repositories/project-ledger-reader.ts and recorded as an accepted foreign-table edge. No Finance code changes and no Finance import from Projects.",
+      "why": "The two calculations already differ on purpose or by drift (raw sums plus roiPct versus base-currency conversion plus interestOwed); the 'lockstep' comment was stale. Keeping Projects' semantics inside Projects means zero numeric drift and no dependency on Finance's WP-8/WP-9 pack. A Finance-owned per-project use case (the original D2) remains possible later, but it would change which module owns the receipt arithmetic.",
+      "openQuestion": "DECIDED in PRJ-06: keep raw sums, no conversion, '$' label; pinned by tests."
+    }
+  },
+  "knownImportCycles": [],
+  "currentPhase": "PRJ-08b",
+  "extractedAdapters": [
+    {
+      "file": "project-dates",
+      "phase": "PRJ-02",
+      "mustImportFrom": [
+        "../projects/application/dates"
+      ],
+      "forbiddenImports": [
+        "@workspace/db",
+        "drizzle-orm",
+        "../lib/log-bus"
+      ],
+      "forbiddenPatterns": [
+        "\\bdb\\.",
+        "Table\\b"
+      ]
+    },
+    {
+      "file": "project-templates",
+      "phase": "PRJ-03",
+      "mustImportFrom": [
+        "../projects/application/templates"
+      ],
+      "forbiddenImports": [
+        "@workspace/db",
+        "drizzle-orm"
+      ],
+      "forbiddenPatterns": [
+        "\\bdb\\.",
+        "Table\\b"
+      ]
+    },
+    {
+      "file": "projects",
+      "phase": "PRJ-05 (pure adapter: all 34 routes)",
+      "mustImportFrom": [
+        "../projects/application/projects",
+        "../projects/application/ratings",
+        "../projects/application/roi-receipts",
+        "../projects/application/enrollment",
+        "../projects/application/enrollment-overview",
+        "../projects/application/entity-overview",
+        "../projects/application/members",
+        "../projects/security/enrollment-ownership",
+        "../projects/security/entity-ownership"
+      ],
+      "forbiddenImports": [
+        "@workspace/db",
+        "drizzle-orm"
+      ],
+      "forbiddenPatterns": [
+        "\\bdb\\.",
+        "Table\\b",
+        "sql\\.raw",
+        "function\\s+formatProject\\b",
+        "function\\s+computeProjectPnlSummary\\b",
+        "crypto\\.randomBytes"
+      ]
+    }
+  ],
+  "tableOwnerFiles": [
+    {
+      "table": "project_dates",
+      "identifiers": [
+        "projectDatesTable"
+      ],
+      "ownerFile": "artifacts/api-server/src/projects/infrastructure/repositories/dates-repo.ts",
+      "allowedOthers": [],
+      "phase": "PRJ-02"
+    },
+    {
+      "table": "project_ratings",
+      "identifiers": [
+        "projectRatingsTable"
+      ],
+      "ownerFile": "artifacts/api-server/src/projects/infrastructure/repositories/ratings-repo.ts",
+      "allowedOthers": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+      ],
+      "phase": "PRJ-03",
+      "allowedOthersNote": "Read-only: the external-consumer check pins this file as a reader."
+    },
+    {
+      "table": "ayzen_project_templates",
+      "identifiers": [
+        "projectTemplatesTable"
+      ],
+      "ownerFile": "artifacts/api-server/src/projects/infrastructure/repositories/templates-repo.ts",
+      "allowedOthers": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+      ],
+      "phase": "PRJ-03",
+      "allowedOthersNote": "Read-only: the external-consumer check pins this file as a reader."
+    },
+    {
+      "table": "project_pnl_receipts",
+      "identifiers": [
+        "projectPnlReceiptsTable"
+      ],
+      "ownerFile": "artifacts/api-server/src/projects/infrastructure/repositories/pnl-receipts-repo.ts",
+      "allowedOthers": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+      ],
+      "allowedOthersNote": "Read-only: the external-consumer check pins this file as a reader.",
+      "phase": "PRJ-04"
+    }
+  ],
+  "unscannedDynamicConsumers": [
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "note": "Vault snapshot restore refers to Projects tables by registry name (table: 'projectRatings', sqlTable: 'project_ratings', and others) and restores rows generically. Neither a typed identifier nor a SQL keyword pattern appears, so the validator cannot see it. Column changes in any PRJ phase must keep restore valid.",
+      "enforced": false
+    }
+  ],
+  "knownIssuesPreserved": [],
+  "resolvedShadows": [
+    {
+      "was": "GET /projects/mine/enrolled-entities shadowed by GET /projects/:id/enrolled-entities",
+      "fixedIn": "PRJ-06",
+      "fix": "registered before the :id route; the validator now pins the order and fails on any unexplained shadow"
+    }
+  ],
+  "issuesFixed": [
+    {
+      "id": "PRJ-ISSUE-1",
+      "severity": "high (privileged callers only)",
+      "what": "POST /projects (deadline) and PATCH /projects/:id (deadline, startedAt) interpolate request values into raw SQL without escaping. Callers need admin or moderator (POST) or admin (PATCH).",
+      "status": "FIXED in PRJ-06",
+      "evidence": "projects/infrastructure/sql/project-raw-sets.ts and its characterization test; identical SQL text in the CRUD differential test.",
+      "decision": "Fixing changes behavior (rejects or alters values that work today); needs its own approved change.",
+      "fix": "deadline and startedAt now pass through esc() like every other raw field; valid date strings generate identical SQL."
+    },
+    {
+      "id": "PRJ-ISSUE-3",
+      "severity": "low (admin and moderator callers only)",
+      "what": "PATCH /projects/:id/enrollments/:enrollmentId/status validates the new status with an index lookup on a plain object, so inherited keys such as toString, constructor and hasOwnProperty pass validation. The enrollment's status is then set to that string and a non-string action is handed to the activity log.",
+      "status": "FIXED in PRJ-06",
+      "evidence": "The original route (same lookup) and the extracted domain function behave identically in the whole-file differential test; a characterization test pins it.",
+      "decision": "Needs its own approved change (use an own-property check); a fix rejects inputs the endpoint accepts today.",
+      "fix": "moderationLogAction uses an own-property check and requires a string; toString, constructor etc. and non-strings now get the 400."
+    },
+    {
+      "id": "PRJ-ISSUE-2",
+      "severity": "functional bug: POST /projects returned 500 after creating (confirmed by code reading of drizzle node-postgres db.execute, which returns snake_case rows; not run against a live database)",
+      "what": "POST /projects applies a follow-up raw UPDATE ... RETURNING * whenever the body carries category, projectType, exchangeSubType, accountCategory, deadline, durationType, difficulty or costType, then calls formatProject on the returned raw row. lib/db sets no snake-to-camel mapping, so if node-postgres returns snake_case columns, createdAt is undefined and formatProject throws after the row is inserted and broadcast: the client sees a 500 for a project that was created.",
+      "status": "FIXED after PRJ-07",
+      "evidence": "projects/domain/project.ts#formatCreatedProject builds the response from the typed insert row and adds raw columns from the UPDATE ... RETURNING row; application/projects.ts#createProject uses it. domain/project.test.ts pins the old throw and the new output."
+    },
+    {
+      "id": "PRJ-ISSUE-4",
+      "severity": "probable data-quality bug, NOT confirmed on the live database",
+      "what": "project_enrollments has no unique constraint on (project, user, entity) in the Drizzle schema or any .sql file in the repo, so the bulk-enroll INSERT ... ON CONFLICT DO NOTHING probably never conflicts: repeating a bulk enroll likely inserts duplicate enrollment rows. Since PRJ-07 each inserted row is charged, so repeating a bulk enroll now charges again.",
+      "status": "FIXED in code after PRJ-07 (no schema change)",
+      "evidence": "projects/domain/bulk-enroll-plan.ts + test, projects/application/bulk-enrollment.ts; remaining risk: no unique constraint, so two concurrent identical requests can still race"
+    }
+  ],
+  "decisionsPRJ06": [
+    {
+      "id": 1,
+      "topic": "unreachable GET /projects/mine/enrolled-entities",
+      "decision": "FIXED: registered before the :id route (visible change: the endpoint now returns data instead of 400)."
+    },
+    {
+      "id": 2,
+      "topic": "team and bulk enrollment paths",
+      "decision": "KEEP SEPARATE. Team enroll (leader enrolls the team using the leader's own entity into each member's row) and bulk enroll (many of the caller's own entities, ON CONFLICT DO NOTHING) are distinct features, not copies of the single enroll flow. Open observation: neither charges credits, while single enroll does; whether that is intended is a product/billing question, not decided here."
+    },
+    {
+      "id": 3,
+      "topic": "ai-actions project creation",
+      "decision": "KEEP SEPARATE: it keeps its current behavior (no broadcast, no Telegram alert)."
+    },
+    {
+      "id": 4,
+      "topic": "receipt currency",
+      "decision": "KEEP raw sums with the '$' label (no conversion), pinned by tests. Converting would change public receipt numbers."
+    },
+    {
+      "id": 5,
+      "topic": "PRJ-ISSUE-1 and PRJ-ISSUE-3",
+      "decision": "FIXED."
+    }
+  ],
+  "billedEnrollmentWriters": [
+    {
+      "file": "artifacts/api-server/src/projects/application/team-enrollment.ts",
+      "how": "PRJ-08b: checks the whole quantity (members without a row) before writing, charges the leader per enrollment created; routes/teams.ts keeps authn, the team-leader PDP decision, team_members reads, notifications, broadcast and activity log"
+    },
+    {
+      "file": "artifacts/api-server/src/projects/application/bulk-enrollment.ts",
+      "how": "PRJ-ISSUE-4: plans with domain/bulk-enroll-plan (skips active and banned, reactivates cancelled/disqualified, like single enroll), checks credits for the rows it will write before any write, charges for rows actually written; routes/bulk.ts only resolves owned entities and calls it"
+    }
+  ],
+  "exemptEnrollmentWriters": [
+    {
+      "file": "artifacts/api-server/src/services/sync.ts",
+      "reason": "deletes enrollments (project/team delete cascade); creates none"
+    }
+  ],
+  "decisionsPRJ07": {
+    "request": "Project owner: 'Credit charge billing gap' (team and bulk enroll were free while single enroll charged).",
+    "interpretation": "Treated as confirmation that it is a gap to close.",
+    "policy": "Same metered action as single enroll (workspace.project_use, currently 2 credits), charged to the acting user (the team leader for team enroll), one unit per enrollment row actually created, after the writes. The balance for the whole quantity is checked before any write (chargeCredits charges nothing when the balance is too low, so a one-unit check would let large requests through free). No refund or rollback if a concurrent spend makes the post-write charge fail, same as single enroll.",
+    "assumptionsToConfirm": [
+      "team enroll is charged to the leader, not the members",
+      "price equals single enroll (2 credits per enrollment), with no bulk discount",
+      "the bulk pre-check uses the requested count as an upper bound, so a request that would partly conflict can be refused when the balance covers only the new rows"
+    ]
+  }
+}

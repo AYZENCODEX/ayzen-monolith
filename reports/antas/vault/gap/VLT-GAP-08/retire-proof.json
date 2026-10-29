@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-08",
+  "sub_phase": "08-retire",
+  "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "e3696fbb94614b34e6180442f553204fcd94fb1db0c26e51a14b2078666184ca",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/crypto/backup-envelope.ts": "dec7cd169a84dd45151ef24f32e97cd62d4fb8d25e84774f5c370b9c727614c4",
+    "artifacts/api-server/src/vault/infrastructure/backup/audit.ts": "b205da45f2a75e4c7fc2df8406d9fbb1caf9672038fa0f9d4d990728e26e7592",
+    "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts": "610338d0f11597461cf1e51f7e304c779ac1504b32e220854e5ab66aa62cd66b",
+    "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts": "5ca8bf37abb130fab7eb074ef8ce405990c5a73631ee43d43277c18191878a9f",
+    "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts": "86b73dcec2e566ee18e6b3c43d454096fbd96856017c07cd761ea6e92fc74963",
+    "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts": "cc070b7d3fb2917186f90770e3dd660be890d80b8a293db00656e90bf9f5bfe3",
+    "artifacts/api-server/src/vault/application/backup/schedule-cron.ts": "b9e8d9b2a7e4c2fe7f479723abd1ebe596d93bdd2d55e112f1006237721ffa44",
+    "artifacts/api-server/src/vault/application/backup/key.ts": "e4037ac80d22cbe1dbe596e590e7377fd06207bff5af0df3fb25edd4644b9ab5",
+    "artifacts/api-server/src/vault/application/backup/cloud-connection.ts": "13dce75423d1fe5b66e61547dfd67c112f5e479915a1df3d9c0e26927eca3060",
+    "artifacts/api-server/src/vault/application/backup/schedule.ts": "a4b4689a75de20d380405f94ccbf4437d2038a7bdc33c6abcbd086a7cca6a52c",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-repository.ts": "86826e01236c383df99ab02fd3d8be1a4986392cb461f8d260633a02ec4803b2",
+    "artifacts/api-server/src/routes/vault-backup-key.ts": "af908320b6903338b7747a73677e85a8fd8457426453837e31d387af69a5ac38",
+    "artifacts/api-server/src/routes/vault-backup-cloud.ts": "b74aa25d54dd1f43fefe18519e73afe4c2ccb1d67bf47444456f6fa8b69189c4",
+    "artifacts/api-server/src/routes/vault-backup-schedule.ts": "c3303ef481326b160e88e0e8c0da7967465ce732bf8316ad10cef04e0a8d3e6d",
+    "scripts/antas/vault/gap/differential-vlt-gap-08.mjs": "b70d4019016bf696f40dd406bea1ba4806387cc89463480faf8a61bccfe082bf"
+  },
+  "old_files_removed": [
+    "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+    "artifacts/api-server/src/lib/vault-backup-audit.ts",
+    "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+    "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+    "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+    "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+    "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts"
+  ],
+  "moves": {
+    "artifacts/api-server/src/lib/vault-backup-envelope.ts": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+    "artifacts/api-server/src/lib/vault-backup-audit.ts": "artifacts/api-server/src/vault/infrastructure/backup/audit.ts",
+    "artifacts/api-server/src/lib/vault-backup-cloud.ts": "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts",
+    "artifacts/api-server/src/lib/vault-backup-delivery.ts": "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts",
+    "artifacts/api-server/src/lib/vault-backup-alerts.ts": "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts",
+    "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts": "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts",
+    "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts"
+  },
+  "consumer_graph": [
+    {
+      "old": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "new": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "consumers": [
+        "artifacts/api-server/src/index.ts",
+        "artifacts/api-server/src/lib/dr-test-runner.ts",
+        "artifacts/api-server/src/vault/application/backup/key.ts",
+        "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+        "artifacts/api-server/src/vault/application/snapshot/use-cases.ts",
+        "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts",
+        "artifacts/api-server/src/vault/infrastructure/index.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/index.ts",
+          "path": "artifacts/api-server/src/index.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/lib/dr-test-runner.ts",
+          "path": "artifacts/api-server/src/lib/dr-test-runner.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+          "path": "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+          "path": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-backup-key.ts",
+          "path": "artifacts/api-server/src/vault/application/backup/key.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-snapshot.ts",
+          "path": "artifacts/api-server/src/routes/vault-snapshot.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/vault/infrastructure/index.ts",
+          "path": "artifacts/api-server/src/vault/infrastructure/index.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/backup/audit.ts",
+      "consumers": [
+        "artifacts/api-server/src/vault/application/backup/cloud-connection.ts",
+        "artifacts/api-server/src/vault/application/backup/key.ts",
+        "artifacts/api-server/src/vault/application/backup/schedule.ts",
+        "artifacts/api-server/src/vault/application/snapshot/use-cases.ts",
+        "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+          "path": "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+          "path": "artifacts/api-server/src/vault/application/backup/cloud-connection.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-backup-key.ts",
+          "path": "artifacts/api-server/src/vault/application/backup/key.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+          "path": "artifacts/api-server/src/vault/application/backup/schedule.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-snapshot.ts",
+          "path": "artifacts/api-server/src/routes/vault-snapshot.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts",
+      "consumers": [
+        "artifacts/api-server/src/vault/application/backup/cloud-connection.ts",
+        "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+          "path": "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+          "path": "artifacts/api-server/src/vault/application/backup/cloud-connection.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts",
+      "consumers": [
+        "artifacts/api-server/src/vault/application/backup/schedule-cron.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+          "path": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts",
+      "consumers": [
+        "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+        "artifacts/api-server/src/vault/application/snapshot/use-cases.ts",
+        "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+          "path": "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+          "path": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-snapshot.ts",
+          "path": "artifacts/api-server/src/routes/vault-snapshot.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts",
+      "consumers": [
+        "artifacts/api-server/src/index.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/index.ts",
+          "path": "artifacts/api-server/src/index.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "new": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "consumers": [
+        "artifacts/api-server/src/index.ts",
+        "artifacts/api-server/src/vault/application/backup/schedule.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/index.ts",
+          "path": "artifacts/api-server/src/index.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+          "path": "artifacts/api-server/src/vault/application/backup/schedule.ts"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "route": "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "lines": 41,
+      "baseline_lines": 108,
+      "handlers": 3,
+      "status_codes": [
+        500
+      ]
+    },
+    {
+      "route": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "lines": 59,
+      "baseline_lines": 124,
+      "handlers": 4,
+      "status_codes": [
+        401,
+        404,
+        501
+      ]
+    },
+    {
+      "route": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "lines": 68,
+      "baseline_lines": 185,
+      "handlers": 5,
+      "status_codes": [
+        400,
+        401,
+        404,
+        502
+      ]
+    }
+  ],
+  "duplicate_implementations": [],
+  "executed_differential": "scenarios=33 calls=60 diffs=0",
+  "differential_script_sha256": "b70d4019016bf696f40dd406bea1ba4806387cc89463480faf8a61bccfe082bf",
+  "typecheck": {
+    "exit_code": 0
+  },
+  "status": "PASS"
+}

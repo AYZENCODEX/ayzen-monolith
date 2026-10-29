@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-06",
+  "sub_phase": "VLT-GAP-06-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "4a1f387e81418d9744085702212aa6b362a934bf113eabe2d238268d7a0c3780",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/vault-reauth.ts": "dc000c0eeb730f5b227760a87fa430cf2815683d6fc6d1cfe35c019f7023c68e",
+    "artifacts/api-server/src/vault/application/security/reauth.ts": "f2501605a64454a259f54d2606f773b3ee9b2f2f98f0ecc68b06525d307cd6a7",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-reauth-repository.ts": "a86bfd02c733d31a4f23cfba0ae72d656da76f1b596a9b2154ce883fefb69644",
+    "artifacts/api-server/src/vault/security/reauth-ownership.ts": "dee093ca850adebc0f902aace1de40b15dd4e3a10aa7624576172641943ec527",
+    "artifacts/api-server/src/vault/security/lockout.ts": "8965482f9596bff6aac1a7d64d375b638e6eadad5687a813f61284d53b344f11",
+    "artifacts/api-server/src/lib/vault-pin-guard.ts": "d69c5a16f2d4e7a65dad41aea93b731afbd03c2964bdf573e360edd9a8ef22bd",
+    "scripts/antas/vault/gap/differential-vlt-gap-06-D.mjs": "6a4d98690b8369bf137580908150dc80a2ac108b52711159c9cdb048dcabcdcb"
+  },
+  "baseline": {
+    "file": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__routes__vault-reauth.ts",
+    "sha256": "bd740f54e86019032a298b698c8e2df7ecb9f4d1892659d9a3ea52ee3868f9ef",
+    "lines": 510
+  },
+  "route": {
+    "file": "artifacts/api-server/src/routes/vault-reauth.ts",
+    "lines": 79,
+    "handlers": [
+      "GET /vault/reauth/status",
+      "POST /vault/reauth/email-code/send",
+      "POST /vault/reauth/verify-step3",
+      "POST /vault/reauth/passkey/options",
+      "POST /vault/reauth/passkey/verify",
+      "POST /vault/reauth/verify"
+    ]
+  },
+  "owners": [
+    "artifacts/api-server/src/vault/application/security/reauth.ts",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-reauth-repository.ts",
+    "artifacts/api-server/src/vault/security/reauth-ownership.ts",
+    "artifacts/api-server/src/vault/security/lockout.ts"
+  ],
+  "required_symbols_found": [
+    "getReauthStatus",
+    "sendReauthEmailCode",
+    "verifyStep3",
+    "passkeyOptions",
+    "verifyPasskey",
+    "verifyVaultCredentials",
+    "vaultReauthOtpKey"
+  ],
+  "literal_parity": {
+    "status_codes": [
+      400,
+      401,
+      404,
+      428,
+      429,
+      503
+    ],
+    "string_literals_lost": [],
+    "email_template_identical": true
+  },
+  "security_call_parity": {
+    "verifyPassword": {
+      "before": 2,
+      "after": 2
+    },
+    "totpVerify": {
+      "before": 1,
+      "after": 1
+    },
+    "verifyOtp": {
+      "before": 1,
+      "after": 1
+    },
+    "storeOtp": {
+      "before": 1,
+      "after": 1
+    },
+    "consumeChallenge": {
+      "before": 1,
+      "after": 1
+    },
+    "verifyAuthenticationResponse": {
+      "before": 1,
+      "after": 1
+    },
+    "recordFailure": {
+      "before": 6,
+      "after": 6
+    },
+    "clearFailures": {
+      "before": 3,
+      "after": 3
+    },
+    "isLockedOut": {
+      "before": 4,
+      "after": 4
+    }
+  },
+  "duplicate_lockouts_remaining": [],
+  "legacy_shim": {
+    "file": "artifacts/api-server/src/lib/vault-pin-guard.ts",
+    "shape": "re-export-only",
+    "consumers": []
+  },
+  "executed_differential": "scenarios=25 calls=59 diffs=0",
+  "typecheck": {
+    "exit_code": 0
+  },
+  "status": "PASS"
+}

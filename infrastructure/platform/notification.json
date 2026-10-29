@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "runtime": "services/notification",
+  "shared": true,
+  "adapters": ["in-app", "email", "telegram", "webhook"],
+  "deliveryStates": ["queued", "sending", "sent", "failed", "cancelled"],
+  "defaultRetry": { "maxAttempts": 3, "backoff": "exponential" },
+  "fallbackOrder": ["in-app"],
+  "preferenceEnforcement": "required",
+  "quotaScope": ["app", "workspace", "channel"],
+  "auditEvents": ["notification.requested", "notification.sent", "notification.failed"]
+}

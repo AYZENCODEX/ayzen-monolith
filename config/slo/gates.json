@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "gate": "critical-circuit",
+  "metrics": ["availability", "p95LatencyMs", "errorRate", "queueLagSeconds", "recoveryBudget"],
+  "operator": "all-must-pass",
+  "breachAction": "block-promotion-and-create-gap",
+  "services": {
+    "api-gateway": {"availability": 0.995, "p95LatencyMs": 500, "errorRate": 0.01},
+    "workflow": {"availability": 0.99, "p95LatencyMs": 1000, "errorRate": 0.02, "queueLagSeconds": 60},
+    "notification": {"availability": 0.995, "p95LatencyMs": 750, "errorRate": 0.02, "queueLagSeconds": 30}
+  }
+}

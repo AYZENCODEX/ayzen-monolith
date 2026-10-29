@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-1-FIXES-2",
+  "title": "Fix F3 (per-book account uniqueness) and F4 (atomic, idempotent repayments)",
+  "timestamp": "2026-10-17T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Statically verified only: syntax, 22/22 static tests, boundary scan, call-site audit, migration ordering review. Includes an additive schema change and an index swap, and the DB-level tests (22 ledger + 2 due-rule) plus typecheck/build have not been run: no Postgres, pnpm or node_modules here. PASS requires the Replit run listed under nextSafeStep, and migration 122 applied before deploy.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; bound by content via fin-provenance-manifest.json."
+  },
+  "schemaChanges": [
+    {
+      "id": "F3",
+      "change": "UNIQUE(user_id, code) on finance_accounts replaced by UNIQUE(user_id, book_id, code) (create new, then drop old). In-code: lib/schema-migrations.ts after the book_id ALTER and backfill. SQL: migrations/122_*.sql.",
+      "reversible": "Recreate the old index only if no user has more than one book (or duplicate codes across books)."
+    },
+    {
+      "id": "F4",
+      "change": "finance_repayments.idempotency_key TEXT NULL plus partial UNIQUE(entry_id, idempotency_key) WHERE idempotency_key IS NOT NULL. Additive. Drizzle schema updated (lib/db/src/schema/finance.ts).",
+      "reversible": "Drop the index and column; no data depends on them until clients send keys."
+    }
+  ],
+  "behaviorChanges": [
+    "applyPrincipalRepayment returns number | null (null when the entry does not exist; previously 0). Only caller was the repayments route, now replaced by recordRepayment.",
+    "amount and status are updated in one SQL statement.",
+    "POST /finance/entries/:id/repayments: repayment row and balance/interest change are one transaction; accepts Idempotency-Key header or body.idempotencyKey (<=200 chars); replay returns 200 with Idempotent-Replayed: true; key reuse with different parameters returns 409; a deleted entry returns 404 (was 201). Without a key behavior is unchanged. idempotency key is not returned in responses.",
+    "A user's second and later books can now be seeded with system accounts."
+  ],
+  "deploymentNotes": [
+    "Apply migration 122 (or let the boot-time MIGRATIONS run) BEFORE this code serves traffic: Drizzle now selects and inserts finance_repayments.idempotency_key, so a database without the column fails every repayment read and write.",
+    "The new accounts index is created before the old one is dropped; both are idempotent."
+  ],
+  "filesCreated": [
+    "migrations/122_finance_multi_book_accounts_and_repayment_idempotency.sql",
+    "reports/antas/finance/fin-wp1-fixes2-evidence.json"
+  ],
+  "filesChanged": [
+    "lib/db/src/schema/finance.ts",
+    "artifacts/api-server/src/lib/schema-migrations.ts",
+    "artifacts/api-server/src/lib/finance-accounting.ts",
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/lib/finance-accounting.db.test.ts (nullable sort comparator)",
+    "artifacts/api-server/src/finance/ledger-invariants.db.test.ts",
+    "artifacts/api-server/src/finance/route-security.test.ts",
+    "docs/antas/finance/finance-safety-findings.md",
+    "docs/antas/finance/finance-remaining-scope.md",
+    "docs/antas/finance/finance-target-tree-status.md",
+    "reports/antas/finance/fin-wp1-evidence.json",
+    "reports/antas/finance/fin-01-dependency-scan.json (regenerated)",
+    "reports/antas/finance/fin-provenance-manifest.json (regenerated)"
+  ],
+  "reviewCatches": [
+    "The new accounts index was first placed before the book_id column exists (fresh database would fail); moved after the ALTER and backfill.",
+    "applyPrincipalRepayment now returns number | null, which would break strict typing of two sort comparators in tests; both fixed.",
+    "The SQL runner for the isolated test schema ignores DROP INDEX; the old CREATE UNIQUE INDEX statement was therefore removed from the list so the test schema never gets the old index."
+  ],
+  "commands": [
+    {
+      "command": "node --test --import tsx src/finance/domain/*.test.ts src/finance/route-security.test.ts",
+      "exitCode": 0,
+      "tests": 22,
+      "passed": 22,
+      "failed": 0
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 28 Finance sources, 0 findings"
+    },
+    {
+      "command": "node --experimental-strip-types --check on every changed .ts/.mjs file",
+      "exitCode": 0,
+      "result": "syntax only"
+    },
+    {
+      "command": "call-site audit: applyPrincipalRepayment, financeRepaymentsTable readers/writers",
+      "exitCode": 0,
+      "result": "one caller of applyPrincipalRepayment (replaced); readers: repayments GET (key stripped), late-fee cron SUM (unaffected); writers: 3 other inserts keep working because the new column is nullable"
+    }
+  ],
+  "notRun": [
+    "pnpm typecheck / build (drizzle types for onConflictDoNothing, transaction return type, new schema column)",
+    "pnpm test:finance-static",
+    "pnpm test:finance-db (22 ledger tests incl. recordRepayment suite, 2 due-rule tests, the pre-existing 7)",
+    "Applying migration 122 to a copy of production data (index creation, drop)",
+    "Authenticated HTTP test of the repayments route (replay header, 409, 404)"
+  ],
+  "openFollowUps": [
+    "F5 deleteJournalForEntry not transactional",
+    "F6 installment pay and payment-agreement verify repeat the non-atomic repayment sequence",
+    "Clients must start sending Idempotency-Key for the duplicate protection to take effect"
+  ],
+  "nextSafeStep": "In Replit: apply migrations to a staging/test copy, then pnpm --filter @workspace/api-server typecheck, build, test:finance-static, test:finance-db; send the output. If green, FIN-WP-1-FIXES, FIN-WP-1-FIXES-2 and WP-1a become PASS."
+}

@@ -1,0 +1,17 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "all P0 runtime gates",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "release owner sign-off",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "production canary and rollback",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

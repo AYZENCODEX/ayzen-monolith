@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "AYZEN ZIOX Public Production Readiness",
+  "phase": "F",
+  "name": "Deployment & Cloud Production Hardening",
+  "generatedAt": "2026-09-29T06:07:59.081Z",
+  "status": "PASS",
+  "implementation": "complete",
+  "subphases": [
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6"
+  ],
+  "checks": [
+    {
+      "id": "F1",
+      "description": "Cloud hardening validator",
+      "status": "PASS",
+      "command": "pnpm run validate:cloud-phases",
+      "exitCode": 0,
+      "output": "> workspace@0.0.0 validate:cloud-phases /home/runner/workspace\n> node scripts/validate-cloud-phases.mjs\n\nCloud phases 11–30 validation passed (15 deployables)"
+    },
+    {
+      "id": "F2",
+      "description": "Production configuration contract exists",
+      "status": "PASS",
+      "required": [
+        "infrastructure/deployment/environment.schema.json",
+        ".env.example"
+      ],
+      "missing": []
+    },
+    {
+      "id": "F3",
+      "description": "Deployment topology is defined",
+      "status": "PASS",
+      "required": [
+        "infrastructure/deployment/topology.yaml",
+        "infrastructure/deployment/service-catalog.json",
+        "infrastructure/docker/docker-compose.yml"
+      ],
+      "missing": []
+    },
+    {
+      "id": "F4",
+      "description": "Runtime security controls exist",
+      "status": "PASS",
+      "required": [
+        "config/cloud/runtime-security.json",
+        "infrastructure/docker/Dockerfile",
+        ".dockerignore"
+      ],
+      "missing": []
+    },
+    {
+      "id": "F5",
+      "description": "CI/CD promotion validator",
+      "status": "PASS",
+      "command": "pnpm run validate:cicd-phases",
+      "exitCode": 0,
+      "output": "> workspace@0.0.0 validate:cicd-phases /home/runner/workspace\n> node scripts/validate-cicd-phases.mjs\n\nCI/CD phases 10–30 validation passed (15 deployables)"
+    },
+    {
+      "id": "F6",
+      "description": "ZIOX-F certification",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "evidence": {
+    "sourceDocument": "attached_assets/AYZEN_ZIOX_Public_Production_Readiness_Roadmap_1790636953669.md",
+    "validator": "scripts/validate-ziox.mjs"
+  }
+}

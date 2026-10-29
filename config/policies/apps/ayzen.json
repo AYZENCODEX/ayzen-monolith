@@ -1,0 +1,6 @@
+{
+  "app": "ayzen",
+  "roles": { "member": ["profile.read"], "owner": ["profile.read", "workspace.manage"] },
+  "resources": ["identity", "workspace", "search"],
+  "defaultDeny": true
+}

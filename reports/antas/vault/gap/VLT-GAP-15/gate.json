@@ -1,0 +1,105 @@
+{
+  "gap": "VLT-GAP-15",
+  "sub": "VLT-GAP-15-D",
+  "stage": "gate",
+  "checked_at": "2026-10-12T16:40:14.745Z",
+  "cells": 2229,
+  "equal_cells": 2229,
+  "groups": {
+    "entity-secret": {
+      "cells": 614,
+      "equal": 614,
+      "routes": 41,
+      "shallow_routes": [
+        "GET /vault/activity",
+        "GET /vault/gas-overview"
+      ]
+    },
+    "local-account": {
+      "cells": 345,
+      "equal": 345,
+      "routes": 23,
+      "shallow_routes": [
+        "POST /local-accounts/category-receipt/:category",
+        "POST /local-accounts/category-receipt/:category/email"
+      ]
+    },
+    "kyc": {
+      "cells": 195,
+      "equal": 195,
+      "routes": 13,
+      "shallow_routes": []
+    },
+    "game-marketplace": {
+      "cells": 225,
+      "equal": 225,
+      "routes": 15,
+      "shallow_routes": []
+    },
+    "security-access": {
+      "cells": 255,
+      "equal": 255,
+      "routes": 17,
+      "shallow_routes": []
+    },
+    "backup-restore": {
+      "cells": 180,
+      "equal": 180,
+      "routes": 12,
+      "shallow_routes": []
+    },
+    "snapshot-trash": {
+      "cells": 174,
+      "equal": 174,
+      "routes": 14,
+      "shallow_routes": []
+    },
+    "share-attachment": {
+      "cells": 225,
+      "equal": 225,
+      "routes": 15,
+      "shallow_routes": []
+    },
+    "health": {
+      "cells": 16,
+      "equal": 16,
+      "routes": 4,
+      "shallow_routes": []
+    }
+  },
+  "planted_divergences_detected": [
+    "status code",
+    "error message",
+    "db query arg",
+    "dropped side effect"
+  ],
+  "residual_covered_by": {
+    "differential-vlt-gap-15-backup.mjs": true,
+    "differential-vlt-gap-11.mjs": true
+  },
+  "residual_accepted_by_owner": [],
+  "equivalence_complete": true,
+  "known_limits": [
+    "moved-module internals are the same fake on both sides in the route replay (covered by module-level differentials/cells)",
+    "4 routes reach shallow paths only (allowed_shallow, listed per group)",
+    "stand-in values: AUTH_STEP_POLICIES, CLOUD_PROVIDERS, retention days",
+    "no-auth state not replayed (requireAuth answers first; middleware chain compared)"
+  ],
+  "source_hashes": {
+    "scripts/antas/vault/gap/validate-vlt-gap-15-D.mjs": "86fd91c11a139b81fa1b6cd1141fec70798721b0372f8ae2a2fb87440ecd6b3b",
+    "scripts/antas/vault/gap/validate-vlt-gap-15-C.mjs": "a8634657306ba09cbc376ba2ea95965f5d3c045b84d7f1d0b43a2612f516f823",
+    "scripts/antas/vault/gap/validate-vlt-gap-15-B.mjs": "9ee3701b9025af448c4e442c7e427d0f5a2b1889b517f54fbe54671b1cc313c1",
+    "scripts/antas/vault/gap/equivalence-replay.mjs": "cdb497b66370834709eb58174743c24780b7f9c8165d1c2e9f5f79747ff40f1c",
+    "scripts/antas/vault/gap/equivalence-suite.mjs": "edf3f03e0e1dedc0f3503b67358b1415de6797787b6fde481a4654905cead856",
+    "scripts/antas/vault/gap/differential-vlt-gap-15-backup.mjs": "4d64d2d6f77c85e7b625e92029442f15a8c85426780f2243dcef04d9ff693550",
+    "scripts/antas/vault/gap/gap-configs/vault-equivalence-replay.json": "f9a9ef35dc110bb62fe3bdfe1cff4be1d7a4500e976f31a0f2e9233712590467"
+  },
+  "source_tree_sha256": "79ef2972a6bd9f5fe444e129f01399f396c037dbe3bc5ecdd3b3236fa2b68dfd",
+  "binding": {
+    "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+    "commit_binding": "git-head",
+    "source_tree_sha256": "79ef2972a6bd9f5fe444e129f01399f396c037dbe3bc5ecdd3b3236fa2b68dfd"
+  },
+  "errors": [],
+  "status": "PASS"
+}

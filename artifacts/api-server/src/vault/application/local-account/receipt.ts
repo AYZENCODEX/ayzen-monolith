@@ -1,0 +1,224 @@
+import type { FantasticReceiptConfig } from "../../../lib/receipt-theme";
+import { fmtPublicLocalReceipt, fmtPublicCategoryReceipt, aggregateCategoryRows } from "../../domain/local-account-values";
+import type { FoundCategoryReceipt } from "../../domain/local-account-values";
+import {
+  selectLocalAccountReceiptRow, setLocalAccountReceiptToken, clearLocalAccountReceiptToken,
+  findLocalAccountByReceiptToken, selectCategoryReceiptToken, insertCategoryReceipt, deleteCategoryReceipt,
+  selectCategoryAggregateRows, findCategoryReceiptRowByToken, selectUserEmailRecipient,
+} from "../../infrastructure/repositories/local-account-repository";
+import { vaultDbError as dbError, type VaultOperationResult as UseCaseResult } from "../use-case-result";
+import { generateVaultReceiptToken, vaultReceiptLink } from "../../security/receipt-token";
+
+
+/**
+ * Local account public-receipt use-cases (single-entity receipt link and the
+ * category-wise vault receipt). Extracted from routes/local-accounts.ts
+ * (VLT-GAP-02-B). Both receipt kinds keep the possession-is-auth model of
+ * finance_ledger_entries.receipt_token: the public payload only ever carries
+ * the "worth showing off" fields — never passwords/2FA/backup codes/emails.
+ */
+
+export async function computeCategoryAggregate(userId: number, category: string) {
+  return aggregateCategoryRows(await selectCategoryAggregateRows(userId, category));
+}
+
+export async function findCategoryReceiptByToken(token: string): Promise<FoundCategoryReceipt | null> {
+  const receipt = await findCategoryReceiptRowByToken(token);
+  if (!receipt) return null;
+  const aggregate = await computeCategoryAggregate(receipt.user_id, receipt.category);
+  return { receipt, issuedBy: receipt.owner_username ?? null, aggregate };
+}
+
+/** Existing category-receipt token, or a freshly minted one (3 attempts on unique collision). */
+async function ensureCategoryReceiptToken(userId: number, category: string): Promise<string | null> {
+  const [existing] = (await selectCategoryReceiptToken(userId, category)).rows as any[];
+
+  let token: string | null = existing?.receipt_token ?? null;
+  if (!token) {
+    for (let attempt = 0; attempt < 3 && !token; attempt++) {
+      const candidate = generateVaultReceiptToken();
+      try {
+        const result = await insertCategoryReceipt(userId, category, candidate);
+        token = (result.rows[0] as any)?.receipt_token ?? null;
+      } catch { /* unique collision — loop and retry */ }
+    }
+  }
+  return token;
+}
+
+// ─── POST /local-accounts/:id/receipt — mint (or fetch the existing) public link ──
+export async function createLocalAccountReceipt(userId: number, idParam: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    const [row] = (await selectLocalAccountReceiptRow(id, userId)).rows as any[];
+    if (!row) return { status: 404, body: { error: "Account not found" } };
+
+    let token = row.receipt_token as string | null;
+    if (!token) {
+      for (let attempt = 0; attempt < 3 && !token; attempt++) {
+        const candidate = generateVaultReceiptToken();
+        try {
+          const result = await setLocalAccountReceiptToken(id, candidate);
+          token = (result.rows[0] as any)?.receipt_token ?? null;
+        } catch { /* unique collision — loop and retry */ }
+      }
+      if (!token) return { status: 500, body: { error: "Could not generate a receipt link, please try again" } };
+    }
+    return { status: 200, body: { token, url: vaultReceiptLink("local", token) } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── DELETE /local-accounts/:id/receipt — revoke the public link ──────────────
+export async function revokeLocalAccountReceipt(userId: number, idParam: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+  try {
+    const result = await clearLocalAccountReceiptToken(id, userId);
+    if (!result.rows.length) return { status: 404, body: { error: "Account not found" } };
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── GET /local-accounts/receipt/:token(/pdf) — public, no auth ───────────────
+// `streamPdf` present = the /pdf variant: the route adapter supplies the
+// response-bound PDF writer, the use-case decides what goes into it.
+export async function resolvePublicLocalReceipt(
+  rawToken: unknown,
+  streamPdf?: (spec: FantasticReceiptConfig) => void,
+): Promise<UseCaseResult> {
+  const token = String(rawToken || "");
+  if (!token) return { status: 400, body: { error: "Missing token" } };
+  try {
+    const row = await findLocalAccountByReceiptToken(token);
+    if (!row) return { status: 404, body: { error: "This receipt link is invalid or has been revoked." } };
+    const r = fmtPublicLocalReceipt(row, row.owner_username ?? null);
+    if (!streamPdf) return { status: 200, body: r };
+    const displayName = row.label || row.username || `Local Entity #${row.id}`;
+
+    streamPdf({
+      kicker: "Local Entity Receipt",
+      title: displayName,
+      subtitle: row.category ? `${row.category}${r.username ? ` · @${r.username}` : ""}` : (r.username ? `@${r.username}` : undefined),
+      avatarLetter: displayName,
+      heroLabel: r.roiPct !== null ? "Profit & Loss" : "Account Worth",
+      heroValue: r.roiPct !== null
+        ? `${r.roiPct >= 0 ? "+" : ""}${r.roiPct.toFixed(1)}%`
+        : `$${r.accountWorth.toFixed(2)}`,
+      heroPositive: r.roiPct !== null ? r.roiPct >= 0 : undefined,
+      stats: [
+        { label: "Username", value: r.username || "—" },
+        { label: "Followers", value: r.followers ? String(r.followers) : "—" },
+        { label: "Account Age", value: r.age ?? "—" },
+        { label: "Current Worth", value: `$${r.accountWorth.toFixed(2)}`, color: "#0f9d58" },
+        { label: "Buy Price", value: `$${r.buyPrice.toFixed(2)}` },
+        { label: "Net Profit", value: r.profit !== null ? `${r.profit >= 0 ? "+" : ""}$${r.profit.toFixed(2)}` : "—", color: r.profit !== null ? (r.profit >= 0 ? "#0f9d58" : "#e4453a") : undefined },
+      ],
+      receiptId: r.id,
+      issuedBy: r.issuedBy,
+      filenamePrefix: "local-entity",
+    });
+    return { status: 200, body: undefined, streamed: true };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── POST /local-accounts/category-receipt/:category — mint (or fetch) public link ──
+export async function createCategoryReceipt(userId: number, categoryParam: unknown): Promise<UseCaseResult> {
+  const category = String(categoryParam || "").trim();
+  if (!category) return { status: 400, body: { error: "Category required" } };
+  try {
+    const token = await ensureCategoryReceiptToken(userId, category);
+    if (!token) return { status: 500, body: { error: "Could not generate a receipt link, please try again" } };
+    return { status: 200, body: { token, url: vaultReceiptLink("vault-category", token) } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── DELETE /local-accounts/category-receipt/:category — revoke the public link ──
+export async function revokeCategoryReceipt(userId: number, categoryParam: unknown): Promise<UseCaseResult> {
+  const category = String(categoryParam || "").trim();
+  if (!category) return { status: 400, body: { error: "Category required" } };
+  try {
+    const result = await deleteCategoryReceipt(userId, category);
+    if (!result.rows.length) return { status: 404, body: { error: "No active receipt link for this category" } };
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── GET /local-accounts/category-receipt/:token(/pdf) — public, no auth ──────
+export async function resolvePublicCategoryReceipt(
+  rawToken: unknown,
+  streamPdf?: (spec: FantasticReceiptConfig) => void,
+): Promise<UseCaseResult> {
+  const token = String(rawToken || "");
+  if (!token) return { status: 400, body: { error: "Missing token" } };
+  try {
+    const found = await findCategoryReceiptByToken(token);
+    if (!found) return { status: 404, body: { error: "This receipt link is invalid or has been revoked." } };
+    const r = fmtPublicCategoryReceipt(found);
+    if (!streamPdf) return { status: 200, body: r };
+    const displayName = r.category.charAt(0).toUpperCase() + r.category.slice(1);
+
+    streamPdf({
+      kicker: "Vault Category Receipt",
+      title: displayName,
+      subtitle: `${r.accountCount} account${r.accountCount === 1 ? "" : "s"}`,
+      avatarLetter: displayName,
+      heroLabel: r.pnlPct !== null ? "Category P&L" : "Total Worth",
+      heroValue: r.pnlPct !== null
+        ? `${r.pnlPct >= 0 ? "+" : ""}${r.pnlPct.toFixed(1)}%`
+        : `$${r.totalWorth.toFixed(2)}`,
+      heroPositive: r.pnlPct !== null ? r.pnlPct >= 0 : undefined,
+      stats: [
+        { label: "Accounts", value: String(r.accountCount) },
+        { label: "Avg Age", value: r.avgAge ?? "—" },
+        { label: "Avg Followers", value: r.avgFollowers !== null ? r.avgFollowers.toFixed(0) : "—" },
+        { label: "Total Worth", value: `$${r.totalWorth.toFixed(2)}`, color: "#0f9d58" },
+        { label: "Total Buy Value", value: `$${r.totalBuyValue.toFixed(2)}` },
+        { label: "Total P&L", value: r.totalPnl !== null ? `${r.totalPnl >= 0 ? "+" : ""}$${r.totalPnl.toFixed(2)}` : "—", color: r.totalPnl !== null ? (r.totalPnl >= 0 ? "#0f9d58" : "#e4453a") : undefined },
+      ],
+      receiptId: r.id,
+      issuedBy: r.issuedBy,
+      filenamePrefix: "vault-category",
+    });
+    return { status: 200, body: undefined, streamed: true };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}
+
+// ─── POST /local-accounts/category-receipt/:category/email — email the link to the requester ──
+export async function emailCategoryReceipt(userId: number, categoryParam: unknown): Promise<UseCaseResult> {
+  const category = String(categoryParam || "").trim();
+  if (!category) return { status: 400, body: { error: "Category required" } };
+  try {
+    const token = await ensureCategoryReceiptToken(userId, category);
+    if (!token) return { status: 500, body: { error: "Could not generate a receipt link, please try again" } };
+
+    const aggregate = await computeCategoryAggregate(userId, category);
+    const [recipient] = (await selectUserEmailRecipient(userId)).rows as any[];
+    if (!recipient?.email) return { status: 400, body: { error: "No email on file for this user" } };
+
+    const { sendReceiptEmail } = await import("../../infrastructure/providers/lazy-provider-ports");
+    const displayName = category.charAt(0).toUpperCase() + category.slice(1);
+    const result = await sendReceiptEmail(recipient.email, recipient.username, {
+      kicker: "Vault Category Receipt",
+      title: displayName,
+      summary: `${aggregate.count} accounts · Avg followers ${aggregate.avgFollowers !== null ? aggregate.avgFollowers.toFixed(0) : "—"} · Avg age ${aggregate.avgAgeLabel ?? "—"}`,
+      url: vaultReceiptLink("vault-category", token),
+    });
+    if (!result.success) return { status: 502, body: { error: "Failed to send email", detail: result.error } };
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return { status: 500, body: { error: "Failed to email receipt", detail: err?.message } };
+  }
+}

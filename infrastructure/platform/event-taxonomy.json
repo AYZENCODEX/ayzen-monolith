@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "requiredEnvelopeFields": [
+    "eventId",
+    "eventType",
+    "eventVersion",
+    "occurredAt",
+    "payload",
+    "traceId",
+    "correlationId",
+    "causationId"
+  ],
+  "categories": {
+    "domain": ["organization.", "workspace.", "user.", "finance.", "vault.", "wisp.", "mail.", "notification.", "workflow.", "ai.", "search."],
+    "security": ["authentication.", "authorization.", "telegram.auth."],
+    "operations": ["deployment.", "service.health.", "event.consumer.", "backup."],
+    "intelligence": ["intelligence.", "analytics.", "technical_gap.", "user.error"],
+    "controlPlane": ["audit.", "alert.", "incident."]
+  },
+  "rules": {
+    "producerMustBeRegistered": true,
+    "consumerMustBeIdempotent": true,
+    "replayRequiresOperator": true,
+    "deadLettersRequireAudit": true,
+    "sensitivePayloadsMustBeRedacted": true
+  }
+}

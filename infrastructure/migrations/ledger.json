@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "checksumAlgorithm": "sha256",
+  "environments": ["development", "staging", "production"],
+  "requiredEvidence": ["owner", "checksum", "dependencyOrder", "appliedEnvironment", "restoreEvidence"],
+  "migrations": []
+}

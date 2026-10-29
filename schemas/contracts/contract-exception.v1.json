@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ayzen.internal/schemas/contracts/contract-exception.v1.json",
+  "title": "AYZEN Contract Zero-Gap Exception",
+  "description": "Phase 06 (Contract Zero-Gap Sprint). One entry per domain-contract-coverage finding (see tools/contract-validator/domain-coverage.mjs) that is accepted as an architectural fact rather than fixed -- e.g. a domain whose public operation genuinely has no HTTP endpoint by design. Consumed by scripts/validate-contract-exceptions.mjs, which fails the build if a current finding has no matching, unexpired entry here, or if an entry here has expired. This is deliberately stricter than scripts/domain-contract-coverage-baseline.json's frozen-forever baseline: every acceptance here has an owner and an expiry, so it comes back for a human decision instead of aging silently.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["exceptions"],
+  "properties": {
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["category", "key", "reason", "owner", "expires"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": ["ownersWithoutContract", "contractsWithoutEndpoints", "unresolvedOperations"],
+            "description": "Which of computeDomainContractCoverage()'s three finding lists this entry excuses."
+          },
+          "key": {
+            "type": "string",
+            "description": "The exact finding string, e.g. 'platform' (ownersWithoutContract/contractsWithoutEndpoints) or 'telegram:resolve-command' (unresolvedOperations, 'domain:operation')."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Why this is an accepted architectural fact, not a bug -- reviewed by a human, not a placeholder."
+          },
+          "owner": {
+            "type": "string",
+            "description": "Team or individual accountable for re-reviewing this exception when it expires."
+          },
+          "ticket": {
+            "type": "string",
+            "description": "Optional tracking reference (e.g. a roadmap doc section or issue id) for follow-up work, if any is planned."
+          },
+          "expires": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "ISO date (YYYY-MM-DD). Once today's date passes this, the exception no longer excuses the finding and the gate fails until a human renews (extends the date, having re-confirmed the reason still holds) or resolves it."
+          }
+        }
+      }
+    }
+  }
+}

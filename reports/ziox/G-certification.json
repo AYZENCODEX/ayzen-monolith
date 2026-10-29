@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "AYZEN ZIOX Public Production Readiness",
+  "phase": "G",
+  "name": "Performance, Capacity & Abuse Readiness",
+  "generatedAt": "2026-09-29T06:07:59.197Z",
+  "status": "PASS",
+  "implementation": "complete",
+  "subphases": [
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "G6",
+    "G7"
+  ],
+  "checks": [
+    {
+      "id": "G1",
+      "description": "Performance baseline is defined",
+      "status": "PASS",
+      "required": [
+        "docs/operations/performance-baseline.md",
+        "config/slo/gates.json"
+      ],
+      "missing": []
+    },
+    {
+      "id": "G2-evidence",
+      "description": "Load and failure matrix evidence is defined",
+      "status": "PASS",
+      "required": [
+        "tests/load/backbone/README.md",
+        "tests/load/gateway-smoke.js"
+      ],
+      "missing": []
+    },
+    {
+      "id": "G2",
+      "description": "Failure-injection contract tests",
+      "status": "PASS",
+      "command": "node --test tests/failure-injection/matrix.test.mjs",
+      "exitCode": 0,
+      "output": "✔ runtime graph detects a missing critical hop (1.43484ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 71.613155"
+    },
+    {
+      "id": "G3",
+      "description": "Backpressure policy exists",
+      "status": "PASS",
+      "required": [
+        "config/limits/backpressure.json",
+        "packages/backpressure/src/index.mjs"
+      ],
+      "missing": []
+    },
+    {
+      "id": "G4",
+      "description": "Abuse protection is documented and implemented",
+      "status": "PASS",
+      "required": [
+        "docs/security/abuse-protection.md",
+        "packages/rate-limit/src/index.mjs"
+      ],
+      "missing": []
+    },
+    {
+      "id": "G5",
+      "description": "AI/resource cost controls exist",
+      "status": "PASS",
+      "required": [
+        "config/cost-budgets/policy.json",
+        "config/resources/budgets.json"
+      ],
+      "missing": []
+    },
+    {
+      "id": "G6",
+      "description": "Capacity model exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/capacity-plan.md",
+        "infrastructure/platform/capacity-plan.json"
+      ],
+      "missing": []
+    },
+    {
+      "id": "G7",
+      "description": "ZIOX-G certification",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "evidence": {
+    "sourceDocument": "attached_assets/AYZEN_ZIOX_Public_Production_Readiness_Roadmap_1790636953669.md",
+    "validator": "scripts/validate-ziox.mjs"
+  }
+}

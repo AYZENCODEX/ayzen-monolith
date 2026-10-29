@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-09.1",
+  "phase": "ANTAS-09",
+  "name": "Route Contract",
+  "generatedAt": "2026-09-29T06:06:06.718Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "config/antas/api-policy.json",
+    "packages/api-spec/src/index.mjs",
+    "lib/api-spec/openapi.yaml"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "status": "UNVERIFIED",
+  "checks": {
+    "debitsEqualCredits": "UNVERIFIED",
+    "balanceEquation": "UNVERIFIED",
+    "postedTransactionsImmutable": "UNVERIFIED",
+    "providerBackedReconciliation": "UNVERIFIED"
+  },
+  "reason": "No provider-backed ledger dataset was supplied; the script refuses to invent balances."
+}

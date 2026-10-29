@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "environments": ["development", "staging", "production"],
+  "compare": ["configSchema", "capabilities", "contracts", "migrations", "slo"],
+  "ignore": ["secretValues", "providerCredentials"],
+  "driftAction": "block-promotion"
+}

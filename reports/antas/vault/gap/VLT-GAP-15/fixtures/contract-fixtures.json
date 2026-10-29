@@ -1,0 +1,1620 @@
+{
+  "gap": "VLT-GAP-15",
+  "kind": "frozen-pre-extraction-contract",
+  "groups": {
+    "entity-secret": {
+      "tasks": [
+        2,
+        6
+      ],
+      "note": "routes/vault.ts serves entity CRUD AND secret create/list/reveal (GET /vault/:id/seed); one contract group.",
+      "files": [
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-01/baseline/routes/vault.ts",
+          "sha256": "caa19f200d2fa364a5858d71e12c79dd5f50cfa1f5d817eefa781e02115213df",
+          "manifest_sha256": "caa19f200d2fa364a5858d71e12c79dd5f50cfa1f5d817eefa781e02115213df",
+          "manifest_verified": true,
+          "lines": 1899,
+          "routes": [
+            "DELETE /vault/:id",
+            "DELETE /vault/:id/receipt",
+            "DELETE /vault/trash",
+            "DELETE /vault/trash/:id",
+            "GET /admin/vault",
+            "GET /admin/vault/activity",
+            "GET /admin/vault/full",
+            "GET /admin/vault/local-accounts",
+            "GET /admin/vault/users",
+            "GET /admin/vault/users/:userId",
+            "GET /vault",
+            "GET /vault/:id",
+            "GET /vault/:id/activity",
+            "GET /vault/:id/field-history",
+            "GET /vault/:id/gas",
+            "GET /vault/:id/seed",
+            "GET /vault/activity",
+            "GET /vault/analytics",
+            "GET /vault/analytics/value-history",
+            "GET /vault/gas-overview",
+            "GET /vault/health-report",
+            "GET /vault/receipt/:token",
+            "GET /vault/receipt/:token/pdf",
+            "GET /vault/tags",
+            "GET /vault/trash",
+            "PATCH /vault/:id",
+            "PATCH /vault/:id/drive-wallet",
+            "PATCH /vault/:id/field",
+            "PATCH /vault/bulk-action",
+            "PATCH /vault/bulk-tag",
+            "POST /vault",
+            "POST /vault/:id/receipt",
+            "POST /vault/:id/refresh-wallet-worth",
+            "POST /vault/:id/restore",
+            "POST /vault/health-check",
+            "POST /vault/validate-key"
+          ],
+          "status_codes": [
+            "201",
+            "400",
+            "403",
+            "404",
+            "409",
+            "500"
+          ],
+          "error_messages": [
+            "Could not generate a receipt link, please try again",
+            "Drive wallet is already set and cannot be edited",
+            "Failed to create receipt link",
+            "Failed to decrypt seed phrase",
+            "Failed to fetch Vault activity",
+            "Failed to fetch activity feed",
+            "Failed to fetch activity log",
+            "Failed to fetch analytics",
+            "Failed to fetch full vault",
+            "Failed to fetch local accounts",
+            "Failed to fetch tags",
+            "Failed to fetch user vault",
+            "Failed to fetch value history",
+            "Failed to fetch vault users",
+            "Failed to generate health report",
+            "Health check failed",
+            "Invalid entity id",
+            "Invalid userId",
+            "Max 200 ids per bulk action",
+            "Missing token",
+            "No seed phrase stored for this entity",
+            "No valid ids",
+            "Reveal token missing or expired",
+            "Seed phrase reveal is disabled by your organization's extension policy",
+            "This entity has no wallet addresses to check",
+            "This receipt link is invalid or has been revoked.",
+            "Unable to load field history",
+            "Unable to load gas health for this entity",
+            "Unable to load gas overview",
+            "Unable to refresh live wallet worth",
+            "Unable to save drive wallet",
+            "Unable to update field",
+            "Unknown or non-editable field",
+            "Vault entry not found",
+            "Wallet address is required",
+            "action must be one of: tag, status, delete",
+            "followers must be a number",
+            "ids (non-empty array) is required",
+            "projectName is required",
+            "tag is required",
+            "value is required"
+          ],
+          "error_codes": [
+            "ORG_SEED_REVEAL_DISABLED",
+            "REVEAL_TOKEN_REQUIRED"
+          ],
+          "events": [
+            "vault_updated"
+          ],
+          "audit_actions": [
+            "bulk_status",
+            "bulk_tagged",
+            "bulk_trashed",
+            "created",
+            "delete",
+            "field_updated",
+            "purged",
+            "restored",
+            "status",
+            "tag",
+            "trash_emptied",
+            "trashed",
+            "updated"
+          ],
+          "side_effect_callees": {
+            "broadcastEvent": 11,
+            "logVaultActivity": 13,
+            "logSubjectActivity": 1,
+            "createNotification": 1,
+            "syncOnVaultDelete": 1,
+            "delistVaultMarketplaceListings": 2,
+            "chargeCredits": 2
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-01/baseline/routes/vault-entity-links.ts",
+          "sha256": "082faae119f14eaba5d0241b2c037c1821460dc36c42b93ff4db939264055e10",
+          "manifest_sha256": "082faae119f14eaba5d0241b2c037c1821460dc36c42b93ff4db939264055e10",
+          "manifest_verified": true,
+          "lines": 277,
+          "routes": [
+            "DELETE /vault-entity-links/:id",
+            "GET /vault/:id/links",
+            "GET /vault/links/all",
+            "PATCH /vault-entity-links/:id",
+            "POST /vault-entity-links"
+          ],
+          "status_codes": [
+            "201",
+            "400",
+            "404",
+            "409",
+            "500"
+          ],
+          "error_messages": [
+            "An entity can't be linked to itself",
+            "Failed to create link",
+            "Failed to delete link",
+            "Failed to fetch linked entities",
+            "Failed to fetch links",
+            "Failed to update link",
+            "Invalid entity id",
+            "Invalid link id",
+            "Link not found",
+            "This relationship is already linked",
+            "Vault entry not found",
+            "entityId and linkedEntityId are required",
+            "entityId not found or not owned by you",
+            "linkedEntityId not found or not owned by you"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        }
+      ],
+      "merged": {
+        "routes": [
+          "DELETE /vault-entity-links/:id",
+          "DELETE /vault/:id",
+          "DELETE /vault/:id/receipt",
+          "DELETE /vault/trash",
+          "DELETE /vault/trash/:id",
+          "GET /admin/vault",
+          "GET /admin/vault/activity",
+          "GET /admin/vault/full",
+          "GET /admin/vault/local-accounts",
+          "GET /admin/vault/users",
+          "GET /admin/vault/users/:userId",
+          "GET /vault",
+          "GET /vault/:id",
+          "GET /vault/:id/activity",
+          "GET /vault/:id/field-history",
+          "GET /vault/:id/gas",
+          "GET /vault/:id/links",
+          "GET /vault/:id/seed",
+          "GET /vault/activity",
+          "GET /vault/analytics",
+          "GET /vault/analytics/value-history",
+          "GET /vault/gas-overview",
+          "GET /vault/health-report",
+          "GET /vault/links/all",
+          "GET /vault/receipt/:token",
+          "GET /vault/receipt/:token/pdf",
+          "GET /vault/tags",
+          "GET /vault/trash",
+          "PATCH /vault-entity-links/:id",
+          "PATCH /vault/:id",
+          "PATCH /vault/:id/drive-wallet",
+          "PATCH /vault/:id/field",
+          "PATCH /vault/bulk-action",
+          "PATCH /vault/bulk-tag",
+          "POST /vault",
+          "POST /vault-entity-links",
+          "POST /vault/:id/receipt",
+          "POST /vault/:id/refresh-wallet-worth",
+          "POST /vault/:id/restore",
+          "POST /vault/health-check",
+          "POST /vault/validate-key"
+        ],
+        "status_codes": [
+          "201",
+          "400",
+          "403",
+          "404",
+          "409",
+          "500"
+        ],
+        "error_messages": [
+          "An entity can't be linked to itself",
+          "Could not generate a receipt link, please try again",
+          "Drive wallet is already set and cannot be edited",
+          "Failed to create link",
+          "Failed to create receipt link",
+          "Failed to decrypt seed phrase",
+          "Failed to delete link",
+          "Failed to fetch Vault activity",
+          "Failed to fetch activity feed",
+          "Failed to fetch activity log",
+          "Failed to fetch analytics",
+          "Failed to fetch full vault",
+          "Failed to fetch linked entities",
+          "Failed to fetch links",
+          "Failed to fetch local accounts",
+          "Failed to fetch tags",
+          "Failed to fetch user vault",
+          "Failed to fetch value history",
+          "Failed to fetch vault users",
+          "Failed to generate health report",
+          "Failed to update link",
+          "Health check failed",
+          "Invalid entity id",
+          "Invalid link id",
+          "Invalid userId",
+          "Link not found",
+          "Max 200 ids per bulk action",
+          "Missing token",
+          "No seed phrase stored for this entity",
+          "No valid ids",
+          "Reveal token missing or expired",
+          "Seed phrase reveal is disabled by your organization's extension policy",
+          "This entity has no wallet addresses to check",
+          "This receipt link is invalid or has been revoked.",
+          "This relationship is already linked",
+          "Unable to load field history",
+          "Unable to load gas health for this entity",
+          "Unable to load gas overview",
+          "Unable to refresh live wallet worth",
+          "Unable to save drive wallet",
+          "Unable to update field",
+          "Unknown or non-editable field",
+          "Vault entry not found",
+          "Wallet address is required",
+          "action must be one of: tag, status, delete",
+          "entityId and linkedEntityId are required",
+          "entityId not found or not owned by you",
+          "followers must be a number",
+          "ids (non-empty array) is required",
+          "linkedEntityId not found or not owned by you",
+          "projectName is required",
+          "tag is required",
+          "value is required"
+        ],
+        "error_codes": [
+          "ORG_SEED_REVEAL_DISABLED",
+          "REVEAL_TOKEN_REQUIRED"
+        ],
+        "events": [
+          "vault_updated"
+        ],
+        "audit_actions": [
+          "bulk_status",
+          "bulk_tagged",
+          "bulk_trashed",
+          "created",
+          "delete",
+          "field_updated",
+          "purged",
+          "restored",
+          "status",
+          "tag",
+          "trash_emptied",
+          "trashed",
+          "updated"
+        ],
+        "side_effect_callees": {
+          "broadcastEvent": 11,
+          "logVaultActivity": 13,
+          "logSubjectActivity": 1,
+          "createNotification": 1,
+          "syncOnVaultDelete": 1,
+          "delistVaultMarketplaceListings": 2,
+          "chargeCredits": 2
+        }
+      }
+    },
+    "local-account": {
+      "tasks": [
+        3
+      ],
+      "note": null,
+      "files": [
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__api-server__src__routes__local-accounts.ts",
+          "sha256": "476a564b98a0ee8416f4415db1a857fed54080eadee4c28f0916e58a309ef7a7",
+          "manifest_sha256": "476a564b98a0ee8416f4415db1a857fed54080eadee4c28f0916e58a309ef7a7",
+          "manifest_verified": true,
+          "lines": 797,
+          "routes": [
+            "DELETE /local-accounts/:id",
+            "DELETE /local-accounts/:id/receipt",
+            "DELETE /local-accounts/categories/:id",
+            "DELETE /local-accounts/category-receipt/:category",
+            "DELETE /local-accounts/points/:pointId",
+            "GET /local-accounts",
+            "GET /local-accounts/:id",
+            "GET /local-accounts/:id/points",
+            "GET /local-accounts/categories",
+            "GET /local-accounts/category-receipt/:token",
+            "GET /local-accounts/category-receipt/:token/pdf",
+            "GET /local-accounts/receipt/:token",
+            "GET /local-accounts/receipt/:token/pdf",
+            "PATCH /local-accounts/:id/link-vault",
+            "PATCH /local-accounts/:id/status",
+            "PATCH /local-accounts/:id/unlink-vault",
+            "POST /local-accounts",
+            "POST /local-accounts/:id/points",
+            "POST /local-accounts/:id/receipt",
+            "POST /local-accounts/categories",
+            "POST /local-accounts/category-receipt/:category",
+            "POST /local-accounts/category-receipt/:category/email",
+            "PUT /local-accounts/:id"
+          ],
+          "status_codes": [
+            "201",
+            "400",
+            "404",
+            "500",
+            "502"
+          ],
+          "error_messages": [
+            "Account not found",
+            "Category name required",
+            "Category required",
+            "Could not generate a receipt link, please try again",
+            "DB error",
+            "Failed to email receipt",
+            "Failed to send email",
+            "Invalid ID",
+            "Missing token",
+            "No active receipt link for this category",
+            "No email on file for this user",
+            "Not found",
+            "Not found or forbidden",
+            "This receipt link is invalid or has been revoked.",
+            "amount required",
+            "status must be one of: active, banned",
+            "vaultEntryId required"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "chargeCredits": 1
+          }
+        }
+      ],
+      "merged": {
+        "routes": [
+          "DELETE /local-accounts/:id",
+          "DELETE /local-accounts/:id/receipt",
+          "DELETE /local-accounts/categories/:id",
+          "DELETE /local-accounts/category-receipt/:category",
+          "DELETE /local-accounts/points/:pointId",
+          "GET /local-accounts",
+          "GET /local-accounts/:id",
+          "GET /local-accounts/:id/points",
+          "GET /local-accounts/categories",
+          "GET /local-accounts/category-receipt/:token",
+          "GET /local-accounts/category-receipt/:token/pdf",
+          "GET /local-accounts/receipt/:token",
+          "GET /local-accounts/receipt/:token/pdf",
+          "PATCH /local-accounts/:id/link-vault",
+          "PATCH /local-accounts/:id/status",
+          "PATCH /local-accounts/:id/unlink-vault",
+          "POST /local-accounts",
+          "POST /local-accounts/:id/points",
+          "POST /local-accounts/:id/receipt",
+          "POST /local-accounts/categories",
+          "POST /local-accounts/category-receipt/:category",
+          "POST /local-accounts/category-receipt/:category/email",
+          "PUT /local-accounts/:id"
+        ],
+        "status_codes": [
+          "201",
+          "400",
+          "404",
+          "500",
+          "502"
+        ],
+        "error_messages": [
+          "Account not found",
+          "Category name required",
+          "Category required",
+          "Could not generate a receipt link, please try again",
+          "DB error",
+          "Failed to email receipt",
+          "Failed to send email",
+          "Invalid ID",
+          "Missing token",
+          "No active receipt link for this category",
+          "No email on file for this user",
+          "Not found",
+          "Not found or forbidden",
+          "This receipt link is invalid or has been revoked.",
+          "amount required",
+          "status must be one of: active, banned",
+          "vaultEntryId required"
+        ],
+        "error_codes": [],
+        "events": [],
+        "audit_actions": [],
+        "side_effect_callees": {
+          "chargeCredits": 1
+        }
+      }
+    },
+    "kyc": {
+      "tasks": [
+        4
+      ],
+      "note": null,
+      "files": [
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__api-server__src__routes__kyc.ts",
+          "sha256": "05201d5c50191aa0682f2e7425902f9f07f04d65c4e8743d7f2cf1052b881a69",
+          "manifest_sha256": "05201d5c50191aa0682f2e7425902f9f07f04d65c4e8743d7f2cf1052b881a69",
+          "manifest_verified": true,
+          "lines": 287,
+          "routes": [
+            "DELETE /kyc-entries/:id",
+            "GET /kyc-entries",
+            "GET /kyc-entries/:id",
+            "GET /kyc-entries/enrollments",
+            "PATCH /kyc-entries/:id/status",
+            "POST /kyc-entries",
+            "PUT /kyc-entries/:id"
+          ],
+          "status_codes": [
+            "201",
+            "400",
+            "404",
+            "500"
+          ],
+          "error_messages": [
+            "Category required",
+            "DB error",
+            "Invalid ID",
+            "Not found",
+            "Not found or forbidden",
+            "status must be one of: active, banned"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "chargeCredits": 1
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__api-server__src__routes__kyc-data-entities.ts",
+          "sha256": "42558bc1c65cbdf067505479afb184853b2c39f79af1857067372c72e5f0d2bd",
+          "manifest_sha256": "42558bc1c65cbdf067505479afb184853b2c39f79af1857067372c72e5f0d2bd",
+          "manifest_verified": true,
+          "lines": 185,
+          "routes": [
+            "DELETE /kyc-data-entities/:id",
+            "GET /kyc-data-entities",
+            "GET /kyc-data-entities/:id",
+            "GET /kyc-data-entities/overview",
+            "POST /kyc-data-entities",
+            "PUT /kyc-data-entities/:id"
+          ],
+          "status_codes": [
+            "201",
+            "400",
+            "404",
+            "409",
+            "500"
+          ],
+          "error_messages": [
+            "DB error",
+            "Data entity is in use by a KYC entity — unlink it first",
+            "Data entity is in use by a Vault entity — unlink it first",
+            "Invalid ID",
+            "Not found",
+            "Not found or forbidden"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        }
+      ],
+      "merged": {
+        "routes": [
+          "DELETE /kyc-data-entities/:id",
+          "DELETE /kyc-entries/:id",
+          "GET /kyc-data-entities",
+          "GET /kyc-data-entities/:id",
+          "GET /kyc-data-entities/overview",
+          "GET /kyc-entries",
+          "GET /kyc-entries/:id",
+          "GET /kyc-entries/enrollments",
+          "PATCH /kyc-entries/:id/status",
+          "POST /kyc-data-entities",
+          "POST /kyc-entries",
+          "PUT /kyc-data-entities/:id",
+          "PUT /kyc-entries/:id"
+        ],
+        "status_codes": [
+          "201",
+          "400",
+          "404",
+          "409",
+          "500"
+        ],
+        "error_messages": [
+          "Category required",
+          "DB error",
+          "Data entity is in use by a KYC entity — unlink it first",
+          "Data entity is in use by a Vault entity — unlink it first",
+          "Invalid ID",
+          "Not found",
+          "Not found or forbidden",
+          "status must be one of: active, banned"
+        ],
+        "error_codes": [],
+        "events": [],
+        "audit_actions": [],
+        "side_effect_callees": {
+          "chargeCredits": 1
+        }
+      }
+    },
+    "game-marketplace": {
+      "tasks": [
+        5
+      ],
+      "note": null,
+      "files": [
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__api-server__src__routes__game-entries.ts",
+          "sha256": "8503b842bcab4d907147488d12288d533fe38a0aa402a4514a63aabe27d8fc58",
+          "manifest_sha256": "8503b842bcab4d907147488d12288d533fe38a0aa402a4514a63aabe27d8fc58",
+          "manifest_verified": true,
+          "lines": 151,
+          "routes": [
+            "DELETE /game-entries/:id",
+            "GET /game-entries",
+            "GET /game-entries/:id",
+            "POST /game-entries",
+            "PUT /game-entries/:id"
+          ],
+          "status_codes": [
+            "201",
+            "400",
+            "404",
+            "500"
+          ],
+          "error_messages": [
+            "Category required",
+            "DB error",
+            "Invalid ID",
+            "Not found",
+            "Not found or forbidden"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "chargeCredits": 1
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__api-server__src__routes__marketplace-game.ts",
+          "sha256": "414f1877b0a876725353697a9d95675092ef57c5cec29e42c7f2a198a00ea0f6",
+          "manifest_sha256": "414f1877b0a876725353697a9d95675092ef57c5cec29e42c7f2a198a00ea0f6",
+          "manifest_verified": true,
+          "lines": 204,
+          "routes": [
+            "DELETE /marketplace/game/listings/:id",
+            "GET /marketplace/game/listings",
+            "GET /marketplace/game/stats",
+            "POST /marketplace/game/buy",
+            "POST /marketplace/game/listings"
+          ],
+          "status_codes": [
+            "400",
+            "403",
+            "404",
+            "409",
+            "500"
+          ],
+          "error_messages": [
+            "Cannot buy your own listing",
+            "Forbidden",
+            "Game Market is currently disabled",
+            "Insufficient game wallet balance",
+            "Listing not found or already sold",
+            "Listing was already sold or cancelled",
+            "Not found",
+            "game_name required",
+            "listing_id required",
+            "photos must be an array",
+            "title required",
+            "valid price required"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [
+            "marketplace.game_listing.cancel"
+          ],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-13/baseline/marketplace-vault.pre-extraction.ts",
+          "sha256": "87fc9ff5ba7fb74f9d163ab7970b9c2ab514d65f2973387f01168ed3c2bb0baa",
+          "manifest_sha256": null,
+          "manifest_verified": false,
+          "lines": 333,
+          "routes": [
+            "DELETE /marketplace/vault/listings/:id",
+            "GET /marketplace/vault/listings",
+            "GET /marketplace/vault/stats",
+            "POST /marketplace/vault/buy",
+            "POST /marketplace/vault/listings"
+          ],
+          "status_codes": [
+            "400",
+            "403",
+            "404",
+            "409",
+            "500"
+          ],
+          "error_messages": [
+            "Asset ownership conflict — seller may no longer own this KYC entry",
+            "Asset ownership conflict — seller may no longer own this entry",
+            "Asset ownership conflict — seller may no longer own this local account",
+            "Cannot buy your own listing",
+            "Forbidden",
+            "Insufficient vault wallet balance",
+            "KYC entry not found or not yours",
+            "Listing not found, sold, or is not a sell listing",
+            "Listing was already sold or cancelled",
+            "Local account not found or not yours",
+            "Not found",
+            "Vault Market is currently disabled",
+            "Vault entry not found, not yours, or in trash",
+            "account_type required for buy order",
+            "listing_id required",
+            "price required for sell order"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [
+            "marketplace.vault_listing.cancel"
+          ],
+          "side_effect_callees": {}
+        }
+      ],
+      "merged": {
+        "routes": [
+          "DELETE /game-entries/:id",
+          "DELETE /marketplace/game/listings/:id",
+          "DELETE /marketplace/vault/listings/:id",
+          "GET /game-entries",
+          "GET /game-entries/:id",
+          "GET /marketplace/game/listings",
+          "GET /marketplace/game/stats",
+          "GET /marketplace/vault/listings",
+          "GET /marketplace/vault/stats",
+          "POST /game-entries",
+          "POST /marketplace/game/buy",
+          "POST /marketplace/game/listings",
+          "POST /marketplace/vault/buy",
+          "POST /marketplace/vault/listings",
+          "PUT /game-entries/:id"
+        ],
+        "status_codes": [
+          "201",
+          "400",
+          "403",
+          "404",
+          "409",
+          "500"
+        ],
+        "error_messages": [
+          "Asset ownership conflict — seller may no longer own this KYC entry",
+          "Asset ownership conflict — seller may no longer own this entry",
+          "Asset ownership conflict — seller may no longer own this local account",
+          "Cannot buy your own listing",
+          "Category required",
+          "DB error",
+          "Forbidden",
+          "Game Market is currently disabled",
+          "Insufficient game wallet balance",
+          "Insufficient vault wallet balance",
+          "Invalid ID",
+          "KYC entry not found or not yours",
+          "Listing not found or already sold",
+          "Listing not found, sold, or is not a sell listing",
+          "Listing was already sold or cancelled",
+          "Local account not found or not yours",
+          "Not found",
+          "Not found or forbidden",
+          "Vault Market is currently disabled",
+          "Vault entry not found, not yours, or in trash",
+          "account_type required for buy order",
+          "game_name required",
+          "listing_id required",
+          "photos must be an array",
+          "price required for sell order",
+          "title required",
+          "valid price required"
+        ],
+        "error_codes": [],
+        "events": [],
+        "audit_actions": [
+          "marketplace.game_listing.cancel",
+          "marketplace.vault_listing.cancel"
+        ],
+        "side_effect_callees": {
+          "chargeCredits": 1
+        }
+      }
+    },
+    "security-access": {
+      "tasks": [
+        7
+      ],
+      "note": null,
+      "files": [
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__routes__vault-security.ts",
+          "sha256": "08248de670f095ce5d601a223e9c3328b30ebe1f51a0cf4ce5e66f58a05db296",
+          "manifest_sha256": "08248de670f095ce5d601a223e9c3328b30ebe1f51a0cf4ce5e66f58a05db296",
+          "manifest_verified": true,
+          "lines": 567,
+          "routes": [
+            "GET /vault/security/2fa/status",
+            "GET /vault/security/status",
+            "POST /vault/security/2fa/disable",
+            "POST /vault/security/2fa/setup",
+            "POST /vault/security/2fa/verify",
+            "POST /vault/security/password/disable",
+            "POST /vault/security/pin/request-code",
+            "POST /vault/security/verify",
+            "PUT /vault/security/auth-policy",
+            "PUT /vault/security/password",
+            "PUT /vault/security/pin"
+          ],
+          "status_codes": [
+            "200",
+            "400",
+            "401",
+            "403",
+            "404",
+            "429",
+            "503"
+          ],
+          "error_messages": [
+            "Account password required",
+            "Current PIN required",
+            "Current vault password required",
+            "Email code required",
+            "Failed to send email. Please check email config.",
+            "Incorrect account password",
+            "Incorrect current PIN",
+            "Incorrect current vault password",
+            "Invalid PIN",
+            "Invalid kind",
+            "Invalid or expired code",
+            "Invalid or expired email code",
+            "Invalid password",
+            "Invalid policy",
+            "Run Vault 2FA setup first",
+            "Too many attempts",
+            "Unauthorized",
+            "User not found",
+            "token is required"
+          ],
+          "error_codes": [
+            "ACCOUNT_PASSWORD_REQUIRED",
+            "EMAIL_CODE_REQUIRED",
+            "PASSWORD_LOCKED",
+            "PIN_LOCKED",
+            "VAULT_PIN_SETUP_LOCKED",
+            "WRONG_ACCOUNT_PASSWORD",
+            "WRONG_CURRENT_PASSWORD",
+            "WRONG_CURRENT_PIN",
+            "WRONG_EMAIL_CODE"
+          ],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__routes__vault-reauth.ts",
+          "sha256": "bd740f54e86019032a298b698c8e2df7ecb9f4d1892659d9a3ea52ee3868f9ef",
+          "manifest_sha256": "bd740f54e86019032a298b698c8e2df7ecb9f4d1892659d9a3ea52ee3868f9ef",
+          "manifest_verified": true,
+          "lines": 510,
+          "routes": [
+            "GET /vault/reauth/status",
+            "POST /vault/reauth/email-code/send",
+            "POST /vault/reauth/passkey/options",
+            "POST /vault/reauth/passkey/verify",
+            "POST /vault/reauth/verify",
+            "POST /vault/reauth/verify-step3"
+          ],
+          "status_codes": [
+            "400",
+            "401",
+            "404",
+            "428",
+            "429",
+            "503"
+          ],
+          "error_messages": [
+            "Authenticator code is required",
+            "Challenge expired or invalid. Try again.",
+            "Email code is required",
+            "Failed to send email. Please check email config.",
+            "Incorrect Vault PIN",
+            "Invalid authenticator code",
+            "Invalid or expired email code",
+            "Malformed passkey response",
+            "No passkeys registered for this account",
+            "Passkey verification failed",
+            "Set a Vault PIN before using this fail-over",
+            "Set a Vault PIN or password to unlock Vault",
+            "This passkey does not belong to your account",
+            "Too many attempts",
+            "Unauthorized",
+            "User not found",
+            "Vault 2FA is required to access Vault",
+            "Vault PIN is required",
+            "challengeKey and response are required"
+          ],
+          "error_codes": [
+            "2FA_NOT_ENABLED",
+            "CREDENTIAL_NOT_SET",
+            "CREDENTIAL_REQUIRED",
+            "EMAIL_CODE_REQUIRED",
+            "REAUTH_LOCKED",
+            "TOTP_REQUIRED",
+            "WRONG_EMAIL_CODE",
+            "WRONG_PIN",
+            "WRONG_TOTP"
+          ],
+          "events": [],
+          "audit_actions": [
+            "vault.reauth.passkey_verify"
+          ],
+          "side_effect_callees": {}
+        }
+      ],
+      "merged": {
+        "routes": [
+          "GET /vault/reauth/status",
+          "GET /vault/security/2fa/status",
+          "GET /vault/security/status",
+          "POST /vault/reauth/email-code/send",
+          "POST /vault/reauth/passkey/options",
+          "POST /vault/reauth/passkey/verify",
+          "POST /vault/reauth/verify",
+          "POST /vault/reauth/verify-step3",
+          "POST /vault/security/2fa/disable",
+          "POST /vault/security/2fa/setup",
+          "POST /vault/security/2fa/verify",
+          "POST /vault/security/password/disable",
+          "POST /vault/security/pin/request-code",
+          "POST /vault/security/verify",
+          "PUT /vault/security/auth-policy",
+          "PUT /vault/security/password",
+          "PUT /vault/security/pin"
+        ],
+        "status_codes": [
+          "200",
+          "400",
+          "401",
+          "403",
+          "404",
+          "428",
+          "429",
+          "503"
+        ],
+        "error_messages": [
+          "Account password required",
+          "Authenticator code is required",
+          "Challenge expired or invalid. Try again.",
+          "Current PIN required",
+          "Current vault password required",
+          "Email code is required",
+          "Email code required",
+          "Failed to send email. Please check email config.",
+          "Incorrect Vault PIN",
+          "Incorrect account password",
+          "Incorrect current PIN",
+          "Incorrect current vault password",
+          "Invalid PIN",
+          "Invalid authenticator code",
+          "Invalid kind",
+          "Invalid or expired code",
+          "Invalid or expired email code",
+          "Invalid password",
+          "Invalid policy",
+          "Malformed passkey response",
+          "No passkeys registered for this account",
+          "Passkey verification failed",
+          "Run Vault 2FA setup first",
+          "Set a Vault PIN before using this fail-over",
+          "Set a Vault PIN or password to unlock Vault",
+          "This passkey does not belong to your account",
+          "Too many attempts",
+          "Unauthorized",
+          "User not found",
+          "Vault 2FA is required to access Vault",
+          "Vault PIN is required",
+          "challengeKey and response are required",
+          "token is required"
+        ],
+        "error_codes": [
+          "2FA_NOT_ENABLED",
+          "ACCOUNT_PASSWORD_REQUIRED",
+          "CREDENTIAL_NOT_SET",
+          "CREDENTIAL_REQUIRED",
+          "EMAIL_CODE_REQUIRED",
+          "PASSWORD_LOCKED",
+          "PIN_LOCKED",
+          "REAUTH_LOCKED",
+          "TOTP_REQUIRED",
+          "VAULT_PIN_SETUP_LOCKED",
+          "WRONG_ACCOUNT_PASSWORD",
+          "WRONG_CURRENT_PASSWORD",
+          "WRONG_CURRENT_PIN",
+          "WRONG_EMAIL_CODE",
+          "WRONG_PIN",
+          "WRONG_TOTP"
+        ],
+        "events": [],
+        "audit_actions": [
+          "vault.reauth.passkey_verify"
+        ],
+        "side_effect_callees": {}
+      }
+    },
+    "backup-restore": {
+      "tasks": [
+        8
+      ],
+      "note": null,
+      "files": [
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__routes__vault__backup__cloud__ts",
+          "sha256": "c15246b957ba6a00831d5fad1cf3b16cf00e4fd42237c3c45bd8bcc0a151b20d",
+          "manifest_sha256": "c15246b957ba6a00831d5fad1cf3b16cf00e4fd42237c3c45bd8bcc0a151b20d",
+          "manifest_verified": true,
+          "lines": 124,
+          "routes": [
+            "DELETE /vault/backup/cloud/:provider",
+            "GET /vault/backup/cloud",
+            "GET /vault/backup/cloud/:provider/callback",
+            "GET /vault/backup/cloud/:provider/connect"
+          ],
+          "status_codes": [
+            "401",
+            "404",
+            "501"
+          ],
+          "error_messages": [
+            "Unauthorized",
+            "Unknown provider"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "logBackupAudit": 2
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__routes__vault__backup__key__ts",
+          "sha256": "ff5908a46d2cd4417bb8c798f569ec6ca2ea5135c5e89c9a1782f0bb0f9f25a2",
+          "manifest_sha256": "ff5908a46d2cd4417bb8c798f569ec6ca2ea5135c5e89c9a1782f0bb0f9f25a2",
+          "manifest_verified": true,
+          "lines": 108,
+          "routes": [
+            "GET /admin/vault-backup/audit-log",
+            "GET /admin/vault-backup/key-status",
+            "POST /admin/vault-backup/rotate-key"
+          ],
+          "status_codes": [
+            "500"
+          ],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "logActivity": 1,
+            "logBackupAudit": 1
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__routes__vault__backup__schedule__ts",
+          "sha256": "11c791b6a6cbbc6845c42e282a4df6f740c34319d4842fabdd22ef8d1ad423a2",
+          "manifest_sha256": "11c791b6a6cbbc6845c42e282a4df6f740c34319d4842fabdd22ef8d1ad423a2",
+          "manifest_verified": true,
+          "lines": 185,
+          "routes": [
+            "GET /vault/backup/audit-log",
+            "GET /vault/backup/deliveries",
+            "GET /vault/backup/schedule",
+            "POST /vault/backup/schedule/run-now",
+            "PUT /vault/backup/schedule"
+          ],
+          "status_codes": [
+            "400",
+            "401",
+            "404",
+            "502"
+          ],
+          "error_messages": [
+            "No backup schedule configured yet — set one up first.",
+            "Unauthorized",
+            "destinationEmail doesn't look like a valid email address"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "logBackupAudit": 2
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__alerts__ts",
+          "sha256": "5e703944cc34142497a35c27ccd954218d4f75e1a54747331ba10c4b393783fe",
+          "manifest_sha256": "5e703944cc34142497a35c27ccd954218d4f75e1a54747331ba10c4b393783fe",
+          "manifest_verified": true,
+          "lines": 260,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "createNotification": 3
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__audit__ts",
+          "sha256": "83cf31bcfc5bb860b06a776ca2d22270f62c492753b49b7578e0193b11b5ecfb",
+          "manifest_sha256": "83cf31bcfc5bb860b06a776ca2d22270f62c492753b49b7578e0193b11b5ecfb",
+          "manifest_verified": true,
+          "lines": 134,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "logBackupAudit": 1
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__cloud__ts",
+          "sha256": "dbfe8c9092e9969b89b992995217597aa1e89138db91b5acd032be2eaac5e239",
+          "manifest_sha256": "dbfe8c9092e9969b89b992995217597aa1e89138db91b5acd032be2eaac5e239",
+          "manifest_verified": true,
+          "lines": 317,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__delivery__ts",
+          "sha256": "0a3af1f565dae24df43cdd7ebedbea3231a500f6be2163e664abd39fdce8165f",
+          "manifest_sha256": "0a3af1f565dae24df43cdd7ebedbea3231a500f6be2163e664abd39fdce8165f",
+          "manifest_verified": true,
+          "lines": 203,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [
+            "No destination email configured",
+            "No webhook URL configured"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__envelope__ts",
+          "sha256": "e8b25d6f4c57dff81bb26e7cc99209dd59ba8d463d20181101f4fcbd56e8c0bc",
+          "manifest_sha256": "e8b25d6f4c57dff81bb26e7cc99209dd59ba8d463d20181101f4fcbd56e8c0bc",
+          "manifest_verified": true,
+          "lines": 227,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__key__rotation__cron__ts",
+          "sha256": "b5dca0f651b7ec1398a5925ef50983e0433672dee644eeb3ef2521f33bdfd7bb",
+          "manifest_sha256": "b5dca0f651b7ec1398a5925ef50983e0433672dee644eeb3ef2521f33bdfd7bb",
+          "manifest_verified": true,
+          "lines": 123,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "logBackupAudit": 2
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__schedule__cron__ts",
+          "sha256": "acc8cbb04cdee1664b53e661bf289cfa902b7a0022bf18498ab62339b4b4e956",
+          "manifest_sha256": "acc8cbb04cdee1664b53e661bf289cfa902b7a0022bf18498ab62339b4b4e956",
+          "manifest_verified": true,
+          "lines": 323,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "logActivity": 1
+          }
+        }
+      ],
+      "merged": {
+        "routes": [
+          "DELETE /vault/backup/cloud/:provider",
+          "GET /admin/vault-backup/audit-log",
+          "GET /admin/vault-backup/key-status",
+          "GET /vault/backup/audit-log",
+          "GET /vault/backup/cloud",
+          "GET /vault/backup/cloud/:provider/callback",
+          "GET /vault/backup/cloud/:provider/connect",
+          "GET /vault/backup/deliveries",
+          "GET /vault/backup/schedule",
+          "POST /admin/vault-backup/rotate-key",
+          "POST /vault/backup/schedule/run-now",
+          "PUT /vault/backup/schedule"
+        ],
+        "status_codes": [
+          "400",
+          "401",
+          "404",
+          "500",
+          "501",
+          "502"
+        ],
+        "error_messages": [
+          "No backup schedule configured yet — set one up first.",
+          "No destination email configured",
+          "No webhook URL configured",
+          "Unauthorized",
+          "Unknown provider",
+          "destinationEmail doesn't look like a valid email address"
+        ],
+        "error_codes": [],
+        "events": [],
+        "audit_actions": [],
+        "side_effect_callees": {
+          "logBackupAudit": 8,
+          "logActivity": 2,
+          "createNotification": 3
+        }
+      }
+    },
+    "snapshot-trash": {
+      "tasks": [
+        9
+      ],
+      "note": null,
+      "files": [
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-01/baseline/routes/vault-snapshot.ts",
+          "sha256": "62d41bf7504052ddcada8a8e00f96d2e11f3be77262fa559976521713eedcb4c",
+          "manifest_sha256": "62d41bf7504052ddcada8a8e00f96d2e11f3be77262fa559976521713eedcb4c",
+          "manifest_verified": true,
+          "lines": 1106,
+          "routes": [
+            "DELETE /vault/snapshots/:id",
+            "DELETE /vault/snapshots/trash/:id",
+            "GET /vault/snapshots",
+            "GET /vault/snapshots/:id/download",
+            "GET /vault/snapshots/storage",
+            "GET /vault/snapshots/trash",
+            "PATCH /vault/snapshots/:id",
+            "POST /vault/snapshot/export",
+            "POST /vault/snapshot/restore",
+            "POST /vault/snapshot/restore-preview",
+            "POST /vault/snapshots/:id/restore"
+          ],
+          "status_codes": [
+            "400",
+            "401",
+            "404",
+            "500"
+          ],
+          "error_messages": [
+            "Invalid password",
+            "Invalid snapshot id",
+            "Invalid snapshotId",
+            "Snapshot not found",
+            "Snapshot not found — it may be in the trash; restore it first",
+            "Trashed backup not found",
+            "Unauthorized",
+            "blob or snapshotId is required",
+            "password is required"
+          ],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "logActivity": 5,
+            "logBackupAudit": 5
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__extra__ts",
+          "sha256": "8fd93e4bc3a3480f8b780ff2c680c2e6f522ed96515e4b1856a13ec63cebb0fb",
+          "manifest_sha256": "8fd93e4bc3a3480f8b780ff2c680c2e6f522ed96515e4b1856a13ec63cebb0fb",
+          "manifest_verified": true,
+          "lines": 1053,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__restore__ts",
+          "sha256": "817d33707c22e1ef93167ad1f843f1d45bf601f6ae6fca8877efde1c34d2d7e0",
+          "manifest_sha256": "817d33707c22e1ef93167ad1f843f1d45bf601f6ae6fca8877efde1c34d2d7e0",
+          "manifest_verified": true,
+          "lines": 699,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__trash__cron__ts",
+          "sha256": "79cb434bd019add875632d9fa42b21b0a3107a751ec08f0a15b632a192420565",
+          "manifest_sha256": "79cb434bd019add875632d9fa42b21b0a3107a751ec08f0a15b632a192420565",
+          "manifest_verified": true,
+          "lines": 47,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__trash__purge__ts",
+          "sha256": "8fefe3e230c82d475a50762839fbc920d32f10eea621373d4ca2bb789e87b139",
+          "manifest_sha256": "8fefe3e230c82d475a50762839fbc920d32f10eea621373d4ca2bb789e87b139",
+          "manifest_verified": true,
+          "lines": 62,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__trash__cron__ts",
+          "sha256": "cbdebe51aae8205de1f5a6a6a8e33c87e45b318ccb7ab2bc69989d8e94be6635",
+          "manifest_sha256": "cbdebe51aae8205de1f5a6a6a8e33c87e45b318ccb7ab2bc69989d8e94be6635",
+          "manifest_verified": true,
+          "lines": 46,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__trash__purge__ts",
+          "sha256": "5e6c593fc70192fb39c0eace19f88aff188fcdf772883dade3d3e3eb2e2143fd",
+          "manifest_sha256": "5e6c593fc70192fb39c0eace19f88aff188fcdf772883dade3d3e3eb2e2143fd",
+          "manifest_verified": true,
+          "lines": 52,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "syncOnVaultDelete": 1
+          }
+        }
+      ],
+      "merged": {
+        "routes": [
+          "DELETE /vault/snapshots/:id",
+          "DELETE /vault/snapshots/trash/:id",
+          "GET /vault/snapshots",
+          "GET /vault/snapshots/:id/download",
+          "GET /vault/snapshots/storage",
+          "GET /vault/snapshots/trash",
+          "PATCH /vault/snapshots/:id",
+          "POST /vault/snapshot/export",
+          "POST /vault/snapshot/restore",
+          "POST /vault/snapshot/restore-preview",
+          "POST /vault/snapshots/:id/restore"
+        ],
+        "status_codes": [
+          "400",
+          "401",
+          "404",
+          "500"
+        ],
+        "error_messages": [
+          "Invalid password",
+          "Invalid snapshot id",
+          "Invalid snapshotId",
+          "Snapshot not found",
+          "Snapshot not found — it may be in the trash; restore it first",
+          "Trashed backup not found",
+          "Unauthorized",
+          "blob or snapshotId is required",
+          "password is required"
+        ],
+        "error_codes": [],
+        "events": [],
+        "audit_actions": [],
+        "side_effect_callees": {
+          "logActivity": 5,
+          "logBackupAudit": 5,
+          "syncOnVaultDelete": 1
+        }
+      }
+    },
+    "share-attachment": {
+      "tasks": [],
+      "note": null,
+      "files": [
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-10/baseline/sources/artifacts__api__server__src__routes__vault__shares__ts",
+          "sha256": "9b33fa8f0d1276debe9e58d8204a9f1b0504f5f9f24506798b651b8adf151758",
+          "manifest_sha256": "9b33fa8f0d1276debe9e58d8204a9f1b0504f5f9f24506798b651b8adf151758",
+          "manifest_verified": true,
+          "lines": 786,
+          "routes": [
+            "DELETE /vault-shares/:id",
+            "DELETE /vault-shares/bulk",
+            "GET /vault-shares/entity/:entityType/:entityId",
+            "GET /vault-shares/fields/:entityType",
+            "GET /vault-shares/received",
+            "GET /vault-shares/sent",
+            "PATCH /vault-shares/:id",
+            "PATCH /vault-shares/bulk",
+            "POST /vault-shares",
+            "POST /vault-shares/bulk"
+          ],
+          "status_codes": [
+            "201",
+            "400",
+            "403",
+            "404",
+            "500"
+          ],
+          "error_messages": [
+            "DB error",
+            "Entity no longer exists",
+            "Entity not found, not owned by you, or in trash",
+            "Invalid ID",
+            "Invalid entityId",
+            "No valid ids provided",
+            "Not found or not yours to manage",
+            "Not shared with you",
+            "Too many items in one batch (max 200)",
+            "User not found",
+            "You already own this — can't share with yourself",
+            "ids must be a non-empty array",
+            "items must be a non-empty array of { entityType, entityId }",
+            "permission must be 'view' or 'edit'",
+            "username is required"
+          ],
+          "error_codes": [],
+          "events": [
+            "vault.share.created",
+            "vault.share.revoked"
+          ],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "createNotification": 4
+          }
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-10/baseline/sources/artifacts__api__server__src__routes__vault__attachments__ts",
+          "sha256": "2f700c2dfbb078972cd25c84c557fab1b16b02327afc53e1102b2a134d128cea",
+          "manifest_sha256": "2f700c2dfbb078972cd25c84c557fab1b16b02327afc53e1102b2a134d128cea",
+          "manifest_verified": true,
+          "lines": 300,
+          "routes": [
+            "DELETE /vault/:id/attachments/:attachmentId",
+            "GET /vault/:id/attachments",
+            "GET /vault/:id/attachments/:attachmentId",
+            "PATCH /vault/:id/attachments/:attachmentId",
+            "POST /vault/:id/attachments"
+          ],
+          "status_codes": [
+            "201",
+            "400",
+            "401",
+            "404",
+            "413"
+          ],
+          "error_messages": [
+            "Attachment not found",
+            "Entity not found",
+            "File is empty",
+            "File too large",
+            "Invalid category",
+            "Invalid entity id",
+            "Invalid fileName",
+            "Invalid id",
+            "Unauthorized",
+            "dataBase64 is not valid base64",
+            "dataBase64 is required",
+            "fileName is required",
+            "mimeType is required"
+          ],
+          "error_codes": [
+            "ATTACHMENT_TOO_LARGE"
+          ],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "logActivity": 3
+          }
+        }
+      ],
+      "merged": {
+        "routes": [
+          "DELETE /vault-shares/:id",
+          "DELETE /vault-shares/bulk",
+          "DELETE /vault/:id/attachments/:attachmentId",
+          "GET /vault-shares/entity/:entityType/:entityId",
+          "GET /vault-shares/fields/:entityType",
+          "GET /vault-shares/received",
+          "GET /vault-shares/sent",
+          "GET /vault/:id/attachments",
+          "GET /vault/:id/attachments/:attachmentId",
+          "PATCH /vault-shares/:id",
+          "PATCH /vault-shares/bulk",
+          "PATCH /vault/:id/attachments/:attachmentId",
+          "POST /vault-shares",
+          "POST /vault-shares/bulk",
+          "POST /vault/:id/attachments"
+        ],
+        "status_codes": [
+          "201",
+          "400",
+          "401",
+          "403",
+          "404",
+          "413",
+          "500"
+        ],
+        "error_messages": [
+          "Attachment not found",
+          "DB error",
+          "Entity no longer exists",
+          "Entity not found",
+          "Entity not found, not owned by you, or in trash",
+          "File is empty",
+          "File too large",
+          "Invalid ID",
+          "Invalid category",
+          "Invalid entity id",
+          "Invalid entityId",
+          "Invalid fileName",
+          "Invalid id",
+          "No valid ids provided",
+          "Not found or not yours to manage",
+          "Not shared with you",
+          "Too many items in one batch (max 200)",
+          "Unauthorized",
+          "User not found",
+          "You already own this — can't share with yourself",
+          "dataBase64 is not valid base64",
+          "dataBase64 is required",
+          "fileName is required",
+          "ids must be a non-empty array",
+          "items must be a non-empty array of { entityType, entityId }",
+          "mimeType is required",
+          "permission must be 'view' or 'edit'",
+          "username is required"
+        ],
+        "error_codes": [
+          "ATTACHMENT_TOO_LARGE"
+        ],
+        "events": [
+          "vault.share.created",
+          "vault.share.revoked"
+        ],
+        "audit_actions": [],
+        "side_effect_callees": {
+          "createNotification": 4,
+          "logActivity": 3
+        }
+      }
+    },
+    "health": {
+      "tasks": [],
+      "note": null,
+      "files": [
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-11/baseline/sources/artifacts__api__server__src__lib__vault__health__cron__ts",
+          "sha256": "33bf4814731060294679de6ad87b8f360bfbefd3d16ed9e5634b2f7937c57c98",
+          "manifest_sha256": "33bf4814731060294679de6ad87b8f360bfbefd3d16ed9e5634b2f7937c57c98",
+          "manifest_verified": true,
+          "lines": 45,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {}
+        },
+        {
+          "baseline_copy": "reports/antas/vault/gap/VLT-GAP-11/baseline/sources/artifacts__api__server__src__lib__vault__health__scan__ts",
+          "sha256": "544709220a6d99c0ca02a2b9c8fa843cbb6824325103fd7bb2375e82f375cef0",
+          "manifest_sha256": "544709220a6d99c0ca02a2b9c8fa843cbb6824325103fd7bb2375e82f375cef0",
+          "manifest_verified": true,
+          "lines": 320,
+          "routes": [],
+          "status_codes": [],
+          "error_messages": [],
+          "error_codes": [],
+          "events": [],
+          "audit_actions": [],
+          "side_effect_callees": {
+            "createNotification": 1
+          }
+        }
+      ],
+      "merged": {
+        "routes": [],
+        "status_codes": [],
+        "error_messages": [],
+        "error_codes": [],
+        "events": [],
+        "audit_actions": [],
+        "side_effect_callees": {
+          "createNotification": 1
+        }
+      }
+    }
+  }
+}

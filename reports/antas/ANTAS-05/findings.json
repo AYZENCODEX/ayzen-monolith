@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "provider schema introspection",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "cross-tenant staging test",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

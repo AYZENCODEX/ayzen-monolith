@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-13.4",
+  "phase": "ANTAS-13",
+  "name": "Destructive DR Drill",
+  "generatedAt": "2026-09-29T06:06:06.720Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "docs/antas/dr/recovery-drill.md",
+    "scripts/backup-restore-check.mjs"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

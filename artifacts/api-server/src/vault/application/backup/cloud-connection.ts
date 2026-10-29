@@ -1,0 +1,91 @@
+import type { VaultRequest } from "../../security/request-context";
+import {
+  CLOUD_PROVIDERS, type CloudProvider,
+  isCloudProviderConfigured, buildAuthorizeUrl, verifyAuthorizeState,
+  completeCloudConnect, listCloudConnections, disconnectCloudProvider,
+} from "../../infrastructure/backup/cloud";
+import { logger } from "../../../lib/logger";
+import { logBackupAudit } from "../../infrastructure/backup/audit";
+
+export interface VaultBackupResult { status: number; body: unknown }
+
+/**
+ * Cloud Backup Delivery (Google Drive / Dropbox) connection use cases. Moved
+ * unchanged from routes/vault-backup-cloud.ts (VLT-GAP-08). The route keeps
+ * request parsing and the 401 guard; GET /connect is a JSON call that returns
+ * `{ url }` because a browser navigation carries no Authorization header, and
+ * the callback runs unauthenticated (the OAuth `state` carries the userId).
+ */
+
+function isCloudProvider(v: string): v is CloudProvider {
+  return (CLOUD_PROVIDERS as string[]).includes(v);
+}
+
+// Where the callback sends the browser back to, regardless of outcome.
+function backToSnapshotPage(): string {
+  return `${process.env.APP_URL ?? "https://ayzen.replit.app"}/vault/snapshot`;
+}
+
+/** GET /vault/backup/cloud — connection status for every provider (never tokens). */
+export async function listOwnCloudConnections(userId: number): Promise<VaultBackupResult> {
+  return { status: 200, body: { connections: await listCloudConnections(userId) } };
+}
+
+/** GET /vault/backup/cloud/:provider/connect — the provider's OAuth consent URL. */
+export function startCloudConnect(userId: number, providerParam: string): VaultBackupResult {
+  const provider = String(providerParam);
+  if (!isCloudProvider(provider)) return { status: 404, body: { error: "Unknown provider" } };
+  if (!isCloudProviderConfigured(provider)) {
+    return {
+      status: 501,
+      body: {
+        error: `${provider === "google_drive" ? "Google Drive" : "Dropbox"} isn't configured on this server yet — ` +
+          "the required OAuth client id/secret/redirect URI environment variables aren't set.",
+      },
+    };
+  }
+  return { status: 200, body: { url: buildAuthorizeUrl(provider, userId) } };
+}
+
+/**
+ * GET /vault/backup/cloud/:provider/callback — provider redirects here after
+ * consent. Exchanges the code, stores the connection, returns where to bounce
+ * the browser back into the app.
+ */
+export async function handleCloudCallback(
+  input: { provider: string; code: string | null; state: string | null },
+  req: VaultRequest,
+): Promise<{ redirect: string }> {
+  const provider = String(input.provider);
+  const { code, state } = input;
+
+  if (!isCloudProvider(provider) || !code || !state) {
+    return { redirect: `${backToSnapshotPage()}?cloudError=${encodeURIComponent("Malformed callback")}` };
+  }
+
+  const verified = verifyAuthorizeState(state);
+  if (!verified || verified.provider !== provider) {
+    return { redirect: `${backToSnapshotPage()}?cloudError=${encodeURIComponent("Connect link expired — try again")}` };
+  }
+
+  try {
+    await completeCloudConnect(provider, verified.userId, code);
+    await logBackupAudit({
+      ownerUserId: verified.userId, eventType: "cloud_connected", req, detail: { provider },
+    });
+    return { redirect: `${backToSnapshotPage()}?cloudConnected=${provider}` };
+  } catch (err: any) {
+    logger.error({ err, provider, userId: verified.userId }, "Cloud backup connect failed");
+    return { redirect: `${backToSnapshotPage()}?cloudError=${encodeURIComponent(err?.message ?? "Connect failed")}` };
+  }
+}
+
+/** DELETE /vault/backup/cloud/:provider */
+export async function disconnectCloud(userId: number, providerParam: string, req: VaultRequest): Promise<VaultBackupResult> {
+  const provider = String(providerParam);
+  if (!isCloudProvider(provider)) return { status: 404, body: { error: "Unknown provider" } };
+
+  await disconnectCloudProvider(userId, provider);
+  await logBackupAudit({ ownerUserId: userId, eventType: "cloud_disconnected", req, detail: { provider } });
+  return { status: 200, body: { ok: true } };
+}

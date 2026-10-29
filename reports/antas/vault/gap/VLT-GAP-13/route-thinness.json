@@ -1,0 +1,112 @@
+{
+  "gap": "VLT-GAP-13",
+  "scanned_at": "2026-10-12T17:33:09.949Z",
+  "route_files": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "handlers": 5,
+      "lines": 55,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "handlers": 6,
+      "lines": 58,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "handlers": 7,
+      "lines": 67,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/local-accounts.ts",
+      "handlers": 23,
+      "lines": 175,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "handlers": 5,
+      "lines": 48,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "handlers": 5,
+      "lines": 47,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "handlers": 5,
+      "lines": 83,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "handlers": 4,
+      "lines": 59,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "handlers": 3,
+      "lines": 41,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "handlers": 5,
+      "lines": 68,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "handlers": 5,
+      "lines": 47,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-migration.ts",
+      "handlers": 2,
+      "lines": 49,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-reauth.ts",
+      "handlers": 6,
+      "lines": 79,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-security.ts",
+      "handlers": 11,
+      "lines": 183,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "handlers": 10,
+      "lines": 93,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "handlers": 11,
+      "lines": 193,
+      "violations": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "handlers": 36,
+      "lines": 393,
+      "violations": 0
+    }
+  ],
+  "total_handlers": 149,
+  "violations_by_rule": {},
+  "violations": [],
+  "status": "PASS"
+}

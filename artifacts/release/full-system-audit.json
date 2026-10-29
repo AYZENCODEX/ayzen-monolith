@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-27T17:01:07.491Z",
+  "status": "failed",
+  "results": [
+    {
+      "name": "api-security-backbone-1-50",
+      "script": "scripts/validate-api-security-backbone-1-50.mjs",
+      "passed": true,
+      "output": "API/security/backbone validation passed: 50 phases, app API contracts, security boundaries, connectivity, EventBus, workflow, outbox/inbox, replay, observability, and circuit evidence."
+    },
+    {
+      "name": "capability-scope-coverage",
+      "script": "scripts/validate-capability-scope-coverage.mjs",
+      "passed": true,
+      "output": "Covered capabilities:   30/44\n  NOT covered, BY DESIGN (admin-domain, admin-only): admin.read, admin.audit, admin.data-read, admin.data-write, admin.break-glass, admin.remediate, admin.deploy, admin.xuka-status, admin.xuka-validate, admin.xuka-preview, admin.xuka-inspect\n  NOT covered, UNINTENDED (would get MISSING_SCOPE if the gate enforced today): mail.create-draft, mail.update-message, mail.manage-permissions\n\n── role \"admin\" ──\n  RBAC grants (own + inherited): *, ryft.payment.approve, sylo.vault.read, sylo.vault.update, ryft.payment.create, identity.authenticate, identity.session.write, workspace.read, workspace.membership.write, finance.read, mail.read, mail.send, notification.write, notification.read, workflow.write, workflow.read, ai.execute, search.read, verve.read, verve.write, warde.read, warde.write\n  Resolves to capability scopes: identity:authenticate, identity:session:write, workspace:read, workspace:membership:write, finance:read, finance:write, vault:read, vault:write, mail:read, mail:send, mail:write, notification:write, notification:read, workflow:write, workflow:read, ai:execute, search:read, verve:read, verve:write, warde:read, warde:write, admin:read, admin:audit, admin:data:read, admin:data:write, admin:break-glass, admin:remediate, admin:deploy\n  Covered capabilities:   44/44\n\nCONCLUSION: at least one seeded role would fail MISSING_SCOPE on at least one capability\nit is supposed to reach, under today's RBAC grants. Flipping CAPABILITY_AUTHZ_GATE to\n\"enforce\" now would deny real, legitimately-privileged requests, not just bad ones —\nmatching (and now backed by data instead of just the code comment) the exact reason H9.2\ndefaulted this gate to \"report\". Do not flip the default without first expanding\nrole_permissions seed data (or a real grant UI, once one exists) to cover the capabilities\nlisted above as UNINTENDED gaps, then re-running this script until every role you intend to\nsupport shows zero unintended gaps for the routes it should reach."
+    },
+    {
+      "name": "cicd-phases",
+      "script": "scripts/validate-cicd-phases.mjs",
+      "passed": true,
+      "output": "CI/CD phases 10–30 validation passed (15 deployables)"
+    },
+    {
+      "name": "cloud-phases",
+      "script": "scripts/validate-cloud-phases.mjs",
+      "passed": true,
+      "output": "Cloud phases 11–30 validation passed (15 deployables)"
+    },
+    {
+      "name": "connectivity",
+      "script": "scripts/validate-connectivity.mjs",
+      "passed": true,
+      "output": "Connectivity fabric passed (19 registered connections)"
+    },
+    {
+      "name": "contract-exceptions",
+      "script": "scripts/validate-contract-exceptions.mjs",
+      "passed": true,
+      "output": "Contract Zero-Gap gate passed: 0 unresolved findings, 0 expired exceptions (6 active exception(s) covering today's architectural non-routes).\nReport written to reports/contracts/coverage-report.json."
+    },
+    {
+      "name": "domain-boundaries",
+      "script": "scripts/validate-domain-boundaries.mjs",
+      "passed": true,
+      "output": "Domain boundary validation passed (22 services)"
+    },
+    {
+      "name": "domain-contract-coverage",
+      "script": "scripts/validate-domain-contract-coverage.mjs",
+      "passed": true,
+      "output": "Domain-contract coverage: 0 unmapped registry owner(s), 1 endpoint-less contract(s), 5 unresolved operation(s) — all within baseline unless noted below.\nNo new domain-contract coverage drift beyond the committed baseline."
+    },
+    {
+      "name": "env",
+      "script": "scripts/validate-env.mjs",
+      "passed": true,
+      "output": "{\"ok\":true,\"environment\":\"development\",\"checked\":[]}"
+    },
+    {
+      "name": "event-wiring",
+      "script": "scripts/validate-event-wiring.mjs",
+      "passed": true,
+      "output": "{\n  \"status\": \"passed\",\n  \"totalFindings\": 0,\n  \"baselineSize\": 0\n}"
+    },
+    {
+      "name": "hybrid-identity-1-15",
+      "script": "scripts/validate-hybrid-identity-1-15.mjs",
+      "passed": true,
+      "output": "Hybrid identity validation passed: 15 phases, explicit linking, app-scoped sessions, policy separation, ownership, events, Telegram controls, and domain tests."
+    },
+    {
+      "name": "maturity-phases",
+      "script": "scripts/validate-maturity-phases.mjs",
+      "passed": true,
+      "output": "Maturity phases 61–70 validation passed (5 chaos scenarios, 5 capacity scenarios)"
+    },
+    {
+      "name": "migration-beta",
+      "script": "scripts/validate-migration-beta.mjs",
+      "passed": true,
+      "output": "Beta migration registry passed (13 apps, 52 categorized entries)"
+    },
+    {
+      "name": "phase-1-10",
+      "script": "scripts/validate-phase-1-10.mjs",
+      "passed": true,
+      "output": "Phase 1–10 evidence present (15 files)"
+    },
+    {
+      "name": "phase-1-11",
+      "script": "scripts/validate-phase-1-11.mjs",
+      "passed": true,
+      "output": "Phase 1–11 validation passed (11 evidence files, 44 capabilities)"
+    },
+    {
+      "name": "phase-1-15",
+      "script": "scripts/validate-phase-1-15.mjs",
+      "passed": true,
+      "output": "{\"schemaVersion\":1,\"id\":\"3ebd4a73-bd7d-4ecf-ac81-1e75a32ec54a\",\"occurredAt\":\"2026-09-27T17:01:04.616Z\",\"service\":\"event-bus\",\"action\":\"event.published.sensitive\",\"outcome\":\"success\",\"resource\":{\"eventType\":\"finance.transaction.created\",\"eventId\":\"82ae9c83-495e-49d4-8bbe-1a03ad8f7264\"},\"requestId\":\"b051862f-ab78-48e6-b492-9da16a61e667\",\"traceId\":\"b051862f-ab78-48e6-b492-9da16a61e667\",\"metadata\":{\"redactedPaths\":[],\"sensitive\":true},\"previousHash\":\"GENESIS\",\"hash\":\"12d4bc65ebe87dd29b4cac7a380d24d2e0e1e6171c3a1d5c3d1907a08ef62dce\",\"event\":\"audit.recorded\"}\n{\"schemaVersion\":1,\"id\":\"79c1d5b6-ea02-482b-96d2-fea257e676f8\",\"occurredAt\":\"2026-09-27T17:01:04.623Z\",\"service\":\"event-bus\",\"action\":\"event.published.sensitive\",\"outcome\":\"success\",\"resource\":{\"eventType\":\"finance.transaction.created\",\"eventId\":\"82ae9c83-495e-49d4-8bbe-1a03ad8f7264\"},\"requestId\":\"b051862f-ab78-48e6-b492-9da16a61e667\",\"traceId\":\"b051862f-ab78-48e6-b492-9da16a61e667\",\"metadata\":{\"redactedPaths\":[],\"sensitive\":true},\"previousHash\":\"GENESIS\",\"hash\":\"d3e10f9c2a508dcd6720e38c8d926ccc0ca942b0d7e1091474ca1e03e20bcccd\",\"event\":\"audit.recorded\"}\nPhase 1–15 validation passed (16 evidence files, 14 syntax checks)"
+    },
+    {
+      "name": "phase-16-25",
+      "script": "scripts/validate-phase-16-25.mjs",
+      "passed": true,
+      "output": "Phase 16–25 validation passed (14 evidence files)"
+    },
+    {
+      "name": "platform-phases",
+      "script": "scripts/validate-platform-phases.mjs",
+      "passed": true,
+      "output": "Platform phases 31–60 validation passed (72 Telegram commands, 3 workflows)"
+    },
+    {
+      "name": "roadmap-0-30",
+      "script": "scripts/validate-roadmap-0-30.mjs",
+      "passed": true,
+      "output": "Roadmap phases 0–30 contract and governance validation passed"
+    },
+    {
+      "name": "roadmap-1-50",
+      "script": "scripts/validate-roadmap-1-50.mjs",
+      "passed": false,
+      "output": "ivery.requested\nFeature circuit is incomplete: event.mail.delivery.updated\nFeature circuit is incomplete: event.notification.requested\nFeature circuit is incomplete: event.notification.sent\nFeature circuit is incomplete: event.notification.failed\nFeature circuit is incomplete: event.ai.task.completed\nFeature circuit is incomplete: event.ai.task.failed\nFeature circuit is incomplete: event.intelligence.observation.created\nFeature circuit is incomplete: event.intelligence.signal.created\nFeature circuit is incomplete: event.search.document.indexed\nFeature circuit is incomplete: event.marketplace.listing.created\nFeature circuit is incomplete: event.marketplace.order.created\nFeature circuit is incomplete: event.analytics.event.recorded\nFeature circuit is incomplete: event.identity.telegram.linked\nFeature circuit is incomplete: event.authorization.decision.allowed\nFeature circuit is incomplete: event.authorization.decision.denied\nFeature circuit is incomplete: event.telegram.update.received\nFeature circuit is incomplete: event.telegram.update.failed\nFeature circuit is incomplete: event.technical_gap.detected\nFeature circuit is incomplete: event.technical_gap.updated\nFeature circuit is incomplete: event.deployment.started\nFeature circuit is incomplete: event.deployment.succeeded\nFeature circuit is incomplete: event.deployment.failed\nFeature circuit is incomplete: event.service.health.changed\nFeature circuit is incomplete: event.event.consumer.lag\nFeature circuit is incomplete: event.workflow.stalled\nFeature circuit is incomplete: event.audit.created\nFeature circuit is incomplete: event.alert.created\nFeature circuit is incomplete: event.incident.created\nFeature circuit is incomplete: event.incident.resolved\nFeature circuit is incomplete: event.user.error\nFeature circuit is incomplete: event.telegram.auth.linked\nFeature circuit is incomplete: event.telegram.auth.unlinked\nFeature circuit is incomplete: event.backup.restore.completed\nArchitecture health scorecard is not healthy"
+    },
+    {
+      "name": "roadmap-30-70",
+      "script": "scripts/validate-roadmap-30-70.mjs",
+      "passed": true,
+      "output": "Roadmap phases 30–70 validation passed (41 phases; provider-gated actions remain explicitly gated)"
+    },
+    {
+      "name": "service-boundaries",
+      "script": "scripts/validate-service-boundaries.mjs",
+      "passed": true,
+      "output": "Service boundary validation passed"
+    },
+    {
+      "name": "shared-platform-1-30",
+      "script": "scripts/validate-shared-platform-1-30.mjs",
+      "passed": true,
+      "output": "Shared platform phases 1–30 validation passed (30 phases, 21 graph nodes, 22 graph edges)"
+    },
+    {
+      "name": "stra-1-50",
+      "script": "scripts/validate-stra-1-50.mjs",
+      "passed": true,
+      "output": "STRA phases 1–50 validation passed (50 phases, 4 local circuits, 72 Telegram commands)"
+    },
+    {
+      "name": "track-a-d",
+      "script": "scripts/validate-track-a-d.mjs",
+      "passed": true,
+      "output": "Track A-D validation passed: broker contract, workflow execution, worker wiring, catalog, and Telegram adapter dispatch."
+    },
+    {
+      "name": "track-e",
+      "script": "scripts/validate-track-e.mjs",
+      "passed": true,
+      "output": "Track E validation passed: command tree schema + gate, hierarchical parser, auto-generated help, and deprecated-alias backward compatibility."
+    },
+    {
+      "name": "track-f",
+      "script": "scripts/validate-track-f.mjs",
+      "passed": true,
+      "output": "Phase F1: generated registry in sync (1223 endpoints, 15 owners).\nPhase F2: gateway's SERVICE_ROUTE_TABLE is registry-generated (13 prefixes) and its routing test suite passes.\nPhase F3: config/api/routes.json is retired (deprecated, zero live routes, zero importers) — permission on the generated registry is the one policy source.\nTrack F (F1-F3) validation passed: endpoint-registry is generated from real route sources, the gateway routes from it, and the old dead routes.json config is retired in favor of that one source."
+    },
+    {
+      "name": "ui-circuit",
+      "script": "scripts/validate-ui-circuit.mjs",
+      "passed": true,
+      "output": "UI circuit gate passed: 0 critical findings (129 warning(s): mock/static pages + dead pages, tracked but non-blocking)."
+    },
+    {
+      "name": "xuka-1-80",
+      "script": "scripts/validate-xuka-1-80.mjs",
+      "passed": true,
+      "output": "XUKA phases 1-80 validation passed (1223 endpoints, 72 Telegram commands)"
+    },
+    {
+      "name": "xuka-81-156",
+      "script": "scripts/validate-xuka-81-156.mjs",
+      "passed": true,
+      "output": "XUKA phases 81-156 validation passed (156 phases, 23 evidence areas)"
+    },
+    {
+      "name": "xuka-completion",
+      "script": "scripts/validate-xuka-completion.mjs",
+      "passed": false,
+      "output": "node:fs:1590\n  const result = binding.readdir(\n                         ^\n\nError: ENOENT: no such file or directory, scandir '/home/claude/ayzen/attached_assets'\n    at Object.readdirSync (node:fs:1590:26)\n    at file:///home/claude/ayzen/scripts/validate-xuka-completion.mjs:8:28\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'scandir',\n  path: '/home/claude/ayzen/attached_assets'\n}\n\nNode.js v22.22.2"
+    },
+    {
+      "name": "backup-restore-policy",
+      "script": "scripts/backup-restore-check.mjs",
+      "passed": true,
+      "output": "Backup/restore policy check passed"
+    },
+    {
+      "name": "event-catalog",
+      "script": "tools/event-catalog-lint.mjs",
+      "passed": true,
+      "output": "Event catalog passed (55 events, every event has a declared consumer)"
+    },
+    {
+      "name": "validator-orphans",
+      "script": "tools/validator-coverage.mjs",
+      "passed": true,
+      "output": "Validator coverage passed (31 validators have callers)"
+    }
+  ],
+  "nextAction": "fix failed gates before release"
+}

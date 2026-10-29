@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "states": ["normal", "elevated", "throttled", "shed"],
+  "sources": ["api", "eventbus", "worker", "notification"],
+  "admission": {"default": "fail-closed-at-capacity", "releaseRequired": true},
+  "limits": {
+    "api": {"capacity": 1000, "elevatedAt": 0.7, "throttledAt": 0.9, "shedAt": 1},
+    "eventbus": {"capacity": 10000, "elevatedAt": 0.7, "throttledAt": 0.9, "shedAt": 1},
+    "worker": {"capacity": 100, "elevatedAt": 0.7, "throttledAt": 0.9, "shedAt": 1},
+    "notification": {"capacity": 500, "elevatedAt": 0.7, "throttledAt": 0.9, "shedAt": 1}
+  }
+}

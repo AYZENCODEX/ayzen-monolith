@@ -1,0 +1,52 @@
+import { drizzle } from "drizzle-orm/node-postgres";
+import pg from "pg";
+import { selectDatabaseUrl } from "@ayzen/config";
+import * as schema from "./schema";
+
+const { Pool } = pg;
+
+const databaseUrl = selectDatabaseUrl();
+if (!databaseUrl) {
+  throw new Error(
+    'APP_DATABASE_URL must be set for app runtime. For Replit test runs, set DATABASE_URL_TARGET="replit-test".',
+  );
+}
+
+// Exported (not just used internally for `pool` below) so callers that need
+// their own dedicated, non-pooled connection — e.g. the DR Evidence
+// Collector's isolated-schema restore (lib/dr-test-db.ts), which needs a
+// single session-sticky connection for `SET search_path`, not a pool — can
+// open one with the exact same DATABASE_URL/SSL/pooler-port handling
+// instead of re-deriving it.
+export function buildPoolConfig(): pg.PoolConfig {
+  let connectionString = selectDatabaseUrl()!;
+  let needsSsl = false;
+
+  try {
+    const url = new URL(connectionString);
+    const isSupabase = /supabase\.co$|pooler\.supabase\.com$/.test(url.hostname);
+
+    if (isSupabase) {
+      needsSsl = true;
+      // Supabase's transaction pooler (port 6543) does not support prepared
+      // statements, which Drizzle relies on. Force the session pooler (5432).
+      if (url.port === "6543") {
+        url.port = "5432";
+        connectionString = url.toString();
+      }
+    }
+  } catch {
+    // If DATABASE_URL isn't a valid URL, fall back to using it as-is.
+  }
+
+  const config: pg.PoolConfig = { connectionString };
+  if (needsSsl) {
+    config.ssl = { rejectUnauthorized: false };
+  }
+  return config;
+}
+
+export const pool = new Pool(buildPoolConfig());
+export const db = drizzle(pool, { schema });
+
+export * from "./schema";

@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-09",
+  "sub_phase": "08-census",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "0bd2864cc82069220a449f58b3ea75a463663b66985dcfba4946194835863bf6",
+  "source_hashes": {
+    "artifacts/api-server/src/lib/vault-snapshot-restore.ts": "817d33707c22e1ef93167ad1f843f1d45bf601f6ae6fca8877efde1c34d2d7e0",
+    "artifacts/api-server/src/lib/vault-snapshot-extra.ts": "8fd93e4bc3a3480f8b780ff2c680c2e6f522ed96515e4b1856a13ec63cebb0fb",
+    "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts": "8fefe3e230c82d475a50762839fbc920d32f10eea621373d4ca2bb789e87b139",
+    "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts": "79cb434bd019add875632d9fa42b21b0a3107a751ec08f0a15b632a192420565",
+    "artifacts/api-server/src/lib/vault-trash-purge.ts": "5e6c593fc70192fb39c0eace19f88aff188fcdf772883dade3d3e3eb2e2143fd",
+    "artifacts/api-server/src/lib/vault-trash-cron.ts": "cbdebe51aae8205de1f5a6a6a8e33c87e45b318ccb7ab2bc69989d8e94be6635",
+    "artifacts/api-server/src/routes/vault-snapshot.ts": "6ca28fe215532300042e545a3784d7c86e6f526b95ef8958a60566fd51022dc5"
+  },
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__restore__ts",
+      "sha256": "817d33707c22e1ef93167ad1f843f1d45bf601f6ae6fca8877efde1c34d2d7e0",
+      "lines": 699,
+      "symbols": 30,
+      "exported": 3
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__extra__ts",
+      "sha256": "8fd93e4bc3a3480f8b780ff2c680c2e6f522ed96515e4b1856a13ec63cebb0fb",
+      "lines": 1053,
+      "symbols": 30,
+      "exported": 20
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__trash__purge__ts",
+      "sha256": "8fefe3e230c82d475a50762839fbc920d32f10eea621373d4ca2bb789e87b139",
+      "lines": 62,
+      "symbols": 2,
+      "exported": 2
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__trash__cron__ts",
+      "sha256": "79cb434bd019add875632d9fa42b21b0a3107a751ec08f0a15b632a192420565",
+      "lines": 47,
+      "symbols": 2,
+      "exported": 1
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-trash-purge.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__trash__purge__ts",
+      "sha256": "5e6c593fc70192fb39c0eace19f88aff188fcdf772883dade3d3e3eb2e2143fd",
+      "lines": 52,
+      "symbols": 2,
+      "exported": 2
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-trash-cron.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__trash__cron__ts",
+      "sha256": "cbdebe51aae8205de1f5a6a6a8e33c87e45b318ccb7ab2bc69989d8e94be6635",
+      "lines": 46,
+      "symbols": 2,
+      "exported": 1
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__routes__vault__snapshot__ts",
+      "sha256": "6ca28fe215532300042e545a3784d7c86e6f526b95ef8958a60566fd51022dc5",
+      "lines": 1102,
+      "symbols": 22,
+      "exported": 3
+    }
+  ],
+  "moves": {
+    "artifacts/api-server/src/lib/vault-snapshot-restore.ts": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+    "artifacts/api-server/src/lib/vault-snapshot-extra.ts": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+    "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts": "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts",
+    "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts": "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts",
+    "artifacts/api-server/src/lib/vault-trash-purge.ts": "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts",
+    "artifacts/api-server/src/lib/vault-trash-cron.ts": "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts"
+  },
+  "status": "PASS"
+}

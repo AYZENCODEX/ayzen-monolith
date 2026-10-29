@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-6a",
+  "title": "Invoices: 11 handlers to application/invoices, lib/finance-invoice + lib/invoice-pdf moved to finance/invoices/*; F15 to F18; test-harness repair",
+  "timestamp": "2026-10-20T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Code checks pass and DB tests ran for the first time on a local Postgres 17 (139/139). Still BLOCKED by the project's own rule: not run in the Replit checkout against the project's real database setup, no commit SHA, payment-agreement paths (WP-6b) have no DB test.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; cumulative with WP-2b to WP-5b; bound by content in fin-provenance-manifest.json."
+  },
+  "baselineBeforeChanges": {
+    "command": "pnpm test:finance-db (embedded Postgres 17.5, throwaway database)",
+    "result": "106 tests, 96 pass, 10 fail",
+    "cause": "harness gaps only: no users table in the isolated schema (1 test) and finance_depreciation not created (9 tests, wp4 suite). No code defect found."
+  },
+  "oldToNew": {
+    "finance/application/invoices.ts": {
+      "GET /finance/invoices": "listInvoices",
+      "POST /finance/invoices": "createInvoice",
+      "PUT /finance/invoices/:id/line-items": "updateInvoiceLineItems",
+      "GET /finance/invoices/:id": "getInvoiceDetail",
+      "GET /finance/invoices/:id/pdf": "streamCreditorInvoicePdf",
+      "POST /finance/invoices/:id/send": "sendInvoice",
+      "DELETE /finance/invoices/:id": "cancelInvoice",
+      "GET /finance/invoices/public/:token": "getPublicInvoiceView",
+      "GET /finance/invoices/public/:token/pdf": "streamPublicInvoicePdf",
+      "POST /finance/invoices/public/:token/submit-payment": "submitInvoicePayment",
+      "POST /finance/invoices/:id/reopen": "reopenInvoice"
+    },
+    "finance/invoices/links.ts": "generateInvoiceToken, generateAgreementToken, financeInvoiceUrl, financePaymentAgreementUrl, generateInvoicePayLinkQrDataUrl (from lib/finance-invoice.ts)",
+    "finance/invoices/events.ts": "logInvoiceEvent, getClientIpLocal (type-only widening of the request parameter)",
+    "finance/invoices/store.ts": "getInvoiceByToken, getInvoiceLineItems, replaceInvoiceLineItems (+InTx, F15), getCreditorProfile (column-limited read)",
+    "finance/invoices/rule-invoice.ts": "createAndSendRuleInvoice (F15 transaction)",
+    "finance/invoices/pdf.ts": "streamInvoicePdf and types, body byte-identical except one import path (diffed)",
+    "lib/finance-invoice.ts, lib/invoice-pdf.ts": "pure re-export shims, same public symbol surface; consumers rewired (routes, jobs/recurring, invoice reminder cron)"
+  },
+  "stays in routes/finance-invoices.ts": [
+    "auth 401, id parsing, body-shape 400s, PDP ownership checks and their ordering, PDF streaming call, date formatting, the 6 payment-agreement handlers and payment-method routes"
+  ],
+  "behaviorChanges": [
+    "F15 to F17: same outcomes and messages; races and partial failures now resolve safely. The public view logs one 'viewed' event instead of one per concurrent view.",
+    "F18: submit-payment rejects a zero, negative or non-numeric amount with 400 'amount must be a positive number.' (previously accepted).",
+    "Public invoice and PDF read only the creditor columns they use instead of the whole users row (same values).",
+    "Boot MIGRATIONS now include the 034 invoice columns (idempotent; no-op where 034 was applied)."
+  ],
+  "ran": [
+    {
+      "check": "pnpm test:finance-db (Postgres 17.5, throwaway DB)",
+      "result": "139/139 pass, exit 0 (was 96/106 before: 10 harness failures repaired)"
+    },
+    {
+      "check": "mutation: reverted F17 send, F18 lock, F17 reopen guard",
+      "result": "4 targeted tests failed, restored, 139/139 again"
+    },
+    {
+      "check": "pnpm test:finance-static",
+      "result": "61/61 pass (route-security 35: 8 new WP-6a gates, ratchet 18 to 8)"
+    },
+    {
+      "check": "node scripts/antas/finance/validate-boundaries.mjs",
+      "result": "PASS, 0 findings (new wp6a-single-owner, wp6a-wiring, wp6a-legacy-not-a-shim, wp6a-legacy-consumers; shim mutation detected)"
+    },
+    {
+      "check": "tsc -p artifacts/api-server --noEmit",
+      "result": "exit 0"
+    },
+    {
+      "check": "pnpm build (api-server)",
+      "result": "exit 0"
+    }
+  ],
+  "notRun": [
+    "Replit checkout run",
+    "staging walk-through of the invoice send/pay/verify flow",
+    "payment-agreement paths (WP-6b) have no DB test",
+    "real SMTP/Telegram delivery (no transport configured in tests)"
+  ],
+  "ratchet": "routes with direct db.*: 18 to 8",
+  "next": "WP-6b: application/payment-agreements (6 handlers) and the two open product decisions listed under F18."
+}

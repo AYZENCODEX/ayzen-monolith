@@ -1,0 +1,103 @@
+{
+  "gap": "VLT-GAP-13",
+  "kind": "intentional-violation-self-test",
+  "cases": [
+    {
+      "case": "vault-clean.ts",
+      "expected": [],
+      "caught": [],
+      "ok": true
+    },
+    {
+      "case": "vault-r1.ts",
+      "expected": [
+        "R1-db-import"
+      ],
+      "caught": [
+        "R1-db-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "vault-r2.ts",
+      "expected": [
+        "R2-raw-sql/db"
+      ],
+      "caught": [
+        "R2-raw-sql/db"
+      ],
+      "ok": true
+    },
+    {
+      "case": "vault-r2b.ts",
+      "expected": [
+        "R2-raw-sql/db"
+      ],
+      "caught": [
+        "R2-raw-sql/db"
+      ],
+      "ok": true
+    },
+    {
+      "case": "vault-r3.ts",
+      "expected": [
+        "R3-provider-access"
+      ],
+      "caught": [
+        "R3-provider-access"
+      ],
+      "ok": true
+    },
+    {
+      "case": "vault-r4.ts",
+      "expected": [
+        "R4-business-calc"
+      ],
+      "caught": [
+        "R4-business-calc"
+      ],
+      "ok": true
+    },
+    {
+      "case": "vault-r5.ts",
+      "expected": [
+        "R5-state-mutation"
+      ],
+      "caught": [
+        "R5-state-mutation"
+      ],
+      "ok": true
+    },
+    {
+      "case": "vault-r6.ts",
+      "expected": [
+        "R6-security-policy"
+      ],
+      "caught": [
+        "R6-security-policy"
+      ],
+      "ok": true
+    },
+    {
+      "case": "vault-r7.ts",
+      "expected": [
+        "R7-route-to-route"
+      ],
+      "caught": [
+        "R7-route-to-route"
+      ],
+      "ok": true
+    },
+    {
+      "case": "vault-r9.ts",
+      "expected": [
+        "R9-no-delegate"
+      ],
+      "caught": [
+        "R9-no-delegate"
+      ],
+      "ok": true
+    }
+  ],
+  "status": "PASS"
+}

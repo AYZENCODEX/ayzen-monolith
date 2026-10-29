@@ -1,0 +1,1289 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-08",
+  "sub_phase": "08-census",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "e73a8fd7fd71b86b6667ec4bb997cd746e17bc2695cf3870b3608589ae189806",
+  "source_hashes": {
+    "artifacts/api-server/src/lib/vault-backup-envelope.ts": "e8b25d6f4c57dff81bb26e7cc99209dd59ba8d463d20181101f4fcbd56e8c0bc",
+    "artifacts/api-server/src/lib/vault-backup-audit.ts": "83cf31bcfc5bb860b06a776ca2d22270f62c492753b49b7578e0193b11b5ecfb",
+    "artifacts/api-server/src/lib/vault-backup-cloud.ts": "dbfe8c9092e9969b89b992995217597aa1e89138db91b5acd032be2eaac5e239",
+    "artifacts/api-server/src/lib/vault-backup-delivery.ts": "0a3af1f565dae24df43cdd7ebedbea3231a500f6be2163e664abd39fdce8165f",
+    "artifacts/api-server/src/lib/vault-backup-alerts.ts": "5e703944cc34142497a35c27ccd954218d4f75e1a54747331ba10c4b393783fe",
+    "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts": "b5dca0f651b7ec1398a5925ef50983e0433672dee644eeb3ef2521f33bdfd7bb",
+    "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts": "acc8cbb04cdee1664b53e661bf289cfa902b7a0022bf18498ab62339b4b4e956",
+    "artifacts/api-server/src/routes/vault-backup-key.ts": "ff5908a46d2cd4417bb8c798f569ec6ca2ea5135c5e89c9a1782f0bb0f9f25a2",
+    "artifacts/api-server/src/routes/vault-backup-cloud.ts": "c15246b957ba6a00831d5fad1cf3b16cf00e4fd42237c3c45bd8bcc0a151b20d",
+    "artifacts/api-server/src/routes/vault-backup-schedule.ts": "11c791b6a6cbbc6845c42e282a4df6f740c34319d4842fabdd22ef8d1ad423a2"
+  },
+  "records": [
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "NAMESPACE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        75,
+        75
+      ],
+      "body_sha256": "7e60032397997e1650842a9028f2bf135a52fda8b0cab575155a28ba385b556e",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "PREFIX",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        76,
+        76
+      ],
+      "body_sha256": "4fc819bfb821713313b48443934a8ef315904e027ea3d167791c64be2df30345",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "PREFIX_V2",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        77,
+        77
+      ],
+      "body_sha256": "cd70a25ec69c109e4554de8ccebe03ee3cae079b1b9b783611303215615f35bc",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "KEYLEN",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        78,
+        78
+      ],
+      "body_sha256": "e29c9c180c6279b0b02abd6a1801c7c04082cf486ec027aa13515e4f3884bb6b",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "backupAad",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        80,
+        82
+      ],
+      "body_sha256": "87299419e264789fea0d89a42f8aaa0816fbe0ad4b41cd67432de1b23c81a419",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "getRawKekSecret",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        84,
+        93
+      ],
+      "body_sha256": "076124565c06f68dbb6f34e7d30c2f67d7e63f1565564b99784189522e573643",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "ENV_KEK_HKDF_SALT",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        102,
+        102
+      ],
+      "body_sha256": "b1582492efa78cd60601249a83938b7938dddd1c6b4b526bb593e0eab7eea620",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "ENV_KEK_HKDF_INFO",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        103,
+        103
+      ],
+      "body_sha256": "02b61cba6b91fea125ae40cab33838eb9763e9ec35c281df77de6dc7268fd6e1",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "deriveKekStrong",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        104,
+        106
+      ],
+      "body_sha256": "4554b8709e706237f94f78ad942677e0f83f275ebd58c511f96092dbb35cf8b0",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "deriveKekLegacy",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        107,
+        109
+      ],
+      "body_sha256": "8d599c250b88934cd2b3f55d6392a9106555ef7180fa1336c02c4f67673917fd",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "getKek",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        110,
+        112
+      ],
+      "body_sha256": "fd7f2d7e2e3ed4b0b00798a16f0b6ee18cb65a31ef5e67111175ec53de6ccd52",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "getLegacyKek",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        113,
+        115
+      ],
+      "body_sha256": "d7bce501fb0460d96347a0d49f95aa4be6333c5ecad4c5707246ddf2b56d2c59",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "wrapDek",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        117,
+        119
+      ],
+      "body_sha256": "a842a14fe3971cb40257b7f55e9f3a142ce55cd6a541663d5e89c7b239d8890b",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "unwrapDekWith",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        120,
+        123
+      ],
+      "body_sha256": "a090508f94e26658e5278113689c63c26c462d02a660519b36c234ae7cea1d43",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "unwrapDek",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        124,
+        130
+      ],
+      "body_sha256": "1dccc4486b6127d99b0ff889278dd3be2accc661793a4b972a39138b9fbd56e9",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "dekCache",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        132,
+        132
+      ],
+      "body_sha256": "a38e6fea086ec0102fabbe817b16bfbd7ce4d97327ed28d4394f59dd542d5ddc",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "activeVersion",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        133,
+        133
+      ],
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "ready",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        134,
+        134
+      ],
+      "body_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "bootstrapFirstKey",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        136,
+        143
+      ],
+      "body_sha256": "364270084dc4b150899bdf86d9f27b8d0c28fa6add1e9397c6dfba8bf5a5ff30",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "loadBackupEnvelopeKeyManager",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        146,
+        163
+      ],
+      "body_sha256": "bfe69e29428f1c0bd8873eefff485141e05288addf667359fbbfd5a6d718978b",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "rotateBackupEnvelopeKey",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        166,
+        177
+      ],
+      "body_sha256": "e296ae5a4f7c53212b9851f0f95e9438942545e59bc8ccd7a6bcde9a37c685a9",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "getActiveBackupEnvelopeVersion",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        179,
+        181
+      ],
+      "body_sha256": "5b9ad8a1369269c44b52476bfc6be5cce2edd1f404c6ab6157e549ce2149299a",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "envelopeEncryptBackup",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        188,
+        195
+      ],
+      "body_sha256": "7e482fc9eacd00299f2d1ee4baf1e4a2efeaeefd73984b89f79fb91eb5601b8e",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "name": "envelopeDecryptBackup",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        208,
+        226
+      ],
+      "body_sha256": "2a6128760805344c67e510d946d80f6ae0792553f85d519291040d1536aa268e",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "name": "requestIp",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        50,
+        52
+      ],
+      "body_sha256": "54a7fa372fe9cecbf621705008deebae8c2eb3bd5a7600c9e108411054e24d52",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "name": "redactUrl",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        55,
+        63
+      ],
+      "body_sha256": "41b5c4148a588b57768284879008594fed5ea915354dff67830db03a96d0253c",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "name": "logBackupAudit",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        65,
+        83
+      ],
+      "body_sha256": "2f0b43ce35911ea980fdbbb60b3063e48b1b5889bfa1266d05d2f9e12e62311a",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "name": "listOwnBackupAuditLog",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        86,
+        91
+      ],
+      "body_sha256": "af19dae29c63e8697e2967842f93a7960a846e588a6c1c4e955e117704b318f7",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "name": "listBackupAuditLogAdmin",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        94,
+        102
+      ],
+      "body_sha256": "cd8b484677bd2dcb078e54bda32e9933f93a4f92d8bd9d36c832796279e99b1b",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "name": "BACKUP_IP_HISTORY_LOOKBACK",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        113,
+        113
+      ],
+      "body_sha256": "1a6562590ef19d1045d06c4055742d38288e9e6dcd71ccde5cee80f1d5a774eb",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "name": "isAnomalousBackupIp",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        121,
+        133
+      ],
+      "body_sha256": "fa9f121790086a4a88e63c21756f7c58a6d2025f1d330bac1b92ced2a009ec46",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "CLOUD_PROVIDERS",
+      "kind": "const",
+      "exported": true,
+      "lines": [
+        55,
+        55
+      ],
+      "body_sha256": "5853ce98ec9254e7ffd2889473e21fb2ec202b03856d2620e8297ae3725e4cb5",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "GOOGLE_AUTH_URL",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        57,
+        57
+      ],
+      "body_sha256": "b18de17748a87d24c83087aaebff4d763c2bff76b33947de25c3fc9b6b020f96",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "GOOGLE_TOKEN_URL",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        58,
+        58
+      ],
+      "body_sha256": "8b2b650109cb18dedc7b60b39bd49ed8e0c4b1adc868e46429f690fa2fbb20c5",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "GOOGLE_UPLOAD_URL",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        59,
+        59
+      ],
+      "body_sha256": "be81f711149ec485d1dc5943140441e11ae3cee891ecf3b7b1643e353cd01924",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "GOOGLE_FILES_URL",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        60,
+        60
+      ],
+      "body_sha256": "acb23809d9eef489fcc923ca68f87edabc9b38bb5ec517e9045f89d51e34e03c",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "GOOGLE_USERINFO_URL",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        61,
+        61
+      ],
+      "body_sha256": "b168b609c0dcc6078956a261888ad985f230cd0190086692c02b5859192e54ea",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "GOOGLE_SCOPE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        62,
+        62
+      ],
+      "body_sha256": "e514ad8deed0bf1f60e5451f1c4274b72e642761628e5cd4fe61535c4209a881",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "DROPBOX_AUTH_URL",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        64,
+        64
+      ],
+      "body_sha256": "832759bb1d511c1ec5baa49993f8916595d16154eec371728cfaa3428926235a",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "DROPBOX_TOKEN_URL",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        65,
+        65
+      ],
+      "body_sha256": "589c81de29b1647303a4890967ef3de7189aeb1631428917155bd84cde9e1005",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "DROPBOX_UPLOAD_URL",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        66,
+        66
+      ],
+      "body_sha256": "0b38729e18dee4afba94dabc28dcc5498652d605f0100c3ed97395f4b62a835f",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "DROPBOX_ACCOUNT_URL",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        67,
+        67
+      ],
+      "body_sha256": "12b675c91ba77799dbd2f300a4b2c899aafb0a2b5e6a15e81de9a64230cf4db0",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "DROPBOX_BACKUP_PATH",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        68,
+        68
+      ],
+      "body_sha256": "09a7e7ca3fbc719f1c864b026f4113bb9254d0d9d602f246011224c30c561aea",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "googleCreds",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        70,
+        76
+      ],
+      "body_sha256": "cd7c26944e31a0a25ec192b16bd582a2c1870ee76ca37e7223b78bbef72bf981",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "dropboxCreds",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        77,
+        83
+      ],
+      "body_sha256": "9f5f6c53add7e9769914be7502832e98c2c40d43aefba0799c70c664a5a34996",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "isCloudProviderConfigured",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        86,
+        89
+      ],
+      "body_sha256": "329e2f6129eb5b9812fe2b3ddecef8c8d6fb4396e9b38864c5449a83187676d7",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "buildAuthorizeUrl",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        92,
+        108
+      ],
+      "body_sha256": "f34873758dcc1ebaa6c010178517ec6781961878edfa956048c44d2f0eae5036",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "verifyAuthorizeState",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        111,
+        115
+      ],
+      "body_sha256": "c9e4d5ccea37ea66474678f55b4bc1badfdb16c5ffdf7a002ca96fe160f2c709",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "exchangeGoogleCode",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        119,
+        135
+      ],
+      "body_sha256": "b66e98ea691a2348302db0c67ec7419c1a76205cdaac9cc656a4364b6e3d40dd",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "exchangeDropboxCode",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        137,
+        153
+      ],
+      "body_sha256": "f20af513f8be7208107f41a15cfe8511a79e657729d5809eaca0db8dfc400c7e",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "fetchGoogleAccountLabel",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        155,
+        162
+      ],
+      "body_sha256": "2b62ebb6ad21cb345d03c5e9073bc9a54ffa04871d597e458561fc4d423bf3ee",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "fetchDropboxAccountLabel",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        163,
+        170
+      ],
+      "body_sha256": "dc933b9794c5a33967a9cb0b5d6ecdec6fbd1104845a18de4d3fcd55366ce1c7",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "ensureGoogleFolder",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        173,
+        187
+      ],
+      "body_sha256": "dd2c29e60f3e872ea8a1c916c5c87f26a51945c49d8e85a6e066610b27190aa0",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "completeCloudConnect",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        190,
+        217
+      ],
+      "body_sha256": "ad6769d39cc3bccf5c3f37112e2c1d74366d00a117f951657755eecb482a2bca",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "getFreshAccessToken",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        220,
+        239
+      ],
+      "body_sha256": "3567394f96bc3eeae8f63f4bf4f3d7819020188fba5b29c060c12ede6db93879",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "refreshAccessToken",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        241,
+        251
+      ],
+      "body_sha256": "f8740320807eb487e2e48defef7e6b47c324a8562eb06597a8de24709d2a4d8a",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "uploadToGoogleDrive",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        254,
+        274
+      ],
+      "body_sha256": "1560d79810af8874739f828764be839df9548925f560b913a2aafc230de165bc",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "uploadToDropbox",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        277,
+        294
+      ],
+      "body_sha256": "104e1ed9aa739ea727f90ad13132c72cfe9ebc9c9e3ec2ca01cb7549d5e6bba6",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "listCloudConnections",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        304,
+        310
+      ],
+      "body_sha256": "105fed3d05bc6f7425f8a4a59dcd0786ea211b125d1d70baef6b0b0e435d39be",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "name": "disconnectCloudProvider",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        312,
+        316
+      ],
+      "body_sha256": "864b531feece24747945b0a1fdfa0cc0a07b1febcac627947bee9325c5d59039",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "name": "logDelivery",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        54,
+        65
+      ],
+      "body_sha256": "81178d2f039c19f0638bb4357a7965e5730442477a20f459350caf83a134cb74",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "name": "deliverSnapshotByEmail",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        68,
+        99
+      ],
+      "body_sha256": "43a14c06106d3bf21b4b378bc9e00802a33d84dbb5759a432c800e89efd09eaa",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "name": "deliverSnapshotByWebhook",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        114,
+        167
+      ],
+      "body_sha256": "54756093ad8193e01315cb8a2ad82f5496bbe60ce28f5a5a1195e1c3e6ad7a40",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "name": "deliverSnapshotByCloud",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        170,
+        184
+      ],
+      "body_sha256": "692037b63264f8dfaf0579081dbbecc6701888cb8663f3b41a081df4133b42e5",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "name": "deliverSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        187,
+        202
+      ],
+      "body_sha256": "3bd91fac9a6a42c2052474879ad99f92ef194977e03bfdcca52abba2591362a6",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+      "name": "alertOwnerOfAnomalousBackupAccess",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        59,
+        87
+      ],
+      "body_sha256": "594467560dcdfba017e9e498932881117ff1447d1f1c2ef1ed17081b636f0c3a",
+      "db_ops": true,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+      "name": "alertAdminsOfStaleKeyRotation",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        89,
+        113
+      ],
+      "body_sha256": "2e16a55a2b41e30df5596e883a70b26f9728f2182af1640f103ab6bcbea4b6ec",
+      "db_ops": true,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+      "name": "alertUserOfScheduledBackupResult",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        136,
+        210
+      ],
+      "body_sha256": "124d43f0c10979132212bb35886bd25f3e4c90facbeaf24926fa8d9df02608e9",
+      "db_ops": true,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+      "name": "alertUserOfMissedBackup",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        222,
+        259
+      ],
+      "body_sha256": "eeabe2406c97527441e2e451cb268a630237382ce3e0eaa09bc14d61b157ea5d",
+      "db_ops": true,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "name": "scheduled",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        42,
+        42
+      ],
+      "body_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "name": "ROTATION_DAYS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        44,
+        44
+      ],
+      "body_sha256": "a0e87522107a4fe3e2e550b689af23c70a8d9b79235d9ffb1e156c6a76bda45f",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "name": "getActiveKeyAgeDays",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        46,
+        54
+      ],
+      "body_sha256": "c10d8984b867207d2a301c86b887b1cd4f3d62ed50abd98fdcf49d6bca3ecaf5",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "name": "checkAndRotateIfStale",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        56,
+        91
+      ],
+      "body_sha256": "dbecef4d0732dd924e6096b3f3c99a05b39f997b711d9bccd824bce9a1ba738f",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "name": "startVaultBackupKeyRotationCron",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        93,
+        120
+      ],
+      "body_sha256": "f55a1610ff486de7923260604c158f75ad61986955f6bf35f42273946d1e3823",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "scheduled",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        56,
+        56
+      ],
+      "body_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "watchdogScheduled",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        57,
+        57
+      ],
+      "body_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "STALE_LOCK_MINUTES",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        64,
+        64
+      ],
+      "body_sha256": "efef2db046880f86030c9b75692423d04f41e6fe23b6163f23e0b360b618c8bb",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "computeNextRunAt",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        67,
+        96
+      ],
+      "body_sha256": "fc6f26e1a3a16c133923d711376df8cf1d403ac25569bccfe2beda87208aef91",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "runVaultBackupSchedule",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        99,
+        172
+      ],
+      "body_sha256": "c8f51cb8eecbfadfb81cad9ae0e1b0af2b477cb40011a03eced06d11a11383d6",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "claimSchedule",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        185,
+        195
+      ],
+      "body_sha256": "f1069e0846847b790e08273159197d7da9647032ab8f3e7162409bd3421985ec",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "sweepDueSchedules",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        197,
+        219
+      ],
+      "body_sha256": "c68603c9ef86cb611afcf7b3525f746a15775a2a349f3fd6c5159a571784702e",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "startVaultBackupScheduleCron",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        221,
+        241
+      ],
+      "body_sha256": "98a7f0223471d80efe9ac328e92067f2f7a0566884a07a04f4af79e8ce4811f0",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "DEFAULT_WATCHDOG_GRACE_MINUTES",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        268,
+        268
+      ],
+      "body_sha256": "811786ad1ae74adfdd20dd0372abaaebc6246e343aebd01da0bfc4c02bf0106c",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "WATCHDOG_GRACE_MINUTES",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        269,
+        269
+      ],
+      "body_sha256": "93b1a5ebae7075c9dfb1b49c1eb19d5cc03d1b7760c1c2dae792d77be6396ed4",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "sweepMissedSchedules",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        271,
+        297
+      ],
+      "body_sha256": "550f165df866454645ceb26467ee64c7e0abcda0aba9e84493e652f8d47569fe",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "name": "startVaultBackupMissedWatchdog",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        299,
+        322
+      ],
+      "body_sha256": "c51588e85037bca7f91037e928d9e8928d1c027a7778412806b6c90be3f94f7c",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "name": "router",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        34,
+        34
+      ],
+      "body_sha256": "bda692dc52aa8238226acd3c84b38be744a6ff60086dd7ce0929fb8c12f36d87",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "name": "ROTATION_DAYS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        39,
+        39
+      ],
+      "body_sha256": "a0e87522107a4fe3e2e550b689af23c70a8d9b79235d9ffb1e156c6a76bda45f",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "name": "router",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        37,
+        37
+      ],
+      "body_sha256": "bda692dc52aa8238226acd3c84b38be744a6ff60086dd7ce0929fb8c12f36d87",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "name": "isCloudProvider",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        39,
+        41
+      ],
+      "body_sha256": "9bb2408e6ad11ac99bb0a6d458fca5d51f2ecb96c593b4a12d139757f17a634e",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "name": "backToSnapshotPage",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        46,
+        48
+      ],
+      "body_sha256": "9f4cd097031de414c281b1a3eb2a200bdb43391d462c76b4d5306262acb7edf6",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "name": "router",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        24,
+        24
+      ],
+      "body_sha256": "bda692dc52aa8238226acd3c84b38be744a6ff60086dd7ce0929fb8c12f36d87",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "name": "FREQUENCIES",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        26,
+        26
+      ],
+      "body_sha256": "efc553f3a0e37fe5340fccd5acd31e2adfe84dabf6723248b38935a2cc57bbb6",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "name": "DESTINATIONS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        30,
+        30
+      ],
+      "body_sha256": "97e0197b4741b4e071d9dd06e19ef752fe926b26addf4f02aad3dc0e6673b31f",
+      "db_ops": false,
+      "provider_ops": false
+    }
+  ],
+  "consumers": {
+    "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts": [
+      "artifacts/api-server/src/index.ts",
+      "artifacts/api-server/src/routes/vault-backup-schedule.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts": [
+      "artifacts/api-server/src/index.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-backup-envelope.ts": [
+      "artifacts/api-server/src/index.ts",
+      "artifacts/api-server/src/lib/dr-test-runner.ts",
+      "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "artifacts/api-server/src/vault/infrastructure/index.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-backup-cloud.ts": [
+      "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "artifacts/api-server/src/routes/vault-backup-cloud.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-backup-audit.ts": [
+      "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "artifacts/api-server/src/routes/vault-snapshot.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-backup-alerts.ts": [
+      "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "artifacts/api-server/src/routes/vault-snapshot.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-backup-delivery.ts": [
+      "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts"
+    ]
+  },
+  "summary": {
+    "files": 10,
+    "symbols": 94,
+    "db_symbols": 21,
+    "provider_symbols": 17,
+    "consumers": 21
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-5a",
+  "title": "Recurring rules and manual journal: application use cases, recurring sweep job, F13",
+  "timestamp": "2026-10-19T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Static verification passes. typecheck, build and ALL DB tests (WP-1 to WP-5a) did not run: no Postgres and no node_modules here. Nothing is PASS until pnpm test:finance-db is green in the real checkout.",
+  "assumption": "The roadmap splits WP-5 into two sub-phases ('WP-5 2') without defining them. 5a = recurring + journal + the recurring cron (9 handlers, lower risk); 5b = entries (17 handlers). Say so if you meant a different split.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; cumulative with WP-2b to WP-4; bound by content in fin-provenance-manifest.json (77 files, regenerated)."
+  },
+  "oldToNew": {
+    "application/recurring.ts": {
+      "GET /finance/recurring": "listRecurringRules",
+      "POST /finance/recurring": "createRecurringRule",
+      "PUT /finance/recurring/:id": "updateRecurringRule",
+      "DELETE /finance/recurring/:id": "deleteRecurringRule",
+      "POST /finance/recurring/run-now": "runRecurringNow (dynamic import of the sweep, scoped to the caller, F1)"
+    },
+    "application/journal.ts": {
+      "GET /finance/journal": "listJournal",
+      "GET /finance/journal/:id": "getJournalEntry",
+      "POST /finance/journal": "createManualJournal",
+      "DELETE /finance/journal/:id": "deleteManualJournal"
+    },
+    "jobs/recurring.ts": ["runFinanceRecurringSweep", "startFinanceRecurringCron"],
+    "lib/finance-recurring-cron.ts": "now a re-export shim"
+  },
+  "behaviorChanges": [
+    "F13: manual journal delete is one transaction (header locked FOR UPDATE with owner predicate, lines and header deleted together). Outcomes and messages unchanged.",
+    "Everything else moved without logic edits. Route validation, status codes and messages unchanged."
+  ],
+  "knownDebt": [
+    "jobs/recurring.ts still imports lib/finance-invoice (createAndSendRuleInvoice) until WP-6.",
+    "The sweep and run-now have no DB test: they load the legacy invoice module. Due-rule selection stays covered by jobs/due-rules.db.test.ts.",
+    "The sweep still calls postEntryJournal best-effort (.catch(() => {})), as before; not changed in a move."
+  ],
+  "ran": [
+    { "check": "node scripts/antas/finance/validate-boundaries.mjs", "result": "PASS, 0 findings (includes new wp5a-single-owner, wp5a-wiring, wp5a-recurring-compat-shim)" },
+    { "check": "node --test --experimental-strip-types src/finance/route-security.test.ts", "result": "23/23 pass (3 new; ratchet lowered 39 to 31; F1 test now checks route -> runRecurringNow(authUser.userId) -> scoped sweep)" },
+    { "check": "syntax check of all new and changed .ts files", "result": "ok" }
+  ],
+  "notRun": [
+    "pnpm typecheck", "pnpm build", "pnpm test:finance-db (incl. new wp5a-use-cases.db.test.ts, registered in the runner)",
+    "src/finance/domain/*.test.ts via node strip-types: they fail here only because extensionless imports need tsx (environment, not this change)"
+  ],
+  "ratchet": "routes with direct db.*: 39 to 31 (run-now never had db.*, so 8, not 9)",
+  "next": "WP-5b: application/entries (17 handlers). Money-critical; depends on WP-3 and WP-4 (done)."
+}

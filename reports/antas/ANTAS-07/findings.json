@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "real key rotation",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "cross-user restore attack test",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

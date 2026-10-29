@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "snapshotStore": "artifacts/release/architecture-snapshots",
+  "diffEngine": "packages/architecture/src/index.mjs",
+  "reviewRequiredFor": ["security-boundary", "topology", "database-ownership", "production-route", "admin-policy"],
+  "automation": {
+    "mayRecommend": true,
+    "mayApplyCriticalChanges": false,
+    "requiresApproval": true,
+    "recordsReason": true
+  }
+}

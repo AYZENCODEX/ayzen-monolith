@@ -1,0 +1,10 @@
+{
+  "name": "@ayzen/events",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {},
+  "exports": {
+    ".": "./src/index.mjs"
+  }
+}

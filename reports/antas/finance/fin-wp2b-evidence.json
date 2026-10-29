@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-2b",
+  "title": "Non-money use cases, slice 2b: books/accounts, receipts, AI, invoice-branding, report-schedule job",
+  "timestamp": "2026-10-18T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Mechanical, behavior-preserving move verified statically (syntax-only tsc, 18 static gate tests, boundary scan, two mutation tests, line-level comparison of moved bodies). typecheck, build and every DB test (including the new wp2b-use-cases.db.test.ts, and the still-unrun WP-1/WP-2a suites) did not run: no Postgres and no node_modules in this environment.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; bound by content via fin-provenance-manifest.json (57 files, regenerated)."
+  },
+  "oldToNewMapping": [
+    {
+      "routes": "GET/POST /finance/books, PUT /finance/books/:id, PUT .../set-default, DELETE /finance/books/:id",
+      "to": "finance/application/books-accounts.ts#listUserBooks/createBook/updateBook/setDefaultBook/deleteBook"
+    },
+    {
+      "routes": "GET/POST /finance/accounts, PUT/DELETE /finance/accounts/:id",
+      "to": "finance/application/books-accounts.ts#listAccounts/createAccount/updateAccount/deleteAccount"
+    },
+    {
+      "routes": "POST/DELETE /finance/entries/:id/receipt",
+      "to": "finance/application/receipts.ts#mintEntryReceiptLink/revokeEntryReceiptLink"
+    },
+    {
+      "routes": "GET /finance/receipt/:token, GET /finance/receipt/:token/pdf",
+      "to": "finance/application/receipts.ts#findByReceiptToken/fmtPublicReceipt/renderReceiptPdf"
+    },
+    {
+      "routes": "POST /finance/ai/quick-entry/preview|commit, POST /finance/ai/receipt-scan, GET|POST /finance/ai/sms-webhook-token[/rotate], POST /finance/ai/sms-webhook/:token",
+      "to": "finance/application/ai.ts#previewQuickEntries/commitQuickEntries/scanReceipt/getSmsWebhookInfo/rotateSmsWebhookInfo/ingestSmsWebhook"
+    },
+    {
+      "routes": "POST /finance/ai/query, GET /finance/ai/anomalies, GET /finance/ai/recurring-suggestions",
+      "to": "unchanged: already thin calls into finance/ai/finance-ai.ts"
+    },
+    {
+      "routes": "GET/PUT /finance/invoice-branding",
+      "to": "finance/application/invoice-branding.ts#getInvoiceBranding/updateInvoiceBranding"
+    },
+    {
+      "file": "lib/finance-report-schedule-cron.ts",
+      "to": "finance/jobs/report-schedule.ts (re-export shim left at the old path; index.ts now imports the owner)"
+    }
+  ],
+  "consumers": {
+    "migrated": [
+      "routes/finance.ts",
+      "routes/finance-invoices.ts",
+      "index.ts (cron)"
+    ],
+    "remaining": [
+      "lib/finance-report-schedule-cron.ts shim has no importers; retire in WP-8 after a consumer scan"
+    ]
+  },
+  "behaviorChanges": "None intended. Status codes, messages and response shapes preserved. Two deliberate seams: the SMS webhook gets its in-app notification through a callback (so application/* never imports routes/*); receipt link functions are named mintEntryReceiptLink/revokeEntryReceiptLink because revokeReceiptLink already exists in the Vault module.",
+  "newFindings": [
+    {
+      "id": "F8",
+      "status": "OPEN",
+      "summary": "deleteBook runs five sequential deletes without a transaction (same class as F5). Moved unchanged; fix in its own sub-phase."
+    }
+  ],
+  "filesCreated": [
+    "artifacts/api-server/src/finance/application/books-accounts.ts",
+    "artifacts/api-server/src/finance/application/receipts.ts",
+    "artifacts/api-server/src/finance/application/ai.ts",
+    "artifacts/api-server/src/finance/application/invoice-branding.ts",
+    "artifacts/api-server/src/finance/application/wp2b-use-cases.db.test.ts",
+    "artifacts/api-server/src/finance/jobs/report-schedule.ts"
+  ],
+  "filesChanged": [
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/routes/finance-invoices.ts",
+    "artifacts/api-server/src/index.ts",
+    "artifacts/api-server/src/lib/finance-report-schedule-cron.ts (now a re-export)",
+    "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs (new test registered)",
+    "artifacts/api-server/src/finance/route-security.test.ts (WP-2b gate, ratchet 59 -> 46)",
+    "scripts/antas/finance/validate-boundaries.mjs (WP-2b owner/wiring/shim checks; receipt-token consumer moved to application/receipts.ts)",
+    "docs/antas/finance/*, reports/antas/finance/fin-01-dependency-scan.json, fin-provenance-manifest.json"
+  ],
+  "metrics": {
+    "routesFinanceTsLines": {
+      "before": 2222,
+      "after": 1968
+    },
+    "routesFinanceInvoicesTsLines": {
+      "before": 1120,
+      "after": 1088
+    },
+    "routesWithDirectDb": {
+      "before": 59,
+      "after": 46,
+      "of": 109,
+      "note": "count includes one scanner false positive (helper block after DELETE /finance/books/:id)"
+    },
+    "routesRewired": 24,
+    "routesActuallyChanged": 21
+  },
+  "commands": [
+    {
+      "command": "node --experimental-strip-types --test src/finance/route-security.test.ts",
+      "exitCode": 0,
+      "tests": 18,
+      "passed": 18,
+      "failed": 0
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 37 Finance sources, 0 findings"
+    },
+    {
+      "command": "node scripts/antas/finance/provenance.mjs --verify",
+      "exitCode": 0,
+      "result": "0 changed, 0 missing, 57 files"
+    },
+    {
+      "command": "tsc --noEmit --noResolve (syntax and undefined-name filter only)",
+      "exitCode": 0,
+      "result": "no TS1xxx syntax errors, no TS2304 undefined names in touched files; NOT a typecheck"
+    },
+    {
+      "command": "mutation: db.select() added back into POST /finance/accounts",
+      "exitCode": 1,
+      "result": "ratchet (47>46) and WP-2b adapter gate fail as intended; reverted"
+    },
+    {
+      "command": "mutation: function added to lib/finance-report-schedule-cron.ts shim",
+      "exitCode": 1,
+      "result": "wp2b-report-schedule-compat-shim finding; reverted"
+    }
+  ],
+  "firstRunIssuesFixed": [
+    "receipt-token consumer wiring in the validator pointed at routes/finance.ts (moved to application/receipts.ts)",
+    "revokeReceiptLink name collided with vault/application/entity/receipt.ts; renamed",
+    "gate read non-route helper code as route body for DELETE /finance/books/:id; WP-2b gate now inspects handler text only"
+  ],
+  "notRun": [
+    "pnpm typecheck / build",
+    "pnpm test:finance-db (wp2b-use-cases: 5 tests; plus unrun WP-1 and WP-2a suites)",
+    "src/finance/domain/*.test.ts here: they need tsx for extensionless imports (not installed); they ran green in WP-2a evidence",
+    "Authenticated HTTP tests of any moved route; receipt PDF byte-for-byte comparison; invoice-branding and AI commit/SMS DB tests (need users table / seams)"
+  ],
+  "nextSafeStep": "In the Replit checkout run the WP-1 commands plus pnpm typecheck and test:finance-db; if green, promote WP-1a, F1-F7, WP-2a and WP-2b together. Then fix F8 in its own sub-phase, then WP-3 (ledger core)."
+}

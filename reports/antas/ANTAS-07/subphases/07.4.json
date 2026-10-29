@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-07.4",
+  "phase": "ANTAS-07",
+  "name": "SSRF Defense",
+  "generatedAt": "2026-09-29T06:06:06.717Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "scripts/antas/security/test-ssrf-policy.mjs",
+    "services/vault/src/index.mjs"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

@@ -1,0 +1,507 @@
+{
+  "phase": "VLT-GAP-03",
+  "sub_phase": "VLT-GAP-03-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "386d676b6ff44cc0732a2b5a451a7979a27ad4a74c8d9445124224e444169270",
+  "validator_version": "1.0.0",
+  "validator_sha256": "b7ce83bf8f53cb06c268ea3092740f096d8aaeb19dae761c541e96b7ada7342a",
+  "description": "Security regression: middleware chains and route order identical to baseline; ownership/deny gates imported from vault/security; bypass attempts rejected; gate mutation tests",
+  "route_middleware_chains": [
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "same_order": true,
+      "differences": [],
+      "per_route": [
+        {
+          "key": "GET /kyc-entries",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "POST /kyc-entries",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "GET /kyc-entries/:id",
+          "mw": [
+            "requireAuth",
+            "requireKycEntryOwnership(\"kyc_entry.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})",
+            "requireCreditBalance(\"sylo.kyc_entry_view\")"
+          ]
+        },
+        {
+          "key": "PUT /kyc-entries/:id",
+          "mw": [
+            "requireAuth",
+            "requireKycEntryOwnership(\"kyc_entry.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+          ]
+        },
+        {
+          "key": "PATCH /kyc-entries/:id/status",
+          "mw": [
+            "requireAuth",
+            "requireKycEntryOwnership(\"kyc_entry.status.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+          ]
+        },
+        {
+          "key": "DELETE /kyc-entries/:id",
+          "mw": [
+            "requireAuth",
+            "requireKycEntryOwnership(\"kyc_entry.delete\", DENY{{ res.json({ success: true }); }})"
+          ]
+        },
+        {
+          "key": "GET /kyc-entries/enrollments",
+          "mw": [
+            "requireAuth"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "same_order": true,
+      "differences": [],
+      "per_route": [
+        {
+          "key": "GET /kyc-data-entities",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "GET /kyc-data-entities/overview",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "POST /kyc-data-entities",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "GET /kyc-data-entities/:id",
+          "mw": [
+            "requireAuth",
+            "requireKycDataEntityOwnership(\"kyc_data_entity.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})"
+          ]
+        },
+        {
+          "key": "PUT /kyc-data-entities/:id",
+          "mw": [
+            "requireAuth",
+            "requireKycDataEntityOwnership(\"kyc_data_entity.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+          ]
+        },
+        {
+          "key": "DELETE /kyc-data-entities/:id",
+          "mw": [
+            "requireAuth",
+            "requireKycDataEntityOwnership(\"kyc_data_entity.delete\", DENY{{ res.json({ success: true }); }})"
+          ]
+        }
+      ]
+    }
+  ],
+  "ownership_gates": [
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "gates": [
+        {
+          "gate": "requireKycEntryOwnership",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycNotFound",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycNotFoundOrForbidden",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycSilentSuccess",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "gates": [
+        {
+          "gate": "requireKycDataEntityOwnership",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycNotFound",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycNotFoundOrForbidden",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycSilentSuccess",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        }
+      ]
+    }
+  ],
+  "security_03B": {
+    "passed": 29,
+    "total": 29
+  },
+  "validator_bypass_test": [
+    {
+      "attempt": "flag --skip-tests",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "flag --force-pass",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "flag --ignore-failures",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "flag --continue-on-error",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "unknown flag --whatever",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "env ANTAS_BYPASS=true",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "env VALIDATION_DISABLED=true",
+      "exit_code": 1,
+      "rejected": true
+    }
+  ],
+  "mutation_evidence": [
+    {
+      "name": "selftest:mutation-anchor-a1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-query-in-kyc-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-query-in-data-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:decision-tree-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:if-branch-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-c1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:altered-response-mapping-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-c2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:non-canonical-response-mapping-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-e",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-import-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-ownership-middleware-kyc-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-ownership-middleware-data-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-deny-behavior-on-delete-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f5",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unresolvable-deny-handler-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-credit-middleware-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-g",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:route-reorder-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:compat-reexport-restored-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-listKycEntries-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-createKycDataEntity-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:hidden-import-of-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:compat-import-of-ownership-gate-from-old-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dynamic-import-of-old-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-copy-outside-vault-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-l",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:moved-sql-pasted-outside-repository-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-routes-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:express-runtime-import-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:req-res-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:domain-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:infrastructure-importing-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:sql-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:provider-call-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-n1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mail-read-exception-cannot-be-widened-to-a-write",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unknown-kyc-endpoint-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:display-roi-feeding-request-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:client-health-score-feeding-request-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unclassified-ui-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:modified-ui-file-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-n2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:stale-deferral-is-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ownership-gate-from-wrong-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:tampered-seal-manifest-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:refactored-move-without-executed-proof-is-rejected",
+      "passed": true,
+      "details": ""
+    }
+  ]
+}

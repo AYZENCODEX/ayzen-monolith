@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-F9-F10-follow-up",
+  "title": "F9 rollback proof, F10a confirmation, F10b atomic depreciation post",
+  "timestamp": "2026-10-19T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Code and static/simulated verification only. No Postgres or node_modules here: typecheck, build and every DB test (including the new F9 rollback and F10b tests, and the existing ledger-invariants suite that covers the postJournal refactor) did not run.",
+  "supersedes": "fin-wp4-evidence.json where it lists F10b as OPEN and says F9 has no rollback test.",
+  "f9": {
+    "state": "already fixed in WP-4 (delete+insert in one transaction per generator); this step adds rollback proof",
+    "tests": [
+      "amortization regenerate with an invalid start date throws after the delete and the previous rows must survive",
+      "depreciation: same"
+    ],
+    "run": false
+  },
+  "f10a": {
+    "state": "already fixed in WP-4 (conditional claim status <> 'posted'); unchanged here",
+    "test": "wp4-use-cases.db.test.ts F10a (4 concurrent posts, one journal)",
+    "run": false
+  },
+  "f10b": {
+    "change": "claim + journal + asset totalValue update are one transaction; journal failure rolls back and the route returns 500 (explicit journal_failed outcome); other errors roll back and propagate",
+    "refactor": "ledger/journal.ts postJournal split into prepareJournal + insertJournal; new postJournalInTx(tx,...). Check: of the old lines, only 5 structural ones changed (signature wrapper, db.transaction wrapper, a comment); every statement present.",
+    "newExports": [
+      "postJournalInTx",
+      "PostJournalOptions (journal.ts)",
+      "postDepreciationJournalInTx (schedules/depreciation.ts)"
+    ],
+    "seam": "postDepreciationPeriod(userId, id, deps?) accepts { postJournalInTx } for tests only",
+    "publicSurface": "lib/finance-accounting.ts shim unchanged (34 symbols); postDepreciationJournal unchanged in behaviour"
+  },
+  "newObservation": {
+    "id": "F12",
+    "summary": "Express 4, no async error wrapper or unhandledRejection handler found; a thrown error in any async handler is an unhandled rejection. App-wide, not fixed."
+  },
+  "commands": [
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 46 sources, 0 findings"
+    },
+    {
+      "command": "node --experimental-strip-types --test src/finance/route-security.test.ts src/finance/ledger-compat.test.ts",
+      "exitCode": 0,
+      "tests": 23,
+      "passed": 23
+    },
+    {
+      "command": "schedules.test.ts with ts-extension hook",
+      "exitCode": 0,
+      "tests": 5,
+      "passed": 5
+    },
+    {
+      "command": "stubbed-DB control-flow simulation of postDepreciationPeriod (scripts/antas/finance/depreciation-post-flow-sim.mjs)",
+      "exitCode": 0,
+      "checks": 8,
+      "passed": 8,
+      "mutation": "swallowing the journal failure again makes it fail; restored 8/8",
+      "proves": "ordering (claim, journal, asset update), rollback on false and on throw, outcome mapping, lost-claim path, early returns; does NOT prove database atomicity"
+    },
+    {
+      "command": "tsc --ignoreConfig --noEmit --noResolve (syntax/undefined-name/missing-export filter)",
+      "exitCode": 0,
+      "note": "not a typecheck"
+    }
+  ],
+  "firstRunIssues": [
+    "flow-sim stub lacked a drizzle export (harness, not code under test)"
+  ],
+  "notRun": [
+    "pnpm typecheck / build",
+    "pnpm test:finance-db (F9 rollback x2, F10b x2, F10a, plus the whole existing suite incl. ledger-invariants which exercises postJournal)",
+    "HTTP-level test of PUT /finance/depreciation/:id/post returning 500 on journal failure"
+  ],
+  "remainingOpen": [
+    "F11 float32 money columns (needs your decision, blocks WP-5 sign-off)",
+    "F12 async error handling (app-wide)",
+    "out-of-order depreciation posting leaves totalValue at the last-posted period (unchanged behaviour)"
+  ],
+  "wp5": "Not started: only read handlers before this request; no WP-5 file was written. Entries/journal/recurring (about 20 handlers with direct DB access, plus the recurring cron) remain.",
+  "nextSafeStep": "Run pnpm typecheck and pnpm test:finance-db in the Replit checkout. Then decide F11 and say go for WP-5."
+}

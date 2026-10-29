@@ -1,0 +1,13 @@
+{
+  "name": "@ayzen/contracts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@ayzen/platform-governance": "workspace:*"
+  },
+  "exports": {
+    ".": "./src/index.mjs",
+    "./platform": "./src/platform.mjs"
+  }
+}

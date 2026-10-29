@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-29T06:07:38.002Z",
+  "status": "PASS",
+  "artifacts": [
+    {
+      "name": "api-server",
+      "path": "artifacts/api-server/dist/index.mjs",
+      "exists": true
+    },
+    {
+      "name": "ayzen",
+      "path": "artifacts/ayzen/dist/public/index.html",
+      "exists": true
+    }
+  ]
+}

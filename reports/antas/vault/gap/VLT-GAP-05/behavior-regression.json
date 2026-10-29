@@ -1,0 +1,114 @@
+{
+  "phase": "VLT-GAP-05",
+  "sub_phase": "VLT-GAP-05-D",
+  "commit_sha": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "24632c57068a52091de19e44d6e60f5987ca10e846739f920d68908e43c7399c",
+  "validator_version": "1.0.0",
+  "validator_sha256": "dd4837fd94acabb481411b49bfbe09403108fff0368208e37f997e9d91f20406",
+  "prerequisite_05C_on_reconstructed_tree": {
+    "ok": true,
+    "details": "05-C PASS on reconstructed tree (27 consumers, 05-B differential 51/51, 33/33 mutations)",
+    "tests": {
+      "mutation_self_tests": 33,
+      "mutation_self_tests_passed": 33,
+      "bypass_attempts_rejected": 7,
+      "prerequisite_05B": {
+        "differential_cases": 51,
+        "differential_passed": 51,
+        "security_checks": 19,
+        "security_passed": 19,
+        "mutations_seeded": 34,
+        "mutations_detected": 34
+      }
+    }
+  },
+  "executed_owner_cases": [
+    {
+      "name": "exports:all-seven-public-functions-present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "legacy:pre-load-ciphertext-uses-plain-enc-prefix-and-iv:ct:tag-envelope",
+      "passed": true,
+      "details": "enc:6f2df04701e3ba8f"
+    },
+    {
+      "name": "legacy:round-trip",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "passthrough:null-undefined-empty-and-unprefixed-values-are-returned-unchanged",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "version:no-active-version-before-load",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "bootstrap:first-load-creates-v1-through-parameterised-sql-only",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "versioned:v1-envelope",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "versioned:legacy-ciphertext-still-decrypts-after-key-load",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "iv:two-encryptions-of-the-same-plaintext-differ",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rotation:rotateKey-returns-next-version-and-switches-active",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rotation:new-ciphertext-uses-v2-and-v1-ciphertext-still-decrypts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "tamper:modified-ciphertext-yields-failure-marker-not-plaintext",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "tamper:unknown-key-version-is-reported-not-guessed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "tamper:malformed-envelope-is-reported",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "rows:decryptRow-and-decryptRows-map-only-the-listed-fields",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-leak:wrapped-dek-in-the-key-table-is-ciphertext",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "owner_token_identity_to_05C_sealed_owner": {
+    "name": "crypto:owner-code-token-identical-to-the-05-C-sealed-owner (only comments may differ)",
+    "passed": true,
+    "details": "1152 vs 1152 tokens"
+  },
+  "consumers_still_importing_owner": 27
+}

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "mode": "continuous-delivery",
+  "releaseRecordRequired": [
+    "releaseId",
+    "commit",
+    "imageDigest",
+    "migrationSummary",
+    "gateResults",
+    "rolloutCohort",
+    "monitoringWindow",
+    "rollbackOwner"
+  ],
+  "riskyChangeControls": [
+    "feature-flag",
+    "expand-contract-migration",
+    "staged-rollout",
+    "explicit-approval"
+  ],
+  "rules": {
+    "buildOncePromoteDigest": true,
+    "releaseEvidenceIsImmutable": true,
+    "privilegedChangesAreAudited": true,
+    "rollbackSwitchIsRecorded": true
+  }
+}

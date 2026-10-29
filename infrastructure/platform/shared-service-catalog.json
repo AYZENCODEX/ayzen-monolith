@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "catalogId": "ayzen-shared-platform",
+  "defaultDeny": true,
+  "sharedServices": [
+    { "id": "api-gateway", "owner": "platform", "kind": "edge", "source": "apps/api-gateway", "lifecycle": "ACTIVE", "capabilities": ["routing", "authentication", "rate-limit", "audit"] },
+    { "id": "event-fabric", "owner": "platform", "kind": "shared-runtime", "source": "packages/event-client", "lifecycle": "ACTIVE", "capabilities": ["publish", "subscribe", "retry", "dlq", "replay"] },
+    { "id": "workflow-runtime", "owner": "platform", "kind": "shared-runtime", "source": "services/workflow", "lifecycle": "ACTIVE", "capabilities": ["durable-execution", "saga", "recovery"] },
+    { "id": "scheduler", "owner": "platform", "kind": "shared-runtime", "source": "services/scheduler", "lifecycle": "ACTIVE", "capabilities": ["triggers", "leases", "missed-runs"] },
+    { "id": "notification", "owner": "platform", "kind": "shared-runtime", "source": "services/notification", "lifecycle": "ACTIVE", "capabilities": ["templates", "preferences", "delivery", "fallback"] },
+    { "id": "policy-decision-point", "owner": "platform", "kind": "shared-runtime", "source": "services/policy", "lifecycle": "ACTIVE", "capabilities": ["decision", "simulation", "audit"] },
+    { "id": "identity", "owner": "identity", "kind": "shared-capability", "source": "services/identity", "lifecycle": "ACTIVE", "capabilities": ["user-identity", "service-identity", "sessions"] },
+    { "id": "config-control", "owner": "platform", "kind": "shared-capability", "source": "services/config-control", "lifecycle": "READY", "capabilities": ["namespaces", "validation", "drift", "rotation"] },
+    { "id": "coordination", "owner": "platform", "kind": "shared-capability", "source": "services/coordination", "lifecycle": "READY", "capabilities": ["leases", "locks", "idempotency"] },
+    { "id": "quota", "owner": "platform", "kind": "shared-capability", "source": "services/quota", "lifecycle": "READY", "capabilities": ["quota", "rate-limit", "backpressure"] },
+    { "id": "platform-health", "owner": "platform", "kind": "control-plane", "source": "services/platform-health", "lifecycle": "READY", "capabilities": ["health", "readiness", "dependency-state"] },
+    { "id": "admin", "owner": "admin", "kind": "control-plane", "source": "services/admin", "lifecycle": "ACTIVE", "capabilities": ["operations", "audit", "safe-remediation"] },
+    { "id": "audit-telemetry-intelligence", "owner": "platform", "kind": "shared-capability", "source": "packages/audit", "lifecycle": "ACTIVE", "capabilities": ["audit", "metrics", "tracing", "intelligence"] }
+  ],
+  "appOwnedDomains": [
+    { "app": "ryft", "services": ["finance"], "databaseAccess": "owner-only" },
+    { "app": "sylo", "services": ["vault"], "databaseAccess": "owner-only" },
+    { "app": "wisp", "services": ["mail"], "databaseAccess": "owner-only" },
+    { "app": "skarn", "services": ["workflow"], "databaseAccess": "owner-only" },
+    { "app": "zynth", "services": ["ai-agent"], "databaseAccess": "owner-only" },
+    { "app": "verve", "services": ["marketplace"], "databaseAccess": "owner-only" },
+    { "app": "ayzen", "services": ["identity", "search"], "databaseAccess": "owner-only" }
+  ],
+  "compatibility": [{ "id": "monolith", "source": "artifacts/api-server", "rule": "may-call-governed-services-only" }],
+  "rules": {
+    "onePhysicalRuntimePerCapability": true,
+    "crossAppDatabaseAccess": "deny-by-default",
+    "appDefinitionsRemainAppOwned": true,
+    "extractionRequiresIndependentNeed": true
+  }
+}

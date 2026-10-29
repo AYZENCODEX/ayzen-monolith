@@ -1,0 +1,1816 @@
+{
+  "phase": "VLT-GAP-01",
+  "sub_phase": "VLT-GAP-01-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "15cc70d7cfef801f9993710ffe3618c0e59df1b52fb75a452e8f900ccae1b3d4",
+  "validator_version": "1.0.0",
+  "validator_sha256": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+  "description": "Old frozen baseline vs current routes, executed side by side under identical stubs (DB, providers, events, crypto)",
+  "stubbed": "no network and no real database; deterministic stand-ins are identical for OLD and NEW",
+  "cases": [
+    {
+      "name": "gas-overview: success (addresses, mixed risk)",
+      "route": "GET /vault/gas-overview",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 6,
+      "calls_new": 6,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "gas-overview: provider failure -> 500",
+      "route": "GET /vault/gas-overview",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "gas-overview: db + fallback failure -> 500",
+      "route": "GET /vault/gas-overview",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 6,
+      "calls_new": 6,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "entity gas: success",
+      "route": "GET /vault/:id/gas",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "entity gas: array id param",
+      "route": "GET /vault/:id/gas",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "entity gas: not owned -> 404",
+      "route": "GET /vault/:id/gas",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "entity gas: no addresses",
+      "route": "GET /vault/:id/gas",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "entity gas: provider failure -> 500",
+      "route": "GET /vault/:id/gas",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "create: validation projectName required -> 400",
+      "route": "POST /vault",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "create: success full payload (encrypt, audit, bridge)",
+      "route": "POST /vault",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 67,
+      "calls_new": 67,
+      "response_status": 201,
+      "exercised": true
+    },
+    {
+      "name": "create: minimal payload defaults score",
+      "route": "POST /vault",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 48,
+      "calls_new": 48,
+      "response_status": 201,
+      "exercised": true
+    },
+    {
+      "name": "create: schema fallback insert",
+      "route": "POST /vault",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 71,
+      "calls_new": 71,
+      "response_status": 201,
+      "exercised": true
+    },
+    {
+      "name": "create: both inserts fail -> propagates",
+      "route": "POST /vault",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 47,
+      "calls_new": 47,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "bulk-tag: ids required -> 400",
+      "route": "PATCH /vault/bulk-tag",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "bulk-tag: tag required -> 400",
+      "route": "PATCH /vault/bulk-tag",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "bulk-tag: add (owned, foreign/missing, NaN)",
+      "route": "PATCH /vault/bulk-tag",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 18,
+      "calls_new": 18,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "bulk-tag: remove",
+      "route": "PATCH /vault/bulk-tag",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 14,
+      "calls_new": 14,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "bulk-tag: update failure is per-id ok:false",
+      "route": "PATCH /vault/bulk-tag",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 14,
+      "calls_new": 14,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: ids required -> 400",
+      "route": "PATCH /vault/bulk-action",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: >200 ids -> 400",
+      "route": "PATCH /vault/bulk-action",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: no valid ids -> 400",
+      "route": "PATCH /vault/bulk-action",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: tag missing -> 400",
+      "route": "PATCH /vault/bulk-action",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: tag add",
+      "route": "PATCH /vault/bulk-action",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 18,
+      "calls_new": 18,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: status invalid -> 400",
+      "route": "PATCH /vault/bulk-action",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: status success + row missing",
+      "route": "PATCH /vault/bulk-action",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 22,
+      "calls_new": 22,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: status update failure",
+      "route": "PATCH /vault/bulk-action",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 11,
+      "calls_new": 11,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: delete (soft) + foreign row not touched",
+      "route": "PATCH /vault/bulk-action",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 22,
+      "calls_new": 22,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: unknown action -> 400",
+      "route": "PATCH /vault/bulk-action",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "analytics: success (roi, platforms, 2fa)",
+      "route": "GET /vault/analytics",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "analytics: empty",
+      "route": "GET /vault/analytics",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "analytics: failure -> 500",
+      "route": "GET /vault/analytics",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 6,
+      "calls_new": 6,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "value-history: success",
+      "route": "GET /vault/analytics/value-history",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "value-history: failure -> 500",
+      "route": "GET /vault/analytics/value-history",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "my activity: defaults",
+      "route": "GET /vault/activity",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 10,
+      "calls_new": 10,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "my activity: page/limit clamps",
+      "route": "GET /vault/activity",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 10,
+      "calls_new": 10,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "my activity: failure -> 500",
+      "route": "GET /vault/activity",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 8,
+      "calls_new": 8,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "entity activity: success",
+      "route": "GET /vault/:id/activity",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 9,
+      "calls_new": 9,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "entity activity: not owned -> 404",
+      "route": "GET /vault/:id/activity",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "entity activity: failure -> 500",
+      "route": "GET /vault/:id/activity",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 9,
+      "calls_new": 9,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "update: full body (status change path)",
+      "route": "PATCH /vault/:id",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 21,
+      "calls_new": 21,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "update: non-status body (updated path + sync)",
+      "route": "PATCH /vault/:id",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 16,
+      "calls_new": 16,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "update: not found -> 404",
+      "route": "PATCH /vault/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "update: schema fallback succeeds",
+      "route": "PATCH /vault/:id",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 26,
+      "calls_new": 26,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "update: fallback row missing -> 404",
+      "route": "PATCH /vault/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 15,
+      "calls_new": 15,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "update: both updates fail -> propagates",
+      "route": "PATCH /vault/:id",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 15,
+      "calls_new": 15,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "field: unknown field -> 400",
+      "route": "PATCH /vault/:id/field",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "field: not owned -> 404",
+      "route": "PATCH /vault/:id/field",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "field: sensitive field success (history + bridge)",
+      "route": "PATCH /vault/:id/field",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 27,
+      "calls_new": 27,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "field: date field",
+      "route": "PATCH /vault/:id/field",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 25,
+      "calls_new": 25,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "field: followers NaN -> 400",
+      "route": "PATCH /vault/:id/field",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "field: followers rounds",
+      "route": "PATCH /vault/:id/field",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 25,
+      "calls_new": 25,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "field: empty value -> null",
+      "route": "PATCH /vault/:id/field",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 25,
+      "calls_new": 25,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "field: update returns no row -> 404",
+      "route": "PATCH /vault/:id/field",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 9,
+      "calls_new": 9,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "field: update failure -> 500",
+      "route": "PATCH /vault/:id/field",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 9,
+      "calls_new": 9,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "field-history: not owned -> 404",
+      "route": "GET /vault/:id/field-history",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "field-history: success",
+      "route": "GET /vault/:id/field-history",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 12,
+      "calls_new": 12,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "field-history: filtered",
+      "route": "GET /vault/:id/field-history",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 10,
+      "calls_new": 10,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "field-history: failure -> 500",
+      "route": "GET /vault/:id/field-history",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 10,
+      "calls_new": 10,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "admin list: success",
+      "route": "GET /admin/vault",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "admin list: falls back to selectVault(0)",
+      "route": "GET /admin/vault",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 8,
+      "calls_new": 8,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "admin full: success (seed decrypted)",
+      "route": "GET /admin/vault/full",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "admin full: failure -> 500",
+      "route": "GET /admin/vault/full",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "admin local-accounts: success",
+      "route": "GET /admin/vault/local-accounts",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 3,
+      "calls_new": 3,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "admin local-accounts: failure -> 500",
+      "route": "GET /admin/vault/local-accounts",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 2,
+      "calls_new": 2,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "admin users: success",
+      "route": "GET /admin/vault/users",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 2,
+      "calls_new": 2,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "admin users: failure -> 500",
+      "route": "GET /admin/vault/users",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 2,
+      "calls_new": 2,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "admin user vault: invalid id -> 400",
+      "route": "GET /admin/vault/users/:userId",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "admin user vault: success (+missing user)",
+      "route": "GET /admin/vault/users/:userId",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 11,
+      "calls_new": 11,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "admin user vault: user found, array param",
+      "route": "GET /admin/vault/users/:userId",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 11,
+      "calls_new": 11,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "admin user vault: failure -> 500",
+      "route": "GET /admin/vault/users/:userId",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 10,
+      "calls_new": 10,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "admin activity: success",
+      "route": "GET /admin/vault/activity",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 7,
+      "calls_new": 7,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "admin activity: failure -> 500",
+      "route": "GET /admin/vault/activity",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 7,
+      "calls_new": 7,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "receipt create: invalid id -> 400",
+      "route": "POST /vault/:id/receipt",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "receipt create: not owned -> 404",
+      "route": "POST /vault/:id/receipt",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "receipt create: existing token",
+      "route": "POST /vault/:id/receipt",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "receipt create: mints token",
+      "route": "POST /vault/:id/receipt",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 10,
+      "calls_new": 10,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "receipt create: 3 collisions -> 500",
+      "route": "POST /vault/:id/receipt",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 22,
+      "calls_new": 22,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "receipt create: db failure -> 500",
+      "route": "POST /vault/:id/receipt",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 500,
+      "exercised": true
+    },
+    {
+      "name": "receipt revoke: invalid id -> 400",
+      "route": "DELETE /vault/:id/receipt",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "receipt revoke: not owned -> 404",
+      "route": "DELETE /vault/:id/receipt",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "receipt revoke: success",
+      "route": "DELETE /vault/:id/receipt",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "public receipt: missing token -> 400",
+      "route": "GET /vault/receipt/:token",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "public receipt: unknown -> 404",
+      "route": "GET /vault/receipt/:token",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "public receipt: success (array token)",
+      "route": "GET /vault/receipt/:token",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 10,
+      "calls_new": 10,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "public receipt pdf: unknown -> 404",
+      "route": "GET /vault/receipt/:token/pdf",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "public receipt pdf: missing token -> 400",
+      "route": "GET /vault/receipt/:token/pdf",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "public receipt pdf: streams (profit)",
+      "route": "GET /vault/receipt/:token/pdf",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 11,
+      "calls_new": 11,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "public receipt pdf: streams (no buy value)",
+      "route": "GET /vault/receipt/:token/pdf",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 11,
+      "calls_new": 11,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "get entity: success (charge on success)",
+      "route": "GET /vault/:id",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 10,
+      "calls_new": 10,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "get entity: not found -> 404, no charge",
+      "route": "GET /vault/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "trash entity: success (delist, audit, broadcast)",
+      "route": "DELETE /vault/:id",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 15,
+      "calls_new": 15,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "trash entity: foreign/missing -> 404",
+      "route": "DELETE /vault/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "restore entity: success",
+      "route": "POST /vault/:id/restore",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 14,
+      "calls_new": 14,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "restore entity: not trashed/foreign -> 404",
+      "route": "POST /vault/:id/restore",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "purge entity: success (hard delete + sync)",
+      "route": "DELETE /vault/trash/:id",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 11,
+      "calls_new": 11,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "purge entity: not trashed/foreign -> 404",
+      "route": "DELETE /vault/trash/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "entity links: success (forward + counterpart)",
+      "route": "GET /vault/:id/links",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 12,
+      "calls_new": 12,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "entity links: invalid id -> 400",
+      "route": "GET /vault/:id/links",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "entity links: not owned -> 404",
+      "route": "GET /vault/:id/links",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "update link: success (note only)",
+      "route": "PATCH /vault-entity-links/:id",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "update link: bad relationType -> 400",
+      "route": "PATCH /vault-entity-links/:id",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "update link: foreign/missing -> 404",
+      "route": "PATCH /vault-entity-links/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "delete link: success",
+      "route": "DELETE /vault-entity-links/:id",
+      "category": "success",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "delete link: invalid id -> 400",
+      "route": "DELETE /vault-entity-links/:id",
+      "category": "failure",
+      "passed": true,
+      "differences": [],
+      "calls_old": 0,
+      "calls_new": 0,
+      "response_status": 400,
+      "exercised": true
+    },
+    {
+      "name": "delete link: foreign/missing -> 404",
+      "route": "DELETE /vault-entity-links/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    }
+  ],
+  "static_parity": [
+    {
+      "route": "GET /vault/:id/links",
+      "use_case": "vault/application/entity/links.ts#listEntityLinks",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 2,
+        "tables": 11,
+        "branches": 12,
+        "awaits": 3
+      },
+      "current": {
+        "db": 2,
+        "tables": 11,
+        "branches": 12,
+        "awaits": 3
+      }
+    },
+    {
+      "route": "POST /vault-entity-links",
+      "use_case": "vault/application/entity/links.ts#createEntityLink",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 2,
+        "tables": 4,
+        "branches": 13,
+        "awaits": 3
+      },
+      "current": {
+        "db": 2,
+        "tables": 4,
+        "branches": 13,
+        "awaits": 3
+      }
+    },
+    {
+      "route": "PATCH /vault-entity-links/:id",
+      "use_case": "vault/application/entity/links.ts#updateEntityLink",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 11,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 11,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "DELETE /vault-entity-links/:id",
+      "use_case": "vault/application/entity/links.ts#deleteEntityLink",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 5,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 5,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /vault/links/all",
+      "use_case": "vault/application/entity/links.ts#listAllEntityLinks",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /vault",
+      "use_case": "vault/application/entity/lifecycle.ts#listEntities",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 0,
+        "awaits": 1
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 0,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /vault/tags",
+      "use_case": "vault/application/entity/lifecycle.ts#listEntityTags",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 12,
+        "awaits": 1
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 12,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /vault/trash",
+      "use_case": "vault/application/entity/lifecycle.ts#listTrashedEntities",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 2,
+        "awaits": 1
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 2,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /vault/:id",
+      "use_case": "vault/application/entity/lifecycle.ts#getEntity",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 5,
+        "awaits": 2
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 5,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "DELETE /vault/trash",
+      "use_case": "vault/application/entity/lifecycle.ts#emptyTrash",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 1,
+        "awaits": 2
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 1,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "DELETE /vault/:id",
+      "use_case": "vault/application/entity/lifecycle.ts#trashEntity",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 2,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 2,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "POST /vault/:id/restore",
+      "use_case": "vault/application/entity/lifecycle.ts#restoreEntity",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 2,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 2,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "DELETE /vault/trash/:id",
+      "use_case": "vault/application/entity/lifecycle.ts#purgeTrashedEntity",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 2,
+        "awaits": 2
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 2,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "GET /vault/gas-overview",
+      "use_case": "vault/application/entity/analytics.ts#getGasOverviewForUser",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 8,
+        "awaits": 4
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 8,
+        "awaits": 4
+      }
+    },
+    {
+      "route": "GET /vault/:id/gas",
+      "use_case": "vault/application/entity/analytics.ts#getEntityGas",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 6,
+        "awaits": 3
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 6,
+        "awaits": 3
+      }
+    },
+    {
+      "route": "GET /vault/analytics",
+      "use_case": "vault/application/entity/analytics.ts#getEntityAnalytics",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 25,
+        "awaits": 1
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 25,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /vault/analytics/value-history",
+      "use_case": "vault/application/entity/analytics.ts#getEntityValueHistory",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 4,
+        "branches": 3,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 4,
+        "branches": 3,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "POST /vault",
+      "use_case": "vault/application/entity/create.ts#createEntity",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 2,
+        "tables": 1,
+        "branches": 85,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 1,
+        "branches": 85,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "PATCH /vault/bulk-tag",
+      "use_case": "vault/application/entity/bulk.ts#bulkTagEntities",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 12,
+        "awaits": 3
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 12,
+        "awaits": 3
+      }
+    },
+    {
+      "route": "PATCH /vault/bulk-action",
+      "use_case": "vault/application/entity/bulk.ts#bulkActionEntities",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 3,
+        "tables": 4,
+        "branches": 26,
+        "awaits": 7
+      },
+      "current": {
+        "db": 3,
+        "tables": 4,
+        "branches": 26,
+        "awaits": 7
+      }
+    },
+    {
+      "route": "GET /vault/activity",
+      "use_case": "vault/application/entity/activity-feed.ts#listMyVaultActivity",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 2,
+        "tables": 7,
+        "branches": 8,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 7,
+        "branches": 8,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "GET /vault/:id/activity",
+      "use_case": "vault/application/entity/activity-feed.ts#listEntityActivity",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 5,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 5,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "PATCH /vault/:id",
+      "use_case": "vault/application/entity/update.ts#updateEntity",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 2,
+        "tables": 3,
+        "branches": 35,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 3,
+        "branches": 35,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "PATCH /vault/:id/field",
+      "use_case": "vault/application/entity/update.ts#updateEntityField",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 3,
+        "tables": 4,
+        "branches": 25,
+        "awaits": 2
+      },
+      "current": {
+        "db": 3,
+        "tables": 4,
+        "branches": 25,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "GET /vault/:id/field-history",
+      "use_case": "vault/application/entity/update.ts#listEntityFieldHistory",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 2,
+        "tables": 7,
+        "branches": 7,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 7,
+        "branches": 7,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "GET /admin/vault",
+      "use_case": "vault/application/entity/admin.ts#adminListEntities",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 6,
+        "branches": 2,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 6,
+        "branches": 2,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "GET /admin/vault/full",
+      "use_case": "vault/application/entity/admin.ts#adminFullVault",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 6,
+        "branches": 7,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 6,
+        "branches": 7,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /admin/vault/local-accounts",
+      "use_case": "vault/application/entity/admin.ts#adminListLocalAccounts",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /admin/vault/users",
+      "use_case": "vault/application/entity/admin.ts#adminListVaultUsers",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /admin/vault/users/:userId",
+      "use_case": "vault/application/entity/admin.ts#adminGetUserVault",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 3,
+        "tables": 4,
+        "branches": 9,
+        "awaits": 1
+      },
+      "current": {
+        "db": 3,
+        "tables": 4,
+        "branches": 9,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /admin/vault/activity",
+      "use_case": "vault/application/entity/admin.ts#adminVaultActivityFeed",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 6,
+        "branches": 6,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 6,
+        "branches": 6,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "POST /vault/:id/receipt",
+      "use_case": "vault/application/entity/receipt.ts#createReceiptLink",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 2,
+        "tables": 5,
+        "branches": 12,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 5,
+        "branches": 12,
+        "awaits": 2
+      }
+    },
+    {
+      "route": "DELETE /vault/:id/receipt",
+      "use_case": "vault/application/entity/receipt.ts#revokeReceiptLink",
+      "equivalent": true,
+      "differences": [],
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 3,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 3,
+        "awaits": 1
+      }
+    },
+    {
+      "route": "GET /vault/receipt/:token",
+      "use_case": "vault/application/entity/receipt.ts#{resolvePublicReceipt,findVaultEntryByReceiptToken,fmtPublicVaultReceipt}",
+      "equivalent": true,
+      "differences": [],
+      "composite": true
+    },
+    {
+      "route": "GET /vault/receipt/:token/pdf",
+      "use_case": "vault/application/entity/receipt.ts#{resolvePublicReceipt,buildReceiptPdfSpec,findVaultEntryByReceiptToken,fmtPublicVaultReceipt}",
+      "equivalent": true,
+      "differences": [],
+      "composite": true
+    }
+  ],
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build is NOT executed)",
+    "before_total": 128,
+    "after_total": 184,
+    "syntactic_errors": [],
+    "new_diagnostics": [
+      "2591: Cannot find name '…'. Do you need to install type definitions for node? Try `npm i --save- (+30)"
+    ],
+    "real_class_new": [],
+    "before": {
+      "__external_unresolved": 7,
+      "7006: Parameter '…' implicitly has an '…' type.": 93,
+      "2339: Property '…' does not exist on type '…'.": 5,
+      "2345: Argument of type '…' is not assignable to parameter of type '…'.   Index signature for typ": 1,
+      "2591: Cannot find name '…'. Do you need to install type definitions for node? Try `npm i --save-": 2,
+      "2584: Cannot find name '…'. Do you need to change your target library? Try changing the '…' comp": 4,
+      "7031: Binding element '…' implicitly has an '…' type.": 11,
+      "2345: Argument of type '…' is not assignable to parameter of type '…'.   Type '…' is not assigna": 2,
+      "2538: Type '…' cannot be used as an index type.": 3
+    },
+    "after": {
+      "2591: Cannot find name '…'. Do you need to install type definitions for node? Try `npm i --save-": 32,
+      "__external_unresolved": 33,
+      "2584: Cannot find name '…'. Do you need to change your target library? Try changing the '…' comp": 4,
+      "7006: Parameter '…' implicitly has an '…' type.": 93,
+      "2345: Argument of type '…' is not assignable to parameter of type '…'.   Type '…' is not assigna": 2,
+      "2538: Type '…' cannot be used as an index type.": 3,
+      "7031: Binding element '…' implicitly has an '…' type.": 11,
+      "2339: Property '…' does not exist on type '…'.": 5,
+      "2345: Argument of type '…' is not assignable to parameter of type '…'.   Index signature for typ": 1
+    }
+  },
+  "summary": {
+    "cases": 105,
+    "passed": 105,
+    "static_parity": 35,
+    "static_parity_equivalent": 35
+  }
+}

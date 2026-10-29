@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "workstream": "ayzen-tech-domain-fabric",
+  "domainInventory": "infrastructure/platform/domain-registry.json",
+  "contractRegistry": "infrastructure/platform/domain-contract-registry.json",
+  "dnsAndEdgePolicy": "infrastructure/platform/dns-edge-policy.json",
+  "routing": {
+    "serviceRegistry": "infrastructure/platform/service-registry.json",
+    "deployableCatalog": "infrastructure/deployment/service-catalog.json",
+    "undeclaredTargets": "deny",
+    "environmentIsolation": "staging-cannot-target-production"
+  },
+  "security": {
+    "tls": "provider-gated",
+    "cors": "explicit-origin-allowlist",
+    "cookies": "environment-scoped-secure-http-only"
+  },
+  "observability": {
+    "runtimeGraph": "infrastructure/platform/runtime-execution-graph.json",
+    "alerts": "infrastructure/platform/alert-routing.json"
+  },
+  "failover": {
+    "policy": "infrastructure/deployment/promotion-policy.json",
+    "mode": "health-gated-maintenance-and-rollback"
+  }
+}

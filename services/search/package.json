@@ -1,0 +1,15 @@
+{
+  "name": "@ayzen/search-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "dependencies": {
+    "@ayzen/auth-client": "workspace:*",
+    "@ayzen/event-client": "workspace:*",
+    "@ayzen/service-runtime": "workspace:*",
+    "@ayzen/service-state": "workspace:*"
+  }
+}

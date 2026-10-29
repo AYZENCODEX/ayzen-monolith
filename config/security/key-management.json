@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "namespaces": ["platform", "identity", "apps", "eventbus", "workflow", "admin"],
+  "separation": "per-app-key-material",
+  "rotation": { "required": true, "maxAgeDays": 90, "emergencyRotation": true },
+  "rawSecretsInLogs": false
+}

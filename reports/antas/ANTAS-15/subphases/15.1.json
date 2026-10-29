@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-15.1",
+  "phase": "ANTAS-15",
+  "name": "Dependency Security",
+  "generatedAt": "2026-09-29T06:06:06.720Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    ".github/workflows/security.yml",
+    "docs/antas/release/supply-chain.md"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-08.3",
+  "phase": "ANTAS-08",
+  "name": "Outbox / Inbox",
+  "generatedAt": "2026-09-29T06:06:06.717Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "packages/event-client/src/index.mjs",
+    "docs/antas/events/reliability.md"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

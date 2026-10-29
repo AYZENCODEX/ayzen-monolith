@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "classes": {
+    "audit": {"owner": "audit", "retention": "deployment-input", "deletion": "approved-privacy-workflow"},
+    "intelligence": {"owner": "intelligence", "retention": "deployment-input", "deletion": "approved-privacy-workflow"},
+    "logs": {"owner": "platform", "retention": "deployment-input", "deletion": "provider-policy"},
+    "events": {"owner": "event-bus", "retention": "deployment-input", "deletion": "replay-safe-expiry"},
+    "backups": {"owner": "domain", "retention": "deployment-input", "deletion": "approval-and-evidence"},
+    "restricted": {"owner": "owning-domain", "retention": "minimum-required", "deletion": "secure-erasure"}
+  },
+  "rules": {
+    "neverLogSecrets": true,
+    "tenantScopeRequired": true,
+    "exportIsAudited": true,
+    "deletionIsAudited": true
+  }
+}

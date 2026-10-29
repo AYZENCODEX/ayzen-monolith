@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-05e",
+  "status": "PASS_STATIC_AND_UNIT_ONLY",
+  "date": "2026-10-26",
+  "commitSha": "UNAVAILABLE",
+  "scope": "routes/marketplace-reports.ts: listing and seller reports, the admin moderation queue, and the admin resolve transaction (5 routes, 3 write, 1 with a transaction); MKT-05 so far: 28 of 44 routes (discovery 4, analytics 6, alerts 6, reviews 7, reports 5)",
+  "done": [
+    "marketplace/engagement: rules in domain/reports.ts, the 8 SQL statements in infrastructure/reports-repo.ts (the 3 of the moderation transaction take the client), use cases in application/reports.ts, composition roots in *.wired.ts",
+    "SQL text equals the pre-move route text (moved-sql.pins.json, 8 statements)",
+    "status codes and response keys of all 5 routes compared with the ORIGINAL uploaded file by a script that does not use the inventory map: all SAME",
+    "the moderation transaction keeps its ORIGINAL shape on purpose instead of using the kernel withTransaction: connect before the try, BEGIN, lock the pending report (FOR UPDATE), optional listing removal, mark resolved, COMMIT; 404 rolls back; any other failure rolls back and is returned as a 500 result with the message; a failing ROLLBACK escapes the handler as before; the client is always released",
+    "its statement order is verified at run time with a fake client: BEGIN, lock, [remove listing], mark resolved, COMMIT (dismiss, remove_listing with and without a listing, 404, failure, failing ROLLBACK, connect failure)",
+    "13 unit tests (domain differential against the original checks for 13 odd values, application with fake pool and fake client)",
+    "validator: the application layer may run transaction control (BEGIN, COMMIT, ROLLBACK) on a client, any other client.query there is still a finding (2 new self-tests, 29 total)",
+    "baseline ratchet: SQL calls in route files 329 -> 317; the route file no longer writes marketplace_reports or marketplace_listings"
+  ],
+  "notVerified": [
+    "no handler executed, no database; TypeScript syntax and import resolution only; typecheck/build UNAVAILABLE",
+    "FOR UPDATE and the rollback behavior were verified against a fake client only, never against PostgreSQL"
+  ],
+  "keptOnPurpose": [
+    "no input validation added; errors stay 500 with the database message",
+    "the 404 branch of the moderation transaction already had its ROLLBACK (this route is not affected by MKT-ISSUE-8)"
+  ],
+  "next": "remaining MKT-05: coupons reads, favorites, settings, admin activity, listing GETs, stats, search, history (16 routes). Still waiting for the first real run of the DB suite; MKT-04 waits for it."
+}

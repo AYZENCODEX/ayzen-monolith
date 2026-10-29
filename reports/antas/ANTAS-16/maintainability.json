@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-29T06:06:07.449Z",
+  "files": 1321,
+  "anyOccurrences": 3138,
+  "todoFixmeOccurrences": 13,
+  "largeFiles": [
+    {
+      "file": "artifacts/ayzen/src/pages/user/mailbox.tsx",
+      "lines": 4179,
+      "any": 18,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/finance.ts",
+      "lines": 2962,
+      "any": 33,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "lines": 2770,
+      "any": 9,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+      "lines": 2581,
+      "any": 26,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/teams.tsx",
+      "lines": 2055,
+      "any": 21,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault.tsx",
+      "lines": 1979,
+      "any": 22,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "lines": 1976,
+      "any": 92,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/teams.ts",
+      "lines": 1969,
+      "any": 73,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/components/layout/app-sidebar.tsx",
+      "lines": 1906,
+      "any": 7,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/project-detail.tsx",
+      "lines": 1615,
+      "any": 56,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/components/local-accounts.tsx",
+      "lines": 1441,
+      "any": 9,
+      "todoFixme": 0
+    },
+    {
+      "file": "packages/xuka/src/index.mjs",
+      "lines": 1440,
+      "any": 0,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/nav-seeds.generated.ts",
+      "lines": 1394,
+      "any": 0,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/wallets.tsx",
+      "lines": 1367,
+      "any": 5,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/projects.ts",
+      "lines": 1332,
+      "any": 39,
+      "todoFixme": 0
+    },
+    {
+      "file": "packages/endpoint-registry/src/index.mjs",
+      "lines": 1330,
+      "any": 0,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-entity-detail.tsx",
+      "lines": 1308,
+      "any": 8,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/admin/developer.tsx",
+      "lines": 1291,
+      "any": 6,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/lib/oidc-logout-propagation.ts",
+      "lines": 1216,
+      "any": 12,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/login.tsx",
+      "lines": 1208,
+      "any": 11,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/security.tsx",
+      "lines": 1176,
+      "any": 19,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-security.tsx",
+      "lines": 1175,
+      "any": 15,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/finance-invoices.ts",
+      "lines": 1160,
+      "any": 15,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "lines": 1106,
+      "any": 16,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace.ts",
+      "lines": 1083,
+      "any": 48,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/tasks.tsx",
+      "lines": 1075,
+      "any": 6,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "lines": 1053,
+      "any": 97,
+      "todoFixme": 0
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/wallet-hub.tsx",
+      "lines": 1016,
+      "any": 8,
+      "todoFixme": 0
+    }
+  ],
+  "note": "This report identifies maintainability work; it does not silently waive findings."
+}

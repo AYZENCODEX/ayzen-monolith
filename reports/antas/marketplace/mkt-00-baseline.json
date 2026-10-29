@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-00",
+  "recordedOn": "2026-10-23",
+  "basis": "uploaded archive AYZEN-projects-PRJ07-codebase.zip, tree AYZEN4X1-finance-fin02czip, no .git",
+  "commitSha": "UNAVAILABLE",
+  "tooling": {
+    "node": "v22.22.2",
+    "pnpm": "not installed in the sandbox",
+    "nodeModules": "absent (no install possible without network)",
+    "lockfile": "pnpm-lock.yaml present"
+  },
+  "typecheck": { "status": "UNAVAILABLE", "reason": "dependencies cannot be installed in the sandbox; must be run on the real checkout: pnpm install --frozen-lockfile && pnpm typecheck" },
+  "build": { "status": "UNAVAILABLE", "reason": "same as typecheck: pnpm build on the real checkout" },
+  "tests": {
+    "marketplaceTests": 0,
+    "note": "no test in the tree mentions Marketplace, Polymarket, spot or staking; MKT-01 builds the safety net"
+  },
+  "priorKnownIssue": "Projects PRJ-00 recorded that the repo's frozen install fails and a baseline only ran in a scratch copy; the same applies here until fixed on the real checkout",
+  "ownerAction": "On the real checkout run: pnpm install --frozen-lockfile && pnpm typecheck && pnpm build, then record the result in this file with the commit SHA"
+}

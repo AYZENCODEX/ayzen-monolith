@@ -1,0 +1,41 @@
+import { ENTITY_TABLES, type FieldPermissionMap, NON_SHAREABLE_COLUMNS } from "../../infrastructure/repositories/share-entity-types";
+import { executeInformationSchemaForShareableColumns } from "../../infrastructure/repositories/vault-share-repository";
+
+/** Extracted verbatim from the pre-extraction route (VLT-GAP-10); bodies unchanged. */
+
+/** All real columns of an entity type's underlying table, minus the internal/owner-only ones. */
+export async function shareableColumns(entityType: keyof typeof ENTITY_TABLES): Promise<string[]> {
+  const cfg = ENTITY_TABLES[entityType];
+  const r = await executeInformationSchemaForShareableColumns(cfg);
+  return (r.rows as any[]).map((row) => row.column_name).filter((c) => !NON_SHAREABLE_COLUMNS.has(c));
+}
+/**
+ * Validates a client-supplied { field: 'view'|'edit' } map against the
+ * entity type's real columns. Returns null (no per-field restriction — falls
+ * back to legacy whole-entity `permission`) for an empty/absent input, or
+ * throws a descriptive error for anything invalid so route handlers can
+ * turn it into a 400.
+ */
+export async function parseFieldPermissions(entityType: keyof typeof ENTITY_TABLES, input: unknown): Promise<FieldPermissionMap | null> {
+  if (input === undefined || input === null) return null;
+  if (typeof input !== "object" || Array.isArray(input)) throw new Error("fieldPermissions must be an object of { field: 'view'|'edit' }");
+  const entries = Object.entries(input as Record<string, unknown>);
+  if (!entries.length) return null;
+
+  const validColumns = new Set(await shareableColumns(entityType));
+  const result: FieldPermissionMap = {};
+  for (const [field, perm] of entries) {
+    if (!validColumns.has(field)) throw new Error(`Unknown or non-shareable field: ${field}`);
+    if (perm !== "view" && perm !== "edit") throw new Error(`Permission for field '${field}' must be 'view' or 'edit'`);
+    result[field] = perm;
+  }
+  return result;
+}
+/** Keeps only the fields the field-permission map allows, dropping everything else. */
+export function filterToAllowedFields<T extends Record<string, any>>(entity: T, fieldPermissions: FieldPermissionMap): Partial<T> {
+  const out: Partial<T> = {};
+  for (const field of Object.keys(fieldPermissions)) {
+    if (field in entity) out[field as keyof T] = entity[field];
+  }
+  return out;
+}

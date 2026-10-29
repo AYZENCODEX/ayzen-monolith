@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "AYZEN ZIOX Public Production Readiness",
+  "phase": "A",
+  "name": "Dependency & Build Closure",
+  "generatedAt": "2026-09-29T06:07:38.006Z",
+  "status": "PASS",
+  "implementation": "complete",
+  "subphases": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6"
+  ],
+  "checks": [
+    {
+      "id": "A1",
+      "description": "Dependency inventory is reproducible",
+      "status": "PASS",
+      "runtimeDependencies": 1,
+      "devDependencies": 2
+    },
+    {
+      "id": "A2",
+      "description": "Frozen dependency install",
+      "status": "PASS",
+      "command": "pnpm install --frozen-lockfile --offline",
+      "exitCode": 0,
+      "output": "Scope: all 96 workspace projects\nLockfile is up to date, resolution step is skipped\nAlready up to date\n\n. preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'\n. preinstall: Done\nDone in 3.8s using pnpm v10.26.1"
+    },
+    {
+      "id": "A3",
+      "description": "Full production-relevant typecheck",
+      "status": "PASS",
+      "command": "pnpm run typecheck",
+      "exitCode": 0,
+      "output": "> workspace@0.0.0 typecheck /home/runner/workspace\n> pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck\n\n\n> workspace@0.0.0 typecheck:libs /home/runner/workspace\n> tsc --build\n\nScope: 4 of 96 workspace projects\nartifacts/api-server typecheck$ tsc -p tsconfig.json --noEmit\nartifacts/astra-extension typecheck$ echo 'astra-extension: no build step yet (plain JS) — nothing to typecheck'\nartifacts/ayzen typecheck$ tsc -p tsconfig.json --noEmit\nscripts typecheck$ tsc -p tsconfig.json --noEmit\nartifacts/astra-extension typecheck: astra-extension: no build step yet (plain JS) — nothing to typecheck\nartifacts/astra-extension typecheck: Done\nscripts typecheck: Done\nartifacts/api-server typecheck: Done\nartifacts/ayzen typecheck: Done"
+    },
+    {
+      "id": "A4-api",
+      "description": "API production build",
+      "status": "PASS",
+      "command": "pnpm --filter @workspace/api-server build",
+      "exitCode": 0,
+      "output": "> @workspace/api-server@0.0.0 build /home/runner/workspace/artifacts/api-server\n> node ./build.mjs\n\n\n  dist/index.mjs                       8.5mb ⚠️\n  dist/pino-worker.mjs               153.4kb\n  dist/pino-file.mjs                 142.1kb\n  dist/pino-pretty.mjs               114.4kb\n  dist/thread-stream-worker.mjs        7.3kb\n  dist/index.mjs.map                  16.6mb\n  dist/pino-worker.mjs.map           256.9kb\n  dist/pino-file.mjs.map             229.0kb\n  dist/pino-pretty.mjs.map           203.6kb\n  dist/thread-stream-worker.mjs.map   12.0kb\n\n⚡ Done in 1052ms"
+    },
+    {
+      "id": "A4-ui",
+      "description": "Frontend production build",
+      "status": "PASS",
+      "command": "pnpm --filter @workspace/ayzen build",
+      "exitCode": 0,
+      "output": "N.js                  22.43 kB │ gzip:   6.34 kB\ndist/public/assets/profile-ClcNPJM3.js                             22.61 kB │ gzip:   6.29 kB\ndist/public/assets/email-accounts-DoHSCHH6.js                      24.30 kB │ gzip:   5.27 kB\ndist/public/assets/entity-dashboard-tabs-BmtY8FXd.js               24.31 kB │ gzip:   6.28 kB\ndist/public/assets/vault-local-detail-D1X4nkUG.js                  24.89 kB │ gzip:   6.10 kB\ndist/public/assets/PieChart-D6SP0uc_.js                            26.02 kB │ gzip:   7.07 kB\ndist/public/assets/vault-wallet-seed-Q_SFgbmn.js                   26.44 kB │ gzip:   7.05 kB\ndist/public/assets/vault-security-qBj7bVVU.js                      27.81 kB │ gzip:   7.23 kB\ndist/public/assets/invoices-CjmFSjQi.js                            28.07 kB │ gzip:   8.29 kB\ndist/public/assets/credits-DAQ2uPA1.js                             28.22 kB │ gzip:   6.17 kB\ndist/public/assets/theme-studio-CT5xPx8o.js                        28.58 kB │ gzip:   7.75 kB\ndist/public/assets/vault-kyc-detail-BsQrs6if.js                    28.71 kB │ gzip:   6.59 kB\ndist/public/assets/marketplace-BAUANPOB.js                         28.94 kB │ gzip:   7.36 kB\ndist/public/assets/marketplace-azn-CuSmBYM1.js                     29.73 kB │ gzip:   6.24 kB\ndist/public/assets/ai-agent-CjcfT3aq.js                            30.29 kB │ gzip:   7.77 kB\ndist/public/assets/wallet-hub-Sek_TT7f.js                          30.52 kB │ gzip:   7.33 kB\ndist/public/assets/vault-snapshot-eFbJ6ZM5.js                      31.11 kB │ gzip:   7.91 kB\ndist/public/assets/marketplace-vault-ftmNzaZL.js                   31.50 kB │ gzip:   7.28 kB\ndist/public/assets/marketplace-Bef5omiG.js                         34.17 kB │ gzip:   7.43 kB\ndist/public/assets/project-detail-zmkKY3uC.js                      34.54 kB │ gzip:   8.43 kB\ndist/public/assets/security-BqJP6yfe.js                            35.46 kB │ gzip:   8.20 kB\ndist/public/assets/tasks-ClPgymj8.js                               35.75 kB │ gzip:   9.24 kB\ndist/public/assets/wallets-CUg2CkC_.js                             45.20 kB │ gzip:  10.60 kB\ndist/public/assets/developer-CO_p_wW2.js                           48.95 kB │ gzip:  12.05 kB\ndist/public/assets/kyc-entries-15B5tJKj.js                         53.14 kB │ gzip:  14.60 kB\ndist/public/assets/project-detail-Cn1Mp21w.js                      60.27 kB │ gzip:  13.70 kB\ndist/public/assets/vault-entity-detail-Dgo4oSjM.js                 66.53 kB │ gzip:  13.63 kB\ndist/public/assets/teams-9NCiEVOs.js                               73.31 kB │ gzip:  15.01 kB\ndist/public/assets/mailbox-BbLm74Xh.js                            115.28 kB │ gzip:  28.34 kB\ndist/public/assets/vault-B79fmrG2.js                              131.65 kB │ gzip:  29.77 kB\ndist/public/assets/index-B9NG3UPh.js                            1,269.73 kB │ gzip: 357.24 kB\n✓ built in 13.42s\nsrc/components/ui/tooltip.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.\nsrc/components/ui/label.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.\nsrc/components/ui/select.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.\nsrc/components/ui/sheet.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.\nsrc/components/ui/progress.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.\nsrc/components/ui/dropdown-menu.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.\n\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit."
+    },
+    {
+      "id": "A4",
+      "description": "Build artifacts are present",
+      "status": "PASS"
+    },
+    {
+      "id": "A5",
+      "description": "Clean startup evidence and probes are defined",
+      "status": "PASS",
+      "required": [
+        "docs/operations/build-verification.md",
+        "docs/operations/runtime-recovery-runbook.md",
+        "apps/api-gateway/src/index.mjs",
+        "apps/worker/src/index.mjs"
+      ],
+      "missing": []
+    },
+    {
+      "id": "A6",
+      "description": "ZIOX-A certification",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "evidence": {
+    "sourceDocument": "attached_assets/AYZEN_ZIOX_Public_Production_Readiness_Roadmap_1790636953669.md",
+    "validator": "scripts/validate-ziox.mjs"
+  }
+}

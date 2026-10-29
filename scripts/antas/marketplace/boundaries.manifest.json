@@ -1,0 +1,453 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-03",
+  "note": "Rules and decisions are authored here. The 'baseline' section is generated from the tree by `validate-boundaries.mjs --baseline`; the validator then requires the tree to equal it exactly (a stale or missing entry fails), so every migration phase must rewrite the baseline in the same change and the diff shows the ratchet going down.",
+  "rules": {
+    "routesCallApplicationOnly": "After a sub-module is migrated its route adapters contain no pool/client/db call and no SQL string.",
+    "tableWritersAreOwners": "A Marketplace table is written only from its owner sub-module (marketplace/<owner>/infrastructure).",
+    "walletTablesOnlyFromWallet": "marketplace_wallets and marketplace_transactions are written only from marketplace/wallet (D3).",
+    "moneyTablesOnlyThroughPorts": "credits, builtin_wallet_tokens and wallets are written only through marketplace/kernel/ports adapters (D2).",
+    "domainIsPure": "marketplace/**/domain imports nothing outside domain and has no pool, db, fs, fetch or process.env.",
+    "oneKeyAccessPoint": "lib/wallet-crypto.decryptPhrase has exactly one Marketplace caller, marketplace/polymarket/security/wallet-unlock.ts (D4).",
+    "routeSurfaceFrozen": "The 143 route (method, path, file) tuples and their access class equal reports/antas/marketplace/marketplace-frozen-routes.json."
+  },
+  "tableOwners": {
+    "wallet": [
+      "marketplace_wallets",
+      "marketplace_transactions"
+    ],
+    "catalog": [
+      "marketplace_listings",
+      "marketplace_listing_platform_pricing",
+      "marketplace_favorites"
+    ],
+    "orders": [
+      "marketplace_orders"
+    ],
+    "checkout": [
+      "marketplace_cart_items",
+      "marketplace_offers",
+      "marketplace_coupons",
+      "marketplace_coupon_usage",
+      "marketplace_bundles"
+    ],
+    "engagement": [
+      "marketplace_reviews",
+      "marketplace_reports",
+      "marketplace_alerts",
+      "marketplace_saved_searches"
+    ],
+    "markets": [
+      "azn_listings",
+      "usdt_listings",
+      "nft_market_listings",
+      "nft_market_categories"
+    ],
+    "spot": [
+      "spot_orders",
+      "spot_trades",
+      "staking_pools",
+      "staking_positions"
+    ],
+    "admin": [
+      "marketplace_settings",
+      "marketplace_market_configs",
+      "marketplace_activity_log"
+    ],
+    "polymarket": [
+      "polymarket_trades"
+    ]
+  },
+  "externalConsumers": {
+    "artifacts/api-server/src/services/admin-wallet.ts": {
+      "decision": "REWIRE",
+      "resolvePhase": "MKT-13",
+      "how": "mark transactions admin_credited through the wallet contract"
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts": {
+      "decision": "REWIRE",
+      "resolvePhase": "MKT-04b",
+      "how": "wallet and transaction writes call MarketplaceWalletContract (D3); listing SQL stays in Vault"
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts": {
+      "decision": "REWIRE",
+      "resolvePhase": "MKT-04b",
+      "how": "same as vault-market-repository"
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts": {
+      "decision": "REWIRE",
+      "resolvePhase": "MKT-12",
+      "how": "reads trades through marketplace/polymarket/contract.listTradesForSnapshot (read only)"
+    },
+    "artifacts/api-server/src/routes/search.ts": {
+      "decision": "REWIRE",
+      "resolvePhase": "MKT-13",
+      "how": "read model from catalog (read only)"
+    },
+    "artifacts/api-server/src/routes/nft-subscriptions.ts": {
+      "decision": "REWIRE",
+      "resolvePhase": "MKT-13",
+      "how": "writes marketplace_activity_log and nft_market_categories; move to admin/markets application use cases"
+    },
+    "artifacts/api-server/src/lib/service-boundaries.ts": {
+      "decision": "EXEMPT",
+      "resolvePhase": "none",
+      "how": "static registry of table names per domain, no SQL; recorded as accepted"
+    }
+  },
+  "accessReviewStatuses": {
+    "owner-gated": "route passes through a requireOwnership factory",
+    "in-handler-owner-sql": "authenticated, mutating, has an :id param, no PEP gate, but the handler SQL constrains by user_id/seller_id/buyer_id/owner_id = $n (heuristic, confirm in MKT-02 review)",
+    "needs-review": "authenticated, mutating, has an :id param, no PEP gate and no ownership predicate found in the handler: a person must read the handler",
+    "public-write": "no authentication and the handler writes (INSERT/UPDATE/DELETE): confirm it is intentional and rate limited",
+    "inline-auth-verified": "Polymarket route whose first statement calls requireUser(req, res)",
+    "inline-auth-unverified": "inline-auth route without that first-statement call"
+  },
+  "knownIssues": [
+    {
+      "id": "MKT-ISSUE-1",
+      "severity": "medium",
+      "what": "POST /marketplace/listings/:id/view is public and increments marketplace_listings.view_count with no authentication and no visible rate limit; the counter can be inflated by anyone.",
+      "status": "OPEN (recorded, not changed: behavior change needs owner decision)",
+      "resolvePhase": "MKT-05"
+    },
+    {
+      "id": "MKT-ISSUE-2",
+      "severity": "high",
+      "what": "P2P order creation uses the constant 5 and ignores marketplace_settings.fee_pct and enabled (audit F03).",
+      "status": "OPEN, fixed by BC-1 in MKT-03",
+      "resolvePhase": "MKT-03"
+    },
+    {
+      "id": "MKT-ISSUE-3",
+      "severity": "medium",
+      "what": "Authenticated mutating :id routes without a PEP gate. MKT-02 review result: 8 have an ownership predicate in the handler SQL (in-handler-owner-sql), 6 were read by a person (see routeReviews): 5 are fine (self-scoped insert or delegated Vault ownership check), 1 has a race (MKT-ISSUE-5). The 8 SQL-predicate routes are heuristic matches and keep MKT-02 review status.",
+      "status": "REVIEWED for the 6 needs-review routes; the 8 heuristic routes remain to be confirmed",
+      "resolvePhase": "MKT-02 review"
+    },
+    {
+      "id": "MKT-ISSUE-4",
+      "severity": "medium",
+      "what": "Polymarket decrypts the wallet phrase in two places in one file (balance and trade); wallet-crypto has other callers outside Marketplace (routes/wallets.ts, vault snapshot payload).",
+      "status": "OPEN",
+      "resolvePhase": "MKT-12"
+    },
+    {
+      "id": "MKT-ISSUE-5",
+      "severity": "low",
+      "what": "POST /marketplace/nft/listings/:id/like does a read-modify-write of nft_market_listings.liked_by (JSON array) with no lock, so concurrent likes can be lost; a non-numeric :id is passed as a parameter and surfaces as a 500 with e.message.",
+      "status": "OPEN (recorded, not changed)",
+      "resolvePhase": "MKT-09"
+    },
+    {
+      "id": "MKT-ISSUE-6",
+      "severity": "high",
+      "what": "AZN and USDT market buy (POST /marketplace/azn/buy, /marketplace/usdt/buy): the listing is read with pool.query outside the transaction, no row lock is taken, the listing is updated by id only (no status or remaining-amount guard) and the seller's locked_balance is decreased without a guard. Two concurrent buys of the same listing can both pass; the seller wallet can be credited twice from one escrow and locked_balance can go negative. Read from code, not reproduced. The buyer-side debit is guarded (balance >= $1). NFT buy, cart checkout, offer accept and bundle buy are not affected (status guard or FOR UPDATE).",
+      "status": "OPEN (pinned by characterization tests, not changed)",
+      "resolvePhase": "MKT-09 (fix only as a listed behavior change, BC-4)"
+    },
+    {
+      "id": "MKT-ISSUE-7",
+      "severity": "high",
+      "what": "P2P buy (POST /marketplace/listings/:id/buy): the buyer balance is checked with a read, then the order is inserted and credits.azn_balance is decreased by two separate pool.query calls with no transaction and no balance predicate. A failure between the two leaves an order without escrow; two concurrent buys by one buyer can drive the balance negative. Read from code, not reproduced.",
+      "status": "OPEN (pinned by characterization tests, not changed)",
+      "resolvePhase": "MKT-07 (fix only as a listed behavior change, BC-5)"
+    },
+    {
+      "id": "MKT-ISSUE-8",
+      "severity": "medium",
+      "what": "PATCH /admin/marketplace/orders/:id: when the order id does not exist the handler answers 404 right after BEGIN with no ROLLBACK, so the pooled connection goes back to the pool idle in transaction. node-pg release() does not reset the session, so the next user of that connection runs inside the open transaction. Found by a path-by-path scan of all 16 transactional handlers (the only one). Admin-only trigger. Read from code; the DB suite reproduces it (txn-hygiene.db.test.ts).",
+      "status": "OPEN (pinned, not changed)",
+      "resolvePhase": "MKT-07 (fix with the orders move: one ROLLBACK, or withTransaction)"
+    },
+    {
+      "id": "MKT-ISSUE-9",
+      "severity": "high",
+      "what": "NFT buy (POST /marketplace/nft/buy): the seller is credited with UPDATE marketplace_wallets ... market_type='nft' and the result is never checked. Minting an NFT listing does not create the seller's nft wallet row (ensureWallet is called only for the buyer). A seller who never opened the wallet page or deposited has no nft wallet row, so a sale debits the buyer, marks the NFT sold, records a transaction and credits nobody. Read from code, not reproduced; the DB suite reproduces it deterministically.",
+      "status": "OPEN (pinned, not changed)",
+      "resolvePhase": "MKT-09 (fix as a listed behavior change)"
+    },
+    {
+      "id": "MKT-ISSUE-10",
+      "severity": "medium",
+      "what": "GET /marketplace/azn/chart (public) returns SYNTHETIC data: a date-seeded pseudo random OHLCV series around a fixed base of 0.01 USD per AZN (100 AZN = 1 USD), and the last point wobbles with Math.random(). It is presented as chart data of the AZN market but is not derived from any trade or price. Found while moving the route in MKT-05f; behavior kept.",
+      "status": "OPEN (recorded, not changed: product decision whether the chart should show real trade prices)",
+      "resolvePhase": "owner decision; code now in marketplace/analytics/domain/azn-chart.ts"
+    }
+  ],
+  "baseline": {
+    "sqlInRoutes": {
+      "routes/marketplace-alerts.ts": {
+        "pool": 0,
+        "client": 0,
+        "drizzle": 0
+      },
+      "routes/marketplace-analytics.ts": {
+        "pool": 0,
+        "client": 0,
+        "drizzle": 0
+      },
+      "routes/marketplace-azn.ts": {
+        "pool": 15,
+        "client": 10,
+        "drizzle": 0
+      },
+      "routes/marketplace-bundles.ts": {
+        "pool": 7,
+        "client": 13,
+        "drizzle": 0
+      },
+      "routes/marketplace-cart.ts": {
+        "pool": 13,
+        "client": 11,
+        "drizzle": 0
+      },
+      "routes/marketplace-coupons.ts": {
+        "pool": 9,
+        "client": 0,
+        "drizzle": 0
+      },
+      "routes/marketplace-discovery.ts": {
+        "pool": 0,
+        "client": 0,
+        "drizzle": 0
+      },
+      "routes/marketplace-game.ts": {
+        "pool": 0,
+        "client": 0,
+        "drizzle": 0
+      },
+      "routes/marketplace-market-config.ts": {
+        "pool": 0,
+        "client": 0,
+        "drizzle": 0
+      },
+      "routes/marketplace-nft.ts": {
+        "pool": 11,
+        "client": 10,
+        "drizzle": 0
+      },
+      "routes/marketplace-offers.ts": {
+        "pool": 11,
+        "client": 11,
+        "drizzle": 0
+      },
+      "routes/marketplace-reports.ts": {
+        "pool": 0,
+        "client": 0,
+        "drizzle": 0
+      },
+      "routes/marketplace-reviews.ts": {
+        "pool": 0,
+        "client": 0,
+        "drizzle": 0
+      },
+      "routes/marketplace-spot.ts": {
+        "pool": 17,
+        "client": 42,
+        "drizzle": 0
+      },
+      "routes/marketplace-usdt.ts": {
+        "pool": 13,
+        "client": 10,
+        "drizzle": 0
+      },
+      "routes/marketplace-vault.ts": {
+        "pool": 0,
+        "client": 0,
+        "drizzle": 0
+      },
+      "routes/marketplace-wallet.ts": {
+        "pool": 10,
+        "client": 13,
+        "drizzle": 0
+      },
+      "routes/marketplace.ts": {
+        "pool": 42,
+        "client": 27,
+        "drizzle": 1
+      },
+      "routes/polymarket.ts": {
+        "pool": 0,
+        "client": 0,
+        "drizzle": 4
+      }
+    },
+    "tableWritesInRoutes": {
+      "routes/marketplace-azn.ts": [
+        "azn_listings",
+        "marketplace_transactions",
+        "marketplace_wallets"
+      ],
+      "routes/marketplace-bundles.ts": [
+        "credits",
+        "marketplace_bundles",
+        "marketplace_orders"
+      ],
+      "routes/marketplace-cart.ts": [
+        "credits",
+        "marketplace_cart_items",
+        "marketplace_orders"
+      ],
+      "routes/marketplace-coupons.ts": [
+        "marketplace_coupons"
+      ],
+      "routes/marketplace-nft.ts": [
+        "marketplace_transactions",
+        "marketplace_wallets",
+        "nft_market_listings"
+      ],
+      "routes/marketplace-offers.ts": [
+        "credits",
+        "marketplace_offers",
+        "marketplace_orders"
+      ],
+      "routes/marketplace-spot.ts": [
+        "builtin_wallet_tokens",
+        "marketplace_wallets",
+        "spot_orders",
+        "spot_trades",
+        "staking_positions"
+      ],
+      "routes/marketplace-usdt.ts": [
+        "marketplace_transactions",
+        "marketplace_wallets",
+        "usdt_listings"
+      ],
+      "routes/marketplace-wallet.ts": [
+        "credits",
+        "marketplace_wallets"
+      ],
+      "routes/marketplace.ts": [
+        "credits",
+        "marketplace_activity_log",
+        "marketplace_listing_platform_pricing",
+        "marketplace_listings",
+        "marketplace_orders"
+      ]
+    },
+    "walletTableWriters": [
+      "routes/marketplace-azn.ts",
+      "routes/marketplace-nft.ts",
+      "routes/marketplace-spot.ts",
+      "routes/marketplace-usdt.ts",
+      "routes/marketplace-wallet.ts",
+      "services/admin-wallet.ts",
+      "vault/infrastructure/repositories/game-repository.ts",
+      "vault/infrastructure/repositories/vault-market-repository.ts"
+    ],
+    "sharedMoneyWritersInScope": {
+      "routes/marketplace-bundles.ts": [
+        "credits"
+      ],
+      "routes/marketplace-cart.ts": [
+        "credits"
+      ],
+      "routes/marketplace-offers.ts": [
+        "credits"
+      ],
+      "routes/marketplace-spot.ts": [
+        "builtin_wallet_tokens"
+      ],
+      "routes/marketplace-wallet.ts": [
+        "credits"
+      ],
+      "routes/marketplace.ts": [
+        "credits"
+      ]
+    },
+    "externalConsumers": [
+      "artifacts/api-server/src/lib/service-boundaries.ts",
+      "artifacts/api-server/src/routes/nft-subscriptions.ts",
+      "artifacts/api-server/src/routes/search.ts",
+      "artifacts/api-server/src/services/admin-wallet.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts"
+    ],
+    "decryptPhraseCallsInScope": {
+      "routes/polymarket.ts": 2
+    },
+    "routeAccessClasses": {
+      "admin": 20,
+      "authenticated": 61,
+      "in-handler-owner-sql": 8,
+      "inline-auth-verified": 5,
+      "needs-review": 6,
+      "owner-gated": 26,
+      "public-read": 16,
+      "public-write": 1
+    },
+    "needsHumanReview": [
+      "DELETE /marketplace/game/listings/:id marketplace-game.ts",
+      "DELETE /marketplace/vault/listings/:id marketplace-vault.ts",
+      "POST /marketplace/listings/:id/favorite marketplace.ts",
+      "POST /marketplace/listings/:id/report marketplace-reports.ts",
+      "POST /marketplace/listings/:id/view marketplace-analytics.ts",
+      "POST /marketplace/nft/listings/:id/like marketplace-nft.ts",
+      "POST /marketplace/sellers/:id/report marketplace-reports.ts"
+    ],
+    "testsCoveringMarketplace": 15
+  },
+  "sharedMoneyTables": [
+    "credits",
+    "builtin_wallet_tokens",
+    "wallets"
+  ],
+  "routeReviews": {
+    "POST /marketplace/listings/:id/favorite marketplace.ts": {
+      "verdict": "OK",
+      "reviewedBy": "MKT-02 code reading",
+      "note": "inserts a favorite row for the caller (user_id from the session) on any existing listing; no cross-user effect"
+    },
+    "POST /marketplace/listings/:id/report marketplace-reports.ts": {
+      "verdict": "OK",
+      "reviewedBy": "MKT-02 code reading",
+      "note": "inserts a report row with reporter_id = caller; reporting someone else's listing is the purpose"
+    },
+    "POST /marketplace/sellers/:id/report marketplace-reports.ts": {
+      "verdict": "OK",
+      "reviewedBy": "MKT-02 code reading",
+      "note": "same shape as the listing report"
+    },
+    "POST /marketplace/nft/listings/:id/like marketplace-nft.ts": {
+      "verdict": "ISSUE",
+      "issue": "MKT-ISSUE-5",
+      "reviewedBy": "MKT-02 code reading",
+      "note": "no ownership needed (any user may like), but it reads liked_by, edits the JSON array in JavaScript and writes it back without a lock or transaction, so two concurrent likes can lose one"
+    },
+    "DELETE /marketplace/vault/listings/:id marketplace-vault.ts": {
+      "verdict": "OK",
+      "reviewedBy": "MKT-02 code reading",
+      "note": "ownership is delegated: canCancelVaultListing(req, id, listing.seller_id) (seller or admin) in vault/security/market-listing-ownership"
+    },
+    "DELETE /marketplace/game/listings/:id marketplace-game.ts": {
+      "verdict": "OK",
+      "reviewedBy": "MKT-02 code reading",
+      "note": "ownership is delegated: canCancelGameListing(req, id, listing.seller_id) (seller or admin) in vault/security/game-ownership"
+    },
+    "POST /marketplace/listings/:id/view marketplace-analytics.ts": {
+      "verdict": "ISSUE",
+      "issue": "MKT-ISSUE-1",
+      "reviewedBy": "MKT-02 code reading",
+      "note": "public, unauthenticated UPDATE of view_count; no rate limit visible in the file"
+    }
+  },
+  "resolvedExternalConsumers": {
+    "artifacts/api-server/src/lib/market-config.ts": {
+      "decision": "MOVE",
+      "resolvedIn": "MKT-03",
+      "how": "code moved verbatim to marketplace/kernel/infrastructure/market-config-repo.ts; lib/market-config.ts is now a one-line re-export for the existing importers"
+    }
+  },
+  "classOverrides": {
+    "POST /marketplace/listings/:id/view marketplace-analytics.ts": {
+      "class": "public-write",
+      "reason": "MKT-05b moved the UPDATE of marketplace_listings.view_count into marketplace/analytics/infrastructure/analytics-repo.ts; the route is still public and still writes (MKT-ISSUE-1)"
+    },
+    "DELETE /marketplace/listings/:id/favorite marketplace.ts": {
+      "class": "in-handler-owner-sql",
+      "reason": "MKT-05g moved the statement into marketplace/engagement/infrastructure/favorites-repo.ts; it is still DELETE FROM marketplace_favorites WHERE user_id=$1 AND listing_id=$2 with the session user id, so the caller can only remove their own favorite"
+    }
+  }
+}

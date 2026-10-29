@@ -1,0 +1,8 @@
+{
+  "name": "@ayzen/config-control",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.mjs" },
+  "dependencies": { "@ayzen/platform-governance": "workspace:*" }
+}

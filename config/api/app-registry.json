@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "apps": ["ayzenx", "warde", "verve", "ryft", "sylo", "skarn", "zynth", "wisp", "admin"],
+  "apiOwnership": "app-owned",
+  "sharedCapabilities": ["identity", "authorization", "eventbus", "workflow", "audit", "intelligence", "network-hub"],
+  "crossAppDataAccess": "deny-by-default"
+}

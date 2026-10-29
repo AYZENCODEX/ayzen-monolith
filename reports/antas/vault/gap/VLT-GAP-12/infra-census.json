@@ -1,0 +1,1312 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-12",
+  "sub_phase": "12-census",
+  "commit_sha": "e76a9d47c2210884d57afcec43a6afac231451f4",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "17271296bbf56f3a739ca1d17773bbe0c632535d1dad08f8437018b89d67d6a9",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/application/snapshot/sections.ts": "4f4254f938dd0baf90247d8150059b17de439e1ad99a07f919e1e2715395f2f0",
+    "artifacts/api-server/src/vault/application/snapshot/restore.ts": "f78ec7793b1ff594b43972865d151178de60423e7454db27f1ecbfe26feee168",
+    "artifacts/api-server/src/vault/application/entity/receipt.ts": "a5297f18cce294ca416c16a14071189dcca002524a5c00351764c84f6212829e",
+    "artifacts/api-server/src/vault/security/pin-guard.ts": "6cf7a898200612e84feee0d2c82e47a31b075c7cc89b0dcbe0b1f27adf61437d",
+    "artifacts/api-server/src/vault/security/kyc-ownership.ts": "8af586a462bec5104c8a57bb6cf6e06489aa8e636daf7a5b7f6b10a5ea28d1b4"
+  },
+  "records": [
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "name": "runHealthCheck",
+      "lines": 60,
+      "categories": [
+        "db",
+        "provider"
+      ],
+      "exported": false,
+      "body_sha256": "a47ad1c51b7435309d338fb85a19b9af8e438eac3cef7efdbfb887beff24cdf7",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/attachment/use-cases.ts",
+      "name": "uploadAttachment",
+      "lines": 56,
+      "categories": [
+        "storage"
+      ],
+      "exported": true,
+      "body_sha256": "da23bf6cd3f0e21cae7c97d3f14e77414bec004ab73d256c7d65d8604580779e",
+      "disposition": "encoding-only"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/attachment/use-cases.ts",
+      "name": "downloadAttachment",
+      "lines": 34,
+      "categories": [
+        "storage"
+      ],
+      "exported": true,
+      "body_sha256": "d795b09ffeefa8252915ca11f5ebaf30efdb3468f0588a67a59057af7bfaf08b",
+      "disposition": "encoding-only"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "name": "runVaultBackupSchedule",
+      "lines": 74,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "34ac7ecbe753ef41b7ff20839cbb1f7445df29e54608eeef5d311568265fc4cb",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "name": "claimSchedule",
+      "lines": 11,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "86820af9588811b79453c2c5781a2bf661bcd7decf337c9e744696b3417da67f",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "name": "sweepDueSchedules",
+      "lines": 23,
+      "categories": [
+        "db",
+        "event"
+      ],
+      "exported": false,
+      "body_sha256": "de5e30883f9e55f8aa0918ade0c9ebd50a64ae80a0f7059d966cc2831f39ba95",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "name": "startVaultBackupScheduleCron",
+      "lines": 21,
+      "categories": [
+        "event",
+        "job"
+      ],
+      "exported": true,
+      "body_sha256": "fe7855dcc3b270cb8a82ed49f7bbda3c6fdb646ac8f251141c70062909d86a1b",
+      "disposition": "job-wiring"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "name": "sweepMissedSchedules",
+      "lines": 27,
+      "categories": [
+        "db",
+        "event"
+      ],
+      "exported": false,
+      "body_sha256": "e7cfdd1730c482e5fe891fae4f430a3f6bdcfa5bb80b712d1e1f967eb6c7df24",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "name": "startVaultBackupMissedWatchdog",
+      "lines": 24,
+      "categories": [
+        "event",
+        "job"
+      ],
+      "exported": true,
+      "body_sha256": "8d67a968999a0d0f61912a0dadac2155405f680feabbdd54809f18a80f904fb2",
+      "disposition": "job-wiring"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "name": "listMyVaultActivity",
+      "lines": 38,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "9675a593e3bccabf1eaed1d4a477141df4e91e6e38c5bf4ed22f2c753d7a7e8b",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "name": "listEntityActivity",
+      "lines": 13,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "587d995c80f9de9c505e8854624ed5ff8706f359fc9d53f3e6aa91a5f7a9d2d3",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity.ts",
+      "name": "logVaultActivity",
+      "lines": 23,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "2f482abfd19a8af6cc6297920250a8f893451d37bd396c557b7686dba1d7398e",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "name": "adminListEntities",
+      "lines": 16,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "d7437fe0b58ff3f67c991d26c7d63611df56d6aef57f1750b5fe4388f966e56a",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "name": "adminFullVault",
+      "lines": 20,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "d46ad14937f13de6ca1a226b0b87ae409e6a6bd3bd8ad96f189d973c19ad1a6a",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "name": "adminListLocalAccounts",
+      "lines": 13,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "d2081baf37d37a19c4253d68593e268ace9bacaf76bf4450c3e90889e1edefa1",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "name": "adminListVaultUsers",
+      "lines": 19,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "4bbd4f7643eba360aeb5a9140b8992148a2d2848d088935ef0105ac2f910d607",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "name": "adminGetUserVault",
+      "lines": 27,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "2764534806ca147d47b2312edc9e81769d04846f512843fcebff6d4a32b8a113",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "name": "adminVaultActivityFeed",
+      "lines": 22,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "bb98a51401d6eaa47e2c68b9c96a6ccd4fec895dba8fd40c254e94467e9a765e",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "name": "getEntityValueHistory",
+      "lines": 11,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "f69fb2af45dcf6e6b0d446c0671c8a7697a3a6179686d4b2281ab15dddaad52c",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "name": "bulkTagEntities",
+      "lines": 35,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "c065f2adb2863d937a528c4629cf6d6968fe42a444df43aead14bb8dff7e1ff1",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "name": "bulkActionEntities",
+      "lines": 93,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "d34a01f1019a2b2c048fc3a4f79628aded9cea99d10a6b2c9df0fb95c630d8de",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/create.ts",
+      "name": "createEntity",
+      "lines": 136,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "cb8d399117226aec2f41de483a6291cdb6781797784c080bf8858722d9340e33",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "name": "trashEntity",
+      "lines": 15,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "b52142ea741c36738e19af1ce09fb8a83c9b8a0dae1dd5499109e3ea5969ca4e",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "name": "restoreEntity",
+      "lines": 11,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "e1f6c9ed5c5abe5a2b7f1a6be1833a7b8a1ced0f6ee1e796cd4189d9ac615c1b",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/links.ts",
+      "name": "ownsEntity",
+      "lines": 15,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "808dff58a7caf7bb84006f2db11fc767a24450c28da1f52f911831c55f1c2ca6",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/links.ts",
+      "name": "listEntityLinks",
+      "lines": 51,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "d851627d9ced59e0fa1d47c1f137dd8853692ca2846ee2a63d8a60115025a6b4",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/links.ts",
+      "name": "createEntityLink",
+      "lines": 48,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "4afe7b86da214b80194b36a5fe57c82e25b5b40fa8b06f95edc1eb9735a1bb06",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/links.ts",
+      "name": "updateEntityLink",
+      "lines": 20,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "1a82812cf6a12e65182bc5f10a4735fd15fd6be28f3794ccce0191238f54a784",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/links.ts",
+      "name": "deleteEntityLink",
+      "lines": 13,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "eb63e30f0d00f78b9641f5bf56292773420c85bdbde702a0d105b33d8539aa7e",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/links.ts",
+      "name": "listAllEntityLinks",
+      "lines": 22,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "4d7ff3910368b7787053b4b2de1e1e57b1a21ce28b4846910093908f9767be91",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "name": "findVaultEntryByReceiptToken",
+      "lines": 7,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "c7fe120d7af62e2d06b2a213e75d10491cb2466ba67ef7f0db088810e630290e",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "name": "createReceiptLink",
+      "lines": 28,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "cd16893cdf9eab35a42a69fc7be23451ec956740b59127a9a41a9b99bf75f0c8",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "name": "revokeReceiptLink",
+      "lines": 10,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "268fb80a4066f8fe28cf1e1ef0df2b614b9a50d807b6192898890cfd84b467c4",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+      "name": "updateEntity",
+      "lines": 89,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "d40f4a7c353e4a99d17cdb28961dc351dc1b120426ecf8efe92afb91dc006c17",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+      "name": "updateEntityField",
+      "lines": 66,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "d1dd7d87626295daf16ab25c6ceb355c3a138207e8d7e8ef905a06ede3f2a4d2",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+      "name": "listEntityFieldHistory",
+      "lines": 27,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "2d60dcb0a42c323a9d3935afbfe2de713ff18263aaa77c558fc19c918f88a02f",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-cron.ts",
+      "name": "startVaultHealthCron",
+      "lines": 21,
+      "categories": [
+        "event",
+        "job"
+      ],
+      "exported": true,
+      "body_sha256": "6b8bafc9340ea9346d852756ba59920bb8f55431238d969f745d009210932b03",
+      "disposition": "deferred-gap-11-sealed"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-scan.ts",
+      "name": "persistFlags",
+      "lines": 11,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "d1f1972025f530d8d0eccaa26968c08b9c604f4e56f7739967489dee39325599",
+      "disposition": "deferred-gap-11-sealed"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-scan.ts",
+      "name": "persistRawFlags",
+      "lines": 11,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "94df57c8cad615dba8e01c8398e5bae4e78f101daf91791bb9170232cca09f88",
+      "disposition": "deferred-gap-11-sealed"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-scan.ts",
+      "name": "persistWalletFlags",
+      "lines": 11,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "32fcaf1cfaed0782176f069698be930f4ec18ff4b8a0a3dd05c9e5f76a7a9a70",
+      "disposition": "deferred-gap-11-sealed"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-scan.ts",
+      "name": "runDailyHealthScan",
+      "lines": 171,
+      "categories": [
+        "db",
+        "event"
+      ],
+      "exported": true,
+      "body_sha256": "650d77475fe597ccf785e59f34200f8d4fdf54667d0451c4c80e09481bd0b3e8",
+      "disposition": "deferred-gap-11-sealed"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-scan.ts",
+      "name": "deliverDigest",
+      "lines": 31,
+      "categories": [
+        "provider"
+      ],
+      "exported": false,
+      "body_sha256": "8200eb2064be432b4e32b9acf28166b626b6a45d8716dd7755e2491c672c943b",
+      "disposition": "deferred-gap-11-sealed"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "name": "emailCategoryReceipt",
+      "lines": 25,
+      "categories": [
+        "provider"
+      ],
+      "exported": true,
+      "body_sha256": "92f8c7881336ae9c9d42fbacddea51cb5dfcdb73ed56d0113f088fa735d56d75",
+      "disposition": "provider-event-coupling"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/pin-setup-code.ts",
+      "name": "sendVaultPinSetupCode",
+      "lines": 37,
+      "categories": [
+        "db",
+        "provider"
+      ],
+      "exported": true,
+      "body_sha256": "19e20863bf0fecedb12b764b8659ba066c4d940094f31badcd90fc5c1785f3d2",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/pin.ts",
+      "name": "setPin",
+      "lines": 71,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "ec5b3fc8979247a3bd505c9fceb6b410e571271499cd083807878fb6e97ccd6a",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/reauth.ts",
+      "name": "sendReauthEmailCode",
+      "lines": 40,
+      "categories": [
+        "provider"
+      ],
+      "exported": true,
+      "body_sha256": "108894bf9e6b64f7abacbc4b69f043b4c69973b1e52775b5299c0bf9ff71c9d2",
+      "disposition": "provider-event-coupling"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/reauth.ts",
+      "name": "verifyPasskey",
+      "lines": 55,
+      "categories": [
+        "storage"
+      ],
+      "exported": true,
+      "body_sha256": "27080b0c9097bd06f59c60cfab1326009453e6eae64e6eaff442316dddde28f8",
+      "disposition": "encoding-only"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/two-fa.ts",
+      "name": "setupVaultTwoFa",
+      "lines": 14,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "22c3ec1194dc98eefa9dfae1f750e91d7862a21cacb4cab655f9c96a497e94c9",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/field-permissions.ts",
+      "name": "shareableColumns",
+      "lines": 7,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "37a2bf0bf2f50e51047a95a68cbc858bbae40b54dafdd8bb9407fa77a163559a",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/use-cases.ts",
+      "name": "createShare",
+      "lines": 66,
+      "categories": [
+        "provider",
+        "event"
+      ],
+      "exported": true,
+      "body_sha256": "12eca4c6241fb2b0a60a1a1e20718467a27806a96112a874945ff0be1269d105",
+      "disposition": "provider-event-coupling"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/use-cases.ts",
+      "name": "bulkCreateShares",
+      "lines": 74,
+      "categories": [
+        "provider"
+      ],
+      "exported": true,
+      "body_sha256": "be3dcbba329fa91eba42d07bdd080307b257f775464fb7494ade49c714b573c0",
+      "disposition": "provider-event-coupling"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/use-cases.ts",
+      "name": "bulkUpdateShares",
+      "lines": 36,
+      "categories": [
+        "provider"
+      ],
+      "exported": true,
+      "body_sha256": "a318b953d19f55cf026453ecb9d3d36ee6a04b7e649f0fcfd2ae8866a37568b8",
+      "disposition": "provider-event-coupling"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/use-cases.ts",
+      "name": "updateShare",
+      "lines": 67,
+      "categories": [
+        "provider",
+        "event"
+      ],
+      "exported": true,
+      "body_sha256": "a873435c367d8b33b5e63ab39b12a715905513534e4ba37b4de9cbae33fc9df1",
+      "disposition": "provider-event-coupling"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/use-cases.ts",
+      "name": "deleteShare",
+      "lines": 16,
+      "categories": [
+        "event"
+      ],
+      "exported": true,
+      "body_sha256": "1837537e18d46b48f643beabd7324b715f991a1637aa8c1f85b4014b3b0cc684",
+      "disposition": "provider-event-coupling"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/blob.ts",
+      "name": "decryptBlob",
+      "lines": 19,
+      "categories": [
+        "storage"
+      ],
+      "exported": true,
+      "body_sha256": "45a7125d3d4c64f954c3974cef711ed28797421aa4e0ffda2b02798d0b1e20cb",
+      "disposition": "encoding-only"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/payload.ts",
+      "name": "buildVaultSnapshotPayload",
+      "lines": 302,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "5b02e873b2a846541367ed82cf33f149b747919bdba100444cbf56aacfaa682a",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "existingVaultKeys",
+      "lines": 6,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "a223f262aea4945d088be86c89c82fb38958f62ad32bb7998ab598ef279d5e12",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "insertVaultRow",
+      "lines": 9,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "4b58e04b3a209eeb6bd92cb91ee846e8c9bf1e57f3ee80fcb6b98cf85f73730f",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "existingWalletKeys",
+      "lines": 5,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "f2633ebc044b1ed24a5adb569e4a20f278173517cc40cd2a2739832b560e6e10",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "insertWalletRow",
+      "lines": 11,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "d96d243127f5c276cfcf6ec919724c7a256e6aefee2b9688bdafa48ff38ef2ce",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "existingRawKeys",
+      "lines": 7,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "fae67f0b68b266a19965b567c8bfe7c37e7359b431ef21cc590a5ff28d655302",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "insertRawRow",
+      "lines": 6,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "9374d278e057c7d3c95dbc3721465888baac0c0b57fa1c94ed5cc3b4870a580e",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "existingTemplateKeys",
+      "lines": 4,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "59faa204c58836bd6da407c97ff6f80d2a51ccef2576ea3c7fec50192d33f882",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "insertTemplateRow",
+      "lines": 7,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "47d66d737bbdc6f34aebb37bea979c7b71d8ca5dccb72d5089e6c12ef1846c66",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "existingMessageKeys",
+      "lines": 4,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "4235c3236f47fcfdcf871066de402726f3e7c0a5011e4a717d2ff8bd73ec4c3f",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "insertMessageRow",
+      "lines": 13,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "43a82f69cef92461e791f1a1f3c82a727a8cb78196ea861583d7209b77012421",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "existingDataEntityKeys",
+      "lines": 4,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "169eccf84ac14e9303ee6d31ce733d4dc6a217a98e69d7ca3b9a32598a73aceb",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "insertDataEntityRow",
+      "lines": 7,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "99cd2bd38364bc9720acc8f87e0b401c35cc8d24949279d8d5dd4580920a605c",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "existingEmailAccountKeys",
+      "lines": 4,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "fdf26c7329fee7c3380aca4ad5b3cc366645a6bedbae90e4a411c9cdbd9b5b24",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "insertEmailAccountRow",
+      "lines": 8,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "96087c8c99de0c90fa90502151a5f361ff2b2ecd3f3e6a5454f9cb9791817881",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "name": "applyRestoreDiff",
+      "lines": 136,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "1a0a52e44f4a3ab1ea2cca53246a3d4dbd9ffc0f66282b2f66762fc7d8b998ad",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherMailboxSnapshot",
+      "lines": 55,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "11328f186ee715bd0f048289119dc905bc12c662f2bc4bfc928aa776c88b8808",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherProjectsSnapshot",
+      "lines": 10,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "e2a2fb23afe238a896ca571662acfd0770503bdb6a25f02e16392f4dc866e3d2",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherTasksSnapshot",
+      "lines": 4,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "a067d2f31c4bc3cc00bf3ad66bdedb78c4d9a20d1e35cd811b29116232dcbfaf",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherFinanceSnapshot",
+      "lines": 82,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "ff66ef97be27051172126abff23105c2d4098c1914b2867553c43f757ccc15fc",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherUserProfileSnapshot",
+      "lines": 10,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "8f049b27fc24bf5b364420c861aa38ce3650ccd49574fbf36afa1069058962c4",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherWalletHubSnapshot",
+      "lines": 12,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "f180b0c9c6f4ecce8ec8729d5203eb718b5b8c6a5eb5107ee0391cecc52882ca",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherActivitySnapshot",
+      "lines": 17,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "04faacdad87fd043081f3d20316ffbd4be9498f189bbcebe3417739eda35c222",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherEntityCoverageSnapshot",
+      "lines": 20,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "3d11fe83de3b27ae05f030921fee2aaf89c7fbc52387b67da2f2a8f26b576697",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherEmergencyAccessSnapshot",
+      "lines": 12,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "6d61f364091e0a06174a12955e657af068003fdafdf515ebc31a67a85721887d",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherAccountExtrasSnapshot",
+      "lines": 42,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "4aa289fd5791e1c248ef5c43b5c574984fb2a157b10652b045197bed802651a3",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherTeamSnapshot",
+      "lines": 27,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "9b0abca797894f83cc3785fdc9b4ee57c8755a2b76d7c5171f8573f93c964e03",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherEarningSnapshot",
+      "lines": 4,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "cc6c9d6bc896c3356db08395f86fa90d575ec7140d37d60741b755277021a4f4",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherBackupSystemSnapshot",
+      "lines": 31,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "5ef59f1b828d12ddbb510cc5941e03210ccfe3e22d5e85b082ec6b8499ec8c3a",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherEmailAccountsSnapshot",
+      "lines": 9,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "5a855b6d9ad04d15fdaf1a6f9c24b52990f87a206bfaee6e63d3d3098b1833ea",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherMailboxReputationSnapshot",
+      "lines": 8,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "76c797056a7e19b785c4e1282707f91fbf0223c9fa33955f220c88c963a71ca8",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "name": "gatherExternalMailSnapshot",
+      "lines": 8,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "6e43a142117effc446ebe536c5415d5f84f3bb8577e78fde8523ca053309598d",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/store.ts",
+      "name": "pruneOldSnapshots",
+      "lines": 31,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "eafc10427b05ff921a7fb3f08e4718c242d3816fd92d4d722a3b510dfbe405e9",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/store.ts",
+      "name": "storeSnapshotRow",
+      "lines": 33,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "cce42b77bc5a326e09a805abab1197e529e6f1f92411336d22ff2e367d56f189",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/use-cases.ts",
+      "name": "decryptSnapshotFromRequest",
+      "lines": 45,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "0e2bda41cb8a1a5947f8eef5e24c2e478627fad0ad5c8207f6f711beaaefd900",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "name": "bootstrapFirstKey",
+      "lines": 8,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "c1db483307871ef5b28527bdf68824cc677e1a126148ba83f3215c6a57110ab8",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "name": "loadBackupEnvelopeKeyManager",
+      "lines": 18,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "45506c251ba6fb35bfe7858fe8b7bfcb90512455fcd0d1c900d02e398ae30f09",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "name": "rotateBackupEnvelopeKey",
+      "lines": 12,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "67b8cc6fcb4b0070ae1878625a1f9583a12e950c443ecd24231ab6ec5bf1ddcd",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "name": "envelopeDecryptBackup",
+      "lines": 19,
+      "categories": [
+        "storage"
+      ],
+      "exported": true,
+      "body_sha256": "2eeb3289b182725a9ccf20100121eada782df50692c8565c6896c86890f11191",
+      "disposition": "encoding-only"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "name": "bootstrapFirstKey",
+      "lines": 8,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "8a4d99ce6fd6f3aa2c7a3d7490d5f72b0667b263c402cda1b0467c2370d0e4c4",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "name": "loadKeyManager",
+      "lines": 18,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "dddb122c974feb0ce6cf2c0f17c684667e268baffd6cecb71c43fff57c3aaacf",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "name": "rotateKey",
+      "lines": 11,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "4d8edd0c826c6bcdf5509d10e6f5c37d595d2e004b2a40d8c19d3c45e8eb27a6",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/attachment-ownership.ts",
+      "name": "vaultAttachmentEntityResource",
+      "lines": 12,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "7cee69a4f1efe6b5f026c9ccf67bf0e5027f11f5293934897f2026fc24f98056",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "name": "vaultEntryResource",
+      "lines": 7,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "e7f210f97e1ba0481d5ac742c1d09ba517de63151b0f97701aa4708bd2763357",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "name": "vaultEntityLinkResource",
+      "lines": 7,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "b9edb594e0b0e2461349fb06681d14138114709886ef0fcbdf0d91290c6a457a",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "name": "auditVaultBulkOwnership",
+      "lines": 15,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "7b46a6e15bb62fbe9c7abe0140ecf42d7c645fdbe48fdd30a600f78455919510",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "name": "selectKycEntryOwnerRow",
+      "lines": 4,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "3ab17cc4c40363fed59795359788ea732a5b8f99d460ea767cf8e30d576f161d",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "name": "kycDataEntityResource",
+      "lines": 7,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "e46a30a9719f581e2850629f8685d3d5902ba1c11a4a276b6db86b02c7b43088",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "name": "localAccountResource",
+      "lines": 6,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "25f671c98149a2d57e06f357fd1ac2c7e372160af9f396895dc2697c9469747d",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "name": "localAccountCategoryResource",
+      "lines": 6,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "e60e638b7a3c9d9cce3dd209a775158c32f98c43d194f11a99bdadfb12b796e5",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "name": "localAccountPointResource",
+      "lines": 6,
+      "categories": [
+        "db"
+      ],
+      "exported": false,
+      "body_sha256": "e17797aa7ee6125936ac4ade9166beadaa2b68bde2d231ad46de100391e22f7a",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "name": "hasVaultPin",
+      "lines": 5,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "b55e15c2a64f3a1c528ddddf66415e124ab494d2dd368704e30ed98fda1b45fe",
+      "disposition": "extract-12B",
+      "target": "artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "name": "requireVaultPin",
+      "lines": 45,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "3dbacb9fe0dce973e41f591cf3f3c9e9db88f979938afbcaf3843c0cc18cc6f8",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/share-ownership.ts",
+      "name": "vaultShareResource",
+      "lines": 6,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "b29713812b7afc94a96b023f7d6c31407ba1d39e25ad0186af445cb7cb438497",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/share-ownership.ts",
+      "name": "auditVaultShareBulkOwnership",
+      "lines": 16,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "7a961c2690312b835b3c9be8c0048634b8bd05a53b1ebd59d16b198fe0f17a6f",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/share-ownership.ts",
+      "name": "auditVaultShareCreateOwnership",
+      "lines": 33,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "9ad77ac33e4ec5d98878ae28fcc7e7622cb0468540973c5dc392a83aafde6c32",
+      "disposition": "split-required"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/snapshot-ownership.ts",
+      "name": "vaultSnapshotResource",
+      "lines": 9,
+      "categories": [
+        "db"
+      ],
+      "exported": true,
+      "body_sha256": "acf000297f9a83da7c5912d18a4372f4a8d7ee74a585ec9fba75f5830fa9e196",
+      "disposition": "split-required"
+    }
+  ],
+  "summary": {
+    "symbols": 112,
+    "files": 37,
+    "by_disposition": {
+      "split-required": 59,
+      "encoding-only": 5,
+      "job-wiring": 2,
+      "extract-12B": 33,
+      "deferred-gap-11-sealed": 6,
+      "provider-event-coupling": 7
+    },
+    "by_category": {
+      "db": 96,
+      "provider": 9,
+      "event": 9,
+      "job": 3,
+      "storage": 5
+    }
+  },
+  "status": "PASS"
+}

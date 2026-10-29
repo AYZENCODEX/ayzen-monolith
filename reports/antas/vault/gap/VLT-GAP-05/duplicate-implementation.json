@@ -1,0 +1,68 @@
+{
+  "phase": "VLT-GAP-05",
+  "sub_phase": "VLT-GAP-05-D",
+  "commit_sha": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "24632c57068a52091de19e44d6e60f5987ca10e846739f920d68908e43c7399c",
+  "validator_version": "1.0.0",
+  "validator_sha256": "dd4837fd94acabb481411b49bfbe09403108fff0368208e37f997e9d91f20406",
+  "owner_function_matches": [],
+  "redeclared_owner_names": [],
+  "redeclared_use_cases": [],
+  "old_handler_body_copies": [],
+  "deferred_copies": [
+    {
+      "file": "artifacts/api-server/src/lib/wallet-crypto.ts",
+      "line": 102,
+      "function": "bootstrapFirstKey",
+      "copy_of": "bootstrapFirstKey",
+      "deferred_to": "VLT-GAP-07"
+    },
+    {
+      "file": "scripts/src/rewrap-encryption-keys.ts",
+      "line": 145,
+      "function": "vaultAesDecrypt",
+      "copy_of": "aesDecrypt",
+      "deferred_to": "VLT-GAP-07"
+    }
+  ],
+  "owner_functions": 10,
+  "old_handlers_fingerprinted": 4,
+  "files_scanned": 1616,
+  "deferred_copy_namespaces": [
+    {
+      "file": "artifacts/api-server/src/lib/wallet-crypto.ts",
+      "namespace": "wallet"
+    },
+    {
+      "file": "scripts/src/rewrap-encryption-keys.ts",
+      "namespace": null
+    }
+  ],
+  "deferred_copy_same_namespace": [],
+  "adapter_retired": true,
+  "importers_of_retired_adapter": [],
+  "code_references_to_retired_path": [],
+  "comment_only_mentions": [
+    "artifacts/api-server/src/lib/jwt-keys.ts",
+    "artifacts/api-server/src/lib/schema-migrations.ts",
+    "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+    "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+    "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+    "artifacts/api-server/src/lib/wallet-crypto.ts",
+    "artifacts/api-server/src/routes/vault-attachments.ts",
+    "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+    "scripts/src/reencrypt-seed-phrases.ts",
+    "scripts/src/reencrypt-vault.ts",
+    "scripts/src/rewrap-encryption-keys.ts",
+    "scripts/src/test-route-ownership-regression.ts",
+    "lib/db/src/schema/encryption-keys.ts",
+    "lib/db/src/schema/finance.ts",
+    "lib/db/src/schema/vault-attachments.ts",
+    "lib/db/src/schema/vault-backup-cloud-connections.ts",
+    "lib/db/src/src/schema/encryption-keys.ts"
+  ],
+  "comment_only_note": "Comments naming the retired path are documentation, not code; the generated docs/map were updated, historical change-logs and script comments are intentionally left as history.",
+  "config_references": [],
+  "duplicate_implementations": []
+}

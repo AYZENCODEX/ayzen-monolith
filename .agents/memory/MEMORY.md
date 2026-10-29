@@ -1,0 +1,5 @@
+- [Supabase schema isolation](supabase-schema-isolation.md) — Scope introspection to public; verify Drizzle push effects because configured table filters may not limit DDL.
+- [Imported workspace startup](imported-workspace-startup.md) — Install the frozen lockfile and provide vault secrets before starting the imported app.
+- [Vault certification evidence](vault-certification-evidence.md) — Static VLT gates must not be presented as provider-backed production or recovery proof.
+- [Vault migration-map generation](vault-map-generation.md) — Keep GAP-17 as the authoritative per-file map; supersede historical failures only with current source-bound proof.
+- [Finance extraction evidence](finance-extraction-evidence.md) — Extraction complete in code, final pack BLOCKED until typecheck, build and DB suite run in a real checkout; re-measure, do not copy counts.

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "pools": [
+    { "id": "general", "owner": "platform", "queue": "events", "backpressure": "bounded", "userTrafficIsolated": true },
+    { "id": "audit", "owner": "audit", "queue": "audit", "backpressure": "bounded", "userTrafficIsolated": true },
+    { "id": "intelligence", "owner": "intelligence", "queue": "intelligence", "backpressure": "bounded", "userTrafficIsolated": true },
+    { "id": "workflow", "owner": "skarn", "queue": "workflow", "backpressure": "bounded", "userTrafficIsolated": true },
+    { "id": "architecture", "owner": "platform", "queue": "architecture", "backpressure": "bounded", "userTrafficIsolated": true }
+  ],
+  "scaling": "measured-queue-age-and-utilization"
+}

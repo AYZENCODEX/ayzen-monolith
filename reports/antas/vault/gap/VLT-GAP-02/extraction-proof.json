@@ -1,0 +1,2384 @@
+{
+  "phase": "VLT-GAP-02",
+  "sub_phase": "VLT-GAP-02-B",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "c66e0788dc9c8cd2c11da355e84c29d9f964735979b42518a0859c4a9d375f1e",
+  "validator_version": "1.0.0",
+  "validator_sha256": "27ebd3bb00c4efd2bfccfead5fdc10dba3edb4d539f90970bb58e96c84259fa6",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/local-accounts.ts": "dc2e9ad68537f5cf6a85803d98e0055f7cfdeeb13d298c5dc3a827245f01e5c7",
+    "artifacts/api-server/src/vault/domain/local-account-values.ts": "3963033b26d175417cfcc355e4ffce24993de88c71e943af78c55ce2e173ff76",
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts": "be5dfd065857a55370c139e69b46f9836f8ab2b3d0f4d91d5e36415a0c6c704b",
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts": "4e0b065ccd5de6d0595285b77a2eb8ea1eee368fe77729598bfe92e7829f982b",
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts": "bcb8cff17e632716682a24f1002c3f8f4dd805ed04a7925a0e1fd815d36aa8c8",
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts": "a7a11f335dc8d93ca9c23e78dda1ab563362a4424157c2a197995f9e1bed47e8",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-02-B.mjs",
+    "in-process differential suite (frozen baseline vs new source)",
+    "in-process differential typecheck"
+  ],
+  "exit_codes": {
+    "differential_suite": 0,
+    "security_suite": 0,
+    "unit_parity": 0,
+    "mutation_suite": 0,
+    "typecheck_differential": 0
+  },
+  "symbols_moved": [
+    {
+      "symbol": "safe",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "sql-support",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "safeNum",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "sql-support",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "safeDate",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "sql-support",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "safeScore",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "sql-support",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "calcAgeLabel",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "metadata",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 1
+      }
+    },
+    {
+      "symbol": "calcRoiPct",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "metadata",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 1
+      }
+    },
+    {
+      "symbol": "ageInDays",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "metadata",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 1
+      }
+    },
+    {
+      "symbol": "fmtAvgAgeLabel",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "metadata",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 1
+      }
+    },
+    {
+      "symbol": "fmtPublicLocalReceipt",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "receipt",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "LOCAL_ACCOUNT_OWNER_SENTINEL_NONE",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": null
+    },
+    {
+      "symbol": "localAccountResource",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": null
+    },
+    {
+      "symbol": "requireLocalAccountOwnership",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "denyNotFoundOrForbidden",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "denyNotFound",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "denyAccountNotFound",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "denySilentSuccess",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 2
+      }
+    },
+    {
+      "symbol": "denyEmptyPoints",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "LOCAL_ACCOUNT_CATEGORY_OWNER_SENTINEL_NONE",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": null
+    },
+    {
+      "symbol": "localAccountCategoryResource",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": null
+    },
+    {
+      "symbol": "requireLocalAccountCategoryOwnership",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "LOCAL_ACCOUNT_POINT_OWNER_SENTINEL_NONE",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": null
+    },
+    {
+      "symbol": "localAccountPointResource",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": null
+    },
+    {
+      "symbol": "requireLocalAccountPointOwnership",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "generateReceiptToken",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "mode": "verbatim",
+      "layer": "application",
+      "behavior_domain": "receipt",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 1
+      }
+    },
+    {
+      "symbol": "receiptUrl",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "mode": "verbatim",
+      "layer": "application",
+      "behavior_domain": "receipt",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 1
+      }
+    },
+    {
+      "symbol": "generateCategoryReceiptToken",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "mode": "verbatim",
+      "layer": "application",
+      "behavior_domain": "receipt",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 1
+      }
+    },
+    {
+      "symbol": "categoryReceiptUrl",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "mode": "verbatim",
+      "layer": "application",
+      "behavior_domain": "receipt",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 2
+      }
+    },
+    {
+      "symbol": "findLocalAccountByReceiptToken",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts",
+      "mode": "verbatim",
+      "layer": "infrastructure",
+      "behavior_domain": "receipt",
+      "identical_modulo_export": true,
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    },
+    {
+      "symbol": "computeCategoryAggregate",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "mode": "refactor",
+      "layer": "application",
+      "behavior_domain": "category-receipt",
+      "note": "SELECT → repository, arithmetic → domain aggregateCategoryRows; verified differentially",
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 2
+      }
+    },
+    {
+      "symbol": "findCategoryReceiptByToken",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "mode": "refactor",
+      "layer": "application",
+      "behavior_domain": "category-receipt",
+      "note": "SELECT → repository findCategoryReceiptRowByToken; verified differentially",
+      "consumers": {
+        "external_importers": 0,
+        "intra_file_references": 1
+      }
+    },
+    {
+      "symbol": "fmtPublicCategoryReceipt",
+      "from": "artifacts/api-server/src/routes/local-accounts.ts",
+      "to": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "mode": "refactor",
+      "layer": "domain",
+      "behavior_domain": "category-receipt",
+      "note": "parameter type named FoundCategoryReceipt instead of the inferred Awaited<ReturnType<…>>; body identical",
+      "consumers": {
+        "external_importers": 1,
+        "intra_file_references": 0
+      }
+    }
+  ],
+  "handlers_extracted": [
+    {
+      "route": "GET /local-accounts",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#listLocalAccounts",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 16,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "POST /local-accounts",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#createLocalAccount",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 33,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "PUT /local-accounts/:id",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#editLocalAccount",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 38,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "PATCH /local-accounts/:id/status",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#setLocalAccountStatus",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 22,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "DELETE /local-accounts/:id",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#removeLocalAccount",
+      "db_refs_before": 4,
+      "db_refs_after": 0,
+      "handler_lines_before": 14,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "PATCH /local-accounts/:id/link-vault",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#linkLocalAccount",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 17,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "PATCH /local-accounts/:id/unlink-vault",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#unlinkLocalAccount",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 15,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "GET /local-accounts/categories",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#listLocalAccountCategories",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 11,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "POST /local-accounts/categories",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#createLocalAccountCategory",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 13,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "DELETE /local-accounts/categories/:id",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#removeLocalAccountCategory",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 11,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "GET /local-accounts/:id",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#getLocalAccount",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 17,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "GET /local-accounts/:id/points",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#listLocalAccountPoints",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 15,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "POST /local-accounts/:id/points",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#createLocalAccountPoint",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 15,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "DELETE /local-accounts/points/:pointId",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/accounts.ts#removeLocalAccountPoint",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 11,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "POST /local-accounts/:id/receipt",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/receipt.ts#createLocalAccountReceipt",
+      "db_refs_before": 4,
+      "db_refs_after": 0,
+      "handler_lines_before": 28,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "DELETE /local-accounts/:id/receipt",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/receipt.ts#revokeLocalAccountReceipt",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 14,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "GET /local-accounts/receipt/:token",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/receipt.ts#resolvePublicLocalReceipt",
+      "db_refs_before": 0,
+      "db_refs_after": 0,
+      "handler_lines_before": 11,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "GET /local-accounts/receipt/:token/pdf",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/receipt.ts#resolvePublicLocalReceipt",
+      "db_refs_before": 0,
+      "db_refs_after": 0,
+      "handler_lines_before": 35,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "POST /local-accounts/category-receipt/:category",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/receipt.ts#createCategoryReceipt",
+      "db_refs_before": 4,
+      "db_refs_after": 0,
+      "handler_lines_before": 27,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "DELETE /local-accounts/category-receipt/:category",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/receipt.ts#revokeCategoryReceipt",
+      "db_refs_before": 2,
+      "db_refs_after": 0,
+      "handler_lines_before": 14,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "GET /local-accounts/category-receipt/:token",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/receipt.ts#resolvePublicCategoryReceipt",
+      "db_refs_before": 0,
+      "db_refs_after": 0,
+      "handler_lines_before": 11,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "GET /local-accounts/category-receipt/:token/pdf",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/receipt.ts#resolvePublicCategoryReceipt",
+      "db_refs_before": 0,
+      "db_refs_after": 0,
+      "handler_lines_before": 35,
+      "handler_lines_after": 4
+    },
+    {
+      "route": "POST /local-accounts/category-receipt/:category/email",
+      "use_case": "artifacts/api-server/src/vault/application/local-account/receipt.ts#emailCategoryReceipt",
+      "db_refs_before": 6,
+      "db_refs_after": 0,
+      "handler_lines_before": 43,
+      "handler_lines_after": 4
+    }
+  ],
+  "consumers_migrated": [],
+  "old_business_symbols_remaining": {
+    "route_declares_business_symbols": [],
+    "route_handlers_with_db_refs": []
+  },
+  "duplicate_implementations": [],
+  "route_thinness": {
+    "before": {
+      "routes": 23,
+      "with_db_refs": 19,
+      "handler_lines": 466
+    },
+    "after": {
+      "routes": 23,
+      "with_db_refs": 0,
+      "handler_lines": 92
+    }
+  },
+  "symbol_usage": {
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#safe": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#safeNum": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#safeDate": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#safeScore": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#calcAgeLabel": {
+      "external_importers": 0,
+      "intra_file_references": 1
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#calcRoiPct": {
+      "external_importers": 0,
+      "intra_file_references": 1
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#fmtPublicLocalReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#ageInDays": {
+      "external_importers": 0,
+      "intra_file_references": 1
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#fmtAvgAgeLabel": {
+      "external_importers": 0,
+      "intra_file_references": 1
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#aggregateCategoryRows": {
+      "external_importers": 1,
+      "intra_file_references": 1
+    },
+    "artifacts/api-server/src/vault/domain/local-account-values.ts#fmtPublicCategoryReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts#requireLocalAccountOwnership": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts#denyNotFoundOrForbidden": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts#denyNotFound": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts#denyAccountNotFound": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts#denySilentSuccess": {
+      "external_importers": 1,
+      "intra_file_references": 2
+    },
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts#denyEmptyPoints": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts#requireLocalAccountCategoryOwnership": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts#requireLocalAccountPointOwnership": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#selectLocalAccounts": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#insertLocalAccount": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#updateLocalAccount": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#updateLocalAccountStatus": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#deleteLocalAccount": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#deleteLocalAccountValueHistory": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#linkLocalAccountToVault": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#unlinkLocalAccountFromVault": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#findLocalAccountById": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#selectLocalAccountCategories": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#insertLocalAccountCategory": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#deleteLocalAccountCategory": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#selectLocalAccountPoints": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#insertLocalAccountPoint": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#deleteLocalAccountPoint": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#selectLocalAccountReceiptRow": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#setLocalAccountReceiptToken": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#clearLocalAccountReceiptToken": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#findLocalAccountByReceiptToken": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#selectCategoryReceiptToken": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#insertCategoryReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#deleteCategoryReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#selectCategoryAggregateRows": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#findCategoryReceiptRowByToken": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts#selectUserEmailRecipient": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#dbError": {
+      "external_importers": 1,
+      "intra_file_references": 14
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#listLocalAccounts": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#createLocalAccount": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#editLocalAccount": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#setLocalAccountStatus": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#removeLocalAccount": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#linkLocalAccount": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#unlinkLocalAccount": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#listLocalAccountCategories": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#createLocalAccountCategory": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#removeLocalAccountCategory": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#getLocalAccount": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#listLocalAccountPoints": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#createLocalAccountPoint": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts#removeLocalAccountPoint": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#generateReceiptToken": {
+      "external_importers": 0,
+      "intra_file_references": 1
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#receiptUrl": {
+      "external_importers": 0,
+      "intra_file_references": 1
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#generateCategoryReceiptToken": {
+      "external_importers": 0,
+      "intra_file_references": 1
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#categoryReceiptUrl": {
+      "external_importers": 0,
+      "intra_file_references": 2
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#computeCategoryAggregate": {
+      "external_importers": 0,
+      "intra_file_references": 2
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#findCategoryReceiptByToken": {
+      "external_importers": 0,
+      "intra_file_references": 1
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#createLocalAccountReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#revokeLocalAccountReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#resolvePublicLocalReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#createCategoryReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#revokeCategoryReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#resolvePublicCategoryReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    },
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts#emailCategoryReceipt": {
+      "external_importers": 1,
+      "intra_file_references": 0
+    }
+  },
+  "diff_audit": {
+    "changed": [
+      "artifacts/api-server/src/routes/local-accounts.ts"
+    ],
+    "added": [
+      "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts",
+      "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "scripts/antas/vault/gap/validate-vlt-gap-02-B.mjs"
+    ],
+    "removed": [],
+    "unexpected": []
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build is NOT executed)",
+    "before_total": 52,
+    "after_total": 55,
+    "syntactic_errors": [],
+    "new_diagnostics": []
+  },
+  "tests": {
+    "differential_cases": 115,
+    "differential_passed": 115,
+    "security_checks": 14,
+    "security_passed": 14,
+    "unit_parity": 16,
+    "unit_passed": 16,
+    "mutation_tests": 11,
+    "mutation_detected": 11
+  },
+  "notes": [
+    "consumers_migrated is empty by design: value-history.ts and other consumers are rewired in 02-C; the route keeps a compatibility re-export of requireLocalAccountOwnership until then.",
+    "The frontend sources (components/local-accounts.tsx, config/fields/*) are not part of 02-B; they are handled in the later GAP-02 phases.",
+    "Full tsc/build cannot run here (no node_modules); a differential typecheck against the frozen baseline is used instead and recorded as degraded."
+  ],
+  "checks": [
+    {
+      "name": "destination-exists:vault/domain/local-account-values.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/domain/local-account-values.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/security/local-account-ownership.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/security/local-account-ownership.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/infrastructure/repositories/local-account-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/infrastructure/repositories/local-account-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/local-account/accounts.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/application/local-account/accounts.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/local-account/receipt.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/application/local-account/receipt.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "baseline-route-matches-02A-evidence-hash",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "baseline-route-is-pre-extraction-shape",
+      "passed": true,
+      "details": "baseline must still contain inline DB access"
+    },
+    {
+      "name": "move:safe:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:safe:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:safeNum:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:safeNum:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:safeDate:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:safeDate:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:safeScore:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:safeScore:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:calcAgeLabel:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:calcAgeLabel:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:calcRoiPct:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:calcRoiPct:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:ageInDays:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:ageInDays:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:fmtAvgAgeLabel:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:fmtAvgAgeLabel:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:fmtPublicLocalReceipt:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:fmtPublicLocalReceipt:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:LOCAL_ACCOUNT_OWNER_SENTINEL_NONE:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:LOCAL_ACCOUNT_OWNER_SENTINEL_NONE:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:localAccountResource:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:localAccountResource:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:requireLocalAccountOwnership:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:requireLocalAccountOwnership:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:denyNotFoundOrForbidden:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:denyNotFoundOrForbidden:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:denyNotFound:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:denyNotFound:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:denyAccountNotFound:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:denyAccountNotFound:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:denySilentSuccess:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:denySilentSuccess:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:denyEmptyPoints:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:denyEmptyPoints:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:LOCAL_ACCOUNT_CATEGORY_OWNER_SENTINEL_NONE:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:LOCAL_ACCOUNT_CATEGORY_OWNER_SENTINEL_NONE:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:localAccountCategoryResource:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:localAccountCategoryResource:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:requireLocalAccountCategoryOwnership:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:requireLocalAccountCategoryOwnership:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:LOCAL_ACCOUNT_POINT_OWNER_SENTINEL_NONE:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:LOCAL_ACCOUNT_POINT_OWNER_SENTINEL_NONE:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:localAccountPointResource:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:localAccountPointResource:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:requireLocalAccountPointOwnership:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:requireLocalAccountPointOwnership:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:generateReceiptToken:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:generateReceiptToken:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:receiptUrl:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:receiptUrl:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:generateCategoryReceiptToken:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:generateCategoryReceiptToken:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:categoryReceiptUrl:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:categoryReceiptUrl:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:findLocalAccountByReceiptToken:verbatim-identical",
+      "passed": true,
+      "details": "declaration differs from frozen baseline"
+    },
+    {
+      "name": "move:findLocalAccountByReceiptToken:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:computeCategoryAggregate:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:findCategoryReceiptByToken:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "move:fmtPublicCategoryReceipt:removed-from-route",
+      "passed": true,
+      "details": "old route still declares it (duplicate implementation)"
+    },
+    {
+      "name": "route-count-preserved",
+      "passed": true,
+      "details": "before=23 after=23 declared=23"
+    },
+    {
+      "name": "route-order-and-middleware-identical",
+      "passed": true,
+      "details": "route table (order, path, middleware chain text) changed"
+    },
+    {
+      "name": "handler:GET /local-accounts:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=listLocalAccounts db_refs=0"
+    },
+    {
+      "name": "handler:POST /local-accounts:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=createLocalAccount db_refs=0"
+    },
+    {
+      "name": "handler:PUT /local-accounts/:id:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=editLocalAccount db_refs=0"
+    },
+    {
+      "name": "handler:PATCH /local-accounts/:id/status:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=setLocalAccountStatus db_refs=0"
+    },
+    {
+      "name": "handler:DELETE /local-accounts/:id:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=removeLocalAccount db_refs=0"
+    },
+    {
+      "name": "handler:PATCH /local-accounts/:id/link-vault:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=linkLocalAccount db_refs=0"
+    },
+    {
+      "name": "handler:PATCH /local-accounts/:id/unlink-vault:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=unlinkLocalAccount db_refs=0"
+    },
+    {
+      "name": "handler:GET /local-accounts/categories:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=listLocalAccountCategories db_refs=0"
+    },
+    {
+      "name": "handler:POST /local-accounts/categories:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=createLocalAccountCategory db_refs=0"
+    },
+    {
+      "name": "handler:DELETE /local-accounts/categories/:id:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=removeLocalAccountCategory db_refs=0"
+    },
+    {
+      "name": "handler:GET /local-accounts/:id:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=getLocalAccount db_refs=0"
+    },
+    {
+      "name": "handler:GET /local-accounts/:id/points:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=listLocalAccountPoints db_refs=0"
+    },
+    {
+      "name": "handler:POST /local-accounts/:id/points:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=createLocalAccountPoint db_refs=0"
+    },
+    {
+      "name": "handler:DELETE /local-accounts/points/:pointId:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=removeLocalAccountPoint db_refs=0"
+    },
+    {
+      "name": "handler:POST /local-accounts/:id/receipt:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=createLocalAccountReceipt db_refs=0"
+    },
+    {
+      "name": "handler:DELETE /local-accounts/:id/receipt:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=revokeLocalAccountReceipt db_refs=0"
+    },
+    {
+      "name": "handler:GET /local-accounts/receipt/:token:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=resolvePublicLocalReceipt db_refs=0"
+    },
+    {
+      "name": "handler:GET /local-accounts/receipt/:token/pdf:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=resolvePublicLocalReceipt,streamFantasticReceiptPdf db_refs=0"
+    },
+    {
+      "name": "handler:POST /local-accounts/category-receipt/:category:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=createCategoryReceipt db_refs=0"
+    },
+    {
+      "name": "handler:DELETE /local-accounts/category-receipt/:category:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=revokeCategoryReceipt db_refs=0"
+    },
+    {
+      "name": "handler:GET /local-accounts/category-receipt/:token:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=resolvePublicCategoryReceipt db_refs=0"
+    },
+    {
+      "name": "handler:GET /local-accounts/category-receipt/:token/pdf:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=resolvePublicCategoryReceipt,streamFantasticReceiptPdf db_refs=0"
+    },
+    {
+      "name": "handler:POST /local-accounts/category-receipt/:category/email:delegates",
+      "passed": true,
+      "details": "route=true declared=true imported=true calls=emailCategoryReceipt db_refs=0"
+    },
+    {
+      "name": "route-has-zero-db-or-sql-references",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-declares-no-business-symbols",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "sql-every-old-statement-preserved-in-destination",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "sql-no-new-statements-introduced",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "sql-none-left-in-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-repository-executes-sql",
+      "passed": true,
+      "details": "db.execute calls=25"
+    },
+    {
+      "name": "destination-application-has-use-cases",
+      "passed": true,
+      "details": "accounts=14 receipt=14"
+    },
+    {
+      "name": "destination-domain-has-logic",
+      "passed": true,
+      "details": "functions=8"
+    },
+    {
+      "name": "destination-security-has-logic",
+      "passed": true,
+      "details": "functions=11"
+    },
+    {
+      "name": "no-scaffold-only-destination",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved-symbols-are-used",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-duplicate-implementation-between-route-and-destination",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-duplicate-implementation-between-destinations",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-sql-statement-implemented-in-two-files",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "forbidden-imports:vault/domain/local-account-values.ts",
+      "passed": true,
+      "details": "domain must be pure: "
+    },
+    {
+      "name": "forbidden-imports:vault/infrastructure/repositories/local-account-repository.ts",
+      "passed": true,
+      "details": "infrastructure must not depend on API/application: "
+    },
+    {
+      "name": "forbidden-imports:vault/application/local-account/accounts.ts",
+      "passed": true,
+      "details": "application persists only through repositories: "
+    },
+    {
+      "name": "forbidden-imports:vault/application/local-account/receipt.ts",
+      "passed": true,
+      "details": "application persists only through repositories: "
+    },
+    {
+      "name": "forbidden-imports:vault/security/local-account-ownership.ts",
+      "passed": true,
+      "details": "security must not depend on routes/application: "
+    },
+    {
+      "name": "route-no-longer-imports-persistence-crypto-or-sync",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-vault-module-imports-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-keeps-compat-export-requireLocalAccountOwnership",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "old-exports-known",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts — list: success no filters",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts — list: all filters",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts — list: linked=true / bad vaultEntryId",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts — list: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts — create: full body",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts — create: defaults (empty body)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts — create: score clamp + NaN worth",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts — create: empty category rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts — create: null category rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts — create: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PUT /local-accounts/:id — update: success with score",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PUT /local-accounts/:id — update: score omitted keeps column",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PUT /local-accounts/:id — update: not found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PUT /local-accounts/:id — update: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PUT /local-accounts/:id — update: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/status — status: banned",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/status — status: invalid value",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/status — status: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/status — status: not found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/status — status: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/:id — delete: success purges value history",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/:id — delete: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/:id — delete: db error on account",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/:id — delete: db error on value history",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/link-vault — link: success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/link-vault — link: missing vaultEntryId",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/link-vault — link: NaN vaultEntryId",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/link-vault — link: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/link-vault — link: not found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/link-vault — link: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/unlink-vault — unlink: success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/unlink-vault — unlink: not found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/unlink-vault — unlink: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PATCH /local-accounts/:id/unlink-vault — unlink: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id — get: success charges credits",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id — get: not found does not charge",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id — get: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id — get: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/categories — categories list: success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/categories — categories list: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/categories — categories create: success trims",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/categories — categories create: missing name",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/categories — categories create: whitespace name",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/categories — categories create: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/categories/:id — categories delete: success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/categories/:id — categories delete: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/categories/:id — categories delete: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id/points — points list: sums amounts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id/points — points list: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id/points — points list: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/points — points create: success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/points — points create: missing amount",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/points — points create: NaN amount",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/points — points create: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/points — points create: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/points/:pointId — points delete: success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/points/:pointId — points delete: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/points/:pointId — points delete: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/receipt — receipt create: existing token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/receipt — receipt create: mints token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/receipt — receipt create: retries after collision",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/receipt — receipt create: three collisions fail",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/receipt — receipt create: account not found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/receipt — receipt create: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/receipt — receipt create: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/:id/receipt — receipt revoke: success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/:id/receipt — receipt revoke: not found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/:id/receipt — receipt revoke: invalid id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/:id/receipt — receipt revoke: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token — public receipt: success with ROI",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token — public receipt: no buy price / no label",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token — public receipt: negative P&L, no category",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token — public receipt: unknown token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token — public receipt: missing token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token — public receipt: quote in token is escaped",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token — public receipt: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token/pdf — public receipt/pdf: success with ROI",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token/pdf — public receipt/pdf: no buy price / no label",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token/pdf — public receipt/pdf: negative P&L, no category",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token/pdf — public receipt/pdf: unknown token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token/pdf — public receipt/pdf: missing token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token/pdf — public receipt/pdf: quote in token is escaped",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token/pdf — public receipt/pdf: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/receipt/:token/pdf — public receipt pdf: stream throws → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category — cat receipt create: existing token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category — cat receipt create: mints token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category — cat receipt create: retries after collision",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category — cat receipt create: three collisions fail",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category — cat receipt create: blank category",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category — cat receipt create: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/category-receipt/:category — cat receipt revoke: success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/category-receipt/:category — cat receipt revoke: none active",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/category-receipt/:category — cat receipt revoke: blank category",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /local-accounts/category-receipt/:category — cat receipt revoke: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token — cat public: success aggregate",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token — cat public: empty category (no rows)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token — cat public: unknown token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token — cat public: missing token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token — cat public: quote in token is escaped",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token — cat public: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token — cat public: aggregate error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token/pdf — cat public/pdf: success aggregate",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token/pdf — cat public/pdf: empty category (no rows)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token/pdf — cat public/pdf: unknown token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token/pdf — cat public/pdf: missing token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token/pdf — cat public/pdf: quote in token is escaped",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token/pdf — cat public/pdf: db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/category-receipt/:token/pdf — cat public/pdf: aggregate error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category/email — cat email: success existing token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category/email — cat email: success mints token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category/email — cat email: no email on file",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category/email — cat email: provider failure → 502",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category/email — cat email: token mint fails",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category/email — cat email: blank category",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/category-receipt/:category/email — cat email: db error → 500 email body",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:route-middleware-chains-identical",
+      "passed": true,
+      "details": "ownership action / deny body / auth / credit gate / public-audit chain changed"
+    },
+    {
+      "name": "security:exported-requireLocalAccountOwnership-identical",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:resource-builder:account:owner found",
+      "passed": true,
+      "details": "{\"id\":9,\"ownerId\":42,\"type\":\"local_account\"} vs {\"id\":9,\"ownerId\":42,\"type\":\"local_account\"}"
+    },
+    {
+      "name": "security:resource-builder:account:row missing",
+      "passed": true,
+      "details": "{\"id\":9,\"ownerId\":-1,\"type\":\"local_account\"} vs {\"id\":9,\"ownerId\":-1,\"type\":\"local_account\"}"
+    },
+    {
+      "name": "security:resource-builder:account:non-numeric id",
+      "passed": true,
+      "details": "{\"id\":\"abc\",\"ownerId\":-1,\"type\":\"local_account\"} vs {\"id\":\"abc\",\"ownerId\":-1,\"type\":\"local_account\"}"
+    },
+    {
+      "name": "security:resource-builder:account:owner null",
+      "passed": true,
+      "details": "{\"id\":9,\"ownerId\":-1,\"type\":\"local_account\"} vs {\"id\":9,\"ownerId\":-1,\"type\":\"local_account\"}"
+    },
+    {
+      "name": "security:resource-builder:category:owner found",
+      "passed": true,
+      "details": "{\"id\":9,\"ownerId\":42,\"type\":\"local_account_category\"} vs {\"id\":9,\"ownerId\":42,\"type\":\"local_account_category\"}"
+    },
+    {
+      "name": "security:resource-builder:category:row missing",
+      "passed": true,
+      "details": "{\"id\":9,\"ownerId\":-1,\"type\":\"local_account_category\"} vs {\"id\":9,\"ownerId\":-1,\"type\":\"local_account_category\"}"
+    },
+    {
+      "name": "security:resource-builder:category:non-numeric id",
+      "passed": true,
+      "details": "{\"id\":\"abc\",\"ownerId\":-1,\"type\":\"local_account_category\"} vs {\"id\":\"abc\",\"ownerId\":-1,\"type\":\"local_account_category\"}"
+    },
+    {
+      "name": "security:resource-builder:category:owner null",
+      "passed": true,
+      "details": "{\"id\":9,\"ownerId\":-1,\"type\":\"local_account_category\"} vs {\"id\":9,\"ownerId\":-1,\"type\":\"local_account_category\"}"
+    },
+    {
+      "name": "security:resource-builder:point:owner found",
+      "passed": true,
+      "details": "{\"id\":9,\"ownerId\":42,\"type\":\"local_account_point\"} vs {\"id\":9,\"ownerId\":42,\"type\":\"local_account_point\"}"
+    },
+    {
+      "name": "security:resource-builder:point:row missing",
+      "passed": true,
+      "details": "{\"id\":9,\"ownerId\":-1,\"type\":\"local_account_point\"} vs {\"id\":9,\"ownerId\":-1,\"type\":\"local_account_point\"}"
+    },
+    {
+      "name": "security:resource-builder:point:non-numeric id",
+      "passed": true,
+      "details": "{\"id\":\"abc\",\"ownerId\":-1,\"type\":\"local_account_point\"} vs {\"id\":\"abc\",\"ownerId\":-1,\"type\":\"local_account_point\"}"
+    },
+    {
+      "name": "security:resource-builder:point:owner null",
+      "passed": true,
+      "details": "{\"id\":9,\"ownerId\":-1,\"type\":\"local_account_point\"} vs {\"id\":9,\"ownerId\":-1,\"type\":\"local_account_point\"}"
+    },
+    {
+      "name": "unit:safe",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:safeNum",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:safeDate",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:safeScore",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:calcAgeLabel",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:ageInDays",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:calcRoiPct",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:fmtAvgAgeLabel",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:fmtPublicLocalReceipt",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:computeCategoryAggregate:mixed",
+      "passed": true,
+      "details": "{\"avgAgeDays\":896,\"avgAgeLabel\":\"2.5y\",\"avgFollowers\":100,\"count\":2,\"pnlPct\":200,\"totalBuyValue\":20,\"totalPnl\":40,\"totalWorth\":60} vs {\"avgAgeDays\":896,\"avgAgeLabel\":\"2.5y\",\"avgFollowers\":100,\"count\":2,\"pnlPct\":200,\"totalBuyValue\":20,\"totalPnl\":40,\"totalWorth\":60}"
+    },
+    {
+      "name": "unit:computeCategoryAggregate:empty",
+      "passed": true,
+      "details": "{\"avgAgeDays\":null,\"avgAgeLabel\":null,\"avgFollowers\":null,\"count\":0,\"pnlPct\":null,\"totalBuyValue\":0,\"totalPnl\":null,\"totalWorth\":0} vs {\"avgAgeDays\":null,\"avgAgeLabel\":null,\"avgFollowers\":null,\"count\":0,\"pnlPct\":null,\"totalBuyValue\":0,\"totalPnl\":null,\"totalWorth\":0}"
+    },
+    {
+      "name": "unit:computeCategoryAggregate:all-no-buy",
+      "passed": true,
+      "details": "{\"avgAgeDays\":896,\"avgAgeLabel\":\"2.5y\",\"avgFollowers\":1,\"count\":1,\"pnlPct\":null,\"totalBuyValue\":0,\"totalPnl\":null,\"totalWorth\":5} vs {\"avgAgeDays\":896,\"avgAgeLabel\":\"2.5y\",\"avgFollowers\":1,\"count\":1,\"pnlPct\":null,\"totalBuyValue\":0,\"totalPnl\":null,\"totalWorth\":5}"
+    },
+    {
+      "name": "unit:findCategoryReceiptByToken:found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:fmtPublicCategoryReceipt",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:findCategoryReceiptByToken:missing",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:receiptUrl/categoryReceiptUrl",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:UPDATE drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:DELETE stops purging value history",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:GET :id 404 body changed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:points create loses amount validation",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:category revoke status 404 → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:point ownership sentinel changed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:password no longer encrypted on create/update",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:score clamp widened",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:token mint retries reduced 3 → 1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:ownership deny handler leaks 403",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:route ownership gate removed from points create",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:security",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:every-route-has-differential-case",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:every-route-has-success-and-failure-case",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-skipped-tests",
+      "passed": true,
+      "details": "115/115"
+    },
+    {
+      "name": "differential-cases-executed-db-calls",
+      "passed": true,
+      "details": "87 cases recorded interactions"
+    },
+    {
+      "name": "diff-audit:no-unrelated-changes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-syntax-errors",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-diagnostics-vs-baseline",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "status": "PASS",
+  "evidence_body_sha256": "072c5f4c588d4a01197afeb91cb7256dd45c46508b842546f8fcaefb5681f2e7",
+  "generated_at": "2026-09-30T04:07:47.229Z"
+}

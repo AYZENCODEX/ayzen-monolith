@@ -1,0 +1,16 @@
+{
+  "name": "@ayzen/xuka",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "dependencies": {
+    "@ayzen/capabilities": "workspace:*",
+    "@ayzen/contracts": "workspace:*",
+    "@ayzen/domain-boundaries": "workspace:*",
+    "@ayzen/endpoint-registry": "workspace:*",
+    "@ayzen/events": "workspace:*"
+  }
+}

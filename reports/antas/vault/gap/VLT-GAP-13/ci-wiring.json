@@ -1,0 +1,64 @@
+{
+  "gap": "VLT-GAP-13",
+  "sub_phase": "VLT-GAP-13-C",
+  "checked_at": "2026-10-12T17:33:11.218Z",
+  "validator_version": "13-C.1",
+  "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "6b5d17e8018a8b751db4d112c47228886027af89817d540e59dc7a706b341050",
+  "package_scripts": {
+    "validate:vault-routes": "node scripts/antas/vault/gap/validate-vlt-gap-13.mjs",
+    "validate:vault-routes:self-test": "node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --self-test",
+    "validate:vault-routes:differential": "node scripts/antas/vault/gap/differential-vlt-gap-13-E.mjs",
+    "validate:vault-routes:ci-wiring": "node scripts/antas/vault/gap/validate-vlt-gap-13-C.mjs",
+    "validate:vault-routes:gate": "node scripts/antas/vault/gap/validate-vlt-gap-13-D.mjs"
+  },
+  "workflows": {
+    ".github/workflows/ci.yml": {
+      "validate:vault-routes": {
+        "line": 44,
+        "job": "validation"
+      },
+      "validate:vault-routes:self-test": {
+        "line": 45,
+        "job": "validation"
+      },
+      "validate:vault-routes:differential": {
+        "line": 46,
+        "job": "validation"
+      },
+      "validate:vault-routes:ci-wiring": {
+        "line": 47,
+        "job": "validation"
+      },
+      "validate:vault-routes:gate": {
+        "line": 48,
+        "job": "validation"
+      }
+    },
+    "ci/enforcement-pipeline.yml": {
+      "validate:vault-routes": {
+        "line": 25,
+        "job": "blocking-gates"
+      },
+      "validate:vault-routes:self-test": {
+        "line": 26,
+        "job": "blocking-gates"
+      },
+      "validate:vault-routes:differential": {
+        "line": 27,
+        "job": "blocking-gates"
+      },
+      "validate:vault-routes:ci-wiring": {
+        "line": 28,
+        "job": "blocking-gates"
+      },
+      "validate:vault-routes:gate": {
+        "line": 29,
+        "job": "blocking-gates"
+      }
+    }
+  },
+  "errors": [],
+  "status": "PASS"
+}

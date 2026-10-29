@@ -1,0 +1,53 @@
+{
+  "phase": "F11-F12",
+  "date": "2026-10-19",
+  "basedOn": "AYZEN4X1-finance-wp4-f10b (provenance: no .git in archive, SHA UNAVAILABLE)",
+  "status": "BLOCKED",
+  "blockedBecause": "No node_modules and no Postgres in the authoring environment: typecheck, build, test:finance-static and test:finance-db were NOT run.",
+  "findings": [
+    {
+      "id": "F11",
+      "status": "FIXED_IN_CODE_UNRUN",
+      "decision": "real (float32) -> double precision (float64) for 43 money-like columns in 16 finance_* tables. numeric/minor units rejected for now: pg returns numeric as string, which would break every sql<number> SUM and every route/API type.",
+      "changed": [
+        "lib/db/src/schema/finance.ts (real -> doublePrecision, 43 columns)",
+        "artifacts/api-server/src/lib/schema-migrations.ts (16 guarded DO blocks appended)",
+        "migrations/123_finance_money_double_precision.sql (same blocks)",
+        "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs (applies the conversion in the isolated schema; registers f11-precision test)",
+        "artifacts/api-server/src/finance/f11-precision.db.test.ts (new)",
+        "artifacts/api-server/src/finance/application/wp4-use-cases.db.test.ts (tolerance 1e-6 -> 1e-12)"
+      ],
+      "verifiedHere": [
+        "43/43 real columns in the drizzle schema mapped; cross-checked against REAL columns in MIGRATIONS (none missed)",
+        "conversion rule checked numerically: 99999.992 -> 99999.99, 0.1f -> 0.1, 12.5 unchanged, 123456.78125 -> 123456.78; values float32 already rounded (1000000.01 -> 1000000.0) cannot be recovered"
+      ],
+      "notVerified": [
+        "migration SQL on a real Postgres (DO block, ALTER TYPE with defaults, lock time)",
+        "pnpm typecheck with doublePrecision",
+        "invoice tables (finance_invoices, finance_invoice_lines, finance_invoice_line_items, finance_payment_agreements, finance_net_worth_snapshots) are not in the isolated test schema, so their conversion has no DB test"
+      ],
+      "sideObservation": "finance_invoices.discount_value and tax_rate exist only in migrations/034_finance_invoice_enterprise.sql, not in the startup MIGRATIONS array; the conversion skips them wherever they are absent."
+    },
+    {
+      "id": "F12",
+      "status": "FIXED_IN_CODE_UNRUN",
+      "changed": [
+        "artifacts/api-server/src/lib/express-async-errors.ts (new; patches Express 4 Layer, idempotent)",
+        "artifacts/api-server/src/types/express-layer.d.ts (new)",
+        "artifacts/api-server/src/lib/process-guards.ts (new; unhandledRejection logger, optional exit)",
+        "artifacts/api-server/src/middlewares/error-handler.ts (delegates when headers already sent)",
+        "artifacts/api-server/src/index.ts, app.ts, worker.ts (first-import wiring)",
+        "artifacts/api-server/src/lib/express-async-errors.test.ts, process-guards.test.ts (new; added to test:finance-static)"
+      ],
+      "verifiedHere": [
+        "wrapper logic: 8/8 cases against a stand-in Layer with Express 4 semantics (async throw, late throw, success, sync throw, 4-arg error middleware, arity preserved, single wrap, zero unhandled rejections)",
+        "deep import needs the explicit .js extension under native Node ESM; fixed after the simulation failed without it"
+      ],
+      "notVerified": [
+        "against real Express 4.21 and the esbuild bundle (the Layer import must resolve to the same module Express uses; esbuild bundles express, so it should)",
+        "the two new test files themselves"
+      ]
+    }
+  ],
+  "nextSafeStep": "In the Replit checkout: pnpm typecheck, pnpm test:finance-static, pnpm test:finance-db, then boot once and confirm no finance_* column is still real. Then say go for WP-5."
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "registry": "ANTAS domain ownership",
+  "rules": {
+    "oneOwnerPerResource": true,
+    "privateInternalsAreNotPublicContracts": true,
+    "identityCannotReadArbitraryDomainTables": true,
+    "migrationsRequireOwningDomain": true
+  },
+  "domains": [
+    { "name": "identity", "owner": "identity", "apiOwner": "identity", "migrationOwner": "identity", "eventOwner": "identity", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "platform" },
+    { "name": "authorization", "owner": "security", "apiOwner": "security", "migrationOwner": "security", "eventOwner": "security", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "platform" },
+    { "name": "workspace", "owner": "platform", "apiOwner": "platform", "migrationOwner": "platform", "eventOwner": "platform", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "platform" },
+    { "name": "finance", "owner": "finance", "apiOwner": "finance", "migrationOwner": "finance", "eventOwner": "finance", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "finance" },
+    { "name": "vault", "owner": "vault", "apiOwner": "vault", "migrationOwner": "vault", "eventOwner": "vault", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "vault" },
+    { "name": "mail", "owner": "mail", "apiOwner": "mail", "migrationOwner": "mail", "eventOwner": "mail", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "mail" },
+    { "name": "notification", "owner": "platform", "apiOwner": "notification", "migrationOwner": "notification", "eventOwner": "notification", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "platform" },
+    { "name": "workflow", "owner": "platform", "apiOwner": "workflow", "migrationOwner": "workflow", "eventOwner": "workflow", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "platform" },
+    { "name": "marketplace", "owner": "platform", "apiOwner": "marketplace", "migrationOwner": "marketplace", "eventOwner": "marketplace", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "platform" },
+    { "name": "event-bus", "owner": "platform", "apiOwner": "platform", "migrationOwner": "platform", "eventOwner": "platform", "authorizationOwner": "security", "auditOwner": "platform", "operationalOwner": "platform" }
+  ]
+}

@@ -1,0 +1,50 @@
+name: ayzen-enforcement-pipeline
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  blocking-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm validate:enforcement-phases
+      - run: node tools/enforcement-orchestrator/index.mjs
+      - run: node tools/secret-audit/index.mjs
+      - run: node tools/telegram-circuit-validator/index.mjs
+      - run: node tools/slo-gate/index.mjs
+      # VLT-GAP-13: Vault route-thinness (blocking)
+      - run: pnpm validate:vault-routes
+      - run: pnpm validate:vault-routes:self-test
+      - run: pnpm validate:vault-routes:differential
+      - run: pnpm validate:vault-routes:ci-wiring
+      - run: pnpm validate:vault-routes:gate
+      # VLT-GAP-14: Vault architecture/dependency rules (blocking)
+      - run: pnpm validate:vault-architecture
+      - run: pnpm validate:vault-architecture:self-test
+      - run: pnpm validate:vault-architecture:ci-wiring
+      - run: pnpm validate:vault-architecture:gate
+      # VLT-GAP-16: Vault duplicate/legacy-implementation scan (blocking)
+      - run: pnpm validate:vault-duplicates
+      - run: pnpm validate:vault-duplicates:self-test
+      - run: pnpm validate:vault-duplicates:ci-wiring
+      - run: pnpm validate:vault-duplicates:gate
+      # VLT-GAP-17: migration-map truth gate (blocking)
+      - run: pnpm validate:vault-map
+      - run: pnpm validate:vault-map:self-test
+      # VLT-GAP-18: anti-bypass / evidence tamper gate (blocking)
+      # VLT-GAP-19: runtime / chaos / recovery gate (blocking)
+      - run: pnpm validate:vault-chaos
+      # VLT-GAP-20: performance / query regression vs the frozen pre-extraction code and the committed 20-A capture. Blocking.
+      - run: pnpm validate:vault-perf
+      - run: pnpm validate:vault-perf:ci-wiring
+      - run: pnpm validate:vault-perf:gate
+      - run: pnpm validate:vault-tamper

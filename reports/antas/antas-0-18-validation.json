@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "ANTAS",
+  "phaseRange": [
+    0,
+    18
+  ],
+  "generatedAt": "2026-09-29T06:06:07.500Z",
+  "repositoryStatus": "implemented",
+  "productionReadiness": "UNVERIFIED",
+  "phases": 19,
+  "failures": [],
+  "notices": [
+    "Runtime, provider, staging, production, and release-owner gates remain UNVERIFIED."
+  ]
+}

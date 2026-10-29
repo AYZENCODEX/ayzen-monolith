@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-6b",
+  "title": "Payment agreements: 6 handlers to application/payment-agreements; F19 to F22; first real run of the WP-6b DB suite",
+  "timestamp": "2026-10-20T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Code checks pass and the WP-6b DB tests ran for the first time on a local Postgres 16.15 (first run 165/166 with one test bug, then 166/166 three times; after the two owner decisions below, 176/176). Still BLOCKED by the project's own rule: not run in the Replit checkout against the project's real database setup, no commit SHA, full pnpm typecheck and pnpm build not run, no staging walk-through of the verify flow.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; cumulative with WP-2b to WP-6a; bound by content in fin-provenance-manifest.json."
+  },
+  "oldToNew": {
+    "finance/application/payment-agreements.ts": {
+      "GET /finance/payment-agreements/public/:token": "getPublicAgreementView (+ findAgreementByToken)",
+      "POST /finance/payment-agreements/public/:token/passkey/options": "createPasskeyOptions",
+      "POST /finance/payment-agreements/public/:token/passkey/verify": "confirmAgreementWithPasskey",
+      "GET /finance/payment-agreements/public/:token/evidence-pdf": "streamAgreementEvidencePdf",
+      "POST /finance/payment-agreements/:id/verify": "verifyPaymentAgreement",
+      "POST /finance/payment-agreements/:id/dispute": "disputePaymentAgreement",
+      "lookup before PDP check": "findAgreementInvoiceOwner"
+    },
+    "application/invoices#cancelInvoice": "F22 fix lives here; paid and creditor_verified invoices refuse cancel"
+  },
+  "findings": {
+    "F19": "passkey confirmation: counter update and status flip in one transaction, flip conditional on status = submitted; DB errors are 500 not 401",
+    "F20": "dispute: one transaction under the invoice row lock, conditional on the agreement still being open; settled or cancelled invoices keep their status",
+    "F21": "verify: locks invoice first, re-reads agreement under the lock, refuses a claim larger than amount - paidAmount (409)",
+    "F22": "cancelInvoice: one transaction under the row lock; paid and creditor_verified return already_paid (400) (plus the appeal path, see ownerDecisionsAfter6b)"
+  },
+  "behaviorChanges": [
+    "A paid invoice is cancelled only as an appeal: DELETE /finance/invoices/:id with a reason (3 to 500 characters) reverses the verified payment; without a reason it is refused with 400 and a message that explains the appeal.",
+    "submit-payment refuses a claim that, with the pending claims, would exceed the balance: 409, with the unclaimed amount. An omitted amount claims only the unclaimed part.",
+    "Verify refuses an oversized claim with 409 and the remaining balance; the claim stays reviewable so the creditor can dispute it.",
+    "A database error during passkey confirmation is a 500 instead of a misleading 401.",
+    "The confirmation race loser gets 400 'This agreement is already disputed.' instead of silently winning."
+  ],
+  "testFix": {
+    "test": "verifying the same agreement twice at once posts one repayment and counts it once",
+    "file": "artifacts/api-server/src/finance/application/wp6b-use-cases.db.test.ts",
+    "problem": "First real run: 1 of 166 failed. The test expected both losers of a 3-way verify race to answer 'already_verified'. A loser whose unlocked pre-check runs after the winner commits correctly answers 'not_confirmed' (the 400 a repeat always got), so the outcome is timing dependent.",
+    "cause": "test expectation too strict; no code defect (one repayment, entry amount 40 and paidAmount 60 are asserted afterwards)",
+    "fix": "assert exactly one 'ok', every other result in {already_verified, not_confirmed}, then the unchanged books assertions"
+  },
+  "ran": [
+    {
+      "check": "pnpm test:finance-db (Postgres 16.15, throwaway local DB, isolated schema)",
+      "result": "176/176 pass, exit 0 (10 new tests: 3 pending-claim, 7 appeal; 5 older tests adapted, see testChanges)"
+    },
+    {
+      "check": "earlier, before the owner decisions: same suite",
+      "result": "first run 165/166 (racy test expectation), then 166/166 three times"
+    },
+    {
+      "check": "mutation: F21 remaining-balance check disabled in verify",
+      "result": "3 F21 tests failed, restored"
+    },
+    {
+      "check": "mutation: pending claims no longer subtracted in submit",
+      "result": "4 tests failed (3 new + the adapted wp6a partial-amount test), restored"
+    },
+    {
+      "check": "mutation: appeal does not add the money back to the entry",
+      "result": "4 appeal tests failed, restored"
+    },
+    {
+      "check": "pnpm test:finance-static",
+      "result": "71/71 pass (2 new gates: appeal needs a validated reason and is atomic; submit counts pending claims and answers 409)"
+    },
+    {
+      "check": "node scripts/antas/finance/validate-boundaries.mjs",
+      "result": "PASS, 58 Finance sources, 0 findings"
+    },
+    {
+      "check": "tsc -p artifacts/api-server --noEmit (after tsc --build of lib/db)",
+      "result": "exit 0"
+    }
+  ],
+  "notRun": [
+    "Replit checkout run (pnpm test:finance-db against the project's own database setup)",
+    "pnpm typecheck in full: typecheck:libs failed in lib/api-client-react (missing react types, because only the api-server workspace was installed here); not a Finance file, but not proven green either",
+    "pnpm build",
+    "staging walk-through of the passkey confirm, verify and dispute flow",
+    "real WebAuthn assertions (the tests use the DB and use-case layer, not a browser authenticator)",
+    "real SMTP/Telegram delivery"
+  ],
+  "docCorrections": [
+    "finance-remaining-scope.md WP-6 row: 6b status changed from unrun to DB-tested locally. The two remaining direct-db routes are PUT /finance/payment-methods/:id in finance-invoices.ts and the false-positive helper block after DELETE /finance/books/:id in finance.ts (verified by grep); the row already said so in this tree.",
+    "finance-safety-findings.md: F19 to F22 and the remaining-risk paragraph moved from unrun to DB-tested locally; F22 appeal path and the resolved pending-claims decision documented."
+  ],
+  "openProductDecisions": [
+    "reopen after a dispute lands on viewed/partially_paid even when other claims are still pending"
+  ],
+  "ratchet": "routes with direct db.*: 8 to 2",
+  "next": "Run pnpm test:finance-db, pnpm typecheck and pnpm build in Replit; add the 'payment not received' action to the invoice screen; walk the verify, dispute and appeal flows on staging; then WP-7.",
+  "ownerDecisionsAfter6b": {
+    "paidInvoiceAppeal": "Reverses the veto of the F22 behaviour change in part. A paid or creditor_verified invoice still cannot be cancelled by a plain cancel; with a reason (the payment was not received) DELETE /finance/invoices/:id cancels it and reverses the verified payment atomically: claims -> disputed with reason, verify's repayment row deleted and the amount added back to the entry (partial or pending), contra journal posted only if the original exists and is not yet reversed, paidAmount reduced. New: ledger/journal#postRepaymentReversalJournalInTx, application/invoices#cancelInvoice(opts), route reason validation, event payment_reversed_cancelled. No schema change.",
+    "pendingClaims": "submit counts submitted and passkey_confirmed claims under the invoice lock; a claim that would exceed remaining minus pending is refused (409 pending_claims with pending and available); an omitted amount claims only what is unclaimed; disputed and verified claims do not count as pending."
+  },
+  "testChanges": {
+    "wp6b racy assertion": "3-way verify race accepts already_verified or not_confirmed for the losers",
+    "wp6b F21 tests and one dispute test": "queue their second claim through a direct-insert helper (stackedClaim), because submit now refuses stacked claims",
+    "wp6a partial-amount test": "second claim for 10 is now pending_claims with pending 40.005 and available 0"
+  },
+  "knownLimits": [
+    "Appeal within a fraction of a second after a verify finds no repayment journal yet (it is posted after the commit) and leaves it posted.",
+    "A fully reversed entry returns to 'pending'; its earlier 'overdue' or 'active' status is not stored (the late-fee job re-marks overdue).",
+    "Web and mobile clients still call plain DELETE; they need a 'payment not received' action that sends the reason.",
+    "Appeal recognises the posted repayment by the note verify writes; a repayment row edited or deleted by hand is not reversed (the entry is not given money that was never taken off)."
+  ]
+}

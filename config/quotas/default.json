@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "defaults": {
+    "app": { "limit": 10000, "windowMs": 60000 },
+    "service": { "limit": 5000, "windowMs": 60000 },
+    "workspace": { "limit": 1000, "windowMs": 60000 },
+    "notification": { "limit": 1000, "windowMs": 86400000 }
+  },
+  "backpressure": {
+    "eventConsumerLag": "pause-low-priority",
+    "workflowQueueDepth": "reject-new-noncritical",
+    "notificationProvider": "fallback-or-queue"
+  },
+  "enforcement": "shared-quota-service"
+}

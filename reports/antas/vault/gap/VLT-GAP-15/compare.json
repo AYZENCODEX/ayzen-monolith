@@ -1,0 +1,297 @@
+{
+  "gap": "VLT-GAP-15",
+  "sub": "VLT-GAP-15-C",
+  "stage": "compare",
+  "checked_at": "2023-11-14T22:13:20.000Z",
+  "total_cells": 2229,
+  "equal_cells": 2229,
+  "groups": {
+    "entity-secret": {
+      "cells": 614,
+      "equal_cells": 614,
+      "routes": 41,
+      "dimension_events_old_vs_new": {
+        "db_state": {
+          "old": 3668,
+          "new": 3668
+        },
+        "events": {
+          "old": 66,
+          "new": 66
+        },
+        "encrypted_values": {
+          "old": 14,
+          "new": 14
+        },
+        "side_effects": {
+          "old": 53,
+          "new": 53
+        },
+        "audit": {
+          "old": 52,
+          "new": 52
+        }
+      },
+      "unexercised_dimensions": [],
+      "shallow_routes": [
+        "GET /vault/activity",
+        "GET /vault/gas-overview"
+      ]
+    },
+    "local-account": {
+      "cells": 345,
+      "equal_cells": 345,
+      "routes": 23,
+      "dimension_events_old_vs_new": {
+        "db_state": {
+          "old": 642,
+          "new": 642
+        },
+        "encrypted_values": {
+          "old": 217,
+          "new": 217
+        },
+        "side_effects": {
+          "old": 13,
+          "new": 13
+        }
+      },
+      "unexercised_dimensions": [],
+      "shallow_routes": [
+        "POST /local-accounts/category-receipt/:category",
+        "POST /local-accounts/category-receipt/:category/email"
+      ]
+    },
+    "kyc": {
+      "cells": 195,
+      "equal_cells": 195,
+      "routes": 13,
+      "dimension_events_old_vs_new": {
+        "db_state": {
+          "old": 287,
+          "new": 287
+        },
+        "encrypted_values": {
+          "old": 407,
+          "new": 407
+        },
+        "side_effects": {
+          "old": 13,
+          "new": 13
+        }
+      },
+      "unexercised_dimensions": [],
+      "shallow_routes": []
+    },
+    "game-marketplace": {
+      "cells": 225,
+      "equal_cells": 225,
+      "routes": 15,
+      "dimension_events_old_vs_new": {
+        "db_state": {
+          "old": 579,
+          "new": 579
+        },
+        "encrypted_values": {
+          "old": 174,
+          "new": 174
+        },
+        "side_effects": {
+          "old": 13,
+          "new": 13
+        }
+      },
+      "unexercised_dimensions": [],
+      "shallow_routes": []
+    },
+    "security-access": {
+      "cells": 255,
+      "equal_cells": 255,
+      "routes": 17,
+      "dimension_events_old_vs_new": {
+        "db_state": {
+          "old": 908,
+          "new": 908
+        },
+        "side_effects": {
+          "old": 13,
+          "new": 13
+        }
+      },
+      "unexercised_dimensions": [],
+      "shallow_routes": []
+    },
+    "backup-restore": {
+      "cells": 180,
+      "equal_cells": 180,
+      "routes": 12,
+      "dimension_events_old_vs_new": {
+        "db_state": {
+          "old": 266,
+          "new": 266
+        },
+        "audit": {
+          "old": 44,
+          "new": 44
+        }
+      },
+      "unexercised_dimensions": [
+        "side_effects",
+        "encrypted_values"
+      ],
+      "shallow_routes": []
+    },
+    "snapshot-trash": {
+      "cells": 174,
+      "equal_cells": 174,
+      "routes": 14,
+      "dimension_events_old_vs_new": {
+        "db_state": {
+          "old": 792,
+          "new": 792
+        },
+        "audit": {
+          "old": 78,
+          "new": 78
+        },
+        "side_effects": {
+          "old": 3,
+          "new": 3
+        },
+        "encrypted_values": {
+          "old": 18,
+          "new": 18
+        }
+      },
+      "unexercised_dimensions": [],
+      "shallow_routes": []
+    },
+    "share-attachment": {
+      "cells": 225,
+      "equal_cells": 225,
+      "routes": 15,
+      "dimension_events_old_vs_new": {
+        "db_state": {
+          "old": 1009,
+          "new": 1009
+        },
+        "events": {
+          "old": 13,
+          "new": 13
+        },
+        "audit": {
+          "old": 26,
+          "new": 26
+        },
+        "encrypted_values": {
+          "old": 26,
+          "new": 26
+        },
+        "side_effects": {
+          "old": 11,
+          "new": 11
+        }
+      },
+      "unexercised_dimensions": [],
+      "shallow_routes": []
+    },
+    "health": {
+      "cells": 16,
+      "equal_cells": 16,
+      "routes": 4,
+      "dimension_events_old_vs_new": {
+        "db_state": {
+          "old": 183,
+          "new": 183
+        }
+      },
+      "unexercised_dimensions": [
+        "side_effects"
+      ],
+      "shallow_routes": []
+    }
+  },
+  "sensitivity_probes": [
+    {
+      "mutation": "status code",
+      "applied": true,
+      "detected_cells": 39
+    },
+    {
+      "mutation": "error message",
+      "applied": true,
+      "detected_cells": 33
+    },
+    {
+      "mutation": "db query arg",
+      "applied": true,
+      "detected_cells": 40
+    },
+    {
+      "mutation": "dropped side effect",
+      "applied": true,
+      "detected_cells": 10
+    }
+  ],
+  "legacy_differentials": {
+    "differential-vlt-gap-06-D.mjs": {
+      "exit": 0,
+      "status": "PASS",
+      "last_line": "scenarios=25 calls=59 diffs=0"
+    },
+    "differential-vlt-gap-08.mjs": {
+      "exit": 0,
+      "status": "PASS",
+      "last_line": "scenarios=33 calls=60 diffs=0"
+    },
+    "differential-vlt-gap-09.mjs": {
+      "exit": 0,
+      "status": "PASS",
+      "last_line": "scenarios=55 calls=105 ok_responses=38 diffs=0"
+    },
+    "differential-vlt-gap-11.mjs": {
+      "exit": 0,
+      "status": "PASS",
+      "last_line": "VLT-GAP-11 differential PASS — 20 executed comparisons (scan 7, cron 6, toHealthInput 7), 8/8 mutants caught"
+    },
+    "differential-vlt-gap-12.mjs": {
+      "exit": 0,
+      "status": "PASS",
+      "last_line": "VLT-GAP-12 differential PASS — 25 executed comparisons (16 section readers + re-encryptors, 14 restore helpers, 10 identity probes, 3 lookups; 16 gather runs re"
+    },
+    "differential-vlt-gap-13-E.mjs": {
+      "exit": 0,
+      "status": "PASS",
+      "last_line": "VLT-GAP-13-E differential PASS — 49 scenarios identical (status/body/SQL/auth), route table equal (5 routes), statuses 200,400,403,404,409,500"
+    }
+  },
+  "stale_legacy_differentials": [],
+  "open_for_15_D": [
+    {
+      "group": "backup-restore",
+      "dimension": "side_effects",
+      "reason": "cloud upload (fetch), OAuth token exchange/refresh and failure notifications live inside the faked backup-cloud/alerts boundaries; covered by differential-vlt-gap-15-backup, which runs the OLD frozen lib/vault-backup-cloud + lib/vault-backup-alerts against the NEW vault/infrastructure/backup/{cloud,alerts} with a scripted fetch and recording notification/email/telegram sinks (every request, DB op and sink call compared, failing sinks included)",
+      "covered_by_passing_differential": true
+    },
+    {
+      "group": "backup-restore",
+      "dimension": "encrypted_values",
+      "reason": "envelope key wrap/unwrap lives inside the faked backup-envelope boundary; covered by differential-vlt-gap-15-backup, which runs the OLD frozen lib/vault-backup-envelope against the NEW vault/crypto/backup-envelope (real node:crypto + real aes-gcm, NEW key-store port and repository SQL executed against a stateful encryption_keys fake, cross-decrypt both directions, AAD owner binding, legacy-KEK fallback, rotation)",
+      "covered_by_passing_differential": true
+    },
+    {
+      "group": "health",
+      "dimension": "side_effects",
+      "reason": "createNotification/telegram/email fire only for users with alert subscriptions; replay rows have none (usersAlerted=0); covered by differential-vlt-gap-11 (executes notify/telegram/email with subscribed users, 8/8 mutants caught)",
+      "covered_by_passing_differential": true
+    }
+  ],
+  "equivalence_complete": false,
+  "binding": {
+    "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+    "commit_binding": "git-head",
+    "source_tree_sha256": "edac0a876999db0c00066f502434df52e40bba9fa9e40a97858714996d7e3306"
+  },
+  "errors": [],
+  "status": "PASS"
+}

@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-02F",
+  "title": "Extract payment-method persistence and QR logic",
+  "timestamp": "2026-10-17T02:23:03+00:00",
+  "status": "PASS",
+  "statusReason": "Payment-method CRUD and public-safe QR/listing logic now have a canonical owner, the isolated Replit database tests pass, and existing route authorization/response adapters remain in place.",
+  "commit": "9d2265005539307911672cb7ba17f2047c1de5c4; working tree contains the phase changes and is not committed.",
+  "objective": "Move payment-method persistence, default management, public-safe listing, labels, and QR generation out of invoice routes and the legacy invoice helper while preserving route behavior and compatibility exports.",
+  "oldToNewMapping": [
+    {
+      "from": "routes/finance-invoices.ts: GET/POST /finance/payment-methods and PUT/DELETE /finance/payment-methods/:id",
+      "to": "finance/payment-methods/payment-methods.ts",
+      "symbols": [
+        "listFinancePaymentMethods",
+        "createFinancePaymentMethod",
+        "resetFinancePaymentMethodDefaults",
+        "updateFinancePaymentMethod",
+        "deleteFinancePaymentMethod"
+      ]
+    },
+    {
+      "from": "lib/finance-invoice.ts: payment method labels, QR generation, and active public listing",
+      "to": "finance/payment-methods/payment-methods.ts",
+      "symbols": [
+        "PAYMENT_METHOD_LABELS",
+        "generatePaymentQrDataUrl",
+        "listActivePaymentMethods"
+      ]
+    }
+  ],
+  "migratedConsumers": [
+    {
+      "consumer": "artifacts/api-server/src/routes/finance-invoices.ts",
+      "status": "Imports the canonical owner. requireAuth, PEP ownership/authorization middleware, route status codes, date formatting, and the existing default-reset-before-authorization ordering are retained."
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/finance-invoice.ts",
+      "status": "Uses the canonical active-method listing and re-exports the established QR, label, and public-method symbols for compatibility."
+    }
+  ],
+  "filesChangedOrAdded": [
+    "artifacts/api-server/src/finance/payment-methods/payment-methods.ts",
+    "artifacts/api-server/src/finance/payment-methods/payment-methods.db.test.ts",
+    "artifacts/api-server/src/lib/finance-invoice.ts",
+    "artifacts/api-server/src/routes/finance-invoices.ts",
+    "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs",
+    "scripts/antas/finance/validate-boundaries.mjs",
+    "docs/antas/finance/finance-boundaries.md",
+    "docs/antas/finance/finance-target-tree-status.md",
+    "reports/antas/finance/fin-01-dependency-scan.json"
+  ],
+  "databaseTestIsolation": {
+    "target": "Replit development database, explicitly selected as replit-test",
+    "runner": "Creates a uniquely named isolated schema, applies allowlisted Finance table DDL, runs tests, and drops the schema.",
+    "publicSchemaFallback": false,
+    "schemaMigration": false,
+    "result": {
+      "tests": 11,
+      "passed": 11,
+      "failed": 0
+    }
+  },
+  "commands": [
+    {
+      "command": "pnpm --filter @workspace/api-server typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server test:finance-db",
+      "exitCode": 1,
+      "result": "The new test incorrectly assumed the public active-method listing used CRUD ordering; the assertion was corrected to identify the default by method type."
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server test:finance-db",
+      "exitCode": 0,
+      "tests": 11,
+      "passed": 11,
+      "failed": 0
+    },
+    {
+      "command": "pnpm validate:finance-boundaries",
+      "exitCode": 1,
+      "result": "The new owner check initially treated generic getRateMap/toBase functions in unrelated AI/net-worth modules as duplicate report use cases; those helpers were excluded from the report-use-case ownership assertion."
+    },
+    {
+      "command": "pnpm validate:finance-boundaries",
+      "exitCode": 0,
+      "financeSources": 27,
+      "findings": 0
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server exec node --test --import tsx src/finance/domain/*.test.ts",
+      "exitCode": 0,
+      "tests": 11,
+      "passed": 11,
+      "failed": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "command": "Start application workflow: API build, frontend build, and API server on port 5000",
+      "exitCode": 0,
+      "result": "Workflow restarted and remained running. API and frontend builds succeeded; Vite emitted non-blocking sourcemap/chunk-size warnings."
+    },
+    {
+      "command": "curl GET /api/finance/summary and GET /api/finance/payment-methods without a session",
+      "exitCode": 0,
+      "result": "Both endpoints returned HTTP 401, as expected for unauthenticated requests."
+    }
+  ],
+  "invariants": [
+    {
+      "name": "Default selection on create",
+      "status": "Database characterization confirms creating a new default clears the user's prior default."
+    },
+    {
+      "name": "Default reset before PEP authorization on update",
+      "status": "The existing route ordering remains unchanged; this intentionally unusual side-effect ordering is not altered or represented as a safe authorization design."
+    },
+    {
+      "name": "Public payment-method exposure",
+      "status": "Database characterization confirms inactive rows are excluded, default state is returned as a boolean, and QR output is produced for bank and mobile-money methods."
+    },
+    {
+      "name": "Authentication",
+      "status": "Both payment-method route smoke requests returned HTTP 401 without a session. Authenticated route behavior was not exercised."
+    }
+  ],
+  "runtimeVerification": {
+    "workflow": "Start application",
+    "status": "RUNNING",
+    "result": "The API listened on port 5000, the root page rendered, and both unauthenticated Finance route smoke checks returned 401. Authenticated Finance UI was not visually verified."
+  },
+  "limitations": [
+    "PASS applies only to this low-risk payment-method leaf extraction, not completion of the Finance target tree.",
+    "Authenticated HTTP response contracts and PEP policy behavior still require route-level tests.",
+    "Payment-method changes preserve existing behavior, including the update default-reset ordering; no schema migration was performed.",
+    "Money-moving ledger, schedule, invoice lifecycle, fee, job, and wallet-bridge extraction remains blocked by missing rollback, retry/idempotency, and authorization invariants.",
+    "No Finance service cutover was performed."
+  ],
+  "diffReview": {
+    "result": "git diff --check passed.",
+    "singleOwnerAndCompatibility": "The Finance boundary scan verifies payment-method function ownership, route imports, and the legacy finance-invoice compatibility export."
+  },
+  "evidencePath": "reports/antas/finance/fin-02f-evidence.json",
+  "nextSafeStep": "Keep money-critical modules in their existing owners until the FIN-03 rollback, retry/idempotency, concurrency, and authorization test gates pass."
+}

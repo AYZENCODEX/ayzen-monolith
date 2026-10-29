@@ -1,0 +1,84 @@
+import type { Request } from "express";
+import { rotateBackupEnvelopeKey, getActiveBackupEnvelopeVersion } from "../../crypto/backup-envelope";
+import { logActivity } from "../../../lib/activity";
+import { logBackupAudit, listBackupAuditLogAdmin } from "../../infrastructure/backup/audit";
+import { listBackupKeyRows } from "../../infrastructure/repositories/vault-backup-repository";
+
+export interface VaultBackupResult { status: number; body: unknown }
+
+/**
+ * Admin visibility + manual trigger for the "vault-backup" envelope key chain.
+ * Moved unchanged from routes/vault-backup-key.ts (VLT-GAP-08); see that
+ * route's header for the (still accurate) operational warnings: rotation only
+ * affects NEW backups, is unrelated to VAULT_MASTER_KEY, and nothing here ever
+ * returns wrapped_dek or raw key material.
+ */
+
+// Vault Backup hardening, Round 6 — same threshold
+// vault/infrastructure/backup/key-rotation-cron.ts auto-rotates against,
+// surfaced so an admin sees "stale" before the cron would even act.
+const ROTATION_DAYS = Number(process.env.VAULT_BACKUP_KEY_ROTATION_DAYS ?? 90);
+
+/** GET /admin/vault-backup/key-status — list DEK versions (metadata only). */
+export async function getBackupKeyStatus(): Promise<VaultBackupResult> {
+  try {
+    const rows = await listBackupKeyRows();
+    const activeVersion = getActiveBackupEnvelopeVersion();
+    const activeRow = rows.find(r => Number(r.version) === activeVersion);
+    const activeAgeDays = activeRow ? (Date.now() - new Date(activeRow.created_at).getTime()) / 86_400_000 : null;
+
+    return {
+      status: 200,
+      body: {
+        activeVersion,
+        activeKeyAgeDays: activeAgeDays !== null ? Math.floor(activeAgeDays) : null,
+        rotationThresholdDays: ROTATION_DAYS,
+        // Cosmetic-only flag for the UI to badge — the enforcing check lives
+        // in the cron (VAULT_BACKUP_KEY_ROTATION_DAYS), not here.
+        stale: activeAgeDays !== null && ROTATION_DAYS > 0 && activeAgeDays >= ROTATION_DAYS,
+        versions: rows.map(r => ({ version: Number(r.version), active: !!r.active, createdAt: r.created_at })),
+      },
+    };
+  } catch (e: any) {
+    return { status: 500, body: { error: e.message } };
+  }
+}
+
+/** POST /admin/vault-backup/rotate-key — generate + activate a new DEK. */
+export async function rotateBackupKey(adminId: number | null | undefined, req: Request): Promise<VaultBackupResult> {
+  try {
+    const newVersion = await rotateBackupEnvelopeKey();
+    if (adminId) {
+      // No key material in the log — only the fact that a rotation happened
+      // and which version is now active.
+      await logActivity(adminId, "vault_backup_key_rotated", "encryption_key", newVersion, "vault-backup", { newVersion });
+    }
+    // Vault Backup hardening, Round 6 — also record it in the dedicated
+    // backup audit trail (ownerUserId null: namespace-wide, not one user's data).
+    await logBackupAudit({
+      ownerUserId: null, actorUserId: adminId ?? null, actorKind: "admin",
+      eventType: "key_rotated", keyVersion: newVersion, req, detail: { trigger: "manual" },
+    });
+    return { status: 200, body: { ok: true, newActiveVersion: newVersion } };
+  } catch (e: any) {
+    return { status: 500, body: { error: e.message } };
+  }
+}
+
+/**
+ * GET /admin/vault-backup/audit-log — backup-security event feed.
+ * Optional ?userId= to scope to one account (incident response).
+ */
+export async function getAdminBackupAuditLog(query: { userId?: unknown; limit?: unknown }): Promise<VaultBackupResult> {
+  try {
+    const userId = query.userId ? Number(query.userId) : undefined;
+    const limit = query.limit ? Number(query.limit) : undefined;
+    const rows = await listBackupAuditLogAdmin({
+      userId: userId && Number.isFinite(userId) ? userId : undefined,
+      limit: limit && Number.isFinite(limit) ? limit : undefined,
+    });
+    return { status: 200, body: { events: rows } };
+  } catch (e: any) {
+    return { status: 500, body: { error: e.message } };
+  }
+}

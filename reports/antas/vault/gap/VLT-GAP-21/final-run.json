@@ -1,0 +1,571 @@
+{
+  "gap": "VLT-GAP-21",
+  "checked_at": "2026-10-12T17:10:21.567Z",
+  "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "6de0f9bbb97a2fe696681d203eff471ce03cce748ef7e903e45942878db710c1",
+  "duration_seconds": 900,
+  "method": "live gates (from package.json validate:vault-*) executed in a clean copy of the tree; point-in-time sub-phase gates verified by recorded evidence; build/tests in the real tree",
+  "certificate": {
+    "status": "FAIL",
+    "source_of_truth_verified": false,
+    "all_required_validators_executed": true,
+    "extraction_proof": true,
+    "route_thinness_proof": true,
+    "duplicate_business_implementations": 0,
+    "unexpected_legacy_consumers": 0,
+    "forbidden_imports": 0,
+    "behavior_regressions": 0,
+    "security_regressions": 0,
+    "crypto_compatibility_failures": 0,
+    "backup_restore_failures": 0,
+    "snapshot_restore_failures": 0,
+    "runtime_failures": 0,
+    "performance_regressions": 0,
+    "validator_bypass_test": "FAIL"
+  },
+  "requirements": [
+    {
+      "n": 1,
+      "what": "all GAP validators execute and PASS",
+      "gates": [
+        "validate:vault-architecture",
+        "validate:vault-architecture:self-test",
+        "validate:vault-architecture:ci-wiring",
+        "validate:vault-architecture:gate",
+        "validate:vault-equivalence:census",
+        "validate:vault-equivalence:replay",
+        "validate:vault-equivalence:compare",
+        "validate:vault-equivalence:backup",
+        "validate:vault-duplicates",
+        "validate:vault-duplicates:self-test",
+        "validate:vault-duplicates:ci-wiring",
+        "validate:vault-duplicates:gate",
+        "validate:vault-map",
+        "validate:vault-map:self-test",
+        "validate:vault-chaos",
+        "validate:vault-perf",
+        "validate:vault-perf:ci-wiring",
+        "validate:vault-perf:gate",
+        "validate:vault-tamper",
+        "validate:vault-equivalence:gate",
+        "validate:vault-routes",
+        "validate:vault-routes:self-test",
+        "validate:vault-routes:differential",
+        "validate:vault-routes:ci-wiring",
+        "validate:vault-routes:gate"
+      ],
+      "status": "FAIL"
+    },
+    {
+      "n": 4,
+      "what": "source graph",
+      "gates": [
+        "validate:vault-architecture",
+        "validate:vault-architecture:gate"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 5,
+      "what": "route thinness",
+      "gates": [
+        "validate:vault-routes",
+        "validate:vault-routes:gate",
+        "validate:vault-routes:differential"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 6,
+      "what": "duplicate scan",
+      "gates": [
+        "validate:vault-duplicates",
+        "validate:vault-duplicates:gate"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 7,
+      "what": "migration map",
+      "gates": [
+        "validate:vault-map"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 8,
+      "what": "security (behaviour/API equivalence incl. tenant isolation)",
+      "gates": [
+        "validate:vault-equivalence:compare",
+        "validate:vault-equivalence:gate"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 9,
+      "what": "crypto compatibility (replay + backup envelope)",
+      "gates": [
+        "validate:vault-equivalence:replay",
+        "validate:vault-equivalence:backup"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 10,
+      "what": "backup/restore",
+      "gates": [
+        "validate:vault-equivalence:backup"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 11,
+      "what": "snapshot/restore",
+      "gates": [
+        "validate:vault-equivalence:compare"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 12,
+      "what": "runtime/chaos",
+      "gates": [
+        "validate:vault-chaos"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 13,
+      "what": "performance",
+      "gates": [
+        "validate:vault-perf",
+        "validate:vault-perf:gate"
+      ],
+      "status": "PASS"
+    },
+    {
+      "n": 14,
+      "what": "fake-PASS / tamper",
+      "gates": [
+        "validate:vault-tamper"
+      ],
+      "status": "FAIL"
+    }
+  ],
+  "build_and_tests": [
+    {
+      "n": 2,
+      "what": "full build (typecheck + build)",
+      "command": "pnpm run build",
+      "executed": true,
+      "exit_code": 0,
+      "seconds": 48.3,
+      "status": "PASS",
+      "last_line": "artifacts/api-server build: Done"
+    },
+    {
+      "n": 3,
+      "what": "unit/integration/contract suites",
+      "command": "pnpm -r --if-present run test && pnpm --filter ./artifacts/api-server run test:mega-engine && pnpm --filter ./artifacts/api-server run test:new-engines && pnpm --filter ./artifacts/api-server run test:telegram",
+      "executed": true,
+      "exit_code": 1,
+      "seconds": 15,
+      "status": "FAIL",
+      "last_line": "Exit status 1"
+    }
+  ],
+  "executed_gates": {
+    "validate:vault-architecture:ci-wiring": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-14-C.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 1.1,
+      "last_line": "VLT-GAP-14-C PASS — 2 pipelines run 4 Vault architecture steps as blocking steps (reports/antas/vault/gap/VLT-GAP-14/ci-wiring.json)"
+    },
+    "validate:vault-architecture:self-test": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --self-test",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 1.5,
+      "last_line": "VLT-GAP-14/self-test PASS — 24 cases behaved as expected (23 violations caught, clean tree + type-only cycle accepted, empty/missing root fails closed)"
+    },
+    "validate:vault-equivalence:census": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-15-A.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 1.2,
+      "last_line": "    [game-marketplace] error_messages: DB error"
+    },
+    "validate:vault-architecture": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-14.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 5.4,
+      "last_line": "VLT-GAP-14 PASS — 0 architecture violations, 0 runtime cycles"
+    },
+    "validate:vault-equivalence:compare": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-15-C.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 58,
+      "last_line": "VLT-GAP-15-C PASS -- 2229/2229 cells equal; planted divergences detected 4/4; open for 15-D: 3 residual dimension(s), 0 stale differential(s)"
+    },
+    "validate:vault-equivalence:replay": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-15-B.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 92.7,
+      "last_line": "VLT-GAP-15-B PASS -- 2230 cells replayed across 9 groups; legacy differentials: 06-D=PASS 08=PASS 09=PASS 11=PASS 12=PASS 13-E=PASS"
+    },
+    "validate:vault-duplicates": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 4.7,
+      "last_line": "VLT-GAP-16 PASS — 667 files scanned, duplicate business implementations = 0, unexpected legacy consumers = 0, old source-of-truth modules = 0"
+    },
+    "validate:vault-duplicates:self-test": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --self-test",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 0.5,
+      "last_line": "VLT-GAP-16/self-test PASS — 14 planted cases behaved as expected"
+    },
+    "validate:vault-duplicates:ci-wiring": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-16-C.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 0.1,
+      "last_line": "VLT-GAP-16-C PASS — 2 pipelines run 4 Vault duplicate-scan steps as blocking steps (reports/antas/vault/gap/VLT-GAP-16/ci-wiring.json)"
+    },
+    "validate:vault-architecture:gate": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-14-D.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 104.1,
+      "last_line": "VLT-GAP-14-D PASS — 139 Vault files clean; 21 planted cases on a copy of the real tree each failed the scan at the planted line; 11 bypass/fail-closed checks rejected; CI wiring verified"
+    },
+    "validate:vault-map": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-17.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 8.2,
+      "last_line": "VLT-GAP-17 PASS — 145 rows match the tree (139 vault files mapped); open: 0 pending, 0 uncertified, 0 origin-unproven"
+    },
+    "validate:vault-equivalence:backup": {
+      "command": "node scripts/antas/vault/gap/differential-vlt-gap-15-backup.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 83.5,
+      "last_line": "differential-vlt-gap-15-backup PASS -- 124/124 cells equal (envelope:15, envelope-cross:10, cloud:31, cloud-intentional:3, alerts:65), 16/16 mutants caught"
+    },
+    "validate:vault-perf:ci-wiring": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-20-C.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 0.2,
+      "last_line": "VLT-GAP-20-C PASS -- 2 pipelines run 3 Vault perf steps as blocking steps after GAP-19; capture never runs in CI (reports/antas/vault/gap/VLT-GAP-20/ci-wiring.json)"
+    },
+    "validate:vault-map:self-test": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-17.mjs --self-test",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 50.8,
+      "last_line": "VLT-GAP-17 self-test PASS — 17 cases (planted lies caught by rule; control passes; bypass/fail-closed enforced)"
+    },
+    "validate:vault-routes": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-13.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 0.6,
+      "last_line": "VLT-GAP-13 PASS — 17 route files, 149 handlers, 0 violations"
+    },
+    "validate:vault-routes:self-test": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --self-test",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 0.6,
+      "last_line": "VLT-GAP-13/self-test PASS — 10 planted cases behaved as expected (9 violations caught, clean adapter accepted)"
+    },
+    "validate:vault-routes:differential": {
+      "command": "node scripts/antas/vault/gap/differential-vlt-gap-13-E.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 0.8,
+      "last_line": "VLT-GAP-13-E differential PASS — 49 scenarios identical (status/body/SQL/auth), route table equal (5 routes), statuses 200,400,403,404,409,500"
+    },
+    "validate:vault-routes:ci-wiring": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-13-C.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 0.1,
+      "last_line": "VLT-GAP-13-C PASS — 2 pipelines run 5 Vault route steps as blocking steps (reports/antas/vault/gap/VLT-GAP-13/ci-wiring.json)"
+    },
+    "validate:vault-routes:gate": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-13-D.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 11.5,
+      "last_line": "VLT-GAP-13-D PASS — 17 route files / 149 handlers clean; 11 planted violations each failed the scan at the planted line; 9 bypass/fail-closed checks rejected; CI wiring verified"
+    },
+    "validate:vault-duplicates:gate": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-16-D.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 83.7,
+      "last_line": "VLT-GAP-16-D PASS — 667 files clean; 13 planted cases on a copy of the real tree each failed the scan at the planted line, 2 negative controls accepted; 11 bypass/fail-closed checks rejected; CI wiring verified"
+    },
+    "validate:vault-equivalence:gate": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-15-D.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 184.7,
+      "last_line": "VLT-GAP-15-D PASS -- 2229/2229 cells equal, 4/4 planted divergences detected, 2 covering differential(s) pass"
+    },
+    "validate:vault-chaos": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-19.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 38.7,
+      "last_line": "VLT-GAP-19 PASS — 20 scenarios, 308 I/O points, 476 crash/error/outage runs: no corruption, duplicate side effect, plaintext leak, missing key-rotation audit or unrecoverable state; 24/24 planted defects caught; 1 declared residual(s) measured"
+    },
+    "validate:vault-perf": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-20-B.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 32.3,
+      "last_line": "VLT-GAP-20-B PASS -- 663 cells: no extra queries/shapes/boundary calls, no N+1 introduced (2 pre-existing, unchanged), latency within tolerance, 10/10 judge checks caught"
+    },
+    "validate:vault-perf:gate": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-20-D.mjs",
+      "exit_code": 0,
+      "executed": true,
+      "passed": true,
+      "seconds": 304.2,
+      "last_line": "VLT-GAP-20-D PASS -- real gate PASS (663 cells); 16/16 planted regressions caught, 2/2 negative controls pass, 4 bypass attempts rejected; unreached-branch + current-only plants included (reports/antas/vault/gap/VLT-GAP-20/ci-gate.json)"
+    },
+    "validate:vault-tamper": {
+      "command": "node scripts/antas/vault/gap/validate-vlt-gap-18.mjs",
+      "exit_code": 1,
+      "executed": true,
+      "passed": false,
+      "seconds": 47.5,
+      "last_line": "  [gate-failed] regen: regenerated gates exited non-zero: scripts/antas/vault/gap/validate-vlt-gap-13.mjs, scripts/antas/vault/gap/validate-vlt-gap-14.mjs"
+    }
+  },
+  "recorded_evidence": {
+    "per_gap": {
+      "10": {
+        "files": 8,
+        "pass": 8
+      },
+      "11": {
+        "files": 9,
+        "pass": 9
+      },
+      "12": {
+        "files": 12,
+        "pass": 12
+      },
+      "13": {
+        "files": 9,
+        "pass": 9
+      },
+      "14": {
+        "files": 8,
+        "pass": 8
+      },
+      "15": {
+        "files": 9,
+        "pass": 9
+      },
+      "16": {
+        "files": 8,
+        "pass": 8
+      },
+      "17": {
+        "files": 5,
+        "pass": 5
+      },
+      "18": {
+        "files": 6,
+        "pass": 6
+      },
+      "19": {
+        "files": 5,
+        "pass": 5
+      },
+      "20": {
+        "files": 4,
+        "pass": 4
+      },
+      "00": {
+        "files": 4,
+        "pass": 4
+      },
+      "01": {
+        "files": 9,
+        "pass": 9
+      },
+      "02": {
+        "files": 8,
+        "pass": 8
+      },
+      "03": {
+        "files": 8,
+        "pass": 8
+      },
+      "04": {
+        "files": 8,
+        "pass": 5
+      },
+      "05": {
+        "files": 8,
+        "pass": 8
+      },
+      "06": {
+        "files": 8,
+        "pass": 8
+      },
+      "07": {
+        "files": 4,
+        "pass": 4
+      },
+      "08": {
+        "files": 9,
+        "pass": 9
+      },
+      "09": {
+        "files": 9,
+        "pass": 9
+      }
+    },
+    "non_pass": [],
+    "superseded_non_pass": [
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-04/consumer-graph.json",
+        "status": "FAIL",
+        "reason": "Historical GAP-04 evidence is superseded by the fresh GAP-13 game-route scan and GAP-15-D equivalence gate recorded in the current map-check."
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-04/extraction-proof.json",
+        "status": "FAIL",
+        "reason": "Historical GAP-04 evidence is superseded by the fresh GAP-13 game-route scan and GAP-15-D equivalence gate recorded in the current map-check."
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-04/gate.json",
+        "status": "FAIL",
+        "reason": "Historical GAP-04 evidence is superseded by the fresh GAP-13 game-route scan and GAP-15-D equivalence gate recorded in the current map-check."
+      }
+    ]
+  },
+  "migration_map_open_items": {
+    "pending_rows": [],
+    "uncertified_rows": [],
+    "origin_unproven_files": [],
+    "justified_new_seams": [
+      {
+        "line": 49,
+        "files": [
+          "artifacts/api-server/src/vault/infrastructure/repositories/encryption-key-repository.ts"
+        ],
+        "reason": "PostgreSQL implementation of the key-store port; no legacy route owner exists"
+      },
+      {
+        "line": 50,
+        "files": [
+          "artifacts/api-server/src/vault/infrastructure/crypto-key-stores.ts"
+        ],
+        "reason": "process composition adapter registers the repository-backed key-store ports; no legacy implementation was moved"
+      },
+      {
+        "line": 51,
+        "files": [
+          "artifacts/api-server/src/vault/infrastructure/repositories/entity-field-contract.ts"
+        ],
+        "reason": "type-only check that domain fields match insertable database columns"
+      },
+      {
+        "line": 52,
+        "files": [
+          "artifacts/api-server/src/vault/application/local-account/bulk.ts"
+        ],
+        "reason": "bulk/export handlers delegate here while the shared route retains unrelated database behavior"
+      },
+      {
+        "line": 53,
+        "files": [
+          "artifacts/api-server/src/vault/application/local-account/value.ts"
+        ],
+        "reason": "value-history handlers delegate here while the shared route retains unrelated database behavior"
+      },
+      {
+        "line": 54,
+        "files": [
+          "artifacts/api-server/src/vault/application/kyc/enrollment.ts"
+        ],
+        "reason": "the enroll-by-KYC branch delegates here while the shared route retains unrelated database behavior"
+      },
+      {
+        "line": 55,
+        "files": [
+          "artifacts/api-server/src/vault/application/kyc/exchange.ts"
+        ],
+        "reason": "exchange-key handlers delegate here while the shared route retains unrelated database behavior"
+      },
+      {
+        "line": 56,
+        "files": [
+          "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts"
+        ],
+        "reason": "shared repository serves the extracted enrollment and exchange-key use cases"
+      },
+      {
+        "line": 105,
+        "files": [
+          "artifacts/api-server/src/vault/application/use-case-result.ts"
+        ],
+        "reason": "shared by 7 legacy files — cross-cutting seam, no single OLD origin"
+      }
+    ]
+  },
+  "blockers": [
+    {
+      "id": "requirement-1",
+      "detail": "all GAP validators execute and PASS:  failed: validate:vault-tamper (  [gate-failed] regen: regenerated gates exited non-zero: scripts/antas/vault/gap/validate-vlt-gap-13.mjs, scripts/antas/vault/gap/validate-vlt-gap-14.mjs)"
+    },
+    {
+      "id": "requirement-14",
+      "detail": "fake-PASS / tamper:  failed: validate:vault-tamper (  [gate-failed] regen: regenerated gates exited non-zero: scripts/antas/vault/gap/validate-vlt-gap-13.mjs, scripts/antas/vault/gap/validate-vlt-gap-14.mjs)"
+    },
+    {
+      "id": "requirement-3",
+      "detail": "unit/integration/contract suites failed: Exit status 1"
+    }
+  ],
+  "status": "FAIL"
+}

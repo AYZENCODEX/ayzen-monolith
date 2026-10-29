@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-03",
+  "title": "Money-critical path characterization",
+  "timestamp": "2026-10-15T20:01:22Z",
+  "status": "BLOCKED",
+  "statusReason": "Two controlled Replit-development-database characterization tests now pass, including balanced journal lines and concurrent principal decrements. Rollback, duplicate-request/idempotency, authorization, provider-backed reconciliation, and full route/service parity remain unverified; the extracted service is not safe to cut over.",
+  "commit": {
+    "sha": "a5df0e678ef4a11706c2b86c3b4e4df62ea3a49f",
+    "workingTreeAtStart": "Dirty only for the documented FIN-01/02 edits and user-provided attachments; no ledger fixture or database test artifacts were present."
+  },
+  "objective": "Map amount representation, currency/rounding, transaction scope, and retry/concurrency evidence for existing Finance money paths.",
+  "inspectedFiles": [
+    "lib/db/src/schema/finance.ts",
+    "migrations/024_finance_accounting.sql",
+    "migrations/025_finance_wallet_bridge.sql",
+    "artifacts/api-server/src/lib/finance-accounting.ts",
+    "artifacts/api-server/src/lib/finance-wallet-bridge.ts",
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/finance/domain/invoice-totals.ts",
+    "artifacts/api-server/src/finance/domain/invoice-totals.test.ts",
+    "docs/antas/finance/ledger-integrity.md"
+  ],
+  "filesChanged": [
+    "artifacts/api-server/src/lib/finance-accounting.ts",
+    "artifacts/api-server/src/lib/finance-accounting.db.test.ts",
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/package.json",
+    "reports/antas/finance/fin-03-evidence.json"
+  ],
+  "oldToNewMapping": [
+    {
+      "source": "artifacts/api-server/src/routes/finance.ts: principal repayment SQL decrement/status update",
+      "target": "artifacts/api-server/src/lib/finance-accounting.ts: applyPrincipalRepayment",
+      "behavior": "Existing atomic GREATEST decrement and 0.01 paid-status threshold moved without changing the calculation."
+    }
+  ],
+  "migratedConsumers": [
+    "POST /finance/entries/:id/repayments now delegates its principal decrement to applyPrincipalRepayment; interest repayment behavior is unchanged."
+  ],
+  "commands": [
+    {
+      "command": "pnpm --filter @workspace/api-server exec node --test --import tsx src/finance/domain/invoice-totals.test.ts",
+      "exitCode": 0,
+      "result": "4/4 invoice calculation tests pass; these do not exercise database-backed postings."
+    },
+    {
+      "command": "rg -n 'db\\.transaction|FOR UPDATE|idempotency|sourceLedgerEntryId|unique\\(' artifacts/api-server/src/routes/finance.ts artifacts/api-server/src/routes/finance-invoices.ts artifacts/api-server/src/lib/finance-accounting.ts artifacts/api-server/src/lib/finance-wallet-bridge.ts",
+      "exitCode": 0,
+      "result": "Source inspection only; not a rollback, retry, or concurrency test."
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server test:finance-db",
+      "exitCode": 0,
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "result": "Against Replit's development database: valid journal lines balanced in the resolved book; two concurrent principal decrements of 40.00 from 100.00 left 20.00 and status partial. Test-owned negative user IDs were cleaned in an after hook."
+    }
+  ],
+  "moneyModel": {
+    "ledger": "finance_ledger_entries is the existing day-to-day source; amount columns use PostgreSQL REAL.",
+    "journal": "Separate double-entry mirror; journal debit/credit columns also use REAL.",
+    "invoiceRounding": "Two-decimal Math.round behavior, including existing JavaScript half-cent behavior, is covered by the four domain tests.",
+    "walletBridge": "Deposit and wallet transaction source identifiers have unique indexes; the bridge treats PostgreSQL unique violations as already-posted no-ops."
+  },
+  "invariants": {
+    "invoicePrecisionAndRounding": "PASS for the existing four test cases only.",
+    "balancedJournal": "PASS for one controlled database fixture (125.50 debit and 125.50 credit); this does not prove every posting path or rollback.",
+    "failedOperationRollback": "NOT VERIFIED; source writes a journal header and journal lines through separate database calls without an enclosing transaction.",
+    "duplicateJournalRetry": "NOT VERIFIED; sourceLedgerEntryId is not unique and postEntryJournal has no existing-post check.",
+    "repaymentDuplicateRequest": "NOT VERIFIED; the route inserts a repayment, updates the ledger, and posts a journal as separate operations without a request idempotency key or surrounding transaction.",
+    "concurrentRepayment": "PASS for two concurrent principal decrements against one controlled ledger row; duplicate request and complete route behavior remain unverified.",
+    "authorizationAndCrossAccountIsolation": "NOT VERIFIED by Finance-specific route tests."
+  },
+  "limitations": [
+    "The test target is Replit's development database, not a provider-backed production ledger or isolated ephemeral PostgreSQL instance.",
+    "The new tests cover one journal posting and the extracted principal-decrement helper; they do not exercise authenticated HTTP routes, rollback, retry/idempotency, or authorization.",
+    "The repayment SQL was moved without changing semantics. Financial transaction/idempotency corrections remain out of scope until their behavior is characterized."
+  ],
+  "diffReview": "The existing principal-decrement SQL and status threshold were moved from the route into the finance accounting library. The two database tests passed and removed their test rows. No journal transaction, retry/idempotency, schema, or route cutover behavior was changed.",
+  "currentDatabaseRevalidation": {
+    "timestamp": "2026-10-15T20:01:22Z",
+    "databaseTarget": "Replit-managed development database selected explicitly with DATABASE_URL_TARGET=replit-test.",
+    "schemaSetup": "A purported Finance-only Drizzle push did not honor the configured tablesFilter and added the complete application schema to public. The pre-existing rate_limit_buckets table remains. No data backfill or Finance rows were inserted by the schema push. No tables were dropped.",
+    "financeTestDataAfterCleanup": {
+      "negativeTestBooks": 0,
+      "negativeTestLedgerEntries": 0,
+      "negativeTestAccounts": 0,
+      "negativeTestJournals": 0
+    },
+    "appDatabase": "APP_DATABASE_URL is not configured yet; application-target selection currently falls back to the runtime-managed DATABASE_URL until a rotated Supabase connection is entered securely.",
+    "supabaseWrites": false
+  },
+  "evidencePath": "reports/antas/finance/fin-03-evidence.json",
+  "nextSafeStep": "Add route-level rollback, retry/idempotency, and authorization tests on the Replit test database, then assess the separate Finance service against all existing route contracts. Do not enable service routing or retire monolith routes until parity is demonstrated.",
+  "followUps": [
+    {
+      "phase": "FIN-WP-1",
+      "item": "Safety gate tests and findings",
+      "resolution": "Static route security gate (9 tests) passes; 11-test ledger invariant suite written but unexecuted; findings F1-F5 recorded. FIN-03 stays BLOCKED until the DB suite runs green and the HTTP-level tests exist. See fin-wp1-evidence.json. F1 and F2 were then fixed in FIN-WP-1-FIXES (BLOCKED pending the Replit DB run)."
+    }
+  ]
+}

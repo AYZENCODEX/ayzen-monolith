@@ -1,0 +1,400 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-10",
+  "sub_phase": "08-census",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "326e54b0072474e2d269f2bb6974ab08b166267ff4cfd76223d6be85d8f72c64",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/vault-shares.ts": "9b33fa8f0d1276debe9e58d8204a9f1b0504f5f9f24506798b651b8adf151758",
+    "artifacts/api-server/src/routes/vault-attachments.ts": "2f700c2dfbb078972cd25c84c557fab1b16b02327afc53e1102b2a134d128cea"
+  },
+  "records": [
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "router",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        16,
+        16
+      ],
+      "body_sha256": "bda692dc52aa8238226acd3c84b38be744a6ff60086dd7ce0929fb8c12f36d87",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "ENTITY_TABLES",
+      "kind": "const",
+      "exported": true,
+      "lines": [
+        37,
+        71
+      ],
+      "body_sha256": "97720d6ab1770d3484b845b3bc0e793be876cd42c9453d4bd11f83c0a9f3bdca",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "notTrashedClause",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        76,
+        78
+      ],
+      "body_sha256": "91a32999571f33dd608ce6781c08e26eb3be20b8bec680f6536c2fafdcd1fa68",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "VALID_TYPES",
+      "kind": "const",
+      "exported": true,
+      "lines": [
+        80,
+        80
+      ],
+      "body_sha256": "0d1ac82feac3d3b51353ec55ccbd38e5250e21f6977f89b337bc5baca89f8caf",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "NON_SHAREABLE_COLUMNS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        85,
+        85
+      ],
+      "body_sha256": "013a5d10c6d6af3b884ea5ec00b57d4ee2e5fa9dc83e7ea69e1b7220c841061b",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "safe",
+      "kind": "function-value",
+      "exported": false,
+      "lines": [
+        87,
+        87
+      ],
+      "body_sha256": "e97840166fd8e8ae5c11379b641654d0caec0b19bdc8791d6c21b9338982fbd5",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "VAULT_SHARE_OWNER_SENTINEL_NONE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        106,
+        106
+      ],
+      "body_sha256": "1bad6b8cf97131fceab8543e81f7757195fbb1d36b376ee994ad1cf17699c464",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "vaultShareResource",
+      "kind": "function-value",
+      "exported": false,
+      "lines": [
+        108,
+        113
+      ],
+      "body_sha256": "27c890a4a07aff24a5daea955fa928018e2e64b12dce511e718aa71131a695a7",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "requireVaultShareOwnership",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        115,
+        117
+      ],
+      "body_sha256": "5e3bfaf1848ddf7e8ef86f461879912117cca1172a446954cfcc9c22e853df0e",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "denyVaultShareNotFound",
+      "kind": "function-value",
+      "exported": false,
+      "lines": [
+        118,
+        118
+      ],
+      "body_sha256": "55451505f4c211745fb95684d2662cf7f58c3372207041c9db10e0b755fffa4d",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "vaultShareBulkOwnershipEngine",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        134,
+        134
+      ],
+      "body_sha256": "144ff55fa3fb27ca24dee64f0293977ffddaa6997fb74a79274ce63c1cc24e5c",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "auditVaultShareBulkOwnership",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        146,
+        161
+      ],
+      "body_sha256": "489e53f62c557fef2bfb29163129869ccbc89047a277a2b3509bb03ba0365118",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "vaultShareCandidateOwnershipEngine",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        175,
+        175
+      ],
+      "body_sha256": "144ff55fa3fb27ca24dee64f0293977ffddaa6997fb74a79274ce63c1cc24e5c",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "ENTITY_TYPE_TO_RESOURCE_TYPE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        178,
+        183
+      ],
+      "body_sha256": "c14a41f3f044ef10f26d44216878d703271cc257d93f77497abf9ffb56466c2f",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "auditVaultShareCreateOwnership",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        195,
+        227
+      ],
+      "body_sha256": "e7a492d83728ea0e5434fcd01feff3ceb36f27b4f7cd5a55abf63713be4eda88",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "isValidType",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        229,
+        231
+      ],
+      "body_sha256": "9cbb023c5ff5f99c65daddc8767d1e81ba3e24350975adda1ff96a35205e70c7",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "FieldPermission",
+      "kind": "type",
+      "exported": false,
+      "lines": [
+        233,
+        233
+      ],
+      "body_sha256": "5f4b052ea55257691bbea2c33843cf3eb8922c7dfb24ac5e2e2a530334014be6",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "FieldPermissionMap",
+      "kind": "type",
+      "exported": false,
+      "lines": [
+        234,
+        234
+      ],
+      "body_sha256": "11cb5cb4dcc67a0024f6fea496b6359c6a6a4ccb530bd32d8bd26f98c16da896",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "shareableColumns",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        237,
+        243
+      ],
+      "body_sha256": "35a88894c800a80c559671485f33efc6a548c4a353cf69220481cd4c52d38123",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "parseFieldPermissions",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        252,
+        266
+      ],
+      "body_sha256": "a446ddad18bdfc556e2e42ae9bf4e500e4ea586e193c4cc57971fee3c988cd19",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "name": "filterToAllowedFields",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        269,
+        275
+      ],
+      "body_sha256": "666bdcc38891ddd0d7d849738871bf3dc9bd0943d280c4b522bb55e259aa7c42",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "name": "router",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        28,
+        28
+      ],
+      "body_sha256": "bda692dc52aa8238226acd3c84b38be744a6ff60086dd7ce0929fb8c12f36d87",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "name": "VAULT_ATTACHMENT_ENTITY_OWNER_SENTINEL_NONE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        56,
+        56
+      ],
+      "body_sha256": "1bad6b8cf97131fceab8543e81f7757195fbb1d36b376ee994ad1cf17699c464",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "name": "vaultAttachmentEntityResource",
+      "kind": "function-value",
+      "exported": false,
+      "lines": [
+        58,
+        69
+      ],
+      "body_sha256": "1beb896dfb2756858df9074bba8f552867ecf4f04bb942cd562414e5756194e2",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "name": "requireVaultAttachmentEntityOwnership",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        71,
+        78
+      ],
+      "body_sha256": "3f926faff3752cf050e54e181b83ea05fce2bb7147769ce10821ef9539661867",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "name": "MAX_ATTACHMENT_BYTES",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        84,
+        84
+      ],
+      "body_sha256": "5bfa0e74bb865886e035f8113f9e6c9abf2276d91963f8fee39809857d58c7d3",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "name": "ALLOWED_CATEGORIES",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        85,
+        85
+      ],
+      "body_sha256": "6a90d9c5c751e48f5fa6734135609d8a8b8899e4ee860ee1f67214eb665513fa",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "name": "uploadBodyParser",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        91,
+        91
+      ],
+      "body_sha256": "62d07368a1f28fb797c7057e76249bb8bc8aa178e85af5055dd8080ea31f9589",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "name": "assertEntityOwnership",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        93,
+        99
+      ],
+      "body_sha256": "23c496a5f17b8879d67c61153e4f8eb3d9d1f9cfeee957b466f1cf113cd5da80",
+      "db_ops": true,
+      "provider_ops": false
+    }
+  ],
+  "consumers": {},
+  "summary": {
+    "files": 2,
+    "symbols": 29,
+    "db_symbols": 6,
+    "provider_symbols": 0,
+    "consumers": 0
+  },
+  "status": "PASS"
+}

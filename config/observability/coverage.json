@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "requiredSignals": ["audit", "metric", "trace", "log", "correlationId"],
+  "criticalCircuitRule": "every critical circuit must contain every required signal",
+  "missingSignalAction": "block-readiness",
+  "redactionRequired": true
+}

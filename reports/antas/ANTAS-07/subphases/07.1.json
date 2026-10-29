@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-07.1",
+  "phase": "ANTAS-07",
+  "name": "Cryptographic Inventory",
+  "generatedAt": "2026-09-29T06:06:06.717Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "config/security/key-management.json",
+    "docs/antas/security/cryptography.md"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

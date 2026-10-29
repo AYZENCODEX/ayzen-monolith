@@ -1,0 +1,26 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: ayzen-gateway
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["gateway:5000"]
+  - job_name: ayzen-services
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - "identity:8100"
+          - "finance:8101"
+          - "vault:8102"
+          - "mail:8103"
+          - "notification:8104"
+          - "workflow:8105"
+          - "ai:8106"
+          - "search:8108"
+          - "intelligence:8109"
+          - "admin:8111"
+  - job_name: ayzen-worker
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["worker:8110"]

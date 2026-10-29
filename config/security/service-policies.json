@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "defaultDeny": true,
+  "policies": [
+    { "service": "api-gateway", "audience": "identity", "targets": ["identity"], "scopes": ["identity:read", "identity:session:write"] },
+    { "service": "workflow", "audience": "eventbus", "targets": ["eventbus", "audit"], "scopes": ["event:publish", "audit:write"] },
+    { "service": "admin", "audience": "backbone", "targets": ["eventbus", "workflow"], "scopes": ["backbone:read"], "stepUp": true }
+  ]
+}

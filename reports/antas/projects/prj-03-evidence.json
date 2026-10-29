@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "phase": "PRJ-03",
+  "title": "Extract ratings, templates and core project CRUD",
+  "timestamp": "2026-10-21T10:22:16.690510Z",
+  "status": "PASS",
+  "statusScope": "PRJ-03 complete for ratings, templates and core CRUD (GET/POST/PATCH/DELETE /projects, GET /projects/:id). routes/ai-actions.ts is deliberately untouched (undecided, recorded). Typecheck, build and tests ran in a scratch copy installed with --no-frozen-lockfile; the repo's own frozen install still fails. DB-backed tests did not run, and parity was shown against fake databases. Two pre-existing issues were found and preserved, not fixed (see findings).",
+  "commit": {
+    "sha": "UNAVAILABLE",
+    "reason": "Uploaded snapshot has no .git directory."
+  },
+  "dependsOn": [
+    "reports/antas/projects/prj-01-evidence.json",
+    "reports/antas/projects/prj-02-evidence.json"
+  ],
+  "oldToNewMapping": [
+    {
+      "old": "routes/projects.ts rating validation and summary math",
+      "new": "projects/domain/rating.ts (parseRatingValue, summarizeRatings, formatOwnRating)"
+    },
+    {
+      "old": "routes/projects.ts rating queries and handler logic (5 routes)",
+      "new": "projects/application/ratings.ts + infrastructure/repositories/ratings-repo.ts + projects-repo.ts (findProjectById)"
+    },
+    {
+      "old": "routes/project-templates.ts formatTemplate, pickTemplateData, update building, name de-duping, 409 test",
+      "new": "projects/domain/template.ts"
+    },
+    {
+      "old": "routes/project-templates.ts handler logic and queries (8 routes)",
+      "new": "projects/application/templates.ts + infrastructure/repositories/templates-repo.ts + projects-repo.ts (findProjectRowById, raw SELECT)"
+    },
+    {
+      "old": "routes/projects.ts formatProject, pagination, create/update value mapping, PATCH response shape",
+      "new": "projects/domain/project.ts"
+    },
+    {
+      "old": "routes/projects.ts raw-SQL SET fragments for columns outside the Drizzle definition",
+      "new": "projects/infrastructure/sql/project-raw-sets.ts"
+    },
+    {
+      "old": "routes/projects.ts GET/POST/PATCH/DELETE /projects and GET /projects/:id handler logic and queries",
+      "new": "projects/application/projects.ts + projects-repo.ts + enrollments-repo.ts (listUserEnrollmentsForProject)"
+    }
+  ],
+  "filesChangedThisPhase": [
+    "artifacts/api-server/src/projects/domain/rating.ts, rating.test.ts, template.ts, template.test.ts (new)",
+    "artifacts/api-server/src/projects/application/ratings.ts, templates.ts (new)",
+    "artifacts/api-server/src/projects/infrastructure/repositories/ratings-repo.ts, templates-repo.ts, projects-repo.ts (new)",
+    "artifacts/api-server/src/routes/project-templates.ts (pure adapter, 282 -> 120 lines)",
+    "artifacts/api-server/src/routes/projects.ts (5 rating handlers now call application/ratings; projectRatingsTable import removed)",
+    "scripts/antas/projects/boundaries.manifest.json, validate-boundaries.mjs (PRJ-03 rules; foreign-table scan now covers module files)",
+    "scripts/antas/projects/differential/prj03-* and README.md (harness)",
+    "docs/antas/projects/projects-boundaries.md (PRJ-03 section)",
+    ".github/workflows/ci.yml (test:projects-static step)",
+    "reports/antas/projects/prj-03-* (generated + this file)",
+    "artifacts/api-server/src/projects/domain/project.ts, project.test.ts (new)",
+    "artifacts/api-server/src/projects/infrastructure/sql/project-raw-sets.ts, project-raw-sets.test.ts (new)",
+    "artifacts/api-server/src/projects/application/projects.ts (new)",
+    "artifacts/api-server/src/projects/infrastructure/repositories/enrollments-repo.ts (new); projects-repo.ts (extended)",
+    "artifacts/api-server/src/routes/projects.ts (5 CRUD handlers now call application/projects; formatProject, ilike and syncOnProjectDelete removed from the file)",
+    "artifacts/api-server/package.json (test:projects-static now also runs infrastructure/sql tests)",
+    "scripts/antas/projects/differential/prj03-crud-* (harness)"
+  ],
+  "behaviorPreserved": [
+    "All 47 route paths, methods, middleware chains and registration order unchanged (frozen surface check passes).",
+    "Rating validation keeps Number() coercion (true counts as 1, '5' as 5); average rounding and distribution unchanged.",
+    "The projects_updated broadcast still fires after the write and before the response.",
+    "Handlers that had no try/catch (all rating routes except the list, and all template routes except create, patch and from-project) still have none.",
+    "Template create/patch/from-project still map the unique-name violation to 409 and rethrow anything else; the clear-previous-default-then-write transactions are unchanged and still roll back together.",
+    "Templates still never create or update a project.",
+    "Generated raw SQL text is identical to the original for every CRUD scenario, including the unescaped deadline/startedAt fragments.",
+    "Side effects keep their order: write, broadcast, best-effort Telegram alert (create), then the response; delete still fires the sync cascade without awaiting it.",
+    "PATCH keeps its try/catch and 500 body; GET list, GET detail, POST and DELETE keep having none.",
+    "ai-actions.ts and its project insert are untouched."
+  ],
+  "commands": [
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs --self-test",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS: 47 routes, 0 findings"
+    },
+    {
+      "command": "negative tests M1-M5 on a scratch copy (db import in templates adapter, rating table back in projects.ts, application imports routes, new foreign table in a repo, rogue rating writer)",
+      "exitCode": 0,
+      "result": "Each produced FAIL with the expected finding; restored copy PASS."
+    },
+    {
+      "command": "differential test, ratings: original handler block (sliced verbatim from the original projects.ts) vs current, fake DB, express@4.21.2",
+      "exitCode": 0,
+      "result": "29 scenarios, 29 identical (status, body, realtime events, resulting rows)."
+    },
+    {
+      "command": "differential test, templates: original routes/project-templates.ts vs current adapter, fake DB with unique-name constraint and transactional rollback",
+      "exitCode": 0,
+      "result": "37 scenarios, 37 identical, statuses 200/201/400/401/403/404/409/500."
+    },
+    {
+      "command": "harness sensitivity: change one rating message, the average's rounding, one template message in the new bundle",
+      "exitCode": 0,
+      "result": "Detected: 8, 2 and 5 scenarios differed respectively; unmutated rerun 29/29 and 37/37."
+    },
+    {
+      "command": "scratch copy: pnpm install --no-frozen-lockfile",
+      "exitCode": 0,
+      "result": "Done in 17.1s. The repo's own pnpm install --frozen-lockfile still fails (ERR_PNPM_LOCKFILE_CONFIG_MISMATCH)."
+    },
+    {
+      "command": "scratch copy: tsc --build --force in lib/db and lib/api-zod, then tsc -p artifacts/api-server --noEmit",
+      "exitCode": 0,
+      "result": "0 errors. Note: the .tsbuildinfo files shipped in the zip are stale and made tsc --build emit nothing (TS6305) until forced."
+    },
+    {
+      "command": "scratch copy: pnpm test:projects-static (node --test --import tsx src/projects/domain/*.test.ts)",
+      "exitCode": 0,
+      "result": "12 tests, 12 pass (dates 4, ratings 3, templates 5)"
+    },
+    {
+      "command": "scratch copy: pnpm build (artifacts/api-server)",
+      "exitCode": 0,
+      "result": "esbuild bundle produced"
+    },
+    {
+      "command": "differential test, core CRUD: original handlers (sliced verbatim, with getOptionalUserId and formatProject) vs current, fake DB that records raw SQL",
+      "exitCode": 0,
+      "result": "45 scenarios, 45 identical (status, body, events, raw SQL text, Telegram calls, sync calls, rows); statuses 200/201/400/403/404/500; 13 scenarios generated raw SQL, 9 notified Telegram, 2 triggered the delete cascade."
+    },
+    {
+      "command": "harness sensitivity: change one raw-SQL fragment's quoting; change the page-size cap",
+      "exitCode": 0,
+      "result": "2 and 1 scenarios differed; unmutated rerun 45/45."
+    },
+    {
+      "command": "negative tests C1-C5 (project insert back in the route, formatProject redeclared, tasks read in application, PATCH auth dropped, restored)",
+      "exitCode": 0,
+      "result": "Each produced FAIL with the expected finding; restored copy PASS."
+    },
+    {
+      "command": "scratch copy (refreshed with final src): tsc -p artifacts/api-server --noEmit",
+      "exitCode": 0,
+      "result": "0 errors"
+    },
+    {
+      "command": "scratch copy: pnpm test:projects-static",
+      "exitCode": 0,
+      "result": "21 tests, 21 pass (dates 4, ratings 3, templates 5, project 6, raw sets 3). One initial failure was my wrong test expectation (the response keeps the raw started_at key); the code matched the original."
+    },
+    {
+      "command": "scratch copy: pnpm build",
+      "exitCode": 0,
+      "result": "esbuild bundle produced"
+    }
+  ],
+  "baselineNote": "This is the first real typecheck/build/test result for the Projects work. It also covers the PRJ-02 code, which prj-02-evidence.json recorded as unverified: that code compiles and builds. It is not the PRJ-00 baseline of the ORIGINAL code, and the scratch dependencies came from a non-frozen resolution, so versions may differ from the repo lockfile.",
+  "notRun": [
+    {
+      "check": "repo-level pnpm typecheck (all artifacts and scripts)",
+      "status": "NOT_RUN",
+      "reason": "Only artifacts/api-server was typechecked."
+    },
+    {
+      "check": "pnpm install --frozen-lockfile in the repo",
+      "status": "FAIL",
+      "reason": "Unchanged from PRJ-01: lockfile overrides mismatch. Not fixed."
+    },
+    {
+      "check": "DB-backed tests / real database parity",
+      "status": "NOT_RUN",
+      "reason": "No test database in this environment; parity shown against a fake DB only."
+    },
+    {
+      "check": "Vault snapshot restore of project_ratings / ayzen_project_templates",
+      "status": "NOT_RUN",
+      "reason": "Restore addresses these tables by registry name; schemas were not changed, but the path was not exercised."
+    },
+    {
+      "check": "reminder cron end-to-end",
+      "status": "NOT_RUN",
+      "reason": "Reviewed as a diff only (PRJ-02)."
+    }
+  ],
+  "openForPrj03": [
+    "routes/ai-actions.ts still inserts into projects and updates total_roi_distributed (undecided: keep as is, or unify with POST /projects including broadcast and Telegram alert).",
+    "Whether DELETE /projects/:id leaves orphan ratings, receipts, dates and ledger rows (sync cascade covers three tables) is unchecked at the database level.",
+    "Confirm PRJ-ISSUE-2 against a real database."
+  ],
+  "risks": [
+    "The fake DB covers only the query shapes these routes use; real Postgres behavior (constraint timing, ordering ties on updatedAt) is not exercised.",
+    "express-async-errors stands in for the application's own async error handling in the differential test."
+  ],
+  "nextSafeStep": "PRJ-04 (ROI / P&L). Before starting it, decide D2's parity test setup and run the Finance WP-8/WP-9 pack the roadmap names as a prerequisite. Separately: confirm PRJ-ISSUE-2 on a real database and decide whether to fix PRJ-ISSUE-1.",
+  "findings": [
+    {
+      "id": "PRJ-ISSUE-1",
+      "severity": "high, privileged callers only",
+      "summary": "POST /projects (deadline) and PATCH /projects/:id (deadline, startedAt) interpolate request values into raw SQL without escaping. Preserved and pinned by a characterization test; needs its own approved change."
+    },
+    {
+      "id": "PRJ-ISSUE-2",
+      "severity": "likely functional bug, NOT confirmed on a real database",
+      "summary": "POST /projects calls formatProject on a raw snake_case row whenever the body carries a raw-SQL-only field; createdAt would be undefined and the handler would throw after the insert and broadcast, returning 500 for a created project. Reproduced against the original handler with a snake_case fake only."
+    }
+  ]
+}

@@ -1,0 +1,1315 @@
+[
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#router",
+    "kind": "router-instance",
+    "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+    "line_start": 51,
+    "line_end": 51,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#PIN_REGEX",
+    "kind": "constant",
+    "fingerprint_sha256": "9076d2306e991058a2acaa8723853bcd031755f1accae84a7563b72975c0df29",
+    "line_start": 53,
+    "line_end": 53,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#MIN_VAULT_PASSWORD_LENGTH",
+    "kind": "constant",
+    "fingerprint_sha256": "b3841febb30223a1716f413c0b8773d848b39ef08f0c2d4e4d897c7078def317",
+    "line_start": 54,
+    "line_end": 54,
+    "classification": "security",
+    "behaviors": [
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#vaultPinOtpKey",
+    "kind": "function",
+    "fingerprint_sha256": "4ae8d7aeebd4178efeaaddbded2350ee62fbd4aa4d3f9be17f3b52839f3731ff",
+    "line_start": 60,
+    "line_end": 62,
+    "classification": "domain",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#PinKind",
+    "kind": "type",
+    "fingerprint_sha256": "9ef92a76f8c0b371784bfb5e0d30654686e04003fbacd9af5ced474ad0b1d7ce",
+    "line_start": 64,
+    "line_end": 64,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#hashColumn",
+    "kind": "function",
+    "fingerprint_sha256": "80fa7e9f0978cb9c60835126738a82ea398a6d1fe323b8b62d26669c9ce6552b",
+    "line_start": 66,
+    "line_end": 68,
+    "classification": "domain",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#getRow",
+    "kind": "function",
+    "fingerprint_sha256": "a728b9845f738c36841675b8cd2c67e1c7424ec859775bef2dd4aacdb3094aa4",
+    "line_start": 70,
+    "line_end": 73,
+    "classification": "infrastructure",
+    "behaviors": [
+      "tenant-isolation"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#FAILED_ATTEMPT_LIMIT",
+    "kind": "constant",
+    "fingerprint_sha256": "18c7997fcfa8e6c4f471c86d2633f1be3bda0ccbe3a030ccbec18b75871a7a53",
+    "line_start": 76,
+    "line_end": 76,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#LOCKOUT_MS",
+    "kind": "constant",
+    "fingerprint_sha256": "749ecf30f7a915dcda532d976c311d53fb31f87728b561da413bf932f64a10e3",
+    "line_start": 77,
+    "line_end": 77,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#failedAttempts",
+    "kind": "constant",
+    "fingerprint_sha256": "57a092cefaa2d506420b9018c577c7a53b4c9aad76f919e23cd1d199a319fe7f",
+    "line_start": 78,
+    "line_end": 78,
+    "classification": "security",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#LockoutKind",
+    "kind": "type",
+    "fingerprint_sha256": "e43b680431f456960f5124e15d80b3dc395c6f693b27cf041864ea366058614a",
+    "line_start": 86,
+    "line_end": 86,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#attemptKey",
+    "kind": "function",
+    "fingerprint_sha256": "385b4a5f7ad9a648cf9d259d896da0e98a127dfd0ddbecc547e83c99d4804ee2",
+    "line_start": 88,
+    "line_end": 90,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#isLockedOut",
+    "kind": "function",
+    "fingerprint_sha256": "cd6035e15689272c5bc2a99aff9191203d86a49b8be9dc8c3b1ebb542a665de3",
+    "line_start": 92,
+    "line_end": 97,
+    "classification": "security",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#recordFailure",
+    "kind": "function",
+    "fingerprint_sha256": "f45b639955120c41aa555eb3adbf93a3838c731edfc6e94448ff73b85fbfccf8",
+    "line_start": 99,
+    "line_end": 108,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#clearFailures",
+    "kind": "function",
+    "fingerprint_sha256": "0e29ec6c5a5330828199a194eff6b0cf07d511f442b433b089c48e3883078770",
+    "line_start": 110,
+    "line_end": 112,
+    "classification": "security",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#REVEAL_TOKEN_TTL_MS",
+    "kind": "constant",
+    "fingerprint_sha256": "1a9faefd1ee68c4e63cdaf28338aec32a0046a1133d70a9a7c5a41c389197919",
+    "line_start": 124,
+    "line_end": 124,
+    "classification": "security",
+    "behaviors": [
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#revealTokens",
+    "kind": "constant",
+    "fingerprint_sha256": "dd8d06d4c241c81d44e9929383f7f6733288779b92a0cfb24cf14637d00fd3d1",
+    "line_start": 125,
+    "line_end": 125,
+    "classification": "security",
+    "behaviors": [
+      "step-up"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#mintRevealToken",
+    "kind": "function",
+    "fingerprint_sha256": "f06a6671b23a236a730f807010872a575b1af465ade76149e8e2acdcbe16e730",
+    "line_start": 127,
+    "line_end": 131,
+    "classification": "security",
+    "behaviors": [
+      "step-up",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#consumeRevealToken",
+    "kind": "function",
+    "fingerprint_sha256": "898766f87b7b564fdac18f7938fb1c90b52967f51c1491e078cf954690da1902",
+    "line_start": 134,
+    "line_end": 141,
+    "classification": "security",
+    "behaviors": [
+      "step-up"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#hasNoEntityPin",
+    "kind": "function",
+    "fingerprint_sha256": "a201a535ad6ce752da5ad20462e593293f858ac991b1dc701af238273cbe3006",
+    "line_start": 144,
+    "line_end": 147,
+    "classification": "security",
+    "behaviors": [
+      "step-up",
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:GET /vault/security/status@150",
+    "kind": "route-handler",
+    "fingerprint_sha256": "5011b022806c9a7dab698e28ffc07d9847dbb392bca8dd9e1ef742767405b5f5",
+    "line_start": 150,
+    "line_end": 167,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:PUT /vault/security/auth-policy@174",
+    "kind": "route-handler",
+    "fingerprint_sha256": "043356a8cc9d3846a12d341276351cde618e4c5b0d0870d4fc5b28bf2ea58056",
+    "line_start": 174,
+    "line_end": 196,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:POST /vault/security/pin/request-code@205",
+    "kind": "route-handler",
+    "fingerprint_sha256": "5ee8a8e353453f9057c33ed9698d980b8b32c83ec9fff85121b08a5322cad638",
+    "line_start": 205,
+    "line_end": 245,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:PUT /vault/security/password@253",
+    "kind": "route-handler",
+    "fingerprint_sha256": "a651601751c8d3b238f41e1c02fe0c01b0197b6997a7d250835ce7f4a12a32fb",
+    "line_start": 253,
+    "line_end": 306,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:POST /vault/security/password/disable@313",
+    "kind": "route-handler",
+    "fingerprint_sha256": "72f4136f84c7334ebe449d393f5529d9d203b2612ee9479806ddb800a10cf439",
+    "line_start": 313,
+    "line_end": 324,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:PUT /vault/security/pin@338",
+    "kind": "route-handler",
+    "fingerprint_sha256": "94693f6649d807bbaf65620fa7c1f09e26b9c9893de28240ec315fc519997f21",
+    "line_start": 338,
+    "line_end": 435,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:POST /vault/security/verify@439",
+    "kind": "route-handler",
+    "fingerprint_sha256": "f369a1cd70e89768b4110a90bfc76d45453109b7babe3a28fadfab4f679f6516",
+    "line_start": 439,
+    "line_end": 489,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:GET /vault/security/2fa/status@499",
+    "kind": "route-handler",
+    "fingerprint_sha256": "7c898c194aa712608b2c8cf1930a9453348df16f4f1a7749c32c809898cd723b",
+    "line_start": 499,
+    "line_end": 504,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:POST /vault/security/2fa/setup@507",
+    "kind": "route-handler",
+    "fingerprint_sha256": "d98600c3b7db1a936fea40cf7d19f5b0bc64e3e314634a97b32805df5b76d01f",
+    "line_start": 507,
+    "line_end": 529,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:POST /vault/security/2fa/verify@532",
+    "kind": "route-handler",
+    "fingerprint_sha256": "51e84f8559427446c3ed9134d92846c9316653d1e6348a7bd172e7ca74f6e83d",
+    "line_start": 532,
+    "line_end": 550,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#route:POST /vault/security/2fa/disable@553",
+    "kind": "route-handler",
+    "fingerprint_sha256": "ffffd370c1614e282a013e9847e0d022f915a419e271e3dda037a8e483dd69ce",
+    "line_start": 553,
+    "line_end": 564,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-security.ts#export-default",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+    "line_start": 566,
+    "line_end": 566,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#router",
+    "kind": "router-instance",
+    "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+    "line_start": 74,
+    "line_end": 74,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#VAULT_REAUTH_OWNER_SENTINEL_NONE",
+    "kind": "constant",
+    "fingerprint_sha256": "23b70cd4bad3532f4f3d6487c3233f37a842582b99bdbfdb5e460ad5150bcb73",
+    "line_start": 90,
+    "line_end": 90,
+    "classification": "security",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#vaultReauthOwnershipEngine",
+    "kind": "constant",
+    "fingerprint_sha256": "f92320dda77bbfb23eaf96456d6d4d2e75961f03f24670b86fefb48f2292355c",
+    "line_start": 92,
+    "line_end": 92,
+    "classification": "security",
+    "behaviors": [
+      "ownership",
+      "audit",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#rule@93",
+    "kind": "rule-registration",
+    "fingerprint_sha256": "94c53943e22be166cb959a3bb7798e2ce4400dbd3ac14eaef30aa804b9d8fedc",
+    "line_start": 93,
+    "line_end": 93,
+    "classification": "security",
+    "behaviors": [
+      "ownership",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#vaultReauthOtpKey",
+    "kind": "function",
+    "fingerprint_sha256": "0a2e7a9df44bf03828d58e728d3fcef308e3cc331fedd2d14c1254713fe30646",
+    "line_start": 98,
+    "line_end": 100,
+    "classification": "domain",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#FAILED_ATTEMPT_LIMIT",
+    "kind": "constant",
+    "fingerprint_sha256": "18c7997fcfa8e6c4f471c86d2633f1be3bda0ccbe3a030ccbec18b75871a7a53",
+    "line_start": 106,
+    "line_end": 106,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#LOCKOUT_MS",
+    "kind": "constant",
+    "fingerprint_sha256": "749ecf30f7a915dcda532d976c311d53fb31f87728b561da413bf932f64a10e3",
+    "line_start": 107,
+    "line_end": 107,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#failedAttempts",
+    "kind": "constant",
+    "fingerprint_sha256": "7f3c29755a1a6b2cb69e6cb4be434ed686e13ff41ec8da4fb0c869b78393a2ea",
+    "line_start": 108,
+    "line_end": 108,
+    "classification": "security",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#isLockedOut",
+    "kind": "function",
+    "fingerprint_sha256": "a50f2dd6c24a2700143883d60d9862a6fd192b3a05f7dd6b5d0b8471564c2f32",
+    "line_start": 110,
+    "line_end": 115,
+    "classification": "security",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#recordFailure",
+    "kind": "function",
+    "fingerprint_sha256": "ac3d7ec8d04bf49062c6e8f9479851b20cd7160bd091dedbb4acd2990d2365e2",
+    "line_start": 117,
+    "line_end": 125,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#clearFailures",
+    "kind": "function",
+    "fingerprint_sha256": "ecfa94d9e6da4b0e2c9d829d5e2d5c249d2736bab9be3c1bf2ab9e347b7a6f20",
+    "line_start": 127,
+    "line_end": 129,
+    "classification": "security",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#route:GET /vault/reauth/status@137",
+    "kind": "route-handler",
+    "fingerprint_sha256": "eac5744ba2181649a2ad5fb2c400ac6f5e44a3aae8284ad5e1b4506d484294bb",
+    "line_start": 137,
+    "line_end": 170,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#route:POST /vault/reauth/email-code/send@180",
+    "kind": "route-handler",
+    "fingerprint_sha256": "b8d9d97f5cf94860b1a779ad9c5c9719687deb33ab5395c4550675f228add377",
+    "line_start": 180,
+    "line_end": 231,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#route:POST /vault/reauth/verify-step3@238",
+    "kind": "route-handler",
+    "fingerprint_sha256": "d710ee0e2ce87156ed69c98fca93f8245cb6b96e19e537e30b8e4a1b7cc77a70",
+    "line_start": 238,
+    "line_end": 290,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#route:POST /vault/reauth/passkey/options@296",
+    "kind": "route-handler",
+    "fingerprint_sha256": "05b752fee8a6d3e388f76003e813d618a27ff23b382e0b12e94ca6a2bd938066",
+    "line_start": 296,
+    "line_end": 322,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#route:POST /vault/reauth/passkey/verify@330",
+    "kind": "route-handler",
+    "fingerprint_sha256": "15a26213726ce354c221059a05b6266cb5d731d29cd672927e20a2ea53275e32",
+    "line_start": 330,
+    "line_end": 408,
+    "classification": "API",
+    "behaviors": [
+      "ownership",
+      "tenant-isolation",
+      "step-up",
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#route:POST /vault/reauth/verify@415",
+    "kind": "route-handler",
+    "fingerprint_sha256": "3ec947768453d98e0f75c1b9d644c9b4c31e68f10fa728fc8f7959c72492e983",
+    "line_start": 415,
+    "line_end": 507,
+    "classification": "API",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/routes/vault-reauth.ts#export-default",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+    "line_start": 509,
+    "line_end": 509,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-pin-guard.ts#FAILED_ATTEMPT_LIMIT",
+    "kind": "constant",
+    "fingerprint_sha256": "18c7997fcfa8e6c4f471c86d2633f1be3bda0ccbe3a030ccbec18b75871a7a53",
+    "line_start": 31,
+    "line_end": 31,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-pin-guard.ts#LOCKOUT_MS",
+    "kind": "constant",
+    "fingerprint_sha256": "749ecf30f7a915dcda532d976c311d53fb31f87728b561da413bf932f64a10e3",
+    "line_start": 32,
+    "line_end": 32,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-pin-guard.ts#failedAttempts",
+    "kind": "constant",
+    "fingerprint_sha256": "7f3c29755a1a6b2cb69e6cb4be434ed686e13ff41ec8da4fb0c869b78393a2ea",
+    "line_start": 33,
+    "line_end": 33,
+    "classification": "security",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-pin-guard.ts#isVaultPinLockedOut",
+    "kind": "function",
+    "fingerprint_sha256": "d4030f035ed8584553536eb2c2fe934859ebe21615fffd2588074b9244265f0c",
+    "line_start": 35,
+    "line_end": 40,
+    "classification": "security",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-pin-guard.ts#recordFailure",
+    "kind": "function",
+    "fingerprint_sha256": "ac3d7ec8d04bf49062c6e8f9479851b20cd7160bd091dedbb4acd2990d2365e2",
+    "line_start": 42,
+    "line_end": 50,
+    "classification": "security",
+    "behaviors": [
+      "pin",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-pin-guard.ts#clearVaultPinFailures",
+    "kind": "function",
+    "fingerprint_sha256": "5429f6f1df502da3f0cb0718673c331b3c29a45cf25e985b84e93aaa72560b4f",
+    "line_start": 52,
+    "line_end": 54,
+    "classification": "security",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-pin-guard.ts#hasVaultPin",
+    "kind": "function",
+    "fingerprint_sha256": "d90f93803c1aef19038e4c2a81e0393c533714361686281301efebc492b1abfe",
+    "line_start": 56,
+    "line_end": 60,
+    "classification": "security",
+    "behaviors": [
+      "tenant-isolation",
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-pin-guard.ts#VaultPinCheckResult",
+    "kind": "type",
+    "fingerprint_sha256": "802c6095f14d6758b8c4e965de0999cb8d4ca1b3ee95bed3647b78ce8233edaf",
+    "line_start": 62,
+    "line_end": 64,
+    "classification": "domain",
+    "behaviors": [
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/vault-pin-guard.ts#requireVaultPin",
+    "kind": "function",
+    "fingerprint_sha256": "f4eca4e4f4a5b671a87765adaa0ee463257f947ae7134998120d4de4b2912b45",
+    "line_start": 72,
+    "line_end": 116,
+    "classification": "security",
+    "behaviors": [
+      "tenant-isolation",
+      "step-up",
+      "pin"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize-many.ts#AuthorizeManyItem",
+    "kind": "interface",
+    "fingerprint_sha256": "71a808586d6348749b260233f1cfab2eb3d07e037f541f2c9b2fd159e89a5b1b",
+    "line_start": 100,
+    "line_end": 109,
+    "classification": "domain",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize-many.ts#AuthorizeManyResult",
+    "kind": "interface",
+    "fingerprint_sha256": "d801a571a702c32df0611807ecd87ff00635c9f0abcd52be0285b1807b600d63",
+    "line_start": 111,
+    "line_end": 115,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize-many.ts#AuthorizeManyOutcome",
+    "kind": "interface",
+    "fingerprint_sha256": "951b127a0f5ed21f9758eb28a3dd770a08f36f09321e2ac7dd060555fa3731b6",
+    "line_start": 117,
+    "line_end": 120,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize-many.ts#AuthorizeManyInput",
+    "kind": "interface",
+    "fingerprint_sha256": "9b2db1b56e37866ffd6a536628ccd42bbcd8ff5a6c4042b446ed9a80133154f8",
+    "line_start": 122,
+    "line_end": 132,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize-many.ts#firstHeaderValue",
+    "kind": "function",
+    "fingerprint_sha256": "f8fb545e737c46342dee25d463c3723950a25834527ad239b1611fee4a4b0175",
+    "line_start": 134,
+    "line_end": 137,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize-many.ts#authorizeMany",
+    "kind": "function",
+    "fingerprint_sha256": "5803c6bd5ec75d65819858598d0bccd73c3bd832d1ff9c401ca4d0ea75937c52",
+    "line_start": 153,
+    "line_end": 200,
+    "classification": "security",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize-many.ts#allowedKeys",
+    "kind": "function",
+    "fingerprint_sha256": "189f64b10cb60ab30c0be72df2ab12137c17e4e27735f34c4a39027184e0d9ca",
+    "line_start": 210,
+    "line_end": 212,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize.ts#AuthorizeInput",
+    "kind": "interface",
+    "fingerprint_sha256": "0dbb9ebf250a9ceacd5a5cff4e0a7ff9415ea579ad17c2c9aa866b6534b15d1c",
+    "line_start": 109,
+    "line_end": 119,
+    "classification": "domain",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize.ts#authorize",
+    "kind": "function",
+    "fingerprint_sha256": "f76345cd371bfded31886560604e31901679aaff23e09e8f9ffca58ef53980e7",
+    "line_start": 131,
+    "line_end": 177,
+    "classification": "security",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize.ts#firstHeaderValue",
+    "kind": "function",
+    "fingerprint_sha256": "f8fb545e737c46342dee25d463c3723950a25834527ad239b1611fee4a4b0175",
+    "line_start": 179,
+    "line_end": 182,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/authorize.ts#pipFailureOutcome",
+    "kind": "function",
+    "fingerprint_sha256": "f8e7f5d2ea5fdbf60553a535af5feede81bed434adaba4a3a214f8568efa71a1",
+    "line_start": 197,
+    "line_end": 206,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/enforce.ts#resolveIncludeDetail",
+    "kind": "function",
+    "fingerprint_sha256": "a73f252e8901587ca7958c5321e10fbb1230ba26c04fe0774ec1129d878d858f",
+    "line_start": 82,
+    "line_end": 88,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/enforce.ts#enforce",
+    "kind": "function",
+    "fingerprint_sha256": "33d12f72b1c16cc9a5968c2e7844be53f0032a1931435f0dd1d06404dcce28fd",
+    "line_start": 96,
+    "line_end": 167,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/index.ts#export-decl@22",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "309c4ee7bf169c5fd5ffe8955c3bb810ffea28fad679b8bde0b73162ab73aad7",
+    "line_start": 22,
+    "line_end": 22,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/index.ts#export-decl@23",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "2066f969468ae9640bb2665dddfd27c6d8430ebfe8d0cf5de55ef23d8c080470",
+    "line_start": 23,
+    "line_end": 23,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/index.ts#export-decl@24",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "20062fe544773f451d2d3f7420c0cb921aed5ba18b675deb451e4813b843b72b",
+    "line_start": 24,
+    "line_end": 24,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/index.ts#export-decl@25",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "d7280549c203301a6ef62d28d6e3dad28a7f7ca74bc5a0269dfae954e6a6e5e2",
+    "line_start": 25,
+    "line_end": 25,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/index.ts#export-decl@26",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "0a7b4ab89547b33a61528da641e8d8e0df7decbab410da3e9b8fbfd9dedea036",
+    "line_start": 26,
+    "line_end": 26,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/middleware.ts#fixedResource",
+    "kind": "function",
+    "fingerprint_sha256": "5d4509ede23258969fd37cbdeb7a8424f48bf174d26c79d15dcf692215ef45b8",
+    "line_start": 106,
+    "line_end": 108,
+    "classification": "security",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/middleware.ts#requirePolicy",
+    "kind": "function",
+    "fingerprint_sha256": "4533a58770c1ca0ccd4dd22ee184a9e7fffbb9431fc654dac0043103d2621eef",
+    "line_start": 116,
+    "line_end": 127,
+    "classification": "security",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/middleware.ts#requirePermission",
+    "kind": "function",
+    "fingerprint_sha256": "c29cf404e49203052e50ed58f5396aeb98b2f9ac3f6083a08027f87dc93402cd",
+    "line_start": 137,
+    "line_end": 151,
+    "classification": "security",
+    "behaviors": [
+      "ownership",
+      "audit",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/middleware.ts#requireOwnership",
+    "kind": "function",
+    "fingerprint_sha256": "4eb03589dad1dec9672abc4aac4bb5934549fba751f664671dce56142dd2fd59",
+    "line_start": 167,
+    "line_end": 183,
+    "classification": "security",
+    "behaviors": [
+      "ownership",
+      "audit",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/middleware.ts#requireRole",
+    "kind": "function",
+    "fingerprint_sha256": "bbb3a51713299493cc9a9ffdad040481af067e7a7f7540cd1702c7b7f4e94868",
+    "line_start": 195,
+    "line_end": 212,
+    "classification": "security",
+    "behaviors": [
+      "ownership",
+      "audit",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/middleware.ts#requireStepUp",
+    "kind": "function",
+    "fingerprint_sha256": "54e266192da3e2a7a32d54fbdcddf56bb6ac89a88bf0f0fb17d04d573a52606f",
+    "line_start": 222,
+    "line_end": 237,
+    "classification": "security",
+    "behaviors": [
+      "ownership",
+      "audit",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/middleware.ts#requireApproval",
+    "kind": "function",
+    "fingerprint_sha256": "3614eff8431fc3645d7bf4db3dfea3067806578a4cfc0ca292283894e97ffcfc",
+    "line_start": 248,
+    "line_end": 258,
+    "classification": "security",
+    "behaviors": [
+      "ownership",
+      "audit",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/middleware.ts#requirePublicAudit",
+    "kind": "function",
+    "fingerprint_sha256": "f2f6491a88423b2527e1748c3ef4e3cb5ec583fa8f3a057cd9a33900bf69f456",
+    "line_start": 302,
+    "line_end": 327,
+    "classification": "security",
+    "behaviors": [
+      "audit"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/types.ts#AuthorizingEngine",
+    "kind": "interface",
+    "fingerprint_sha256": "50caca920906b1df1089316404c9dc7f9da4faa3bc2b538da6c75dd99562a018",
+    "line_start": 60,
+    "line_end": 62,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/types.ts#ResourceRefBuilder",
+    "kind": "type",
+    "fingerprint_sha256": "562ed81f5a1e7dd71ba4e36d2777eac162fc780a6036b80177a33983138b7ab3",
+    "line_start": 75,
+    "line_end": 75,
+    "classification": "domain",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/types.ts#PepEnrichmentOptions",
+    "kind": "interface",
+    "fingerprint_sha256": "a39cb98e4c7f10d11d15e36f7d327a91586079991aa223a12eb18199c749ec20",
+    "line_start": 85,
+    "line_end": 133,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/types.ts#PepResponseOptions",
+    "kind": "interface",
+    "fingerprint_sha256": "4a0d36bc84729d2f18c70e8f778e8844ef7a8759b75a49362869053ebdcfd87b",
+    "line_start": 142,
+    "line_end": 159,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/types.ts#PepMiddlewareOptions",
+    "kind": "type",
+    "fingerprint_sha256": "2833e3d56a68577f71d5ec776363d8edb86d1d5360ba6e3ebe55dca59edb6f79",
+    "line_start": 162,
+    "line_end": 162,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/types.ts#AuthorizeOutcome",
+    "kind": "interface",
+    "fingerprint_sha256": "ba2dcb347e592b2f1b2d9a5fe8e102d9d748bd1ef7d2e7730b378e55709e1820",
+    "line_start": 174,
+    "line_end": 178,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/pep/types.ts#ambient@180",
+    "kind": "ambient-declaration",
+    "fingerprint_sha256": "31df7849625a9c7af9106c1089dadec147a492a7126270f747bc8efc5456d986",
+    "line_start": 180,
+    "line_end": 192,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/policy-engine.ts#PolicyRule",
+    "kind": "type",
+    "fingerprint_sha256": "fb8048564fc8a4bb19ea0dc98452abd2698006ea9a9025cf56d8ab102b142310",
+    "line_start": 103,
+    "line_end": 105,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/policy-engine.ts#RegisteredPolicyRule",
+    "kind": "interface",
+    "fingerprint_sha256": "54a8a2f45fcb3a443d48d7051e9ecf3de1cbf4b973fd987b770bee7c48c14a49",
+    "line_start": 107,
+    "line_end": 110,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/policy-engine.ts#RuleEvaluationTrace",
+    "kind": "interface",
+    "fingerprint_sha256": "2d4523862d2fc39d343b12b35cfcbcc1222c99a8b7137cfa99e7782e90967788",
+    "line_start": 121,
+    "line_end": 124,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/policy-engine.ts#PolicyDecisionObserver",
+    "kind": "type",
+    "fingerprint_sha256": "4609b0a784ff8c37c2c66f05dc721c95ae34896b22ac042b5e2a112ff2181602",
+    "line_start": 133,
+    "line_end": 136,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/policy-engine.ts#PolicyEngineOptions",
+    "kind": "interface",
+    "fingerprint_sha256": "acdfacb583a175b1a72a48a8c48e969aa69234b79260971651e3c140d6230fbc",
+    "line_start": 138,
+    "line_end": 158,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/policy-engine.ts#resolveRequestOrEarlyDecision",
+    "kind": "function",
+    "fingerprint_sha256": "5cd3df5922108ebf06750de4d30054053010cd31a8bbcfafbd8786e7bc2757b3",
+    "line_start": 172,
+    "line_end": 203,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/policy-engine.ts#stampLatency",
+    "kind": "function",
+    "fingerprint_sha256": "4542c11cfdca95983d3bbfe3471853c96042c173868c5eb7340ce452cb8510a2",
+    "line_start": 218,
+    "line_end": 221,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/policy-engine.ts#PolicyEngine",
+    "kind": "class",
+    "fingerprint_sha256": "59a7cf34f86f68f3c55a0ceaf3ac19183dba52e160de63245919c1a60dbf5945",
+    "line_start": 223,
+    "line_end": 404,
+    "classification": "security",
+    "behaviors": [
+      "ownership",
+      "security-policy"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/explicit-grant-rule.ts#RESOURCE_GRANT_POLICY_ID",
+    "kind": "constant",
+    "fingerprint_sha256": "4fac76ee3863ccf56c8873031d4b2f5b558bd4b027894be78b40aa41c020829e",
+    "line_start": 44,
+    "line_end": 44,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/explicit-grant-rule.ts#createExplicitResourceGrantRule",
+    "kind": "function",
+    "fingerprint_sha256": "1440f0531753a7d40ca6bac2597d84d03571e2e5ff9497203f7623652500184d",
+    "line_start": 46,
+    "line_end": 78,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/group-membership-rule.ts#GROUP_MEMBERSHIP_POLICY_ID",
+    "kind": "constant",
+    "fingerprint_sha256": "94efdbafc2c3f1dd04c6266711f363fe3d83488651cb303c5fdb8c575e0bae62",
+    "line_start": 90,
+    "line_end": 90,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/group-membership-rule.ts#GroupMembershipRuleOptions",
+    "kind": "interface",
+    "fingerprint_sha256": "3bbc34fddf3aef2d4792c6cc30d2e1661b51d0765bae8977cd3df67eb7654dd9",
+    "line_start": 92,
+    "line_end": 98,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/group-membership-rule.ts#createGroupMembershipRule",
+    "kind": "function",
+    "fingerprint_sha256": "0bf0bbcde08f12fa3e88f07d3c97b421422a529c8f5d72591b649186f47dc47c",
+    "line_start": 100,
+    "line_end": 121,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/index.ts#export-decl@36",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "7424316415cd64c2cd87dc85a952225a68fe48ef489a5e505a3549edce553d32",
+    "line_start": 36,
+    "line_end": 36,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/index.ts#export-decl@37",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "24412399db4a4a12f1c49eba6a1df0988d2d2934d7ec12554b0e4d01201294a6",
+    "line_start": 37,
+    "line_end": 37,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/index.ts#export-decl@38",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "a36d6a4f060582252152d0e59c4bcf412b76b25eb9c9ad36e8c4751842e6b3ff",
+    "line_start": 38,
+    "line_end": 38,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/index.ts#export-decl@39",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "73a1fe215da0a4dc5d34ecdef8a148fdb65ff1f8136c47965903aa0f702b3215",
+    "line_start": 39,
+    "line_end": 39,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/index.ts#export-decl@40",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "75e9ab0af2012591cdf9bcd5e30bb870b573b40ba1dab3726d9fba51340f6ceb",
+    "line_start": 40,
+    "line_end": 40,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/index.ts#export-decl@41",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "59d97317c4b71d0650fd03a5bc0c04f3afb264363e397a21a31ea0e295b81e0e",
+    "line_start": 41,
+    "line_end": 41,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/index.ts#export-decl@42",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "f51b9de2047278c8480e32b843ed83b443f77637ba5d5ee740d06e1618800f2b",
+    "line_start": 42,
+    "line_end": 42,
+    "classification": "adapter",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/locked-resource-rule.ts#LOCKED_RESOURCE_POLICY_ID",
+    "kind": "constant",
+    "fingerprint_sha256": "858ebf3b8a5ec219c83be1c73d50ba90c4b291f78cd24f167fe6c305458dd235",
+    "line_start": 37,
+    "line_end": 37,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/locked-resource-rule.ts#LockedResourceRuleOptions",
+    "kind": "interface",
+    "fingerprint_sha256": "d43aeec8b85755fdad962cef22fadd4da19d596d9ae17d2b2ec7dbe560766868",
+    "line_start": 39,
+    "line_end": 46,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/locked-resource-rule.ts#createLockedResourceRule",
+    "kind": "function",
+    "fingerprint_sha256": "e417c6452351b69b3a5392f9fe169ed9b7b5426b30d9af24dc5c227b2a0af365",
+    "line_start": 48,
+    "line_end": 61,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/organization-access-rule.ts#ORGANIZATION_ACCESS_POLICY_ID",
+    "kind": "constant",
+    "fingerprint_sha256": "62a871f92e4cbcbc4ad72df997d90875a72cc436af38b61a5fcd95ff27fd47d2",
+    "line_start": 75,
+    "line_end": 75,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/organization-access-rule.ts#createOrganizationAccessRule",
+    "kind": "function",
+    "fingerprint_sha256": "7931400a04f00d8b06c055f6f40adfe736504ac3dcae9b8a7a01173679ca864b",
+    "line_start": 77,
+    "line_end": 99,
+    "classification": "security",
+    "behaviors": [
+      "tenant-isolation"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/ownership-rule.ts#RESOURCE_OWNERSHIP_POLICY_ID",
+    "kind": "constant",
+    "fingerprint_sha256": "e14c892850ad02820a207de832688ed36909abaab78f25df137642401a301143",
+    "line_start": 61,
+    "line_end": 61,
+    "classification": "security",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/ownership-rule.ts#createResourceOwnershipRule",
+    "kind": "function",
+    "fingerprint_sha256": "353429b2f621dcd22754a9bfc0fece5c49c05f6602d2d7f5ee6521786c02aadf",
+    "line_start": 63,
+    "line_end": 82,
+    "classification": "security",
+    "behaviors": [
+      "ownership"
+    ]
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/role-override-rule.ts#ROLE_OVERRIDE_POLICY_ID",
+    "kind": "constant",
+    "fingerprint_sha256": "8c213356643f489aa4b9960b20b9808eb3ace15cb45dc5252fe3a6be3e96363d",
+    "line_start": 62,
+    "line_end": 62,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/role-override-rule.ts#createRoleOverrideRule",
+    "kind": "function",
+    "fingerprint_sha256": "7c70896c03013fb36e81b3583acf7e72a6a1487d1a02fc3048f08aa790a71523",
+    "line_start": 64,
+    "line_end": 76,
+    "classification": "security",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/types.ts#ResourceGrantEntry",
+    "kind": "interface",
+    "fingerprint_sha256": "7f37226148fde283c3910474cc2d40e96891c38f0f24024256fb9b1064b369fe",
+    "line_start": 17,
+    "line_end": 23,
+    "classification": "domain",
+    "behaviors": []
+  },
+  {
+    "id": "artifacts/api-server/src/lib/policy/resource/types.ts#ResourceGrantProvider",
+    "kind": "interface",
+    "fingerprint_sha256": "d7b3baa256db83d1b7221017d52ccc913d5efef933bd5afd3b8419bb903d1c68",
+    "line_start": 40,
+    "line_end": 47,
+    "classification": "domain",
+    "behaviors": []
+  }
+]

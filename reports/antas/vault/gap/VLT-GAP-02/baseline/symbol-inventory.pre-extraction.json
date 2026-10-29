@@ -1,0 +1,492 @@
+[
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#router",
+    "kind": "router-instance",
+    "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+    "line_start": 14,
+    "line_end": 14
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#generateReceiptToken",
+    "kind": "function",
+    "fingerprint_sha256": "bee808d7abc1d6abf223dd92a0bb1643c6d6e01afe292c5117fffb8db6dfc8a3",
+    "line_start": 19,
+    "line_end": 21
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#receiptUrl",
+    "kind": "function",
+    "fingerprint_sha256": "d3660742ff383f4dcd24a00133f30b2723c139c15aa377ba597c722a6bd535a2",
+    "line_start": 22,
+    "line_end": 24
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#safe",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "6373b9018eebfcdfd4bd20582efa0f895b7cc5daa3847d2b935e48768ceb8ce4",
+    "line_start": 27,
+    "line_end": 27
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#safeNum",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "f972419a9f145af4bceba74381e65e7afd39d6e2e20e2502bb81566c6aee3a9f",
+    "line_start": 28,
+    "line_end": 28
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#safeDate",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "e84b596b5bc2cc89ec42953b60cf4e66fc97191cacb0e7f4ffbc8df41353d69d",
+    "line_start": 29,
+    "line_end": 29
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#safeScore",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "e1a45e37af975ff06fe61ac566a72c8534eb6ebf7777e00469f821f6f86ba4e1",
+    "line_start": 31,
+    "line_end": 34
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:GET /local-accounts@38",
+    "kind": "route-handler",
+    "fingerprint_sha256": "dcaa5c27e84bce5a404905e6eaa6225b9295a9ba6d5778eae4f253fc108240b7",
+    "line_start": 38,
+    "line_end": 53
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:POST /local-accounts@56",
+    "kind": "route-handler",
+    "fingerprint_sha256": "1afa2d6ba2919dd696a2750706f933fa6c0deaa79f81586fab44cedaaa56a4ff",
+    "line_start": 56,
+    "line_end": 88
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#LOCAL_ACCOUNT_OWNER_SENTINEL_NONE",
+    "kind": "constant",
+    "fingerprint_sha256": "6f6752a6aa8fb637cc836b0e04c90aecd737d1ac6cd0905cf24345def2990bec",
+    "line_start": 124,
+    "line_end": 124
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#localAccountResource",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "a68b9ff7f6179897ef5a7167b027dce7bc110e4d2ee235c081adfec4a7c8592c",
+    "line_start": 126,
+    "line_end": 131
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#requireLocalAccountOwnership",
+    "kind": "function",
+    "fingerprint_sha256": "5956eab7ee8e022b9c0c01b4850d0049af715d4b5984dc13ce6478b720f593d3",
+    "line_start": 139,
+    "line_end": 141
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#denyNotFoundOrForbidden",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "172bfd628fe0caf3bd62deb8501206112b8097ff6b5ca386801bc5c42edbeab9",
+    "line_start": 143,
+    "line_end": 143
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#denyNotFound",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "4ef8131cb3b9598c148734e9fc0921f5632b50b37c116933b26336aa3059e5f5",
+    "line_start": 144,
+    "line_end": 144
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#denyAccountNotFound",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "834d1c54f5689e998772ede26edf76467dbaba4f5b788d841eda94bb2468b8d2",
+    "line_start": 145,
+    "line_end": 145
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#denySilentSuccess",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "4ae7c2e5a785fc659d33962816e83f0b65fe66de53fc6a1d57fc1ab2c5c4b5ea",
+    "line_start": 146,
+    "line_end": 146
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#denyEmptyPoints",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "473c93e659675dc7e239ffec64a612065c9e1e43fd2c34f0200341dbf467ed7b",
+    "line_start": 147,
+    "line_end": 147
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#LOCAL_ACCOUNT_CATEGORY_OWNER_SENTINEL_NONE",
+    "kind": "constant",
+    "fingerprint_sha256": "53bf1bcfdd9c446e3a108fdb6f196b4c33e3a2d6193c80b1f6d0124be9539f55",
+    "line_start": 154,
+    "line_end": 154
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#localAccountCategoryResource",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "1008f24d420fea3c5cd5a36dfdaddb1c3d73cd2379680909880f303776f898e6",
+    "line_start": 155,
+    "line_end": 160
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#requireLocalAccountCategoryOwnership",
+    "kind": "function",
+    "fingerprint_sha256": "84e5736a12b833504b93d3f82f4c0b8e33942425b7355faa5e47755529fbfe1e",
+    "line_start": 161,
+    "line_end": 163
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#LOCAL_ACCOUNT_POINT_OWNER_SENTINEL_NONE",
+    "kind": "constant",
+    "fingerprint_sha256": "1bc7184766c7119d0baf4537bc4abe4a3a1b9298bae9ec138ba98003cd7cde37",
+    "line_start": 165,
+    "line_end": 165
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#localAccountPointResource",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "9848aaa19e501fd3a57dd11dd2284333c41ac0ea28a73bfe530a2f123a8c9b53",
+    "line_start": 166,
+    "line_end": 171
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#requireLocalAccountPointOwnership",
+    "kind": "function",
+    "fingerprint_sha256": "3532d87a9e7502ec717a702a3f497ca364da5be970cdabb64694556c958946d3",
+    "line_start": 172,
+    "line_end": 174
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:PUT /local-accounts/:id@177",
+    "kind": "route-handler",
+    "fingerprint_sha256": "acc22795eb11629597328714f38998a665478e54bdba0679429b4d1b8fab4df6",
+    "line_start": 177,
+    "line_end": 214
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:PATCH /local-accounts/:id/status@217",
+    "kind": "route-handler",
+    "fingerprint_sha256": "ca142da478335238e1c89a145ae837f865f6b7c2c7a1dc62c02128c68fa0b09e",
+    "line_start": 217,
+    "line_end": 238
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:DELETE /local-accounts/:id@241",
+    "kind": "route-handler",
+    "fingerprint_sha256": "f4c61106f38c26636299e1c5b293576fa9a263e10a3f686372ff7c41c19a33d9",
+    "line_start": 241,
+    "line_end": 254
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:PATCH /local-accounts/:id/link-vault@257",
+    "kind": "route-handler",
+    "fingerprint_sha256": "44e8f0c2ec50ba917a59dd372f5ffa31a0cb0d342a52614bd613fe31366e88bd",
+    "line_start": 257,
+    "line_end": 273
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:PATCH /local-accounts/:id/unlink-vault@276",
+    "kind": "route-handler",
+    "fingerprint_sha256": "974838ffd411b7ba93652ee92ef948e2b99021b65bfbeadfd8a307ba69c35960",
+    "line_start": 276,
+    "line_end": 290
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:GET /local-accounts/categories@293",
+    "kind": "route-handler",
+    "fingerprint_sha256": "2017362f11aba6ad8c36378216d4b323f128e74b07678ce6edd23f2d7be54ff1",
+    "line_start": 293,
+    "line_end": 303
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:POST /local-accounts/categories@306",
+    "kind": "route-handler",
+    "fingerprint_sha256": "a1d804a45ebdd53187f09ae77318437481f3eca541714773a2578734bc75b69b",
+    "line_start": 306,
+    "line_end": 318
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:DELETE /local-accounts/categories/:id@321",
+    "kind": "route-handler",
+    "fingerprint_sha256": "dd1f75c33749720b774fbec14e96b70d8792ea6e6e576011961f16a98e657ea5",
+    "line_start": 321,
+    "line_end": 331
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:GET /local-accounts/:id@336",
+    "kind": "route-handler",
+    "fingerprint_sha256": "c7f24ac2c0eb9ea6c37962403df8ea97e9595a3285240aeaf4d3b7cc87bf1ca0",
+    "line_start": 336,
+    "line_end": 352
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:GET /local-accounts/:id/points@355",
+    "kind": "route-handler",
+    "fingerprint_sha256": "f137f4cd763de682aff3f98caf1680e3d769a5ddf61bf4f38f44765b7744c2a9",
+    "line_start": 355,
+    "line_end": 369
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:POST /local-accounts/:id/points@380",
+    "kind": "route-handler",
+    "fingerprint_sha256": "c09c6d2ccd9b64b97eaa9507048b3fc3365e3e5bc2b081dcd89b62507b5c6037",
+    "line_start": 380,
+    "line_end": 394
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:DELETE /local-accounts/points/:pointId@397",
+    "kind": "route-handler",
+    "fingerprint_sha256": "0e5b27d15f2a0a1fe78772fe9e4cbe70a09508afb114f318f7f19ef97cd2bccf",
+    "line_start": 397,
+    "line_end": 407
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#calcAgeLabel",
+    "kind": "function",
+    "fingerprint_sha256": "b1903bee9d4c0f189ccf6093608253f8bb245a906f5e83bace5e9fc46688bde3",
+    "line_start": 418,
+    "line_end": 427
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#calcRoiPct",
+    "kind": "function",
+    "fingerprint_sha256": "c7cddae9874a19ec64d603787df17a1ea90dddd72bf289ba08c94465369c27f7",
+    "line_start": 429,
+    "line_end": 432
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#fmtPublicLocalReceipt",
+    "kind": "function",
+    "fingerprint_sha256": "2aeed8287318269dc5b067f6d7db13e05d737c43040b6ce667c2048b3f5dd6d2",
+    "line_start": 434,
+    "line_end": 455
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:POST /local-accounts/:id/receipt@458",
+    "kind": "route-handler",
+    "fingerprint_sha256": "f0052f0ac16732daa6a4fd53d9ea9bd4d934b290a4808304fb8b5224e110e373",
+    "line_start": 458,
+    "line_end": 485
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:DELETE /local-accounts/:id/receipt@488",
+    "kind": "route-handler",
+    "fingerprint_sha256": "fe181637f814b3f6ce58812bd094e2eb06c55db4b7674dee7665401c4b92468f",
+    "line_start": 488,
+    "line_end": 501
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#findLocalAccountByReceiptToken",
+    "kind": "function",
+    "fingerprint_sha256": "180dcdc8c1fce65aba6f795d6d10ceae9c0faf54de25000f5c62913430f807bd",
+    "line_start": 503,
+    "line_end": 510
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:GET /local-accounts/receipt/:token@513",
+    "kind": "route-handler",
+    "fingerprint_sha256": "ccddc535abdf097c432d57a778f2db60ecb6e17573385bfb1ca057049eb72636",
+    "line_start": 513,
+    "line_end": 523
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:GET /local-accounts/receipt/:token/pdf@526",
+    "kind": "route-handler",
+    "fingerprint_sha256": "c21229fcd44ff52a653c265bacd996b0403c3f9808ed48ce8812059edf4ac727",
+    "line_start": 526,
+    "line_end": 560
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#generateCategoryReceiptToken",
+    "kind": "function",
+    "fingerprint_sha256": "68c82b74fdcd4c057a724c55c4829017a35be8f7c03e4a751d5ee3244f230496",
+    "line_start": 570,
+    "line_end": 572
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#categoryReceiptUrl",
+    "kind": "function",
+    "fingerprint_sha256": "ca9dc57fd276ddc99cc51cfbbee43f60202295d87a99457f6e9eb715d67667b8",
+    "line_start": 573,
+    "line_end": 575
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#ageInDays",
+    "kind": "function",
+    "fingerprint_sha256": "8c04af76d008f257c60e92eaade6516970235cddaa0bf9b253e5091b5e856acb",
+    "line_start": 577,
+    "line_end": 582
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#fmtAvgAgeLabel",
+    "kind": "function",
+    "fingerprint_sha256": "c055e00dd775f4afd04497777e57482344679b2ca5916e36de92af6343665279",
+    "line_start": 584,
+    "line_end": 590
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#computeCategoryAggregate",
+    "kind": "function",
+    "fingerprint_sha256": "0fef99689de7ee7821d0a9ec90812fcfcff11f91d5ca7ea1176f9cffdad226f3",
+    "line_start": 592,
+    "line_end": 625
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:POST /local-accounts/category-receipt/:category@628",
+    "kind": "route-handler",
+    "fingerprint_sha256": "8bf1ec0c7fe86e20ede47fdb05a515d9e66059246c788f534351c98369b55a2c",
+    "line_start": 628,
+    "line_end": 654
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:DELETE /local-accounts/category-receipt/:category@657",
+    "kind": "route-handler",
+    "fingerprint_sha256": "11a88bb86388f3821296812965df6bed769d15a2208a5ff3c93e680cfdc4cc66",
+    "line_start": 657,
+    "line_end": 670
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#findCategoryReceiptByToken",
+    "kind": "function",
+    "fingerprint_sha256": "d89805eb76d16f2c5bef47fc5e7b7d63a9a0509cdb064e1e4c941f7fae8d71d1",
+    "line_start": 672,
+    "line_end": 682
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#fmtPublicCategoryReceipt",
+    "kind": "function",
+    "fingerprint_sha256": "f9ead5fbe55fece08c37928448517ec8efcaab10b4cadbdbd6c866b2fd42802a",
+    "line_start": 684,
+    "line_end": 699
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:GET /local-accounts/category-receipt/:token@702",
+    "kind": "route-handler",
+    "fingerprint_sha256": "01e8e94383a23ccb5d0da3ab01c3237f0cd125982a5f8a1231d415a01152d402",
+    "line_start": 702,
+    "line_end": 712
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:GET /local-accounts/category-receipt/:token/pdf@715",
+    "kind": "route-handler",
+    "fingerprint_sha256": "382c567c71ab94ec587c6d4447d7daae10741cf8ca47e1ec5f6462625d1a1078",
+    "line_start": 715,
+    "line_end": 749
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#route:POST /local-accounts/category-receipt/:category/email@752",
+    "kind": "route-handler",
+    "fingerprint_sha256": "5750d402ff83af8b7a8097f55e03eeacf4a19ddbf9ebc3c8abfe07de3caf2c50",
+    "line_start": 752,
+    "line_end": 794
+  },
+  {
+    "id": "artifacts/api-server/src/routes/local-accounts.ts#export-default",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+    "line_start": 796,
+    "line_end": 796
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#LocalAccount",
+    "kind": "interface",
+    "fingerprint_sha256": "eef0fd8020d58514fd77a9777195be7a3b3a33ac9c47ed81bc15bdb3a3683dd0",
+    "line_start": 33,
+    "line_end": 64
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#Category",
+    "kind": "interface",
+    "fingerprint_sha256": "32d4bd08cb3d6652234994fb4ebee2b1b61d811748ece2f4b9f0d17edeca1477",
+    "line_start": 66,
+    "line_end": 72
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#calcAge",
+    "kind": "function",
+    "fingerprint_sha256": "e830746775f907bd6df38019fec65cf044db3319d7b020b8fd7d3904913ae7a6",
+    "line_start": 80,
+    "line_end": 90
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#calcROI",
+    "kind": "function",
+    "fingerprint_sha256": "7f78d561bb3990fc771f9532fcccf1ab10150b5f2924f8493dc13ec378cf64fe",
+    "line_start": 92,
+    "line_end": 95
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#SecretField",
+    "kind": "function",
+    "fingerprint_sha256": "c9be5034daed0ffc56ef52dac4ff1c7344ea008c946b170a65a6a9bf7f36e0df",
+    "line_start": 98,
+    "line_end": 123
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#AccountViewDialog",
+    "kind": "function",
+    "fingerprint_sha256": "4d515646bbf8e183fd82b79d5a4908836cc1568493e7f29517a78c6261b0b054",
+    "line_start": 126,
+    "line_end": 261
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#AccountCard",
+    "kind": "function",
+    "fingerprint_sha256": "52c9fa701ebc6d2ba6ed25011d631e21edb9ef10c0df8838dc2af4caba057051",
+    "line_start": 264,
+    "line_end": 431
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#EMPTY",
+    "kind": "constant",
+    "fingerprint_sha256": "9cac50c8669edf12995ffd63e14ec4dfca18e38efbbb420d672140a0713d4862",
+    "line_start": 434,
+    "line_end": 442
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#toFormState",
+    "kind": "function",
+    "fingerprint_sha256": "d93aed66cd18dd97d96d1964e362dcabf01ca2b8d39a355d11d482ecad412e0c",
+    "line_start": 444,
+    "line_end": 466
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#AccountFormDialog",
+    "kind": "function",
+    "fingerprint_sha256": "269e4ebaf4226ef0ab8173ffde5621a04bc47aa4612d34047b690b449cc1e4b6",
+    "line_start": 469,
+    "line_end": 956
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#AddCategoryDialog",
+    "kind": "function",
+    "fingerprint_sha256": "53998c10ba0e7882afec2763cf95c5688eea3ef09d605da9b798a83174f4c400",
+    "line_start": 959,
+    "line_end": 1008
+  },
+  {
+    "id": "artifacts/ayzen/src/components/local-accounts.tsx#LocalAccounts",
+    "kind": "function",
+    "fingerprint_sha256": "15cd5707e0306b7a0d0c3ed4bc2e542701e28f8729058d0a70186a3130c68750",
+    "line_start": 1011,
+    "line_end": 1440
+  },
+  {
+    "id": "artifacts/ayzen/src/config/fields/local-account-create.ts#LOCAL_ACCOUNT_FIELDS",
+    "kind": "constant",
+    "fingerprint_sha256": "e3ccb0abb327a20176b201b4b671c9f99aa9ce676e11c5ea56e16964c45d0d70",
+    "line_start": 18,
+    "line_end": 81
+  },
+  {
+    "id": "artifacts/ayzen/src/config/fields/local-account-buy.ts#LOCAL_ACCOUNT_BUY_FIELDS",
+    "kind": "constant",
+    "fingerprint_sha256": "589e6d9a8a03fc309c8b4f2ee6e5acbb673472632c8f7c4855cab6d1dfe99b51",
+    "line_start": 15,
+    "line_end": 41
+  }
+]

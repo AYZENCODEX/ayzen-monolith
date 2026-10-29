@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-F8-and-WP-3",
+  "title": "F8 fix (transactional book delete) and WP-3 ledger core split",
+  "timestamp": "2026-10-18T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Code is written and verified statically only. typecheck, build and ALL DB tests did not run (no Postgres, no node_modules). WP-3 is money-critical; the repo's own gate says its DB invariant suite should run first, so nothing here is PASS until pnpm test:finance-db is green in the real checkout.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; cumulative with WP-2b; bound by content in fin-provenance-manifest.json (63 files, regenerated)."
+  },
+  "f8": {
+    "change": "deleteBook now runs in one db.transaction: book row SELECT ... FOR UPDATE with owner predicate, entry count re-checked inside, journal lines and headers deleted by the same id set, accounts and book deleted with user_id in the predicate.",
+    "behavior": "Outcomes and messages unchanged.",
+    "residual": "A journal posted concurrently by another path is not blocked by the book lock.",
+    "tests": "3 new DB tests in wp2b-use-cases.db.test.ts (cleanup + other book untouched, concurrent double delete, refusal leaves chart intact). Unrun. No injected-failure rollback test."
+  },
+  "wp3": {
+    "oldToNew": {
+      "ledger/books.ts": [
+        "listBooks",
+        "resolveBookId"
+      ],
+      "ledger/system-accounts.ts": [
+        "SYSTEM_ACCOUNTS",
+        "ensureSystemAccounts",
+        "AccountType"
+      ],
+      "ledger/journal.ts": [
+        "REPAYABLE_KINDS",
+        "postJournal",
+        "postEntryJournal",
+        "postEntryAdjustmentJournal",
+        "postRepaymentJournal",
+        "postLateFeeAccrualJournal",
+        "deleteJournalForEntry",
+        "deleteLedgerEntryCascade",
+        "FinanceDbTransaction"
+      ],
+      "ledger/repayments.ts": [
+        "applyPrincipalRepayment",
+        "applyPrincipalRepaymentTx",
+        "recordRepayment",
+        "payAmortizationInstallment",
+        "RecordRepaymentInput",
+        "RecordRepaymentResult",
+        "PayInstallmentResult"
+      ],
+      "ledger/balances.ts": [
+        "computeAccountBalances",
+        "AccountBalanceRow"
+      ],
+      "stays in lib/finance-accounting.ts (WP-4)": [
+        "generate/listAmortization*",
+        "generate/listDepreciation*",
+        "postDepreciationJournal",
+        "fmtAmortRow",
+        "row shapes",
+        "receipt-token re-exports"
+      ]
+    },
+    "method": "Verbatim line slicing by script. Check: 0 original code lines after the imports are missing from the new files; every added line is an import, header comment or the DbTransaction alias.",
+    "publicSurface": "34 exports before, 34 after, none missing, none extra (pinned by ledger-compat.test.ts).",
+    "consumersMigrated": [
+      "finance/jobs/report-schedule.ts",
+      "finance/application/ai.ts",
+      "finance/application/books-accounts.ts",
+      "finance/application/reports.ts",
+      "lib/finance-invoice.ts",
+      "lib/finance-wallet-bridge.ts",
+      "lib/finance-recurring-cron.ts",
+      "lib/finance-late-fee-cron.ts",
+      "routes/finance.ts",
+      "routes/finance-invoices.ts"
+    ],
+    "consumersRemaining": [
+      "3 DB test files import via the shim on purpose (exercise the compat path)",
+      "routes/finance.ts schedule functions (WP-4)"
+    ],
+    "behaviorChanges": "None intended; no logic edited."
+  },
+  "commands": [
+    {
+      "command": "node --experimental-strip-types --test src/finance/route-security.test.ts src/finance/ledger-compat.test.ts",
+      "exitCode": 0,
+      "tests": 21,
+      "passed": 21,
+      "failed": 0
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 42 sources, 0 findings (new wp3-single-owner and wp3-ledger-forbidden-imports checks)"
+    },
+    {
+      "command": "node scripts/antas/finance/provenance.mjs --verify",
+      "exitCode": 0,
+      "result": "0 changed, 0 missing, 63 files"
+    },
+    {
+      "command": "tsc --ignoreConfig --noEmit --noResolve over all touched files (syntax/undefined-name/missing-export filter)",
+      "exitCode": 0,
+      "result": "no TS1xxx, TS2304, TS2305, TS2724 findings; NOT a typecheck"
+    },
+    {
+      "command": "mutation: duplicate postJournal declaration in legacy file",
+      "exitCode": 1,
+      "result": "wp3-single-owner finding; reverted"
+    },
+    {
+      "command": "mutation: ledger/balances.ts imports ../../lib/logger",
+      "exitCode": 1,
+      "result": "wp3-ledger-forbidden-imports finding; reverted"
+    }
+  ],
+  "correctionsToEarlierEvidence": "Earlier syntax checks (WP-2b evidence) ran tsc without --ignoreConfig and TS5112 may have stopped tsc from checking at all in some invocations. They were re-run here with --ignoreConfig over the WP-2b files too and are clean. The WP-2b evidence line for that command should be read as superseded by this one.",
+  "firstRunIssuesFixed": [
+    "Validator regex counted `import { type X }` as a declaration (false positives); tightened to real declarations and re-mutation-tested",
+    "lib/finance-accounting.ts kept three unused imports; removed",
+    "routes/finance.ts kept ensureSystemAccounts, listBooks, usersTable unused after moves; removed (other unused imports there predate this work and are untouched; noUnusedLocals is false)"
+  ],
+  "notRun": [
+    "pnpm typecheck / build",
+    "pnpm test:finance-db (WP-1 suite F1-F7, WP-2a, WP-2b, F8 tests; all unrun)",
+    "domain/*.test.ts (need tsx)",
+    "any HTTP-level test of moved routes"
+  ],
+  "nextSafeStep": "In the Replit checkout run pnpm typecheck and pnpm test:finance-db. If green, promote WP-1a, F1-F8, WP-2a, WP-2b and WP-3 together. Then WP-4 (schedules and assets); the schedule generators interleave DB deletes with math, so add characterization tests before splitting."
+}

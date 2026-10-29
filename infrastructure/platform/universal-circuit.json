@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "stages": ["domain", "dns-edge", "frontend", "page-route", "ui-module", "component", "feature", "sub-feature", "function", "sub-function", "module", "api-client", "api", "api-server", "service", "artifact", "deployment", "db-resource", "eventbus", "workflow", "audit", "intelligence", "admin-telegram"],
+  "statuses": ["CONNECTED", "BROKEN", "MISSING", "OPTIONAL", "N/A", "DEPRECATED"],
+  "requiredForProduction": ["domain", "frontend", "feature", "api", "service", "artifact", "deployment", "audit"],
+  "optionalByPolicy": ["dns-edge", "eventbus", "workflow", "intelligence", "admin-telegram"],
+  "engine": "packages/architecture/src/index.mjs"
+}

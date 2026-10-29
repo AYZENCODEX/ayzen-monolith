@@ -1,0 +1,341 @@
+{
+  "gap": "VLT-GAP-20",
+  "sub": "VLT-GAP-20-B",
+  "stage": "gate",
+  "checked_at": "2023-11-14T22:13:20.000Z",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "1c65522d03f805b9bfb11464c0c4e7634d2020d8f74add8a3d2489dc3f25f87a",
+  "source_hashes": {
+    "scripts/antas/vault/gap/perf-common.mjs": "143f100f4bcbd208bfde467f4b88fe964aa3aeb32812eeabe78f31339ca9624b",
+    "scripts/antas/vault/gap/equivalence-replay.mjs": "cdb497b66370834709eb58174743c24780b7f9c8165d1c2e9f5f79747ff40f1c",
+    "scripts/antas/vault/gap/equivalence-suite.mjs": "edf3f03e0e1dedc0f3503b67358b1415de6797787b6fde481a4654905cead856",
+    "scripts/antas/vault/gap/harness.mjs": "5d5ee87633aa75ec673aff72e137093c32b2bdfcccf304a4e138216fa23964c4",
+    "scripts/antas/vault/gap/gap-configs/vault-perf.json": "0d189557a6d01003d0a7d292f2c26d71f7c99411db4eaad2a8b2f1b177f4cd2e",
+    "scripts/antas/vault/gap/gap-configs/vault-equivalence.json": "e135fe26116dcb3b1290bab7504bde1f087dc84007dfeac67d3d846f6e1e6fc4",
+    "scripts/antas/vault/gap/validate-vlt-gap-20-A.mjs": "e59b170e5a3c666d723d40e7017373f8535be873b661afb760df6dd02ccf123d",
+    "scripts/antas/vault/gap/validate-vlt-gap-20-B.mjs": "0cb5a5f49d317026886b5efaebc582f3cb55dd35beeaa720c030d0405a6d7b8e",
+    "reports/antas/vault/gap/VLT-GAP-20/baseline.json": "d4134a84c8a9c517cef0f7a0f8b8b27e9fa6ffcbe023804492829c0d796ef501"
+  },
+  "duration_ms": -91718053441,
+  "scenarios": [
+    "empty-db",
+    "row-db",
+    "row-db-two-rows",
+    "row-db-admin",
+    "row-db-linked",
+    "row-db-import"
+  ],
+  "reps": 7,
+  "cells_profiled": 663,
+  "timing_attempts": 1,
+  "statements": {
+    "old": 855,
+    "current": 855
+  },
+  "regressions": {
+    "more_queries": 0,
+    "new_query_shapes": 0,
+    "more_boundary_calls": 0,
+    "n_plus_one_introduced": 0,
+    "n_plus_one_worsened": 0,
+    "violations": 0
+  },
+  "improvements": [],
+  "pre_existing_n_plus_one": [
+    {
+      "group": "entity-secret",
+      "route": "DELETE /vault/trash",
+      "extra_statements_for_second_row": 2,
+      "one_row": 3,
+      "two_rows": 5,
+      "still_in_current": true
+    },
+    {
+      "group": "entity-secret",
+      "route": "POST /vault/health-check",
+      "extra_statements_for_second_row": 2,
+      "one_row": 3,
+      "two_rows": 5,
+      "still_in_current": true
+    }
+  ],
+  "latency_ms": {
+    "entity-secret": {
+      "old": {
+        "samples": 200,
+        "timed_out": 5,
+        "p50": 0.026,
+        "p95": 0.105,
+        "p99": 0.182,
+        "total": 7.727
+      },
+      "new": {
+        "samples": 200,
+        "timed_out": 5,
+        "p50": 0.026,
+        "p95": 0.085,
+        "p99": 0.134,
+        "total": 6.95
+      }
+    },
+    "local-account": {
+      "old": {
+        "samples": 92,
+        "timed_out": 0,
+        "p50": 0.018,
+        "p95": 0.098,
+        "p99": 0.127,
+        "total": 2.6
+      },
+      "new": {
+        "samples": 92,
+        "timed_out": 0,
+        "p50": 0.019,
+        "p95": 0.094,
+        "p99": 0.139,
+        "total": 2.796
+      }
+    },
+    "kyc": {
+      "old": {
+        "samples": 65,
+        "timed_out": 0,
+        "p50": 0.025,
+        "p95": 0.099,
+        "p99": 0.159,
+        "total": 2.195
+      },
+      "new": {
+        "samples": 65,
+        "timed_out": 0,
+        "p50": 0.027,
+        "p95": 0.096,
+        "p99": 0.164,
+        "total": 2.315
+      }
+    },
+    "game-marketplace": {
+      "old": {
+        "samples": 60,
+        "timed_out": 0,
+        "p50": 0.014,
+        "p95": 0.06,
+        "p99": 0.159,
+        "total": 1.46
+      },
+      "new": {
+        "samples": 60,
+        "timed_out": 0,
+        "p50": 0.016,
+        "p95": 0.045,
+        "p99": 0.144,
+        "total": 1.36
+      }
+    },
+    "security-access": {
+      "old": {
+        "samples": 68,
+        "timed_out": 0,
+        "p50": 0.009,
+        "p95": 0.071,
+        "p99": 0.121,
+        "total": 1.377
+      },
+      "new": {
+        "samples": 68,
+        "timed_out": 0,
+        "p50": 0.011,
+        "p95": 0.06,
+        "p99": 0.11,
+        "total": 1.357
+      }
+    },
+    "backup-restore": {
+      "old": {
+        "samples": 48,
+        "timed_out": 0,
+        "p50": 0.007,
+        "p95": 0.037,
+        "p99": 0.045,
+        "total": 0.584
+      },
+      "new": {
+        "samples": 48,
+        "timed_out": 0,
+        "p50": 0.008,
+        "p95": 0.035,
+        "p99": 0.051,
+        "total": 0.631
+      }
+    },
+    "snapshot-trash": {
+      "old": {
+        "samples": 55,
+        "timed_out": 0,
+        "p50": 0.014,
+        "p95": 0.057,
+        "p99": 0.066,
+        "total": 1.007
+      },
+      "new": {
+        "samples": 55,
+        "timed_out": 0,
+        "p50": 0.012,
+        "p95": 0.051,
+        "p99": 0.057,
+        "total": 0.982
+      }
+    },
+    "share-attachment": {
+      "old": {
+        "samples": 60,
+        "timed_out": 0,
+        "p50": 0.017,
+        "p95": 0.046,
+        "p99": 0.12,
+        "total": 1.289
+      },
+      "new": {
+        "samples": 60,
+        "timed_out": 0,
+        "p50": 0.018,
+        "p95": 0.044,
+        "p99": 0.106,
+        "total": 1.307
+      }
+    },
+    "migration": {
+      "old": {
+        "samples": 10,
+        "timed_out": 0,
+        "p50": 0.014,
+        "p95": 0.05,
+        "p99": 0.05,
+        "total": 0.206
+      },
+      "new": {
+        "samples": 10,
+        "timed_out": 0,
+        "p50": 0.014,
+        "p95": 0.053,
+        "p99": 0.053,
+        "total": 0.196
+      }
+    }
+  },
+  "tolerance": {
+    "p95_factor": 1.5,
+    "p50_factor": 1.5,
+    "p99_factor": 2,
+    "p99_abs_slack_ms": 10,
+    "total_factor": 1.35,
+    "abs_slack_ms": 2,
+    "retries": 2,
+    "total_abs_slack_ms": 5
+  },
+  "intentional_changes": [],
+  "unmeasurable_routes": {
+    "entity-secret": {
+      "GET /vault/gas-overview": "handler never answers under the replay fakes (same on OLD and NEW; GAP-15 lists it as allowed_shallow); reported, not timed"
+    }
+  },
+  "mutations": [
+    {
+      "mutation": "control: unmutated profile is clean",
+      "expected": "no violations",
+      "caught": true,
+      "got": []
+    },
+    {
+      "mutation": "one extra DB statement on a current-side cell",
+      "expected": "V2_MORE_QUERIES",
+      "caught": true,
+      "got": [
+        "V2_MORE_QUERIES",
+        "V6_BASELINE_DRIFT"
+      ]
+    },
+    {
+      "mutation": "current code issues a query shape OLD never did",
+      "expected": "V3_NEW_QUERY_SHAPE",
+      "caught": true,
+      "got": [
+        "V3_NEW_QUERY_SHAPE",
+        "V6_BASELINE_DRIFT"
+      ]
+    },
+    {
+      "mutation": "current code encrypts/audits one more time",
+      "expected": "V4_MORE_BOUNDARY_CALLS",
+      "caught": true,
+      "got": [
+        "V4_MORE_BOUNDARY_CALLS",
+        "V6_BASELINE_DRIFT"
+      ]
+    },
+    {
+      "mutation": "per-row query planted (N+1) on a route that had none",
+      "expected": "V5_N_PLUS_ONE_INTRODUCED",
+      "caught": true,
+      "got": [
+        "V2_MORE_QUERIES",
+        "V6_BASELINE_DRIFT",
+        "V5_N_PLUS_ONE_INTRODUCED"
+      ]
+    },
+    {
+      "mutation": "OLD route dropped from current code",
+      "expected": "V1_ROUTE_MISSING",
+      "caught": true,
+      "got": [
+        "V1_ROUTE_MISSING"
+      ]
+    },
+    {
+      "mutation": "current latency 6x slower on every handler",
+      "expected": "V7_LATENCY_TOTAL",
+      "caught": true,
+      "got": [
+        "V7_LATENCY_P50",
+        "V7_LATENCY_P95",
+        "V7_LATENCY_TOTAL"
+      ]
+    },
+    {
+      "mutation": "capture edited by hand (counts no longer match reality)",
+      "expected": "V6_BASELINE_DRIFT",
+      "caught": true,
+      "got": [
+        "V6_BASELINE_DRIFT"
+      ]
+    },
+    {
+      "mutation": "intentional-change allowance that matches nothing",
+      "expected": "V8_STALE_ALLOWANCE",
+      "caught": true,
+      "got": [
+        "V8_STALE_ALLOWANCE"
+      ]
+    },
+    {
+      "mutation": "profile differs between two identical runs",
+      "expected": "V9_NON_DETERMINISTIC",
+      "caught": true,
+      "got": [
+        "V9_NON_DETERMINISTIC"
+      ]
+    }
+  ],
+  "limits": [
+    "Counts are exact for what the GAP-15 fakes can drive: canned rows, 1 vs 2 rows to expose per-row querying. A route whose fan-out depends on real data volume (e.g. a loop over 10k rows) shows as N+1 only if its statement count changes between 1 and 2 rows.",
+    "Handler time is the CPU/await cost of the code path against in-memory fakes. It is NOT Postgres latency, plans, locks, indexes or payload size; p50/p95/p99 here guard against the extraction adding work, not against slow queries.",
+    "GET /vault/gas-overview never answers under the replay fakes (same on OLD and current, declared in vault-perf.json): its statements and timing are not measured.",
+    "Pre-existing N+1 shapes (DELETE /vault/trash, POST /vault/health-check) are the same in OLD and current: the extraction did not introduce them and this gate does not fix them; they are listed for a performance backlog.",
+    "Only branches the GAP-15 fake rows reach are profiled: e.g. the kyc code that re-reads a data entity runs only when a row carries data_entity_id, which the canned rows do not, so an extra query planted there (tried by hand) is NOT seen. Statement counts on exercised paths are exact (an extra query planted on GET /kyc-entries/:id was caught by V2/V3/V6).",
+    "The db-throws scenario is not profiled (error paths short-circuit); its one intentional old/current difference is covered by GAP-15-C.",
+    "Judge mutations are planted on the profiles/capture the judge consumes, not on the Vault source; a source-level regression is caught because it changes the profiles."
+  ],
+  "findings": [],
+  "status": "PASS"
+}

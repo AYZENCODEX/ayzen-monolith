@@ -1,0 +1,317 @@
+{
+  "measuredAt": "2026-10-20T07:05:01.475Z",
+  "routes": {
+    "files": [
+      {
+        "file": "artifacts/api-server/src/routes/finance.ts",
+        "handlers": 86,
+        "lines": 1445,
+        "dbLines": [
+          204,
+          217,
+          317
+        ],
+        "dbWriteLines": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/finance-invoices.ts",
+        "handlers": 23,
+        "lines": 580,
+        "dbLines": [
+          128,
+          136,
+          194
+        ],
+        "dbWriteLines": []
+      }
+    ],
+    "totalHandlers": 109,
+    "directDbLines": 6,
+    "directDbWriteLines": 0
+  },
+  "targetTree": {
+    "sourceFiles": 51,
+    "sourceLines": 7079,
+    "testFiles": 23,
+    "directoriesWithSources": 13,
+    "byDirectory": {
+      "(root)": {
+        "sources": 0,
+        "sourceLines": 0,
+        "tests": 5
+      },
+      "ai": {
+        "sources": 1,
+        "sourceLines": 181,
+        "tests": 1
+      },
+      "application": {
+        "sources": 17,
+        "sourceLines": 3440,
+        "tests": 8
+      },
+      "domain": {
+        "sources": 5,
+        "sourceLines": 350,
+        "tests": 5
+      },
+      "fees": {
+        "sources": 1,
+        "sourceLines": 148,
+        "tests": 0
+      },
+      "integrations": {
+        "sources": 2,
+        "sourceLines": 155,
+        "tests": 0
+      },
+      "invoices": {
+        "sources": 6,
+        "sourceLines": 633,
+        "tests": 0
+      },
+      "jobs": {
+        "sources": 8,
+        "sourceLines": 771,
+        "tests": 1
+      },
+      "ledger": {
+        "sources": 5,
+        "sourceLines": 693,
+        "tests": 0
+      },
+      "networth": {
+        "sources": 1,
+        "sourceLines": 154,
+        "tests": 1
+      },
+      "notifications": {
+        "sources": 1,
+        "sourceLines": 218,
+        "tests": 0
+      },
+      "payment-methods": {
+        "sources": 1,
+        "sourceLines": 142,
+        "tests": 1
+      },
+      "receipts": {
+        "sources": 1,
+        "sourceLines": 33,
+        "tests": 1
+      },
+      "schedules": {
+        "sources": 2,
+        "sourceLines": 161,
+        "tests": 0
+      }
+    }
+  },
+  "legacy": {
+    "libFinanceFiles": [
+      "finance-accounting.db-runner.mjs",
+      "finance-accounting.db.test.ts"
+    ],
+    "removedModulesStillPresent": [],
+    "importersOfRemovedModules": [],
+    "ignoredFixtures": [
+      "tools/lineage-builder/test/lib.test.mjs:21",
+      "tools/lineage-builder/test/lib.test.mjs:34"
+    ]
+  },
+  "evidence": {
+    "files": 31,
+    "statusCounts": {
+      "BLOCKED": 24,
+      "PASS": 7
+    },
+    "list": [
+      {
+        "file": "fin-00-a-evidence.json",
+        "phase": "FIN-00-A",
+        "status": "BLOCKED",
+        "notRun": 4
+      },
+      {
+        "file": "fin-01-evidence.json",
+        "phase": "FIN-01",
+        "status": "BLOCKED",
+        "notRun": 0
+      },
+      {
+        "file": "fin-02-evidence.json",
+        "phase": "FIN-02",
+        "status": "PASS",
+        "notRun": 0
+      },
+      {
+        "file": "fin-02b-evidence.json",
+        "phase": "FIN-02B",
+        "status": "PASS",
+        "notRun": 5
+      },
+      {
+        "file": "fin-02c-evidence.json",
+        "phase": "FIN-02C",
+        "status": "PASS",
+        "notRun": 4
+      },
+      {
+        "file": "fin-02d-evidence.json",
+        "phase": "FIN-02D",
+        "status": "PASS",
+        "notRun": 0
+      },
+      {
+        "file": "fin-02e-evidence.json",
+        "phase": "FIN-02E",
+        "status": "PASS",
+        "notRun": 0
+      },
+      {
+        "file": "fin-02f-evidence.json",
+        "phase": "FIN-02F",
+        "status": "PASS",
+        "notRun": 0
+      },
+      {
+        "file": "fin-03-evidence.json",
+        "phase": "FIN-03",
+        "status": "BLOCKED",
+        "notRun": 0
+      },
+      {
+        "file": "fin-04-evidence.json",
+        "phase": "FIN-04",
+        "status": "BLOCKED",
+        "notRun": 0
+      },
+      {
+        "file": "fin-f10c-evidence.json",
+        "phase": "F10c",
+        "status": "BLOCKED",
+        "notRun": 0
+      },
+      {
+        "file": "fin-f11-f12-evidence.json",
+        "phase": "F11-F12",
+        "status": "BLOCKED",
+        "notRun": 0
+      },
+      {
+        "file": "fin-f9-f10-evidence.json",
+        "phase": "FIN-F9-F10-follow-up",
+        "status": "BLOCKED",
+        "notRun": 3
+      },
+      {
+        "file": "fin-wp0-evidence.json",
+        "phase": "FIN-WP-0",
+        "status": "PASS",
+        "notRun": 2
+      },
+      {
+        "file": "fin-wp1-evidence.json",
+        "phase": "FIN-WP-1",
+        "status": "BLOCKED",
+        "notRun": 6
+      },
+      {
+        "file": "fin-wp1-f5-evidence.json",
+        "phase": "FIN-WP-1-F5",
+        "status": "BLOCKED",
+        "notRun": 3
+      },
+      {
+        "file": "fin-wp1-f6-evidence.json",
+        "phase": "FIN-WP-1-F6",
+        "status": "BLOCKED",
+        "notRun": 3
+      },
+      {
+        "file": "fin-wp1-f7-evidence.json",
+        "phase": "FIN-WP-1-F7",
+        "status": "BLOCKED",
+        "notRun": 3
+      },
+      {
+        "file": "fin-wp1-fixes-evidence.json",
+        "phase": "FIN-WP-1-FIXES",
+        "status": "BLOCKED",
+        "notRun": 4
+      },
+      {
+        "file": "fin-wp1-fixes2-evidence.json",
+        "phase": "FIN-WP-1-FIXES-2",
+        "status": "BLOCKED",
+        "notRun": 5
+      },
+      {
+        "file": "fin-wp2a-evidence.json",
+        "phase": "FIN-WP-2a",
+        "status": "BLOCKED",
+        "notRun": 4
+      },
+      {
+        "file": "fin-wp2b-evidence.json",
+        "phase": "FIN-WP-2b",
+        "status": "BLOCKED",
+        "notRun": 4
+      },
+      {
+        "file": "fin-wp3-evidence.json",
+        "phase": "FIN-F8-and-WP-3",
+        "status": "BLOCKED",
+        "notRun": 4
+      },
+      {
+        "file": "fin-wp4-evidence.json",
+        "phase": "FIN-WP-4",
+        "status": "BLOCKED",
+        "notRun": 5
+      },
+      {
+        "file": "fin-wp5a-evidence.json",
+        "phase": "FIN-WP-5a",
+        "status": "BLOCKED",
+        "notRun": 4
+      },
+      {
+        "file": "fin-wp5b-evidence.json",
+        "phase": "FIN-WP-5b",
+        "status": "BLOCKED",
+        "notRun": 3
+      },
+      {
+        "file": "fin-wp6a-evidence.json",
+        "phase": "FIN-WP-6a",
+        "status": "BLOCKED",
+        "notRun": 4
+      },
+      {
+        "file": "fin-wp6b-evidence.json",
+        "phase": "FIN-WP-6b",
+        "status": "BLOCKED",
+        "notRun": 6
+      },
+      {
+        "file": "fin-wp7-evidence.json",
+        "phase": "FIN-WP-7",
+        "status": "BLOCKED",
+        "notRun": 4
+      },
+      {
+        "file": "fin-wp8-evidence.json",
+        "phase": "FIN-WP-8",
+        "status": "BLOCKED",
+        "notRun": 4
+      },
+      {
+        "file": "fin-wp9-evidence.json",
+        "phase": "FIN-WP-9",
+        "status": "BLOCKED",
+        "notRun": 13
+      }
+    ]
+  }
+}

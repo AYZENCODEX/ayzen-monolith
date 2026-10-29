@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-5b",
+  "title": "Ledger entries: entries, repayments, attachments, invoice lines, CSV import as application use cases; F14",
+  "timestamp": "2026-10-19T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Static verification passes. typecheck, build and ALL DB tests (WP-1 to WP-5b) did not run: no Postgres and no node_modules here. Money-critical (entries, repayments); nothing is PASS until pnpm test:finance-db is green in the real checkout.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; cumulative with WP-2b to WP-5a; bound by content in fin-provenance-manifest.json (79 files, regenerated)."
+  },
+  "scopeNote": "The roadmap counts 17 handlers for entries; 4 of them (2 receipt-link, 2 amortization) were already thin adapters from WP-2b and WP-4. 13 were extracted here.",
+  "oldToNew": {
+    "application/entries.ts": {
+      "GET /finance/entries": "listEntries",
+      "POST /finance/entries": "createEntry",
+      "PUT /finance/entries/:id": "updateEntry",
+      "DELETE /finance/entries/:id": "deleteEntry (ownership check, then ledger/journal#deleteLedgerEntryCascade, F5)",
+      "GET /finance/entries/:id/repayments": "listRepayments",
+      "POST /finance/entries/:id/repayments": "addRepayment (ledger/repayments#recordRepayment, F4)",
+      "GET /finance/entries/:id/attachments": "listEntryAttachments",
+      "POST /finance/entries/:id/attachments": "uploadEntryAttachment",
+      "GET /finance/entries/:id/attachments/:attachmentId": "getEntryAttachment",
+      "DELETE /finance/entries/:id/attachments/:attachmentId": "deleteEntryAttachment",
+      "GET /finance/entries/:id/invoice-lines": "listInvoiceLines",
+      "PUT /finance/entries/:id/invoice-lines": "replaceInvoiceLines",
+      "POST /finance/entries/import": "importEntriesCsv"
+    },
+    "also moved": ["assertEntryOwnership", "MAX_ATTACHMENT_BYTES (still imported by the receipt-scan route)", "allowed attachment MIME list", "recomputeInvoiceTotal (folded into the F14 transaction)"],
+    "stays in routes/finance.ts": ["fmtEntry", "fmtRepayment", "id parsing", "required-field and positive-amount validation on create", "Idempotency-Key header parsing and 409/replay mapping", "raw attachment streaming", "PDP ownership middleware"]
+  },
+  "behaviorChanges": [
+    "F14: invoice-line replacement is one transaction (delete, insert, recompute amount). The amount update also carries user_id. Outcomes and messages unchanged.",
+    "Notifications (entry created, repayment posted) are loaded with a dynamic import inside the use cases so tests do not load Telegram, email or SSE modules; they remain fire-and-forget with errors swallowed, as before.",
+    "Everything else moved without logic edits."
+  ],
+  "knownDebt": [
+    "Journal postings after create, update, repayment and import remain best-effort (.catch(() => {})), as before. An entry can exist without its journal if posting fails; reconciliation is out of scope.",
+    "Attachment bytes are stored as base64 text in the row, unchanged.",
+    "Invoice-line journal adjustment is computed after the transaction commits; a concurrent edit between commit and the adjustment can compute a stale delta (same class as the F5 residual)."
+  ],
+  "ran": [
+    { "check": "node scripts/antas/finance/validate-boundaries.mjs", "result": "PASS, 0 findings (new wp5b-single-owner and wp5b-wiring; notify consumer contract moved to application/entries.ts; attachment function names made unique against the vault module)" },
+    { "check": "node --test --experimental-strip-types src/finance/route-security.test.ts", "result": "27/27 pass (4 new; F4 and F5 gates now also inspect application/entries.ts; ratchet 31 to 18)" },
+    { "check": "syntax check of all new and changed .ts files", "result": "ok" }
+  ],
+  "notRun": ["pnpm typecheck", "pnpm build", "pnpm test:finance-db (incl. new wp5b-use-cases.db.test.ts, registered in the runner; finance_attachments and finance_invoice_lines added to the isolated-schema allowlist)"],
+  "ratchet": "routes with direct db.*: 31 to 18",
+  "next": "WP-6 Invoices (17 handlers in finance-invoices.ts plus lib/finance-invoice.ts and lib/invoice-pdf.ts). High risk; the recurring sweep's createAndSendRuleInvoice import moves with it."
+}

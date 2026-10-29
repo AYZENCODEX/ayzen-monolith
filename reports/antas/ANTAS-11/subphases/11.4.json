@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-11.4",
+  "phase": "ANTAS-11",
+  "name": "Mutation Testing",
+  "generatedAt": "2026-09-29T06:06:06.718Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "docs/antas/testing/test-pyramid.md",
+    "tests/failure-injection/matrix.test.mjs"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

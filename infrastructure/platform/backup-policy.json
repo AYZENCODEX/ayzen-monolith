@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "ownership": "domain",
+  "encryptedAtRest": true,
+  "restrictedAccess": true,
+  "restoreVerification": {
+    "isolatedTargetRequired": true,
+    "recordCountsAndChecksums": true,
+    "recordRtoAndRpo": true,
+    "auditEvent": "backup.restore.completed"
+  },
+  "domains": [
+    "shared-workspace",
+    "identity",
+    "authorization",
+    "finance",
+    "vault",
+    "mail",
+    "notification",
+    "workflow",
+    "ai",
+    "search",
+    "intelligence",
+    "event-bus"
+  ],
+  "rules": {
+    "productionRestoreRequiresApproval": true,
+    "runtimeIdentityCannotRestoreProduction": true,
+    "deleteBeforeRestoreForbidden": true,
+    "restoreEvidenceMustBeRetained": true
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "defaultDeny": true,
+  "producerIdentity": "service-auth",
+  "consumerIdentity": "service-auth",
+  "restrictedPayloads": ["credentials", "tokens", "private-keys"],
+  "sensitiveEventsRequireAudit": true
+}

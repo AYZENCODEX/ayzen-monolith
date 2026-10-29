@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "reviewAreas": [
+    "trust-boundaries",
+    "central-auth",
+    "oidc-audiences-and-scopes",
+    "policy-default-deny",
+    "cross-app-service-auth",
+    "database-ownership",
+    "telegram-webhook-and-admin-owner",
+    "secret-manager-and-rotation",
+    "ci-cd-workload-identity",
+    "audit-and-retention"
+  ],
+  "requiredEvidence": [
+    "docs/security/incident-response.md",
+    "docs/security/data-governance.md",
+    "infrastructure/platform/policy-packs.json",
+    "infrastructure/platform/retention-policy.json",
+    "infrastructure/deployment/environment.schema.json"
+  ],
+  "rules": {
+    "threatModelMustBeUpdated": true,
+    "highRiskGapsBlockRelease": true,
+    "exceptionsRequireOwnerAndExpiry": true,
+    "secretsNeverEnterEvidence": true
+  }
+}

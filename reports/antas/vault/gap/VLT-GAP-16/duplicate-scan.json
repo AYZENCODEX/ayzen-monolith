@@ -1,0 +1,29 @@
+{
+  "gap": "VLT-GAP-16",
+  "scanned_at": "2026-10-12T17:33:24.257Z",
+  "config_sha256": "cb280d8a9866c5e2d5e72aa5b0c0d3eb6e381801d6f7bf1c0bf64208e7ae0063",
+  "files_scanned": 667,
+  "vault_files": 139,
+  "thresholds": {
+    "min_statements": 1,
+    "min_normalized_chars": 60
+  },
+  "duplicate_groups": [],
+  "legacy_classification": [
+    {
+      "file": "lib/vault-pin-guard.ts",
+      "class": "SHIM(re-export only)",
+      "lines": 12,
+      "consumers": 0,
+      "allowed_shim": true
+    }
+  ],
+  "findings_by_rule": {},
+  "findings": [],
+  "totals": {
+    "duplicate_business_implementations": 0,
+    "unexpected_legacy_consumers": 0,
+    "old_source_of_truth_modules": 0
+  },
+  "status": "PASS"
+}

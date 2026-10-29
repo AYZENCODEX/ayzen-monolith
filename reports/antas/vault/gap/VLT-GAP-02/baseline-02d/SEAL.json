@@ -1,0 +1,23 @@
+{
+  "sealed_at": "2026-09-30T05:04:02.657Z",
+  "tree_manifest_sha256": "29ad7dafdecb75124fd454ea32190ec4ef0928f2350b2f8b52a1e259e10a8f5a",
+  "file_count": 2200,
+  "certified_by": {
+    "sub_phase": "VLT-GAP-02-C",
+    "source_tree_sha256": "bb5f56676e35196ae1025a26217841957d007e1f076528351f890cf707f05262",
+    "commit_sha": null,
+    "validator_sha256": "1f1df1e80eee29f3e57f117bb054bcd5f477fa287250ae35f9f37b742079ce59"
+  },
+  "gap_scripts_at_freeze": {
+    "scripts/antas/vault/gap/freeze-vlt-gap-02-C-baseline.mjs": "45af9e6efba2b140e6094b57028c0a7549fe3a062ea43b8c992b9f35c0c0ad6a",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-A.mjs": "77a4b3b76d7aaae1a5d60869253b0d102fcaa6de37cf71e103fb674e3f861a7f",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-B.mjs": "bf0a6a746e0680dbabf5aff4bb4217a68304cd7ee70e3e757831afff0d6c8153",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-C.mjs": "765a3d1259a8dd043bdc0405289024dc0313dfc86d8ff1dbc4f8908a95345b9d",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-D.mjs": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-A.mjs": "b48a0758dd09d98a242cb7cfda4b7a689eaa1d83312e6a554444c2314d357cff",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-B.mjs": "27ebd3bb00c4efd2bfccfead5fdc10dba3edb4d539f90970bb58e96c84259fa6",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-C.mjs": "1f1df1e80eee29f3e57f117bb054bcd5f477fa287250ae35f9f37b742079ce59"
+  }
+}

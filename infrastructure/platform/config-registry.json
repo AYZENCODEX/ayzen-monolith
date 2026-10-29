@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "authority": "services/config-control",
+  "namespaces": ["platform", "app", "service", "environment", "workspace"],
+  "environments": ["development", "staging", "production"],
+  "secretValues": "reference-only",
+  "validation": { "requiredBeforeActivation": true, "unknownKeys": "reject", "typeMismatch": "reject" },
+  "rotation": { "gracePeriodMs": 86400000, "dualRead": true, "auditRequired": true },
+  "drift": { "detect": true, "blockProductionActivation": true },
+  "reload": { "safeOnly": true, "requiresVersion": true }
+}

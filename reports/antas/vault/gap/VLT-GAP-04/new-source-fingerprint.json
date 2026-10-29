@@ -1,0 +1,344 @@
+{
+  "phase": "VLT-GAP-04",
+  "sub_phase": "VLT-GAP-04-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "123e12536a8b8cce0869075e26f4e01643e16a095e9f30cf686713268403722f",
+  "validator_version": "1.0.0",
+  "validator_sha256": "46f2283906076ae8603a1dba5db1fadd024e45b27431d89eea8396850e221b3d",
+  "description": "Fingerprints of the new owner modules and proof that the old routes actually call them",
+  "owner_files": [
+    {
+      "file": "artifacts/api-server/src/vault/domain/game.ts",
+      "sha256": "5aa689436c3e989e2ac5955b7fff3aa112beea9259858e90856b61907877fe27",
+      "lines": 10,
+      "exports": [
+        "GAME_SENSITIVE_FIELDS",
+        "GAME_ENTRY_OWNER_SENTINEL_NONE",
+        "GAME_MARKET_LISTING_OWNER_SENTINEL_NONE"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "calls": 0
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/game-ownership.ts",
+      "sha256": "d5c8460686d908f73bb16516ff7a7bd98ff242bca5a03d8ea1201b547add6f0d",
+      "lines": 62,
+      "exports": [
+        "requireGameEntryOwnership",
+        "denyGameEntryNotFound",
+        "denyGameEntryNotFoundOrForbidden",
+        "denyGameEntrySilentSuccess",
+        "authorizeGameListingOwnerOrAdmin",
+        "canCancelGameListing"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 5,
+        "calls": 16
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "sha256": "018a001799a4591d08905b284e9181b05022c7dd3035881d616e350c74a10561",
+      "lines": 140,
+      "exports": [
+        "dbError",
+        "listGameEntries",
+        "createGameEntry",
+        "getGameEntry",
+        "editGameEntry",
+        "removeGameEntry"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 20,
+        "calls": 41
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "sha256": "6760d8357fb0acd4502438c00def3e7da5ccd99323fe2dd356f21f0716106a8e",
+      "lines": 121,
+      "exports": [
+        "parseListing",
+        "listGameMarketListings",
+        "createGameMarketListing",
+        "buyGameMarketListing",
+        "cancelGameMarketListing",
+        "getGameMarketStats"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 33,
+        "calls": 49
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/listing.ts",
+      "sha256": "55acc03cadf57475609df9dd276e793d33fbfd8ac57209e1b3aa550410a148a2",
+      "lines": 46,
+      "exports": [
+        "loadGameEntryListingPreview",
+        "transferGameEntryToBuyer"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 2,
+        "calls": 3
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts",
+      "sha256": "f4af7a14277e04b8bb93bda69f9b4d0c851c6667c8f4a776e27544531cb2add0",
+      "lines": 234,
+      "exports": [
+        "selectGameEntryOwner",
+        "selectGameEntries",
+        "insertGameEntry",
+        "findGameEntryById",
+        "updateGameEntry",
+        "deleteGameEntry",
+        "selectGameListings",
+        "countActiveGameListings",
+        "insertGameListing",
+        "findActiveGameListingById",
+        "ensureGameWallet",
+        "completeGameListingPurchase",
+        "cancelGameListing",
+        "selectGameMarketplaceStats",
+        "selectGameEntryForListing",
+        "transferGameEntryOwnership"
+      ],
+      "executable_business": {
+        "db_refs": 27,
+        "sql_literals": 22,
+        "branches": 19,
+        "calls": 83
+      }
+    }
+  ],
+  "delegate_targets": [
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "symbol": "listGameEntries",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 88,
+      "branches": 3,
+      "calls": 3,
+      "routes": [
+        "GET /game-entries"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "symbol": "createGameEntry",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 289,
+      "branches": 3,
+      "calls": 19,
+      "routes": [
+        "POST /game-entries"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "symbol": "getGameEntry",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 165,
+      "branches": 5,
+      "calls": 6,
+      "routes": [
+        "GET /game-entries/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "symbol": "editGameEntry",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 210,
+      "branches": 4,
+      "calls": 9,
+      "routes": [
+        "PUT /game-entries/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "symbol": "removeGameEntry",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 92,
+      "branches": 3,
+      "calls": 4,
+      "routes": [
+        "DELETE /game-entries/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "symbol": "listGameMarketListings",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 145,
+      "branches": 2,
+      "calls": 8,
+      "routes": [
+        "GET /marketplace/game/listings"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "symbol": "createGameMarketListing",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 295,
+      "branches": 11,
+      "calls": 17,
+      "routes": [
+        "POST /marketplace/game/listings"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "symbol": "buyGameMarketListing",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 300,
+      "branches": 8,
+      "calls": 9,
+      "routes": [
+        "POST /marketplace/game/buy"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "symbol": "cancelGameMarketListing",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 161,
+      "branches": 5,
+      "calls": 5,
+      "routes": [
+        "DELETE /marketplace/game/listings/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/game-ownership.ts",
+      "symbol": "canCancelGameListing",
+      "layer": "security",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 48,
+      "branches": 0,
+      "calls": 1,
+      "routes": [
+        "DELETE /marketplace/game/listings/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "symbol": "getGameMarketStats",
+      "layer": "application",
+      "layer_ok": true,
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 148,
+      "branches": 5,
+      "calls": 8,
+      "routes": [
+        "GET /marketplace/game/stats"
+      ]
+    }
+  ],
+  "moved_symbols": [
+    {
+      "symbol": "gameEntryResource",
+      "disposition": "MOVED_REFACTORED_WITH_EXECUTED_PROOF",
+      "new_owner": "artifacts/api-server/src/vault/security/game-ownership.ts#gameEntryResource"
+    },
+    {
+      "symbol": "requireGameEntryOwnership",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/security/game-ownership.ts#requireGameEntryOwnership"
+    },
+    {
+      "symbol": "safe",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts#safe"
+    },
+    {
+      "symbol": "safeTags",
+      "disposition": "MOVED_REFACTORED_WITH_EXECUTED_PROOF",
+      "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts#safeTags"
+    },
+    {
+      "symbol": "gameListingOwnerOrAdminEngine",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/security/game-ownership.ts#gameListingOwnerOrAdminEngine"
+    },
+    {
+      "symbol": "stmt@17",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/security/game-ownership.ts#registerRule"
+    },
+    {
+      "symbol": "stmt@18",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/security/game-ownership.ts#registerRule"
+    },
+    {
+      "symbol": "ensureWallet",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts#ensureGameWallet"
+    },
+    {
+      "symbol": "parseListing",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/application/game/marketplace.ts#parseListing"
+    }
+  ],
+  "layering_notes": []
+}

@@ -1,0 +1,607 @@
+{
+  "phase": "VLT-GAP-03",
+  "sub_phase": "VLT-GAP-03-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "386d676b6ff44cc0732a2b5a451a7979a27ad4a74c8d9445124224e444169270",
+  "validator_version": "1.0.0",
+  "validator_sha256": "b7ce83bf8f53cb06c268ea3092740f096d8aaeb19dae761c541e96b7ada7342a",
+  "description": "Per-route thinness of every route left in the old files",
+  "allowed_in_old_route": [
+    "request parsing (req.user.userId / req.params.* / req.body / req.query.*)",
+    "auth-context construction",
+    "exactly one `const out = await <use-case>(...)`",
+    "exactly one canonical response mapping `(out.status === 200 ? res : res.status(out.status)).json(out.body)`",
+    "middleware wiring",
+    "router default export"
+  ],
+  "rejected_in_old_route": [
+    "db/sql/table access",
+    "provider/crypto/event/sync calls",
+    "domain calculations",
+    "decision trees (if/ternary/switch/loops/try)",
+    "duplicated authorization/persistence",
+    "non-adapter imports",
+    "compat re-exports",
+    "any second statement or non-canonical response mapping"
+  ],
+  "routes": [
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "route": "GET /kyc-entries",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/entries.ts#listKycEntries",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "route": "POST /kyc-entries",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/entries.ts#createKycEntry",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "route": "GET /kyc-entries/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/entries.ts#getKycEntry",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireKycEntryOwnership(\"kyc_entry.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})",
+        "requireCreditBalance(\"sylo.kyc_entry_view\")"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "route": "PUT /kyc-entries/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/entries.ts#editKycEntry",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireKycEntryOwnership(\"kyc_entry.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "route": "PATCH /kyc-entries/:id/status",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/entries.ts#setKycEntryStatus",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireKycEntryOwnership(\"kyc_entry.status.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "route": "DELETE /kyc-entries/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/entries.ts#removeKycEntry",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireKycEntryOwnership(\"kyc_entry.delete\", DENY{{ res.json({ success: true }); }})"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "route": "GET /kyc-entries/enrollments",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/entries.ts#listKycEnrollments",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "route": "GET /kyc-data-entities",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/data-entities.ts#listKycDataEntities",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "route": "GET /kyc-data-entities/overview",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/data-entities.ts#getKycDataEntityOverview",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "route": "POST /kyc-data-entities",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/data-entities.ts#createKycDataEntity",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "route": "GET /kyc-data-entities/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/data-entities.ts#getKycDataEntity",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireKycDataEntityOwnership(\"kyc_data_entity.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "route": "PUT /kyc-data-entities/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/data-entities.ts#editKycDataEntity",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireKycDataEntityOwnership(\"kyc_data_entity.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "route": "DELETE /kyc-data-entities/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/kyc/data-entities.ts#removeKycDataEntity",
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireKycDataEntityOwnership(\"kyc_data_entity.delete\", DENY{{ res.json({ success: true }); }})"
+      ]
+    }
+  ],
+  "per_file": [
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "imports": [
+        {
+          "spec": "express",
+          "line": 1,
+          "allowed": true
+        },
+        {
+          "spec": "../middlewares/auth",
+          "line": 2,
+          "allowed": true
+        },
+        {
+          "spec": "../services/credit-meter",
+          "line": 3,
+          "allowed": true
+        },
+        {
+          "spec": "../vault/security/kyc-ownership",
+          "line": 4,
+          "allowed": true
+        },
+        {
+          "spec": "../vault/application/kyc/entries",
+          "line": 5,
+          "allowed": true
+        }
+      ],
+      "route_table": {
+        "baseline": [
+          {
+            "key": "GET /kyc-entries",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /kyc-entries",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /kyc-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycEntryOwnership(\"kyc_entry.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})",
+              "requireCreditBalance(\"sylo.kyc_entry_view\")"
+            ]
+          },
+          {
+            "key": "PUT /kyc-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycEntryOwnership(\"kyc_entry.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+            ]
+          },
+          {
+            "key": "PATCH /kyc-entries/:id/status",
+            "mw": [
+              "requireAuth",
+              "requireKycEntryOwnership(\"kyc_entry.status.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+            ]
+          },
+          {
+            "key": "DELETE /kyc-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycEntryOwnership(\"kyc_entry.delete\", DENY{{ res.json({ success: true }); }})"
+            ]
+          },
+          {
+            "key": "GET /kyc-entries/enrollments",
+            "mw": [
+              "requireAuth"
+            ]
+          }
+        ],
+        "current": [
+          {
+            "key": "GET /kyc-entries",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /kyc-entries",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /kyc-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycEntryOwnership(\"kyc_entry.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})",
+              "requireCreditBalance(\"sylo.kyc_entry_view\")"
+            ]
+          },
+          {
+            "key": "PUT /kyc-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycEntryOwnership(\"kyc_entry.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+            ]
+          },
+          {
+            "key": "PATCH /kyc-entries/:id/status",
+            "mw": [
+              "requireAuth",
+              "requireKycEntryOwnership(\"kyc_entry.status.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+            ]
+          },
+          {
+            "key": "DELETE /kyc-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycEntryOwnership(\"kyc_entry.delete\", DENY{{ res.json({ success: true }); }})"
+            ]
+          },
+          {
+            "key": "GET /kyc-entries/enrollments",
+            "mw": [
+              "requireAuth"
+            ]
+          }
+        ],
+        "same_order": true,
+        "middleware_diffs": [],
+        "routes_baseline": 7,
+        "routes_current": 7
+      },
+      "ownership_gates": [
+        {
+          "gate": "requireKycEntryOwnership",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycNotFound",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycNotFoundOrForbidden",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycSilentSuccess",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "imports": [
+        {
+          "spec": "express",
+          "line": 1,
+          "allowed": true
+        },
+        {
+          "spec": "../middlewares/auth",
+          "line": 2,
+          "allowed": true
+        },
+        {
+          "spec": "../vault/security/kyc-ownership",
+          "line": 3,
+          "allowed": true
+        },
+        {
+          "spec": "../vault/application/kyc/data-entities",
+          "line": 4,
+          "allowed": true
+        }
+      ],
+      "route_table": {
+        "baseline": [
+          {
+            "key": "GET /kyc-data-entities",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /kyc-data-entities/overview",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /kyc-data-entities",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /kyc-data-entities/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycDataEntityOwnership(\"kyc_data_entity.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})"
+            ]
+          },
+          {
+            "key": "PUT /kyc-data-entities/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycDataEntityOwnership(\"kyc_data_entity.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+            ]
+          },
+          {
+            "key": "DELETE /kyc-data-entities/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycDataEntityOwnership(\"kyc_data_entity.delete\", DENY{{ res.json({ success: true }); }})"
+            ]
+          }
+        ],
+        "current": [
+          {
+            "key": "GET /kyc-data-entities",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /kyc-data-entities/overview",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /kyc-data-entities",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /kyc-data-entities/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycDataEntityOwnership(\"kyc_data_entity.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})"
+            ]
+          },
+          {
+            "key": "PUT /kyc-data-entities/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycDataEntityOwnership(\"kyc_data_entity.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+            ]
+          },
+          {
+            "key": "DELETE /kyc-data-entities/:id",
+            "mw": [
+              "requireAuth",
+              "requireKycDataEntityOwnership(\"kyc_data_entity.delete\", DENY{{ res.json({ success: true }); }})"
+            ]
+          }
+        ],
+        "same_order": true,
+        "middleware_diffs": [],
+        "routes_baseline": 6,
+        "routes_current": 6
+      },
+      "ownership_gates": [
+        {
+          "gate": "requireKycDataEntityOwnership",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycNotFound",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycNotFoundOrForbidden",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyKycSilentSuccess",
+          "imported_from": "../vault/security/kyc-ownership",
+          "exported_by_owner": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "routes": 13,
+    "thin": 13,
+    "not_thin": 0,
+    "per_file_metrics": [
+      {
+        "file": "artifacts/api-server/src/routes/kyc.ts",
+        "baseline_lines": 287,
+        "current_lines": 66,
+        "baseline_db_refs": 32,
+        "current_db_refs": 0,
+        "baseline_sql_literals": 10,
+        "current_sql_literals": 0,
+        "baseline_tokens": 2269,
+        "current_tokens": 609
+      },
+      {
+        "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+        "baseline_lines": 185,
+        "current_lines": 57,
+        "baseline_db_refs": 20,
+        "current_db_refs": 0,
+        "baseline_sql_literals": 11,
+        "current_sql_literals": 0,
+        "baseline_tokens": 1498,
+        "current_tokens": 498
+      }
+    ]
+  }
+}

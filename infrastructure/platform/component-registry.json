@@ -1,0 +1,4439 @@
+{
+  "schemaVersion": 1,
+  "registryId": "ayzen-component-registry",
+  "generatedAt": "2026-09-29T06:07:09.761Z",
+  "generatedBy": "tools/component-registry/build.mjs",
+  "schema": "schemas/platform/components/component.v1.json",
+  "sourceRegistries": [
+    "infrastructure/platform/service-registry.json",
+    "infrastructure/platform/workflow-registry.json",
+    "infrastructure/platform/worker-pools.json",
+    "infrastructure/platform/telegram-command-registry.json",
+    "infrastructure/platform/feature-completeness.json",
+    "infrastructure/platform/domain-registry.json",
+    "infrastructure/platform/enforcement-registry.json"
+  ],
+  "components": [
+    {
+      "id": "service:api-gateway",
+      "kind": "service",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "api-gateway"
+      },
+      "metadata": {
+        "kind": "api",
+        "source": "apps/api-gateway",
+        "deploymentTarget": "public-gateway"
+      }
+    },
+    {
+      "id": "service:monolith",
+      "kind": "service",
+      "owner": "core",
+      "app": "core",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "monolith"
+      },
+      "metadata": {
+        "kind": "compatibility-api",
+        "source": "artifacts/api-server",
+        "deploymentTarget": "compatibility-runtime"
+      }
+    },
+    {
+      "id": "service:event-worker",
+      "kind": "service",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "event-worker"
+      },
+      "metadata": {
+        "kind": "worker",
+        "source": "apps/worker",
+        "deploymentTarget": "async-worker"
+      }
+    },
+    {
+      "id": "service:telegram-gateway",
+      "kind": "service",
+      "owner": "telegram-platform",
+      "app": "telegram-platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "telegram-gateway"
+      },
+      "metadata": {
+        "kind": "telegram",
+        "source": "apps/telegram-gateway",
+        "deploymentTarget": "telegram-edge"
+      }
+    },
+    {
+      "id": "service:identity",
+      "kind": "service",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "identity"
+      },
+      "metadata": {
+        "kind": "domain-service",
+        "source": "services/identity",
+        "deploymentTarget": "domain-runtime"
+      }
+    },
+    {
+      "id": "service:finance",
+      "kind": "service",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "finance"
+      },
+      "metadata": {
+        "kind": "domain-service",
+        "source": "services/finance",
+        "deploymentTarget": "domain-runtime"
+      }
+    },
+    {
+      "id": "service:vault",
+      "kind": "service",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "vault"
+      },
+      "metadata": {
+        "kind": "domain-service",
+        "source": "services/vault",
+        "deploymentTarget": "domain-runtime"
+      }
+    },
+    {
+      "id": "service:mail",
+      "kind": "service",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "mail"
+      },
+      "metadata": {
+        "kind": "domain-service",
+        "source": "services/mail",
+        "deploymentTarget": "domain-runtime"
+      }
+    },
+    {
+      "id": "service:notification",
+      "kind": "service",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "notification"
+      },
+      "metadata": {
+        "kind": "domain-service",
+        "source": "services/notification",
+        "deploymentTarget": "domain-runtime"
+      }
+    },
+    {
+      "id": "service:workflow",
+      "kind": "service",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "workflow"
+      },
+      "metadata": {
+        "kind": "domain-service",
+        "source": "services/workflow",
+        "deploymentTarget": "domain-runtime"
+      }
+    },
+    {
+      "id": "service:ai-agent",
+      "kind": "service",
+      "owner": "zynth",
+      "app": "zynth",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "ai-agent"
+      },
+      "metadata": {
+        "kind": "domain-service",
+        "source": "services/ai",
+        "deploymentTarget": "domain-runtime"
+      }
+    },
+    {
+      "id": "service:marketplace",
+      "kind": "service",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "marketplace"
+      },
+      "metadata": {
+        "kind": "domain-service",
+        "source": "services/marketplace",
+        "deploymentTarget": "domain-runtime"
+      }
+    },
+    {
+      "id": "service:search",
+      "kind": "service",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "search"
+      },
+      "metadata": {
+        "kind": "domain-service",
+        "source": "services/search",
+        "deploymentTarget": "domain-runtime"
+      }
+    },
+    {
+      "id": "service:intelligence",
+      "kind": "service",
+      "owner": "intelligence",
+      "app": "intelligence",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "intelligence"
+      },
+      "metadata": {
+        "kind": "intelligence",
+        "source": "services/intelligence",
+        "deploymentTarget": "intelligence-runtime"
+      }
+    },
+    {
+      "id": "service:admin",
+      "kind": "service",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/service-registry.json",
+        "originalId": "admin"
+      },
+      "metadata": {
+        "kind": "control-plane",
+        "source": "services/admin",
+        "deploymentTarget": "admin-runtime"
+      }
+    },
+    {
+      "id": "workflow:deployment-promotion",
+      "kind": "workflow",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/workflow-registry.json",
+        "originalId": "deployment-promotion"
+      },
+      "metadata": {
+        "steps": [
+          "validate",
+          "stage",
+          "smoke",
+          "approve",
+          "promote",
+          "audit"
+        ],
+        "requiresPolicy": "admin.deploy"
+      }
+    },
+    {
+      "id": "workflow:incident-response",
+      "kind": "workflow",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/workflow-registry.json",
+        "originalId": "incident-response"
+      },
+      "metadata": {
+        "steps": [
+          "detect",
+          "deduplicate",
+          "notify",
+          "acknowledge",
+          "mitigate",
+          "resolve",
+          "reaudit"
+        ],
+        "requiresPolicy": "admin.remediate"
+      }
+    },
+    {
+      "id": "workflow:backup-restore-verification",
+      "kind": "workflow",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/workflow-registry.json",
+        "originalId": "backup-restore-verification"
+      },
+      "metadata": {
+        "steps": [
+          "snapshot",
+          "restore-isolated",
+          "reconcile",
+          "record-evidence"
+        ],
+        "requiresPolicy": "admin.remediate"
+      }
+    },
+    {
+      "id": "worker-pool:general",
+      "kind": "worker-pool",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/worker-pools.json",
+        "originalId": "general"
+      },
+      "metadata": {
+        "queue": "events",
+        "backpressure": "bounded"
+      }
+    },
+    {
+      "id": "worker-pool:audit",
+      "kind": "worker-pool",
+      "owner": "audit",
+      "app": "audit",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/worker-pools.json",
+        "originalId": "audit"
+      },
+      "metadata": {
+        "queue": "audit",
+        "backpressure": "bounded"
+      }
+    },
+    {
+      "id": "worker-pool:intelligence",
+      "kind": "worker-pool",
+      "owner": "intelligence",
+      "app": "intelligence",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/worker-pools.json",
+        "originalId": "intelligence"
+      },
+      "metadata": {
+        "queue": "intelligence",
+        "backpressure": "bounded"
+      }
+    },
+    {
+      "id": "worker-pool:workflow",
+      "kind": "worker-pool",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/worker-pools.json",
+        "originalId": "workflow"
+      },
+      "metadata": {
+        "queue": "workflow",
+        "backpressure": "bounded"
+      }
+    },
+    {
+      "id": "worker-pool:architecture",
+      "kind": "worker-pool",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/worker-pools.json",
+        "originalId": "architecture"
+      },
+      "metadata": {
+        "queue": "architecture",
+        "backpressure": "bounded"
+      }
+    },
+    {
+      "id": "telegram-command:ayzenx:/start",
+      "kind": "telegram-command",
+      "owner": "ayzenx",
+      "app": "ayzenx",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ayzenx:/start"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ayzenx:/help",
+      "kind": "telegram-command",
+      "owner": "ayzenx",
+      "app": "ayzenx",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ayzenx:/help"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ayzenx:/connect",
+      "kind": "telegram-command",
+      "owner": "ayzenx",
+      "app": "ayzenx",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ayzenx:/connect"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:ayzenx:/workspace",
+      "kind": "telegram-command",
+      "owner": "ayzenx",
+      "app": "ayzenx",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ayzenx:/workspace"
+      },
+      "metadata": {
+        "capability": "workspace.switch-context",
+        "group": "workspace",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ayzenx:/activity",
+      "kind": "telegram-command",
+      "owner": "ayzenx",
+      "app": "ayzenx",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ayzenx:/activity"
+      },
+      "metadata": {
+        "capability": "workspace.activity",
+        "group": "activity",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ayzenx:/search",
+      "kind": "telegram-command",
+      "owner": "ayzenx",
+      "app": "ayzenx",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ayzenx:/search"
+      },
+      "metadata": {
+        "capability": "search.search",
+        "group": "features",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ayzenx:/notifications",
+      "kind": "telegram-command",
+      "owner": "ayzenx",
+      "app": "ayzenx",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ayzenx:/notifications"
+      },
+      "metadata": {
+        "capability": "notification.list-notifications",
+        "group": "settings",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ayzenx:/settings",
+      "kind": "telegram-command",
+      "owner": "ayzenx",
+      "app": "ayzenx",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ayzenx:/settings"
+      },
+      "metadata": {
+        "capability": "workspace.get-workspace",
+        "group": "settings",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ayzenx:/permissions",
+      "kind": "telegram-command",
+      "owner": "ayzenx",
+      "app": "ayzenx",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ayzenx:/permissions"
+      },
+      "metadata": {
+        "capability": "workspace.get-workspace",
+        "group": "settings",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:warde:/start",
+      "kind": "telegram-command",
+      "owner": "warde",
+      "app": "warde",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "warde:/start"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:warde:/help",
+      "kind": "telegram-command",
+      "owner": "warde",
+      "app": "warde",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "warde:/help"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:warde:/report",
+      "kind": "telegram-command",
+      "owner": "warde",
+      "app": "warde",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "warde:/report"
+      },
+      "metadata": {
+        "capability": "organization.report",
+        "group": "reports",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:warde:/members",
+      "kind": "telegram-command",
+      "owner": "warde",
+      "app": "warde",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "warde:/members"
+      },
+      "metadata": {
+        "capability": "workspace.list-members",
+        "group": "organization",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:warde:/invite",
+      "kind": "telegram-command",
+      "owner": "warde",
+      "app": "warde",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "warde:/invite"
+      },
+      "metadata": {
+        "capability": "workspace.add-member",
+        "group": "organization",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:warde:/activity",
+      "kind": "telegram-command",
+      "owner": "warde",
+      "app": "warde",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "warde:/activity"
+      },
+      "metadata": {
+        "capability": "workspace.activity",
+        "group": "activity",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:warde:/settings",
+      "kind": "telegram-command",
+      "owner": "warde",
+      "app": "warde",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "warde:/settings"
+      },
+      "metadata": {
+        "capability": "workspace.get-workspace",
+        "group": "settings",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:verve:/start",
+      "kind": "telegram-command",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "verve:/start"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:verve:/help",
+      "kind": "telegram-command",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "verve:/help"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:verve:/listings",
+      "kind": "telegram-command",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "verve:/listings"
+      },
+      "metadata": {
+        "capability": "marketplace.list",
+        "group": "marketplace",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:verve:/listing",
+      "kind": "telegram-command",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "verve:/listing"
+      },
+      "metadata": {
+        "capability": "marketplace.create-listing",
+        "group": "marketplace",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:verve:/search",
+      "kind": "telegram-command",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "verve:/search"
+      },
+      "metadata": {
+        "capability": "search.search",
+        "group": "marketplace",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:verve:/activity",
+      "kind": "telegram-command",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "verve:/activity"
+      },
+      "metadata": {
+        "capability": "workspace.activity",
+        "group": "activity",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ryft:/start",
+      "kind": "telegram-command",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ryft:/start"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ryft:/help",
+      "kind": "telegram-command",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ryft:/help"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ryft:/accounts",
+      "kind": "telegram-command",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ryft:/accounts"
+      },
+      "metadata": {
+        "capability": "finance.list-accounts",
+        "group": "accounts",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ryft:/balance",
+      "kind": "telegram-command",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ryft:/balance"
+      },
+      "metadata": {
+        "capability": "finance.get-balance",
+        "group": "accounts",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ryft:/transactions",
+      "kind": "telegram-command",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ryft:/transactions"
+      },
+      "metadata": {
+        "capability": "finance.list-accounts",
+        "group": "transactions",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:ryft:/transaction",
+      "kind": "telegram-command",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ryft:/transaction"
+      },
+      "metadata": {
+        "capability": "finance.post-transaction",
+        "group": "transactions",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:ryft:/activity",
+      "kind": "telegram-command",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "ryft:/activity"
+      },
+      "metadata": {
+        "capability": "workspace.activity",
+        "group": "activity",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:sylo:/start",
+      "kind": "telegram-command",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "sylo:/start"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:sylo:/help",
+      "kind": "telegram-command",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "sylo:/help"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:sylo:/vault",
+      "kind": "telegram-command",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "sylo:/vault"
+      },
+      "metadata": {
+        "capability": "vault.list-secrets",
+        "group": "vault",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:sylo:/secret",
+      "kind": "telegram-command",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "sylo:/secret"
+      },
+      "metadata": {
+        "capability": "vault.create-secret",
+        "group": "vault",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:sylo:/reveal",
+      "kind": "telegram-command",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "sylo:/reveal"
+      },
+      "metadata": {
+        "capability": "vault.read-secret",
+        "group": "vault",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:sylo:/activity",
+      "kind": "telegram-command",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "sylo:/activity"
+      },
+      "metadata": {
+        "capability": "workspace.activity",
+        "group": "activity",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:skarn:/start",
+      "kind": "telegram-command",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "skarn:/start"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:skarn:/help",
+      "kind": "telegram-command",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "skarn:/help"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:skarn:/project",
+      "kind": "telegram-command",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "skarn:/project"
+      },
+      "metadata": {
+        "capability": "workspace.get-workspace",
+        "group": "project",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:skarn:/workflow",
+      "kind": "telegram-command",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "skarn:/workflow"
+      },
+      "metadata": {
+        "capability": "workflow.get-execution",
+        "group": "workflows",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:skarn:/run",
+      "kind": "telegram-command",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "skarn:/run"
+      },
+      "metadata": {
+        "capability": "workflow.start-execution",
+        "group": "workflows",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:skarn:/cancel",
+      "kind": "telegram-command",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "skarn:/cancel"
+      },
+      "metadata": {
+        "capability": "workflow.cancel-execution",
+        "group": "workflows",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:skarn:/tasks",
+      "kind": "telegram-command",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "skarn:/tasks"
+      },
+      "metadata": {
+        "capability": "workflow.get-execution",
+        "group": "tasks",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:skarn:/events",
+      "kind": "telegram-command",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "skarn:/events"
+      },
+      "metadata": {
+        "capability": "workspace.activity",
+        "group": "events",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:skarn:/audit",
+      "kind": "telegram-command",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "skarn:/audit"
+      },
+      "metadata": {
+        "capability": "workspace.activity",
+        "group": "audit",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:zynth:/start",
+      "kind": "telegram-command",
+      "owner": "zynth",
+      "app": "zynth",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "zynth:/start"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:zynth:/help",
+      "kind": "telegram-command",
+      "owner": "zynth",
+      "app": "zynth",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "zynth:/help"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:zynth:/ask",
+      "kind": "telegram-command",
+      "owner": "zynth",
+      "app": "zynth",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "zynth:/ask"
+      },
+      "metadata": {
+        "capability": "ai.run-agent",
+        "group": "ai",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:zynth:/agents",
+      "kind": "telegram-command",
+      "owner": "zynth",
+      "app": "zynth",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "zynth:/agents"
+      },
+      "metadata": {
+        "capability": "ai.run-agent",
+        "group": "ai",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:zynth:/history",
+      "kind": "telegram-command",
+      "owner": "zynth",
+      "app": "zynth",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "zynth:/history"
+      },
+      "metadata": {
+        "capability": "ai.run-agent",
+        "group": "ai",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:zynth:/activity",
+      "kind": "telegram-command",
+      "owner": "zynth",
+      "app": "zynth",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "zynth:/activity"
+      },
+      "metadata": {
+        "capability": "workspace.activity",
+        "group": "activity",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:wisp:/start",
+      "kind": "telegram-command",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "wisp:/start"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:wisp:/help",
+      "kind": "telegram-command",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "wisp:/help"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:wisp:/inbox",
+      "kind": "telegram-command",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "wisp:/inbox"
+      },
+      "metadata": {
+        "capability": "mail.list-messages",
+        "group": "mailbox",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:wisp:/read",
+      "kind": "telegram-command",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "wisp:/read"
+      },
+      "metadata": {
+        "capability": "mail.read-thread",
+        "group": "mailbox",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:wisp:/send",
+      "kind": "telegram-command",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "wisp:/send"
+      },
+      "metadata": {
+        "capability": "mail.send-message",
+        "group": "mailbox",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:wisp:/search",
+      "kind": "telegram-command",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "wisp:/search"
+      },
+      "metadata": {
+        "capability": "mail.search",
+        "group": "mailbox",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:wisp:/notifications",
+      "kind": "telegram-command",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "wisp:/notifications"
+      },
+      "metadata": {
+        "capability": "notification.list-notifications",
+        "group": "settings",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/start",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/start"
+      },
+      "metadata": {
+        "capability": "identity.authenticate",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/help",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/help"
+      },
+      "metadata": {
+        "capability": "admin.read",
+        "group": "account",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/admin",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/admin"
+      },
+      "metadata": {
+        "capability": "admin.read",
+        "group": "overview",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/health",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/health"
+      },
+      "metadata": {
+        "capability": "admin.read",
+        "group": "operations",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/alerts",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/alerts"
+      },
+      "metadata": {
+        "capability": "admin.read",
+        "group": "operations",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/gaps",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/gaps"
+      },
+      "metadata": {
+        "capability": "admin.read",
+        "group": "operations",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/tickets",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/tickets"
+      },
+      "metadata": {
+        "capability": "admin.read",
+        "group": "operations",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/audit",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/audit"
+      },
+      "metadata": {
+        "capability": "admin.audit",
+        "group": "audit",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/data",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/data"
+      },
+      "metadata": {
+        "capability": "admin.data-read",
+        "group": "data",
+        "confirmation": false
+      }
+    },
+    {
+      "id": "telegram-command:admin:/mutate",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/mutate"
+      },
+      "metadata": {
+        "capability": "admin.data-write",
+        "group": "data",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:admin:/breakglass",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/breakglass"
+      },
+      "metadata": {
+        "capability": "admin.break-glass",
+        "group": "security",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:admin:/incident",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/incident"
+      },
+      "metadata": {
+        "capability": "admin.remediate",
+        "group": "incidents",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:admin:/ack",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/ack"
+      },
+      "metadata": {
+        "capability": "admin.remediate",
+        "group": "incidents",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:admin:/resolve",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/resolve"
+      },
+      "metadata": {
+        "capability": "admin.remediate",
+        "group": "incidents",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "telegram-command:admin:/deploy",
+      "kind": "telegram-command",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/telegram-command-registry.json",
+        "originalId": "admin:/deploy"
+      },
+      "metadata": {
+        "capability": "admin.deploy",
+        "group": "deployments",
+        "confirmation": true
+      }
+    },
+    {
+      "id": "feature:finance.post-transaction",
+      "kind": "feature",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "finance.post-transaction"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "finance",
+          "feature": "finance.post-transaction",
+          "api": "finance-api",
+          "api-server": "monolith",
+          "service": "finance",
+          "artifact": "api-gateway",
+          "deployment": "finance-deployment",
+          "db-resource": "finance_transactions",
+          "eventbus": "finance.transaction.created",
+          "audit": "audit-platform",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:vault.read-secret",
+      "kind": "feature",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "vault.read-secret"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "vault",
+          "feature": "vault.read-secret",
+          "api": "vault-api",
+          "api-server": "monolith",
+          "service": "vault",
+          "artifact": "api-gateway",
+          "deployment": "vault-deployment",
+          "db-resource": "vault_records",
+          "audit": "audit-platform",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:workflow.start-execution",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "workflow.start-execution"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "workflow.start-execution",
+          "api": "workflow-api",
+          "api-server": "monolith",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow_executions",
+          "eventbus": "workflow.started",
+          "workflow": "workflow-execution",
+          "audit": "audit-platform",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.read-control-plane",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.read-control-plane"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.read-control-plane",
+          "api": "admin-api",
+          "api-server": "admin",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin_configuration",
+          "audit": "audit-platform",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:identity.get.health",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "identity.get.health"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "identity.get.health",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /health",
+          "auth": "public",
+          "policy": "identity:health",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:identity.post.api-auth-login",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "identity.post.api-auth-login"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "identity.post.api-auth-login",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/auth/login",
+          "auth": "public",
+          "policy": "identity:authenticate",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "audit": "auth.login",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:finance.get.api-finance-accounts",
+      "kind": "feature",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "finance.get.api-finance-accounts"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "finance",
+          "feature": "finance.get.api-finance-accounts",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/finance/accounts",
+          "auth": "user",
+          "policy": "finance:read",
+          "service": "finance",
+          "artifact": "api-gateway",
+          "deployment": "finance-deployment",
+          "db-resource": "finance",
+          "audit": "finance.accounts.read",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:finance.post.api-finance-accounts",
+      "kind": "feature",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "finance.post.api-finance-accounts"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "finance",
+          "feature": "finance.post.api-finance-accounts",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/finance/accounts",
+          "auth": "user",
+          "policy": "finance:write",
+          "service": "finance",
+          "artifact": "api-gateway",
+          "deployment": "finance-deployment",
+          "db-resource": "finance",
+          "audit": "finance.account.created",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:finance.post.api-finance-accounts--accountId-transactions",
+      "kind": "feature",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "finance.post.api-finance-accounts--accountId-transactions"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "finance",
+          "feature": "finance.post.api-finance-accounts--accountId-transactions",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/finance/accounts/:accountId/transactions",
+          "auth": "user",
+          "policy": "finance:write",
+          "service": "finance",
+          "artifact": "api-gateway",
+          "deployment": "finance-deployment",
+          "db-resource": "finance",
+          "audit": "finance.transaction.created",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:vault.get.api-vault-secrets",
+      "kind": "feature",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "vault.get.api-vault-secrets"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "vault",
+          "feature": "vault.get.api-vault-secrets",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/vault/secrets",
+          "auth": "user",
+          "policy": "vault:read",
+          "service": "vault",
+          "artifact": "api-gateway",
+          "deployment": "vault-deployment",
+          "db-resource": "vault",
+          "audit": "vault.listed",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:vault.post.api-vault-secrets",
+      "kind": "feature",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "vault.post.api-vault-secrets"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "vault",
+          "feature": "vault.post.api-vault-secrets",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/vault/secrets",
+          "auth": "user",
+          "policy": "vault:write",
+          "service": "vault",
+          "artifact": "api-gateway",
+          "deployment": "vault-deployment",
+          "db-resource": "vault",
+          "audit": "vault.secret.updated",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:vault.get.api-vault-secrets--secretId",
+      "kind": "feature",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "vault.get.api-vault-secrets--secretId"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "vault",
+          "feature": "vault.get.api-vault-secrets--secretId",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/vault/secrets/:secretId",
+          "auth": "user",
+          "policy": "vault:read",
+          "service": "vault",
+          "artifact": "api-gateway",
+          "deployment": "vault-deployment",
+          "db-resource": "vault",
+          "audit": "vault.secret.accessed",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:mail.get.api-mail-messages",
+      "kind": "feature",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "mail.get.api-mail-messages"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "mail",
+          "feature": "mail.get.api-mail-messages",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/mail/messages",
+          "auth": "user",
+          "policy": "mail:read",
+          "service": "mail",
+          "artifact": "api-gateway",
+          "deployment": "mail-deployment",
+          "db-resource": "mail",
+          "audit": "wisp.message.listed",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:mail.post.api-mail-messages",
+      "kind": "feature",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "mail.post.api-mail-messages"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "mail",
+          "feature": "mail.post.api-mail-messages",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/mail/messages",
+          "auth": "user",
+          "policy": "mail:send",
+          "service": "mail",
+          "artifact": "api-gateway",
+          "deployment": "mail-deployment",
+          "db-resource": "mail",
+          "audit": "wisp.message.sent",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:workflow.get.api-workflows",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "workflow.get.api-workflows"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "workflow.get.api-workflows",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/workflows",
+          "auth": "user",
+          "policy": "workflow:read",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow",
+          "audit": "workflow.listed",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:workflow.post.api-workflows",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "workflow.post.api-workflows"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "workflow.post.api-workflows",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/workflows",
+          "auth": "user",
+          "policy": "workflow:write",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow",
+          "audit": "workflow.created",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:workflow.post.api-workflows--workflowId-executions",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "workflow.post.api-workflows--workflowId-executions"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "workflow.post.api-workflows--workflowId-executions",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/workflows/:workflowId/executions",
+          "auth": "user",
+          "policy": "workflow:write",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow",
+          "audit": "workflow.started",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:workflow.post.api-workflows-executions--executionId-cancel",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "workflow.post.api-workflows-executions--executionId-cancel"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "workflow.post.api-workflows-executions--executionId-cancel",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/workflows/executions/:executionId/cancel",
+          "auth": "user",
+          "policy": "workflow:write",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow",
+          "audit": "workflow.cancelled",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:marketplace.get.api-marketplace-listings",
+      "kind": "feature",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "marketplace.get.api-marketplace-listings"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "marketplace",
+          "feature": "marketplace.get.api-marketplace-listings",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/marketplace/listings",
+          "auth": "user",
+          "policy": "verve:read",
+          "service": "marketplace",
+          "artifact": "api-gateway",
+          "deployment": "marketplace-deployment",
+          "db-resource": "marketplace",
+          "audit": "marketplace.listed",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:marketplace.post.api-marketplace-listings",
+      "kind": "feature",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "marketplace.post.api-marketplace-listings"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "marketplace",
+          "feature": "marketplace.post.api-marketplace-listings",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/marketplace/listings",
+          "auth": "user",
+          "policy": "verve:write",
+          "service": "marketplace",
+          "artifact": "api-gateway",
+          "deployment": "marketplace-deployment",
+          "db-resource": "marketplace",
+          "audit": "marketplace.listing.created",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:search.get.api-search",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "search.get.api-search"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "search",
+          "feature": "search.get.api-search",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/search",
+          "auth": "user",
+          "policy": "search:read",
+          "service": "search",
+          "artifact": "api-gateway",
+          "deployment": "search-deployment",
+          "db-resource": "search",
+          "audit": "search.executed",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:intelligence.get.api-intelligence-signals",
+      "kind": "feature",
+      "owner": "intelligence",
+      "app": "intelligence",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "intelligence.get.api-intelligence-signals"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "intelligence",
+          "feature": "intelligence.get.api-intelligence-signals",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/intelligence/signals",
+          "auth": "admin",
+          "policy": "admin:read",
+          "service": "intelligence",
+          "artifact": "api-gateway",
+          "deployment": "intelligence-deployment",
+          "db-resource": "intelligence",
+          "audit": "intelligence.read",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.get.api-admin-data-resources",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.get.api-admin-data-resources"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.get.api-admin-data-resources",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/admin/data/resources",
+          "auth": "admin",
+          "policy": "admin:read",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.data.catalog.read",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.post.api-admin-data-query",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.post.api-admin-data-query"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.post.api-admin-data-query",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/admin/data/query",
+          "auth": "admin",
+          "policy": "admin:data:read",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.data.query",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.post.api-admin-data-mutate",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.post.api-admin-data-mutate"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.post.api-admin-data-mutate",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/admin/data/mutate",
+          "auth": "admin",
+          "policy": "admin:data:write",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.data.mutate",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.post.api-admin-break-glass",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.post.api-admin-break-glass"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.post.api-admin-break-glass",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/admin/break-glass",
+          "auth": "admin",
+          "policy": "admin:break-glass",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.break_glass.issued",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.post.api-admin-events",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.post.api-admin-events"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.post.api-admin-events",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/admin/events",
+          "auth": "service",
+          "policy": "platform:internal",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.event.accepted",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.get.api-admin-xuka-phases",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.get.api-admin-xuka-phases"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.get.api-admin-xuka-phases",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/admin/xuka/phases",
+          "auth": "admin",
+          "policy": "admin:read",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.xuka.phases.read",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.get.api-admin-xuka-phases--phase",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.get.api-admin-xuka-phases--phase"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.get.api-admin-xuka-phases--phase",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/admin/xuka/phases/:phase",
+          "auth": "admin",
+          "policy": "admin:read",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.xuka.phase.read",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.get.api-admin-xuka-registry",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.get.api-admin-xuka-registry"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.get.api-admin-xuka-registry",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "GET /api/admin/xuka/registry",
+          "auth": "admin",
+          "policy": "admin:read",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.xuka.registry.read",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.post.api-admin-xuka-validate",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.post.api-admin-xuka-validate"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.post.api-admin-xuka-validate",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/admin/xuka/validate",
+          "auth": "admin",
+          "policy": "admin:read",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.xuka.validate",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.post.api-admin-xuka-preview",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.post.api-admin-xuka-preview"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.post.api-admin-xuka-preview",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/admin/xuka/preview",
+          "auth": "admin",
+          "policy": "admin:read",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.xuka.preview",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:admin.post.api-admin-xuka-inspect",
+      "kind": "feature",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "admin.post.api-admin-xuka-inspect"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "admin",
+          "feature": "admin.post.api-admin-xuka-inspect",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/admin/xuka/inspect",
+          "auth": "admin",
+          "policy": "admin:read",
+          "service": "admin",
+          "artifact": "api-gateway",
+          "deployment": "admin-deployment",
+          "db-resource": "admin",
+          "audit": "admin.xuka.inspect",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:telegram-gateway.post.api-telegram-gateway--botKey-webhook",
+      "kind": "feature",
+      "owner": "telegram-platform",
+      "app": "telegram-platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "telegram-gateway.post.api-telegram-gateway--botKey-webhook"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "telegram-gateway",
+          "feature": "telegram-gateway.post.api-telegram-gateway--botKey-webhook",
+          "api": "api-gateway",
+          "api-server": "monolith",
+          "route": "POST /api/telegram/gateway/:botKey/webhook",
+          "auth": "service",
+          "policy": "telegram:update",
+          "service": "telegram-gateway",
+          "artifact": "api-gateway",
+          "deployment": "telegram-gateway-deployment",
+          "db-resource": "telegram-gateway",
+          "audit": "telegram.update.received",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.organization.created",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.organization.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workspace",
+          "feature": "event.organization.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "workspace",
+          "artifact": "api-gateway",
+          "deployment": "workspace-deployment",
+          "db-resource": "workspace",
+          "eventbus": "organization.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.organization.member.added",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.organization.member.added"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workspace",
+          "feature": "event.organization.member.added",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "workspace",
+          "artifact": "api-gateway",
+          "deployment": "workspace-deployment",
+          "db-resource": "workspace",
+          "eventbus": "organization.member.added",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.workspace.created",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.workspace.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workspace",
+          "feature": "event.workspace.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "workspace",
+          "artifact": "api-gateway",
+          "deployment": "workspace-deployment",
+          "db-resource": "workspace",
+          "eventbus": "workspace.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.workspace.member.added",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.workspace.member.added"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workspace",
+          "feature": "event.workspace.member.added",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "workspace",
+          "artifact": "api-gateway",
+          "deployment": "workspace-deployment",
+          "db-resource": "workspace",
+          "eventbus": "workspace.member.added",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.user.created",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.user.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "event.user.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "eventbus": "user.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.user.updated",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.user.updated"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "event.user.updated",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "eventbus": "user.updated",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.session.created",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.session.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "event.session.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "eventbus": "session.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.session.revoked",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.session.revoked"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "event.session.revoked",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "eventbus": "session.revoked",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.authentication.failed",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.authentication.failed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "event.authentication.failed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "eventbus": "authentication.failed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.finance.transaction.updated",
+      "kind": "feature",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.finance.transaction.updated"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "finance",
+          "feature": "event.finance.transaction.updated",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "finance",
+          "artifact": "api-gateway",
+          "deployment": "finance-deployment",
+          "db-resource": "finance",
+          "eventbus": "finance.transaction.updated",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.finance.transaction.created",
+      "kind": "feature",
+      "owner": "ryft",
+      "app": "ryft",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.finance.transaction.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "finance",
+          "feature": "event.finance.transaction.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "finance",
+          "artifact": "api-gateway",
+          "deployment": "finance-deployment",
+          "db-resource": "finance",
+          "eventbus": "finance.transaction.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.vault.secret.accessed",
+      "kind": "feature",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.vault.secret.accessed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "vault",
+          "feature": "event.vault.secret.accessed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "vault",
+          "artifact": "api-gateway",
+          "deployment": "vault-deployment",
+          "db-resource": "vault",
+          "eventbus": "vault.secret.accessed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.vault.secret.updated",
+      "kind": "feature",
+      "owner": "sylo",
+      "app": "sylo",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.vault.secret.updated"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "vault",
+          "feature": "event.vault.secret.updated",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "vault",
+          "artifact": "api-gateway",
+          "deployment": "vault-deployment",
+          "db-resource": "vault",
+          "eventbus": "vault.secret.updated",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.workflow.completed",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.workflow.completed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "event.workflow.completed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow",
+          "eventbus": "workflow.completed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.workflow.started",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.workflow.started"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "event.workflow.started",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow",
+          "eventbus": "workflow.started",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.workflow.failed",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.workflow.failed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "event.workflow.failed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow",
+          "eventbus": "workflow.failed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.workflow.cancelled",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.workflow.cancelled"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "event.workflow.cancelled",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow",
+          "eventbus": "workflow.cancelled",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.wisp.message.received",
+      "kind": "feature",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.wisp.message.received"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "mail",
+          "feature": "event.wisp.message.received",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "mail",
+          "artifact": "api-gateway",
+          "deployment": "mail-deployment",
+          "db-resource": "mail",
+          "eventbus": "wisp.message.received",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.wisp.message.sent",
+      "kind": "feature",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.wisp.message.sent"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "mail",
+          "feature": "event.wisp.message.sent",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "mail",
+          "artifact": "api-gateway",
+          "deployment": "mail-deployment",
+          "db-resource": "mail",
+          "eventbus": "wisp.message.sent",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.mail.delivery.requested",
+      "kind": "feature",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.mail.delivery.requested"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "mail",
+          "feature": "event.mail.delivery.requested",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "mail",
+          "artifact": "api-gateway",
+          "deployment": "mail-deployment",
+          "db-resource": "mail",
+          "eventbus": "mail.delivery.requested",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.mail.delivery.updated",
+      "kind": "feature",
+      "owner": "wisp",
+      "app": "wisp",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.mail.delivery.updated"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "mail",
+          "feature": "event.mail.delivery.updated",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "mail",
+          "artifact": "api-gateway",
+          "deployment": "mail-deployment",
+          "db-resource": "mail",
+          "eventbus": "mail.delivery.updated",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.notification.requested",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.notification.requested"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "notification",
+          "feature": "event.notification.requested",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "notification",
+          "artifact": "api-gateway",
+          "deployment": "notification-deployment",
+          "db-resource": "notification",
+          "eventbus": "notification.requested",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.notification.sent",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.notification.sent"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "notification",
+          "feature": "event.notification.sent",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "notification",
+          "artifact": "api-gateway",
+          "deployment": "notification-deployment",
+          "db-resource": "notification",
+          "eventbus": "notification.sent",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.notification.failed",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.notification.failed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "notification",
+          "feature": "event.notification.failed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "notification",
+          "artifact": "api-gateway",
+          "deployment": "notification-deployment",
+          "db-resource": "notification",
+          "eventbus": "notification.failed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.ai.task.completed",
+      "kind": "feature",
+      "owner": "zynth",
+      "app": "zynth",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.ai.task.completed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "ai-agent",
+          "feature": "event.ai.task.completed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "ai-agent",
+          "artifact": "api-gateway",
+          "deployment": "ai-agent-deployment",
+          "db-resource": "ai-agent",
+          "eventbus": "ai.task.completed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.ai.task.failed",
+      "kind": "feature",
+      "owner": "zynth",
+      "app": "zynth",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.ai.task.failed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "ai-agent",
+          "feature": "event.ai.task.failed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "ai-agent",
+          "artifact": "api-gateway",
+          "deployment": "ai-agent-deployment",
+          "db-resource": "ai-agent",
+          "eventbus": "ai.task.failed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.intelligence.observation.created",
+      "kind": "feature",
+      "owner": "intelligence",
+      "app": "intelligence",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.intelligence.observation.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "intelligence",
+          "feature": "event.intelligence.observation.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "intelligence",
+          "artifact": "api-gateway",
+          "deployment": "intelligence-deployment",
+          "db-resource": "intelligence",
+          "eventbus": "intelligence.observation.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.intelligence.signal.created",
+      "kind": "feature",
+      "owner": "intelligence",
+      "app": "intelligence",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.intelligence.signal.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "intelligence",
+          "feature": "event.intelligence.signal.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "intelligence",
+          "artifact": "api-gateway",
+          "deployment": "intelligence-deployment",
+          "db-resource": "intelligence",
+          "eventbus": "intelligence.signal.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.search.document.indexed",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.search.document.indexed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "search",
+          "feature": "event.search.document.indexed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "search",
+          "artifact": "api-gateway",
+          "deployment": "search-deployment",
+          "db-resource": "search",
+          "eventbus": "search.document.indexed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.marketplace.listing.created",
+      "kind": "feature",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.marketplace.listing.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "marketplace",
+          "feature": "event.marketplace.listing.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "marketplace",
+          "artifact": "api-gateway",
+          "deployment": "marketplace-deployment",
+          "db-resource": "marketplace",
+          "eventbus": "marketplace.listing.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.marketplace.order.created",
+      "kind": "feature",
+      "owner": "verve",
+      "app": "verve",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.marketplace.order.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "marketplace",
+          "feature": "event.marketplace.order.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "marketplace",
+          "artifact": "api-gateway",
+          "deployment": "marketplace-deployment",
+          "db-resource": "marketplace",
+          "eventbus": "marketplace.order.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.analytics.event.recorded",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.analytics.event.recorded"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "platform",
+          "feature": "event.analytics.event.recorded",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "platform",
+          "artifact": "api-gateway",
+          "deployment": "platform-deployment",
+          "db-resource": "platform",
+          "eventbus": "analytics.event.recorded",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.identity.telegram.linked",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.identity.telegram.linked"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "event.identity.telegram.linked",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "eventbus": "identity.telegram.linked",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.authorization.decision.allowed",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.authorization.decision.allowed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "authorization",
+          "feature": "event.authorization.decision.allowed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "authorization",
+          "artifact": "api-gateway",
+          "deployment": "authorization-deployment",
+          "db-resource": "authorization",
+          "eventbus": "authorization.decision.allowed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.authorization.decision.denied",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.authorization.decision.denied"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "authorization",
+          "feature": "event.authorization.decision.denied",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "authorization",
+          "artifact": "api-gateway",
+          "deployment": "authorization-deployment",
+          "db-resource": "authorization",
+          "eventbus": "authorization.decision.denied",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.telegram.update.received",
+      "kind": "feature",
+      "owner": "telegram-platform",
+      "app": "telegram-platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.telegram.update.received"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "telegram-gateway",
+          "feature": "event.telegram.update.received",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "telegram-gateway",
+          "artifact": "api-gateway",
+          "deployment": "telegram-gateway-deployment",
+          "db-resource": "telegram-gateway",
+          "eventbus": "telegram.update.received",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.telegram.update.failed",
+      "kind": "feature",
+      "owner": "telegram-platform",
+      "app": "telegram-platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.telegram.update.failed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "telegram-gateway",
+          "feature": "event.telegram.update.failed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "telegram-gateway",
+          "artifact": "api-gateway",
+          "deployment": "telegram-gateway-deployment",
+          "db-resource": "telegram-gateway",
+          "eventbus": "telegram.update.failed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.technical_gap.detected",
+      "kind": "feature",
+      "owner": "intelligence",
+      "app": "intelligence",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.technical_gap.detected"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "intelligence",
+          "feature": "event.technical_gap.detected",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "intelligence",
+          "artifact": "api-gateway",
+          "deployment": "intelligence-deployment",
+          "db-resource": "intelligence",
+          "eventbus": "technical_gap.detected",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.technical_gap.updated",
+      "kind": "feature",
+      "owner": "intelligence",
+      "app": "intelligence",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.technical_gap.updated"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "intelligence",
+          "feature": "event.technical_gap.updated",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "intelligence",
+          "artifact": "api-gateway",
+          "deployment": "intelligence-deployment",
+          "db-resource": "intelligence",
+          "eventbus": "technical_gap.updated",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.deployment.started",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.deployment.started"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "platform",
+          "feature": "event.deployment.started",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "platform",
+          "artifact": "api-gateway",
+          "deployment": "platform-deployment",
+          "db-resource": "platform",
+          "eventbus": "deployment.started",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.deployment.succeeded",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.deployment.succeeded"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "platform",
+          "feature": "event.deployment.succeeded",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "platform",
+          "artifact": "api-gateway",
+          "deployment": "platform-deployment",
+          "db-resource": "platform",
+          "eventbus": "deployment.succeeded",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.deployment.failed",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.deployment.failed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "platform",
+          "feature": "event.deployment.failed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "platform",
+          "artifact": "api-gateway",
+          "deployment": "platform-deployment",
+          "db-resource": "platform",
+          "eventbus": "deployment.failed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.service.health.changed",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.service.health.changed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "platform",
+          "feature": "event.service.health.changed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "platform",
+          "artifact": "api-gateway",
+          "deployment": "platform-deployment",
+          "db-resource": "platform",
+          "eventbus": "service.health.changed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.event.consumer.lag",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.event.consumer.lag"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "event-bus",
+          "feature": "event.event.consumer.lag",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "event-bus",
+          "artifact": "api-gateway",
+          "deployment": "event-bus-deployment",
+          "db-resource": "event-bus",
+          "eventbus": "event.consumer.lag",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.workflow.stalled",
+      "kind": "feature",
+      "owner": "skarn",
+      "app": "skarn",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.workflow.stalled"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "workflow",
+          "feature": "event.workflow.stalled",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "workflow",
+          "artifact": "api-gateway",
+          "deployment": "workflow-deployment",
+          "db-resource": "workflow",
+          "eventbus": "workflow.stalled",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.audit.created",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.audit.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "audit",
+          "feature": "event.audit.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "audit",
+          "artifact": "api-gateway",
+          "deployment": "audit-deployment",
+          "db-resource": "audit",
+          "eventbus": "audit.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.alert.created",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.alert.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "alerting",
+          "feature": "event.alert.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "alerting",
+          "artifact": "api-gateway",
+          "deployment": "alerting-deployment",
+          "db-resource": "alerting",
+          "eventbus": "alert.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.incident.created",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.incident.created"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "incident",
+          "feature": "event.incident.created",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "incident",
+          "artifact": "api-gateway",
+          "deployment": "incident-deployment",
+          "db-resource": "incident",
+          "eventbus": "incident.created",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.incident.resolved",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.incident.resolved"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "incident",
+          "feature": "event.incident.resolved",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "incident",
+          "artifact": "api-gateway",
+          "deployment": "incident-deployment",
+          "db-resource": "incident",
+          "eventbus": "incident.resolved",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.user.error",
+      "kind": "feature",
+      "owner": "intelligence",
+      "app": "intelligence",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.user.error"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "intelligence",
+          "feature": "event.user.error",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "intelligence",
+          "artifact": "api-gateway",
+          "deployment": "intelligence-deployment",
+          "db-resource": "intelligence",
+          "eventbus": "user.error",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.telegram.auth.linked",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.telegram.auth.linked"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "event.telegram.auth.linked",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "eventbus": "telegram.auth.linked",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.telegram.auth.unlinked",
+      "kind": "feature",
+      "owner": "identity",
+      "app": "identity",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.telegram.auth.unlinked"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "identity",
+          "feature": "event.telegram.auth.unlinked",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "identity",
+          "artifact": "api-gateway",
+          "deployment": "identity-deployment",
+          "db-resource": "identity",
+          "eventbus": "telegram.auth.unlinked",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "feature:event.backup.restore.completed",
+      "kind": "feature",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/feature-completeness.json",
+        "originalId": "event.backup.restore.completed"
+      },
+      "metadata": {
+        "status": "production",
+        "circuit": {
+          "domain": "backup",
+          "feature": "event.backup.restore.completed",
+          "api": "event-gateway",
+          "api-server": "monolith",
+          "service": "backup",
+          "artifact": "api-gateway",
+          "deployment": "backup-deployment",
+          "db-resource": "backup",
+          "eventbus": "backup.restore.completed",
+          "audit": "none",
+          "intelligence": "intelligence",
+          "admin-telegram": "admin"
+        }
+      }
+    },
+    {
+      "id": "domain:ayzen-public",
+      "kind": "domain",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/domain-registry.json",
+        "originalId": "ayzen-public"
+      },
+      "metadata": {
+        "domain": "ayzen.app",
+        "target": "api-gateway",
+        "entryPoint": "frontend"
+      }
+    },
+    {
+      "id": "domain:ayzen-staging",
+      "kind": "domain",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "staging",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/domain-registry.json",
+        "originalId": "ayzen-staging"
+      },
+      "metadata": {
+        "domain": "staging.ayzen.app",
+        "target": "api-gateway",
+        "entryPoint": "frontend"
+      }
+    },
+    {
+      "id": "domain:ayzen-admin",
+      "kind": "domain",
+      "owner": "admin",
+      "app": "admin",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/domain-registry.json",
+        "originalId": "ayzen-admin"
+      },
+      "metadata": {
+        "domain": "admin.ayzen.app",
+        "target": "admin",
+        "entryPoint": "admin"
+      }
+    },
+    {
+      "id": "domain:ayzen-api",
+      "kind": "domain",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/domain-registry.json",
+        "originalId": "ayzen-api"
+      },
+      "metadata": {
+        "domain": "api.ayzen.app",
+        "target": "api-gateway",
+        "entryPoint": "api"
+      }
+    },
+    {
+      "id": "engine:dependency-graph",
+      "kind": "engine",
+      "owner": "platform",
+      "app": "ayzen",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/enforcement-registry.json",
+        "originalId": "dependency-graph"
+      },
+      "metadata": {
+        "policy": "enforcement.registry",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "engine:state-sync",
+      "kind": "engine",
+      "owner": "platform",
+      "app": "ayzen",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/enforcement-registry.json",
+        "originalId": "state-sync"
+      },
+      "metadata": {
+        "policy": "enforcement.state",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "engine:data-governance",
+      "kind": "engine",
+      "owner": "platform",
+      "app": "ayzen",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/enforcement-registry.json",
+        "originalId": "data-governance"
+      },
+      "metadata": {
+        "policy": "enforcement.data",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "engine:resource-orchestration",
+      "kind": "engine",
+      "owner": "platform",
+      "app": "ayzen",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/enforcement-registry.json",
+        "originalId": "resource-orchestration"
+      },
+      "metadata": {
+        "policy": "enforcement.resource",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "engine:runtime-optimization",
+      "kind": "engine",
+      "owner": "platform",
+      "app": "ayzen",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/enforcement-registry.json",
+        "originalId": "runtime-optimization"
+      },
+      "metadata": {
+        "policy": "enforcement.performance",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "engine:policy-simulation",
+      "kind": "engine",
+      "owner": "platform",
+      "app": "ayzen",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/enforcement-registry.json",
+        "originalId": "policy-simulation"
+      },
+      "metadata": {
+        "policy": "enforcement.policy",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "engine:recovery-reconciliation",
+      "kind": "engine",
+      "owner": "platform",
+      "app": "ayzen",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/enforcement-registry.json",
+        "originalId": "recovery-reconciliation"
+      },
+      "metadata": {
+        "policy": "enforcement.recovery",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "engine:lifecycle",
+      "kind": "engine",
+      "owner": "platform",
+      "app": "ayzen",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/enforcement-registry.json",
+        "originalId": "lifecycle"
+      },
+      "metadata": {
+        "policy": "enforcement.lifecycle",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "control-plane:enforcement-fabric",
+      "kind": "control-plane",
+      "owner": "platform",
+      "app": "ayzen",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/enforcement-registry.json",
+        "originalId": "enforcement-fabric"
+      },
+      "metadata": {
+        "policy": "enforcement.write",
+        "version": "1.0.0"
+      }
+    }
+  ]
+}

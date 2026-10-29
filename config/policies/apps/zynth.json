@@ -1,0 +1,6 @@
+{
+  "app": "zynth",
+  "roles": { "member": ["ai.execute"], "owner": ["ai.execute", "ai.manage"] },
+  "resources": ["ai"],
+  "defaultDeny": true
+}

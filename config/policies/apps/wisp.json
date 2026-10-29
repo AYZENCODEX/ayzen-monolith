@@ -1,0 +1,6 @@
+{
+  "app": "wisp",
+  "roles": { "member": ["mail.read", "mail.send"], "owner": ["mail.read", "mail.send", "mail.manage"] },
+  "resources": ["mail"],
+  "defaultDeny": true
+}

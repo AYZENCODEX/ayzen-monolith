@@ -1,0 +1,201 @@
+{
+  "phase": "VLT-GAP-01",
+  "sub_phase": "VLT-GAP-01-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "15cc70d7cfef801f9993710ffe3618c0e59df1b52fb75a452e8f900ccae1b3d4",
+  "validator_version": "1.0.0",
+  "validator_sha256": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+  "description": "Duplicate implementation scan (name-agnostic semantic fingerprints)",
+  "extracted_copy_outside_vault": [],
+  "baseline_gap01_bodies_surviving_in_old_files": [],
+  "owner_module_duplicates": [],
+  "pre_existing_independent_idioms_not_from_extraction": [
+    {
+      "file": "artifacts/api-server/src/lib/finance-accounting.ts",
+      "symbol": "generateReceiptToken",
+      "duplicates": "artifacts/api-server/src/vault/application/entity/receipt.ts#generateVaultReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/finance-invoice.ts",
+      "symbol": "generateInvoiceToken",
+      "duplicates": "artifacts/api-server/src/vault/application/entity/receipt.ts#generateVaultReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/finance-invoice.ts",
+      "symbol": "generateAgreementToken",
+      "duplicates": "artifacts/api-server/src/vault/application/entity/receipt.ts#generateVaultReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "symbol": "deriveKekLegacy",
+      "duplicates": "artifacts/api-server/src/vault/crypto/field-encryption.ts#deriveKekLegacy",
+      "tokens": 33,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/wallet-crypto.ts",
+      "symbol": "wrapDek",
+      "duplicates": "artifacts/api-server/src/vault/crypto/field-encryption.ts#wrapDek",
+      "tokens": 24,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/wallet-crypto.ts",
+      "symbol": "bootstrapFirstKey",
+      "duplicates": "artifacts/api-server/src/vault/crypto/field-encryption.ts#bootstrapFirstKey",
+      "tokens": 39,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ai-actions.ts",
+      "symbol": "generateSerial",
+      "duplicates": "artifacts/api-server/src/vault/domain/serial.ts#generateSerial",
+      "tokens": 66,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/local-accounts.ts",
+      "symbol": "generateReceiptToken",
+      "duplicates": "artifacts/api-server/src/vault/application/entity/receipt.ts#generateVaultReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/local-accounts.ts",
+      "symbol": "generateCategoryReceiptToken",
+      "duplicates": "artifacts/api-server/src/vault/application/entity/receipt.ts#generateVaultReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/projects.ts",
+      "symbol": "generateProjectReceiptToken",
+      "duplicates": "artifacts/api-server/src/vault/application/entity/receipt.ts#generateVaultReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/tasks.ts",
+      "symbol": "generateTaskReceiptToken",
+      "duplicates": "artifacts/api-server/src/vault/application/entity/receipt.ts#generateVaultReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since baseline; pre-dates the extraction (independent idiom, not extracted code)"
+    }
+  ],
+  "owner_functions_fingerprinted": 84,
+  "hidden_import_edges": [
+    {
+      "consumer": "artifacts/api-server/src/lib/dr-test-runner.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "verifyStoredChecksum",
+      "kind": "import",
+      "line": 38,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "buildVaultSnapshotPayload",
+      "kind": "import",
+      "line": 50,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "storeSnapshotRow",
+      "kind": "import",
+      "line": 50,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "target": "artifacts/api-server/src/routes/vault.ts",
+      "symbol": "toHealthInput",
+      "kind": "import",
+      "line": 34,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "target": "artifacts/api-server/src/routes/vault.ts",
+      "symbol": "default",
+      "kind": "import",
+      "line": 11,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "symbol": "default",
+      "kind": "import",
+      "line": 142,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "target": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "symbol": "default",
+      "kind": "import",
+      "line": 143,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "default",
+      "kind": "import",
+      "line": 150,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/organizations.ts",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "symbol": "ENTITY_TABLES",
+      "kind": "import",
+      "line": 8,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/organizations.ts",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "symbol": "isValidType",
+      "kind": "import",
+      "line": 8,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/organizations.ts",
+      "target": "artifacts/api-server/src/routes/vault-shares.ts",
+      "symbol": "VALID_TYPES",
+      "kind": "import",
+      "line": 8,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/vault/api/index.ts",
+      "target": "artifacts/api-server/src/routes/vault.ts",
+      "symbol": "default",
+      "kind": "re-export",
+      "line": 5,
+      "verdict": "ok"
+    },
+    {
+      "consumer": "artifacts/api-server/src/vault/api/index.ts",
+      "target": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "symbol": "default",
+      "kind": "re-export",
+      "line": 7,
+      "verdict": "ok"
+    }
+  ],
+  "hidden_import_violations": [],
+  "layering_violations": []
+}

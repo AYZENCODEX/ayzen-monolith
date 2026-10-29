@@ -1,0 +1,1217 @@
+{
+  "phase": "VLT-GAP-02",
+  "sub_phase": "VLT-GAP-02-C",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "bb5f56676e35196ae1025a26217841957d007e1f076528351f890cf707f05262",
+  "validator_version": "1.0.0",
+  "validator_sha256": "1f1df1e80eee29f3e57f117bb054bcd5f477fa287250ae35f9f37b742079ce59",
+  "baseline": {
+    "mode": "write-once seal (verified, never written by this validator)",
+    "seal_file": "reports/antas/vault/gap/VLT-GAP-02/baseline-02c/SEAL.json",
+    "sealed_at": "2026-09-30T04:32:04.119Z",
+    "tree_manifest_sha256": "c3830708f33e1d170723da341023214a23a7fc4911db4385ee97c92e9eab1b7b",
+    "certified_by": {
+      "sub_phase": "VLT-GAP-02-B",
+      "source_tree_sha256": "c66e0788dc9c8cd2c11da355e84c29d9f964735979b42518a0859c4a9d375f1e",
+      "validator_sha256": "27ebd3bb00c4efd2bfccfead5fdc10dba3edb4d539f90970bb58e96c84259fa6",
+      "source_hashes_checked": 8
+    },
+    "frozen_consumers": {
+      "value-history.ts": {
+        "source": "artifacts/api-server/src/routes/value-history.ts",
+        "sha256": "79948d6aff356fe6bbf61029ac25e65b9d285a1d1c1aa5a3553e1ee2f32916c3"
+      },
+      "vault.ts": {
+        "source": "artifacts/api-server/src/routes/vault.ts",
+        "sha256": "d8c4b257cd4c9abec0cc56aabc7abe3481b1678c8af48261955704c76d7fdcec"
+      },
+      "bulk.ts": {
+        "source": "artifacts/api-server/src/routes/bulk.ts",
+        "sha256": "4ace985d9038e30e723cdaa45def8437196a6c2b5a11d673657c24c6ffe9b5ff"
+      },
+      "local-accounts.route.ts": {
+        "source": "artifacts/api-server/src/routes/local-accounts.ts",
+        "sha256": "dc2e9ad68537f5cf6a85803d98e0055f7cfdeeb13d298c5dc3a827245f01e5c7"
+      },
+      "check-ownership-gate-coverage.ts": {
+        "source": "scripts/src/check-ownership-gate-coverage.ts",
+        "sha256": "de8bcefcc05128aabc1374dc4746ccd5cb54393b027291beec52988f2ef79ef9"
+      }
+    }
+  },
+  "source_hashes": {
+    "artifacts/api-server/src/routes/value-history.ts": "aff03450348d25b8eb00056eae8aec6a35d30df140638bad20f3dbef5596db6a",
+    "artifacts/api-server/src/routes/vault.ts": "615125c0947e28e6a67d82aade5c1009f4f9ba9b29ce21b3dc7a91c576218e77",
+    "artifacts/api-server/src/routes/bulk.ts": "6f041f687f525c7f5c42623f95b154cd7911f0f8ac41f709bc9a1cbc5cc933be",
+    "artifacts/api-server/src/routes/local-accounts.ts": "31cc99b5beaa534b284f9a4b1ead209bbd3a34e890425d2aa8c8f0a57548c963",
+    "artifacts/api-server/src/vault/application/local-account/bridge.ts": "1ab2d0574939de6162eccfbf78ef50deb191760d2d2ad7a1e7bdc160bb61ff41",
+    "artifacts/api-server/src/vault/application/local-account/value.ts": "147cdbf41162308df32933ea41139761fcab29354b2e61d4c586d46b1698ea03",
+    "artifacts/api-server/src/vault/application/local-account/bulk.ts": "4deeb19d31a03fc966e4be05c65f6ff2b515f3ba47c6ff55e4d6b8729ed0398f",
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-consumer-repository.ts": "5614889976d78a933e1a2e4cb0e88c8b9544d129efcca293521f5f8683e01be0",
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts": "be5dfd065857a55370c139e69b46f9836f8ab2b3d0f4d91d5e36415a0c6c704b",
+    "scripts/src/check-ownership-gate-coverage.ts": "db9ee44008a933f66fd18915621bf2a4ed9d6f2750dc99aa4cc6756c2472d9bb",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/freeze-vlt-gap-02-C-baseline.mjs": "45af9e6efba2b140e6094b57028c0a7549fe3a062ea43b8c992b9f35c0c0ad6a",
+    "reports/antas/vault/gap/VLT-GAP-02/baseline-02c/SEAL.json": "4b4715ab8ac0036bda0169b3d545dcaa81a32e0ccb9c0835bb999772eb5eae7b",
+    "reports/antas/vault/gap/VLT-GAP-02/baseline-02c/tree-manifest.json": "c3830708f33e1d170723da341023214a23a7fc4911db4385ee97c92e9eab1b7b"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-02-C.mjs",
+    "in-process differential suite (sealed 02-B consumers vs new source)",
+    "in-process seeded-mutation suite",
+    "tsx scripts/src/check-ownership-gate-coverage.ts (when executable)",
+    "in-process differential typecheck"
+  ],
+  "exit_codes": {
+    "differential_suite": 0,
+    "security_suite": 0,
+    "mutation_suite": 0,
+    "ci_lint": null,
+    "typecheck_differential": 0
+  },
+  "consumer_graph": {
+    "owner_modules": [
+      "vault/application/local-account/bridge.ts",
+      "vault/application/local-account/value.ts",
+      "vault/application/local-account/bulk.ts",
+      "vault/infrastructure/repositories/local-account-consumer-repository.ts"
+    ],
+    "owner_symbols": [
+      {
+        "symbol": "autoCreateLocalAccountsForEntity",
+        "owner": "vault/application/local-account/bridge.ts",
+        "consumers": [
+          "routes/vault.ts"
+        ]
+      },
+      {
+        "symbol": "listLocalAccountValueHistory",
+        "owner": "vault/application/local-account/value.ts",
+        "consumers": [
+          "routes/value-history.ts"
+        ]
+      },
+      {
+        "symbol": "saveLocalAccountValue",
+        "owner": "vault/application/local-account/value.ts",
+        "consumers": [
+          "routes/value-history.ts"
+        ]
+      },
+      {
+        "symbol": "applyLocalAccountBulk",
+        "owner": "vault/application/local-account/bulk.ts",
+        "consumers": [
+          "routes/bulk.ts"
+        ]
+      },
+      {
+        "symbol": "exportLocalAccountRows",
+        "owner": "vault/application/local-account/bulk.ts",
+        "consumers": [
+          "routes/bulk.ts"
+        ]
+      }
+    ],
+    "rewired_consumers": [
+      {
+        "file": "routes/value-history.ts",
+        "imports_owner": true,
+        "local_table_sql_after": 0,
+        "local_table_sql_before": 1,
+        "route_table_unchanged": true,
+        "handlers_after": [
+          {
+            "method": "GET",
+            "path": "/local-accounts/:id/value-history",
+            "middleware": [
+              "requireAuth",
+              "requireLocalAccountOwnership(\"local_account.value_history.read\", (_req, res) => { res.json([]); })"
+            ],
+            "db_refs": 0,
+            "control_flow_nodes": 0,
+            "called": [
+              "listLocalAccountValueHistory"
+            ]
+          },
+          {
+            "method": "POST",
+            "path": "/local-accounts/:id/value",
+            "middleware": [
+              "requireAuth",
+              "requireLocalAccountOwnership(\"local_account.value.update\", (_req, res) => { res.status(404).json({ error: \"Account not found\" }); })"
+            ],
+            "db_refs": 0,
+            "control_flow_nodes": 0,
+            "called": [
+              "saveLocalAccountValue"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "routes/vault.ts",
+        "imports_owner": true,
+        "local_table_sql_after": 0,
+        "local_table_sql_before": 2,
+        "route_table_unchanged": true,
+        "handlers_after": [
+          {
+            "method": "GET",
+            "path": "/admin/vault/local-accounts",
+            "middleware": [
+              "requireAdmin"
+            ],
+            "db_refs": 0,
+            "control_flow_nodes": 0,
+            "called": [
+              "adminListLocalAccounts"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "routes/bulk.ts",
+        "imports_owner": true,
+        "local_table_sql_after": 0,
+        "local_table_sql_before": 3,
+        "route_table_unchanged": true,
+        "handlers_after": [
+          {
+            "method": "POST",
+            "path": "/local-accounts/bulk",
+            "middleware": [
+              "requireAuth",
+              "sensitiveWriteLimiter"
+            ],
+            "db_refs": 0,
+            "control_flow_nodes": 1,
+            "called": [
+              "applyLocalAccountBulk",
+              "auditBulkOwnership",
+              "safeIds"
+            ]
+          },
+          {
+            "method": "GET",
+            "path": "/csv/export/:resource",
+            "middleware": [
+              "requireAuth"
+            ],
+            "db_refs": 4,
+            "control_flow_nodes": 5,
+            "called": [
+              "String",
+              "exportLocalAccountRows"
+            ]
+          }
+        ]
+      }
+    ],
+    "moved_sql": [
+      {
+        "sql": "SELECT id FROM local_accounts WHERE user_id = ${} AND vault_entry_id = ${} AND category = ${} LIMIT 1",
+        "verbatim_in_frozen": true
+      },
+      {
+        "sql": "INSERT INTO local_accounts (user_id, category, label, username, email, password, twofa, followers, vault_entry_id, origin) VALUES (${}, ${}, ${}, ${}, ${}, ${}, ${}, ${}, ${}, 'entity')",
+        "verbatim_in_frozen": true
+      },
+      {
+        "sql": "SELECT * FROM value_history WHERE user_id = ${} AND source_type = 'local' AND source_id = ${} ORDER BY created_at DESC",
+        "verbatim_in_frozen": true
+      },
+      {
+        "sql": "UPDATE local_accounts SET account_worth = ${}, buy_price = ${}, updated_at = NOW() WHERE id = ${} AND user_id = ${} RETURNING *",
+        "verbatim_in_frozen": true
+      },
+      {
+        "sql": "INSERT INTO value_history (user_id, source_type, source_id, target, label, value, buy_value, note) VALUES (${}, 'local', ${}, 'account', ${}, ${}, ${}, ${}) RETURNING *",
+        "verbatim_in_frozen": true
+      },
+      {
+        "sql": "DELETE FROM local_accounts WHERE id IN (${}) AND user_id = ${}",
+        "verbatim_in_frozen": true
+      },
+      {
+        "sql": "UPDATE local_accounts SET category = '${}', updated_at = NOW() WHERE id IN (${}) AND user_id = ${}",
+        "verbatim_in_frozen": true
+      },
+      {
+        "sql": "SELECT id, label, category, username, email, followers, account_worth, buy_price, created_at FROM local_accounts WHERE user_id = ${}",
+        "verbatim_in_frozen": true
+      }
+    ]
+  },
+  "table_access_census": [
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "sql_access": 0,
+      "name_literals": 1,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read: mail-sync table registry"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "sql_access": 9,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "schema migrations"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "sql_access": 1,
+      "name_literals": 2,
+      "kind": "deferred",
+      "gap": "VLT-GAP-11",
+      "reason": "health scan reads local accounts and writes flag updates"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "sql_access": 0,
+      "name_literals": 1,
+      "kind": "deferred",
+      "gap": "VLT-GAP-09",
+      "reason": "snapshot restore writes local accounts back"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/bulk.ts",
+      "sql_access": 0,
+      "name_literals": 1,
+      "kind": "dynamic-audit-name-only",
+      "via": "auditBulkOwnership",
+      "table": "local_accounts",
+      "gap": "VLT-GAP-12",
+      "reason": "generic PEP audit candidate lookup shared with vault_entries/wallets; read-only, no mutation, no data returned to the client"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "sql_access": 2,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-04",
+      "reason": "ownership transfer of local accounts on marketplace sale"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace.ts",
+      "sql_access": 1,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read: marketplace listing source"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/search.ts",
+      "sql_access": 1,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read: search"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/sync.ts",
+      "sql_access": 3,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read/join: sync routes"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/two-factor.ts",
+      "sql_access": 1,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read: 2FA listing"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "sql_access": 0,
+      "name_literals": 1,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read: share table registry"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "sql_access": 1,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-09",
+      "reason": "snapshot export reads local accounts"
+    },
+    {
+      "file": "artifacts/api-server/src/services/sync.ts",
+      "sql_access": 1,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read: sync service"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "sql_access": 3,
+      "name_literals": 0,
+      "kind": "deferred",
+      "gap": "VLT-GAP-12",
+      "reason": "remaining read: entity admin views (GAP-01-D owner, reads local_accounts for admin lists)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/local-account-consumer-repository.ts",
+      "sql_access": 6,
+      "name_literals": 0,
+      "kind": "owner"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts",
+      "sql_access": 13,
+      "name_literals": 0,
+      "kind": "owner"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "sql_access": 1,
+      "name_literals": 0,
+      "kind": "owner"
+    },
+    {
+      "file": "scripts/src/reencrypt-vault.ts",
+      "sql_access": 0,
+      "name_literals": 1,
+      "kind": "deferred",
+      "gap": "VLT-GAP-07",
+      "reason": "re-encryption script rewrites ciphertext columns"
+    }
+  ],
+  "deferred_consumers": [
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read: mail-sync table registry"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "schema migrations"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "deferred_to": "VLT-GAP-11",
+      "reason": "health scan reads local accounts and writes flag updates"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "deferred_to": "VLT-GAP-09",
+      "reason": "snapshot restore writes local accounts back"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "deferred_to": "VLT-GAP-04",
+      "reason": "ownership transfer of local accounts on marketplace sale"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read: marketplace listing source"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/search.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read: search"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/sync.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read/join: sync routes"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/two-factor.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read: 2FA listing"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read: share table registry"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "deferred_to": "VLT-GAP-09",
+      "reason": "snapshot export reads local accounts"
+    },
+    {
+      "file": "artifacts/api-server/src/services/sync.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read: sync service"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "deferred_to": "VLT-GAP-12",
+      "reason": "remaining read: entity admin views (GAP-01-D owner, reads local_accounts for admin lists)"
+    },
+    {
+      "file": "scripts/src/reencrypt-vault.ts",
+      "deferred_to": "VLT-GAP-07",
+      "reason": "re-encryption script rewrites ciphertext columns"
+    }
+  ],
+  "dynamic_table_access": [
+    {
+      "file": "artifacts/api-server/src/routes/bulk.ts",
+      "via": "auditBulkOwnership",
+      "table": "local_accounts",
+      "gap": "VLT-GAP-12",
+      "reason": "generic PEP audit candidate lookup shared with vault_entries/wallets; read-only, no mutation, no data returned to the client"
+    }
+  ],
+  "duplicate_implementations": [],
+  "ci_lint": {
+    "staticOk": true,
+    "baselineUnchanged": true,
+    "executed": false,
+    "exit": 1,
+    "tail": "} |  | Node.js v22.22.2"
+  },
+  "diff_audit": {
+    "changed": [
+      "artifacts/api-server/src/routes/bulk.ts",
+      "artifacts/api-server/src/routes/local-accounts.ts",
+      "artifacts/api-server/src/routes/value-history.ts",
+      "artifacts/api-server/src/routes/vault.ts",
+      "scripts/src/check-ownership-gate-coverage.ts"
+    ],
+    "added": [
+      "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "artifacts/api-server/src/vault/application/local-account/bulk.ts",
+      "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/local-account-consumer-repository.ts",
+      "scripts/antas/vault/gap/freeze-vlt-gap-02-D-baseline.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-02-C.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-02-D.mjs"
+    ],
+    "removed": [],
+    "unexpected": [],
+    "allowed_changed": [
+      "artifacts/api-server/src/routes/value-history.ts",
+      "artifacts/api-server/src/routes/vault.ts",
+      "artifacts/api-server/src/routes/bulk.ts",
+      "artifacts/api-server/src/routes/local-accounts.ts",
+      "scripts/src/check-ownership-gate-coverage.ts"
+    ],
+    "allowed_added_patterns": [
+      "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "artifacts/api-server/src/vault/application/local-account/bulk.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/local-account-consumer-repository.ts",
+      "scripts/antas/vault/gap/*"
+    ]
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build is NOT executed)",
+    "before_total": 153,
+    "after_total": 155,
+    "syntactic_errors": [],
+    "new_diagnostics": []
+  },
+  "tests": {
+    "differential_cases": 36,
+    "differential_passed": 36,
+    "security_checks": 4,
+    "security_passed": 4,
+    "mutation_tests": 14,
+    "mutation_detected": 14
+  },
+  "notes": [
+    "02-C rewires the consumers that bypassed the Vault owner: value-history (2 local handlers), vault.ts (entity↔local bridge), bulk.ts (local bulk + CSV export), and removes the compat re-export from routes/local-accounts.ts.",
+    "Every remaining table access outside the owner is an explicit deferral to the gap that owns that behavior; the census FAILS on any unlisted access and on any stale deferral.",
+    "routes/bulk.ts still passes the table name 'local_accounts' to its generic auditBulkOwnership helper (read-only PEP audit lookup shared with vault_entries/wallets). Recorded under dynamic_table_access, deferred to VLT-GAP-12.",
+    "routes/value-history.ts keeps its own `safe`/`num` for the vault_entries handlers in the same file; those are not local-account behavior.",
+    "The frontend sources (components/local-accounts.tsx, config/fields/*) are not part of the API consumer rewire; they are handled in the later GAP-02 phases.",
+    "The 02-A/02-B pre-extraction route baseline (baseline/sources/…routes__local-accounts.ts) is verified intact by check `baseline-02A:pre-extraction-route-intact` (hash equals the 02-A inventory and the pre-extraction tree manifest, and it still holds the DB-bearing pre-extraction shape), so 02-D can rely on it.",
+    "Full tsc/build cannot run here (no node_modules); a differential typecheck against the sealed baseline is used instead and recorded as degraded."
+  ],
+  "checks": [
+    {
+      "name": "seal:tree-manifest-hash-matches-seal",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:matches-02B-certified-state",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:frozen-consumers-intact-and-equal-to-manifest",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:02B-certified-hashes-equal-sealed-tree",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "baseline-02A:pre-extraction-route-intact",
+      "passed": true,
+      "details": "file=476a564b98a0 manifest=476a564b98a0 inventory=476a564b98a0"
+    },
+    {
+      "name": "destination-exists:vault/application/local-account/bridge.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/application/local-account/bridge.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/local-account/value.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/application/local-account/value.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/local-account/bulk.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/application/local-account/bulk.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/infrastructure/repositories/local-account-consumer-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/infrastructure/repositories/local-account-consumer-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/security/local-account-ownership.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-parses:vault/security/local-account-ownership.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "owner-exports-symbol:autoCreateLocalAccountsForEntity",
+      "passed": true,
+      "details": "vault/application/local-account/bridge.ts"
+    },
+    {
+      "name": "owner-exports-symbol:listLocalAccountValueHistory",
+      "passed": true,
+      "details": "vault/application/local-account/value.ts"
+    },
+    {
+      "name": "owner-exports-symbol:saveLocalAccountValue",
+      "passed": true,
+      "details": "vault/application/local-account/value.ts"
+    },
+    {
+      "name": "owner-exports-symbol:applyLocalAccountBulk",
+      "passed": true,
+      "details": "vault/application/local-account/bulk.ts"
+    },
+    {
+      "name": "owner-exports-symbol:exportLocalAccountRows",
+      "passed": true,
+      "details": "vault/application/local-account/bulk.ts"
+    },
+    {
+      "name": "repository-exports-symbol:findBridgedLocalAccount",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-exports-symbol:insertBridgedLocalAccount",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-exports-symbol:selectLocalAccountValueHistory",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-exports-symbol:updateLocalAccountValue",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-exports-symbol:insertLocalAccountValueHistory",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-exports-symbol:deleteLocalAccountsByIds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-exports-symbol:updateLocalAccountsCategoryByIds",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-exports-symbol:selectLocalAccountsForExport",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "repository-has-executable-sql",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "application-files-import-repository-only-for-sql",
+      "passed": true,
+      "details": "owner application modules must not embed SQL/db"
+    },
+    {
+      "name": "moved-sql-is-verbatim-from-frozen-consumers",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-imports-and-uses-owner:routes/value-history.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-local_accounts-sql:routes/value-history.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-unexplained-local_accounts-literal:routes/value-history.ts",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "consumer-route-table-unchanged:routes/value-history.ts",
+      "passed": true,
+      "details": "method/path/middleware chain changed"
+    },
+    {
+      "name": "consumer-imports-and-uses-owner:routes/vault.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-local_accounts-sql:routes/vault.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-unexplained-local_accounts-literal:routes/vault.ts",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "consumer-route-table-unchanged:routes/vault.ts",
+      "passed": true,
+      "details": "method/path/middleware chain changed"
+    },
+    {
+      "name": "consumer-imports-and-uses-owner:routes/bulk.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-local_accounts-sql:routes/bulk.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-has-no-unexplained-local_accounts-literal:routes/bulk.ts",
+      "passed": true,
+      "details": "[{\"line\":130,\"parent\":\"auditBulkOwnership\"}]"
+    },
+    {
+      "name": "consumer-route-table-unchanged:routes/bulk.ts",
+      "passed": true,
+      "details": "method/path/middleware chain changed"
+    },
+    {
+      "name": "value-history:local-handlers-are-thin-adapters",
+      "passed": true,
+      "details": "[[\"/local-accounts/:id/value-history\",0,0],[\"/local-accounts/:id/value\",0,0]]"
+    },
+    {
+      "name": "bulk:local-handler-has-no-db-and-no-decision-tree",
+      "passed": true,
+      "details": "[[0,1,[\"applyLocalAccountBulk\",\"auditBulkOwnership\",\"safeIds\"]]]"
+    },
+    {
+      "name": "value-history:no-local-copy-of-LOCAL_SENSITIVE_FIELDS",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "vault:autoCreateLocalAccountsForEntity-not-declared-locally",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "vault:bridge-still-passed-to-create-and-update",
+      "passed": true,
+      "details": "3 references (import + create + update deps)"
+    },
+    {
+      "name": "local-accounts:compat-reexport-removed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-file-imports-symbols-from-routes/local-accounts",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "symbol-is-used:autoCreateLocalAccountsForEntity",
+      "passed": true,
+      "details": "[\"routes/vault.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:listLocalAccountValueHistory",
+      "passed": true,
+      "details": "[\"routes/value-history.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:saveLocalAccountValue",
+      "passed": true,
+      "details": "[\"routes/value-history.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:applyLocalAccountBulk",
+      "passed": true,
+      "details": "[\"routes/bulk.ts\"]"
+    },
+    {
+      "name": "symbol-is-used:exportLocalAccountRows",
+      "passed": true,
+      "details": "[\"routes/bulk.ts\"]"
+    },
+    {
+      "name": "duplicate-scan:no-moved-sql-outside-consumer-repository",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "census:no-unclassified-local_accounts-access",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:no-stale-deferral (every deferral still accesses the table)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:rewired-consumers-absent-from-census",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:every-deferral-names-a-later-gap",
+      "passed": true,
+      "details": "VLT-GAP-04, VLT-GAP-11, VLT-GAP-09, VLT-GAP-07, VLT-GAP-12"
+    },
+    {
+      "name": "differential:GET /local-accounts/:id/value-history [routes/value-history.ts] — history: rows",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id/value-history [routes/value-history.ts] — history: empty",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id/value-history [routes/value-history.ts] — history: non-numeric id (NaN interpolated)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /local-accounts/:id/value-history [routes/value-history.ts] — history: db throws (unhandled, propagates)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/value [routes/value-history.ts] — value: success with label+note",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/value [routes/value-history.ts] — value: success defaults (string numbers, no label/note)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/value [routes/value-history.ts] — value: quote in label/note is escaped",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/value [routes/value-history.ts] — value: non-integer id → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/value [routes/value-history.ts] — value: non-numeric id → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/value [routes/value-history.ts] — value: account not found (no rows updated) → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/value [routes/value-history.ts] — value: update throws → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/value [routes/value-history.ts] — value: history insert throws → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/:id/value [routes/value-history.ts] — value: update is scoped to the caller (other user id)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/bulk [routes/bulk.ts] — bulk: delete",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/bulk [routes/bulk.ts] — bulk: delete without audit candidates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/bulk [routes/bulk.ts] — bulk: update_category",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/bulk [routes/bulk.ts] — bulk: update_category quote escaping",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/bulk [routes/bulk.ts] — bulk: update_category missing category → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/bulk [routes/bulk.ts] — bulk: unknown action → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/bulk [routes/bulk.ts] — bulk: no valid ids → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/bulk [routes/bulk.ts] — bulk: delete db throws (propagates)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /local-accounts/bulk [routes/bulk.ts] — bulk: other user's ids are filtered by user_id in SQL",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /csv/export/:resource [routes/bulk.ts] — csv: rows",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /csv/export/:resource [routes/bulk.ts] — csv: empty → empty 200",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /csv/export/:resource [routes/bulk.ts] — csv: unknown resource → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /csv/export/:resource [routes/bulk.ts] — csv: db throws (propagates)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: no platform usernames → no db calls",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: all three platforms created",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: existing local account → skipped (no duplicate)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: twitter existing, discord new",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: blank / non-string usernames ignored",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: optional fields absent → nulls",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: lookup throws → swallowed, loop continues",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: insert throws → swallowed, loop continues",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: scoped to userId + vaultEntryId (other user)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:CALL autoCreateLocalAccountsForEntity — bridge: quote in username stays a bound parameter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:route-middleware-chains-identical:routes/value-history.ts",
+      "passed": true,
+      "details": "auth / ownership action / deny body / limiter chain changed"
+    },
+    {
+      "name": "security:route-middleware-chains-identical:routes/bulk.ts",
+      "passed": true,
+      "details": "auth / ownership action / deny body / limiter chain changed"
+    },
+    {
+      "name": "security:route-table-identical:routes/vault.ts",
+      "passed": true,
+      "details": "36 vs 36 routes"
+    },
+    {
+      "name": "security:vault-security-owner-gate-is-callable",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:value UPDATE drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:bulk DELETE drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:CSV export drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:bridge skips duplicate guard",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:bridge stores password in plaintext",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:bridge stores 2FA in plaintext",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:bridge no longer best-effort (rethrows)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:value 404 body changed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:value response leaks encrypted columns undecrypted",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:value validation removed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:bulk unknown action becomes 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:bulk category escaping removed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:value-history route gate removed from POST value",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:bulk route ownership audit removed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:security",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:GET /local-accounts/:id/value-history:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:GET /local-accounts/:id/value-history:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:POST /local-accounts/:id/value:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:POST /local-accounts/:id/value:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:POST /local-accounts/bulk:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:POST /local-accounts/bulk:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:GET /csv/export/:resource:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:GET /csv/export/:resource:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:CALL autoCreateLocalAccountsForEntity:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:CALL autoCreateLocalAccountsForEntity:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-skipped-tests",
+      "passed": true,
+      "details": "36/36"
+    },
+    {
+      "name": "differential-cases-executed-db-calls",
+      "passed": true,
+      "details": "34 cases recorded interactions"
+    },
+    {
+      "name": "diff-audit:no-unrelated-changes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "ci-lint:check-ownership-gate-coverage-scans-vault-security",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "ci-lint:baseline-not-widened",
+      "passed": true,
+      "details": "ownership-gate-baseline.json must be unchanged (the fix must not grandfather new gaps)"
+    },
+    {
+      "name": "ci-lint:executed-green-or-degraded-static",
+      "passed": true,
+      "details": "} |  | Node.js v22.22.2"
+    },
+    {
+      "name": "typecheck:no-syntax-errors",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-diagnostics-vs-baseline",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "status": "PASS",
+  "evidence_body_sha256": "8fdac6d09933e4496f92052c9454c55f1eb49e20ac5ff1be097ff1bea7f86c71",
+  "generated_at": "2026-09-30T05:07:10.907Z"
+}

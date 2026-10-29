@@ -1,0 +1,1053 @@
+{
+  "phase": "VLT-GAP-05",
+  "sub_phase": "VLT-GAP-05-B",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "bab469c5a9a5c50ab657c6e6383959e61f44519ccfe10c63b69d838e350c3371",
+  "validator_version": "1.0.0",
+  "validator_sha256": "e238798541ef3019ccb10e4ef88acdbf796d36bd9b27660e062547e3ef818934",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/vault.ts": "e9dcd905a02ebe4ce99235bc923d0b20a155733ee1efd70413abf65737fbb4d1",
+    "artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts": "2f145e0a17fc0e8ddd10f396eaef5ad7d1526d73026cc8d5bc1570a8473803ab",
+    "artifacts/api-server/src/vault/application/secret/reveal.ts": "43d84760eb483738266e79eb6c8ce142fcb343fec6a21c91fd8117784375c642",
+    "artifacts/api-server/src/vault/application/secret/wallet.ts": "0063c89c80719e40f237167cd60598e9d34a6b57a451855b2d7de4446400f00c",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-05-B.mjs",
+    "in-process differential suite (frozen baseline routes/vault.ts vs new source)",
+    "in-process seeded-mutation suite",
+    "in-process differential typecheck"
+  ],
+  "exit_codes": {
+    "differential_suite": 0,
+    "security_suite": 0,
+    "mutation_suite": 0,
+    "typecheck_differential": 0
+  },
+  "symbols_moved": [
+    "artifacts/api-server/src/routes/vault.ts#GET /vault/:id/seed → artifacts/api-server/src/vault/application/secret/reveal.ts#revealSeedPhrase",
+    "artifacts/api-server/src/routes/vault.ts#PATCH /vault/:id/drive-wallet → artifacts/api-server/src/vault/application/secret/wallet.ts#setDriveWallet",
+    "artifacts/api-server/src/routes/vault.ts#POST /vault/validate-key → artifacts/api-server/src/vault/application/secret/wallet.ts#validateSecretKey",
+    "artifacts/api-server/src/routes/vault.ts#POST /vault/:id/refresh-wallet-worth → artifacts/api-server/src/vault/application/secret/wallet.ts#refreshWalletWorth",
+    "routes/vault.ts inline db.execute(org policy) → vault/infrastructure/repositories/secret-repository.ts#selectOrgSeedRevealBlock",
+    "routes/vault.ts inline db.update(drive wallet) → secret-repository.ts#updateVaultDriveWallet",
+    "routes/vault.ts inline db.update(wallet worth) → secret-repository.ts#updateVaultWalletWorth"
+  ],
+  "handlers_extracted": [
+    {
+      "method": "GET",
+      "path": "/vault/:id/seed",
+      "old_handler_lines": 53,
+      "new_handler_lines": 4,
+      "old_inline_refs": 9,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/secret/reveal.ts#revealSeedPhrase"
+    },
+    {
+      "method": "PATCH",
+      "path": "/vault/:id/drive-wallet",
+      "old_handler_lines": 29,
+      "new_handler_lines": 4,
+      "old_inline_refs": 12,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/secret/wallet.ts#setDriveWallet"
+    },
+    {
+      "method": "POST",
+      "path": "/vault/validate-key",
+      "old_handler_lines": 9,
+      "new_handler_lines": 4,
+      "old_inline_refs": 1,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/secret/wallet.ts#validateSecretKey"
+    },
+    {
+      "method": "POST",
+      "path": "/vault/:id/refresh-wallet-worth",
+      "old_handler_lines": 41,
+      "new_handler_lines": 4,
+      "old_inline_refs": 12,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/secret/wallet.ts#refreshWalletWorth"
+    }
+  ],
+  "behavior_ownership": [
+    {
+      "behavior": "secret-creation",
+      "owner": "artifacts/api-server/src/vault/application/entity/create.ts#createEntity",
+      "exists": true,
+      "route_uses_it": true,
+      "note": "POST /vault (GAP-01-B)"
+    },
+    {
+      "behavior": "secret-listing",
+      "owner": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#listEntities",
+      "exists": true,
+      "route_uses_it": true,
+      "note": "GET /vault (GAP-01-B)"
+    },
+    {
+      "behavior": "secret-reveal",
+      "owner": "artifacts/api-server/src/vault/application/secret/reveal.ts#revealSeedPhrase",
+      "exists": true,
+      "route_uses_it": true,
+      "note": "GET /vault/:id/seed (05-B); GET /vault/:id reveal is entity/lifecycle#getEntity"
+    },
+    {
+      "behavior": "versioning",
+      "owner": "artifacts/api-server/src/vault/application/entity/update.ts#updateEntityField",
+      "exists": true,
+      "route_uses_it": true,
+      "note": "field change + commit history (GAP-01-B)"
+    },
+    {
+      "behavior": "tenant-scope",
+      "owner": "artifacts/api-server/src/vault/security/entity-ownership.ts#requireVaultEntryOwnership",
+      "exists": true,
+      "route_uses_it": true,
+      "note": "per-route ownership gate (GAP-01-B)"
+    },
+    {
+      "behavior": "audit",
+      "owner": "artifacts/api-server/src/vault/application/entity/activity.ts#logVaultActivity",
+      "exists": true,
+      "route_uses_it": true,
+      "note": "used by the secret use-cases (seed_revealed, drive_wallet_set, wallet_worth_refreshed)"
+    },
+    {
+      "behavior": "events",
+      "owner": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#trashEntity",
+      "exists": true,
+      "route_uses_it": true,
+      "note": "SSE broadcaster injected as a port (routes/events, API layer)"
+    },
+    {
+      "behavior": "step-up",
+      "owner": "artifacts/api-server/src/routes/vault-security.ts#consumeRevealToken/hasNoEntityPin",
+      "exists": true,
+      "route_uses_it": true,
+      "note": "single-use reveal-token store stays in routes/vault-security (GAP-06 owns the security/access surface); 05-B injects it into the reveal use-case as a port, so the use-case enforces the step-up gate but does not own the token store. DEFERRED to GAP-06."
+    }
+  ],
+  "consumers_migrated": [],
+  "old_business_symbols_remaining": {
+    "route_handlers_with_inline_db_crypto_credit_refs": [],
+    "not_gap_05_and_left_in_place": [
+      "toHealthInput",
+      "runHealthCheck",
+      "GET /vault/health-report",
+      "POST /vault/health-check (GAP-11)",
+      "GET /vault/receipt/:token/pdf (GAP-01 receipt use-case; provider call stays in receipt use-case)"
+    ]
+  },
+  "duplicate_implementations": {
+    "sql": [],
+    "functions": [],
+    "redeclared": []
+  },
+  "route_thinness": {
+    "before": {
+      "routes": 4,
+      "with_inline_refs": 4,
+      "handler_lines": 132
+    },
+    "after": {
+      "routes": 4,
+      "with_inline_refs": 0,
+      "handler_lines": 16
+    }
+  },
+  "sql": {
+    "old_statements": 1,
+    "new_statements": 1
+  },
+  "destination_functions": {
+    "vault/infrastructure/repositories/secret-repository.ts": [
+      "selectOrgSeedRevealBlock",
+      "updateVaultDriveWallet",
+      "updateVaultWalletWorth"
+    ],
+    "vault/application/secret/reveal.ts": [
+      "revealSeedPhrase"
+    ],
+    "vault/application/secret/wallet.ts": [
+      "setDriveWallet",
+      "validateSecretKey",
+      "refreshWalletWorth"
+    ]
+  },
+  "diff_audit": {
+    "changed": [
+      "artifacts/api-server/src/routes/vault.ts"
+    ],
+    "added": [
+      "artifacts/api-server/src/vault/application/secret/reveal.ts",
+      "artifacts/api-server/src/vault/application/secret/wallet.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts"
+    ],
+    "removed": [],
+    "unexpected": [],
+    "earlier_validators_edited": [],
+    "tree_manifest_sha256_matches_seal": true
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build is NOT executed)",
+    "before_total": 77,
+    "after_total": 79,
+    "syntactic_errors": [],
+    "new_diagnostics": [],
+    "before_by_class": {
+      "__external_unresolved": 3,
+      "2584: Cannot find name '…'. Do you need to change your target library? Try changing the '…' comp": 1,
+      "7006: Parameter '…' implicitly has an '…' type.": 73
+    },
+    "after_by_class": {
+      "__external_unresolved": 5,
+      "2584: Cannot find name '…'. Do you need to change your target library? Try changing the '…' comp": 1,
+      "7006: Parameter '…' implicitly has an '…' type.": 73
+    }
+  },
+  "tests": {
+    "differential_cases": 51,
+    "differential_passed": 51,
+    "security_checks": 19,
+    "security_passed": 19,
+    "mutations_seeded": 34,
+    "mutations_detected": 34
+  },
+  "notes": [
+    "Scope follows the GAP-01 gate's deferral table: the code in routes/vault.ts that GAP-01/02 left to GAP-05 (secret/wallet) was exactly GET /vault/:id/seed, PATCH /vault/:id/drive-wallet, POST /vault/validate-key and POST /vault/:id/refresh-wallet-worth. Those four handlers were extracted; the other 32 handlers, all non-route symbols, and the route table are token-identical to the baseline.",
+    "Behavior is preserved exactly, including pre-existing quirks: parseInt(id) NaN is passed through unchanged; the reveal token is read from the x-reveal-token header first and the revealToken query parameter second; the audit write (logVaultActivity) stays fire-and-forget; credits are charged only after a successful decrypt; the Drive wallet is write-once; wallet_addresses that fail JSON.parse are treated as empty; dynamic imports of lib/wallet-key-validation and lib/chain-balance are preserved.",
+    "Step-up: the single-use reveal-token store and PIN lookup live in routes/vault-security.ts, which GAP-06 owns. 05-B does not move them; it injects them into the reveal use-case as a port (SecretRevealDeps), so the gate is enforced by vault/application/secret/reveal.ts but the store is a recorded GAP-06 deferral. The same pattern applies to the SSE broadcaster (events).",
+    "services/vault/src/index.mjs is a composition root (imports, wiring consts, createServiceServer(...).start) and lib/vault-crypto.ts is a pure re-export of vault/crypto/field-encryption.ts; both are proven composition/compat-only and byte-identical to the 05-A seal, so no code needed to move out of them. The service's own implementation (services/vault/src/{application,domain,crypto,security,infrastructure,api}) is already layered and is not modified.",
+    "05-A findings that need a decision before any behavioural change and are therefore NOT changed here: the service and the api-server use different, non-interoperable ciphertext formats and separate secret stores; the service stamps version 1 and has no increment path; its step-up single-use state is an in-process Set.",
+    "The project's own test suites and full tsc/build cannot run in this environment (dependencies are not installed); the differential suite executes the frozen OLD routes/vault.ts and the NEW tree under identical stubbed dependencies and compares every DB call, credit charge, reveal-token call, audit write, RPC call, status code and body. Run the repo's build and tests in CI before certifying."
+  ],
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "destination-exists:vault/infrastructure/repositories/secret-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/secret/reveal.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/secret/wallet.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination:repository-has-executable-implementation",
+      "passed": true,
+      "details": "3 functions"
+    },
+    {
+      "name": "destination:reveal-use-case-has-executable-implementation",
+      "passed": true,
+      "details": "57 lines"
+    },
+    {
+      "name": "destination:wallet-use-cases-have-executable-implementation",
+      "passed": true,
+      "details": "3 functions"
+    },
+    {
+      "name": "routes:table-unchanged (order, paths, middleware chains)",
+      "passed": true,
+      "details": "36 → 36 routes"
+    },
+    {
+      "name": "routes:census-36",
+      "passed": true,
+      "details": "36/36"
+    },
+    {
+      "name": "routes:only-the-four-secret-wallet-handlers-changed",
+      "passed": true,
+      "details": "GET /vault/:id/seed, PATCH /vault/:id/drive-wallet, POST /vault/:id/refresh-wallet-worth, POST /vault/validate-key"
+    },
+    {
+      "name": "handler-extracted:GET /vault/:id/seed",
+      "passed": true,
+      "details": "{\"refsB\":9,\"refsA\":0,\"delegates\":true,\"defined\":true,\"mapper\":true}"
+    },
+    {
+      "name": "handler-extracted:PATCH /vault/:id/drive-wallet",
+      "passed": true,
+      "details": "{\"refsB\":12,\"refsA\":0,\"delegates\":true,\"defined\":true,\"mapper\":true}"
+    },
+    {
+      "name": "handler-extracted:POST /vault/validate-key",
+      "passed": true,
+      "details": "{\"refsB\":1,\"refsA\":0,\"delegates\":true,\"defined\":true,\"mapper\":true}"
+    },
+    {
+      "name": "handler-extracted:POST /vault/:id/refresh-wallet-worth",
+      "passed": true,
+      "details": "{\"refsB\":12,\"refsA\":0,\"delegates\":true,\"defined\":true,\"mapper\":true}"
+    },
+    {
+      "name": "symbols:every-non-route-symbol-of-vault.ts-is-token-identical (health, deps, router, default)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "symbols:only-new-top-level-symbol-is-secretDeps-wiring",
+      "passed": true,
+      "details": "secretDeps"
+    },
+    {
+      "name": "symbols:secretDeps-is-plain-port-wiring",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "imports:removed-only-the-moved-implementation-names",
+      "passed": true,
+      "details": "chargeCredits, decryptSeedPhrase, sql"
+    },
+    {
+      "name": "imports:added-only-the-secret-use-cases-and-deps-type",
+      "passed": true,
+      "details": "SecretRevealDeps, refreshWalletWorth, revealSeedPhrase, setDriveWallet, validateSecretKey"
+    },
+    {
+      "name": "imports:vault.ts-no-longer-uses-moved-names",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "sql:statement-multiset-identical-old-vs-new",
+      "passed": true,
+      "details": "old=1 new=1"
+    },
+    {
+      "name": "sql:no-sql-in-application-or-route-seed-handler",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "drizzle:update-chains-moved-not-copied",
+      "passed": true,
+      "details": "old=3 route=1 repo=2"
+    },
+    {
+      "name": "security:both-repository-updates-are-scoped-by-id-and-userId",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:org-policy-query-moved-verbatim (disable_seed_reveal, active members, LIMIT 1)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "duplicates:no-function-body-duplicated-across-destination",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-sql-statement-implemented-twice",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "duplicates:moved-implementation-not-redeclared-in-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "usage:every-exported-destination-symbol-is-used",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "layering:repository-only-db-and-drizzle",
+      "passed": true,
+      "details": "@workspace/db, drizzle-orm"
+    },
+    {
+      "name": "layering:application-does-not-touch-http-or-db-directly",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "layering:application-reaches-persistence-only-via-repositories",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "layering:no-inner-vault-layer-imports-a-route (vault/api is the HTTP barrel and is excluded by definition)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "layering:reveal-token-store-is-an-injected-port-not-an-import",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:reveal-gate-order (org policy → pin/token → lookup → seed present → decrypt → audit → charge)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:charge-only-after-successful-decrypt",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "ownership:secret-creation→createEntity",
+      "passed": true,
+      "details": "{\"exists\":true,\"used\":true}"
+    },
+    {
+      "name": "ownership:secret-listing→listEntities",
+      "passed": true,
+      "details": "{\"exists\":true,\"used\":true}"
+    },
+    {
+      "name": "ownership:secret-reveal→revealSeedPhrase",
+      "passed": true,
+      "details": "{\"exists\":true,\"used\":true}"
+    },
+    {
+      "name": "ownership:versioning→updateEntityField",
+      "passed": true,
+      "details": "{\"exists\":true,\"used\":true}"
+    },
+    {
+      "name": "ownership:tenant-scope→requireVaultEntryOwnership",
+      "passed": true,
+      "details": "{\"exists\":true,\"used\":true}"
+    },
+    {
+      "name": "ownership:audit→logVaultActivity",
+      "passed": true,
+      "details": "{\"exists\":true,\"used\":true}"
+    },
+    {
+      "name": "ownership:events→trashEntity",
+      "passed": true,
+      "details": "{\"exists\":true,\"used\":true}"
+    },
+    {
+      "name": "ownership:step-up-gate-enforced-by-the-use-case-with-token-store-deferred-to-GAP-06",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "service-entry:index.mjs-is-composition-root-only (imports, wiring consts, createServiceServer(...).start)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "compat:lib/vault-crypto.ts-is-a-pure-reexport-of-vault/crypto/field-encryption",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "scope:service-and-compat-sources-byte-identical-to-the-05A-seal",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: pinless user reveals (no token needed)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: reveal token in header",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: reveal token in query",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: header token wins over query token",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: camelCase encryptedSeedPhrase column variant",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: charge response not ok → _credits null",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: org extension policy blocks (403, before PIN/token)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: token missing → 403 REVEAL_TOKEN_REQUIRED",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: token wrong → 403",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: entry not found → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: no seed stored → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: decrypt failure → 500, no charge, no audit",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: org query throws → rejection propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: pin lookup throws → rejection propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: entry lookup throws → rejection propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: charge throws → rejection propagates after audit",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: other user's id still scoped by session user",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: non-numeric id → NaN passed through unchanged",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:seed: array id param takes first",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: set label/address/note",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: address trimmed, falsy label/note → null",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: missing address → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: whitespace address → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: entry not found → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: already set (snake drive_wallet_set_at) → 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: already set (camel driveWalletSetAt) → 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: already set (address only, snake) → 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: already set (address only, camel) → 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: update returns no row (race/foreign) → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: update throws → 500 with detail",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: select throws → rejection propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: injection-shaped address is stored verbatim via ORM",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:drive: update scoped to session user",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:validate-key: valid mnemonic",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:validate-key: value with surrounding spaces is passed untrimmed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:validate-key: missing value → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:validate-key: blank value → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:validate-key: non-string value → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:validate-key: no network/db access (pure offline)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: addresses + drive address, update ok",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: camelCase column variants",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: drive address only",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: invalid JSON addresses → treated as empty, drive added",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: no addresses → 400, no rpc",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: wallet_addresses null → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: entry not found → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: rpc throws → 500 with detail, nothing written",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: update returns no row → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: update throws → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: select throws → rejection propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:worth: update scoped to session user",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:reveal-returns-plaintext-and-charges-exactly-once-after-decrypt",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:audit-entry-written-on-success (seed_revealed)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:reveal-token-checked-with-the-session-user",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:org-policy-blocks-before-pin-or-token-and-never-charges",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:missing-token-blocks-before-any-entry-read-decrypt-or-charge",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:wrong-token-is-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:pinless-user-skips-token-but-still-passes-org-policy-and-lookup",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:decrypt-failure-never-charges-or-audits",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:missing-seed-never-charges",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:entry-lookup-uses-the-session-user-not-the-url",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:drive-wallet-is-write-once-and-never-updates-when-set",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:drive-wallet-update-binds-id-and-session-user",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:drive-wallet-address-goes-through-orm-not-sql-text",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:drive-wallet-validation-precedes-any-read-or-write",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:failed-rpc-writes-nothing-and-logs-no-activity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:no-addresses-makes-no-rpc-call",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:rpc-receives-wallet-addresses-then-drive-address",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:key-validation-touches-no-db-and-no-rpc",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:blank-key-never-reaches-the-validator",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation:org extension policy ignored",
+      "passed": true,
+      "details": "detected by seed: org extension policy blocks (403, before PIN/token)"
+    },
+    {
+      "name": "mutation:org-block error code changed",
+      "passed": true,
+      "details": "detected by seed: org extension policy blocks (403, before PIN/token)"
+    },
+    {
+      "name": "mutation:pin gate inverted",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:reveal token not enforced",
+      "passed": true,
+      "details": "detected by seed: reveal token in header; seed: reveal token in query"
+    },
+    {
+      "name": "mutation:query token wins over header token",
+      "passed": true,
+      "details": "detected by seed: header token wins over query token"
+    },
+    {
+      "name": "mutation:missing-seed message changed",
+      "passed": true,
+      "details": "detected by seed: no seed stored → 404"
+    },
+    {
+      "name": "mutation:decrypt failure status changed",
+      "passed": true,
+      "details": "detected by seed: decrypt failure → 500, no charge, no audit"
+    },
+    {
+      "name": "mutation:audit action renamed",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:audit entry dropped",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:wrong credit action charged",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:credit receipt zeroed",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:entry lookup unscoped from session user",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:plaintext check dropped (empty plaintext revealed)",
+      "passed": true,
+      "details": "detected by seed: decrypt failure → 500, no charge, no audit"
+    },
+    {
+      "name": "mutation:drive wallet address message changed",
+      "passed": true,
+      "details": "detected by drive: missing address → 400; drive: whitespace address → 400"
+    },
+    {
+      "name": "mutation:already-set check ignores address-only variant",
+      "passed": true,
+      "details": "detected by drive: already set (address only, snake) → 409; drive: already set (address only, camel) → 409"
+    },
+    {
+      "name": "mutation:already-set conflict becomes 400",
+      "passed": true,
+      "details": "detected by drive: already set (snake drive_wallet_set_at) → 409; drive: already set (camel driveWalletSetAt) → 409"
+    },
+    {
+      "name": "mutation:drive wallet audit renamed",
+      "passed": true,
+      "details": "detected by drive: set label/address/note; drive: address trimmed, falsy label/note → null"
+    },
+    {
+      "name": "mutation:worth ignores drive address",
+      "passed": true,
+      "details": "detected by worth: addresses + drive address, update ok; worth: camelCase column variants"
+    },
+    {
+      "name": "mutation:no-address status changed",
+      "passed": true,
+      "details": "detected by worth: no addresses → 400, no rpc; worth: wallet_addresses null → 400"
+    },
+    {
+      "name": "mutation:rpc failure status changed",
+      "passed": true,
+      "details": "detected by worth: rpc throws → 500 with detail, nothing written; worth: update throws → 500"
+    },
+    {
+      "name": "mutation:breakdown filter dropped",
+      "passed": true,
+      "details": "detected by worth: addresses + drive address, update ok; worth: camelCase column variants"
+    },
+    {
+      "name": "mutation:validate-key accepts whitespace",
+      "passed": true,
+      "details": "detected by validate-key: blank value → 400"
+    },
+    {
+      "name": "mutation:worth audit dropped",
+      "passed": true,
+      "details": "detected by worth: addresses + drive address, update ok; worth: camelCase column variants"
+    },
+    {
+      "name": "mutation:drive wallet update loses user scope",
+      "passed": true,
+      "details": "detected by drive: set label/address/note; drive: address trimmed, falsy label/note → null"
+    },
+    {
+      "name": "mutation:drive wallet address no longer trimmed",
+      "passed": true,
+      "details": "detected by drive: address trimmed, falsy label/note → null"
+    },
+    {
+      "name": "mutation:drive wallet label no longer nulled",
+      "passed": true,
+      "details": "detected by drive: address trimmed, falsy label/note → null; drive: update returns no row (race/foreign) → 404"
+    },
+    {
+      "name": "mutation:org policy ignores membership status",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:org policy ignores disable flag",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:route passes a fixed user to the reveal",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:route stops sending the reveal header",
+      "passed": true,
+      "details": "detected by seed: reveal token in header; seed: header token wins over query token"
+    },
+    {
+      "name": "mutation:route always accepts reveal tokens",
+      "passed": true,
+      "details": "detected by seed: pinless user reveals (no token needed); seed: reveal token in header"
+    },
+    {
+      "name": "mutation:route ignores the use-case status",
+      "passed": true,
+      "details": "detected by worth: no addresses → 400, no rpc; worth: wallet_addresses null → 400"
+    },
+    {
+      "name": "mutation:route ownership action renamed on drive-wallet",
+      "passed": true,
+      "details": "detected by drive: set label/address/note; drive: address trimmed, falsy label/note → null"
+    },
+    {
+      "name": "mutation:route validates the wrong body",
+      "passed": true,
+      "details": "detected by validate-key: valid mnemonic; validate-key: value with surrounding spaces is passed untrimmed"
+    },
+    {
+      "name": "coverage:category:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:security",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:every-extracted-route-has-success-failure-and-security-cases",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:ownership-middleware-stack-compared-on-every-extracted-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-skipped-tests",
+      "passed": true,
+      "details": "51/51"
+    },
+    {
+      "name": "differential-cases-executed-interactions",
+      "passed": true,
+      "details": "46 cases recorded interactions"
+    },
+    {
+      "name": "mutation-suite-size",
+      "passed": true,
+      "details": "34 seeded regressions"
+    },
+    {
+      "name": "diff-audit:no-unrelated-changes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:no-earlier-validator-edited",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:baseline-seal-intact",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:every-declared-destination-file-was-added-and-vault.ts-changed",
+      "passed": true,
+      "details": "{\"added\":[\"artifacts/api-server/src/vault/application/secret/reveal.ts\",\"artifacts/api-server/src/vault/application/secret/wallet.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts\"],\"changed\":[\"artifacts/api-server/src/routes/vault.ts\"]}"
+    },
+    {
+      "name": "typecheck:no-syntax-errors",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-diagnostics-vs-baseline",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "generated_at": "2026-10-02T18:43:16.412Z",
+  "evidence_body_sha256": "03d0e7405be10b8c5479682ede9792fb6c8676f66d93c020743f69f598af2ce2"
+}

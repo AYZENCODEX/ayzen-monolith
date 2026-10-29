@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "comparison": "declared-migrations-vs-runtime-metadata",
+  "lifecycle": ["create", "access", "audit", "retain", "archive", "delete"],
+  "sensitiveData": {
+    "retentionOwnerRequired": true,
+    "deleteRequiresPolicy": true,
+    "deleteIsAudited": true
+  },
+  "drift": {
+    "unexpectedTables": "finding",
+    "missingColumns": "release-blocking",
+    "missingIndexes": "finding",
+    "migrationVersionMismatch": "release-blocking"
+  }
+}

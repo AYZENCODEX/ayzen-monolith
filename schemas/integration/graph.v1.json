@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ayzen.integration.graph.v1",
+  "type": "object",
+  "required": ["schemaVersion", "nodes", "edges"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "nodes": { "type": "array", "items": { "type": "object", "required": ["id", "type", "owner", "lifecycle"] } },
+    "edges": { "type": "array", "items": { "type": "object", "required": ["id", "from", "to", "transport", "contract", "policy", "audit", "trace", "recovery"] } }
+  }
+}

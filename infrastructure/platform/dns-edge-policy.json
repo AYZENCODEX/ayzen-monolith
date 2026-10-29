@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "registrationSource": "infrastructure/platform/domain-registry.json",
+  "records": "managed-at-deployment-boundary",
+  "tls": {
+    "required": true,
+    "certificateExpiryMonitoring": true,
+    "redirectHttpToHttps": true
+  },
+  "origin": {
+    "allowlistRequired": true,
+    "cors": "domain-registry",
+    "unknownOrigins": "reject"
+  },
+  "healthChecks": ["/health", "/ready", "/metrics"]
+}

@@ -1,0 +1,500 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-12",
+  "sub_phase": "12-split-verify",
+  "commit_sha": "e76a9d47c2210884d57afcec43a6afac231451f4",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "57eaf9c63b75055399ed9cee8aeec09a645daeaed1783d020947c489ab717d6f",
+  "files": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "statements": 7,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "statements": 9,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/local-accounts.ts",
+      "statements": 25,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 5,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "statements": 6,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "statements": 5,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "statements": 7,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "statements": 7,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-migration.ts",
+      "statements": 12,
+      "infrastructure_calls_inlined": 2,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-reauth.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-security.ts",
+      "statements": 13,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "statements": 12,
+      "infrastructure_calls_inlined": 27,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "statements": 15,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "statements": 42,
+      "infrastructure_calls_inlined": 4,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/attachment/use-cases.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/cloud-connection.ts",
+      "statements": 7,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/key.ts",
+      "statements": 5,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "statements": 13,
+      "infrastructure_calls_inlined": 11,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "statements": 2,
+      "infrastructure_calls_inlined": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity.ts",
+      "statements": 1,
+      "infrastructure_calls_inlined": 2,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "statements": 6,
+      "infrastructure_calls_inlined": 8,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "statements": 4,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 4,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/create.ts",
+      "statements": 2,
+      "infrastructure_calls_inlined": 2,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "statements": 10,
+      "infrastructure_calls_inlined": 2,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/links.ts",
+      "statements": 7,
+      "infrastructure_calls_inlined": 8,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/representation.ts",
+      "statements": 1,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+      "statements": 4,
+      "infrastructure_calls_inlined": 7,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/listing.ts",
+      "statements": 4,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-cron.ts",
+      "statements": 2,
+      "infrastructure_calls_inlined": 2,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-scan.ts",
+      "statements": 9,
+      "infrastructure_calls_inlined": 12,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health.ts",
+      "statements": 17,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/index.ts",
+      "statements": 2,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "statements": 6,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "statements": 9,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "statements": 17,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "statements": 2,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/bulk.ts",
+      "statements": 2,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "statements": 14,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/secret/reveal.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/secret/wallet.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/auth-policy.ts",
+      "statements": 2,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/password.ts",
+      "statements": 4,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/pin-setup-code.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 2,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/pin.ts",
+      "statements": 4,
+      "infrastructure_calls_inlined": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/reauth.ts",
+      "statements": 10,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/status.ts",
+      "statements": 2,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/two-fa.ts",
+      "statements": 5,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/verify.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/entity-types.ts",
+      "relocated_to": "artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts",
+      "statements": 9,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/field-permissions.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/use-cases.ts",
+      "statements": 13,
+      "infrastructure_calls_inlined": 7,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/blob.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/payload.ts",
+      "statements": 2,
+      "infrastructure_calls_inlined": 6,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "statements": 11,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/store.ts",
+      "statements": 7,
+      "infrastructure_calls_inlined": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/use-cases.ts",
+      "statements": 13,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "statements": 24,
+      "infrastructure_calls_inlined": 4,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "statements": 27,
+      "infrastructure_calls_inlined": 4,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/seed-phrase.ts",
+      "statements": 5,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/index.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/attachment-ownership.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/game-ownership.ts",
+      "statements": 10,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "statements": 14,
+      "infrastructure_calls_inlined": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/lockout.ts",
+      "statements": 9,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "statements": 8,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/reauth-ownership.ts",
+      "statements": 4,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/reveal-token.ts",
+      "statements": 5,
+      "infrastructure_calls_inlined": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/share-ownership.ts",
+      "statements": 10,
+      "infrastructure_calls_inlined": 3,
+      "status": "PASS"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/snapshot-ownership.ts",
+      "statements": 3,
+      "infrastructure_calls_inlined": 1,
+      "status": "PASS"
+    }
+  ],
+  "repository_functions": 156,
+  "proof_self_test": {
+    "mutants_run": 26,
+    "mutants_caught": 26
+  },
+  "infrastructure_calls_inlined": 150,
+  "typecheck": {
+    "exit_code": 0
+  },
+  "status": "PASS"
+}

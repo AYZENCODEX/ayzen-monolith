@@ -1,0 +1,30 @@
+{
+  "sealed_at": "2026-09-30T10:41:56.741Z",
+  "tree_manifest_sha256": "114e8181a6999a816934a9ab43fb429f3484c893b902232475b4e7a4ff062f5d",
+  "file_count": 2209,
+  "certified_by": {
+    "sub_phase": "VLT-GAP-03-C",
+    "source_tree_sha256": "676b2649160cf4e8e2cde174f4c4672a1f7a9345a9af183859619a160455bd59",
+    "commit_sha": null,
+    "validator_sha256": "c4967407d57b188b834f2bfac48d6aee5b55c26f54e9895ac0964cc6e9b36287"
+  },
+  "gap_scripts_at_freeze": {
+    "scripts/antas/vault/gap/freeze-vlt-gap-02-C-baseline.mjs": "45af9e6efba2b140e6094b57028c0a7549fe3a062ea43b8c992b9f35c0c0ad6a",
+    "scripts/antas/vault/gap/freeze-vlt-gap-02-D-baseline.mjs": "13979343099305c17bb071cf071abea5b1d8002eed51c658578a428096528026",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-B-baseline.mjs": "857983dacac88cdc69d7f9ab7f0758f47127d2bd271412f58673b3b26b86171f",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-C-baseline.mjs": "1e522f3a1ba1755aeeb230acc1a8f3e2903de19adc149209679350c87496bb6b",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-A.mjs": "77a4b3b76d7aaae1a5d60869253b0d102fcaa6de37cf71e103fb674e3f861a7f",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-B.mjs": "bf0a6a746e0680dbabf5aff4bb4217a68304cd7ee70e3e757831afff0d6c8153",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-C.mjs": "765a3d1259a8dd043bdc0405289024dc0313dfc86d8ff1dbc4f8908a95345b9d",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-D.mjs": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-A.mjs": "b48a0758dd09d98a242cb7cfda4b7a689eaa1d83312e6a554444c2314d357cff",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-B.mjs": "27ebd3bb00c4efd2bfccfead5fdc10dba3edb4d539f90970bb58e96c84259fa6",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-C.mjs": "1f1df1e80eee29f3e57f117bb054bcd5f477fa287250ae35f9f37b742079ce59",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-D.mjs": "a51059099be8c41fd9ef6f681b2598b189a1ec78efc516ed77c2d5161f9d8ce2",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-A.mjs": "5e48e0b5e9e6439fc5a6d1bba0077e9bf3e4eb974ca3fa6425a98465eca11834",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-B.mjs": "2d5e688634fc2ec8684faa8fb01be101675b0979da309b974969248bd43f67b0",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-C.mjs": "c4967407d57b188b834f2bfac48d6aee5b55c26f54e9895ac0964cc6e9b36287"
+  }
+}

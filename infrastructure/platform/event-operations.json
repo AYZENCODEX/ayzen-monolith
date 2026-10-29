@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "runtime": "services/event-operations",
+  "retry": { "maxAttempts": 5, "backoff": "exponential", "jitter": true },
+  "deadLetter": { "enabled": true, "operatorApprovalForReplay": true, "retentionDays": 30 },
+  "poisonMessage": { "quarantineAfterAttempts": 5, "emitAudit": true },
+  "checkpoint": { "required": true, "monotonic": true },
+  "idempotency": { "key": "eventId:consumerGroup", "required": true },
+  "replay": { "requiresScope": "event:replay", "requiresReason": true, "dryRunSupported": true }
+}

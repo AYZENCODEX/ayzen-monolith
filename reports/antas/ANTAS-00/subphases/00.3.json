@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-00.3",
+  "phase": "ANTAS-00",
+  "name": "Baseline Metrics",
+  "generatedAt": "2026-09-29T06:06:06.714Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "reports/antas/baseline/metrics.json"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

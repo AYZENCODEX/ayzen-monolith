@@ -1,0 +1,1129 @@
+{
+  "phase": "VLT-GAP-01",
+  "sub_phase": "VLT-GAP-01-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "15cc70d7cfef801f9993710ffe3618c0e59df1b52fb75a452e8f900ccae1b3d4",
+  "validator_version": "1.0.0",
+  "validator_sha256": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+  "description": "Fingerprints of the new owner modules and proof that the old routes actually call them",
+  "owner_files": [
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "sha256": "a4bf78776781b0e552e61121be1b9e94963dff76eadd86b2de664ab0aa98ce12",
+      "lines": 72,
+      "exports": [
+        "listMyVaultActivity",
+        "listEntityActivity"
+      ],
+      "executable_business": {
+        "db_chains": 3,
+        "sql_templates": 1,
+        "branches": 13
+      },
+      "gap01d_new": true
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity.ts",
+      "sha256": "bc6d73f180041ef79aaa67f8d33b255d0e993e0dfff98c84b0b13b115fb33de2",
+      "lines": 31,
+      "exports": [
+        "logVaultActivity"
+      ],
+      "executable_business": {
+        "db_chains": 2,
+        "sql_templates": 0,
+        "branches": 8
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "sha256": "7c2b8519c9e22d492f6d4905daaac4f49d7172afbabd46fb7e1ab9f36f5d4869",
+      "lines": 139,
+      "exports": [
+        "adminListEntities",
+        "adminFullVault",
+        "adminListLocalAccounts",
+        "adminListVaultUsers",
+        "adminGetUserVault",
+        "adminVaultActivityFeed"
+      ],
+      "executable_business": {
+        "db_chains": 8,
+        "sql_templates": 3,
+        "branches": 30
+      },
+      "gap01d_new": true
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "sha256": "47f9c349d5a32ffa239ec6e47e9f6a6fadabf8c3b18d9e379ed04592fb621a4d",
+      "lines": 172,
+      "exports": [
+        "getGasOverviewForUser",
+        "getEntityGas",
+        "getEntityAnalytics",
+        "getEntityValueHistory"
+      ],
+      "executable_business": {
+        "db_chains": 1,
+        "sql_templates": 0,
+        "branches": 42
+      },
+      "gap01d_new": true
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "sha256": "882345a36355611eec126ef2144a8dd669ac358534984d4ccba0d23236b0bd7d",
+      "lines": 172,
+      "exports": [
+        "EntityBulkDeps",
+        "bulkTagEntities",
+        "bulkActionEntities"
+      ],
+      "executable_business": {
+        "db_chains": 4,
+        "sql_templates": 1,
+        "branches": 38
+      },
+      "gap01d_new": true
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/create.ts",
+      "sha256": "a275844ac1ed1ccd80294a0b430d5a87ab360da4265ed52384edf11075b0611e",
+      "lines": 158,
+      "exports": [
+        "EntityCreateDeps",
+        "createEntity"
+      ],
+      "executable_business": {
+        "db_chains": 2,
+        "sql_templates": 0,
+        "branches": 85
+      },
+      "gap01d_new": true
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "sha256": "c3ffea10dfbe6961bdd5970141b692a4415ff009cc33c5e14da95d324bce0978",
+      "lines": 132,
+      "exports": [
+        "EntityResult",
+        "EntityLifecycleDeps",
+        "listEntities",
+        "listTrashedEntities",
+        "getEntity",
+        "emptyTrash",
+        "trashEntity",
+        "restoreEntity",
+        "purgeTrashedEntity",
+        "listEntityTags"
+      ],
+      "executable_business": {
+        "db_chains": 2,
+        "sql_templates": 0,
+        "branches": 26
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/links.ts",
+      "sha256": "4b2c75abf91865eb58a011269028dfbb5e9228487347cfbcfa84ef1d8b1a466e",
+      "lines": 202,
+      "exports": [
+        "LinkResult",
+        "ownsEntity",
+        "listEntityLinks",
+        "createEntityLink",
+        "updateEntityLink",
+        "deleteEntityLink",
+        "listAllEntityLinks"
+      ],
+      "executable_business": {
+        "db_chains": 8,
+        "sql_templates": 1,
+        "branches": 45
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "sha256": "a5297f18cce294ca416c16a14071189dcca002524a5c00351764c84f6212829e",
+      "lines": 138,
+      "exports": [
+        "createReceiptLink",
+        "revokeReceiptLink",
+        "buildReceiptPdfSpec",
+        "PublicReceiptResult",
+        "resolvePublicReceipt"
+      ],
+      "executable_business": {
+        "db_chains": 5,
+        "sql_templates": 2,
+        "branches": 39
+      },
+      "gap01d_new": true
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/representation.ts",
+      "sha256": "3c6d1da46f30aeb69d06ac6f4936bb7c4a638f4c711b06d309a95b1b8356eca4",
+      "lines": 138,
+      "exports": [
+        "formatVaultEntry"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 201
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+      "sha256": "d6d2955504ca60d8e8144dfe438022d138e1115f2c2a75f304c2268acbad731a",
+      "lines": 218,
+      "exports": [
+        "EntityUpdateDeps",
+        "updateEntity",
+        "updateEntityField",
+        "listEntityFieldHistory"
+      ],
+      "executable_business": {
+        "db_chains": 7,
+        "sql_templates": 0,
+        "branches": 67
+      },
+      "gap01d_new": true
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health.ts",
+      "sha256": "9e06b62dd28eb96b8b5c069d74995620640123366e17c050e70ee4fba098fd09",
+      "lines": 215,
+      "exports": [
+        "HealthSeverity",
+        "HealthRuleHit",
+        "VaultHealthInput",
+        "computeAutoScore",
+        "evalHealthRules",
+        "evalBackgroundHealthRules",
+        "severityEmoji",
+        "KycHealthInput",
+        "evalKycBackgroundHealthRules",
+        "WalletHealthInput",
+        "evalWalletBackgroundHealthRules",
+        "LocalAccountHealthInput",
+        "evalLocalAccountBackgroundHealthRules",
+        "DataEntityHealthInput",
+        "evalDataEntityBackgroundHealthRules"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 67
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/index.ts",
+      "sha256": "7986287971fcea962d74e5d504aa6b34d869b73fd69ec77ca4b657970cc4d8b5",
+      "lines": 7,
+      "exports": [
+        "re-export@5",
+        "re-export@6"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 0
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "sha256": "ef6ae643860ec4d4e8339b1467869798fb4a97baf9496cc430c0065d73a14057",
+      "lines": 141,
+      "exports": [
+        "loadKeyManager",
+        "rotateKey",
+        "getActiveVersion",
+        "encryptField",
+        "decryptField",
+        "decryptRow",
+        "decryptRows"
+      ],
+      "executable_business": {
+        "db_chains": 4,
+        "sql_templates": 4,
+        "branches": 31
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/seed-phrase.ts",
+      "sha256": "482f1aa3a199d0838da138671268322c51bb350d9721f19c50fb730e7dea621b",
+      "lines": 36,
+      "exports": [
+        "encryptSeedPhrase",
+        "decryptSeedPhrase"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 5
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/entity/calculations.ts",
+      "sha256": "e75603cafc8fbf9699af5740eac90ac14250012300dd98e30c22a1abf1260bbd",
+      "lines": 16,
+      "exports": [
+        "ENTITY_GAS_CHAINS",
+        "addressesFor"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 6
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/entity/fields.ts",
+      "sha256": "2b3b4e7885317297d5a42755755fd85ebb014dcb0b139fc1efe8ffc961d280f5",
+      "lines": 62,
+      "exports": [
+        "NEW_VAULT_FIELDS",
+        "BASE_VAULT_FIELDS",
+        "DATE_FIELDS",
+        "SINGLE_FIELD_EDITABLE",
+        "fieldLabel",
+        "BULK_ALLOWED_STATUSES"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 0
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/entity-links.ts",
+      "sha256": "736f6e6345218c9a287bf0633be2421a485d37eb65ebc2e0fe40bfdf5c5d0316",
+      "lines": 49,
+      "exports": [
+        "VAULT_ENTRY_OWNER_SENTINEL_NONE",
+        "VAULT_ENTITY_LINK_OWNER_SENTINEL_NONE",
+        "RELATION_TYPES",
+        "RelationType",
+        "isRelationType",
+        "INVERSE_RELATION",
+        "labelFor",
+        "invalidVaultEntryResource",
+        "export-list@48"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 5
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/game.ts",
+      "sha256": "30d9c413af407177b9d39817eb87d2c68badac68cb9f8efe8068e99a57a5eb82",
+      "lines": 9,
+      "exports": [
+        "GAME_SENSITIVE_FIELDS",
+        "GAME_ENTRY_OWNER_SENTINEL_NONE"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 0
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/kyc.ts",
+      "sha256": "f52730677e7dde3339ec12ecb505997aa03e72e1e19c970d5ed627f2aedc27f8",
+      "lines": 19,
+      "exports": [
+        "KYC_SENSITIVE_FIELDS",
+        "KYC_ENTRY_OWNER_SENTINEL_NONE",
+        "isKycStatus"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 2
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/local-account.ts",
+      "sha256": "7ecd2b66e23880a841fa50162fc32985e479096866db9a170c3a011ab9e82bbf",
+      "lines": 16,
+      "exports": [
+        "LOCAL_SENSITIVE_FIELDS",
+        "DEFAULT_LOCAL_ACCOUNT_CATEGORIES"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 0
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/secret-fields.ts",
+      "sha256": "0326f6a472fe8b88193439eb4aa731dc75d2e793cb3fa0f85d65efdfc6e51b02",
+      "lines": 39,
+      "exports": [
+        "VAULT_ENTITY_ENCRYPTED_FIELDS",
+        "SENSITIVE_VAULT_FIELDS"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 0
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/serial.ts",
+      "sha256": "4b88c6eb14c777d65a4e68578b4a18f0aa574a962a4ae679d162bb4412eaf19c",
+      "lines": 9,
+      "exports": [
+        "generateSerial"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 0
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/index.ts",
+      "sha256": "3fbad9590313272e2f12f1c889f250e33967b0f57e49c14da278b9d2628f5fad",
+      "lines": 8,
+      "exports": [
+        "re-export@5",
+        "re-export@6",
+        "re-export@7"
+      ],
+      "executable_business": {
+        "db_chains": 0,
+        "sql_templates": 0,
+        "branches": 0
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts",
+      "sha256": "1bac9901cc4f37e9dd50bcca3126fd5397605374a4c4176b1e50b178d26f0a8b",
+      "lines": 125,
+      "exports": [
+        "selectVault",
+        "selectVaultOne",
+        "selectAllVaultEntries",
+        "selectVaultTrash",
+        "selectVaultTrashOne",
+        "hardDeleteVaultEntry"
+      ],
+      "executable_business": {
+        "db_chains": 12,
+        "sql_templates": 6,
+        "branches": 14
+      },
+      "gap01d_new": false
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "sha256": "7da2e892e29c3a5db08d510a4bb7da19d7af33088850b738278d005e3abf8328",
+      "lines": 85,
+      "exports": [
+        "vaultEntryResource",
+        "vaultEntityLinkResource",
+        "requireVaultEntryOwnership",
+        "requireVaultEntryOwnershipOr404",
+        "requireVaultEntityLinkOwnership",
+        "vaultBulkOwnershipEngine",
+        "auditVaultBulkOwnership"
+      ],
+      "executable_business": {
+        "db_chains": 3,
+        "sql_templates": 3,
+        "branches": 10
+      },
+      "gap01d_new": false
+    }
+  ],
+  "owner_symbol_call_sites_in_old_routes": {
+    "computeAutoScore": 1,
+    "evalHealthRules": 2,
+    "severityEmoji": 2,
+    "VaultHealthInput": 0,
+    "decryptSeedPhrase": 1,
+    "formatRow": 3,
+    "logVaultActivity": 3,
+    "requireVaultEntryOwnership": 14,
+    "auditVaultBulkOwnership": 2,
+    "selectVault": 2,
+    "selectVaultOne": 4,
+    "listEntities": 1,
+    "listEntityTags": 1,
+    "listTrashedEntities": 1,
+    "getEntity": 1,
+    "emptyTrash": 1,
+    "trashEntity": 1,
+    "restoreEntity": 1,
+    "purgeTrashedEntity": 1,
+    "EntityLifecycleDeps": 0,
+    "createEntity": 1,
+    "updateEntity": 1,
+    "updateEntityField": 1,
+    "listEntityFieldHistory": 1,
+    "EntityUpdateDeps": 0,
+    "bulkTagEntities": 1,
+    "bulkActionEntities": 1,
+    "getGasOverviewForUser": 1,
+    "getEntityGas": 1,
+    "getEntityAnalytics": 1,
+    "getEntityValueHistory": 1,
+    "listMyVaultActivity": 1,
+    "listEntityActivity": 1,
+    "adminListEntities": 1,
+    "adminFullVault": 1,
+    "adminListLocalAccounts": 1,
+    "adminListVaultUsers": 1,
+    "adminGetUserVault": 1,
+    "adminVaultActivityFeed": 1,
+    "createReceiptLink": 1,
+    "revokeReceiptLink": 1,
+    "resolvePublicReceipt": 2,
+    "buildReceiptPdfSpec": 1,
+    "requireVaultEntryOwnershipOr404": 1,
+    "requireVaultEntityLinkOwnership": 2,
+    "listEntityLinks": 1,
+    "createEntityLink": 1,
+    "updateEntityLink": 1,
+    "deleteEntityLink": 1,
+    "listAllEntityLinks": 1
+  },
+  "unused_imported_owner_symbols": [
+    "VaultHealthInput",
+    "EntityLifecycleDeps",
+    "EntityUpdateDeps"
+  ],
+  "extracted_routes": [
+    {
+      "route": "GET /vault/:id/links",
+      "use_case": "vault/application/entity/links.ts#listEntityLinks",
+      "baseline": {
+        "db": 2,
+        "tables": 11,
+        "branches": 12,
+        "awaits": 3
+      },
+      "current": {
+        "db": 2,
+        "tables": 11,
+        "branches": 12,
+        "awaits": 3
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "POST /vault-entity-links",
+      "use_case": "vault/application/entity/links.ts#createEntityLink",
+      "baseline": {
+        "db": 2,
+        "tables": 4,
+        "branches": 13,
+        "awaits": 3
+      },
+      "current": {
+        "db": 2,
+        "tables": 4,
+        "branches": 13,
+        "awaits": 3
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "PATCH /vault-entity-links/:id",
+      "use_case": "vault/application/entity/links.ts#updateEntityLink",
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 11,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 11,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "DELETE /vault-entity-links/:id",
+      "use_case": "vault/application/entity/links.ts#deleteEntityLink",
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 5,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 5,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/links/all",
+      "use_case": "vault/application/entity/links.ts#listAllEntityLinks",
+      "baseline": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault",
+      "use_case": "vault/application/entity/lifecycle.ts#listEntities",
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 0,
+        "awaits": 1
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 0,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/tags",
+      "use_case": "vault/application/entity/lifecycle.ts#listEntityTags",
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 12,
+        "awaits": 1
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 12,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/trash",
+      "use_case": "vault/application/entity/lifecycle.ts#listTrashedEntities",
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 2,
+        "awaits": 1
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 2,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/:id",
+      "use_case": "vault/application/entity/lifecycle.ts#getEntity",
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 5,
+        "awaits": 2
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 5,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "DELETE /vault/trash",
+      "use_case": "vault/application/entity/lifecycle.ts#emptyTrash",
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 1,
+        "awaits": 2
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 1,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "DELETE /vault/:id",
+      "use_case": "vault/application/entity/lifecycle.ts#trashEntity",
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 2,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 2,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "POST /vault/:id/restore",
+      "use_case": "vault/application/entity/lifecycle.ts#restoreEntity",
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 2,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 2,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "DELETE /vault/trash/:id",
+      "use_case": "vault/application/entity/lifecycle.ts#purgeTrashedEntity",
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 2,
+        "awaits": 2
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 2,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/gas-overview",
+      "use_case": "vault/application/entity/analytics.ts#getGasOverviewForUser",
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 8,
+        "awaits": 4
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 8,
+        "awaits": 4
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/:id/gas",
+      "use_case": "vault/application/entity/analytics.ts#getEntityGas",
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 6,
+        "awaits": 3
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 6,
+        "awaits": 3
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/analytics",
+      "use_case": "vault/application/entity/analytics.ts#getEntityAnalytics",
+      "baseline": {
+        "db": 0,
+        "tables": 0,
+        "branches": 25,
+        "awaits": 1
+      },
+      "current": {
+        "db": 0,
+        "tables": 0,
+        "branches": 25,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/analytics/value-history",
+      "use_case": "vault/application/entity/analytics.ts#getEntityValueHistory",
+      "baseline": {
+        "db": 1,
+        "tables": 4,
+        "branches": 3,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 4,
+        "branches": 3,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "POST /vault",
+      "use_case": "vault/application/entity/create.ts#createEntity",
+      "baseline": {
+        "db": 2,
+        "tables": 1,
+        "branches": 85,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 1,
+        "branches": 85,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "PATCH /vault/bulk-tag",
+      "use_case": "vault/application/entity/bulk.ts#bulkTagEntities",
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 12,
+        "awaits": 3
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 12,
+        "awaits": 3
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "PATCH /vault/bulk-action",
+      "use_case": "vault/application/entity/bulk.ts#bulkActionEntities",
+      "baseline": {
+        "db": 3,
+        "tables": 4,
+        "branches": 26,
+        "awaits": 7
+      },
+      "current": {
+        "db": 3,
+        "tables": 4,
+        "branches": 26,
+        "awaits": 7
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/activity",
+      "use_case": "vault/application/entity/activity-feed.ts#listMyVaultActivity",
+      "baseline": {
+        "db": 2,
+        "tables": 7,
+        "branches": 8,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 7,
+        "branches": 8,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/:id/activity",
+      "use_case": "vault/application/entity/activity-feed.ts#listEntityActivity",
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 5,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 5,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "PATCH /vault/:id",
+      "use_case": "vault/application/entity/update.ts#updateEntity",
+      "baseline": {
+        "db": 2,
+        "tables": 3,
+        "branches": 35,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 3,
+        "branches": 35,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "PATCH /vault/:id/field",
+      "use_case": "vault/application/entity/update.ts#updateEntityField",
+      "baseline": {
+        "db": 3,
+        "tables": 4,
+        "branches": 25,
+        "awaits": 2
+      },
+      "current": {
+        "db": 3,
+        "tables": 4,
+        "branches": 25,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/:id/field-history",
+      "use_case": "vault/application/entity/update.ts#listEntityFieldHistory",
+      "baseline": {
+        "db": 2,
+        "tables": 7,
+        "branches": 7,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 7,
+        "branches": 7,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /admin/vault",
+      "use_case": "vault/application/entity/admin.ts#adminListEntities",
+      "baseline": {
+        "db": 1,
+        "tables": 6,
+        "branches": 2,
+        "awaits": 2
+      },
+      "current": {
+        "db": 1,
+        "tables": 6,
+        "branches": 2,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /admin/vault/full",
+      "use_case": "vault/application/entity/admin.ts#adminFullVault",
+      "baseline": {
+        "db": 1,
+        "tables": 6,
+        "branches": 7,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 6,
+        "branches": 7,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /admin/vault/local-accounts",
+      "use_case": "vault/application/entity/admin.ts#adminListLocalAccounts",
+      "baseline": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /admin/vault/users",
+      "use_case": "vault/application/entity/admin.ts#adminListVaultUsers",
+      "baseline": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 0,
+        "branches": 3,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /admin/vault/users/:userId",
+      "use_case": "vault/application/entity/admin.ts#adminGetUserVault",
+      "baseline": {
+        "db": 3,
+        "tables": 4,
+        "branches": 9,
+        "awaits": 1
+      },
+      "current": {
+        "db": 3,
+        "tables": 4,
+        "branches": 9,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /admin/vault/activity",
+      "use_case": "vault/application/entity/admin.ts#adminVaultActivityFeed",
+      "baseline": {
+        "db": 1,
+        "tables": 6,
+        "branches": 6,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 6,
+        "branches": 6,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "POST /vault/:id/receipt",
+      "use_case": "vault/application/entity/receipt.ts#createReceiptLink",
+      "baseline": {
+        "db": 2,
+        "tables": 5,
+        "branches": 12,
+        "awaits": 2
+      },
+      "current": {
+        "db": 2,
+        "tables": 5,
+        "branches": 12,
+        "awaits": 2
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "DELETE /vault/:id/receipt",
+      "use_case": "vault/application/entity/receipt.ts#revokeReceiptLink",
+      "baseline": {
+        "db": 1,
+        "tables": 3,
+        "branches": 3,
+        "awaits": 1
+      },
+      "current": {
+        "db": 1,
+        "tables": 3,
+        "branches": 3,
+        "awaits": 1
+      },
+      "composite": false,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/receipt/:token",
+      "use_case": "vault/application/entity/receipt.ts#{resolvePublicReceipt,findVaultEntryByReceiptToken,fmtPublicVaultReceipt}",
+      "composite": true,
+      "parity": true
+    },
+    {
+      "route": "GET /vault/receipt/:token/pdf",
+      "use_case": "vault/application/entity/receipt.ts#{resolvePublicReceipt,buildReceiptPdfSpec,findVaultEntryByReceiptToken,fmtPublicVaultReceipt}",
+      "composite": true,
+      "parity": true
+    }
+  ]
+}

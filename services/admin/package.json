@@ -1,0 +1,20 @@
+{
+  "name": "@ayzen/admin-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "dependencies": {
+    "@ayzen/admin-data": "workspace:*",
+    "@ayzen/admin-policy": "workspace:*",
+    "@ayzen/audit": "workspace:*",
+    "@ayzen/auth-client": "workspace:*",
+    "@ayzen/event-client": "workspace:*",
+    "@ayzen/outbox": "workspace:*",
+    "@ayzen/policy-contract": "workspace:*",
+    "@ayzen/service-runtime": "workspace:*",
+    "@ayzen/xuka": "workspace:*"
+  }
+}

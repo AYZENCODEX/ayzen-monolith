@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "timeoutMs": 10000,
+  "retryAttempts": 2,
+  "failureThreshold": 3,
+  "resetMs": 30000,
+  "bulkheadLimit": 20,
+  "fallback": "explicit-only",
+  "backpressure": "queue-age-and-concurrency"
+}

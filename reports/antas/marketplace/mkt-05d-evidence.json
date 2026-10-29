@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-05d",
+  "status": "PASS_STATIC_AND_UNIT_ONLY",
+  "date": "2026-10-26",
+  "commitSha": "UNAVAILABLE",
+  "scope": "routes/marketplace-reviews.ts: reviews and seller responses (7 routes, 4 write, 4 owner-gated by the PEP); MKT-05 so far: 23 of 44 routes (discovery 4, analytics 6, alerts 6, reviews 7)",
+  "done": [
+    "marketplace/engagement: rules in domain/reviews.ts, the 11 SQL statements (3 of them for the PEP resource builders) in infrastructure/reviews-repo.ts, use cases in application/reviews.ts, the three PEP resource builders in security/review-resources.ts; *.wired.ts composition roots are the only files importing the pool",
+    "SQL text equals the pre-move route text (moved-sql.pins.json, 11 statements)",
+    "all 7 route declaration lines (path, middleware chain, notFound bodies) are byte-identical to the original; only handler bodies and the header resource builders changed",
+    "status codes and response keys of all 7 routes compared with the ORIGINAL uploaded file by a script that does not use the inventory map: all SAME; owner-gated count still 26",
+    "differential tests: parseNewRating and updateReviewParams equal a verbatim copy of the original logic for 21 odd rating values and 21x21 rating/comment pairs",
+    "create keeps the original order: validate rating, look up the completed order of this buyer, 404, then the upsert with the order's listing and seller",
+    "10 unit tests (domain differential, application with a fake database, three PEP builders: owner column, resource type, sentinel owner without a query for a non-numeric id)",
+    "baseline ratchet: SQL calls in route files 340 -> 329; the route file no longer writes marketplace_reviews"
+  ],
+  "notVerified": [
+    "no handler executed, no database; TypeScript syntax and import resolution only; typecheck/build UNAVAILABLE",
+    "no DB test for these routes; the PEP wiring was not exercised (the DB suite stubs the PEP)"
+  ],
+  "keptOnPurpose": [
+    "no validation added: limit/offset still go through Number() and a non-numeric value reaches the database",
+    "ON CONFLICT (order_id) DO UPDATE still makes POST /marketplace/orders/:id/review an upsert answered 201",
+    "errors stay 500 with the database message"
+  ],
+  "next": "remaining MKT-05: reports (5), coupons reads, favorites, settings, market-config (already without SQL), admin activity, listing GETs, stats, search, history. Still waiting for the first real run of the DB suite; MKT-04 waits for it."
+}

@@ -1,0 +1,27 @@
+{
+  "version": "v1",
+  "transport": {
+    "gatewayOwns": ["webhook-secret-validation", "payload-normalization", "bounded-body-read", "update-deduplication"],
+    "handlerOwns": ["identity-linking", "authorization", "command-dispatch", "domain-api-call", "workflow-start", "callback-consumption"],
+    "neverInTransport": ["database-mutations", "secret-material", "business-rules"]
+  },
+  "bots": [
+    { "key": "ayzenx", "app": "AYZENX", "role": "general", "commands": ["/start", "/help", "/connect", "/workspace", "/activity", "/search", "/notifications", "/settings", "/permissions"] },
+    { "key": "warde", "app": "WARDE", "role": "organization", "commands": ["/start", "/help", "/report", "/members", "/invite", "/activity", "/settings"] },
+    { "key": "verve", "app": "VERVE", "role": "marketplace", "commands": ["/start", "/help", "/listings", "/listing", "/search", "/activity"] },
+    { "key": "ryft", "app": "RYFT", "role": "finance", "commands": ["/start", "/help", "/accounts", "/balance", "/transactions", "/transaction", "/activity"] },
+    { "key": "sylo", "app": "SYLO", "role": "vault", "commands": ["/start", "/help", "/vault", "/secret", "/reveal", "/activity"] },
+    { "key": "skarn", "app": "SKARN", "role": "workflow", "commands": ["/start", "/help", "/project", "/workflow", "/run", "/cancel", "/tasks", "/events", "/audit"] },
+    { "key": "zynth", "app": "ZYNTH", "role": "ai", "commands": ["/start", "/help", "/ask", "/agents", "/history", "/activity"] },
+    { "key": "wisp", "app": "WISP", "role": "mail", "commands": ["/start", "/help", "/inbox", "/read", "/send", "/search", "/notifications"] },
+    { "key": "admin", "app": "ADMIN", "role": "control-plane", "privileged": true, "ownerIdentity": "verifiedTelegramNumericUserId", "commands": ["/start", "/help", "/admin", "/health", "/alerts", "/gaps", "/tickets", "/audit", "/data", "/mutate", "/breakglass", "/incident", "/ack", "/resolve", "/deploy"] }
+  ],
+  "ui": {
+    "startLayers": ["workspace", "features", "account", "activity", "settings"],
+    "featureLayers": ["app", "module", "resource", "action"],
+    "sharedControls": ["pagination", "back", "confirmation", "permission-aware-visibility", "request-id-error"]
+  },
+  "callback": { "algorithm": "HMAC-SHA256", "ttlMs": 300000, "singleUse": true, "replayResponseCode": "CALLBACK_ALREADY_USED" },
+  "session": { "ttlMs": 1800000, "mustBind": ["botKey", "telegramUserId", "workspaceId"], "revokeOnUnlink": true },
+  "delivery": { "productionTransport": "webhook", "duplicateUpdates": "ack-without-replay", "handlerTimeoutMs": 15000, "retry": "exponential-with-telegram-retry-after" }
+}

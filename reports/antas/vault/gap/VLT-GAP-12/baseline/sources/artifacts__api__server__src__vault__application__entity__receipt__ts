@@ -1,0 +1,137 @@
+import * as crypto from "crypto";
+import { db, vaultEntriesTable, usersTable } from "@workspace/db";
+import { eq, and, sql } from "drizzle-orm";
+import type { EntityResult } from "./lifecycle";
+import { computeEntityWorth, computeEntityBuyValue, computeEntityProfitPct, computeAge } from "../../../lib/entity-worth";
+
+/**
+ * Public entity receipt link (mint / revoke / resolve). Extracted verbatim from
+ * routes/vault.ts (VLT-GAP-01-D). Only the two public GET handlers' decision
+ * logic is restated as `resolvePublicReceipt`; queries and formatting are the
+ * moved helpers below.
+ */
+
+// ─── Public receipt link ──────────────────────────────────────────────────────
+// One shareable, unauthenticated "PnL card" per Vault Entity — same idea as
+// the Local Entity receipt (routes/local-accounts.ts) and the Finance
+// ledger receipt (routes/finance.ts), but sourced from computeEntityWorth's
+// aggregate across the entity + all linked platforms. Only "worth showing
+// off" fields are exposed — no credentials, 2FA, backup codes, wallet
+// addresses, or seed phrase, even though those are already encrypted at rest.
+function generateVaultReceiptToken(): string {
+  return crypto.randomBytes(20).toString("base64url");
+}
+
+function vaultReceiptUrl(receiptToken: string): string {
+  return `${process.env.APP_URL ?? "https://ayzen.replit.app"}/receipt/entity/${receiptToken}`;
+}
+
+async function findVaultEntryByReceiptToken(token: string) {
+  const [entry] = await db.select().from(vaultEntriesTable)
+    .where(and(eq(vaultEntriesTable.receiptToken, token), sql`${vaultEntriesTable.deletedAt} IS NULL`)).limit(1);
+  if (!entry) return null;
+  const [owner] = await db.select({ username: usersTable.username }).from(usersTable).where(eq(usersTable.id, entry.userId)).limit(1);
+  return { entry, issuedBy: owner?.username ?? null };
+}
+
+function fmtPublicVaultReceipt(entry: any, issuedBy: string | null) {
+  const worth = computeEntityWorth(entry);
+  const buyValue = computeEntityBuyValue(entry);
+  const roiPct = computeEntityProfitPct(entry);
+  return {
+    id: entry.id,
+    entitySerial: entry.entitySerial,
+    projectName: entry.projectName,
+    category: entry.category,
+    username: entry.username,
+    followers: entry.followers,
+    age: computeAge(entry.createDate),
+    worth,
+    buyValue,
+    profit: buyValue > 0 ? worth - buyValue : null,
+    roiPct,
+    status: entry.status,
+    score: entry.score,
+    issuedBy,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+// POST /vault/:id/receipt — mint (or fetch the existing) public link
+export async function createReceiptLink(userId: number, idParam: string | string[]): Promise<EntityResult> {
+  const id = parseInt(Array.isArray(idParam) ? idParam[0] : idParam, 10);
+  if (!Number.isFinite(id)) { return { status: 400, body: { error: "Invalid entity id" } }; }
+  try {
+    const [row] = await db.select({ id: vaultEntriesTable.id, receiptToken: vaultEntriesTable.receiptToken })
+      .from(vaultEntriesTable)
+      .where(and(eq(vaultEntriesTable.id, id), eq(vaultEntriesTable.userId, userId), sql`${vaultEntriesTable.deletedAt} IS NULL`));
+    if (!row) { return { status: 404, body: { error: "Vault entry not found" } }; }
+
+    let token = row.receiptToken;
+    if (!token) {
+      for (let attempt = 0; attempt < 3 && !token; attempt++) {
+        const candidate = generateVaultReceiptToken();
+        try {
+          const [updated] = await db.update(vaultEntriesTable)
+            .set({ receiptToken: candidate, updatedAt: new Date() })
+            .where(eq(vaultEntriesTable.id, id))
+            .returning({ receiptToken: vaultEntriesTable.receiptToken });
+          token = updated.receiptToken;
+        } catch { /* unique collision — loop and retry */ }
+      }
+      if (!token) { return { status: 500, body: { error: "Could not generate a receipt link, please try again" } }; }
+    }
+    return { status: 200, body: { token, url: vaultReceiptUrl(token) } };
+  } catch (err: any) {
+    return { status: 500, body: { error: "Failed to create receipt link", detail: err?.message } };
+  }
+}
+
+// DELETE /vault/:id/receipt — revoke the public link
+export async function revokeReceiptLink(userId: number, idParam: string | string[]): Promise<EntityResult> {
+  const id = parseInt(Array.isArray(idParam) ? idParam[0] : idParam, 10);
+  if (!Number.isFinite(id)) { return { status: 400, body: { error: "Invalid entity id" } }; }
+  const [row] = await db.update(vaultEntriesTable)
+    .set({ receiptToken: null, updatedAt: new Date() })
+    .where(and(eq(vaultEntriesTable.id, id), eq(vaultEntriesTable.userId, userId)))
+    .returning({ id: vaultEntriesTable.id });
+  if (!row) { return { status: 404, body: { error: "Vault entry not found" } }; }
+  return { status: 200, body: { success: true } };
+}
+
+// Presentation spec for the public receipt PDF — moved verbatim from GET /vault/receipt/:token/pdf.
+export function buildReceiptPdfSpec(r: ReturnType<typeof fmtPublicVaultReceipt>) {
+  const displayName = r.projectName || r.entitySerial || `Vault Entity #${r.id}`;
+  return {
+    kicker: "Vault Entity Receipt",
+    title: displayName,
+    subtitle: [r.category, r.username ? `@${r.username}` : null].filter(Boolean).join(" · ") || r.entitySerial || undefined,
+    avatarLetter: displayName,
+    heroLabel: r.roiPct !== null ? "Profit & Loss" : "Total Worth",
+    heroValue: r.roiPct !== null ? `${r.roiPct >= 0 ? "+" : ""}${r.roiPct.toFixed(1)}%` : `$${r.worth.toFixed(2)}`,
+    heroPositive: r.roiPct !== null ? r.roiPct >= 0 : undefined,
+    stats: [
+      { label: "Username", value: r.username || "—" },
+      { label: "Followers", value: r.followers ? String(r.followers) : "—" },
+      { label: "Account Age", value: r.age ?? "—" },
+      { label: "Total Worth", value: `$${r.worth.toFixed(2)}`, color: "#0f9d58" },
+      { label: "Buy Value", value: `$${r.buyValue.toFixed(2)}` },
+      { label: "Net Profit", value: r.profit !== null ? `${r.profit >= 0 ? "+" : ""}$${r.profit.toFixed(2)}` : "—", color: r.profit !== null ? (r.profit >= 0 ? "#0f9d58" : "#e4453a") : undefined },
+    ],
+    receiptId: r.id,
+    issuedBy: r.issuedBy,
+    filenamePrefix: "vault-entity",
+  };
+}
+
+export interface PublicReceiptResult extends EntityResult { receipt?: ReturnType<typeof fmtPublicVaultReceipt> }
+
+// GET /vault/receipt/:token and /pdf — token parsing, lookup and 400/404 decisions.
+export async function resolvePublicReceipt(tokenParam: string | string[]): Promise<PublicReceiptResult> {
+  const token = Array.isArray(tokenParam) ? tokenParam[0] : tokenParam;
+  if (!token) return { status: 400, body: { error: "Missing token" } };
+  const found = await findVaultEntryByReceiptToken(token);
+  if (!found) return { status: 404, body: { error: "This receipt link is invalid or has been revoked." } };
+  const receipt = fmtPublicVaultReceipt(found.entry, found.issuedBy);
+  return { status: 200, body: receipt, receipt };
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "AYZEN ZIOX Public Production Readiness",
+  "phase": "B",
+  "name": "Security & Enforcement Certification",
+  "generatedAt": "2026-09-29T06:07:57.689Z",
+  "status": "PASS",
+  "implementation": "complete",
+  "subphases": [
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "B8"
+  ],
+  "checks": [
+    {
+      "id": "B1",
+      "description": "Shared platform validator",
+      "status": "PASS",
+      "command": "pnpm run validate:shared-platform-1-30",
+      "exitCode": 0,
+      "output": "> workspace@0.0.0 validate:shared-platform-1-30 /home/runner/workspace\n> node scripts/validate-shared-platform-1-30.mjs\n\nShared platform phases 1–30 validation passed (30 phases, 21 graph nodes, 22 graph edges)"
+    },
+    {
+      "id": "B2",
+      "description": "API security backbone validator",
+      "status": "PASS",
+      "command": "pnpm run validate:api-security-backbone-1-50",
+      "exitCode": 0,
+      "output": "> workspace@0.0.0 validate:api-security-backbone-1-50 /home/runner/workspace\n> node scripts/validate-api-security-backbone-1-50.mjs\n\nAPI/security/backbone validation passed: 50 phases, app API contracts, security boundaries, connectivity, EventBus, workflow, outbox/inbox, replay, observability, and circuit evidence."
+    },
+    {
+      "id": "B3",
+      "description": "Policy contract validator",
+      "status": "PASS",
+      "command": "pnpm run validate:policy-contract",
+      "exitCode": 0,
+      "output": "> workspace@0.0.0 validate:policy-contract /home/runner/workspace\n> node scripts/validate-policy-contract.mjs\n\npolicy-contract validation passed (7 consumers, allow/deny/conditional)."
+    },
+    {
+      "id": "B4",
+      "description": "Capability and enforcement validator",
+      "status": "PASS",
+      "command": "pnpm run validate:enforcement",
+      "exitCode": 0,
+      "output": "> workspace@0.0.0 validate:enforcement /home/runner/workspace\n> node tools/ayzen-validate/index.mjs\n\n{\n  \"output\": \"reports/certification/enforcement-certification.json\",\n  \"status\": \"CERTIFIED\",\n  \"failedEngines\": [],\n  \"failedGates\": []\n}"
+    },
+    {
+      "id": "B5",
+      "description": "SIORA boundary is documented",
+      "status": "PASS",
+      "required": [
+        "docs/security/siora-boundary.md",
+        "packages/authorization/src/index.mjs"
+      ],
+      "missing": []
+    },
+    {
+      "id": "B6",
+      "description": "Tenant isolation regression suite",
+      "status": "PASS",
+      "command": "node --test tests/security/tenant-scope.test.mjs tests/admin-enforcement/admin-boundary.test.mjs",
+      "exitCode": 0,
+      "output": "✔ admin gateway does not silently bypass policy (1.76606ms)\n✔ tenant headers must match verified identity (1.581143ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 137.441924"
+    },
+    {
+      "id": "B7",
+      "description": "Security regression suite",
+      "status": "PASS",
+      "command": "node --test tests/security/backbone-security.test.mjs tests/security/step-up-token.test.mjs",
+      "exitCode": 0,
+      "output": "✔ cross-app requests are denied by the app security boundary (0.970875ms)\n✔ step-up tokens are purpose, tenant, expiry, and single-use bound (1.276556ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 94.202664"
+    },
+    {
+      "id": "B8",
+      "description": "ZIOX-B certification",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "evidence": {
+    "sourceDocument": "attached_assets/AYZEN_ZIOX_Public_Production_Readiness_Roadmap_1790636953669.md",
+    "validator": "scripts/validate-ziox.mjs"
+  }
+}

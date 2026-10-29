@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-14.4",
+  "phase": "ANTAS-14",
+  "name": "Cost Model",
+  "generatedAt": "2026-09-29T06:06:06.720Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "infrastructure/platform/capacity-plan.json",
+    "docs/antas/operations/performance.md"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

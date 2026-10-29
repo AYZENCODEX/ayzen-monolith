@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "scope": "workspace",
+  "owner": "platform",
+  "contracts": {
+    "workspace": "canonical-workspace-id",
+    "events": "event-envelope-v1",
+    "audit": "audit-envelope-v1",
+    "transport": "api-or-eventbus-only"
+  },
+  "gates": ["backup", "characterization", "backfill", "validation", "rollback"],
+  "rollback": "disable extracted route and restore monolith traffic",
+  "forbidden": ["direct cross-app database access", "unscoped event consumption", "secret values in manifests"]
+}

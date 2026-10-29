@@ -1,0 +1,219 @@
+import { Router } from "express";
+import express from "express";
+import { db, vaultAttachmentsTable } from "@workspace/db";
+import { and, eq } from "drizzle-orm";
+import { requireAuth, getRequestUserId } from "../middlewares/auth";
+import { sensitiveWriteLimiter } from "../middlewares/security";
+import { encryptField, decryptField } from "../vault/crypto/field-encryption";
+import { logActivity } from "../lib/activity";
+import { requireVaultAttachmentEntityOwnership } from "../vault/security/attachment-ownership";
+import { ALLOWED_CATEGORIES, MAX_ATTACHMENT_BYTES } from "../vault/application/attachment/use-cases";
+import { assertEntityOwnership } from "../vault/infrastructure/repositories/vault-attachment-repository";
+
+const router = Router();
+
+// Attachment uploads need a bigger body than the app-wide JSON_BODY_LIMIT
+// (default 1mb) allows — base64 alone adds ~33% overhead on top of
+// MAX_ATTACHMENT_BYTES. Scoped to just this route so no other endpoint's
+// body-size budget changes.
+const uploadBodyParser = express.json({ limit: "12mb" });
+
+// ── GET /vault/:id/attachments — list (metadata only, no file bytes) ────────
+router.get("/vault/:id/attachments", requireAuth, requireVaultAttachmentEntityOwnership("vault_entry.attachments.list"), async (req, res): Promise<void> => {
+  const userId = getRequestUserId(req);
+  if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const entityId = parseInt(String(req.params.id), 10);
+  if (!Number.isFinite(entityId)) { res.status(400).json({ error: "Invalid entity id" }); return; }
+  if (!(await assertEntityOwnership(entityId, userId))) { res.status(404).json({ error: "Entity not found" }); return; }
+
+  const rows = await db.select({
+    id: vaultAttachmentsTable.id,
+    fileName: vaultAttachmentsTable.fileName,
+    mimeType: vaultAttachmentsTable.mimeType,
+    fileSizeBytes: vaultAttachmentsTable.fileSizeBytes,
+    category: vaultAttachmentsTable.category,
+    note: vaultAttachmentsTable.note,
+    uploadedAt: vaultAttachmentsTable.uploadedAt,
+    updatedAt: vaultAttachmentsTable.updatedAt,
+  }).from(vaultAttachmentsTable)
+    .where(and(eq(vaultAttachmentsTable.vaultEntryId, entityId), eq(vaultAttachmentsTable.userId, userId)))
+    .orderBy(vaultAttachmentsTable.uploadedAt);
+
+  res.json({ items: rows });
+});
+
+// ── POST /vault/:id/attachments — upload a new file ─────────────────────────
+// Body: { fileName, mimeType, category?, note?, dataBase64 }
+router.post("/vault/:id/attachments", requireAuth, requireVaultAttachmentEntityOwnership("vault_entry.attachments.upload"), uploadBodyParser, sensitiveWriteLimiter, async (req, res): Promise<void> => {
+  const userId = getRequestUserId(req);
+  if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const entityId = parseInt(String(req.params.id), 10);
+  if (!Number.isFinite(entityId)) { res.status(400).json({ error: "Invalid entity id" }); return; }
+  if (!(await assertEntityOwnership(entityId, userId))) { res.status(404).json({ error: "Entity not found" }); return; }
+
+  const { fileName, mimeType, category = "other", note, dataBase64 } = req.body ?? {};
+  if (typeof fileName !== "string" || !fileName.trim()) {
+    res.status(400).json({ error: "fileName is required" }); return;
+  }
+  if (typeof mimeType !== "string" || !mimeType.trim()) {
+    res.status(400).json({ error: "mimeType is required" }); return;
+  }
+  if (typeof dataBase64 !== "string" || !dataBase64) {
+    res.status(400).json({ error: "dataBase64 is required" }); return;
+  }
+  if (typeof category !== "string" || !ALLOWED_CATEGORIES.has(category)) {
+    res.status(400).json({ error: "Invalid category", solution: `category must be one of: ${[...ALLOWED_CATEGORIES].join(", ")}` });
+    return;
+  }
+
+  // Strip a data-URL prefix if the client sent one (e.g. "data:application/pdf;base64,...").
+  const b64 = dataBase64.includes(",") && dataBase64.trim().startsWith("data:")
+    ? dataBase64.slice(dataBase64.indexOf(",") + 1)
+    : dataBase64;
+
+  let raw: Buffer;
+  try {
+    raw = Buffer.from(b64, "base64");
+  } catch {
+    res.status(400).json({ error: "dataBase64 is not valid base64" }); return;
+  }
+  if (raw.length === 0) { res.status(400).json({ error: "File is empty" }); return; }
+  if (raw.length > MAX_ATTACHMENT_BYTES) {
+    res.status(413).json({
+      error: "File too large",
+      code: "ATTACHMENT_TOO_LARGE",
+      solution: `Attachments are limited to ${Math.floor(MAX_ATTACHMENT_BYTES / (1024 * 1024))}MB.`,
+    });
+    return;
+  }
+
+  const encryptedContent = encryptField(b64)!;
+
+  const [row] = await db.insert(vaultAttachmentsTable).values({
+    userId,
+    vaultEntryId: entityId,
+    fileName: fileName.trim().slice(0, 255),
+    mimeType: mimeType.trim().slice(0, 100),
+    fileSizeBytes: raw.length,
+    category,
+    note: typeof note === "string" && note.trim() ? note.trim().slice(0, 500) : null,
+    encryptedContent,
+  }).returning({
+    id: vaultAttachmentsTable.id,
+    fileName: vaultAttachmentsTable.fileName,
+    mimeType: vaultAttachmentsTable.mimeType,
+    fileSizeBytes: vaultAttachmentsTable.fileSizeBytes,
+    category: vaultAttachmentsTable.category,
+    note: vaultAttachmentsTable.note,
+    uploadedAt: vaultAttachmentsTable.uploadedAt,
+  });
+
+  await logActivity(userId, "vault_attachment_uploaded", "vault_entry", entityId, fileName, { attachmentId: row.id, category });
+
+  res.status(201).json(row);
+});
+
+// ── GET /vault/:id/attachments/:attachmentId — download (decrypted) ────────
+router.get("/vault/:id/attachments/:attachmentId", requireAuth, requireVaultAttachmentEntityOwnership("vault_entry.attachments.download"), async (req, res): Promise<void> => {
+  const userId = getRequestUserId(req);
+  if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const entityId = parseInt(String(req.params.id), 10);
+  const attachmentId = parseInt(String(req.params.attachmentId), 10);
+  if (!Number.isFinite(entityId) || !Number.isFinite(attachmentId)) { res.status(400).json({ error: "Invalid id" }); return; }
+  if (!(await assertEntityOwnership(entityId, userId))) { res.status(404).json({ error: "Entity not found" }); return; }
+
+  const [row] = await db.select().from(vaultAttachmentsTable)
+    .where(and(
+      eq(vaultAttachmentsTable.id, attachmentId),
+      eq(vaultAttachmentsTable.vaultEntryId, entityId),
+      eq(vaultAttachmentsTable.userId, userId),
+    ))
+    .limit(1);
+  if (!row) { res.status(404).json({ error: "Attachment not found" }); return; }
+
+  const b64 = decryptField(row.encryptedContent);
+  await logActivity(userId, "vault_attachment_downloaded", "vault_entry", entityId, row.fileName, { attachmentId });
+
+  if (req.query.raw === "1") {
+    res.setHeader("Content-Type", row.mimeType);
+    res.setHeader("Content-Disposition", `attachment; filename="${row.fileName.replace(/"/g, "")}"`);
+    res.send(Buffer.from(b64, "base64"));
+    return;
+  }
+
+  res.json({
+    id: row.id,
+    fileName: row.fileName,
+    mimeType: row.mimeType,
+    fileSizeBytes: row.fileSizeBytes,
+    category: row.category,
+    note: row.note,
+    uploadedAt: row.uploadedAt,
+    dataBase64: b64,
+  });
+});
+
+// ── PATCH /vault/:id/attachments/:attachmentId — rename / recategorize ─────
+router.patch("/vault/:id/attachments/:attachmentId", requireAuth, requireVaultAttachmentEntityOwnership("vault_entry.attachments.update"), async (req, res): Promise<void> => {
+  const userId = getRequestUserId(req);
+  if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const entityId = parseInt(String(req.params.id), 10);
+  const attachmentId = parseInt(String(req.params.attachmentId), 10);
+  if (!Number.isFinite(entityId) || !Number.isFinite(attachmentId)) { res.status(400).json({ error: "Invalid id" }); return; }
+  if (!(await assertEntityOwnership(entityId, userId))) { res.status(404).json({ error: "Entity not found" }); return; }
+
+  const { fileName, category, note } = req.body ?? {};
+  const updates: Record<string, unknown> = { updatedAt: new Date() };
+  if (fileName !== undefined) {
+    if (typeof fileName !== "string" || !fileName.trim()) { res.status(400).json({ error: "Invalid fileName" }); return; }
+    updates.fileName = fileName.trim().slice(0, 255);
+  }
+  if (category !== undefined) {
+    if (typeof category !== "string" || !ALLOWED_CATEGORIES.has(category)) { res.status(400).json({ error: "Invalid category" }); return; }
+    updates.category = category;
+  }
+  if (note !== undefined) {
+    updates.note = typeof note === "string" && note.trim() ? note.trim().slice(0, 500) : null;
+  }
+
+  const result = await db.update(vaultAttachmentsTable)
+    .set(updates as any)
+    .where(and(
+      eq(vaultAttachmentsTable.id, attachmentId),
+      eq(vaultAttachmentsTable.vaultEntryId, entityId),
+      eq(vaultAttachmentsTable.userId, userId),
+    ))
+    .returning({ id: vaultAttachmentsTable.id });
+  if (!result.length) { res.status(404).json({ error: "Attachment not found" }); return; }
+
+  res.json({ ok: true });
+});
+
+// ── DELETE /vault/:id/attachments/:attachmentId ─────────────────────────────
+router.delete("/vault/:id/attachments/:attachmentId", requireAuth, requireVaultAttachmentEntityOwnership("vault_entry.attachments.delete"), async (req, res): Promise<void> => {
+  const userId = getRequestUserId(req);
+  if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const entityId = parseInt(String(req.params.id), 10);
+  const attachmentId = parseInt(String(req.params.attachmentId), 10);
+  if (!Number.isFinite(entityId) || !Number.isFinite(attachmentId)) { res.status(400).json({ error: "Invalid id" }); return; }
+  if (!(await assertEntityOwnership(entityId, userId))) { res.status(404).json({ error: "Entity not found" }); return; }
+
+  const [row] = await db.delete(vaultAttachmentsTable)
+    .where(and(
+      eq(vaultAttachmentsTable.id, attachmentId),
+      eq(vaultAttachmentsTable.vaultEntryId, entityId),
+      eq(vaultAttachmentsTable.userId, userId),
+    ))
+    .returning({ id: vaultAttachmentsTable.id, fileName: vaultAttachmentsTable.fileName });
+  if (!row) { res.status(404).json({ error: "Attachment not found" }); return; }
+
+  await logActivity(userId, "vault_attachment_deleted", "vault_entry", entityId, row.fileName, { attachmentId });
+  res.json({ ok: true });
+});
+
+export default router;

@@ -1,0 +1,200 @@
+{
+  "_doc": "VLT-GAP-15-B replay boundaries. The frozen OLD route files import retired lib/* modules; the CURRENT code imports their vault/* successors. For a route-level replay both sides must see the SAME collaborator, so each moved module (old path, new path) is mapped to one shared recording fake. The behaviour of the moved module itself is NOT claimed here \u2014 it is covered by the per-module differentials listed in `module_level_evidence` and by 15-C's literal contract diff. Paths are relative to artifacts/api-server/src, without extension.",
+  "boundaries": {
+    "field-encryption": {
+      "paths": [
+        "lib/vault-crypto",
+        "vault/crypto/field-encryption"
+      ],
+      "kind": "encryption"
+    },
+    "pin-guard": {
+      "paths": [
+        "lib/vault-pin-guard",
+        "vault/security/pin-guard"
+      ],
+      "returns": {
+        "requireVaultPin": {
+          "ok": true
+        }
+      }
+    },
+    "backup-cloud": {
+      "paths": [
+        "lib/vault-backup-cloud",
+        "vault/infrastructure/backup/cloud"
+      ],
+      "constants": {
+        "CLOUD_PROVIDERS": [
+          "google_drive",
+          "dropbox",
+          "onedrive"
+        ]
+      }
+    },
+    "backup-audit": {
+      "paths": [
+        "lib/vault-backup-audit",
+        "vault/infrastructure/backup/audit"
+      ]
+    },
+    "backup-alerts": {
+      "paths": [
+        "lib/vault-backup-alerts",
+        "vault/infrastructure/backup/alerts"
+      ]
+    },
+    "backup-envelope": {
+      "paths": [
+        "lib/vault-backup-envelope",
+        "vault/crypto/backup-envelope"
+      ]
+    },
+    "backup-schedule-cron": {
+      "paths": [
+        "lib/vault-backup-schedule-cron",
+        "vault/application/backup/schedule-cron"
+      ]
+    },
+    "snapshot-restore": {
+      "paths": [
+        "lib/vault-snapshot-restore",
+        "vault/application/snapshot/restore"
+      ]
+    },
+    "snapshot-payload": {
+      "paths": [
+        "lib/vault-snapshot-extra",
+        "vault/application/snapshot/payload"
+      ]
+    },
+    "snapshot-trash-purge": {
+      "paths": [
+        "lib/vault-snapshot-trash-purge",
+        "vault/infrastructure/trash/snapshot-trash-purge"
+      ],
+      "constants": {
+        "VAULT_SNAPSHOT_TRASH_RETENTION_DAYS": 14
+      }
+    },
+    "entry-trash-purge": {
+      "paths": [
+        "lib/vault-trash-purge",
+        "vault/infrastructure/trash/entry-trash-purge"
+      ],
+      "constants": {
+        "VAULT_TRASH_RETENTION_DAYS": 30
+      }
+    },
+    "notifications": {
+      "paths": [
+        "routes/notifications",
+        "lib/create-notification"
+      ]
+    },
+    "event-hub": {
+      "paths": [
+        "routes/events",
+        "lib/event-hub"
+      ]
+    },
+    "reveal-token": {
+      "paths": [
+        "routes/vault-security",
+        "vault/security/reveal-token"
+      ],
+      "returns": {
+        "consumeRevealToken": true,
+        "hasNoEntityPin": false
+      }
+    }
+  },
+  "module_level_evidence": {
+    "field-encryption": [
+      "validate-vlt-gap-07-D.mjs"
+    ],
+    "pin-guard": [
+      "differential-vlt-gap-06-D.mjs"
+    ],
+    "backup-*": [
+      "differential-vlt-gap-08.mjs",
+      "differential-vlt-gap-15-backup.mjs"
+    ],
+    "snapshot-*": [
+      "differential-vlt-gap-09.mjs"
+    ],
+    "entry-trash-purge": [
+      "differential-vlt-gap-09.mjs"
+    ]
+  },
+  "db_constants": {
+    "AUTH_STEP_POLICIES": [
+      "none",
+      "pin",
+      "password",
+      "two_fa"
+    ]
+  },
+  "authorize_effect": "ALLOW",
+  "old_module_bindings": {
+    "entity-secret": {
+      "routes/vault-entity-links": "vault-entity-links.ts"
+    }
+  },
+  "unreachable_scenarios_dropped": [
+    "no authenticated user: requireAuth is first in every stack (compared as `stack`) and answers 401 before any handler runs, so a handler reached with req.user undefined is not a reachable state"
+  ],
+  "allowed_shallow": {
+    "entity-secret": {
+      "GET /vault/activity": "handler reads rows[0].createdAt from a generic stub row shape that does not match its aggregate query; both sides fail identically at the same point (equal, but deeper branches NOT compared)",
+      "GET /vault/gas-overview": "awaits an external RPC/timer that the replay does not fake (REPLAY_TIMEOUT on both sides); branches NOT compared"
+    },
+    "local-account": {
+      "POST /local-accounts/category-receipt/:category": "receipt-link creation needs a signed-token helper the replay does not model; both sides return the same 500 (deeper branches NOT compared)",
+      "POST /local-accounts/category-receipt/:category/email": "same as above"
+    }
+  },
+  "legacy_differentials": [
+    "differential-vlt-gap-06-D.mjs",
+    "differential-vlt-gap-08.mjs",
+    "differential-vlt-gap-09.mjs",
+    "differential-vlt-gap-11.mjs",
+    "differential-vlt-gap-12.mjs",
+    "differential-vlt-gap-13-E.mjs"
+  ],
+  "residual_unexercised": {
+    "backup-restore": {
+      "side_effects": "cloud upload (fetch), OAuth token exchange/refresh and failure notifications live inside the faked backup-cloud/alerts boundaries; covered by differential-vlt-gap-15-backup, which runs the OLD frozen lib/vault-backup-cloud + lib/vault-backup-alerts against the NEW vault/infrastructure/backup/{cloud,alerts} with a scripted fetch and recording notification/email/telegram sinks (every request, DB op and sink call compared, failing sinks included)",
+      "encrypted_values": "envelope key wrap/unwrap lives inside the faked backup-envelope boundary; covered by differential-vlt-gap-15-backup, which runs the OLD frozen lib/vault-backup-envelope against the NEW vault/crypto/backup-envelope (real node:crypto + real aes-gcm, NEW key-store port and repository SQL executed against a stateful encryption_keys fake, cross-decrypt both directions, AAD owner binding, legacy-KEK fallback, rotation)"
+    },
+    "health": {
+      "side_effects": "createNotification/telegram/email fire only for users with alert subscriptions; replay rows have none (usersAlerted=0); covered by differential-vlt-gap-11 (executes notify/telegram/email with subscribed users, 8/8 mutants caught)",
+      "encrypted_values": "health scan decrypts via formatVaultEntry which is faked identically on both sides"
+    },
+    "security-access": {
+      "encrypted_values": "no crypto call sites in the replayed route bodies after the pin-guard boundary (regex over-match on 'version/envelope')",
+      "events": "no event call sites in replayed route bodies (regex over-match)"
+    }
+  },
+  "accepted_residual": {
+    "_doc": "Owner-signed exceptions. Format: {\"<group>/<dimension>\": \"<who accepted, why>\"}. Empty by design: 15-D fails until each open residual is closed or explicitly accepted here."
+  },
+  "intentional_changes": [
+    {
+      "group": "entity-secret",
+      "route": "PATCH /vault/:id",
+      "scn": "db-throws",
+      "reason": "VLT-GAP-19 (chaos gate): the legacy 'strip new fields and retry' fallback ran on ANY database error, so a transient failure silently dropped the seed phrase/credentials/status from a PATCH and still answered 200. It now retries only for a missing-column error (domain/db-errors.ts); every other error surfaces. In this scenario the old code issued a second db.update after the first threw; the new code surfaces the first error. Status/body on success and on missing-column errors are unchanged.",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+          "contains": "if (!isMissingColumnError(err)) throw err;"
+        },
+        {
+          "file": "artifacts/api-server/src/vault/domain/db-errors.ts",
+          "contains": "42703"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@ayzen/capabilities",
+  "version": "1.0.0",
+  "private": true,
+  "types": "./src/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.mjs"
+    }
+  }
+}

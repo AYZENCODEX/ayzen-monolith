@@ -1,0 +1,51 @@
+import { encryptField, decryptField } from "../../crypto/field-encryption";
+import {
+  selectKycEntryExchangeCredentials, updateKycEntryExchangeKeys, type KycExchangeKeyColumn,
+} from "../../infrastructure/repositories/kyc-consumer-repository";
+import { vaultDbError as dbError, type VaultOperationResult as UseCaseResult } from "../use-case-result";
+
+/**
+ * KYC entry ↔ exchange-key use-cases, extracted verbatim from
+ * routes/exchange-api.ts (VLT-GAP-03-C). The route keeps only the exchange
+ * provider proxy (deferred to VLT-GAP-12, providers); everything that reads or
+ * writes the KYC entry's credential columns is owned here.
+ */
+
+export interface KycExchangeCredentials {
+  platform: string;
+  apiKey: string | null;
+  apiSecret: string | null;
+}
+
+// GET /exchange-balance/:id — resolve + decrypt the credentials of one owned KYC
+// entry. `null` = no such (owned) entry. A DB or decrypt failure propagates to
+// the caller, exactly as it did inside the route's try/catch.
+export async function loadKycExchangeCredentials(userId: number, kycId: number): Promise<KycExchangeCredentials | null> {
+  const result = await selectKycEntryExchangeCredentials(kycId, userId);
+  if (!result.rows.length) return null;
+
+  const row = result.rows[0] as any;
+  const apiKey    = row.exchange_api_key    ? decryptField(row.exchange_api_key)    : null;
+  const apiSecret = row.exchange_api_secret ? decryptField(row.exchange_api_secret) : null;
+  const platform  = (row.platform || "").toLowerCase();
+  return { platform, apiKey, apiSecret };
+}
+
+// PATCH /kyc-entries/:id/exchange-keys — save an encrypted key pair.
+export async function setKycEntryExchangeKeys(userId: number, idParam: unknown, body: unknown): Promise<UseCaseResult> {
+  const id = parseInt(idParam as string);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid ID" } };
+
+  const { apiKey, apiSecret } = body as { apiKey?: string; apiSecret?: string };
+  const fields: Array<readonly [KycExchangeKeyColumn, unknown]> = [];
+  if (apiKey !== undefined)    fields.push(["exchange_api_key", apiKey ? encryptField(apiKey) : null]);
+  if (apiSecret !== undefined) fields.push(["exchange_api_secret", apiSecret ? encryptField(apiSecret) : null]);
+  if (fields.length === 0)  return { status: 400, body: { error: "Nothing to update" } };
+
+  try {
+    await updateKycEntryExchangeKeys(id, userId, fields);
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return dbError(err);
+  }
+}

@@ -1,0 +1,1161 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-02",
+  "note": "Parsed from route declarations and handler text; heuristic classes in boundaries.manifest.json accessReviewStatuses. needs-review, public-write and inline-auth-unverified need a person to read the handler.",
+  "counts": {
+    "admin": 20,
+    "authenticated": 61,
+    "in-handler-owner-sql": 8,
+    "inline-auth-verified": 5,
+    "needs-review": 6,
+    "owner-gated": 26,
+    "public-read": 16,
+    "public-write": 1
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/marketplace/listings/:id/similar",
+      "file": "marketplace-discovery.ts",
+      "owner": "catalog/discovery",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/trending",
+      "file": "marketplace-discovery.ts",
+      "owner": "catalog/discovery",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/categories",
+      "file": "marketplace-discovery.ts",
+      "owner": "catalog/discovery",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/listings/featured",
+      "file": "marketplace-discovery.ts",
+      "owner": "catalog/discovery",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/settings",
+      "file": "marketplace.ts",
+      "owner": "admin/settings",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "PATCH",
+      "path": "/marketplace/settings",
+      "file": "marketplace.ts",
+      "owner": "admin/settings",
+      "phase": "MKT-05",
+      "class": "admin"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/listings",
+      "file": "marketplace.ts",
+      "owner": "catalog/listings",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/listings/:id",
+      "file": "marketplace.ts",
+      "owner": "catalog/listings",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/my-listings",
+      "file": "marketplace.ts",
+      "owner": "catalog/listings",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/listings",
+      "file": "marketplace.ts",
+      "owner": "catalog/listings",
+      "phase": "MKT-06",
+      "class": "authenticated"
+    },
+    {
+      "method": "PATCH",
+      "path": "/marketplace/listings/:id",
+      "file": "marketplace.ts",
+      "owner": "catalog/listings",
+      "phase": "MKT-06",
+      "class": "owner-gated"
+    },
+    {
+      "method": "PUT",
+      "path": "/marketplace/listings/:id/platform-pricing",
+      "file": "marketplace.ts",
+      "owner": "catalog/pricing",
+      "phase": "MKT-06",
+      "class": "owner-gated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/listings/:id/platform-pricing/:platform",
+      "file": "marketplace.ts",
+      "owner": "catalog/pricing",
+      "phase": "MKT-06",
+      "class": "owner-gated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/listings/:id",
+      "file": "marketplace.ts",
+      "owner": "catalog/listings",
+      "phase": "MKT-06",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/listings/:id/buy",
+      "file": "marketplace.ts",
+      "owner": "orders/purchase",
+      "phase": "MKT-07",
+      "class": "in-handler-owner-sql"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/orders/my",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/orders/sales",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/orders/:id",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "owner-gated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/orders/tab/:tab",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/orders/sales/tab/:tab",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/orders/:id/confirm",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/orders/:id/dispute",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "owner-gated"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/marketplace/orders/disputed",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "admin"
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/marketplace/orders/:id/resolve-dispute",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "admin"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/marketplace/orders",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "admin"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/marketplace/orders/:id",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "admin"
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/marketplace/orders/:id/edit",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "admin"
+    },
+    {
+      "method": "POST",
+      "path": "/admin/marketplace/orders",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "admin"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/marketplace/listings",
+      "file": "marketplace.ts",
+      "owner": "catalog/listings",
+      "phase": "MKT-05",
+      "class": "admin"
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/marketplace/orders/:id",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "admin"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/vault-items",
+      "file": "marketplace.ts",
+      "owner": "catalog/vault-items",
+      "phase": "MKT-06",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/favorites",
+      "file": "marketplace.ts",
+      "owner": "engagement/favorites",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/listings/:id/favorite",
+      "file": "marketplace.ts",
+      "owner": "engagement/favorites",
+      "phase": "MKT-05",
+      "class": "needs-review"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/listings/:id/favorite",
+      "file": "marketplace.ts",
+      "owner": "engagement/favorites",
+      "phase": "MKT-05",
+      "class": "in-handler-owner-sql"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/search",
+      "file": "marketplace.ts",
+      "owner": "catalog/search",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/listings/:id/history",
+      "file": "marketplace.ts",
+      "owner": "catalog/search",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/marketplace/listings/:id/feature",
+      "file": "marketplace.ts",
+      "owner": "catalog/promotion",
+      "phase": "MKT-06",
+      "class": "admin"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/listings/:id/boost",
+      "file": "marketplace.ts",
+      "owner": "catalog/promotion",
+      "phase": "MKT-06",
+      "class": "owner-gated"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/marketplace/activity",
+      "file": "marketplace.ts",
+      "owner": "admin/activity",
+      "phase": "MKT-05",
+      "class": "admin"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/orders/:id/receipt",
+      "file": "marketplace.ts",
+      "owner": "orders",
+      "phase": "MKT-07",
+      "class": "owner-gated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/stats",
+      "file": "marketplace.ts",
+      "owner": "analytics/market-stats",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/azn/chart",
+      "file": "marketplace.ts",
+      "owner": "analytics/market-stats",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/cart",
+      "file": "marketplace-cart.ts",
+      "owner": "checkout/cart",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/cart/count",
+      "file": "marketplace-cart.ts",
+      "owner": "checkout/cart",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/cart",
+      "file": "marketplace-cart.ts",
+      "owner": "checkout/cart",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/cart/:id",
+      "file": "marketplace-cart.ts",
+      "owner": "checkout/cart",
+      "phase": "MKT-08",
+      "class": "owner-gated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/cart",
+      "file": "marketplace-cart.ts",
+      "owner": "checkout/cart",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/cart/validate",
+      "file": "marketplace-cart.ts",
+      "owner": "checkout/cart",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/cart/checkout",
+      "file": "marketplace-cart.ts",
+      "owner": "checkout/cart",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/cart/:id/save-for-later",
+      "file": "marketplace-cart.ts",
+      "owner": "checkout/cart",
+      "phase": "MKT-08",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/cart/saved/:id/move-to-cart",
+      "file": "marketplace-cart.ts",
+      "owner": "checkout/cart",
+      "phase": "MKT-08",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/orders/:id/review",
+      "file": "marketplace-reviews.ts",
+      "owner": "engagement/reviews",
+      "phase": "MKT-05",
+      "class": "owner-gated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/sellers/:id/reviews",
+      "file": "marketplace-reviews.ts",
+      "owner": "engagement/reviews",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/sellers/:id/rating",
+      "file": "marketplace-reviews.ts",
+      "owner": "engagement/reviews",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "PATCH",
+      "path": "/marketplace/reviews/:id",
+      "file": "marketplace-reviews.ts",
+      "owner": "engagement/reviews",
+      "phase": "MKT-05",
+      "class": "owner-gated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/reviews/:id",
+      "file": "marketplace-reviews.ts",
+      "owner": "engagement/reviews",
+      "phase": "MKT-05",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/reviews/:id/response",
+      "file": "marketplace-reviews.ts",
+      "owner": "engagement/reviews",
+      "phase": "MKT-05",
+      "class": "owner-gated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/reviews/my",
+      "file": "marketplace-reviews.ts",
+      "owner": "engagement/reviews",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/listings/:id/offers",
+      "file": "marketplace-offers.ts",
+      "owner": "checkout/offers",
+      "phase": "MKT-08",
+      "class": "in-handler-owner-sql"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/listings/:id/offers",
+      "file": "marketplace-offers.ts",
+      "owner": "checkout/offers",
+      "phase": "MKT-08",
+      "class": "owner-gated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/offers/my",
+      "file": "marketplace-offers.ts",
+      "owner": "checkout/offers",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/offers/received",
+      "file": "marketplace-offers.ts",
+      "owner": "checkout/offers",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/offers/:id/accept",
+      "file": "marketplace-offers.ts",
+      "owner": "checkout/offers",
+      "phase": "MKT-08",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/offers/:id/reject",
+      "file": "marketplace-offers.ts",
+      "owner": "checkout/offers",
+      "phase": "MKT-08",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/offers/:id/counter",
+      "file": "marketplace-offers.ts",
+      "owner": "checkout/offers",
+      "phase": "MKT-08",
+      "class": "owner-gated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/offers/:id",
+      "file": "marketplace-offers.ts",
+      "owner": "checkout/offers",
+      "phase": "MKT-08",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/admin/marketplace/coupons",
+      "file": "marketplace-coupons.ts",
+      "owner": "checkout/coupons",
+      "phase": "MKT-08",
+      "class": "admin"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/marketplace/coupons",
+      "file": "marketplace-coupons.ts",
+      "owner": "checkout/coupons",
+      "phase": "MKT-08",
+      "class": "admin"
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/marketplace/coupons/:id",
+      "file": "marketplace-coupons.ts",
+      "owner": "checkout/coupons",
+      "phase": "MKT-08",
+      "class": "admin"
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/marketplace/coupons/:id",
+      "file": "marketplace-coupons.ts",
+      "owner": "checkout/coupons",
+      "phase": "MKT-08",
+      "class": "admin"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/coupons/validate",
+      "file": "marketplace-coupons.ts",
+      "owner": "checkout/coupons",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/cart/apply-coupon",
+      "file": "marketplace-coupons.ts",
+      "owner": "checkout/coupons",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/listings/:id/report",
+      "file": "marketplace-reports.ts",
+      "owner": "engagement/reports",
+      "phase": "MKT-05",
+      "class": "needs-review"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/marketplace/reports",
+      "file": "marketplace-reports.ts",
+      "owner": "engagement/reports",
+      "phase": "MKT-05",
+      "class": "admin"
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/marketplace/reports/:id",
+      "file": "marketplace-reports.ts",
+      "owner": "engagement/reports",
+      "phase": "MKT-05",
+      "class": "admin"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/reports/my",
+      "file": "marketplace-reports.ts",
+      "owner": "engagement/reports",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/sellers/:id/report",
+      "file": "marketplace-reports.ts",
+      "owner": "engagement/reports",
+      "phase": "MKT-05",
+      "class": "needs-review"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/analytics/overview",
+      "file": "marketplace-analytics.ts",
+      "owner": "analytics",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/analytics/revenue",
+      "file": "marketplace-analytics.ts",
+      "owner": "analytics",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/analytics/top-listings",
+      "file": "marketplace-analytics.ts",
+      "owner": "analytics",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/listings/:id/views",
+      "file": "marketplace-analytics.ts",
+      "owner": "analytics",
+      "phase": "MKT-05",
+      "class": "public-read"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/listings/:id/view",
+      "file": "marketplace-analytics.ts",
+      "owner": "analytics",
+      "phase": "MKT-05",
+      "class": "public-write"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/marketplace/analytics/platform",
+      "file": "marketplace-analytics.ts",
+      "owner": "analytics",
+      "phase": "MKT-05",
+      "class": "admin"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/bundles",
+      "file": "marketplace-bundles.ts",
+      "owner": "checkout/bundles",
+      "phase": "MKT-08",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/bundles",
+      "file": "marketplace-bundles.ts",
+      "owner": "checkout/bundles",
+      "phase": "MKT-08",
+      "class": "public-read"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/bundles/:id",
+      "file": "marketplace-bundles.ts",
+      "owner": "checkout/bundles",
+      "phase": "MKT-08",
+      "class": "public-read"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/bundles/:id/buy",
+      "file": "marketplace-bundles.ts",
+      "owner": "checkout/bundles",
+      "phase": "MKT-08",
+      "class": "in-handler-owner-sql"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/bundles/:id",
+      "file": "marketplace-bundles.ts",
+      "owner": "checkout/bundles",
+      "phase": "MKT-08",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/alerts",
+      "file": "marketplace-alerts.ts",
+      "owner": "engagement/alerts",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/alerts",
+      "file": "marketplace-alerts.ts",
+      "owner": "engagement/alerts",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "PATCH",
+      "path": "/marketplace/alerts/:id",
+      "file": "marketplace-alerts.ts",
+      "owner": "engagement/alerts",
+      "phase": "MKT-05",
+      "class": "owner-gated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/alerts/:id",
+      "file": "marketplace-alerts.ts",
+      "owner": "engagement/alerts",
+      "phase": "MKT-05",
+      "class": "owner-gated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/saved-searches",
+      "file": "marketplace-alerts.ts",
+      "owner": "engagement/alerts",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/saved-searches",
+      "file": "marketplace-alerts.ts",
+      "owner": "engagement/alerts",
+      "phase": "MKT-05",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/azn/listings",
+      "file": "marketplace-azn.ts",
+      "owner": "markets/azn",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/azn/listings",
+      "file": "marketplace-azn.ts",
+      "owner": "markets/azn",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/azn/buy",
+      "file": "marketplace-azn.ts",
+      "owner": "markets/azn",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/azn/listings/:id",
+      "file": "marketplace-azn.ts",
+      "owner": "markets/azn",
+      "phase": "MKT-09",
+      "class": "in-handler-owner-sql"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/azn/stats",
+      "file": "marketplace-azn.ts",
+      "owner": "markets/azn",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/nft/listings",
+      "file": "marketplace-nft.ts",
+      "owner": "markets/nft",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/nft/listings",
+      "file": "marketplace-nft.ts",
+      "owner": "markets/nft",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/nft/buy",
+      "file": "marketplace-nft.ts",
+      "owner": "markets/nft",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/nft/listings/:id/like",
+      "file": "marketplace-nft.ts",
+      "owner": "markets/nft",
+      "phase": "MKT-09",
+      "class": "needs-review"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/nft/stats",
+      "file": "marketplace-nft.ts",
+      "owner": "markets/nft",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/vault/listings",
+      "file": "marketplace-vault.ts",
+      "owner": "markets/vault",
+      "phase": "MKT-10",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/vault/listings",
+      "file": "marketplace-vault.ts",
+      "owner": "markets/vault",
+      "phase": "MKT-10",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/vault/buy",
+      "file": "marketplace-vault.ts",
+      "owner": "markets/vault",
+      "phase": "MKT-10",
+      "class": "authenticated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/vault/listings/:id",
+      "file": "marketplace-vault.ts",
+      "owner": "markets/vault",
+      "phase": "MKT-10",
+      "class": "needs-review"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/vault/stats",
+      "file": "marketplace-vault.ts",
+      "owner": "markets/vault",
+      "phase": "MKT-10",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/marketplace/market-config",
+      "file": "marketplace-market-config.ts",
+      "owner": "admin/market-config",
+      "phase": "MKT-05",
+      "class": "admin"
+    },
+    {
+      "method": "PATCH",
+      "path": "/admin/marketplace/market-config/:marketType",
+      "file": "marketplace-market-config.ts",
+      "owner": "admin/market-config",
+      "phase": "MKT-05",
+      "class": "admin"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/game/listings",
+      "file": "marketplace-game.ts",
+      "owner": "markets/game",
+      "phase": "MKT-10",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/game/listings",
+      "file": "marketplace-game.ts",
+      "owner": "markets/game",
+      "phase": "MKT-10",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/game/buy",
+      "file": "marketplace-game.ts",
+      "owner": "markets/game",
+      "phase": "MKT-10",
+      "class": "authenticated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/game/listings/:id",
+      "file": "marketplace-game.ts",
+      "owner": "markets/game",
+      "phase": "MKT-10",
+      "class": "needs-review"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/game/stats",
+      "file": "marketplace-game.ts",
+      "owner": "markets/game",
+      "phase": "MKT-10",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/wallet",
+      "file": "marketplace-wallet.ts",
+      "owner": "wallet",
+      "phase": "MKT-04",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/wallet/:type/deposit",
+      "file": "marketplace-wallet.ts",
+      "owner": "wallet",
+      "phase": "MKT-04",
+      "class": "in-handler-owner-sql"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/wallet/:type/withdraw",
+      "file": "marketplace-wallet.ts",
+      "owner": "wallet",
+      "phase": "MKT-04",
+      "class": "in-handler-owner-sql"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/wallet/transactions",
+      "file": "marketplace-wallet.ts",
+      "owner": "wallet",
+      "phase": "MKT-04",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/wallet/summary",
+      "file": "marketplace-wallet.ts",
+      "owner": "wallet",
+      "phase": "MKT-04",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/spot/pairs",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/trading",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/spot/orderbook/:pair",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/trading",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/spot/trades/:pair",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/trading",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/spot/candles/:pair",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/trading",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/spot/balances",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/trading",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/spot/orders",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/trading",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/spot/orders",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/trading",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/spot/orders/:id",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/trading",
+      "phase": "MKT-11",
+      "class": "owner-gated"
+    },
+    {
+      "method": "GET",
+      "path": "/spot/staking/pools",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/staking",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "GET",
+      "path": "/spot/staking/positions",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/staking",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/spot/staking/stake",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/staking",
+      "phase": "MKT-11",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/spot/staking/unstake/:id",
+      "file": "marketplace-spot.ts",
+      "owner": "spot/staking",
+      "phase": "MKT-11",
+      "class": "owner-gated"
+    },
+    {
+      "method": "GET",
+      "path": "/polymarket/markets",
+      "file": "polymarket.ts",
+      "owner": "polymarket/markets",
+      "phase": "MKT-12",
+      "class": "inline-auth-verified"
+    },
+    {
+      "method": "GET",
+      "path": "/polymarket/markets/:id",
+      "file": "polymarket.ts",
+      "owner": "polymarket/markets",
+      "phase": "MKT-12",
+      "class": "inline-auth-verified"
+    },
+    {
+      "method": "GET",
+      "path": "/polymarket/balance",
+      "file": "polymarket.ts",
+      "owner": "polymarket/wallet-access",
+      "phase": "MKT-12",
+      "class": "inline-auth-verified"
+    },
+    {
+      "method": "GET",
+      "path": "/polymarket/trades",
+      "file": "polymarket.ts",
+      "owner": "polymarket/trades",
+      "phase": "MKT-12",
+      "class": "inline-auth-verified"
+    },
+    {
+      "method": "POST",
+      "path": "/polymarket/trade",
+      "file": "polymarket.ts",
+      "owner": "polymarket/trading",
+      "phase": "MKT-12",
+      "class": "inline-auth-verified"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/usdt/listings",
+      "file": "marketplace-usdt.ts",
+      "owner": "markets/usdt",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/usdt/listings",
+      "file": "marketplace-usdt.ts",
+      "owner": "markets/usdt",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/usdt/buy",
+      "file": "marketplace-usdt.ts",
+      "owner": "markets/usdt",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/usdt/listings/:id",
+      "file": "marketplace-usdt.ts",
+      "owner": "markets/usdt",
+      "phase": "MKT-09",
+      "class": "in-handler-owner-sql"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/usdt/stats",
+      "file": "marketplace-usdt.ts",
+      "owner": "markets/usdt",
+      "phase": "MKT-09",
+      "class": "authenticated"
+    }
+  ]
+}

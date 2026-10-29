@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "identity": ["traceId", "requestId", "correlationId", "causationId"],
+  "captures": ["request", "event", "workflow", "latency", "retry", "failure", "service-hop"],
+  "comparison": "expected-circuit-vs-observed-path",
+  "implementation": ["packages/tracing/src/index.mjs", "packages/architecture/src/index.mjs"],
+  "retention": "tenant-scoped-and-redacted"
+}

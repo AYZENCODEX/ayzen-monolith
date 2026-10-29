@@ -1,0 +1,1661 @@
+{
+ "schemaVersion": 1,
+ "phase": "MKT-01a",
+ "note": "Pinned static facts about the current Marketplace routes, defects included (MKT-ISSUE-6, MKT-ISSUE-7). Not proof of correctness.",
+ "files": {
+  "marketplace-alerts.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-analytics.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-azn.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {
+    "FEE_PCT": "azn"
+   },
+   "kernelMoneyCalls": [
+    "const fee = feeByFraction(cost, FEE_PCT);"
+   ],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [
+    "active",
+    "cancelled",
+    "sold"
+   ],
+   "debitGuards": {
+    "debits": 2,
+    "guarded": 1
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-bundles.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {
+    "PLATFORM_FEE_PCT": "bundle"
+   },
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [
+    "const perItemPrice = Number((bundle.bundle_price_azn / bundle.listing_ids.length).toFixed(4));"
+   ],
+   "statusLiterals": [
+    "active",
+    "cancelled",
+    "sold"
+   ],
+   "debitGuards": {
+    "debits": 1,
+    "guarded": 0
+   },
+   "lockOrderInFile": [
+    "LOCK:marketplace_bundles",
+    "LOCK:marketplace_listings",
+    "LOCK:credits"
+   ]
+  },
+  "marketplace-cart.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {
+    "PLATFORM_FEE_PCT": "cart"
+   },
+   "kernelMoneyCalls": [
+    "const feeAzn = feeRounded4(subtotal, PLATFORM_FEE_PCT);"
+   ],
+   "percentExpressions": [],
+   "roundingSites": [
+    "total_azn: Number((subtotal + feeAzn).toFixed(4)),",
+    "res.status(400).json({ error: `Insufficient AZN balance. Need ${total} AZN, have ${Number(buyerAzn).toFixed(2)} AZN` }); return;"
+   ],
+   "statusLiterals": [
+    "active"
+   ],
+   "debitGuards": {
+    "debits": 1,
+    "guarded": 0
+   },
+   "lockOrderInFile": [
+    "LOCK:marketplace_listings",
+    "LOCK:credits"
+   ]
+  },
+  "marketplace-coupons.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [
+    "? Number(((subtotal * coupon.discount_value) / 100).toFixed(4))",
+    "? Number(((subtotal * coupon.discount_value) / 100).toFixed(4))"
+   ],
+   "roundingSites": [
+    "? Number(((subtotal * coupon.discount_value) / 100).toFixed(4))",
+    "res.json({ valid: true, coupon: { code: coupon.code, discount_type: coupon.discount_type, discount_value: coupon.discount_value }, discount_azn: discount, total_after_discount_azn: Number((subtotal - discount).toFixed(4)) });",
+    "? Number(((subtotal * coupon.discount_value) / 100).toFixed(4))",
+    "res.json({ subtotal_azn: subtotal, discount_azn: discount, total_azn: Number((subtotal - discount).toFixed(4)) });"
+   ],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-discovery.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-game.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-market-config.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-nft.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {
+    "FEE_PCT": "nft"
+   },
+   "kernelMoneyCalls": [
+    "const fee = feeByFraction(Number(nft.price), FEE_PCT);"
+   ],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [
+    "active",
+    "sold"
+   ],
+   "debitGuards": {
+    "debits": 1,
+    "guarded": 1
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-offers.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {
+    "PLATFORM_FEE_PCT": "offer"
+   },
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [
+    "accepted",
+    "active",
+    "countered",
+    "pending",
+    "rejected",
+    "withdrawn"
+   ],
+   "debitGuards": {
+    "debits": 1,
+    "guarded": 0
+   },
+   "lockOrderInFile": [
+    "LOCK:marketplace_offers",
+    "LOCK:credits"
+   ]
+  },
+  "marketplace-reports.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-reviews.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-spot.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {
+    "FEE_PCT": "spot"
+   },
+   "kernelMoneyCalls": [
+    "const fee = feeByFraction(usdtAmt, FEE_PCT);"
+   ],
+   "percentExpressions": [
+    "const reward = matured ? Number(pos.amount) * (Number(pos.apy) / 100) * (daysHeld / 365) : 0;"
+   ],
+   "roundingSites": [
+    "if (avail < need) throw Object.assign(new Error(`Insufficient USDT. Need ${need.toFixed(4)}, have ${avail.toFixed(4)}`), { status: 400 });",
+    "if (avail < amtN) throw Object.assign(new Error(`Insufficient USDT. Have ${avail.toFixed(4)}`), { status: 400 });"
+   ],
+   "statusLiterals": [
+    "cancelled",
+    "open",
+    "partial_cancelled"
+   ],
+   "debitGuards": {
+    "debits": 2,
+    "guarded": 0
+   },
+   "lockOrderInFile": [
+    "LOCK:builtin_wallet_tokens",
+    "LOCK:marketplace_wallets",
+    "LOCK:spot_orders",
+    "LOCK:spot_orders",
+    "LOCK:marketplace_wallets",
+    "LOCK:builtin_wallet_tokens",
+    "LOCK:staking_pools"
+   ]
+  },
+  "marketplace-usdt.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {
+    "FEE_PCT": "usdt"
+   },
+   "kernelMoneyCalls": [
+    "const fee = feeByFraction(cost, FEE_PCT);"
+   ],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [
+    "active",
+    "cancelled",
+    "sold"
+   ],
+   "debitGuards": {
+    "debits": 2,
+    "guarded": 1
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-vault.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace-wallet.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 2,
+    "guarded": 2
+   },
+   "lockOrderInFile": []
+  },
+  "marketplace.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {
+    "PLATFORM_FEE_PCT": "p2p"
+   },
+   "kernelMoneyCalls": [
+    "const feeAzn = feeByProduct(order.price_azn, feePct);",
+    "const feeAzn = feeByProduct(order.price_azn, feePct);"
+   ],
+   "percentExpressions": [],
+   "roundingSites": [
+    "res.status(400).json({ error: `Insufficient AZN balance. Need ${listing.price_azn} AZN, have ${buyerAzn.toFixed(2)} AZN` }); return;",
+    "res.status(400).json({ error: `Buyer has insufficient AZN balance. Need ${effectivePrice}, has ${Number(buyerAzn).toFixed(2)}` });"
+   ],
+   "statusLiterals": [
+    "active",
+    "approved",
+    "cancelled",
+    "completed",
+    "disputed",
+    "rejected",
+    "sold"
+   ],
+   "debitGuards": {
+    "debits": 2,
+    "guarded": 0
+   },
+   "lockOrderInFile": [
+    "LOCK:marketplace_orders",
+    "LOCK:marketplace_orders"
+   ]
+  },
+  "polymarket.ts": {
+   "feeConstants": {},
+   "feePolicyBindings": {},
+   "kernelMoneyCalls": [],
+   "percentExpressions": [],
+   "roundingSites": [],
+   "statusLiterals": [],
+   "debitGuards": {
+    "debits": 0,
+    "guarded": 0
+   },
+   "lockOrderInFile": []
+  }
+ },
+ "routes": {
+  "POST /marketplace/azn/listings marketplace-azn.ts": {
+   "writes": [
+    "UPDATE marketplace_wallets",
+    "INSERT azn_listings"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/azn/buy marketplace-azn.ts": {
+   "writes": [
+    "UPDATE marketplace_wallets",
+    "UPDATE azn_listings",
+    "INSERT marketplace_transactions"
+   ],
+   "tx": [
+    "BEGIN",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {amount_bought,cost,fee,net,ok,payment_details,payment_method}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/azn/listings/:id marketplace-azn.ts": {
+   "writes": [
+    "UPDATE azn_listings",
+    "UPDATE marketplace_wallets"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {ok}",
+    "403 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/bundles marketplace-bundles.ts": {
+   "writes": [
+    "INSERT marketplace_bundles"
+   ],
+   "tx": [],
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/bundles/:id/buy marketplace-bundles.ts": {
+   "writes": [
+    "INSERT marketplace_orders",
+    "UPDATE credits",
+    "UPDATE marketplace_bundles"
+   ],
+   "tx": [
+    "BEGIN",
+    "LOCK:marketplace_bundles",
+    "ROLLBACK",
+    "ROLLBACK",
+    "LOCK:marketplace_listings",
+    "ROLLBACK",
+    "LOCK:credits",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "201 {message,orders,total_azn}",
+    "400 {error}",
+    "404 {error}",
+    "409 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/bundles/:id marketplace-bundles.ts": {
+   "writes": [
+    "UPDATE marketplace_bundles"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {ok}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/cart marketplace-cart.ts": {
+   "writes": [
+    "INSERT marketplace_cart_items"
+   ],
+   "tx": [],
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/cart/:id marketplace-cart.ts": {
+   "writes": [
+    "DELETE marketplace_cart_items"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {ok}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/cart marketplace-cart.ts": {
+   "writes": [
+    "DELETE marketplace_cart_items"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {ok}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/cart/checkout marketplace-cart.ts": {
+   "writes": [
+    "INSERT marketplace_orders",
+    "UPDATE credits",
+    "DELETE marketplace_cart_items"
+   ],
+   "tx": [
+    "BEGIN",
+    "LOCK:marketplace_listings",
+    "ROLLBACK",
+    "ROLLBACK",
+    "LOCK:credits",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "201 {message,orders,total_azn}",
+    "400 {error}",
+    "409 {error,issues}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/cart/:id/save-for-later marketplace-cart.ts": {
+   "writes": [
+    "UPDATE marketplace_cart_items"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/cart/saved/:id/move-to-cart marketplace-cart.ts": {
+   "writes": [
+    "UPDATE marketplace_cart_items"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /admin/marketplace/coupons marketplace-coupons.ts": {
+   "writes": [
+    "INSERT marketplace_coupons"
+   ],
+   "tx": [],
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "PATCH /admin/marketplace/coupons/:id marketplace-coupons.ts": {
+   "writes": [
+    "UPDATE marketplace_coupons"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /admin/marketplace/coupons/:id marketplace-coupons.ts": {
+   "writes": [
+    "DELETE marketplace_coupons"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {ok}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/nft/listings marketplace-nft.ts": {
+   "writes": [
+    "INSERT nft_market_listings"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/nft/buy marketplace-nft.ts": {
+   "writes": [
+    "UPDATE marketplace_wallets",
+    "UPDATE nft_market_listings",
+    "INSERT marketplace_transactions"
+   ],
+   "tx": [
+    "BEGIN",
+    "ROLLBACK",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {fee,net,nft_name,ok,price}",
+    "400 {error}",
+    "404 {error}",
+    "409 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/nft/listings/:id/like marketplace-nft.ts": {
+   "writes": [
+    "UPDATE nft_market_listings"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {liked,ok,total_likes}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/listings/:id/offers marketplace-offers.ts": {
+   "writes": [
+    "INSERT marketplace_offers"
+   ],
+   "tx": [],
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/offers/:id/accept marketplace-offers.ts": {
+   "writes": [
+    "INSERT marketplace_orders",
+    "UPDATE credits",
+    "UPDATE marketplace_offers"
+   ],
+   "tx": [
+    "BEGIN",
+    "LOCK:marketplace_offers",
+    "ROLLBACK",
+    "LOCK:credits",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {message,order}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/offers/:id/reject marketplace-offers.ts": {
+   "writes": [
+    "UPDATE marketplace_offers"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/offers/:id/counter marketplace-offers.ts": {
+   "writes": [
+    "UPDATE marketplace_offers"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/offers/:id marketplace-offers.ts": {
+   "writes": [
+    "UPDATE marketplace_offers"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {ok}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /spot/orders marketplace-spot.ts": {
+   "writes": [
+    "UPDATE builtin_wallet_tokens",
+    "UPDATE marketplace_wallets",
+    "INSERT spot_orders",
+    "UPDATE marketplace_wallets",
+    "INSERT marketplace_wallets",
+    "UPDATE builtin_wallet_tokens",
+    "INSERT builtin_wallet_tokens",
+    "UPDATE spot_orders",
+    "INSERT spot_trades",
+    "UPDATE builtin_wallet_tokens",
+    "UPDATE marketplace_wallets",
+    "UPDATE spot_orders"
+   ],
+   "tx": [
+    "BEGIN",
+    "LOCK:builtin_wallet_tokens",
+    "LOCK:marketplace_wallets",
+    "COMMIT",
+    "ROLLBACK",
+    "LOCK:spot_orders"
+   ],
+   "responses": [
+    "200 {fills,order}"
+   ]
+  },
+  "DELETE /spot/orders/:id marketplace-spot.ts": {
+   "writes": [
+    "UPDATE builtin_wallet_tokens",
+    "UPDATE marketplace_wallets",
+    "UPDATE spot_orders"
+   ],
+   "tx": [
+    "BEGIN",
+    "LOCK:spot_orders",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {ok}"
+   ]
+  },
+  "POST /spot/staking/stake marketplace-spot.ts": {
+   "writes": [
+    "UPDATE marketplace_wallets",
+    "UPDATE builtin_wallet_tokens",
+    "INSERT staking_positions"
+   ],
+   "tx": [
+    "BEGIN",
+    "LOCK:marketplace_wallets",
+    "LOCK:builtin_wallet_tokens",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 <non-object>"
+   ]
+  },
+  "POST /spot/staking/unstake/:id marketplace-spot.ts": {
+   "writes": [
+    "INSERT marketplace_wallets",
+    "INSERT builtin_wallet_tokens",
+    "UPDATE staking_positions"
+   ],
+   "tx": [
+    "BEGIN",
+    "LOCK:staking_pools",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {matured,ok,payout,reward}"
+   ]
+  },
+  "POST /marketplace/usdt/listings marketplace-usdt.ts": {
+   "writes": [
+    "UPDATE marketplace_wallets",
+    "INSERT usdt_listings"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/usdt/buy marketplace-usdt.ts": {
+   "writes": [
+    "UPDATE marketplace_wallets",
+    "UPDATE usdt_listings",
+    "INSERT marketplace_transactions"
+   ],
+   "tx": [
+    "BEGIN",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {amount_bought,cost,fee,net,ok,payment_details,payment_method}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/usdt/listings/:id marketplace-usdt.ts": {
+   "writes": [
+    "UPDATE usdt_listings",
+    "UPDATE marketplace_wallets"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {ok}",
+    "403 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/wallet/:type/deposit marketplace-wallet.ts": {
+   "writes": [
+    "UPDATE credits",
+    "UPDATE marketplace_wallets"
+   ],
+   "tx": [
+    "BEGIN",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {balance,deposited,ok}",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/wallet/:type/withdraw marketplace-wallet.ts": {
+   "writes": [
+    "UPDATE marketplace_wallets",
+    "INSERT credits"
+   ],
+   "tx": [
+    "BEGIN",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {ok,withdrawn}",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/listings marketplace.ts": {
+   "writes": [
+    "INSERT marketplace_listings",
+    "INSERT marketplace_activity_log"
+   ],
+   "tx": [],
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "404 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "PATCH /marketplace/listings/:id marketplace.ts": {
+   "writes": [
+    "UPDATE marketplace_listings"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "PUT /marketplace/listings/:id/platform-pricing marketplace.ts": {
+   "writes": [
+    "DELETE marketplace_listing_platform_pricing",
+    "INSERT marketplace_listing_platform_pricing"
+   ],
+   "tx": [
+    "BEGIN",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {listing_id,platform_pricing}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/listings/:id/platform-pricing/:platform marketplace.ts": {
+   "writes": [
+    "DELETE marketplace_listing_platform_pricing"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {ok}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/listings/:id marketplace.ts": {
+   "writes": [
+    "UPDATE marketplace_listings"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {ok}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/listings/:id/buy marketplace.ts": {
+   "writes": [
+    "INSERT marketplace_orders",
+    "UPDATE credits"
+   ],
+   "tx": [],
+   "responses": [
+    "201 {message,order}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/orders/:id/confirm marketplace.ts": {
+   "writes": [
+    "UPDATE marketplace_orders"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/orders/:id/dispute marketplace.ts": {
+   "writes": [
+    "UPDATE marketplace_orders"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "PATCH /admin/marketplace/orders/:id/resolve-dispute marketplace.ts": {
+   "writes": [
+    "UPDATE credits",
+    "UPDATE marketplace_orders",
+    "INSERT credits",
+    "UPDATE marketplace_orders"
+   ],
+   "tx": [
+    "BEGIN",
+    "LOCK:marketplace_orders",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {action,ok}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /admin/marketplace/orders marketplace.ts": {
+   "writes": [
+    "INSERT marketplace_orders",
+    "UPDATE credits"
+   ],
+   "tx": [],
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "PATCH /admin/marketplace/orders/:id marketplace.ts": {
+   "writes": [
+    "UPDATE credits",
+    "UPDATE marketplace_orders",
+    "INSERT credits",
+    "UPDATE marketplace_listings",
+    "UPDATE marketplace_orders",
+    "INSERT credit_transactions"
+   ],
+   "tx": [
+    "BEGIN",
+    "LOCK:marketplace_orders",
+    "ROLLBACK",
+    "COMMIT",
+    "ROLLBACK"
+   ],
+   "responses": [
+    "200 {action,ok}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ],
+   "unrolledEarlyReturns": [
+    "if (orderR.rows.length === 0) { res.status(404).json({ error: \"Order not found\" }); return; }"
+   ]
+  },
+  "PATCH /admin/marketplace/listings/:id/feature marketplace.ts": {
+   "writes": [
+    "UPDATE marketplace_listings"
+   ],
+   "tx": [],
+   "responses": [
+    "200 <non-object>",
+    "403 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/listings/:id/boost marketplace.ts": {
+   "writes": [
+    "UPDATE marketplace_listings",
+    "INSERT marketplace_activity_log"
+   ],
+   "tx": [],
+   "responses": [
+    "200 {creditsCharged,featuredUntil,listing,newCreditBalance,success}",
+    "400 {error}",
+    "402 {action,balance,code,cost,error,topUp}",
+    "403 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  }
+ },
+ "readOnlyRoutes": {
+  "POST /marketplace/alerts marketplace-alerts.ts": {
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/alerts marketplace-alerts.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "PATCH /marketplace/alerts/:id marketplace-alerts.ts": {
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/alerts/:id marketplace-alerts.ts": {
+   "responses": [
+    "200 {ok}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/saved-searches marketplace-alerts.ts": {
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/saved-searches marketplace-alerts.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/analytics/overview marketplace-analytics.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/analytics/revenue marketplace-analytics.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/analytics/top-listings marketplace-analytics.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/listings/:id/views marketplace-analytics.ts": {
+   "responses": [
+    "200 {listing_id,view_count}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/listings/:id/view marketplace-analytics.ts": {
+   "responses": [
+    "200 {view_count}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /admin/marketplace/analytics/platform marketplace-analytics.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/azn/listings marketplace-azn.ts": {
+   "responses": [
+    "200 {fee_pct,listings,total}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/azn/stats marketplace-azn.ts": {
+   "responses": [
+    "200 {active_buy_listings,active_sell_listings,available_azn,fee_pct,total_trades,total_volume}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/bundles marketplace-bundles.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/bundles/:id marketplace-bundles.ts": {
+   "responses": [
+    "200 {...bundle,listings}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/cart marketplace-cart.ts": {
+   "responses": [
+    "200 {count,fee_azn,fee_pct,items,subtotal_azn,total_azn}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/cart/count marketplace-cart.ts": {
+   "responses": [
+    "200 {count}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/cart/validate marketplace-cart.ts": {
+   "responses": [
+    "200 {issues,valid}",
+    "500 {error}"
+   ]
+  },
+  "GET /admin/marketplace/coupons marketplace-coupons.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/coupons/validate marketplace-coupons.ts": {
+   "responses": [
+    "200 {coupon,discount_azn,total_after_discount_azn,valid}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/cart/apply-coupon marketplace-coupons.ts": {
+   "responses": [
+    "200 {discount_azn,subtotal_azn,total_azn}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/listings/:id/similar marketplace-discovery.ts": {
+   "responses": [
+    "200 <non-object>",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/trending marketplace-discovery.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/categories marketplace-discovery.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/listings/featured marketplace-discovery.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/game/listings marketplace-game.ts": {
+   "responses": []
+  },
+  "POST /marketplace/game/listings marketplace-game.ts": {
+   "responses": []
+  },
+  "POST /marketplace/game/buy marketplace-game.ts": {
+   "responses": []
+  },
+  "DELETE /marketplace/game/listings/:id marketplace-game.ts": {
+   "responses": []
+  },
+  "GET /marketplace/game/stats marketplace-game.ts": {
+   "responses": []
+  },
+  "GET /admin/marketplace/market-config marketplace-market-config.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "PATCH /admin/marketplace/market-config/:marketType marketplace-market-config.ts": {
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/nft/listings marketplace-nft.ts": {
+   "responses": [
+    "200 {fee_pct,listings,total}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/nft/stats marketplace-nft.ts": {
+   "responses": [
+    "200 {active_listings,fee_pct,floor_price,rarity_breakdown,total_sales,total_volume}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/listings/:id/offers marketplace-offers.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/offers/my marketplace-offers.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/offers/received marketplace-offers.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/listings/:id/report marketplace-reports.ts": {
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /admin/marketplace/reports marketplace-reports.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "PATCH /admin/marketplace/reports/:id marketplace-reports.ts": {
+   "responses": [
+    "200 {action,ok}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/reports/my marketplace-reports.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/sellers/:id/report marketplace-reports.ts": {
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/orders/:id/review marketplace-reviews.ts": {
+   "responses": [
+    "201 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/sellers/:id/reviews marketplace-reviews.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/sellers/:id/rating marketplace-reviews.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "PATCH /marketplace/reviews/:id marketplace-reviews.ts": {
+   "responses": [
+    "200 <non-object>",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/reviews/:id marketplace-reviews.ts": {
+   "responses": [
+    "200 {ok}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/reviews/:id/response marketplace-reviews.ts": {
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/reviews/my marketplace-reviews.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /spot/pairs marketplace-spot.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /spot/orderbook/:pair marketplace-spot.ts": {
+   "responses": [
+    "200 {asks,bids,pair}"
+   ]
+  },
+  "GET /spot/trades/:pair marketplace-spot.ts": {
+   "responses": [
+    "200 <non-object>"
+   ]
+  },
+  "GET /spot/candles/:pair marketplace-spot.ts": {
+   "responses": [
+    "200 <non-object>"
+   ]
+  },
+  "GET /spot/balances marketplace-spot.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /spot/orders marketplace-spot.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /spot/staking/pools marketplace-spot.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /spot/staking/positions marketplace-spot.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/usdt/listings marketplace-usdt.ts": {
+   "responses": [
+    "200 {fee_pct,listings,total}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/usdt/stats marketplace-usdt.ts": {
+   "responses": [
+    "200 {active_buy_listings,active_sell_listings,available_usdt,fee_pct,total_trades,total_volume}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/vault/listings marketplace-vault.ts": {
+   "responses": []
+  },
+  "POST /marketplace/vault/listings marketplace-vault.ts": {
+   "responses": []
+  },
+  "POST /marketplace/vault/buy marketplace-vault.ts": {
+   "responses": []
+  },
+  "DELETE /marketplace/vault/listings/:id marketplace-vault.ts": {
+   "responses": []
+  },
+  "GET /marketplace/vault/stats marketplace-vault.ts": {
+   "responses": []
+  },
+  "GET /marketplace/wallet marketplace-wallet.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/wallet/transactions marketplace-wallet.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/wallet/summary marketplace-wallet.ts": {
+   "responses": [
+    "200 {total_balance,total_earned,trades,wallets}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/settings marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "200 {enabled,fee_pct}"
+   ]
+  },
+  "PATCH /marketplace/settings marketplace.ts": {
+   "responses": [
+    "200 {ok}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/listings marketplace.ts": {
+   "responses": [
+    "200 {listings,total}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/listings/:id marketplace.ts": {
+   "responses": [
+    "200 {...r.listing,platform_pricing}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/my-listings marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/orders/my marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/orders/sales marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/orders/:id marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/orders/tab/:tab marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/orders/sales/tab/:tab marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /admin/marketplace/orders/disputed marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /admin/marketplace/orders marketplace.ts": {
+   "responses": [
+    "200 {orders,total}",
+    "500 {error}"
+   ]
+  },
+  "GET /admin/marketplace/orders/:id marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "PATCH /admin/marketplace/orders/:id/edit marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /admin/marketplace/listings marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/vault-items marketplace.ts": {
+   "responses": [
+    "200 {entities,local_accounts}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/favorites marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "POST /marketplace/listings/:id/favorite marketplace.ts": {
+   "responses": [
+    "201 <non-object>",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "DELETE /marketplace/listings/:id/favorite marketplace.ts": {
+   "responses": [
+    "200 {ok}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/search marketplace.ts": {
+   "responses": [
+    "200 {count,listings}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/listings/:id/history marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /admin/marketplace/activity marketplace.ts": {
+   "responses": [
+    "200 {entries,total}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/orders/:id/receipt marketplace.ts": {
+   "responses": [
+    "200 {...r.rows,generated_at,receipt_id}",
+    "404 {error}",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/stats marketplace.ts": {
+   "responses": [
+    "200 <non-object>",
+    "500 {error}"
+   ]
+  },
+  "GET /marketplace/azn/chart marketplace.ts": {
+   "responses": [
+    "200 {azn_per_usd,base_usd,data}",
+    "500 {error}"
+   ]
+  },
+  "GET /polymarket/markets polymarket.ts": {
+   "responses": [
+    "200 {markets}",
+    "502 {error}"
+   ]
+  },
+  "GET /polymarket/markets/:id polymarket.ts": {
+   "responses": [
+    "200 {market,noTokenId,yesTokenId}",
+    "404 {error}",
+    "502 {error}"
+   ]
+  },
+  "GET /polymarket/balance polymarket.ts": {
+   "responses": [
+    "200 <non-object>",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}",
+    "502 {error}"
+   ]
+  },
+  "GET /polymarket/trades polymarket.ts": {
+   "responses": [
+    "200 {trades}"
+   ]
+  },
+  "POST /polymarket/trade polymarket.ts": {
+   "responses": [
+    "200 {orderId,success,trade}",
+    "400 {error}",
+    "404 {error}",
+    "500 {error}",
+    "502 {error,trade}"
+   ]
+  }
+ },
+ "realFloatColumns": [
+  "azn_listings.amount",
+  "azn_listings.min_buy",
+  "azn_listings.price_per_unit",
+  "azn_listings.total_price",
+  "marketplace_activity_log.amount_azn",
+  "marketplace_alerts.max_price_azn",
+  "marketplace_bundles.bundle_price_azn",
+  "marketplace_cart_items.price_azn",
+  "marketplace_coupons.discount_value",
+  "marketplace_coupons.min_purchase_azn",
+  "marketplace_listing_platform_pricing.price_azn",
+  "marketplace_listings.price_azn",
+  "marketplace_market_configs.fee_pct",
+  "marketplace_offers.counter_price_azn",
+  "marketplace_offers.offer_price_azn",
+  "marketplace_orders.fee_azn",
+  "marketplace_orders.fee_pct",
+  "marketplace_orders.price_azn",
+  "marketplace_orders.seller_receives",
+  "marketplace_settings.fee_pct",
+  "marketplace_transactions.amount",
+  "marketplace_transactions.fee",
+  "marketplace_transactions.net_amount",
+  "marketplace_wallets.balance",
+  "marketplace_wallets.locked_balance",
+  "nft_market_listings.price",
+  "polymarket_trades.price",
+  "polymarket_trades.size_usdc",
+  "spot_orders.filled_qty",
+  "spot_orders.price",
+  "spot_orders.qty",
+  "spot_trades.price",
+  "spot_trades.qty",
+  "staking_pools.apy",
+  "staking_pools.min_amount",
+  "staking_positions.amount",
+  "staking_positions.apy",
+  "staking_positions.reward_paid",
+  "usdt_listings.amount",
+  "usdt_listings.min_buy",
+  "usdt_listings.price_per_unit",
+  "usdt_listings.total_price"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "automaticActions": [
+    {"action": "restart-unhealthy-workload", "scope": "staging-or-approved-production", "requires": ["health-failure", "audit"]},
+    {"action": "retry-transient-event", "scope": "all", "requires": ["retryable-error", "bounded-attempts"]},
+    {"action": "retry-transient-workflow", "scope": "all", "requires": ["retryable-error", "idempotency-key"]},
+    {"action": "create-technical-gap", "scope": "all", "requires": ["evidence", "deduplication-key"]},
+    {"action": "pause-route", "scope": "approved-production", "requires": ["incident", "admin-approval"]}
+  ],
+  "forbiddenAutomaticActions": ["delete-production-data", "restore-production-backup", "rotate-unknown-secret", "promote-unapproved-artifact"],
+  "rules": {
+    "allowlistOnly": true,
+    "everyActionAudited": true,
+    "reAuditAfterAction": true
+  }
+}

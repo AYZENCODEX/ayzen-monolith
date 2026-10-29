@@ -1,0 +1,9 @@
+pnpm antas:baseline
+pnpm antas:subphases
+node scripts/antas/verify-toolchain.mjs
+node scripts/validate-domain-boundaries.mjs
+node scripts/backup-restore-check.mjs
+node scripts/antas/security/test-identity-controls.mjs
+node scripts/antas/security/test-ssrf-policy.mjs
+node scripts/antas/finance/reconcile.mjs
+node scripts/antas/maintainability.mjs

@@ -1,0 +1,611 @@
+{
+  "phase": "VLT-GAP-02",
+  "sub_phase": "VLT-GAP-02-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "75275a30a699f7482fc7f1c024e2dd2a84c11b9c34cbc6e1c5e7e4ba61066ee3",
+  "validator_version": "1.0.0",
+  "validator_sha256": "a51059099be8c41fd9ef6f681b2598b189a1ec78efc516ed77c2d5161f9d8ce2",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/local-accounts.ts": "31cc99b5beaa534b284f9a4b1ead209bbd3a34e890425d2aa8c8f0a57548c963",
+    "artifacts/ayzen/src/components/local-accounts.tsx": "dcec1d3b042320bf02b0ce034f48c2f208d6ffaee15bd9cb2e8907c4825e6fac",
+    "artifacts/ayzen/src/config/fields/local-account-create.ts": "1ff35082271661214838526b54c2068b1f45cd21cb752b223564b154ca811e5a",
+    "artifacts/ayzen/src/config/fields/local-account-buy.ts": "5a1b8637ac2ba872ee1e858fb036c9d207460a73c581563aee8d7ef0216773cb",
+    "artifacts/api-server/src/vault/domain/local-account.ts": "7ecd2b66e23880a841fa50162fc32985e479096866db9a170c3a011ab9e82bbf",
+    "artifacts/api-server/src/vault/domain/local-account-values.ts": "3963033b26d175417cfcc355e4ffce24993de88c71e943af78c55ce2e173ff76",
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts": "be5dfd065857a55370c139e69b46f9836f8ab2b3d0f4d91d5e36415a0c6c704b",
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts": "bcb8cff17e632716682a24f1002c3f8f4dd805ed04a7925a0e1fd815d36aa8c8",
+    "artifacts/api-server/src/vault/application/local-account/bridge.ts": "1ab2d0574939de6162eccfbf78ef50deb191760d2d2ad7a1e7bdc160bb61ff41",
+    "artifacts/api-server/src/vault/application/local-account/bulk.ts": "4deeb19d31a03fc966e4be05c65f6ff2b515f3ba47c6ff55e4d6b8729ed0398f",
+    "artifacts/api-server/src/vault/application/local-account/receipt.ts": "a7a11f335dc8d93ca9c23e78dda1ab563362a4424157c2a197995f9e1bed47e8",
+    "artifacts/api-server/src/vault/application/local-account/value.ts": "147cdbf41162308df32933ea41139761fcab29354b2e61d4c586d46b1698ea03",
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts": "4e0b065ccd5de6d0595285b77a2eb8ea1eee368fe77729598bfe92e7829f982b",
+    "artifacts/api-server/src/vault/infrastructure/repositories/local-account-consumer-repository.ts": "5614889976d78a933e1a2e4cb0e88c8b9544d129efcca293521f5f8683e01be0",
+    "artifacts/api-server/src/routes/index.ts": "d8db8b5357ab4a6216b5ac6d080fcbc9d41495ca553f1a306e140ab7d19b5619",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/freeze-vlt-gap-02-D-baseline.mjs": "13979343099305c17bb071cf071abea5b1d8002eed51c658578a428096528026",
+    "reports/antas/vault/gap/VLT-GAP-02/baseline-02d/SEAL.json": "c2e97bdbbfb26d573b0fcc7f159899e2b727326abed946a0c3104c6a7a16f6c2",
+    "reports/antas/vault/gap/VLT-GAP-02/baseline-02d/tree-manifest.json": "29ad7dafdecb75124fd454ea32190ec4ef0928f2350b2f8b52a1e259e10a8f5a",
+    "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__api-server__src__routes__local-accounts.ts": "476a564b98a0ee8416f4415db1a857fed54080eadee4c28f0916e58a309ef7a7",
+    "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__ayzen__src__components__local-accounts.tsx": "dcec1d3b042320bf02b0ce034f48c2f208d6ffaee15bd9cb2e8907c4825e6fac",
+    "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__ayzen__src__config__fields__local-account-create.ts": "1ff35082271661214838526b54c2068b1f45cd21cb752b223564b154ca811e5a",
+    "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__ayzen__src__config__fields__local-account-buy.ts": "5a1b8637ac2ba872ee1e858fb036c9d207460a73c581563aee8d7ef0216773cb"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-02-C.mjs (in place)",
+    "node scripts/antas/vault/gap/validate-vlt-gap-02-B.mjs (temp copy of the current tree)",
+    "in-process AST retirement gate / duplicate scan / layering / frontend classification",
+    "in-process mutation self-tests",
+    "child-process bypass attempts against this validator"
+  ],
+  "exit_codes": {
+    "02-C": 0,
+    "02-B(temp)": 1,
+    "retirement_gate": 0,
+    "mutation_self_tests": 0,
+    "bypass_attempts": 0,
+    "typecheck_degraded": 0
+  },
+  "baseline": {
+    "mode": "write-once seal (verified, never written by this validator)",
+    "seal_file": "reports/antas/vault/gap/VLT-GAP-02/baseline-02d/SEAL.json",
+    "sealed_at": "2026-09-30T05:04:02.657Z",
+    "certified_by": {
+      "sub_phase": "VLT-GAP-02-C",
+      "source_tree_sha256": "bb5f56676e35196ae1025a26217841957d007e1f076528351f890cf707f05262",
+      "commit_sha": null,
+      "validator_sha256": "1f1df1e80eee29f3e57f117bb054bcd5f477fa287250ae35f9f37b742079ce59"
+    }
+  },
+  "symbols_moved": [
+    "artifacts/api-server/src/routes/local-accounts.ts#generateReceiptToken",
+    "artifacts/api-server/src/routes/local-accounts.ts#receiptUrl",
+    "artifacts/api-server/src/routes/local-accounts.ts#safe",
+    "artifacts/api-server/src/routes/local-accounts.ts#safeNum",
+    "artifacts/api-server/src/routes/local-accounts.ts#safeDate",
+    "artifacts/api-server/src/routes/local-accounts.ts#safeScore",
+    "artifacts/api-server/src/routes/local-accounts.ts#LOCAL_ACCOUNT_OWNER_SENTINEL_NONE",
+    "artifacts/api-server/src/routes/local-accounts.ts#localAccountResource",
+    "artifacts/api-server/src/routes/local-accounts.ts#requireLocalAccountOwnership",
+    "artifacts/api-server/src/routes/local-accounts.ts#denyNotFoundOrForbidden",
+    "artifacts/api-server/src/routes/local-accounts.ts#denyNotFound",
+    "artifacts/api-server/src/routes/local-accounts.ts#denyAccountNotFound",
+    "artifacts/api-server/src/routes/local-accounts.ts#denySilentSuccess",
+    "artifacts/api-server/src/routes/local-accounts.ts#denyEmptyPoints",
+    "artifacts/api-server/src/routes/local-accounts.ts#LOCAL_ACCOUNT_CATEGORY_OWNER_SENTINEL_NONE",
+    "artifacts/api-server/src/routes/local-accounts.ts#localAccountCategoryResource",
+    "artifacts/api-server/src/routes/local-accounts.ts#requireLocalAccountCategoryOwnership",
+    "artifacts/api-server/src/routes/local-accounts.ts#LOCAL_ACCOUNT_POINT_OWNER_SENTINEL_NONE",
+    "artifacts/api-server/src/routes/local-accounts.ts#localAccountPointResource",
+    "artifacts/api-server/src/routes/local-accounts.ts#requireLocalAccountPointOwnership",
+    "artifacts/api-server/src/routes/local-accounts.ts#calcAgeLabel",
+    "artifacts/api-server/src/routes/local-accounts.ts#calcRoiPct",
+    "artifacts/api-server/src/routes/local-accounts.ts#fmtPublicLocalReceipt",
+    "artifacts/api-server/src/routes/local-accounts.ts#findLocalAccountByReceiptToken",
+    "artifacts/api-server/src/routes/local-accounts.ts#generateCategoryReceiptToken",
+    "artifacts/api-server/src/routes/local-accounts.ts#categoryReceiptUrl",
+    "artifacts/api-server/src/routes/local-accounts.ts#ageInDays",
+    "artifacts/api-server/src/routes/local-accounts.ts#fmtAvgAgeLabel",
+    "artifacts/api-server/src/routes/local-accounts.ts#computeCategoryAggregate",
+    "artifacts/api-server/src/routes/local-accounts.ts#findCategoryReceiptByToken",
+    "artifacts/api-server/src/routes/local-accounts.ts#fmtPublicCategoryReceipt"
+  ],
+  "consumers_migrated": [
+    "routes/value-history.ts",
+    "routes/vault.ts",
+    "routes/bulk.ts"
+  ],
+  "old_business_symbols_remaining": [],
+  "duplicate_implementations": [],
+  "disposition_summary": {
+    "ADAPTER_WIRING": 2,
+    "MOVED_VERBATIM": 28,
+    "ADAPTER_THIN": 23,
+    "MOVED_REFACTORED_WITH_UNIT_PROOF": 3
+  },
+  "module_status": {
+    "routes/local-accounts.ts": "ADAPTER",
+    "vault/{domain,security,application,infrastructure}/local-account*": "MIGRATED",
+    "components/local-accounts.tsx + config/fields/local-account-*.ts": "DISCOVERED (UI adapter / declarative config; display helpers deferred to VLT-GAP-16)",
+    "promotion_ceiling": "VERIFIED/RETIRED are withheld: GAP-15 (behavioral equivalence), GAP-16 (duplicate elimination) and GAP-17 (migration-map truth) have not run; the old route is retained as the public HTTP adapter, so it is ADAPTER, not RETIRED.",
+    "assigned_by": "validator (this run), not manually"
+  },
+  "frontend": {
+    "files": [
+      {
+        "file": "artifacts/ayzen/src/components/local-accounts.tsx",
+        "disposition": "UI_ADAPTER_WITH_DEFERRED_DISPLAY_CALC"
+      },
+      {
+        "file": "artifacts/ayzen/src/config/fields/local-account-create.ts",
+        "disposition": "DECLARATIVE_CONFIG"
+      },
+      {
+        "file": "artifacts/ayzen/src/config/fields/local-account-buy.ts",
+        "disposition": "DECLARATIVE_CONFIG"
+      }
+    ],
+    "residual_business_logic_deferred": [
+      {
+        "symbols": [
+          "calcAge",
+          "calcROI"
+        ],
+        "deferred_to": "VLT-GAP-16",
+        "reason": "calcAge/calcROI are display formatters copy-pasted across the frontend (component + local/KYC pages); removing one copy would not retire anything, and the frontend has no shared owner module. GAP-16 finds and removes duplicate account/KYC logic repo-wide."
+      }
+    ]
+  },
+  "deferred_consumers_from_02C": [
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "deferred_to": "VLT-GAP-11"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "deferred_to": "VLT-GAP-09"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "deferred_to": "VLT-GAP-04"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/search.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/sync.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/two-factor.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "deferred_to": "VLT-GAP-09"
+    },
+    {
+      "file": "artifacts/api-server/src/services/sync.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "scripts/src/reencrypt-vault.ts",
+      "deferred_to": "VLT-GAP-07"
+    }
+  ],
+  "summary": {
+    "old_route_thin_handlers": 23,
+    "old_route_total_handlers": 23,
+    "route_db_refs_before": 62,
+    "route_db_refs_after": 0,
+    "old_route_lines_before": 797,
+    "old_route_lines_after": 174,
+    "use_cases_verified": 21,
+    "differential_cases_02B": 115,
+    "mutation_self_tests": 36,
+    "mutation_self_tests_passed": 36,
+    "bypass_attempts_rejected": 7
+  },
+  "limitations": [
+    "Full tsc/build was NOT executed: project dependencies are not installed in the upload; a differential typecheck against the sealed baseline route is used and recorded as degraded.",
+    "No git repository is present in the upload; evidence is bound to a source-tree hash instead of a commit SHA (commit_sha is null).",
+    "Behavioral equivalence runs against stubbed DB/provider/event layers, not a live database.",
+    "components/local-accounts.tsx still contains calcAge/calcROI display formatters duplicated across the frontend; they are named and deferred to VLT-GAP-16 (duplicate elimination), not retired here.",
+    "02-A cannot be re-executed on the extracted tree (it regenerates its own baseline and censuses the pre-extraction route); its census is instead cross-checked line-by-line against an independent scan of the sealed baseline."
+  ],
+  "companion_evidence_sha256": {
+    "old-source-fingerprint.json": "026bc835d45763f3c76fc47a13c9eb81892f61c423f5604e954024bb3c365965",
+    "new-source-fingerprint.json": "699c43623d0850b1186f7eb37c2476502dd25e4ff4f2e9d3da41147864341b08",
+    "route-thinness.json": "35f7f481985679da41d3e5a985177e5d2cde949f04b84658db858ceda80d3437",
+    "duplicate-implementation.json": "e31b3a4cb06437ed6b8a9cba97833e5e667f24536dcb489d8ef323e4ed5822ad",
+    "behavior-regression.json": "d0caafacee63039997eca7eb187bbf11c65b4edba8aa0516347f0110ad1a3182",
+    "security-regression.json": "14a59db4f6d74d81b04b9f38188aceb9c8cd285ff4aa600b3b4b19d7f2c82d52"
+  },
+  "checks": [
+    {
+      "name": "prerequisite:02-C-executed-and-passed (consumer rewire, differential vs sealed 02-B consumers, mutation tests, CI lint)",
+      "passed": true,
+      "details": "VLT-GAP-02-C PASS — consumers=3 census=18 deferred=14 diff-cases=36 security=4 mutations=14/14 (13306ms)\n"
+    },
+    {
+      "name": "prerequisite:02-C-census-has-no-unclassified-table-access",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "prerequisite:02-C-deferrals-all-name-a-later-gap",
+      "passed": true,
+      "details": "VLT-GAP-12,VLT-GAP-12,VLT-GAP-11,VLT-GAP-09,VLT-GAP-04,VLT-GAP-12,VLT-GAP-12,VLT-GAP-12,VLT-GAP-12,VLT-GAP-12,VLT-GAP-09,VLT-GAP-12,VLT-GAP-12,VLT-GAP-07"
+    },
+    {
+      "name": "prerequisite:02-B-executed-in-temp-copy-and-produced-evidence",
+      "passed": true,
+      "details": "api-server/src/routes/vault.ts, scripts/src/check-ownership-gate-coverage.ts, artifacts/api-server/src/vault/application/local-account/bridge.ts, artifacts/api-server/src/vault/application/local-acco\n"
+    },
+    {
+      "name": "prerequisite:02-B-every-failing-check-is-a-named-02-C-supersession",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "prerequisite:02-B-differential-115-cases-all-identical (old baseline route vs current route, no skips)",
+      "passed": true,
+      "details": "{\"differential_cases\":115,\"differential_passed\":115,\"security_checks\":14,\"security_passed\":13,\"unit_parity\":16,\"unit_passed\":16,\"mutation_tests\":11,\"mutation_detected\":11}"
+    },
+    {
+      "name": "prerequisite:02-B-unit-parity-and-mutation-suites-complete",
+      "passed": true,
+      "details": "{\"differential_cases\":115,\"differential_passed\":115,\"security_checks\":14,\"security_passed\":13,\"unit_parity\":16,\"unit_passed\":16,\"mutation_tests\":11,\"mutation_detected\":11}"
+    },
+    {
+      "name": "prerequisite:02-B-security-only-superseded-check-failed",
+      "passed": true,
+      "details": "13/14"
+    },
+    {
+      "name": "seal:tree-manifest-hash-matches-seal",
+      "passed": true,
+      "details": "tree-manifest.json edited after sealing"
+    },
+    {
+      "name": "seal:certified-by-02C-and-bound-to-fresh-02C-run",
+      "passed": true,
+      "details": "seal=bb5f56676e35 fresh-02C=bb5f56676e35"
+    },
+    {
+      "name": "seal:earlier-validators-and-harness-byte-identical-since-freeze",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:no-unexpected-new-validator-scripts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:no-change-since-02C-seal (application source, frontend, configs, manifests all byte-identical)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:every-02A-pre-extraction-route-symbol-is-in-the-independent-scan",
+      "passed": true,
+      "details": "02-A records not found by this scan (by line): "
+    },
+    {
+      "name": "census:scan-found-no-baseline-symbol-outside-the-02A-inventory",
+      "passed": true,
+      "details": "extra lines: "
+    },
+    {
+      "name": "retirement:every-baseline-symbol-has-a-proven-disposition",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:no-business-symbol-remains-authoritative-in-old-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:all-23-route-handlers-are-thin-adapters",
+      "passed": true,
+      "details": "23/23 thin"
+    },
+    {
+      "name": "retirement:route-census-equals-baseline (no route added or dropped)",
+      "passed": true,
+      "details": "23 vs 23"
+    },
+    {
+      "name": "retirement:route-table-order-and-middleware-chains-identical-to-baseline",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:old-route-has-zero-db-sql-crypto (measured)",
+      "passed": true,
+      "details": "{\"baseline_lines\":797,\"current_lines\":174,\"baseline_tokens\":7410,\"current_tokens\":1660,\"baseline_db_refs\":62,\"current_db_refs\":0,\"baseline_sql_literals\":28,\"current_sql_literals\":0}"
+    },
+    {
+      "name": "retirement:old-route-only-imports-adapter-dependencies",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "compat:reexport-removed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:ownership-gates-are-imported-from-vault-security (no local or legacy copy)",
+      "passed": true,
+      "details": "[{\"gate\":\"requireLocalAccountOwnership\",\"imported_from\":\"../vault/security/local-account-ownership\",\"exported_by_owner\":true},{\"gate\":\"requireLocalAccountCategoryOwnership\",\"imported_from\":\"../vault/security/local-account-ownership\",\"exported_by_owner\":true},{\"gate\":\"requireLocalAccountPointOwnership\",\"imported_from\":\"../vault/security/local-account-ownership\",\"exported_by_owner\":true}]"
+    },
+    {
+      "name": "retirement:every-delegate-target-is-an-exported-executable-use-case",
+      "passed": true,
+      "details": "21 use-cases"
+    },
+    {
+      "name": "retirement:every-refactored-move-has-executed-unit-proof",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "imports:no-hidden-import-keeps-old-code-authoritative",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "duplicates:no-copy-of-extracted-implementation-added-outside-owner",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-moved-sql-added-outside-repositories",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-baseline-implementation-survives-in-old-route",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-two-owner-modules-implement-the-same-function",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:fingerprint-corpus-is-non-trivial",
+      "passed": true,
+      "details": "50 baseline / 90 owner fingerprints"
+    },
+    {
+      "name": "layering:owner-modules-do-not-reach-the-API-layer-or-bypass-repositories",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "frontend:files-classified-unchanged-and-free-of-db-sql-provider-crypto",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "frontend:every-component-api-call-resolves-to-a-registered-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "frontend:display-helper-deferral-to-GAP-16-is-current",
+      "passed": true,
+      "details": "{\"calcAge\":[{\"file\":\"artifacts/ayzen/src/components/local-accounts.tsx\",\"fingerprint\":\"e830746775f907bd\",\"lines\":[80,90]},{\"file\":\"artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx\",\"fingerprint\":\"67ff825341cb193c\",\"lines\":[86,95]},{\"file\":\"artifacts/ayzen/src/pages/user/vault-local-detail.tsx\",\"fingerprint\":\"2e352989ab99992f\",\"lines\":[65,74]}],\"calcROI\":[{\"file\":\"artifacts/ayzen/src/components/local-accounts.tsx\",\"fingerprint\":\"7f78d561bb3990fc\",\"lines\":[92,95]},{\"file\":\"artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx\",\"fingerprint\":\"79d705d980371d91\",\"lines\":[28,31]},{\"file\":\"artifacts/ayzen/src/pages/user/vault-local-dashboard.tsx\",\"fingerprint\":\"79d705d980371d91\",\"lines\":[41,44]},{\"file\":\"artifacts/ayzen/src/pages/user/vault-local-detail.tsx\",\"fingerprint\":\"7f78d561bb3990fc\",\"lines\":[76,79]}]}"
+    },
+    {
+      "name": "typecheck:no-syntax-errors-in-route-or-owner-files",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-real-class-diagnostics-vs-baseline-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-query-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:decision-tree-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-d",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-import-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-e",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-ownership-middleware-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:route-reorder-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:compat-reexport-restored-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-h",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:hidden-import-of-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dynamic-import-of-old-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-copy-outside-vault-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-k",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:moved-sql-pasted-outside-repository-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-routes-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:sql-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:provider-call-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unknown-endpoint-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:display-calc-feeding-request-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:logic-in-declarative-config-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:tampered-seal-manifest-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:stale-deferral-is-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-p",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-p2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ownership-gate-from-wrong-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:domain-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:infrastructure-importing-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:express-runtime-import-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:req-res-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:coverage-at-least-30-mutations-executed",
+      "passed": true,
+      "details": "36"
+    },
+    {
+      "name": "bypass:every-bypass-attempt-is-rejected-by-the-validator-itself",
+      "passed": true,
+      "details": "[]"
+    }
+  ],
+  "status": "PASS",
+  "evidence_body_sha256": "8e8cff075e04c5f82d6bd1aa1ccd7beae55cacabd3d249ab3f9764167ae694c8",
+  "generated_at": "2026-09-30T05:07:42.440Z"
+}

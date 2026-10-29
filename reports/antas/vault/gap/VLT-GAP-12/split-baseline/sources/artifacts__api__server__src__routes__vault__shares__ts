@@ -1,0 +1,522 @@
+import { Router } from "express";
+import { db } from "@workspace/db";
+import { sql } from "drizzle-orm";
+import { requireAuth } from "../middlewares/auth";
+import { decryptRow } from "../vault/crypto/field-encryption";
+import { createNotification } from "./notifications";
+import { publishAyzenDomainEvent } from "../lib/mega-engine/domain-events";
+import { ENTITY_TABLES, VALID_TYPES, isValidType, notTrashedClause, safe, type FieldPermissionMap } from "../vault/application/share/entity-types";
+import { filterToAllowedFields, parseFieldPermissions, shareableColumns } from "../vault/application/share/field-permissions";
+import { auditVaultShareBulkOwnership, auditVaultShareCreateOwnership, denyVaultShareNotFound, requireVaultShareOwnership } from "../vault/security/share-ownership";
+
+const router = Router();
+
+// ─── POST /vault-shares — share an owned entity with another user ─────────
+// body: { entityType, entityId, username, permission? ('view'|'edit') }
+router.post("/vault-shares", requireAuth, async (req, res): Promise<void> => {
+  const userId = req.user!.userId;
+  const { entityType, entityId, username, permission = "view", fieldPermissions } = req.body;
+
+  if (!isValidType(entityType)) { res.status(400).json({ error: `entityType must be one of: ${VALID_TYPES.join(", ")}` }); return; }
+  const id = parseInt(entityId, 10);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid entityId" }); return; }
+  if (!username || typeof username !== "string" || !username.trim()) { res.status(400).json({ error: "username is required" }); return; }
+  if (!["view", "edit"].includes(permission)) { res.status(400).json({ error: "permission must be 'view' or 'edit'" }); return; }
+
+  const cfg = ENTITY_TABLES[entityType];
+
+  let parsedFieldPermissions: FieldPermissionMap | null;
+  try {
+    parsedFieldPermissions = await parseFieldPermissions(entityType, fieldPermissions);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message }); return;
+  }
+
+  try {
+    // Must own the entity to share it — ownership itself is never touched below.
+    const ownedCheck = await db.execute(sql.raw(
+      `SELECT id FROM ${cfg.table} WHERE id = ${id} AND user_id = ${userId}${notTrashedClause(cfg)}`
+    ));
+    if (!ownedCheck.rows.length) { res.status(404).json({ error: "Entity not found, not owned by you, or in trash" }); return; }
+
+    const targetResult = await db.execute(sql.raw(
+      `SELECT id, username FROM users WHERE username = ${safe(username.trim())} OR email = ${safe(username.trim())}`
+    ));
+    const target = targetResult.rows[0] as any;
+    if (!target) { res.status(404).json({ error: "User not found" }); return; }
+    if (Number(target.id) === userId) { res.status(400).json({ error: "You already own this — can't share with yourself" }); return; }
+
+    const fieldPermsSql = safe(parsedFieldPermissions ? JSON.stringify(parsedFieldPermissions) : null);
+    const result = await db.execute(sql.raw(`
+      INSERT INTO vault_shares (entity_type, entity_id, owner_id, shared_with_user_id, permission, field_permissions, is_active, revoked_at)
+      VALUES (${safe(entityType)}, ${id}, ${userId}, ${Number(target.id)}, ${safe(permission)}, ${fieldPermsSql}, TRUE, NULL)
+      ON CONFLICT (entity_type, entity_id, shared_with_user_id)
+      DO UPDATE SET permission = ${safe(permission)}, field_permissions = ${fieldPermsSql}, is_active = TRUE, revoked_at = NULL, updated_at = NOW()
+      RETURNING *
+    `));
+
+    const share = result.rows[0] as any;
+    void publishAyzenDomainEvent({
+      type: "vault.share.created",
+      actorUserId: userId,
+      aggregate: { type: "vault_share", id: String(share.id) },
+      payload: {
+        shareId: Number(share.id),
+        entityType: String(entityType),
+        entityId: id,
+        sharedWithUserId: Number(target.id),
+        permission: String(permission),
+      },
+    }).catch(() => {});
+
+    createNotification(
+      Number(target.id),
+      "vault_share",
+      "New vault item shared with you",
+      `Someone shared a ${entityType} vault item with you (${parsedFieldPermissions ? `${Object.keys(parsedFieldPermissions).length} field(s)` : permission} access).`,
+      { entityType, entityId: id, shareId: share.id }
+    ).catch(() => {});
+
+    res.status(201).json({
+      id: share.id,
+      entityType: share.entity_type,
+      entityId: share.entity_id,
+      ownerId: share.owner_id,
+      sharedWithUserId: share.shared_with_user_id,
+      sharedWithUsername: target.username,
+      permission: share.permission,
+      fieldPermissions: parsedFieldPermissions,
+      isActive: share.is_active,
+      createdAt: share.created_at,
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+// ─── GET /vault-shares/fields/:entityType — shareable field list for the UI ──
+// Lets the frontend build a per-field permission picker without hardcoding
+// each entity type's column list (which does vary — local/entity/kyc/game
+// each have a different shape).
+router.get("/vault-shares/fields/:entityType", requireAuth, async (req, res): Promise<void> => {
+  const entityType = req.params.entityType;
+  if (!isValidType(entityType)) { res.status(400).json({ error: `entityType must be one of: ${VALID_TYPES.join(", ")}` }); return; }
+  try {
+    const fields = await shareableColumns(entityType);
+    res.json({ entityType, fields, sensitiveFields: ENTITY_TABLES[entityType].sensitive });
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+// ─── POST /vault-shares/bulk — share multiple entities (same or mixed
+// types) with one user in a single call. Each item is checked for
+// ownership independently — one bad item doesn't fail the whole batch.
+// body: { items: [{ entityType, entityId }, ...], username, permission? }
+router.post("/vault-shares/bulk", requireAuth, async (req, res): Promise<void> => {
+  const userId = req.user!.userId;
+  const { items, username, permission = "view", fieldPermissions } = req.body;
+
+  if (!Array.isArray(items) || !items.length) { res.status(400).json({ error: "items must be a non-empty array of { entityType, entityId }" }); return; }
+  if (items.length > 200) { res.status(400).json({ error: "Too many items in one batch (max 200)" }); return; }
+  if (!username || typeof username !== "string" || !username.trim()) { res.status(400).json({ error: "username is required" }); return; }
+  if (!["view", "edit"].includes(permission)) { res.status(400).json({ error: "permission must be 'view' or 'edit'" }); return; }
+
+  // fieldPermissions here applies uniformly to every item in the batch. If a
+  // given item's entity type doesn't have one of the named fields, that
+  // item is skipped with a reason rather than failing the whole batch —
+  // same "one bad item doesn't sink the batch" spirit as the rest of this
+  // endpoint.
+  const fieldPermCache = new Map<string, FieldPermissionMap | null>();
+  async function fieldPermissionsFor(entityType: keyof typeof ENTITY_TABLES): Promise<FieldPermissionMap | null> {
+    if (fieldPermCache.has(entityType)) return fieldPermCache.get(entityType)!;
+    const parsed = await parseFieldPermissions(entityType, fieldPermissions);
+    fieldPermCache.set(entityType, parsed);
+    return parsed;
+  }
+
+  try {
+    const targetResult = await db.execute(sql.raw(
+      `SELECT id, username FROM users WHERE username = ${safe(username.trim())} OR email = ${safe(username.trim())}`
+    ));
+    const target = targetResult.rows[0] as any;
+    if (!target) { res.status(404).json({ error: "User not found" }); return; }
+    if (Number(target.id) === userId) { res.status(400).json({ error: "You already own this — can't share with yourself" }); return; }
+
+    // Phase C27 — audit-only, see auditVaultShareCreateOwnership()'s own
+    // header. Does not affect which items get shared below.
+    await auditVaultShareCreateOwnership(req, items);
+
+    const shared: any[] = [];
+    const failed: { entityType: string; entityId: number; reason: string }[] = [];
+
+    for (const item of items) {
+      const entityType = item?.entityType;
+      const entityId = parseInt(item?.entityId, 10);
+      if (!isValidType(entityType) || isNaN(entityId)) {
+        failed.push({ entityType: String(entityType), entityId: Number(item?.entityId), reason: "Invalid entityType/entityId" });
+        continue;
+      }
+      const cfg = ENTITY_TABLES[entityType];
+      try {
+        const itemFieldPerms = await fieldPermissionsFor(entityType);
+        const ownedCheck = await db.execute(sql.raw(`SELECT id FROM ${cfg.table} WHERE id = ${entityId} AND user_id = ${userId}${notTrashedClause(cfg)}`));
+        if (!ownedCheck.rows.length) {
+          failed.push({ entityType, entityId, reason: "Not found, not owned by you, or in trash" });
+          continue;
+        }
+        const fieldPermsSql = safe(itemFieldPerms ? JSON.stringify(itemFieldPerms) : null);
+        const result = await db.execute(sql.raw(`
+          INSERT INTO vault_shares (entity_type, entity_id, owner_id, shared_with_user_id, permission, field_permissions, is_active, revoked_at)
+          VALUES (${safe(entityType)}, ${entityId}, ${userId}, ${Number(target.id)}, ${safe(permission)}, ${fieldPermsSql}, TRUE, NULL)
+          ON CONFLICT (entity_type, entity_id, shared_with_user_id)
+          DO UPDATE SET permission = ${safe(permission)}, field_permissions = ${fieldPermsSql}, is_active = TRUE, revoked_at = NULL, updated_at = NOW()
+          RETURNING *
+        `));
+        shared.push(result.rows[0]);
+      } catch (err: any) {
+        failed.push({ entityType, entityId, reason: err?.message ?? "DB error" });
+      }
+    }
+
+    if (shared.length) {
+      const byType: Record<string, number> = {};
+      for (const s of shared as any[]) byType[s.entity_type] = (byType[s.entity_type] ?? 0) + 1;
+      const summary = Object.entries(byType).map(([t, n]) => `${n} ${t}`).join(", ");
+      createNotification(
+        Number(target.id),
+        "vault_share",
+        "New vault items shared with you",
+        `Someone shared ${shared.length} vault item(s) with you (${summary}).`,
+        { count: shared.length }
+      ).catch(() => {});
+    }
+
+    res.status(shared.length ? 201 : 400).json({
+      sharedCount: shared.length,
+      failedCount: failed.length,
+      shared: shared.map((s: any) => ({
+        id: s.id, entityType: s.entity_type, entityId: s.entity_id, permission: s.permission, isActive: s.is_active,
+      })),
+      failed,
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+
+// ─── GET /vault-shares/sent — entities I own that I've shared out ─────────
+router.get("/vault-shares/sent", requireAuth, async (req, res): Promise<void> => {
+  const userId = req.user!.userId;
+  const entityType = req.query.entityType as string | undefined;
+  try {
+    const q = entityType && isValidType(entityType)
+      ? sql.raw(`SELECT vs.*, u.username as recipient_username FROM vault_shares vs
+                 JOIN users u ON u.id = vs.shared_with_user_id
+                 WHERE vs.owner_id = ${userId} AND vs.entity_type = ${safe(entityType)}
+                 ORDER BY vs.created_at DESC`)
+      : sql.raw(`SELECT vs.*, u.username as recipient_username FROM vault_shares vs
+                 JOIN users u ON u.id = vs.shared_with_user_id
+                 WHERE vs.owner_id = ${userId}
+                 ORDER BY vs.created_at DESC`);
+    const result = await db.execute(q);
+    const rows = result.rows as any[];
+
+    // Attach a display label per entity without leaking sensitive fields.
+    const byType: Record<string, number[]> = {};
+    for (const r of rows) (byType[r.entity_type] ??= []).push(r.entity_id);
+
+    const labels: Record<string, Record<number, string>> = {};
+    for (const [type, ids] of Object.entries(byType)) {
+      const cfg = ENTITY_TABLES[type];
+      if (!cfg || !ids.length) continue;
+      const entRes = await db.execute(sql.raw(`SELECT * FROM ${cfg.table} WHERE id IN (${ids.join(",")})`));
+      labels[type] = {};
+      for (const row of entRes.rows as any[]) labels[type][row.id] = cfg.label(row);
+    }
+
+    res.json(rows.map(r => ({
+      id: r.id,
+      entityType: r.entity_type,
+      entityId: r.entity_id,
+      entityLabel: labels[r.entity_type]?.[r.entity_id] ?? `#${r.entity_id}`,
+      sharedWithUserId: r.shared_with_user_id,
+      sharedWithUsername: r.recipient_username,
+      permission: r.permission,
+      fieldPermissions: r.field_permissions ? JSON.parse(r.field_permissions) : null,
+      isActive: r.is_active,
+      createdAt: r.created_at,
+      revokedAt: r.revoked_at,
+    })));
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+// ─── GET /vault-shares/received — entities shared with me ─────────────────
+router.get("/vault-shares/received", requireAuth, async (req, res): Promise<void> => {
+  const userId = req.user!.userId;
+  const entityType = req.query.entityType as string | undefined;
+  const activeOnly = req.query.activeOnly !== "false"; // default true
+  try {
+    const conditions = [`vs.shared_with_user_id = ${userId}`];
+    if (activeOnly) conditions.push(`vs.is_active = TRUE`);
+    if (entityType && isValidType(entityType)) conditions.push(`vs.entity_type = ${safe(entityType)}`);
+
+    const result = await db.execute(sql.raw(
+      `SELECT vs.*, u.username as owner_username FROM vault_shares vs
+       JOIN users u ON u.id = vs.owner_id
+       WHERE ${conditions.join(" AND ")}
+       ORDER BY vs.created_at DESC`
+    ));
+    const rows = result.rows as any[];
+
+    const byType: Record<string, number[]> = {};
+    for (const r of rows) (byType[r.entity_type] ??= []).push(r.entity_id);
+
+    const labels: Record<string, Record<number, string>> = {};
+    for (const [type, ids] of Object.entries(byType)) {
+      const cfg = ENTITY_TABLES[type];
+      if (!cfg || !ids.length) continue;
+      const entRes = await db.execute(sql.raw(`SELECT * FROM ${cfg.table} WHERE id IN (${ids.join(",")})`));
+      labels[type] = {};
+      for (const row of entRes.rows as any[]) labels[type][row.id] = cfg.label(row);
+    }
+
+    res.json(rows.map(r => ({
+      id: r.id,
+      entityType: r.entity_type,
+      entityId: r.entity_id,
+      entityLabel: labels[r.entity_type]?.[r.entity_id] ?? `#${r.entity_id}`,
+      ownerId: r.owner_id,
+      ownerUsername: r.owner_username,
+      permission: r.permission,
+      fieldPermissions: r.field_permissions ? JSON.parse(r.field_permissions) : null,
+      isActive: r.is_active,
+      createdAt: r.created_at,
+      revokedAt: r.revoked_at,
+    })));
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+// ─── GET /vault-shares/entity/:entityType/:entityId — fetch the actual data
+// for a shared entity. Allowed if the requester owns it, OR has an active
+// share on it. This is the read path a recipient uses; it never changes
+// user_id on the underlying row.
+router.get("/vault-shares/entity/:entityType/:entityId", requireAuth, async (req, res): Promise<void> => {
+  const userId = req.user!.userId;
+  const entityType = req.params.entityType;
+  const entityId = parseInt(req.params.entityId as string, 10);
+  if (!isValidType(entityType)) { res.status(400).json({ error: `entityType must be one of: ${VALID_TYPES.join(", ")}` }); return; }
+  if (isNaN(entityId)) { res.status(400).json({ error: "Invalid entityId" }); return; }
+
+  const cfg = ENTITY_TABLES[entityType];
+
+  try {
+    const ownRes = await db.execute(sql.raw(`SELECT * FROM ${cfg.table} WHERE id = ${entityId} AND user_id = ${userId}${notTrashedClause(cfg)}`));
+    if (ownRes.rows.length) {
+      res.json({ access: "owner", permission: "edit", fieldPermissions: null, entity: decryptRow(ownRes.rows[0] as any, cfg.sensitive as any) });
+      return;
+    }
+
+    const shareRes = await db.execute(sql.raw(
+      `SELECT * FROM vault_shares WHERE entity_type = ${safe(entityType)} AND entity_id = ${entityId}
+       AND shared_with_user_id = ${userId} AND is_active = TRUE`
+    ));
+    const share = shareRes.rows[0] as any;
+    if (!share) { res.status(403).json({ error: "Not shared with you" }); return; }
+
+    const entRes = await db.execute(sql.raw(`SELECT * FROM ${cfg.table} WHERE id = ${entityId}${notTrashedClause(cfg)}`));
+    if (!entRes.rows.length) { res.status(404).json({ error: "Entity no longer exists" }); return; }
+
+    const decrypted = decryptRow(entRes.rows[0] as any, cfg.sensitive as any);
+    const fieldPermissions: FieldPermissionMap | null = share.field_permissions ? JSON.parse(share.field_permissions) : null;
+
+    if (fieldPermissions) {
+      // Per-field share: only the named fields are visible at all, and
+      // editable-ness is field-by-field rather than the whole-row
+      // view/edit split used by legacy whole-entity shares.
+      res.json({
+        access: "shared",
+        permission: share.permission,
+        fieldPermissions,
+        entity: filterToAllowedFields(decrypted, fieldPermissions),
+      });
+      return;
+    }
+
+    res.json({ access: "shared", permission: share.permission, fieldPermissions: null, entity: decrypted });
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+// ─── PATCH /vault-shares/bulk — toggle isActive/permission on many shares
+// at once. Must be registered before "/vault-shares/:id" so "bulk" isn't
+// matched as an :id.
+// body: { ids: number[], isActive?: boolean, permission?: 'view'|'edit' }
+router.patch("/vault-shares/bulk", requireAuth, async (req, res): Promise<void> => {
+  const userId = req.user!.userId;
+  const { ids, isActive, permission } = req.body;
+  if (!Array.isArray(ids) || !ids.length) { res.status(400).json({ error: "ids must be a non-empty array" }); return; }
+  const cleanIds = ids.map((i: unknown) => parseInt(i as string, 10)).filter((n: number) => !isNaN(n));
+  if (!cleanIds.length) { res.status(400).json({ error: "No valid ids provided" }); return; }
+  if (permission !== undefined && !["view", "edit"].includes(permission)) { res.status(400).json({ error: "permission must be 'view' or 'edit'" }); return; }
+
+  await auditVaultShareBulkOwnership(req, cleanIds, "vault_share.bulk.update");
+
+  const sets: string[] = ["updated_at = NOW()"];
+  if (typeof isActive === "boolean") {
+    sets.push(`is_active = ${isActive ? "TRUE" : "FALSE"}`);
+    sets.push(`revoked_at = ${isActive ? "NULL" : "NOW()"}`);
+  }
+  if (permission !== undefined) sets.push(`permission = ${safe(permission)}`);
+
+  try {
+    const result = await db.execute(sql.raw(
+      `UPDATE vault_shares SET ${sets.join(", ")} WHERE id IN (${cleanIds.join(",")}) AND owner_id = ${userId} RETURNING *`
+    ));
+    const rows = result.rows as any[];
+
+    if (typeof isActive === "boolean" && !isActive) {
+      for (const share of rows) {
+        createNotification(
+          Number(share.shared_with_user_id),
+          "vault_share",
+          "Shared access removed",
+          `Access to a shared ${share.entity_type} vault item was turned off.`,
+          { entityType: share.entity_type, entityId: share.entity_id }
+        ).catch(() => {});
+      }
+    }
+
+    res.json({ updatedCount: rows.length, updated: rows.map(s => ({ id: s.id, isActive: s.is_active, permission: s.permission })) });
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+// ─── DELETE /vault-shares/bulk — remove many share records at once ────────
+// Registered before "/vault-shares/:id" for the same reason as above.
+// body: { ids: number[] }
+router.delete("/vault-shares/bulk", requireAuth, async (req, res): Promise<void> => {
+  const userId = req.user!.userId;
+  const { ids } = req.body;
+  if (!Array.isArray(ids) || !ids.length) { res.status(400).json({ error: "ids must be a non-empty array" }); return; }
+  const cleanIds = ids.map((i: unknown) => parseInt(i as string, 10)).filter((n: number) => !isNaN(n));
+  if (!cleanIds.length) { res.status(400).json({ error: "No valid ids provided" }); return; }
+
+  await auditVaultShareBulkOwnership(req, cleanIds, "vault_share.bulk.delete");
+
+  try {
+    const result = await db.execute(sql.raw(
+      `DELETE FROM vault_shares WHERE id IN (${cleanIds.join(",")}) AND owner_id = ${userId} RETURNING id`
+    ));
+    res.json({ deletedCount: result.rows.length });
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+// ─── PATCH /vault-shares/:id — owner toggles access on/off, or changes permission
+// Setting isActive to false is the "turn permission off" action — the item
+// immediately stops showing up under the recipient's "shared with me" list.
+router.patch("/vault-shares/:id", requireAuth, requireVaultShareOwnership("vault_share.update", denyVaultShareNotFound), async (req, res): Promise<void> => {
+  const userId = req.user!.userId;
+  const id = parseInt(req.params.id as string, 10);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid ID" }); return; }
+  const { isActive, permission, fieldPermissions } = req.body;
+
+  // Need the existing row's entity_type to validate fieldPermissions against
+  // the right table, and to confirm ownership before touching anything.
+  const existingRes = await db.execute(sql.raw(`SELECT * FROM vault_shares WHERE id = ${id} AND owner_id = ${userId}`));
+  const existing = existingRes.rows[0] as any;
+  if (!existing) { res.status(404).json({ error: "Not found or not yours to manage" }); return; }
+
+  const sets: string[] = ["updated_at = NOW()"];
+  if (typeof isActive === "boolean") {
+    sets.push(`is_active = ${isActive ? "TRUE" : "FALSE"}`);
+    sets.push(`revoked_at = ${isActive ? "NULL" : "NOW()"}`);
+  }
+  if (permission !== undefined) {
+    if (!["view", "edit"].includes(permission)) { res.status(400).json({ error: "permission must be 'view' or 'edit'" }); return; }
+    sets.push(`permission = ${safe(permission)}`);
+  }
+  if (fieldPermissions !== undefined) {
+    // Explicit null clears per-field restrictions back to whole-entity sharing.
+    if (fieldPermissions === null) {
+      sets.push(`field_permissions = NULL`);
+    } else {
+      let parsed: FieldPermissionMap | null;
+      try {
+        parsed = await parseFieldPermissions(existing.entity_type, fieldPermissions);
+      } catch (err: any) {
+        res.status(400).json({ error: err.message }); return;
+      }
+      sets.push(`field_permissions = ${safe(parsed ? JSON.stringify(parsed) : null)}`);
+    }
+  }
+
+  try {
+    const result = await db.execute(sql.raw(
+      `UPDATE vault_shares SET ${sets.join(", ")} WHERE id = ${id} AND owner_id = ${userId} RETURNING *`
+    ));
+    if (!result.rows.length) { res.status(404).json({ error: "Not found or not yours to manage" }); return; }
+    const share = result.rows[0] as any;
+
+    if (typeof isActive === "boolean" && !isActive) {
+      void publishAyzenDomainEvent({
+        type: "vault.share.revoked",
+        actorUserId: userId,
+        aggregate: { type: "vault_share", id: String(share.id) },
+        payload: { shareId: Number(share.id) },
+      }).catch(() => {});
+      createNotification(
+        Number(share.shared_with_user_id),
+        "vault_share",
+        "Shared access removed",
+        `Access to a shared ${share.entity_type} vault item was turned off.`,
+        { entityType: share.entity_type, entityId: share.entity_id }
+      ).catch(() => {});
+    }
+
+    res.json({
+      id: share.id,
+      entityType: share.entity_type,
+      entityId: share.entity_id,
+      isActive: share.is_active,
+      permission: share.permission,
+      fieldPermissions: share.field_permissions ? JSON.parse(share.field_permissions) : null,
+      revokedAt: share.revoked_at,
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+// ─── DELETE /vault-shares/:id — owner removes the share record entirely ───
+router.delete("/vault-shares/:id", requireAuth, requireVaultShareOwnership("vault_share.delete", denyVaultShareNotFound), async (req, res): Promise<void> => {
+  const userId = req.user!.userId;
+  const id = parseInt(req.params.id as string, 10);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid ID" }); return; }
+  try {
+    const result = await db.execute(sql.raw(
+      `DELETE FROM vault_shares WHERE id = ${id} AND owner_id = ${userId} RETURNING id`
+    ));
+    if (!result.rows.length) { res.status(404).json({ error: "Not found or not yours to manage" }); return; }
+    void publishAyzenDomainEvent({
+      type: "vault.share.revoked",
+      actorUserId: userId,
+      aggregate: { type: "vault_share", id: String(id) },
+      payload: { shareId: Number(id) },
+    }).catch(() => {});
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: "DB error", detail: err?.message });
+  }
+});
+
+export default router;

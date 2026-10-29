@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-4",
+  "title": "Schedules and assets: pure schedule math, DB-backed schedules, asset use cases",
+  "timestamp": "2026-10-19T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Static and golden-math verification pass. typecheck, build and ALL DB tests (WP-1, WP-2a, WP-2b, WP-3, WP-4, F8-F10a) did not run: no Postgres and no node_modules here. Money-critical code; nothing is PASS until pnpm test:finance-db is green in the real checkout.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; cumulative with WP-2b, F8, WP-3; bound by content in fin-provenance-manifest.json (71 files, regenerated)."
+  },
+  "baselineProof": {
+    "method": "The ORIGINAL generateAmortizationSchedule/generateDepreciationSchedule (lib/finance-accounting.ts as of WP-3, sha256 40afb1253b83662199ff85adf17513b16f2fb2b059efcae33cd20becc1ae7674) were executed with the DB and drizzle-orm stubbed; every row passed to insert().values() was recorded. The extracted pure functions must reproduce each case's canonicalised-rows SHA-256.",
+    "cases": {
+      "amortization": 242,
+      "depreciation": 201,
+      "guards": 3
+    },
+    "coverage": "Amortization: principals 0..1,000,000 x rates 0..36% x terms 1..60 months x 4 start dates (month-end clamping incl. Feb 29) plus dueDate fallback and null amount/rate. Depreciation: both methods x costs 0..250,000 x salvage 0..300,000 (incl. salvage > cost) x lives 1..60 x 4 start dates, plus totalValue/purchaseDate fallbacks.",
+    "result": "all cases bit-identical (tests: 5/5)",
+    "mutationChecks": [
+      "changed double-declining coefficient by 1e-7 -> fails",
+      "reordered float operations in monthly rate -> fails"
+    ],
+    "limit": "Resolution of defaults (null amount to 0, start-date fallback chain) stays in the persistence functions and is covered by the golden inputs but only exercised against a real DB by the unrun wp4 tests. Guards (no method / life <= 0 return [] with no insert) are unchanged code, characterised in the capture."
+  },
+  "oldToNew": {
+    "domain/schedules.ts": [
+      "buildAmortizationRows",
+      "buildDepreciationRows"
+    ],
+    "schedules/amortization.ts": [
+      "fmtAmortRow",
+      "generateAmortizationSchedule",
+      "listAmortizationForEntry",
+      "AmortizationRowShape"
+    ],
+    "schedules/depreciation.ts": [
+      "fmtDeprecRow",
+      "generateDepreciationSchedule",
+      "listDepreciationForAsset",
+      "postDepreciationJournal",
+      "DepreciationRowShape"
+    ],
+    "application/assets.ts": {
+      "GET/POST/PUT/DELETE /finance/assets": "listAssets/createAsset/updateAsset/deleteAsset",
+      "GET /finance/entries/:id/amortization": "listAmortization",
+      "POST /finance/entries/:id/amortization/generate": "generateAmortization",
+      "GET /finance/assets/:id/depreciation": "listDepreciation",
+      "POST /finance/assets/:id/depreciation/generate": "generateDepreciation",
+      "PUT /finance/depreciation/:id/post": "postDepreciationPeriod",
+      "PUT /finance/amortization/:id/pay": "unchanged: thin call to ledger/repayments#payAmortizationInstallment"
+    },
+    "lib/finance-accounting.ts": "now a pure re-export shim; public surface identical (34 before, 34 after)"
+  },
+  "behaviorChanges": [
+    "F9: schedule delete+insert is now one transaction per generator (same results on success; a failed insert no longer leaves no schedule).",
+    "F10a: depreciation post uses a conditional claim (status <> 'posted'); concurrent requests no longer double-post the journal; losers return the already-posted row.",
+    "Everything else moved without logic edits. Route validation, status codes and messages unchanged."
+  ],
+  "newFindings": [
+    {
+      "id": "F9",
+      "status": "FIXED (code), DB proof unrun"
+    },
+    {
+      "id": "F10a",
+      "status": "FIXED (code), DB proof unrun"
+    },
+    {
+      "id": "F10b",
+      "status": "OPEN",
+      "summary": "depreciation journal failure swallowed; journal, schedule flip and asset totalValue update not atomic; out-of-order posting leaves totalValue at the last-posted period"
+    },
+    {
+      "id": "F11",
+      "status": "OPEN",
+      "summary": "all 43 money-like finance columns are real (float32): 1,000,000.01 stored as 1,000,000.00; whole units lost above 16,777,216. Needs a schema decision; out of programme scope."
+    }
+  ],
+  "metrics": {
+    "routesFinanceTsLines": {
+      "before": 1968,
+      "after": 1833
+    },
+    "routesWithDirectDb": {
+      "before": 46,
+      "after": 39,
+      "of": 109
+    },
+    "routesRewired": 10,
+    "legacyFinanceAccountingTs": "780 lines at WP-3 start -> 0 implementation lines"
+  },
+  "commands": [
+    {
+      "command": "node --experimental-strip-types --test src/finance/route-security.test.ts src/finance/ledger-compat.test.ts",
+      "exitCode": 0,
+      "tests": 23,
+      "passed": 23,
+      "failed": 0
+    },
+    {
+      "command": "node --experimental-strip-types --import <ts-extension hook> --test src/finance/domain/schedules.test.ts",
+      "exitCode": 0,
+      "tests": 5,
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 46 sources, 0 findings (new wp4-single-owner, wp4-domain-schedules-not-pure, wp4-wiring, wp4-legacy-finance-accounting-not-a-shim, wp4-golden-fixture-missing)"
+    },
+    {
+      "command": "node scripts/antas/finance/provenance.mjs --verify",
+      "exitCode": 0,
+      "result": "0 changed, 0 missing, 71 files"
+    },
+    {
+      "command": "tsc --ignoreConfig --noEmit --noResolve over touched files (syntax/undefined-name/missing-export filter)",
+      "exitCode": 0,
+      "result": "no TS1xxx, TS2304, TS2305, TS2724 findings; NOT a typecheck"
+    },
+    {
+      "command": "mutations: impure domain, logic in shim, duplicate owner, unwired persistence",
+      "exitCode": 1,
+      "result": "each produced its wp4-* finding; reverted; validator PASS after restore"
+    }
+  ],
+  "firstRunIssuesFixed": [
+    "Validator's recurrence-date consumer check still required lib/finance-accounting.ts; updated to the new consumer (domain/schedules.ts) with per-file specifiers",
+    "My own header comment in domain/schedules.ts mentioned new Date() and tripped the purity gate; comment reworded, gate not weakened",
+    "Golden fixture first emitted at 1.8 MB; replaced by per-case SHA-256 digests plus samples (103 KB)",
+    "Removed imports left unused by the move (financeAssetOwnersTable, sql in routes/finance.ts)",
+    "DB test assertions made float32-aware after finding F11"
+  ],
+  "notRun": [
+    "pnpm typecheck / build",
+    "pnpm test:finance-db (WP-1 F1-F7, WP-2a, WP-2b incl. F8, WP-3 via existing suites, WP-4 incl. F9/F10a)",
+    "domain/recurrence-dates and invoice tests need tsx (schedules.test.ts was run with a local resolution hook)",
+    "HTTP-level tests of the 10 rewired routes",
+    "injected-failure rollback tests for F8 and F9 (no seam)"
+  ],
+  "nextSafeStep": "In the Replit checkout run pnpm typecheck and pnpm test:finance-db; promote WP-1a through WP-4 together if green. Decide F11 (float32 money columns) before WP-5, because entries, journal and recurring all write those columns. Then WP-5 (entries, journal, recurring); route handlers left holding logic: 39."
+}

@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "ANTAS",
+  "title": "AYZEN Next-Generation Technical Assurance & Stabilization",
+  "sourceDocument": "attached_assets/ANTAS_Roadmap_1790660792853.md",
+  "phaseRange": [0, 18],
+  "completionContract": {
+    "requiredEvidenceMustExist": true,
+    "criticalFailuresBlockCertification": true,
+    "unsupportedProductionClaims": "UNVERIFIED",
+    "runtimeAndProviderGatesAreExplicit": true
+  },
+  "phases": [
+    {
+      "phase": 0,
+      "name": "Baseline & Truth Freeze",
+      "owner": "platform",
+      "priority": "P0",
+      "evidence": [
+        "docs/antas/baseline/repository-inventory.md",
+        "reports/antas/baseline/repository-inventory.json",
+        "docs/antas/baseline/claim-reality-matrix.md",
+        "reports/antas/baseline/claim-reality.json",
+        "reports/antas/baseline/metrics.json",
+        "scripts/antas/baseline.mjs"
+      ],
+      "externalGates": ["production verification"]
+    },
+    {
+      "phase": 1,
+      "name": "Repository & Build Integrity",
+      "owner": "platform",
+      "priority": "P0",
+      "evidence": [
+        "package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        ".nvmrc",
+        "docs/antas/build/reproducibility.md",
+        "scripts/antas/verify-toolchain.mjs"
+      ],
+      "externalGates": ["clean reinstall in CI", "two-build artifact comparison"]
+    },
+    {
+      "phase": 2,
+      "name": "Architecture & Boundary Hardening",
+      "owner": "platform",
+      "priority": "P1",
+      "evidence": [
+        "docs/antas/architecture/domain-ownership.md",
+        "config/antas/domain-ownership.json",
+        "scripts/validate-domain-boundaries.mjs",
+        "packages/domain-boundaries/src/index.mjs",
+        "docs/architecture/dependency-map.md"
+      ],
+      "externalGates": ["independent architecture review"]
+    },
+    {
+      "phase": 3,
+      "name": "Identity & Authentication Hardening",
+      "owner": "identity",
+      "priority": "P0",
+      "evidence": [
+        "docs/antas/security/identity-lifecycle.md",
+        "scripts/antas/security/test-identity-controls.mjs",
+        "packages/auth-client/src/index.mjs",
+        "packages/identity/src/index.mjs",
+        "docs/security/session-policy.md"
+      ],
+      "externalGates": ["provider-backed OIDC exercise", "session revocation exercise"]
+    },
+    {
+      "phase": 4,
+      "name": "Authorization / Zero-Trust",
+      "owner": "security",
+      "priority": "P0",
+      "evidence": [
+        "docs/antas/security/authorization.md",
+        "config/antas/authorization-matrix.json",
+        "packages/authorization/src/index.mjs",
+        "tests/cross-app/authorization-matrix.test.mjs",
+        "config/security/capabilities.json"
+      ],
+      "externalGates": ["negative endpoint test against staging"]
+    },
+    {
+      "phase": 5,
+      "name": "Data Isolation & Database Integrity",
+      "owner": "platform",
+      "priority": "P0",
+      "evidence": [
+        "docs/antas/data/database-integrity.md",
+        "config/antas/database-ownership.json",
+        "infrastructure/platform/identity-ownership.json",
+        "artifacts/api-server/src/lib/migration-registry.ts",
+        "scripts/validate-migration-beta.mjs"
+      ],
+      "externalGates": ["provider schema introspection", "cross-tenant staging test"]
+    },
+    {
+      "phase": 6,
+      "name": "Finance / Ledger Integrity",
+      "owner": "finance",
+      "priority": "P0",
+      "evidence": [
+        "docs/antas/finance/ledger-integrity.md",
+        "scripts/antas/finance/reconcile.mjs",
+        "services/finance/src/index.mjs",
+        "artifacts/api-server/src/lib/idempotency-service.ts",
+        "tests/failure-injection/matrix.test.mjs"
+      ],
+      "externalGates": ["staging reconciliation run", "concurrent idempotency run"]
+    },
+    {
+      "phase": 7,
+      "name": "Vault / Cryptographic Assurance",
+      "owner": "vault",
+      "priority": "P0",
+      "evidence": [
+        "docs/antas/security/cryptography.md",
+        "config/security/key-management.json",
+        "services/vault/src/index.mjs",
+        "scripts/antas/security/test-ssrf-policy.mjs",
+        "docs/security/key-management.md"
+      ],
+      "externalGates": ["real key rotation", "cross-user restore attack test"]
+    },
+    {
+      "phase": 8,
+      "name": "Event / Queue / Workflow Reliability",
+      "owner": "platform",
+      "priority": "P0",
+      "evidence": [
+        "docs/antas/events/reliability.md",
+        "config/antas/event-envelope.json",
+        "packages/events/src/index.mjs",
+        "packages/event-client/src/index.mjs",
+        "services/workflow/src/index.mjs",
+        "schemas/workflow/recovery.v1.json"
+      ],
+      "externalGates": ["worker crash and replay drill", "DLQ recovery drill"]
+    },
+    {
+      "phase": 9,
+      "name": "API & Gateway Hardening",
+      "owner": "platform",
+      "priority": "P1",
+      "evidence": [
+        "docs/antas/api/route-contracts.md",
+        "config/antas/api-policy.json",
+        "apps/api-gateway/src/index.mjs",
+        "packages/api-spec/src/index.mjs",
+        "lib/api-spec/openapi.yaml"
+      ],
+      "externalGates": ["staging abuse test", "route contract coverage report"]
+    },
+    {
+      "phase": 10,
+      "name": "Service Extraction & Strangler Completion",
+      "owner": "platform",
+      "priority": "P1",
+      "evidence": [
+        "docs/antas/architecture/extraction-exit-criteria.md",
+        "infrastructure/deployment/service-catalog.json",
+        "docs/architecture/service-extraction-policy.md",
+        "scripts/validate-cloud-phases.mjs"
+      ],
+      "externalGates": ["per-service cutover", "fallback and rollback drill"]
+    },
+    {
+      "phase": 11,
+      "name": "Testing & Verification Expansion",
+      "owner": "platform",
+      "priority": "P1",
+      "evidence": [
+        "docs/antas/testing/test-pyramid.md",
+        "tests/security/backbone-security.test.mjs",
+        "tests/contracts/platform-contracts.test.mjs",
+        "tests/restore/restore-evidence.test.mjs",
+        "tests/failure-injection/matrix.test.mjs"
+      ],
+      "externalGates": ["mutation testing", "chaos test execution"]
+    },
+    {
+      "phase": 12,
+      "name": "Observability / SRE",
+      "owner": "observability",
+      "priority": "P1",
+      "evidence": [
+        "docs/antas/operations/observability.md",
+        "config/observability/coverage.json",
+        "packages/telemetry/src/index.mjs",
+        "packages/tracing/src/index.mjs",
+        "config/slo/gates.json"
+      ],
+      "externalGates": ["alert detection and recovery drill"]
+    },
+    {
+      "phase": 13,
+      "name": "Disaster Recovery / Business Continuity",
+      "owner": "platform",
+      "priority": "P0",
+      "evidence": [
+        "docs/antas/dr/recovery-drill.md",
+        "infrastructure/platform/backup-policy.json",
+        "scripts/backup-restore-check.mjs",
+        "tests/restore/restore-evidence.test.mjs",
+        "docs/operations/backup-restore-runbook.md"
+      ],
+      "externalGates": ["destructive staging restore", "measured RTO/RPO"]
+    },
+    {
+      "phase": 14,
+      "name": "Performance / Capacity / Cost",
+      "owner": "reliability",
+      "priority": "P1",
+      "evidence": [
+        "docs/antas/operations/performance.md",
+        "infrastructure/platform/capacity-plan.json",
+        "infrastructure/platform/slo-policy.json",
+        "tests/load/gateway-smoke.js",
+        "docs/operations/performance-baseline.md"
+      ],
+      "externalGates": ["staging load profile", "measured cost model"]
+    },
+    {
+      "phase": 15,
+      "name": "Supply Chain / CI-CD / Release Security",
+      "owner": "platform",
+      "priority": "P1",
+      "evidence": [
+        "docs/antas/release/supply-chain.md",
+        ".github/workflows/ci.yml",
+        ".github/workflows/security.yml",
+        ".github/workflows/release.yml",
+        "schemas/provenance/record.v1.json",
+        "services/artifact-registry/src/index.mjs"
+      ],
+      "externalGates": ["CI dependency audit", "signed artifact verification"]
+    },
+    {
+      "phase": 16,
+      "name": "Maintainability / Code Quality",
+      "owner": "platform",
+      "priority": "P2",
+      "evidence": [
+        "docs/antas/quality/maintainability.md",
+        "reports/antas/baseline/metrics.json",
+        "scripts/antas/maintainability.mjs",
+        "tsconfig.json",
+        "scripts/tsconfig.json"
+      ],
+      "externalGates": ["reviewed complexity budget"]
+    },
+    {
+      "phase": 17,
+      "name": "Product & UX Readiness",
+      "owner": "frontend",
+      "priority": "P2",
+      "evidence": [
+        "docs/antas/product/ux-readiness.md",
+        "scripts/validate-ui-circuit.mjs",
+        "tests/ui-circuit/registry.test.mjs",
+        "artifacts/ayzen/package.json",
+        "infrastructure/platform/feature-circuits.json"
+      ],
+      "externalGates": ["production-like journey test", "accessibility audit"]
+    },
+    {
+      "phase": 18,
+      "name": "Production Certification / Go-Live",
+      "owner": "platform",
+      "priority": "FINAL",
+      "evidence": [
+        "docs/antas/certification/go-live.md",
+        "docs/operations/go-live-checklist.md",
+        "services/certification-registry/src/index.mjs",
+        "scripts/antas/certification.mjs",
+        "reports/antas/ANTAS-18/certification.json"
+      ],
+      "externalGates": ["all P0 runtime gates", "release owner sign-off", "production canary and rollback"]
+    }
+  ]
+}

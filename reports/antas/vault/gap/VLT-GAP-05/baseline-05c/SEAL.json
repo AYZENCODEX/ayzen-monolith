@@ -1,0 +1,159 @@
+{
+  "sub_phase": "VLT-GAP-05-C",
+  "sealed_at": "2026-10-03T05:21:30.958Z",
+  "matches_05B_certified_state": true,
+  "tree_manifest_sha256": "bfdd6df19750c083482effc9c3079d1d956f40b4817f6a480d88605eb1ad5acb",
+  "file_count": 2217,
+  "certified_by": {
+    "sub_phase": "VLT-GAP-05-B",
+    "source_tree_sha256": "bab469c5a9a5c50ab657c6e6383959e61f44519ccfe10c63b69d838e350c3371",
+    "commit_sha": null,
+    "validator_sha256": "e238798541ef3019ccb10e4ef88acdbf796d36bd9b27660e062547e3ef818934",
+    "source_hashes_checked": 6
+  },
+  "compat_adapter": {
+    "source": "artifacts/api-server/src/lib/vault-crypto.ts",
+    "sha256": "e60ad62262d6fa3c5da4ba86097285dc0861f5329b20fc7e6cf22c1c23d29f43"
+  },
+  "frozen_consumers": {
+    "artifacts__api-server__src__index.ts": {
+      "source": "artifacts/api-server/src/index.ts",
+      "sha256": "dcdedd202ccc921ce56dc7635073c59a8f49c3304ce85a2fbab89761891d764f"
+    },
+    "artifacts__api-server__src__lib__mail-attachment-content.ts": {
+      "source": "artifacts/api-server/src/lib/mail-attachment-content.ts",
+      "sha256": "ccaf2a8618e49b5fca493e2e0d152f34a931721a28da7adee2754f688a32e79a"
+    },
+    "artifacts__api-server__src__lib__mail-send-queue.ts": {
+      "source": "artifacts/api-server/src/lib/mail-send-queue.ts",
+      "sha256": "9bcb40ee0211f9f4043a14c35cd2df9e2f2b3eca9fd99e30d7717bcd8eae631d"
+    },
+    "artifacts__api-server__src__lib__mail-sync.ts": {
+      "source": "artifacts/api-server/src/lib/mail-sync.ts",
+      "sha256": "5b4a5ddc38ed3c512ef60eb7a0a63962086c522d3c758424606fc7bb6bb351a6"
+    },
+    "artifacts__api-server__src__lib__vault-backup-cloud.ts": {
+      "source": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "sha256": "d5d9fee64b7774bdf8e274b1a48f125ffa289168e5cbbd153371daa715805f25"
+    },
+    "artifacts__api-server__src__lib__vault-snapshot-extra.ts": {
+      "source": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "sha256": "a18608a98c7b724b0b458d0c3f02c694638940133b3846d80b611b5821b0cf07"
+    },
+    "artifacts__api-server__src__lib__vault-snapshot-restore.ts": {
+      "source": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "sha256": "880e85c2f9162bb1ac5175f9fbd88a8f572fd837d456024e76644b11a2962479"
+    },
+    "artifacts__api-server__src__routes__ayzen-mailbox.ts": {
+      "source": "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+      "sha256": "2729ce8b153ee6c18d7e64b0337ae9a3308aa302253eb56ae69b14d92994a067"
+    },
+    "artifacts__api-server__src__routes__email-accounts.ts": {
+      "source": "artifacts/api-server/src/routes/email-accounts.ts",
+      "sha256": "d92d465ced2111e4d857aa2ebb66053cad79eb371d933ab76c3bbe1e1556522d"
+    },
+    "artifacts__api-server__src__routes__emergency-access.ts": {
+      "source": "artifacts/api-server/src/routes/emergency-access.ts",
+      "sha256": "873fa426447e886a887471ee928de399e94f1ba42830e14f05f11e922c428908"
+    },
+    "artifacts__api-server__src__routes__organizations.ts": {
+      "source": "artifacts/api-server/src/routes/organizations.ts",
+      "sha256": "6f0564e192cb3621d0c85d483c9ff24f243a253e17344536b8ddb6f315d32e84"
+    },
+    "artifacts__api-server__src__routes__resend-webhook.ts": {
+      "source": "artifacts/api-server/src/routes/resend-webhook.ts",
+      "sha256": "4cf43a8743dcc06ce2b50d61063c09fb2a039528a08286ff447e1826964dfb19"
+    },
+    "artifacts__api-server__src__routes__teams.ts": {
+      "source": "artifacts/api-server/src/routes/teams.ts",
+      "sha256": "6c2d41a5eca7946909d853c499c621ead8aa3c1577ee9bb1329ca372e20131b9"
+    },
+    "artifacts__api-server__src__routes__two-factor.ts": {
+      "source": "artifacts/api-server/src/routes/two-factor.ts",
+      "sha256": "1c456558f92fc6d130dd51dff74f077057929a8443bff79dc7fc062592038456"
+    },
+    "artifacts__api-server__src__routes__value-history.ts": {
+      "source": "artifacts/api-server/src/routes/value-history.ts",
+      "sha256": "aff03450348d25b8eb00056eae8aec6a35d30df140638bad20f3dbef5596db6a"
+    },
+    "artifacts__api-server__src__routes__vault-attachments.ts": {
+      "source": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "sha256": "88c182aac4943fbc4e6c3966585dfd4b615b80e263cfd9ca5bbe3a36b1ca1f2f"
+    },
+    "artifacts__api-server__src__routes__vault-migration.ts": {
+      "source": "artifacts/api-server/src/routes/vault-migration.ts",
+      "sha256": "8e547ca701003aa9e449425d57b37c955e7ae462f3c2bb0b93a05b22c2f6776a"
+    },
+    "artifacts__api-server__src__routes__vault-shares.ts": {
+      "source": "artifacts/api-server/src/routes/vault-shares.ts",
+      "sha256": "0e48c9fe8fea7ef89002e96ad50fcb1e854cf9d487434e9a627b57c114f8f212"
+    },
+    "artifacts__api-server__src__routes__vault-snapshot.ts": {
+      "source": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "sha256": "62d41bf7504052ddcada8a8e00f96d2e11f3be77262fa559976521713eedcb4c"
+    },
+    "artifacts__api-server__src__vault__application__game__entries.ts": {
+      "source": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "sha256": "6c8678b94985b66049ec09b9c2fcb95882c6df9c1652e69c5a16523a989bfe25"
+    },
+    "artifacts__api-server__src__vault__application__kyc__data-entities.ts": {
+      "source": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "sha256": "2c16402277b19dc90c79cbefdc9ece39ea3b6b05ad90e4ed41a9005d657a4901"
+    },
+    "artifacts__api-server__src__vault__application__kyc__enrollment.ts": {
+      "source": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "sha256": "b8987a668f5d899fa607c9329b14f125aec579d731dc1071295a5bc4c484cc16"
+    },
+    "artifacts__api-server__src__vault__application__kyc__entries.ts": {
+      "source": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "sha256": "3e021b6a5c2ea876fbcde996d467c847cdc7e16fbbb5ee91e8945b1bf0cad3c4"
+    },
+    "artifacts__api-server__src__vault__application__kyc__exchange.ts": {
+      "source": "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "sha256": "7855f1e9f16127ac3997e41033259358acaf4226aa71e58d87477b038fa05ecd"
+    },
+    "artifacts__api-server__src__vault__application__local-account__accounts.ts": {
+      "source": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "sha256": "bcb8cff17e632716682a24f1002c3f8f4dd805ed04a7925a0e1fd815d36aa8c8"
+    },
+    "artifacts__api-server__src__vault__application__local-account__bridge.ts": {
+      "source": "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "sha256": "1ab2d0574939de6162eccfbf78ef50deb191760d2d2ad7a1e7bdc160bb61ff41"
+    },
+    "artifacts__api-server__src__vault__application__local-account__value.ts": {
+      "source": "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "sha256": "147cdbf41162308df32933ea41139761fcab29354b2e61d4c586d46b1698ea03"
+    }
+  },
+  "gap_scripts_at_freeze": {
+    "scripts/antas/vault/gap/freeze-vlt-gap-02-C-baseline.mjs": "45af9e6efba2b140e6094b57028c0a7549fe3a062ea43b8c992b9f35c0c0ad6a",
+    "scripts/antas/vault/gap/freeze-vlt-gap-02-D-baseline.mjs": "13979343099305c17bb071cf071abea5b1d8002eed51c658578a428096528026",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-B-baseline.mjs": "857983dacac88cdc69d7f9ab7f0758f47127d2bd271412f58673b3b26b86171f",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-C-baseline.mjs": "1e522f3a1ba1755aeeb230acc1a8f3e2903de19adc149209679350c87496bb6b",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-D-baseline.mjs": "f1db2ed08722cd8ddcb7468d997029d63a9331a0f822bda86b5bfa18d7f256b9",
+    "scripts/antas/vault/gap/freeze-vlt-gap-04-B-baseline.mjs": "439e19b8fb274459244646422d7a0b83de3970132e52bc0815e55c3c92612eab",
+    "scripts/antas/vault/gap/freeze-vlt-gap-04-C-baseline.mjs": "7bf93869f27dd93f440afc7df700a376afe5f33573c44e5ad531a4eb3f598004",
+    "scripts/antas/vault/gap/freeze-vlt-gap-04-D-baseline.mjs": "a63ce4d97a2aae55044310030c89da25c8601694821d9480b627cbf0c91bcea1",
+    "scripts/antas/vault/gap/freeze-vlt-gap-05-B-baseline.mjs": "0e654d21eb3e428a702404e991a073355eb10d6bc413530ca578561fe8b2eb27",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-A.mjs": "77a4b3b76d7aaae1a5d60869253b0d102fcaa6de37cf71e103fb674e3f861a7f",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-B.mjs": "bf0a6a746e0680dbabf5aff4bb4217a68304cd7ee70e3e757831afff0d6c8153",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-C.mjs": "765a3d1259a8dd043bdc0405289024dc0313dfc86d8ff1dbc4f8908a95345b9d",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-D.mjs": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-A.mjs": "b48a0758dd09d98a242cb7cfda4b7a689eaa1d83312e6a554444c2314d357cff",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-B.mjs": "27ebd3bb00c4efd2bfccfead5fdc10dba3edb4d539f90970bb58e96c84259fa6",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-C.mjs": "1f1df1e80eee29f3e57f117bb054bcd5f477fa287250ae35f9f37b742079ce59",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-D.mjs": "a51059099be8c41fd9ef6f681b2598b189a1ec78efc516ed77c2d5161f9d8ce2",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-A.mjs": "5e48e0b5e9e6439fc5a6d1bba0077e9bf3e4eb974ca3fa6425a98465eca11834",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-B.mjs": "2d5e688634fc2ec8684faa8fb01be101675b0979da309b974969248bd43f67b0",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-C.mjs": "c4967407d57b188b834f2bfac48d6aee5b55c26f54e9895ac0964cc6e9b36287",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-D.mjs": "b7ce83bf8f53cb06c268ea3092740f096d8aaeb19dae761c541e96b7ada7342a",
+    "scripts/antas/vault/gap/validate-vlt-gap-04-A.mjs": "c8d054187612da635b851ba555bd69512e195104702c9f449d526b7297477d7c",
+    "scripts/antas/vault/gap/validate-vlt-gap-04-B.mjs": "977ee9a585ac4785123ab2929c3c0149237abb5010bec813c55d32217388ea44",
+    "scripts/antas/vault/gap/validate-vlt-gap-04-C.mjs": "7410fd61aac5a1bc059b63d7bdaf6b4318276aaffaefa9ee3b3e5f28222fb532",
+    "scripts/antas/vault/gap/validate-vlt-gap-04-D.mjs": "46f2283906076ae8603a1dba5db1fadd024e45b27431d89eea8396850e221b3d",
+    "scripts/antas/vault/gap/validate-vlt-gap-05-A.mjs": "73f565c152043e085ab06883a2ca4cddcc343927dbee31a71ba74b0f05f736b4",
+    "scripts/antas/vault/gap/validate-vlt-gap-05-B.mjs": "e238798541ef3019ccb10e4ef88acdbf796d36bd9b27660e062547e3ef818934"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "environment": "staging-only",
+  "syntheticDataOnly": true,
+  "approvalRequired": true,
+  "criticalEdges": ["api", "db", "eventbus", "workflow", "worker", "scheduler", "notification", "telegram", "external-provider"],
+  "scenarios": [
+    {"id": "api-timeout", "edge": "api", "failure": "timeout", "expected": "bounded-failure"},
+    {"id": "db-unavailable", "edge": "db", "failure": "unavailable", "expected": "no-fabricated-write"},
+    {"id": "eventbus-lag", "edge": "eventbus", "failure": "lag", "expected": "backpressure"},
+    {"id": "worker-crash", "edge": "worker", "failure": "crash", "expected": "lease-recovery"}
+  ]
+}

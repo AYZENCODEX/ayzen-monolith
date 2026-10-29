@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "gate": "universal-ayzen-enforcement",
+  "defaultDecision": "BLOCK",
+  "engines": [
+    { "id": "dependency-graph", "status": "required", "evidence": "packages/platform-governance/src/dependency-graph.mjs" },
+    { "id": "state-sync", "status": "required", "evidence": "packages/platform-governance/src/state-sync.mjs" },
+    { "id": "data-governance", "status": "required", "evidence": "packages/platform-governance/src/data-governance.mjs" },
+    { "id": "resource-orchestration", "status": "required", "evidence": "packages/platform-governance/src/resource-orchestration.mjs" },
+    { "id": "runtime-optimization", "status": "required", "evidence": "packages/platform-governance/src/runtime-optimization.mjs" },
+    { "id": "policy-simulation", "status": "required", "evidence": "services/policy-simulation/src/index.mjs" },
+    { "id": "recovery-reconciliation", "status": "required", "evidence": "packages/platform-governance/src/recovery.mjs" },
+    { "id": "lifecycle", "status": "required", "evidence": "packages/platform-governance/src/lifecycle.mjs" }
+  ],
+  "requiredSignals": ["audit", "trace", "policy", "recovery", "registry"],
+  "externalGates": [
+    "validate-shared-platform-1-30",
+    "validate-api-security-backbone-1-50",
+    "validate-stra-1-50",
+    "validate-track-f",
+    "validate-track-e"
+  ]
+}

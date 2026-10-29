@@ -1,0 +1,928 @@
+{
+  "gap": "VLT-GAP-15",
+  "sub_phase": "VLT-GAP-15-A",
+  "validator_version": "15-A.1",
+  "checked_at": "2026-10-12T17:33:18.941Z",
+  "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "2a3ac5ec48dc4a7e987b18218a7c1e3049cbb59d1b6877fd60704e1bbf8b4859",
+  "freeze": {
+    "groups": 9,
+    "baseline_files": 31,
+    "manifest_verified": 30,
+    "seal": "6ccd1eb624099ef4744bb4294bc874f34f4880c7b2367d3455409d352677da9b"
+  },
+  "replay_tasks": {
+    "2": {
+      "label": "entity CRUD",
+      "groups": [
+        "entity-secret"
+      ]
+    },
+    "3": {
+      "label": "account CRUD/purchase",
+      "groups": [
+        "local-account"
+      ]
+    },
+    "4": {
+      "label": "KYC",
+      "groups": [
+        "kyc"
+      ]
+    },
+    "5": {
+      "label": "game/marketplace",
+      "groups": [
+        "game-marketplace"
+      ]
+    },
+    "6": {
+      "label": "secret create/list/reveal",
+      "groups": [
+        "entity-secret"
+      ]
+    },
+    "7": {
+      "label": "security negative cases",
+      "groups": [
+        "security-access"
+      ]
+    },
+    "8": {
+      "label": "backup/restore",
+      "groups": [
+        "backup-restore"
+      ]
+    },
+    "9": {
+      "label": "snapshot/restore/trash",
+      "groups": [
+        "snapshot-trash"
+      ]
+    }
+  },
+  "contract_census": {
+    "entity-secret": {
+      "tasks": [
+        2,
+        6
+      ],
+      "diff": {
+        "routes": {
+          "old": 41,
+          "current": 41,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "status_codes": {
+          "old": 6,
+          "current": 10,
+          "missing_in_current": [],
+          "added_in_current": 4
+        },
+        "error_messages": {
+          "old": 53,
+          "current": 76,
+          "missing_in_current": [],
+          "added_in_current": 23
+        },
+        "error_codes": {
+          "old": 2,
+          "current": 6,
+          "missing_in_current": [],
+          "added_in_current": 4
+        },
+        "events": {
+          "old": 1,
+          "current": 1,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "audit_actions": {
+          "old": 13,
+          "current": 16,
+          "missing_in_current": [],
+          "added_in_current": 3
+        }
+      },
+      "side_effect_callee_counts": {
+        "broadcastEvent": {
+          "old": 11,
+          "current": 11
+        },
+        "logVaultActivity": {
+          "old": 13,
+          "current": 12
+        },
+        "logSubjectActivity": {
+          "old": 1,
+          "current": 1
+        },
+        "createNotification": {
+          "old": 1,
+          "current": 1
+        },
+        "syncOnVaultDelete": {
+          "old": 1,
+          "current": 1
+        },
+        "delistVaultMarketplaceListings": {
+          "old": 2,
+          "current": 2
+        },
+        "chargeCredits": {
+          "old": 2,
+          "current": 2
+        }
+      },
+      "callee_count_drops": [
+        "logVaultActivity 13→12"
+      ]
+    },
+    "local-account": {
+      "tasks": [
+        3
+      ],
+      "diff": {
+        "routes": {
+          "old": 23,
+          "current": 23,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "status_codes": {
+          "old": 5,
+          "current": 10,
+          "missing_in_current": [],
+          "added_in_current": 5
+        },
+        "error_messages": {
+          "old": 17,
+          "current": 39,
+          "missing_in_current": [
+            "DB error"
+          ],
+          "added_in_current": 23
+        },
+        "error_codes": {
+          "old": 0,
+          "current": 3,
+          "missing_in_current": [],
+          "added_in_current": 3
+        },
+        "events": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "audit_actions": {
+          "old": 0,
+          "current": 3,
+          "missing_in_current": [],
+          "added_in_current": 3
+        }
+      },
+      "side_effect_callee_counts": {
+        "chargeCredits": {
+          "old": 1,
+          "current": 1
+        },
+        "syncOnVaultDelete": {
+          "old": 0,
+          "current": 1
+        }
+      },
+      "callee_count_drops": []
+    },
+    "kyc": {
+      "tasks": [
+        4
+      ],
+      "diff": {
+        "routes": {
+          "old": 13,
+          "current": 13,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "status_codes": {
+          "old": 5,
+          "current": 9,
+          "missing_in_current": [],
+          "added_in_current": 4
+        },
+        "error_messages": {
+          "old": 8,
+          "current": 29,
+          "missing_in_current": [
+            "DB error"
+          ],
+          "added_in_current": 22
+        },
+        "error_codes": {
+          "old": 0,
+          "current": 3,
+          "missing_in_current": [],
+          "added_in_current": 3
+        },
+        "events": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "audit_actions": {
+          "old": 0,
+          "current": 3,
+          "missing_in_current": [],
+          "added_in_current": 3
+        }
+      },
+      "side_effect_callee_counts": {
+        "chargeCredits": {
+          "old": 1,
+          "current": 1
+        },
+        "syncOnVaultDelete": {
+          "old": 0,
+          "current": 1
+        }
+      },
+      "callee_count_drops": []
+    },
+    "game-marketplace": {
+      "tasks": [
+        5
+      ],
+      "diff": {
+        "routes": {
+          "old": 15,
+          "current": 15,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "status_codes": {
+          "old": 6,
+          "current": 9,
+          "missing_in_current": [],
+          "added_in_current": 3
+        },
+        "error_messages": {
+          "old": 27,
+          "current": 34,
+          "missing_in_current": [
+            "Asset ownership conflict — seller may no longer own this KYC entry",
+            "Asset ownership conflict — seller may no longer own this entry",
+            "Asset ownership conflict — seller may no longer own this local account",
+            "DB error"
+          ],
+          "added_in_current": 11
+        },
+        "error_codes": {
+          "old": 0,
+          "current": 3,
+          "missing_in_current": [],
+          "added_in_current": 3
+        },
+        "events": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "audit_actions": {
+          "old": 2,
+          "current": 3,
+          "missing_in_current": [],
+          "added_in_current": 1
+        }
+      },
+      "side_effect_callee_counts": {
+        "chargeCredits": {
+          "old": 1,
+          "current": 1
+        },
+        "syncOnVaultDelete": {
+          "old": 0,
+          "current": 1
+        }
+      },
+      "callee_count_drops": []
+    },
+    "security-access": {
+      "tasks": [
+        7
+      ],
+      "diff": {
+        "routes": {
+          "old": 17,
+          "current": 17,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "status_codes": {
+          "old": 8,
+          "current": 8,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "error_messages": {
+          "old": 33,
+          "current": 41,
+          "missing_in_current": [],
+          "added_in_current": 8
+        },
+        "error_codes": {
+          "old": 16,
+          "current": 19,
+          "missing_in_current": [],
+          "added_in_current": 3
+        },
+        "events": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "audit_actions": {
+          "old": 1,
+          "current": 3,
+          "missing_in_current": [],
+          "added_in_current": 2
+        }
+      },
+      "side_effect_callee_counts": {
+        "syncOnVaultDelete": {
+          "old": 0,
+          "current": 1
+        }
+      },
+      "callee_count_drops": []
+    },
+    "backup-restore": {
+      "tasks": [
+        8
+      ],
+      "diff": {
+        "routes": {
+          "old": 12,
+          "current": 12,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "status_codes": {
+          "old": 6,
+          "current": 7,
+          "missing_in_current": [],
+          "added_in_current": 1
+        },
+        "error_messages": {
+          "old": 6,
+          "current": 6,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "error_codes": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "events": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "audit_actions": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        }
+      },
+      "side_effect_callee_counts": {
+        "logBackupAudit": {
+          "old": 8,
+          "current": 9
+        },
+        "logActivity": {
+          "old": 2,
+          "current": 2
+        },
+        "createNotification": {
+          "old": 3,
+          "current": 3
+        }
+      },
+      "callee_count_drops": []
+    },
+    "snapshot-trash": {
+      "tasks": [
+        9
+      ],
+      "diff": {
+        "routes": {
+          "old": 11,
+          "current": 11,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "status_codes": {
+          "old": 4,
+          "current": 5,
+          "missing_in_current": [],
+          "added_in_current": 1
+        },
+        "error_messages": {
+          "old": 9,
+          "current": 9,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "error_codes": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "events": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "audit_actions": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        }
+      },
+      "side_effect_callee_counts": {
+        "logActivity": {
+          "old": 5,
+          "current": 5
+        },
+        "logBackupAudit": {
+          "old": 5,
+          "current": 5
+        },
+        "syncOnVaultDelete": {
+          "old": 1,
+          "current": 1
+        }
+      },
+      "callee_count_drops": []
+    },
+    "share-attachment": {
+      "tasks": [],
+      "diff": {
+        "routes": {
+          "old": 15,
+          "current": 15,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "status_codes": {
+          "old": 7,
+          "current": 10,
+          "missing_in_current": [],
+          "added_in_current": 3
+        },
+        "error_messages": {
+          "old": 28,
+          "current": 49,
+          "missing_in_current": [],
+          "added_in_current": 21
+        },
+        "error_codes": {
+          "old": 1,
+          "current": 4,
+          "missing_in_current": [],
+          "added_in_current": 3
+        },
+        "events": {
+          "old": 2,
+          "current": 2,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "audit_actions": {
+          "old": 0,
+          "current": 3,
+          "missing_in_current": [],
+          "added_in_current": 3
+        }
+      },
+      "side_effect_callee_counts": {
+        "createNotification": {
+          "old": 4,
+          "current": 4
+        },
+        "logActivity": {
+          "old": 3,
+          "current": 3
+        },
+        "syncOnVaultDelete": {
+          "old": 0,
+          "current": 1
+        }
+      },
+      "callee_count_drops": []
+    },
+    "health": {
+      "tasks": [],
+      "diff": {
+        "routes": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "status_codes": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "error_messages": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "error_codes": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "events": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        },
+        "audit_actions": {
+          "old": 0,
+          "current": 0,
+          "missing_in_current": [],
+          "added_in_current": 0
+        }
+      },
+      "side_effect_callee_counts": {
+        "createNotification": {
+          "old": 1,
+          "current": 1
+        }
+      },
+      "callee_count_drops": []
+    }
+  },
+  "coverage": {
+    "entity-secret": {
+      "tasks": [
+        2,
+        6
+      ],
+      "evidence": [
+        "scripts/antas/vault/gap/validate-vlt-gap-01-D.mjs",
+        "scripts/antas/vault/gap/validate-vlt-gap-05-D.mjs",
+        "scripts/antas/vault/gap/validate-vlt-gap-07-D.mjs",
+        "reports/antas/vault/gap/VLT-GAP-01/behavior-regression.json",
+        "reports/antas/vault/gap/VLT-GAP-01/security-regression.json",
+        "reports/antas/vault/gap/VLT-GAP-05/behavior-regression.json",
+        "reports/antas/vault/gap/VLT-GAP-05/security-regression.json"
+      ],
+      "executes_old_vs_new": true,
+      "dimensions": {
+        "status_body": "signalled",
+        "db_state": "signalled",
+        "encrypted_values": "signalled",
+        "events": "signalled",
+        "audit": "signalled",
+        "side_effects": "signalled"
+      }
+    },
+    "local-account": {
+      "tasks": [
+        3
+      ],
+      "evidence": [
+        "scripts/antas/vault/gap/validate-vlt-gap-02-D.mjs",
+        "reports/antas/vault/gap/VLT-GAP-02/behavior-regression.json",
+        "reports/antas/vault/gap/VLT-GAP-02/security-regression.json"
+      ],
+      "executes_old_vs_new": true,
+      "dimensions": {
+        "status_body": "signalled",
+        "db_state": "signalled",
+        "encrypted_values": "signalled",
+        "events": "NONE",
+        "audit": "NONE",
+        "side_effects": "signalled"
+      }
+    },
+    "kyc": {
+      "tasks": [
+        4
+      ],
+      "evidence": [
+        "scripts/antas/vault/gap/validate-vlt-gap-03-D.mjs",
+        "reports/antas/vault/gap/VLT-GAP-03/behavior-regression.json",
+        "reports/antas/vault/gap/VLT-GAP-03/security-regression.json"
+      ],
+      "executes_old_vs_new": true,
+      "dimensions": {
+        "status_body": "signalled",
+        "db_state": "signalled",
+        "encrypted_values": "signalled",
+        "events": "NONE",
+        "audit": "NONE",
+        "side_effects": "signalled"
+      }
+    },
+    "game-marketplace": {
+      "tasks": [
+        5
+      ],
+      "evidence": [
+        "scripts/antas/vault/gap/validate-vlt-gap-04-D.mjs",
+        "scripts/antas/vault/gap/differential-vlt-gap-13-E.mjs",
+        "reports/antas/vault/gap/VLT-GAP-04/behavior-regression.json",
+        "reports/antas/vault/gap/VLT-GAP-04/security-regression.json",
+        "reports/antas/vault/gap/VLT-GAP-13/differential-marketplace-vault.json"
+      ],
+      "executes_old_vs_new": true,
+      "dimensions": {
+        "status_body": "signalled",
+        "db_state": "signalled",
+        "encrypted_values": "signalled",
+        "events": "NONE",
+        "audit": "NONE",
+        "side_effects": "signalled"
+      }
+    },
+    "security-access": {
+      "tasks": [
+        7
+      ],
+      "evidence": [
+        "scripts/antas/vault/gap/validate-vlt-gap-06-D.mjs",
+        "scripts/antas/vault/gap/differential-vlt-gap-06-D.mjs"
+      ],
+      "executes_old_vs_new": true,
+      "dimensions": {
+        "status_body": "signalled",
+        "db_state": "signalled",
+        "encrypted_values": "NONE",
+        "events": "NONE",
+        "audit": "NONE",
+        "side_effects": "NONE"
+      }
+    },
+    "backup-restore": {
+      "tasks": [
+        8
+      ],
+      "evidence": [
+        "scripts/antas/vault/gap/validate-vlt-gap-08.mjs",
+        "scripts/antas/vault/gap/differential-vlt-gap-08.mjs"
+      ],
+      "executes_old_vs_new": true,
+      "dimensions": {
+        "status_body": "signalled",
+        "db_state": "signalled",
+        "encrypted_values": "signalled",
+        "events": "NONE",
+        "audit": "signalled",
+        "side_effects": "NONE"
+      }
+    },
+    "snapshot-trash": {
+      "tasks": [
+        9
+      ],
+      "evidence": [
+        "scripts/antas/vault/gap/validate-vlt-gap-09.mjs",
+        "scripts/antas/vault/gap/differential-vlt-gap-09.mjs"
+      ],
+      "executes_old_vs_new": true,
+      "dimensions": {
+        "status_body": "signalled",
+        "db_state": "signalled",
+        "encrypted_values": "signalled",
+        "events": "NONE",
+        "audit": "signalled",
+        "side_effects": "NONE"
+      }
+    },
+    "share-attachment": {
+      "tasks": [],
+      "evidence": [
+        "scripts/antas/vault/gap/validate-vlt-gap-10.mjs"
+      ],
+      "executes_old_vs_new": false,
+      "dimensions": {
+        "status_body": "NONE",
+        "db_state": "NONE",
+        "encrypted_values": "NONE",
+        "events": "NONE",
+        "audit": "NONE",
+        "side_effects": "NONE"
+      }
+    },
+    "health": {
+      "tasks": [],
+      "evidence": [
+        "scripts/antas/vault/gap/validate-vlt-gap-11.mjs",
+        "scripts/antas/vault/gap/differential-vlt-gap-11.mjs"
+      ],
+      "executes_old_vs_new": true,
+      "dimensions": {
+        "status_body": "signalled",
+        "db_state": "NONE",
+        "encrypted_values": "signalled",
+        "events": "NONE",
+        "audit": "NONE",
+        "side_effects": "signalled"
+      }
+    }
+  },
+  "open_for_15_B_to_D": {
+    "unexplained_contract_differences": [
+      {
+        "group": "local-account",
+        "kind": "error_messages",
+        "value": "DB error"
+      },
+      {
+        "group": "kyc",
+        "kind": "error_messages",
+        "value": "DB error"
+      },
+      {
+        "group": "game-marketplace",
+        "kind": "error_messages",
+        "value": "DB error"
+      }
+    ],
+    "callee_count_drops": [
+      "entity-secret: logVaultActivity 13→12"
+    ],
+    "uncovered_cells": [
+      {
+        "group": "local-account",
+        "cell": "events"
+      },
+      {
+        "group": "local-account",
+        "cell": "audit"
+      },
+      {
+        "group": "kyc",
+        "cell": "events"
+      },
+      {
+        "group": "kyc",
+        "cell": "audit"
+      },
+      {
+        "group": "game-marketplace",
+        "cell": "events"
+      },
+      {
+        "group": "game-marketplace",
+        "cell": "audit"
+      },
+      {
+        "group": "security-access",
+        "cell": "encrypted_values"
+      },
+      {
+        "group": "security-access",
+        "cell": "events"
+      },
+      {
+        "group": "security-access",
+        "cell": "audit"
+      },
+      {
+        "group": "security-access",
+        "cell": "side_effects"
+      },
+      {
+        "group": "backup-restore",
+        "cell": "events"
+      },
+      {
+        "group": "backup-restore",
+        "cell": "side_effects"
+      },
+      {
+        "group": "snapshot-trash",
+        "cell": "events"
+      },
+      {
+        "group": "snapshot-trash",
+        "cell": "side_effects"
+      },
+      {
+        "group": "share-attachment",
+        "cell": "no executed old-vs-new replay (static/validator evidence only)"
+      },
+      {
+        "group": "share-attachment",
+        "cell": "status_body"
+      },
+      {
+        "group": "share-attachment",
+        "cell": "db_state"
+      },
+      {
+        "group": "share-attachment",
+        "cell": "encrypted_values"
+      },
+      {
+        "group": "share-attachment",
+        "cell": "events"
+      },
+      {
+        "group": "share-attachment",
+        "cell": "audit"
+      },
+      {
+        "group": "share-attachment",
+        "cell": "side_effects"
+      },
+      {
+        "group": "health",
+        "cell": "db_state"
+      },
+      {
+        "group": "health",
+        "cell": "events"
+      },
+      {
+        "group": "health",
+        "cell": "audit"
+      }
+    ]
+  },
+  "explained_differences": [
+    {
+      "group": "game-marketplace",
+      "kind": "error_messages",
+      "value": "Asset ownership conflict — seller may no longer own this entry",
+      "reason": "Pre-extraction route had three literal 409 messages; extraction (GAP-13-E) builds the identical string from the template `...own this ${done.asset}` where the repository returns asset \"entry\". Same status and body text.",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+          "contains": "Asset ownership conflict — seller may no longer own this ${done.asset}"
+        },
+        {
+          "file": "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts",
+          "contains": "reason: \"ownership-conflict\", asset: \"entry\""
+        }
+      ]
+    },
+    {
+      "group": "game-marketplace",
+      "kind": "error_messages",
+      "value": "Asset ownership conflict — seller may no longer own this local account",
+      "reason": "Pre-extraction route had three literal 409 messages; extraction (GAP-13-E) builds the identical string from the template `...own this ${done.asset}` where the repository returns asset \"local account\". Same status and body text.",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+          "contains": "Asset ownership conflict — seller may no longer own this ${done.asset}"
+        },
+        {
+          "file": "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts",
+          "contains": "reason: \"ownership-conflict\", asset: \"local account\""
+        }
+      ]
+    },
+    {
+      "group": "game-marketplace",
+      "kind": "error_messages",
+      "value": "Asset ownership conflict — seller may no longer own this KYC entry",
+      "reason": "Pre-extraction route had three literal 409 messages; extraction (GAP-13-E) builds the identical string from the template `...own this ${done.asset}` where the repository returns asset \"KYC entry\". Same status and body text.",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+          "contains": "Asset ownership conflict — seller may no longer own this ${done.asset}"
+        },
+        {
+          "file": "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts",
+          "contains": "reason: \"ownership-conflict\", asset: \"KYC entry\""
+        }
+      ]
+    }
+  ],
+  "equivalence_proven": false,
+  "errors": [],
+  "status": "PASS"
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-01.4",
+  "phase": "ANTAS-01",
+  "name": "Deterministic Build",
+  "generatedAt": "2026-09-29T06:06:06.715Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "docs/antas/build/reproducibility.md",
+    "scripts/antas/verify-toolchain.mjs"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

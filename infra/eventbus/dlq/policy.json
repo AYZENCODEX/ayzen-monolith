@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "maxAttempts": 5,
+  "quarantinePoisonMessages": true,
+  "operatorAction": "scoped-admin-approval",
+  "replayRequiresIdempotency": true,
+  "retentionDays": 30
+}

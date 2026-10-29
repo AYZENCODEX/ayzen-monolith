@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "phase": "PRJ-06",
+  "title": "Decisions and fixes after PRJ-05 (visible behavior changes)",
+  "timestamp": "2026-10-22T09:50:48.660000+00:00",
+  "status": "PASS",
+  "statusScope": "The five decisions the project owner took after PRJ-05 are implemented as stated. Unlike PRJ-01 to PRJ-05 this phase changes behavior on purpose, in exactly three places; everything else is still identical to the original upload. Verification is the same fake-DB differential plus scratch-copy typecheck/build/tests; the repo's frozen install still fails and no real database or browser was used.",
+  "commit": {
+    "sha": "UNAVAILABLE",
+    "reason": "Uploaded snapshot has no .git directory."
+  },
+  "request": "Project owner: '1-5 fix as you recommend, 1 fix and the other you recommend'. Interpreted as: #1 fix; #2 to #4 follow the recommendation; #5 fix (recommended). #6 and #7 were not requested and are untouched.",
+  "decisions": [
+    {
+      "id": 1,
+      "topic": "unreachable GET /projects/mine/enrolled-entities",
+      "action": "FIXED",
+      "how": "handler registered before GET /projects/:id/enrolled-entities; frozen route surface re-baselined; knownShadowedRoutes emptied; validator fails on any unexplained shadow",
+      "visibleChange": "the endpoint now returns the grouped entity list instead of 400 'Invalid project id'",
+      "consumerCheck": "artifacts/ayzen/src/pages/user/vault-enrollment-entity.tsx declares an EnrolledEntity type that matches the handler output field for field (checked by reading the types; UI not run)"
+    },
+    {
+      "id": 2,
+      "topic": "team and bulk enrollment paths",
+      "action": "KEPT SEPARATE",
+      "why": "teams.ts: a leader enrolls the whole team using the leader's own vault entity, written into each member's row; bulk.ts: many of the caller's own entities with ON CONFLICT DO NOTHING. Distinct features, not copies of the single enroll flow.",
+      "openObservation": "Neither charges credits while single enroll does. Not decided: may be intended or a billing gap."
+    },
+    {
+      "id": 3,
+      "topic": "ai-actions project creation",
+      "action": "KEPT SEPARATE",
+      "why": "Unifying would add a broadcast and Telegram alert it does not have today."
+    },
+    {
+      "id": 4,
+      "topic": "receipt currency",
+      "action": "KEPT raw sums with the '$' label",
+      "why": "Converting would change public receipt numbers; current behavior is pinned by tests."
+    },
+    {
+      "id": 5,
+      "topic": "PRJ-ISSUE-1 and PRJ-ISSUE-3",
+      "action": "FIXED"
+    }
+  ],
+  "fixes": [
+    {
+      "id": "PRJ-ISSUE-1",
+      "was": "deadline (POST and PATCH /projects) and startedAt (PATCH) were interpolated into raw SQL without escaping; admin/moderator callers could inject SQL.",
+      "now": "they pass through the same esc() as every other raw field.",
+      "proof": "UPDATE projects SET started_at = '2026-04-04' OR '1'='1' became started_at = '2026-04-04'' OR ''1''=''1'; valid dates generate byte-identical SQL (checked in unit tests and in 3 whole-file scenarios that stayed identical).",
+      "limit": "Escaping neutralizes injection; it does not validate that the value is a date, so a malformed date still fails at the database cast as before."
+    },
+    {
+      "id": "PRJ-ISSUE-3",
+      "was": "status validated by indexing a plain object, so toString/constructor/hasOwnProperty were accepted and stored as the enrollment status.",
+      "now": "own-property check on a string; inherited keys and non-strings get the existing 400.",
+      "proof": "whole-file scenarios 'status prototype key toString/constructor': original 200 and stored the status, now 400."
+    }
+  ],
+  "filesChangedThisPhase": [
+    "artifacts/api-server/src/routes/projects.ts (mine/enrolled-entities moved before the :id route; header comment updated)",
+    "artifacts/api-server/src/projects/infrastructure/sql/project-raw-sets.ts, project-raw-sets.test.ts",
+    "artifacts/api-server/src/projects/domain/enrollment-status.ts, enrollment-status.test.ts",
+    "scripts/antas/projects/boundaries.manifest.json (route order, shadow list emptied, issuesFixed, decisionsPRJ06, ACCEPTED consumers)",
+    "scripts/antas/projects/differential/prj05-run.mjs and README.md (intended-difference tracking)",
+    "docs/antas/projects/projects-boundaries.md, projects-roadmap-status.md, reports/antas/projects/prj-06-*"
+  ],
+  "commands": [
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs --self-test",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS: 47 routes, 0 findings, no route shadows"
+    },
+    {
+      "command": "negative test R1 (mine route moved back after the :id route) and restore",
+      "exitCode": 0,
+      "result": "R1 produced FAIL with frozen-route-surface and unexplained-route-shadow; restored copy PASS."
+    },
+    {
+      "command": "whole-file differential vs the ORIGINAL 1302-line routes/projects.ts, intended-difference mode",
+      "exitCode": 0,
+      "result": "108 scenarios: 103 identical, 5 intended differences (the route order fix, 2 prototype-key statuses, 2 quote-escaping scenarios), 0 unexpected, 0 missing. Statuses 200/201/400/401/402/403/404/409/500."
+    },
+    {
+      "command": "scratch copy: tsc -p artifacts/api-server --noEmit",
+      "exitCode": 0,
+      "result": "0 errors"
+    },
+    {
+      "command": "scratch copy: pnpm test:projects-static",
+      "exitCode": 0,
+      "result": "44 tests, 44 pass (dates 4, ratings 3, templates 5, project 6, raw sets 3, roi 4, pnl-receipt 3, receipt-token 2, enrollment-status 5, entity-overview 3, enrollment-overview 3, members 3)"
+    },
+    {
+      "command": "scratch copy: pnpm build",
+      "exitCode": 0,
+      "result": "esbuild bundle produced"
+    }
+  ],
+  "notRun": [
+    {
+      "check": "repo-level pnpm install --frozen-lockfile",
+      "status": "FAIL",
+      "reason": "Unchanged since PRJ-01: lockfile overrides mismatch."
+    },
+    {
+      "check": "real Postgres / browser",
+      "status": "NOT_RUN",
+      "reason": "No database or UI in this environment; the frontend contract for #1 was checked by reading types only."
+    },
+    {
+      "check": "PRJ-ISSUE-2 (POST /projects returning 500 after creating)",
+      "status": "NOT_ADDRESSED",
+      "reason": "Not requested; unconfirmed on a real database."
+    }
+  ],
+  "stillOpen": [
+    "PRJ-ISSUE-2 confirmation on a real database",
+    "repo frozen install",
+    "billing question: single enroll charges a credit, team and bulk enroll do not"
+  ]
+}

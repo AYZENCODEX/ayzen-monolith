@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": "ANTAS-08",
+  "name": "Event / Queue / Workflow Reliability",
+  "owner": "platform",
+  "priority": "P0",
+  "generatedAt": "2026-09-29T06:06:07.459Z",
+  "status": "PASS",
+  "required": 6,
+  "passed": 6,
+  "failed": 0,
+  "waived": 0,
+  "criticalFailures": 0,
+  "productionReady": false,
+  "externalGates": [
+    {
+      "gate": "worker crash and replay drill",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "DLQ recovery drill",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "findings": [],
+  "note": "PASS means repository evidence and static controls are present; it does not certify runtime or production behavior."
+}

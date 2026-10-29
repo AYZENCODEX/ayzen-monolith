@@ -1,0 +1,13 @@
+{
+  "ownersWithoutContract": [],
+  "contractsWithoutEndpoints": [
+    "authorization"
+  ],
+  "unresolvedOperations": [
+    "ai:run-agent",
+    "authorization:authorize",
+    "authorization:explain-policy",
+    "telegram:render-menu",
+    "telegram:resolve-command"
+  ]
+}

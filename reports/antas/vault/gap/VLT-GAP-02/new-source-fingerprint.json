@@ -1,0 +1,636 @@
+{
+  "phase": "VLT-GAP-02",
+  "sub_phase": "VLT-GAP-02-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "75275a30a699f7482fc7f1c024e2dd2a84c11b9c34cbc6e1c5e7e4ba61066ee3",
+  "validator_version": "1.0.0",
+  "validator_sha256": "a51059099be8c41fd9ef6f681b2598b189a1ec78efc516ed77c2d5161f9d8ce2",
+  "description": "Fingerprints of the new owner modules and proof that the old routes actually call them",
+  "owner_files": [
+    {
+      "file": "artifacts/api-server/src/vault/domain/local-account.ts",
+      "sha256": "7ecd2b66e23880a841fa50162fc32985e479096866db9a170c3a011ab9e82bbf",
+      "lines": 16,
+      "exports": [
+        "LOCAL_SENSITIVE_FIELDS",
+        "DEFAULT_LOCAL_ACCOUNT_CATEGORIES"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "calls": 0
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "sha256": "3963033b26d175417cfcc355e4ffce24993de88c71e943af78c55ce2e173ff76",
+      "lines": 128,
+      "exports": [
+        "safe",
+        "safeNum",
+        "safeDate",
+        "safeScore",
+        "calcAgeLabel",
+        "calcRoiPct",
+        "fmtPublicLocalReceipt",
+        "ageInDays",
+        "fmtAvgAgeLabel",
+        "aggregateCategoryRows",
+        "fmtPublicCategoryReceipt"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 31,
+        "calls": 39
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "sha256": "be5dfd065857a55370c139e69b46f9836f8ab2b3d0f4d91d5e36415a0c6c704b",
+      "lines": 69,
+      "exports": [
+        "requireLocalAccountOwnership",
+        "denyNotFoundOrForbidden",
+        "denyNotFound",
+        "denyAccountNotFound",
+        "denySilentSuccess",
+        "denyEmptyPoints",
+        "requireLocalAccountCategoryOwnership",
+        "requireLocalAccountPointOwnership"
+      ],
+      "executable_business": {
+        "db_refs": 8,
+        "sql_literals": 3,
+        "branches": 9,
+        "calls": 20
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "sha256": "bcb8cff17e632716682a24f1002c3f8f4dd805ed04a7925a0e1fd815d36aa8c8",
+      "lines": 266,
+      "exports": [
+        "dbError",
+        "listLocalAccounts",
+        "createLocalAccount",
+        "editLocalAccount",
+        "setLocalAccountStatus",
+        "removeLocalAccount",
+        "linkLocalAccount",
+        "unlinkLocalAccount",
+        "listLocalAccountCategories",
+        "createLocalAccountCategory",
+        "removeLocalAccountCategory",
+        "getLocalAccount",
+        "listLocalAccountPoints",
+        "createLocalAccountPoint",
+        "removeLocalAccountPoint"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 58,
+        "calls": 103
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "sha256": "1ab2d0574939de6162eccfbf78ef50deb191760d2d2ad7a1e7bdc160bb61ff41",
+      "lines": 57,
+      "exports": [
+        "BRIDGE_PLATFORMS",
+        "autoCreateLocalAccountsForEntity"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 12,
+        "calls": 9
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/bulk.ts",
+      "sha256": "4deeb19d31a03fc966e4be05c65f6ff2b515f3ba47c6ff55e4d6b8729ed0398f",
+      "lines": 38,
+      "exports": [
+        "applyLocalAccountBulk",
+        "exportLocalAccountRows"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 3,
+        "calls": 6
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "sha256": "a7a11f335dc8d93ca9c23e78dda1ab563362a4424157c2a197995f9e1bed47e8",
+      "lines": 241,
+      "exports": [
+        "generateReceiptToken",
+        "receiptUrl",
+        "generateCategoryReceiptToken",
+        "categoryReceiptUrl",
+        "computeCategoryAggregate",
+        "findCategoryReceiptByToken",
+        "createLocalAccountReceipt",
+        "revokeLocalAccountReceipt",
+        "resolvePublicLocalReceipt",
+        "createCategoryReceipt",
+        "revokeCategoryReceipt",
+        "resolvePublicCategoryReceipt",
+        "emailCategoryReceipt"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 90,
+        "calls": 69
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "sha256": "147cdbf41162308df32933ea41139761fcab29354b2e61d4c586d46b1698ea03",
+      "lines": 38,
+      "exports": [
+        "listLocalAccountValueHistory",
+        "saveLocalAccountValue"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 8,
+        "calls": 13
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts",
+      "sha256": "4e0b065ccd5de6d0595285b77a2eb8ea1eee368fe77729598bfe92e7829f982b",
+      "lines": 219,
+      "exports": [
+        "selectLocalAccounts",
+        "insertLocalAccount",
+        "updateLocalAccount",
+        "updateLocalAccountStatus",
+        "deleteLocalAccount",
+        "deleteLocalAccountValueHistory",
+        "linkLocalAccountToVault",
+        "unlinkLocalAccountFromVault",
+        "findLocalAccountById",
+        "selectLocalAccountCategories",
+        "insertLocalAccountCategory",
+        "deleteLocalAccountCategory",
+        "selectLocalAccountPoints",
+        "insertLocalAccountPoint",
+        "deleteLocalAccountPoint",
+        "selectLocalAccountReceiptRow",
+        "setLocalAccountReceiptToken",
+        "clearLocalAccountReceiptToken",
+        "findLocalAccountByReceiptToken",
+        "selectCategoryReceiptToken",
+        "insertCategoryReceipt",
+        "deleteCategoryReceipt",
+        "selectCategoryAggregateRows",
+        "findCategoryReceiptRowByToken",
+        "selectUserEmailRecipient"
+      ],
+      "executable_business": {
+        "db_refs": 52,
+        "sql_literals": 25,
+        "branches": 7,
+        "calls": 98
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/local-account-consumer-repository.ts",
+      "sha256": "5614889976d78a933e1a2e4cb0e88c8b9544d129efcca293521f5f8683e01be0",
+      "lines": 70,
+      "exports": [
+        "findBridgedLocalAccount",
+        "insertBridgedLocalAccount",
+        "selectLocalAccountValueHistory",
+        "updateLocalAccountValue",
+        "insertLocalAccountValueHistory",
+        "deleteLocalAccountsByIds",
+        "updateLocalAccountsCategoryByIds",
+        "selectLocalAccountsForExport"
+      ],
+      "executable_business": {
+        "db_refs": 18,
+        "sql_literals": 8,
+        "branches": 1,
+        "calls": 16
+      }
+    }
+  ],
+  "use_cases": [
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "listLocalAccounts",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 138,
+      "branches": 4,
+      "calls": 4,
+      "routes": [
+        "GET /local-accounts"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "createLocalAccount",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 328,
+      "branches": 3,
+      "calls": 27,
+      "routes": [
+        "POST /local-accounts"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "editLocalAccount",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 266,
+      "branches": 5,
+      "calls": 13,
+      "routes": [
+        "PUT /local-accounts/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "setLocalAccountStatus",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 194,
+      "branches": 5,
+      "calls": 8,
+      "routes": [
+        "PATCH /local-accounts/:id/status"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "removeLocalAccount",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 116,
+      "branches": 3,
+      "calls": 7,
+      "routes": [
+        "DELETE /local-accounts/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "linkLocalAccount",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 174,
+      "branches": 6,
+      "calls": 7,
+      "routes": [
+        "PATCH /local-accounts/:id/link-vault"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "unlinkLocalAccount",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 127,
+      "branches": 4,
+      "calls": 5,
+      "routes": [
+        "PATCH /local-accounts/:id/unlink-vault"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "listLocalAccountCategories",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 63,
+      "branches": 2,
+      "calls": 2,
+      "routes": [
+        "GET /local-accounts/categories"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "createLocalAccountCategory",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 103,
+      "branches": 4,
+      "calls": 4,
+      "routes": [
+        "POST /local-accounts/categories"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "removeLocalAccountCategory",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 92,
+      "branches": 3,
+      "calls": 4,
+      "routes": [
+        "DELETE /local-accounts/categories/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "getLocalAccount",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 163,
+      "branches": 5,
+      "calls": 6,
+      "routes": [
+        "GET /local-accounts/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "listLocalAccountPoints",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 139,
+      "branches": 4,
+      "calls": 6,
+      "routes": [
+        "GET /local-accounts/:id/points"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "createLocalAccountPoint",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 145,
+      "branches": 5,
+      "calls": 6,
+      "routes": [
+        "POST /local-accounts/:id/points"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "removeLocalAccountPoint",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 92,
+      "branches": 3,
+      "calls": 4,
+      "routes": [
+        "DELETE /local-accounts/points/:pointId"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "symbol": "createLocalAccountReceipt",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 230,
+      "branches": 12,
+      "calls": 7,
+      "routes": [
+        "POST /local-accounts/:id/receipt"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "symbol": "revokeLocalAccountReceipt",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 119,
+      "branches": 4,
+      "calls": 4,
+      "routes": [
+        "DELETE /local-accounts/:id/receipt"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "symbol": "resolvePublicLocalReceipt",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 461,
+      "branches": 23,
+      "calls": 11,
+      "routes": [
+        "GET /local-accounts/receipt/:token",
+        "GET /local-accounts/receipt/:token/pdf"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "symbol": "createCategoryReceipt",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 123,
+      "branches": 5,
+      "calls": 5,
+      "routes": [
+        "POST /local-accounts/category-receipt/:category"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "symbol": "revokeCategoryReceipt",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 122,
+      "branches": 5,
+      "calls": 4,
+      "routes": [
+        "DELETE /local-accounts/category-receipt/:category"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "symbol": "resolvePublicCategoryReceipt",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 449,
+      "branches": 17,
+      "calls": 15,
+      "routes": [
+        "GET /local-accounts/category-receipt/:token",
+        "GET /local-accounts/category-receipt/:token/pdf"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "symbol": "emailCategoryReceipt",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 310,
+      "branches": 11,
+      "calls": 12,
+      "routes": [
+        "POST /local-accounts/category-receipt/:category/email"
+      ]
+    }
+  ],
+  "moved_symbols": [
+    {
+      "symbol": "generateReceiptToken",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "receiptUrl",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "safe",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "safeNum",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "safeDate",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "safeScore",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "LOCAL_ACCOUNT_OWNER_SENTINEL_NONE",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "localAccountResource",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "requireLocalAccountOwnership",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "denyNotFoundOrForbidden",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "denyNotFound",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "denyAccountNotFound",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "denySilentSuccess",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "denyEmptyPoints",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "LOCAL_ACCOUNT_CATEGORY_OWNER_SENTINEL_NONE",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "localAccountCategoryResource",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "requireLocalAccountCategoryOwnership",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "LOCAL_ACCOUNT_POINT_OWNER_SENTINEL_NONE",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "localAccountPointResource",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "requireLocalAccountPointOwnership",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "calcAgeLabel",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "calcRoiPct",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "fmtPublicLocalReceipt",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "findLocalAccountByReceiptToken",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "generateCategoryReceiptToken",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "categoryReceiptUrl",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "ageInDays",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "fmtAvgAgeLabel",
+      "disposition": "MOVED_VERBATIM"
+    },
+    {
+      "symbol": "computeCategoryAggregate",
+      "disposition": "MOVED_REFACTORED_WITH_UNIT_PROOF"
+    },
+    {
+      "symbol": "findCategoryReceiptByToken",
+      "disposition": "MOVED_REFACTORED_WITH_UNIT_PROOF"
+    },
+    {
+      "symbol": "fmtPublicCategoryReceipt",
+      "disposition": "MOVED_REFACTORED_WITH_UNIT_PROOF"
+    }
+  ],
+  "layering_notes": [
+    "artifacts/api-server/src/vault/security/local-account-ownership.ts: security layer resolves ownership through the database (8 refs) — permitted PEP resource resolver"
+  ]
+}

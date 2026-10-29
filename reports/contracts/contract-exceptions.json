@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schemas/contracts/contract-exception.v1.json",
+  "exceptions": [
+    {
+      "category": "contractsWithoutEndpoints",
+      "key": "authorization",
+      "reason": "The authorization domain contract's publicOperations (\"authorize\", \"explain-policy\") are an internal decision interface consumed in-process by every other service via packages/authorization -- not a REST route with its own owner:GET/POST entries in ENDPOINT_REGISTRY. Track G, Phase 07 (\"Unified Policy Decision Contract\") is expected to give this an explicit packages/policy-contract surface; until then it legitimately has zero registry endpoints.",
+      "owner": "Authorization",
+      "ticket": "Roadmap Phase 07 -- Unified Policy Decision Contract",
+      "expires": "2027-03-31"
+    },
+    {
+      "category": "unresolvedOperations",
+      "key": "authorization:authorize",
+      "reason": "Same root cause as the authorization contractsWithoutEndpoints entry above: this operation is an in-process decision call (packages/authorization), not an HTTP route, so it has no ENDPOINT_REGISTRY entry to resolve against.",
+      "owner": "Authorization",
+      "ticket": "Roadmap Phase 07 -- Unified Policy Decision Contract",
+      "expires": "2027-03-31"
+    },
+    {
+      "category": "unresolvedOperations",
+      "key": "authorization:explain-policy",
+      "reason": "Same root cause as authorization:authorize -- an in-process decision-explanation call, not a REST route.",
+      "owner": "Authorization",
+      "ticket": "Roadmap Phase 07 -- Unified Policy Decision Contract",
+      "expires": "2027-03-31"
+    },
+    {
+      "category": "unresolvedOperations",
+      "key": "ai:run-agent",
+      "reason": "Agent runs are dispatched through the workflow/event pipeline (consumes workflow.completed, emits ai.task.completed) rather than a synchronous REST endpoint -- there is no owner:METHOD route for the coverage validator's fuzzy match to resolve \"run-agent\" against by design.",
+      "owner": "ZYNTH",
+      "expires": "2027-03-31"
+    },
+    {
+      "category": "unresolvedOperations",
+      "key": "telegram:render-menu",
+      "reason": "Menu rendering happens inside the Telegram bot's own command-tree parser (apps/telegram-gateway), replying directly over the Telegram Bot API -- it is not, and structurally cannot be, an /api/* HTTP route this scanner would resolve.",
+      "owner": "Telegram Platform",
+      "expires": "2027-03-31"
+    },
+    {
+      "category": "unresolvedOperations",
+      "key": "telegram:resolve-command",
+      "reason": "Same as telegram:render-menu -- command resolution is internal to the Telegram command-tree parser, not a REST route. Called out explicitly in scripts/validate-domain-contract-coverage.mjs's own header comment as the canonical example of a fuzzy-match finding that is architecturally correct, not a bug to fix.",
+      "owner": "Telegram Platform",
+      "expires": "2027-03-31"
+    }
+  ]
+}

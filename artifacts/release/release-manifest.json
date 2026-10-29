@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "local-1790662080181",
+  "gitCommit": "local",
+  "service": "monolith",
+  "package": "@workspace/api-server",
+  "owner": "core",
+  "image": {
+    "repository": "ghcr.io/ayzen/ayzen",
+    "tag": "sha-local"
+  },
+  "runtime": {
+    "port": 8080,
+    "health": "/health",
+    "readiness": "/ready",
+    "rollback": "previous-image"
+  },
+  "generatedAt": "2026-09-29T06:08:00.181Z",
+  "manifestHash": "0af58fc207388e38282ad4854c898c93559e5c1bfc3105d8f08c985b0dd009e5"
+}

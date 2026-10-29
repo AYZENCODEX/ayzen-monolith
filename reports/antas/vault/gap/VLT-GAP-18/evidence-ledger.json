@@ -1,0 +1,288 @@
+{
+  "phase": "VLT-GAP-18",
+  "validator_version": "18.1",
+  "sealed_at": "2026-10-12T17:36:20.180Z",
+  "hmac": null,
+  "entries": {
+    "reports/antas/vault/gap/VLT-GAP-01/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "5b85f348c885a4efd56c676147fced5002b1cca6cd3adbea7bbed145a53dfc0b"
+    },
+    "reports/antas/vault/gap/VLT-GAP-01/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "c604f16dae25dc37d9bcf558153a2147da4a18ce7a68e758e8f1a4dc3998689b"
+    },
+    "reports/antas/vault/gap/VLT-GAP-01/gate.json": {
+      "status": "PASS",
+      "sha256": "4f24b9bb8524031e57ccc0bec2994870b7fa0df6486797662515e5215227f2ab"
+    },
+    "reports/antas/vault/gap/VLT-GAP-01/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "82574f6f3dd270c783708bf031478d61effd689c3f1d7c247b0e41b5749b7b59"
+    },
+    "reports/antas/vault/gap/VLT-GAP-02/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "62350ae479c537ddce382dff730de7a85f1efe511b6a2c25ae5ff940da534b2a"
+    },
+    "reports/antas/vault/gap/VLT-GAP-02/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "62540452abe35237c96dedb44c9c82f86d9fc2af8decc19ea1880cff2c0f1b99"
+    },
+    "reports/antas/vault/gap/VLT-GAP-02/gate.json": {
+      "status": "PASS",
+      "sha256": "95f7fc8441fb61b18bcedac976c4be5207af0642a87a8dd3108facbb9e2e3a94"
+    },
+    "reports/antas/vault/gap/VLT-GAP-02/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "422c602a6020aeda2c87665ecc8481e5528ea2d990ed3c17d34082df7108d53e"
+    },
+    "reports/antas/vault/gap/VLT-GAP-03/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "5044ea54c780da01e3e79a21caeb50748776e975cb511b64bc8c867a90b18ed6"
+    },
+    "reports/antas/vault/gap/VLT-GAP-03/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "36b86a18603fe1cabd97d9ceab8a9b3e151a525ce859a5e1f38a6adfbfb25a21"
+    },
+    "reports/antas/vault/gap/VLT-GAP-03/gate.json": {
+      "status": "PASS",
+      "sha256": "0995a5e071fcfbaa2e0ab92a0ee2ac2ca3852eafa51d592d30fbd4264a922a23"
+    },
+    "reports/antas/vault/gap/VLT-GAP-03/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "4d104137015c41809a21badf7095d9301919a201a6dc0ef871d75f627c4448c3"
+    },
+    "reports/antas/vault/gap/VLT-GAP-04/consumer-graph.json": {
+      "status": "FAIL",
+      "sha256": "a07fd37a9c7cb838a774d2b40081cdf2b11a1bbc0a484ace936efc0a268616e0"
+    },
+    "reports/antas/vault/gap/VLT-GAP-04/extraction-proof.json": {
+      "status": "FAIL",
+      "sha256": "37b35ce5156c6c2ad7d9d79b3a76cf83ee04f59d44d51660b3b6f91265e7d845"
+    },
+    "reports/antas/vault/gap/VLT-GAP-04/gate.json": {
+      "status": "FAIL",
+      "sha256": "da31b77dcf63dd4b9d64b9bce96200aa1e14026efb9e6a0a15ac02d2187e78f6"
+    },
+    "reports/antas/vault/gap/VLT-GAP-04/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "cc8de346e3cec7f4f5be3d158ac91dbf8b8249aa3ccb4e561c83cf8d5d2edc57"
+    },
+    "reports/antas/vault/gap/VLT-GAP-05/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "b4153c81b65e4508c20822f527304b3b6b3b9f2d79fce8e1790c8af4dd5ee3e0"
+    },
+    "reports/antas/vault/gap/VLT-GAP-05/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "7f60cea3059b893a83b90df3fd530b7bbeaa57035a57248475fd614ae05faa2c"
+    },
+    "reports/antas/vault/gap/VLT-GAP-05/gate.json": {
+      "status": "PASS",
+      "sha256": "5c0fde0c2af2ec2387ab1681f7cce985785ca8c10ee8a9eebe9b12e6463155e1"
+    },
+    "reports/antas/vault/gap/VLT-GAP-05/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "a9d0a47f4122b3f90237b85a633e0a06fabdba1782586328fe34415e32731b8b"
+    },
+    "reports/antas/vault/gap/VLT-GAP-06/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "5ad5447c77b01e425bfe9424b36698e4c5ea055d047ff6c6d50439bf5be6a0dd"
+    },
+    "reports/antas/vault/gap/VLT-GAP-06/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "7b67bc51a4f1d04c34bc9a4a78cbc47effb3a6abdb4002786be6f1c191944569"
+    },
+    "reports/antas/vault/gap/VLT-GAP-06/retire-proof.json": {
+      "status": "PASS",
+      "sha256": "043cde03e819e8351ec95e188285857140e1fe2080dbaa1841e0dfe832d909ba"
+    },
+    "reports/antas/vault/gap/VLT-GAP-06/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "072b901e4e76d86eeb9129f671aef058b96a9dc39276e12bab92d8667b04e4f8"
+    },
+    "reports/antas/vault/gap/VLT-GAP-08/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "dc48718db09999e806ff201262a2bc1305f8b7a6572908ec359cae3aff637010"
+    },
+    "reports/antas/vault/gap/VLT-GAP-08/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "caa56d80567302bc466a62d830af0ac908c1d84a39c038b261c792a286f93936"
+    },
+    "reports/antas/vault/gap/VLT-GAP-08/retire-proof.json": {
+      "status": "PASS",
+      "sha256": "25950b2045cbbbfd97e755a274d33054c01139294d35ad172eb09231678f957c"
+    },
+    "reports/antas/vault/gap/VLT-GAP-08/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "0ce7e00db8300efa0f9fc0a19b1b262013f3601bdf9de6dc5e83653fc7fb7c81"
+    },
+    "reports/antas/vault/gap/VLT-GAP-09/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "6ff9862d48d6d007c60c214ca58ca66897e43627e12ef59ea21da9b449699706"
+    },
+    "reports/antas/vault/gap/VLT-GAP-09/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "3ed36044f8cac1da1887cc4a3bbbf560b94c1eba20a29f6e46919b0564719ae1"
+    },
+    "reports/antas/vault/gap/VLT-GAP-09/retire-proof.json": {
+      "status": "PASS",
+      "sha256": "abd053ecfde89b180492ca76739f8e2cc968b2b8a7524479807c71f4e2a1ae2a"
+    },
+    "reports/antas/vault/gap/VLT-GAP-09/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "098d191e7b09f2faa5dc1fb3e57fa8bd76112c8936ed010ec275160629ffb826"
+    },
+    "reports/antas/vault/gap/VLT-GAP-10/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "382949bccfb851e4f50909f61dc1ad28b3955ed8ee52d0325b631fff0470c62e"
+    },
+    "reports/antas/vault/gap/VLT-GAP-10/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "b5d29dc0fad516c1d82ed9694e80701abced788899667883baa5b714b8a8f74a"
+    },
+    "reports/antas/vault/gap/VLT-GAP-10/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "24c3cd7f9d751d7afb88c3df1c49c7b73753f42d792aa4775d706b9b6e50e351"
+    },
+    "reports/antas/vault/gap/VLT-GAP-11/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "59504226d0ca8afaed08eed1c9462373b14b07b26b7ee7d3851886c97b8cbbd4"
+    },
+    "reports/antas/vault/gap/VLT-GAP-11/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "15832622a496a370ed411ea3f512228686bf4ef7da7633af4dc317eb9291047c"
+    },
+    "reports/antas/vault/gap/VLT-GAP-11/retire-proof.json": {
+      "status": "PASS",
+      "sha256": "7e49f1e25e71f4bd06a9e6a69d2156e01ee05a84241f70ba4d67d27e58efa582"
+    },
+    "reports/antas/vault/gap/VLT-GAP-11/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "d8c1cbc10029f863d2c23256a3c89c3d71099bf951c0fab4a3b2e1119fbacc31"
+    },
+    "reports/antas/vault/gap/VLT-GAP-12/consumer-graph.json": {
+      "status": "PASS",
+      "sha256": "a38c1e7297a164c4146661668f07853f50fe9c4b3ae412a1ba0e2e3f04d5b079"
+    },
+    "reports/antas/vault/gap/VLT-GAP-12/extraction-proof.json": {
+      "status": "PASS",
+      "sha256": "46da418430e5f4d0c64a20a6711bfbecc5ba07e6c4d938297277ae9b37c59267"
+    },
+    "reports/antas/vault/gap/VLT-GAP-12/infra-census.json": {
+      "status": "PASS",
+      "sha256": "e31a41df9025bbf6853dcec43f80873a406ce632cf0acf85175ce3b6155b5a73"
+    },
+    "reports/antas/vault/gap/VLT-GAP-12/retire-proof.json": {
+      "status": "PASS",
+      "sha256": "89f57b2aac3997f7767c6ecefd2bf7b769db7f484c7dc3007d68a4c72e8ab449"
+    },
+    "reports/antas/vault/gap/VLT-GAP-12/split-census.json": {
+      "status": "PASS",
+      "sha256": "d32567099658b343da2b527305c08f06591d1b43cac90b43f4864bb9959c5178"
+    },
+    "reports/antas/vault/gap/VLT-GAP-12/split-proof.json": {
+      "status": "PASS",
+      "sha256": "48c423c6a3e20a2e7a2037b7aa71bddd01ac1258556a78f5b5d3088659ca3807"
+    },
+    "reports/antas/vault/gap/VLT-GAP-12/symbol-inventory.json": {
+      "status": "PASS",
+      "sha256": "22151d87d8448e131baf8ad26471115e72963f515d6fed2f47352b066a92b56d"
+    },
+    "reports/antas/vault/gap/VLT-GAP-13/ci-fail-proof.json": {
+      "status": "PASS",
+      "sha256": "2e5c109f1a779e350bdb81af87b046d7043709efb6397cce0424cb0d41ae8386"
+    },
+    "reports/antas/vault/gap/VLT-GAP-13/ci-wiring.json": {
+      "status": "PASS",
+      "sha256": "866559b50f2746bfd0c55cb950185e37077ecc911fc001b11f2da678a9941300"
+    },
+    "reports/antas/vault/gap/VLT-GAP-13/differential-marketplace-vault.json": {
+      "status": "PASS",
+      "sha256": "7b5efba247e08413b8244a8757a5a49ce658429a89fa6cc2a347b1165d37b5da"
+    },
+    "reports/antas/vault/gap/VLT-GAP-13/gate.json": {
+      "status": "PASS",
+      "sha256": "14658870d053205ba9b5d87edb43c91a6ac54d1237594094ad9d725e971e4706"
+    },
+    "reports/antas/vault/gap/VLT-GAP-13/route-thinness.json": {
+      "status": "PASS",
+      "sha256": "6fee0424c111df7c83f322f75b589909fd260016708b2693114ec1fe7154a0d4"
+    },
+    "reports/antas/vault/gap/VLT-GAP-14/architecture.json": {
+      "status": "PASS",
+      "sha256": "abbd4e04706c7c5f39766506cfb3984206b3889cd0c7847e6f93d70476c0ec5e"
+    },
+    "reports/antas/vault/gap/VLT-GAP-14/ci-fail-proof.json": {
+      "status": "PASS",
+      "sha256": "157c8a8ebb5bb877c685411cb75f34df0419e2e77e10e04cf947d32b520f0b6b"
+    },
+    "reports/antas/vault/gap/VLT-GAP-14/ci-wiring.json": {
+      "status": "PASS",
+      "sha256": "e1472e5f6e8598fb14fea7c323c4e4b71151057a50276cd191ca2d0ae7de1e74"
+    },
+    "reports/antas/vault/gap/VLT-GAP-14/gate.json": {
+      "status": "PASS",
+      "sha256": "c016c3d2369db06a399c96428384c29f0033c061b4892f6bebd539ea3b7b5e2d"
+    },
+    "reports/antas/vault/gap/VLT-GAP-15/compare.json": {
+      "status": "PASS",
+      "sha256": "b1fff5b1cd01c82bfa20bfc5c820b3e8591f3254ad137677478b0127bd6e25aa"
+    },
+    "reports/antas/vault/gap/VLT-GAP-15/equivalence-census.json": {
+      "status": "PASS",
+      "sha256": "716acbd250db2e2bc60123a12cd6a6783ae691398a02468be5dd3df0d3e6e0b4"
+    },
+    "reports/antas/vault/gap/VLT-GAP-15/gate.json": {
+      "status": "PASS",
+      "sha256": "da24d0301ee83efb21a6e8397ce59616b9083bb1f9314e0dde63f133464af56a"
+    },
+    "reports/antas/vault/gap/VLT-GAP-15/module-differential-backup.json": {
+      "status": "PASS",
+      "sha256": "2b4e323ba364145a2687bc21b65bc223dabb7f0af6e8ef08587a02bd15f5091f"
+    },
+    "reports/antas/vault/gap/VLT-GAP-15/replay.json": {
+      "status": "PASS",
+      "sha256": "b8dfee573cd86e2fa3ea00ff9ccaefb75e1525f613d1178bb0edf62609cf9043"
+    },
+    "reports/antas/vault/gap/VLT-GAP-16/ci-fail-proof.json": {
+      "status": "PASS",
+      "sha256": "8afaeb81dabef710f0e1bcb841ad87239ac52a2cdfbb16149078aab89d100dcd"
+    },
+    "reports/antas/vault/gap/VLT-GAP-16/ci-wiring.json": {
+      "status": "PASS",
+      "sha256": "0692fe5d15b340ccb3f3800cb6f36faf1402cb757098391ed88ae862dffeda8a"
+    },
+    "reports/antas/vault/gap/VLT-GAP-16/duplicate-scan.json": {
+      "status": "PASS",
+      "sha256": "06d2f3c59ac2c80642cf5871d6c37a5bcc71e4822afecf6fec410eab152d6beb"
+    },
+    "reports/antas/vault/gap/VLT-GAP-16/gate.json": {
+      "status": "PASS",
+      "sha256": "7709fb76d66eeef93b36901ff66ffd7fd4c42483dcfcb1e3e6e4fefdee216593"
+    },
+    "reports/antas/vault/gap/VLT-GAP-17/map-check.json": {
+      "status": "PASS",
+      "sha256": "1fedbcb0b2d8a3a20f0296243a92add6200a253b2d17132fa95a80c7a7e8f173"
+    },
+    "reports/antas/vault/gap/VLT-GAP-19/gate.json": {
+      "status": "PASS",
+      "sha256": "1e9ad23ae001ecd273a80924053657dcd37ea505b2d82a2de3db28a802a9f97f"
+    },
+    "reports/antas/vault/gap/VLT-GAP-20/baseline.json": {
+      "status": "PASS",
+      "sha256": "9953a16726c411bf8080a2a336f532021ca6617cf43623cd3098ec1d2dd779ce"
+    },
+    "reports/antas/vault/gap/VLT-GAP-20/ci-gate.json": {
+      "status": "PASS",
+      "sha256": "feaa1cb9af2236c1aa75afe8176639c6b1943c659eb3366c6d53f1b429101995"
+    },
+    "reports/antas/vault/gap/VLT-GAP-20/ci-wiring.json": {
+      "status": "PASS",
+      "sha256": "b13e4f4bbb3f743ca7be63db2a997abd6ffb0957e3dddfd5a5fbb263670d45d5"
+    },
+    "reports/antas/vault/gap/VLT-GAP-20/gate.json": {
+      "status": "PASS",
+      "sha256": "9049d44c2f53f5050b283baf630629c183b0f53c976e010db85930cd596bbc6c"
+    }
+  }
+}

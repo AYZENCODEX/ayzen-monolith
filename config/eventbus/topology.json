@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "buses": [
+    { "id": "domain", "classification": "internal" },
+    { "id": "security", "classification": "restricted" },
+    { "id": "integration", "classification": "sensitive" },
+    { "id": "workflow", "classification": "internal" },
+    { "id": "platform", "classification": "internal" }
+  ],
+  "crossBus": "policy-required"
+}

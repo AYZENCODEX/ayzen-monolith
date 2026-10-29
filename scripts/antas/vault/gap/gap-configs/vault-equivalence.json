@@ -1,0 +1,129 @@
+{
+  "_doc": "VLT-GAP-15 equivalence groups. Each group = frozen PRE-extraction sources (baseline copies written by earlier gaps) + the CURRENT code that must still carry every contract literal. Edit here, not in the validator. `tasks` = GAP-15 multi-task numbers (2 entity CRUD, 3 account, 4 KYC, 5 game/marketplace, 6 secret, 7 security negatives, 8 backup/restore, 9 snapshot/restore/trash). Groups with tasks=[] are extra surfaces that also moved (share/attachment, health).",
+  "src_root": "artifacts/api-server/src",
+  "groups": {
+    "entity-secret": {
+      "tasks": [2, 6],
+      "note": "routes/vault.ts serves entity CRUD AND secret create/list/reveal (GET /vault/:id/seed); one contract group.",
+      "baseline": [
+        "reports/antas/vault/gap/VLT-GAP-01/baseline/routes/vault.ts",
+        "reports/antas/vault/gap/VLT-GAP-01/baseline/routes/vault-entity-links.ts"
+      ],
+      "current_files": ["routes/vault.ts", "routes/vault-entity-links.ts"],
+      "current_dirs": ["vault/application/entity", "vault/application/secret", "vault/domain", "vault/crypto", "vault/security", "vault/infrastructure/repositories", "vault/shared"],
+      "evidence_scripts": ["validate-vlt-gap-01-D.mjs", "validate-vlt-gap-05-D.mjs", "validate-vlt-gap-07-D.mjs"],
+      "evidence_reports": ["VLT-GAP-01/behavior-regression.json", "VLT-GAP-01/security-regression.json", "VLT-GAP-05/behavior-regression.json", "VLT-GAP-05/security-regression.json"]
+    },
+    "local-account": {
+      "tasks": [3],
+      "baseline": ["reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__api-server__src__routes__local-accounts.ts"],
+      "current_files": ["routes/local-accounts.ts"],
+      "current_dirs": ["vault/application/local-account", "vault/domain", "vault/security", "vault/infrastructure/repositories", "vault/shared"],
+      "evidence_scripts": ["validate-vlt-gap-02-D.mjs"],
+      "evidence_reports": ["VLT-GAP-02/behavior-regression.json", "VLT-GAP-02/security-regression.json"]
+    },
+    "kyc": {
+      "tasks": [4],
+      "baseline": [
+        "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__api-server__src__routes__kyc.ts",
+        "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__api-server__src__routes__kyc-data-entities.ts"
+      ],
+      "current_files": ["routes/kyc.ts", "routes/kyc-data-entities.ts"],
+      "current_dirs": ["vault/application/kyc", "vault/domain", "vault/security", "vault/infrastructure/repositories", "vault/shared"],
+      "evidence_scripts": ["validate-vlt-gap-03-D.mjs"],
+      "evidence_reports": ["VLT-GAP-03/behavior-regression.json", "VLT-GAP-03/security-regression.json"]
+    },
+    "game-marketplace": {
+      "tasks": [5],
+      "baseline": [
+        "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__api-server__src__routes__game-entries.ts",
+        "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__api-server__src__routes__marketplace-game.ts",
+        "reports/antas/vault/gap/VLT-GAP-13/baseline/marketplace-vault.pre-extraction.ts"
+      ],
+      "current_files": ["routes/game-entries.ts", "routes/marketplace-game.ts", "routes/marketplace-vault.ts"],
+      "current_dirs": ["vault/application/game", "vault/domain", "vault/security", "vault/infrastructure/repositories", "vault/shared"],
+      "evidence_scripts": ["validate-vlt-gap-04-D.mjs", "differential-vlt-gap-13-E.mjs"],
+      "evidence_reports": ["VLT-GAP-04/behavior-regression.json", "VLT-GAP-04/security-regression.json", "VLT-GAP-13/differential-marketplace-vault.json"]
+    },
+    "security-access": {
+      "tasks": [7],
+      "baseline": [
+        "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__routes__vault-security.ts",
+        "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__routes__vault-reauth.ts"
+      ],
+      "current_files": ["routes/vault-security.ts", "routes/vault-reauth.ts"],
+      "current_dirs": ["vault/application/security", "vault/security", "vault/infrastructure/repositories"],
+      "evidence_scripts": ["validate-vlt-gap-06-D.mjs", "differential-vlt-gap-06-D.mjs"],
+      "evidence_reports": []
+    },
+    "backup-restore": {
+      "tasks": [8],
+      "baseline": [
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__routes__vault__backup__cloud__ts",
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__routes__vault__backup__key__ts",
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__routes__vault__backup__schedule__ts",
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__alerts__ts",
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__audit__ts",
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__cloud__ts",
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__delivery__ts",
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__envelope__ts",
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__key__rotation__cron__ts",
+        "reports/antas/vault/gap/VLT-GAP-08/baseline/sources/artifacts__api__server__src__lib__vault__backup__schedule__cron__ts"
+      ],
+      "current_files": ["routes/vault-backup-cloud.ts", "routes/vault-backup-key.ts", "routes/vault-backup-schedule.ts"],
+      "current_dirs": ["vault/application/backup", "vault/infrastructure/backup", "vault/infrastructure/jobs", "vault/crypto"],
+      "evidence_scripts": ["validate-vlt-gap-08.mjs", "differential-vlt-gap-08.mjs"],
+      "evidence_reports": []
+    },
+    "snapshot-trash": {
+      "tasks": [9],
+      "baseline": [
+        "reports/antas/vault/gap/VLT-GAP-01/baseline/routes/vault-snapshot.ts",
+        "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__extra__ts",
+        "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__restore__ts",
+        "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__trash__cron__ts",
+        "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__snapshot__trash__purge__ts",
+        "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__trash__cron__ts",
+        "reports/antas/vault/gap/VLT-GAP-09/baseline/sources/artifacts__api__server__src__lib__vault__trash__purge__ts"
+      ],
+      "current_files": ["routes/vault-snapshot.ts"],
+      "current_dirs": ["vault/application/snapshot", "vault/infrastructure/trash", "vault/infrastructure/jobs", "vault/domain"],
+      "evidence_scripts": ["validate-vlt-gap-09.mjs", "differential-vlt-gap-09.mjs"],
+      "evidence_reports": []
+    },
+    "share-attachment": {
+      "tasks": [],
+      "baseline": [
+        "reports/antas/vault/gap/VLT-GAP-10/baseline/sources/artifacts__api__server__src__routes__vault__shares__ts",
+        "reports/antas/vault/gap/VLT-GAP-10/baseline/sources/artifacts__api__server__src__routes__vault__attachments__ts"
+      ],
+      "current_files": ["routes/vault-shares.ts", "routes/vault-attachments.ts"],
+      "current_dirs": ["vault/application/share", "vault/application/attachment", "vault/shared", "vault/security", "vault/infrastructure/repositories"],
+      "evidence_scripts": ["validate-vlt-gap-10.mjs"],
+      "evidence_reports": []
+    },
+    "health": {
+      "tasks": [],
+      "baseline": [
+        "reports/antas/vault/gap/VLT-GAP-11/baseline/sources/artifacts__api__server__src__lib__vault__health__cron__ts",
+        "reports/antas/vault/gap/VLT-GAP-11/baseline/sources/artifacts__api__server__src__lib__vault__health__scan__ts"
+      ],
+      "current_files": [],
+      "current_dirs": ["vault/application/health.ts", "vault/application/health-cron.ts", "vault/application/health-scan.ts"],
+      "evidence_scripts": ["validate-vlt-gap-11.mjs", "differential-vlt-gap-11.mjs"],
+      "evidence_reports": []
+    }
+  },
+  "replay_tasks": {
+    "2": "entity CRUD", "3": "account CRUD/purchase", "4": "KYC", "5": "game/marketplace",
+    "6": "secret create/list/reveal", "7": "security negative cases", "8": "backup/restore", "9": "snapshot/restore/trash"
+  },
+  "dimensions": {
+    "status_body":  "(\\bstatus\\b|\\.body\\b|statusCode)",
+    "db_state":     "(db\\.(select|insert|update|delete|execute)|vaultEntriesTable|ownership|version)",
+    "encrypted_values": "(encrypt|decrypt|ciphertext|\\biv\\b|authTag|envelope)",
+    "events":       "(broadcastEvent|publishEvent|emitEvent|vault\\.[a-z]+\\.[a-z]+)",
+    "audit":        "(recordAudit|logActivity|logVaultActivity|logSubjectActivity|logBackupAudit)",
+    "side_effects": "(createNotification|syncOnVaultDelete|delistVaultMarketplaceListings|chargeCredits|sendMail|fetch\\()"
+  }
+}

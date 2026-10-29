@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "strategy": "hybrid-microservice-strangler",
+  "requiredGates": ["backup", "characterization", "backfill", "validation", "rollback"],
+  "categories": ["features", "architecture", "security", "infrastructure"],
+  "centralWebsite": {
+    "manifest": "migrations/beta/central-website/manifest.json",
+    "app": "ayzen-web",
+    "target": "artifacts/ayzen",
+    "database": {
+      "mode": "isolated-capable",
+      "databaseKey": "ayzen_web",
+      "schema": "ayzen_web",
+      "connectionEnv": "AYZEN_DB_AYZEN_WEB_URL",
+      "crossAppAccess": "forbidden"
+    }
+  },
+  "shared": {
+    "manifest": "migrations/beta/shared/manifest.json",
+    "scope": "workspace",
+    "contracts": ["canonical-workspace-id", "event-envelope-v1", "audit-envelope-v1"]
+  },
+  "apps": [
+    {"app": "api-gateway", "manifest": "migrations/beta/apps/api-gateway/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "api_gateway", "schema": "api_gateway", "connectionEnv": "AYZEN_DB_API_GATEWAY_URL", "crossAppAccess": "forbidden"}},
+    {"app": "telegram-gateway", "manifest": "migrations/beta/apps/telegram-gateway/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "telegram_gateway", "schema": "telegram_gateway", "connectionEnv": "AYZEN_DB_TELEGRAM_GATEWAY_URL", "crossAppAccess": "forbidden"}},
+    {"app": "worker", "manifest": "migrations/beta/apps/worker/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "worker", "schema": "worker", "connectionEnv": "AYZEN_DB_WORKER_URL", "crossAppAccess": "forbidden"}},
+    {"app": "api-server", "manifest": "migrations/beta/apps/api-server/manifest.json", "database": {"mode": "shared", "databaseKey": "workspace", "schema": "public", "connectionEnv": "AYZEN_DB_WORKSPACE_URL", "crossAppAccess": "forbidden"}},
+    {"app": "admin", "manifest": "migrations/beta/apps/admin/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "admin", "schema": "admin", "connectionEnv": "AYZEN_DB_ADMIN_URL", "crossAppAccess": "forbidden"}},
+    {"app": "ai", "manifest": "migrations/beta/apps/ai/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "ai", "schema": "ai", "connectionEnv": "AYZEN_DB_AI_URL", "crossAppAccess": "forbidden"}},
+    {"app": "finance", "manifest": "migrations/beta/apps/finance/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "finance", "schema": "finance", "connectionEnv": "AYZEN_DB_FINANCE_URL", "crossAppAccess": "forbidden"}},
+    {"app": "identity", "manifest": "migrations/beta/apps/identity/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "identity", "schema": "identity", "connectionEnv": "AYZEN_DB_IDENTITY_URL", "crossAppAccess": "forbidden"}},
+    {"app": "mail", "manifest": "migrations/beta/apps/mail/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "mail", "schema": "mail", "connectionEnv": "AYZEN_DB_MAIL_URL", "crossAppAccess": "forbidden"}},
+    {"app": "notification", "manifest": "migrations/beta/apps/notification/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "notification", "schema": "notification", "connectionEnv": "AYZEN_DB_NOTIFICATION_URL", "crossAppAccess": "forbidden"}},
+    {"app": "search", "manifest": "migrations/beta/apps/search/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "search", "schema": "search", "connectionEnv": "AYZEN_DB_SEARCH_URL", "crossAppAccess": "forbidden"}},
+    {"app": "vault", "manifest": "migrations/beta/apps/vault/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "vault", "schema": "vault", "connectionEnv": "AYZEN_DB_VAULT_URL", "crossAppAccess": "forbidden"}},
+    {"app": "workflow", "manifest": "migrations/beta/apps/workflow/manifest.json", "database": {"mode": "isolated-capable", "databaseKey": "workflow", "schema": "workflow", "connectionEnv": "AYZEN_DB_WORKFLOW_URL", "crossAppAccess": "forbidden"}}
+  ]
+}

@@ -1,0 +1,3837 @@
+{
+  "phase": "VLT-GAP-17",
+  "sub_phase": "VLT-GAP-17",
+  "validator_version": "17.1",
+  "checked_at": "2026-10-12T17:33:34.659Z",
+  "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "39cb0274c568774b941ff71f772bc029468a5527fe3cea3e210aac2981b3167a",
+  "source_hashes": {
+    "scripts/antas/vault/gap/gap-17-common.mjs": "faff08b17b1ce9d34d581e130d0268b73e40c63669d2ba0db70884a4c413de1e",
+    "scripts/antas/vault/gap/validate-vlt-gap-17.mjs": "438e853c1d3d33014fc2f1b28df4337d19ac17dc593251e4dd8480c0425e3d65",
+    "scripts/antas/vault/gap/generate-vlt-gap-17-map.mjs": "3e8013caa3ddc0ab45ddc05dc2b2d6fa9e313b12456a7d27d3a6539632a47368",
+    "docs/antas/vault/file-migration-map.md": "da4f462d16bc798cffddc9eeef2431c0efe4a3d5781d4b4dacd5f93e87b6879f"
+  },
+  "command": "node scripts/antas/vault/gap/validate-vlt-gap-17.mjs",
+  "totals": {
+    "rows": 145,
+    "RETIRED": 16,
+    "EXTRACTED": 103,
+    "NEW-SEAM": 20,
+    "IMPLEMENTED": 0,
+    "COMPAT_THIN_SEAM": 6,
+    "vault_files_on_disk": 139,
+    "legacy_files_on_disk": 12,
+    "unmapped_files": 0
+  },
+  "open_items": {
+    "pending_rows": [],
+    "uncertified_rows": [],
+    "origin_unproven_files": [],
+    "justified_new_seams": [
+      {
+        "line": 49,
+        "files": [
+          "artifacts/api-server/src/vault/infrastructure/repositories/encryption-key-repository.ts"
+        ],
+        "reason": "PostgreSQL implementation of the key-store port; no legacy route owner exists"
+      },
+      {
+        "line": 50,
+        "files": [
+          "artifacts/api-server/src/vault/infrastructure/crypto-key-stores.ts"
+        ],
+        "reason": "process composition adapter registers the repository-backed key-store ports; no legacy implementation was moved"
+      },
+      {
+        "line": 51,
+        "files": [
+          "artifacts/api-server/src/vault/infrastructure/repositories/entity-field-contract.ts"
+        ],
+        "reason": "type-only check that domain fields match insertable database columns"
+      },
+      {
+        "line": 52,
+        "files": [
+          "artifacts/api-server/src/vault/application/local-account/bulk.ts"
+        ],
+        "reason": "bulk/export handlers delegate here while the shared route retains unrelated database behavior"
+      },
+      {
+        "line": 53,
+        "files": [
+          "artifacts/api-server/src/vault/application/local-account/value.ts"
+        ],
+        "reason": "value-history handlers delegate here while the shared route retains unrelated database behavior"
+      },
+      {
+        "line": 54,
+        "files": [
+          "artifacts/api-server/src/vault/application/kyc/enrollment.ts"
+        ],
+        "reason": "the enroll-by-KYC branch delegates here while the shared route retains unrelated database behavior"
+      },
+      {
+        "line": 55,
+        "files": [
+          "artifacts/api-server/src/vault/application/kyc/exchange.ts"
+        ],
+        "reason": "exchange-key handlers delegate here while the shared route retains unrelated database behavior"
+      },
+      {
+        "line": 56,
+        "files": [
+          "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts"
+        ],
+        "reason": "shared repository serves the extracted enrollment and exchange-key use cases"
+      },
+      {
+        "line": 105,
+        "files": [
+          "artifacts/api-server/src/vault/application/use-case-result.ts"
+        ],
+        "reason": "shared by 7 legacy files — cross-cutting seam, no single OLD origin"
+      }
+    ]
+  },
+  "evidence_commit_binding_note": "recorded evidence is bound by commit_sha (git) or source_tree_sha256 (no git repository in the upload); the gate verifies presence + status, not that the bound tree equals today's tree — later GAPs legitimately changed it",
+  "rows": [
+    {
+      "line": 7,
+      "kind": "COMPAT",
+      "old": [
+        "artifacts/api-server/src/routes/vault*.ts"
+      ],
+      "new": [],
+      "symbols_moved": {},
+      "old_importers": {},
+      "callers_of_new_outside_vault": {}
+    },
+    {
+      "line": 8,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-crypto.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/crypto/field-encryption.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/crypto/field-encryption.ts": [
+          "loadKeyManager",
+          "rotateKey",
+          "getActiveVersion",
+          "encryptField",
+          "decryptField",
+          "decryptRow",
+          "decryptRows"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-crypto.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/crypto/field-encryption.ts": [
+          "artifacts/api-server/src/index.ts",
+          "artifacts/api-server/src/lib/mail-attachment-content.ts",
+          "artifacts/api-server/src/lib/mail-send-queue.ts",
+          "artifacts/api-server/src/lib/mail-sync.ts",
+          "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+          "artifacts/api-server/src/routes/email-accounts.ts",
+          "artifacts/api-server/src/routes/emergency-access.ts",
+          "artifacts/api-server/src/routes/organizations.ts",
+          "artifacts/api-server/src/routes/resend-webhook.ts",
+          "artifacts/api-server/src/routes/teams.ts",
+          "artifacts/api-server/src/routes/two-factor.ts",
+          "artifacts/api-server/src/routes/value-history.ts"
+        ]
+      }
+    },
+    {
+      "line": 9,
+      "kind": "COMPAT",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts"
+      ],
+      "new": [],
+      "symbols_moved": {},
+      "old_importers": {},
+      "callers_of_new_outside_vault": {}
+    },
+    {
+      "line": 10,
+      "kind": "COMPAT",
+      "old": [],
+      "new": [],
+      "symbols_moved": {},
+      "old_importers": {},
+      "callers_of_new_outside_vault": {}
+    },
+    {
+      "line": 11,
+      "kind": "COMPAT",
+      "old": [],
+      "new": [],
+      "symbols_moved": {},
+      "old_importers": {},
+      "callers_of_new_outside_vault": {}
+    },
+    {
+      "line": 12,
+      "kind": "THIN",
+      "old": [
+        "services/vault/src/index.mjs"
+      ],
+      "new": [],
+      "symbols_moved": {},
+      "old_importers": {},
+      "callers_of_new_outside_vault": {}
+    },
+    {
+      "line": 13,
+      "kind": "SEAM",
+      "old": [
+        "services/vault/src/crypto.mjs",
+        "services/vault/src/access.mjs",
+        "services/vault/src/contracts.mjs",
+        "services/vault/src/domain.mjs"
+      ],
+      "new": [],
+      "symbols_moved": {},
+      "old_importers": {},
+      "callers_of_new_outside_vault": {}
+    },
+    {
+      "line": 23,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-backup-envelope.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/crypto/backup-envelope.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/crypto/backup-envelope.ts": [
+          "loadBackupEnvelopeKeyManager",
+          "rotateBackupEnvelopeKey",
+          "getActiveBackupEnvelopeVersion",
+          "envelopeEncryptBackup",
+          "envelopeDecryptBackup"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-backup-envelope.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/crypto/backup-envelope.ts": [
+          "artifacts/api-server/src/index.ts",
+          "artifacts/api-server/src/lib/dr-test-runner.ts"
+        ]
+      }
+    },
+    {
+      "line": 24,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-backup-audit.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/backup/audit.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/backup/audit.ts": [
+          "AuditRequestSource",
+          "VaultBackupAuditEvent",
+          "LogBackupAuditInput",
+          "redactUrl",
+          "logBackupAudit",
+          "hasKeyRotationAudit",
+          "listOwnBackupAuditLog",
+          "listBackupAuditLogAdmin",
+          "isAnomalousBackupIp"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-backup-audit.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/backup/audit.ts": []
+      }
+    },
+    {
+      "line": 25,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-backup-cloud.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts": [
+          "CloudProvider",
+          "CLOUD_PROVIDERS",
+          "isCloudProviderConfigured",
+          "buildAuthorizeUrl",
+          "verifyAuthorizeState",
+          "completeCloudConnect",
+          "uploadToGoogleDrive",
+          "uploadToDropbox",
+          "CloudConnectionStatus",
+          "listCloudConnections",
+          "disconnectCloudProvider"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-backup-cloud.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts": []
+      }
+    },
+    {
+      "line": 26,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-backup-delivery.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts": [
+          "DeliveryTarget",
+          "SnapshotForDelivery",
+          "snapshotDeliveryKey",
+          "deliverSnapshotByEmail",
+          "deliverSnapshotByWebhook",
+          "deliverSnapshotByCloud",
+          "deliverSnapshot"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-backup-delivery.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts": []
+      }
+    },
+    {
+      "line": 27,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-backup-alerts.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts": [
+          "alertOwnerOfAnomalousBackupAccess",
+          "alertAdminsOfStaleKeyRotation",
+          "ScheduledBackupOutcome",
+          "alertUserOfScheduledBackupResult",
+          "alertUserOfMissedBackup"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-backup-alerts.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts": []
+      }
+    },
+    {
+      "line": 28,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts": [
+          "startVaultBackupKeyRotationCron"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts": [
+          "artifacts/api-server/src/index.ts"
+        ]
+      }
+    },
+    {
+      "line": 29,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/backup/schedule-cron.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/backup/schedule-cron.ts": [
+          "computeNextRunAt",
+          "runVaultBackupSchedule",
+          "startVaultBackupScheduleCron",
+          "startVaultBackupMissedWatchdog"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/backup/schedule-cron.ts": [
+          "artifacts/api-server/src/index.ts"
+        ]
+      }
+    },
+    {
+      "line": 30,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-backup-key.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/backup/key.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/backup/key.ts": [
+          "VaultBackupResult",
+          "getBackupKeyStatus",
+          "rotateBackupKey",
+          "getAdminBackupAuditLog"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/backup/key.ts": [
+          "artifacts/api-server/src/routes/vault-backup-key.ts"
+        ]
+      }
+    },
+    {
+      "line": 31,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-backup-cloud.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/backup/cloud-connection.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/backup/cloud-connection.ts": [
+          "VaultBackupResult",
+          "listOwnCloudConnections",
+          "startCloudConnect",
+          "handleCloudCallback",
+          "disconnectCloud"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/backup/cloud-connection.ts": [
+          "artifacts/api-server/src/routes/vault-backup-cloud.ts"
+        ]
+      }
+    },
+    {
+      "line": 32,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-backup-schedule.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/backup/schedule.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/backup/schedule.ts": [
+          "VaultBackupResult",
+          "getSchedule",
+          "saveSchedule",
+          "runScheduleNow",
+          "listDeliveries",
+          "getOwnAuditLog"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/backup/schedule.ts": [
+          "artifacts/api-server/src/routes/vault-backup-schedule.ts"
+        ]
+      }
+    },
+    {
+      "line": 33,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+        "artifacts/api-server/src/routes/vault-backup-key.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-repository.ts": [
+          "listBackupKeyRows",
+          "getScheduleRow",
+          "insertScheduleRow",
+          "updateScheduleRow",
+          "listDeliveryRows"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-repository.ts": []
+      }
+    },
+    {
+      "line": 34,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-snapshot-restore.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/snapshot/restore.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/snapshot/restore.ts": [
+          "RestoreTableDiff",
+          "RestorePreview",
+          "RestoreApplyResult",
+          "RESTORE_TABLE_SQL_NAMES",
+          "buildRestoreDiff",
+          "ApplyRestoreDiffOptions",
+          "applyRestoreDiff"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-snapshot-restore.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/snapshot/restore.ts": [
+          "artifacts/api-server/src/lib/dr-test-runner.ts"
+        ]
+      }
+    },
+    {
+      "line": 35,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-snapshot-extra.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts": [
+          "MailboxSnapshot",
+          "gatherMailboxSnapshot",
+          "ProjectsSnapshot",
+          "gatherProjectsSnapshot",
+          "TasksSnapshot",
+          "gatherTasksSnapshot",
+          "FinanceSnapshot",
+          "gatherFinanceSnapshot",
+          "gatherUserProfileSnapshot",
+          "reencryptMailboxMessageForRestore",
+          "reencryptMailboxTemplateForRestore",
+          "WalletHubSnapshot",
+          "gatherWalletHubSnapshot",
+          "ActivitySnapshot",
+          "gatherActivitySnapshot",
+          "EntityCoverageSnapshot",
+          "gatherEntityCoverageSnapshot",
+          "EmergencyAccessSnapshot",
+          "gatherEmergencyAccessSnapshot",
+          "reencryptDataEntityForRestore",
+          "AccountExtrasSnapshot",
+          "gatherAccountExtrasSnapshot",
+          "TeamSnapshot",
+          "gatherTeamSnapshot",
+          "EarningSnapshot",
+          "gatherEarningSnapshot",
+          "BackupSystemSnapshot",
+          "gatherBackupSystemSnapshot",
+          "EmailAccountsSnapshot",
+          "gatherEmailAccountsSnapshot",
+          "reencryptEmailAccountForRestore",
+          "MailboxReputationSnapshot",
+          "gatherMailboxReputationSnapshot",
+          "ExternalMailSnapshot",
+          "gatherExternalMailSnapshot"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-snapshot-extra.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts": []
+      }
+    },
+    {
+      "line": 36,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts": [
+          "VAULT_SNAPSHOT_TRASH_RETENTION_DAYS",
+          "purgeExpiredVaultSnapshotTrash"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts": []
+      }
+    },
+    {
+      "line": 37,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts": [
+          "startVaultSnapshotTrashCron"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts": [
+          "artifacts/api-server/src/index.ts"
+        ]
+      }
+    },
+    {
+      "line": 38,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-trash-purge.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts": [
+          "VAULT_TRASH_RETENTION_DAYS",
+          "purgeExpiredVaultTrash"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-trash-purge.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts": []
+      }
+    },
+    {
+      "line": 39,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-trash-cron.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts": [
+          "startVaultTrashCron"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-trash-cron.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts": [
+          "artifacts/api-server/src/index.ts"
+        ]
+      }
+    },
+    {
+      "line": 40,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/snapshot/use-cases.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/snapshot/use-cases.ts": [
+          "decryptSnapshotFromRequest",
+          "SnapshotResult",
+          "exportSnapshot",
+          "listSnapshots",
+          "getSnapshotStorage",
+          "downloadSnapshot",
+          "renameSnapshot",
+          "trashSnapshot",
+          "listTrashedSnapshots",
+          "untrashSnapshot",
+          "purgeSnapshot",
+          "previewRestore",
+          "restoreFromSnapshot"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/snapshot/use-cases.ts": [
+          "artifacts/api-server/src/routes/vault-snapshot.ts"
+        ]
+      }
+    },
+    {
+      "line": 41,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/snapshot/blob.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/snapshot/blob.ts": [
+          "BLOB_PREFIX_V1",
+          "BLOB_PREFIX_V2",
+          "MIN_SNAPSHOT_PASSWORD_LENGTH",
+          "SCRYPT_KEYLEN",
+          "SCRYPT_V2_COST",
+          "deriveKey",
+          "encryptBlob",
+          "decryptBlob"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/snapshot/blob.ts": []
+      }
+    },
+    {
+      "line": 42,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/snapshot/payload.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/snapshot/payload.ts": [
+          "safeDecryptPhrase",
+          "buildVaultSnapshotPayload"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/snapshot/payload.ts": []
+      }
+    },
+    {
+      "line": 43,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/snapshot/store.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/snapshot/store.ts": [
+          "MAX_STORED_SNAPSHOTS",
+          "DEFAULT_STORAGE_QUOTA_BYTES",
+          "MAX_TOTAL_SNAPSHOT_BYTES",
+          "verifyStoredChecksum",
+          "pruneOldSnapshots",
+          "StoreSnapshotRowInput",
+          "storeSnapshotRow"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/snapshot/store.ts": [
+          "artifacts/api-server/src/lib/dr-test-runner.ts"
+        ]
+      }
+    },
+    {
+      "line": 44,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/snapshot-ownership.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/snapshot-ownership.ts": [
+          "VAULT_SNAPSHOT_OWNER_SENTINEL_NONE",
+          "vaultSnapshotResource",
+          "requireVaultSnapshotOwnershipStrictId"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/snapshot-ownership.ts": [
+          "artifacts/api-server/src/routes/vault-snapshot.ts"
+        ]
+      }
+    },
+    {
+      "line": 45,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-repository.ts": [
+          "listLiveSnapshotRows",
+          "listLiveSnapshotSizes",
+          "getLiveSnapshotRow",
+          "renameSnapshotRow",
+          "trashSnapshotRow",
+          "listTrashedSnapshotRows",
+          "untrashSnapshotRow",
+          "getTrashedSnapshotIdRow",
+          "deleteSnapshotRow",
+          "selectVaultSnapshotsForPruneOldSnapshots",
+          "updateVaultSnapshotsForPruneOldSnapshots",
+          "insertVaultSnapshotsForStoreSnapshotRow",
+          "selectVaultSnapshotsForDecryptSnapshotFromRequest",
+          "selectVaultSnapshotsForVaultSnapshotResource"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-repository.ts": []
+      }
+    },
+    {
+      "line": 46,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-health-scan.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/health-scan.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/health-scan.ts": [
+          "DailyScanResult",
+          "runDailyHealthScan"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-health-scan.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/health-scan.ts": []
+      }
+    },
+    {
+      "line": 47,
+      "kind": "RETIRED",
+      "old": [
+        "artifacts/api-server/src/lib/vault-health-cron.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/health-cron.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/health-cron.ts": [
+          "startVaultHealthCron"
+        ]
+      },
+      "old_importers": {
+        "artifacts/api-server/src/lib/vault-health-cron.ts": []
+      },
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/health-cron.ts": [
+          "artifacts/api-server/src/index.ts"
+        ]
+      }
+    },
+    {
+      "line": 48,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/health.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/health.ts": [
+          "HealthSeverity",
+          "HealthRuleHit",
+          "VaultHealthInput",
+          "computeAutoScore",
+          "evalHealthRules",
+          "evalBackgroundHealthRules",
+          "severityEmoji",
+          "KycHealthInput",
+          "evalKycBackgroundHealthRules",
+          "WalletHealthInput",
+          "evalWalletBackgroundHealthRules",
+          "LocalAccountHealthInput",
+          "evalLocalAccountBackgroundHealthRules",
+          "DataEntityHealthInput",
+          "evalDataEntityBackgroundHealthRules",
+          "toHealthInput"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/health.ts": []
+      }
+    },
+    {
+      "line": 49,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/encryption-key-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/encryption-key-repository.ts": [
+          "bootstrapFirstEncryptionKey",
+          "loadEncryptionKeys",
+          "deactivateEncryptionKeys",
+          "insertRotatedEncryptionKey"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/encryption-key-repository.ts": []
+      }
+    },
+    {
+      "line": 50,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/crypto-key-stores.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/crypto-key-stores.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/crypto-key-stores.ts": [
+          "artifacts/api-server/src/index.ts"
+        ]
+      }
+    },
+    {
+      "line": 51,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-field-contract.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-field-contract.ts": [
+          "NewVaultFieldsMatchSchema",
+          "NEW_VAULT_FIELDS_MATCH_SCHEMA"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-field-contract.ts": []
+      }
+    },
+    {
+      "line": 52,
+      "kind": "NEW-SEAM",
+      "old": [
+        "artifacts/api-server/src/routes/bulk.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/local-account/bulk.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/local-account/bulk.ts": [
+          "applyLocalAccountBulk",
+          "exportLocalAccountRows"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/local-account/bulk.ts": [
+          "artifacts/api-server/src/routes/bulk.ts"
+        ]
+      }
+    },
+    {
+      "line": 53,
+      "kind": "NEW-SEAM",
+      "old": [
+        "artifacts/api-server/src/routes/value-history.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/local-account/value.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/local-account/value.ts": [
+          "listLocalAccountValueHistory",
+          "saveLocalAccountValue"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/local-account/value.ts": [
+          "artifacts/api-server/src/routes/value-history.ts"
+        ]
+      }
+    },
+    {
+      "line": 54,
+      "kind": "NEW-SEAM",
+      "old": [
+        "artifacts/api-server/src/routes/projects.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/kyc/enrollment.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/kyc/enrollment.ts": [
+          "loadKycEntryForEnrollment",
+          "buildEnrollmentAccountData"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/kyc/enrollment.ts": [
+          "artifacts/api-server/src/routes/projects.ts"
+        ]
+      }
+    },
+    {
+      "line": 55,
+      "kind": "NEW-SEAM",
+      "old": [
+        "artifacts/api-server/src/routes/exchange-api.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/kyc/exchange.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/kyc/exchange.ts": [
+          "KycExchangeCredentials",
+          "loadKycExchangeCredentials",
+          "setKycEntryExchangeKeys"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/kyc/exchange.ts": [
+          "artifacts/api-server/src/routes/exchange-api.ts"
+        ]
+      }
+    },
+    {
+      "line": 56,
+      "kind": "NEW-SEAM",
+      "old": [
+        "artifacts/api-server/src/routes/projects.ts",
+        "artifacts/api-server/src/routes/exchange-api.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts": [
+          "selectKycEntryExchangeCredentials",
+          "KycExchangeKeyColumn",
+          "updateKycEntryExchangeKeys",
+          "selectKycEntryForEnrollment"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts": []
+      }
+    },
+    {
+      "line": 66,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/api/index.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/api/index.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/api/index.ts": []
+      }
+    },
+    {
+      "line": 67,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-attachments.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/attachment/use-cases.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/attachment/use-cases.ts": [
+          "MAX_ATTACHMENT_BYTES",
+          "ALLOWED_CATEGORIES",
+          "AttachmentResult",
+          "listAttachments",
+          "uploadAttachment",
+          "downloadAttachment",
+          "updateAttachment",
+          "deleteAttachment"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/attachment/use-cases.ts": [
+          "artifacts/api-server/src/routes/vault-attachments.ts"
+        ]
+      }
+    },
+    {
+      "line": 68,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/activity-feed.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/activity-feed.ts": [
+          "listMyVaultActivity",
+          "listEntityActivity"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/activity-feed.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 69,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/activity.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/activity.ts": [
+          "logVaultActivityStrict",
+          "logVaultActivity"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/activity.ts": []
+      }
+    },
+    {
+      "line": 70,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/admin.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/admin.ts": [
+          "adminListEntities",
+          "adminFullVault",
+          "adminListLocalAccounts",
+          "adminListVaultUsers",
+          "adminGetUserVault",
+          "adminVaultActivityFeed"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/admin.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 71,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/analytics.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/analytics.ts": [
+          "getGasOverviewForUser",
+          "getEntityGas",
+          "getEntityAnalytics",
+          "getEntityValueHistory"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/analytics.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 72,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/bulk.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/bulk.ts": [
+          "EntityBulkDeps",
+          "bulkTagEntities",
+          "bulkActionEntities"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/bulk.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 73,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/create.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/create.ts": [
+          "EntityCreateDeps",
+          "createEntity"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/create.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 74,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/health-check.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/health-check.ts": [
+          "EntityHealthResult",
+          "runHealthCheck",
+          "getHealthReport",
+          "runHealthCheckForAll"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/health-check.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 75,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/index.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/index.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/index.ts": []
+      }
+    },
+    {
+      "line": 76,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts": [
+          "EntityResult",
+          "EntityLifecycleDeps",
+          "listEntities",
+          "listTrashedEntities",
+          "getEntity",
+          "emptyTrash",
+          "trashEntity",
+          "restoreEntity",
+          "purgeTrashedEntity",
+          "listEntityTags"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 77,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-entity-links.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/links.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/links.ts": [
+          "LinkResult",
+          "ownsEntity",
+          "listEntityLinks",
+          "createEntityLink",
+          "updateEntityLink",
+          "deleteEntityLink",
+          "listAllEntityLinks"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/links.ts": [
+          "artifacts/api-server/src/routes/vault-entity-links.ts"
+        ]
+      }
+    },
+    {
+      "line": 78,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/receipt.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/receipt.ts": [
+          "createReceiptLink",
+          "revokeReceiptLink",
+          "buildReceiptPdfSpec",
+          "PublicReceiptResult",
+          "resolvePublicReceipt"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/receipt.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 79,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/representation.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/representation.ts": [
+          "formatVaultEntry"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/representation.ts": []
+      }
+    },
+    {
+      "line": 80,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/entity/update.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/entity/update.ts": [
+          "EntityUpdateDeps",
+          "updateEntity",
+          "updateEntityField",
+          "listEntityFieldHistory"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/entity/update.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 81,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/game-entries.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/game/entries.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/game/entries.ts": [
+          "listGameEntries",
+          "createGameEntry",
+          "getGameEntry",
+          "editGameEntry",
+          "removeGameEntry"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/game/entries.ts": [
+          "artifacts/api-server/src/routes/game-entries.ts"
+        ]
+      }
+    },
+    {
+      "line": 82,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/application/game/index.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/game/index.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/game/index.ts": []
+      }
+    },
+    {
+      "line": 83,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/marketplace-vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/game/listing.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/game/listing.ts": [
+          "GameListingPreviewResult",
+          "GameTransferResult",
+          "loadGameEntryListingPreview",
+          "transferGameEntryToBuyer"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/game/listing.ts": []
+      }
+    },
+    {
+      "line": 84,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/marketplace-game.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/game/marketplace.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/game/marketplace.ts": [
+          "UseCaseResult",
+          "parseListing",
+          "listGameMarketListings",
+          "createGameMarketListing",
+          "buyGameMarketListing",
+          "cancelGameMarketListing",
+          "getGameMarketStats"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/game/marketplace.ts": [
+          "artifacts/api-server/src/routes/marketplace-game.ts"
+        ]
+      }
+    },
+    {
+      "line": 85,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/application/index.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/index.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/index.ts": []
+      }
+    },
+    {
+      "line": 86,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/kyc-data-entities.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/kyc/data-entities.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/kyc/data-entities.ts": [
+          "listKycDataEntities",
+          "getKycDataEntityOverview",
+          "createKycDataEntity",
+          "getKycDataEntity",
+          "editKycDataEntity",
+          "removeKycDataEntity"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/kyc/data-entities.ts": [
+          "artifacts/api-server/src/routes/kyc-data-entities.ts"
+        ]
+      }
+    },
+    {
+      "line": 87,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/kyc.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/kyc/entries.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/kyc/entries.ts": [
+          "listKycEntries",
+          "createKycEntry",
+          "getKycEntry",
+          "editKycEntry",
+          "setKycEntryStatus",
+          "removeKycEntry",
+          "listKycEnrollments"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/kyc/entries.ts": [
+          "artifacts/api-server/src/routes/kyc.ts"
+        ]
+      }
+    },
+    {
+      "line": 88,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/local-accounts.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/local-account/accounts.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/local-account/accounts.ts": [
+          "listLocalAccounts",
+          "createLocalAccount",
+          "editLocalAccount",
+          "setLocalAccountStatus",
+          "removeLocalAccount",
+          "linkLocalAccount",
+          "unlinkLocalAccount",
+          "listLocalAccountCategories",
+          "createLocalAccountCategory",
+          "removeLocalAccountCategory",
+          "getLocalAccount",
+          "listLocalAccountPoints",
+          "createLocalAccountPoint",
+          "removeLocalAccountPoint"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/local-account/accounts.ts": [
+          "artifacts/api-server/src/routes/local-accounts.ts"
+        ]
+      }
+    },
+    {
+      "line": 89,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/local-account/bridge.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/local-account/bridge.ts": [
+          "BRIDGE_PLATFORMS",
+          "autoCreateLocalAccountsForEntity"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/local-account/bridge.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 90,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/local-accounts.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/local-account/receipt.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/local-account/receipt.ts": [
+          "computeCategoryAggregate",
+          "findCategoryReceiptByToken",
+          "createLocalAccountReceipt",
+          "revokeLocalAccountReceipt",
+          "resolvePublicLocalReceipt",
+          "createCategoryReceipt",
+          "revokeCategoryReceipt",
+          "resolvePublicCategoryReceipt",
+          "emailCategoryReceipt"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/local-account/receipt.ts": [
+          "artifacts/api-server/src/routes/local-accounts.ts"
+        ]
+      }
+    },
+    {
+      "line": 91,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-migration.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/migration/use-cases.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/migration/use-cases.ts": [
+          "MigrationResult",
+          "exportVault",
+          "importVault"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/migration/use-cases.ts": [
+          "artifacts/api-server/src/routes/vault-migration.ts"
+        ]
+      }
+    },
+    {
+      "line": 92,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/secret/reveal.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/secret/reveal.ts": [
+          "REVEAL_RETRY_WINDOW_MS",
+          "SecretResult",
+          "SecretRevealDeps",
+          "revealSeedPhrase"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/secret/reveal.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 93,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/secret/wallet.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/secret/wallet.ts": [
+          "setDriveWallet",
+          "validateSecretKey",
+          "refreshWalletWorth"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/secret/wallet.ts": [
+          "artifacts/api-server/src/routes/vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 94,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/security/auth-policy.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/security/auth-policy.ts": [
+          "VaultSecurityResult",
+          "setAuthStepPolicy"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/security/auth-policy.ts": [
+          "artifacts/api-server/src/routes/vault-security.ts"
+        ]
+      }
+    },
+    {
+      "line": 95,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/security/password.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/security/password.ts": [
+          "VaultSecurityResult",
+          "setVaultPassword",
+          "disableVaultPassword"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/security/password.ts": [
+          "artifacts/api-server/src/routes/vault-security.ts"
+        ]
+      }
+    },
+    {
+      "line": 96,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/security/pin-setup-code.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/security/pin-setup-code.ts": [
+          "VaultSecurityResult",
+          "vaultPinOtpKey",
+          "sendVaultPinSetupCode"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/security/pin-setup-code.ts": [
+          "artifacts/api-server/src/routes/vault-security.ts"
+        ]
+      }
+    },
+    {
+      "line": 97,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/security/pin.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/security/pin.ts": [
+          "VaultSecurityResult",
+          "setPin"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/security/pin.ts": [
+          "artifacts/api-server/src/routes/vault-security.ts"
+        ]
+      }
+    },
+    {
+      "line": 98,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-reauth.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/security/reauth.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/security/reauth.ts": [
+          "VaultReauthResult",
+          "vaultReauthOtpKey",
+          "getReauthStatus",
+          "sendReauthEmailCode",
+          "verifyStep3",
+          "passkeyOptions",
+          "verifyPasskey",
+          "verifyVaultCredentials"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/security/reauth.ts": [
+          "artifacts/api-server/src/routes/vault-reauth.ts"
+        ]
+      }
+    },
+    {
+      "line": 99,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/security/status.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/security/status.ts": [
+          "VaultSecurityResult",
+          "getVaultSecurityStatus"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/security/status.ts": [
+          "artifacts/api-server/src/routes/vault-security.ts"
+        ]
+      }
+    },
+    {
+      "line": 100,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/security/two-fa.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/security/two-fa.ts": [
+          "VaultSecurityResult",
+          "getVaultTwoFaStatus",
+          "setupVaultTwoFa",
+          "verifyVaultTwoFa",
+          "disableVaultTwoFaRoute"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/security/two-fa.ts": [
+          "artifacts/api-server/src/routes/vault-security.ts"
+        ]
+      }
+    },
+    {
+      "line": 101,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/security/verify.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/security/verify.ts": [
+          "VaultSecurityResult",
+          "verifyPin"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/security/verify.ts": [
+          "artifacts/api-server/src/routes/vault-security.ts"
+        ]
+      }
+    },
+    {
+      "line": 102,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-shares.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/share/field-permissions.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/share/field-permissions.ts": [
+          "shareableColumns",
+          "parseFieldPermissions",
+          "filterToAllowedFields"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/share/field-permissions.ts": []
+      }
+    },
+    {
+      "line": 103,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-shares.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/application/share/use-cases.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/share/use-cases.ts": [
+          "ShareResult",
+          "createShare",
+          "listShareableFields",
+          "bulkCreateShares",
+          "listSentShares",
+          "listReceivedShares",
+          "getEntityAccess",
+          "bulkUpdateShares",
+          "bulkDeleteShares",
+          "updateShare",
+          "deleteShare"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/share/use-cases.ts": [
+          "artifacts/api-server/src/routes/vault-shares.ts"
+        ]
+      }
+    },
+    {
+      "line": 104,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/application/snapshot/index.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/snapshot/index.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/snapshot/index.ts": []
+      }
+    },
+    {
+      "line": 105,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/application/use-case-result.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/application/use-case-result.ts": [
+          "VaultUseCaseResult",
+          "VaultOperationResult",
+          "vaultDbError",
+          "respondWithVaultResult"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/application/use-case-result.ts": [
+          "artifacts/api-server/src/routes/vault-attachments.ts",
+          "artifacts/api-server/src/routes/vault-migration.ts",
+          "artifacts/api-server/src/routes/vault-snapshot.ts"
+        ]
+      }
+    },
+    {
+      "line": 106,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/crypto/key-store-port.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/crypto/key-store-port.ts": [
+          "KeyStorePort",
+          "registerFieldKeyStore",
+          "getFieldKeyStore",
+          "registerBackupEnvelopeKeyStore",
+          "getBackupEnvelopeKeyStore"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/crypto/key-store-port.ts": []
+      }
+    },
+    {
+      "line": 107,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/crypto/seed-phrase.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/crypto/seed-phrase.ts": [
+          "encryptSeedPhrase",
+          "decryptSeedPhrase"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/crypto/seed-phrase.ts": []
+      }
+    },
+    {
+      "line": 108,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/db-errors.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/db-errors.ts": [
+          "isMissingColumnError"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/db-errors.ts": []
+      }
+    },
+    {
+      "line": 109,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts",
+        "artifacts/api-server/src/routes/vault-entity-links.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/entity-links.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/entity-links.ts": [
+          "VAULT_ENTRY_OWNER_SENTINEL_NONE",
+          "VAULT_ENTITY_LINK_OWNER_SENTINEL_NONE",
+          "RELATION_TYPES",
+          "RelationType",
+          "isRelationType",
+          "INVERSE_RELATION",
+          "labelFor",
+          "VaultEntryRouteRequest",
+          "invalidVaultEntryResource"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/entity-links.ts": []
+      }
+    },
+    {
+      "line": 110,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/entity/calculations.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/entity/calculations.ts": [
+          "ENTITY_GAS_CHAINS",
+          "addressesFor"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/entity/calculations.ts": []
+      }
+    },
+    {
+      "line": 111,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/entity/fields.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/entity/fields.ts": [
+          "NEW_VAULT_FIELDS",
+          "BASE_VAULT_FIELDS",
+          "DATE_FIELDS",
+          "SINGLE_FIELD_EDITABLE",
+          "fieldLabel",
+          "BULK_ALLOWED_STATUSES"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/entity/fields.ts": []
+      }
+    },
+    {
+      "line": 112,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/game-entries.ts",
+        "artifacts/api-server/src/routes/marketplace-game.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/game.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/game.ts": [
+          "GAME_SENSITIVE_FIELDS",
+          "GAME_ENTRY_OWNER_SENTINEL_NONE",
+          "GAME_MARKET_LISTING_OWNER_SENTINEL_NONE"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/game.ts": []
+      }
+    },
+    {
+      "line": 113,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/kyc.ts",
+        "artifacts/api-server/src/routes/kyc-data-entities.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/kyc-values.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/kyc-values.ts": [
+          "val",
+          "numVal",
+          "safe",
+          "safeDate",
+          "d"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/kyc-values.ts": []
+      }
+    },
+    {
+      "line": 114,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/kyc.ts",
+        "artifacts/api-server/src/routes/kyc-data-entities.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/kyc.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/kyc.ts": [
+          "KYC_SENSITIVE_FIELDS",
+          "KYC_ENTRY_OWNER_SENTINEL_NONE",
+          "isKycStatus",
+          "KYC_ENTRY_BAN_STATUSES",
+          "isKycBanStatus",
+          "KYC_DATA_ENTITY_SENSITIVE_FIELDS",
+          "KYC_DATA_ENTITY_OWNER_SENTINEL_NONE"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/kyc.ts": []
+      }
+    },
+    {
+      "line": 115,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/local-accounts.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/local-account-values.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/local-account-values.ts": [
+          "safe",
+          "safeNum",
+          "safeDate",
+          "safeScore",
+          "calcAgeLabel",
+          "calcRoiPct",
+          "fmtPublicLocalReceipt",
+          "ageInDays",
+          "fmtAvgAgeLabel",
+          "aggregateCategoryRows",
+          "CategoryAggregate",
+          "FoundCategoryReceipt",
+          "fmtPublicCategoryReceipt"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/local-account-values.ts": []
+      }
+    },
+    {
+      "line": 116,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/local-accounts.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/local-account.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/local-account.ts": [
+          "LOCAL_SENSITIVE_FIELDS",
+          "DEFAULT_LOCAL_ACCOUNT_CATEGORIES"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/local-account.ts": []
+      }
+    },
+    {
+      "line": 117,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/secret-fields.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/secret-fields.ts": [
+          "VAULT_ENTITY_ENCRYPTED_FIELDS",
+          "SENSITIVE_VAULT_FIELDS"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/secret-fields.ts": [
+          "artifacts/api-server/src/routes/emergency-access.ts"
+        ]
+      }
+    },
+    {
+      "line": 118,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/serial.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/serial.ts": [
+          "generateSerial"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/serial.ts": []
+      }
+    },
+    {
+      "line": 119,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts": [
+          "RestoreTableKey",
+          "RawTablePlan",
+          "norm",
+          "vaultKey",
+          "walletKey",
+          "rawRowKey",
+          "dataEntityKey",
+          "emailAccountKey",
+          "MESSAGE_INSERT_COLS",
+          "DATA_ENTITY_INSERT_COLS",
+          "EMAIL_ACCOUNT_INSERT_COLS"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts": [
+          "artifacts/api-server/src/lib/dr-test-runner.ts"
+        ]
+      }
+    },
+    {
+      "line": 120,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/index.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/index.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/index.ts": []
+      }
+    },
+    {
+      "line": 121,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/db-handle.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/db-handle.ts": [
+          "DbTx",
+          "DbExecutor",
+          "defaultDb",
+          "runInTransaction"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/db-handle.ts": []
+      }
+    },
+    {
+      "line": 122,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/index.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/index.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/index.ts": []
+      }
+    },
+    {
+      "line": 123,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-backup-schedule.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/jobs/cron-scheduler.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/jobs/cron-scheduler.ts": [
+          "validateCronExpression",
+          "scheduleCronJob"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/jobs/cron-scheduler.ts": []
+      }
+    },
+    {
+      "line": 124,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/providers/lazy-provider-ports.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/providers/lazy-provider-ports.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/providers/lazy-provider-ports.ts": []
+      }
+    },
+    {
+      "line": 125,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/providers/provider-ports.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/providers/provider-ports.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/providers/provider-ports.ts": []
+      }
+    },
+    {
+      "line": 126,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-analytics-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-analytics-repository.ts": [
+          "selectValueHistoryForGetEntityValueHistory"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-analytics-repository.ts": []
+      }
+    },
+    {
+      "line": 127,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-bulk-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-bulk-repository.ts": [
+          "updateVaultEntriesForBulkTagEntities",
+          "updateVaultEntriesForBulkActionEntities2",
+          "updateVaultEntriesForBulkActionEntities3"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-bulk-repository.ts": []
+      }
+    },
+    {
+      "line": 128,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-create-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-create-repository.ts": [
+          "insertVaultEntriesForCreateEntity",
+          "insertVaultEntriesForCreateEntity2",
+          "claimCreateIdempotencyKey",
+          "selectVaultEntryByCreateSerial"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-create-repository.ts": []
+      }
+    },
+    {
+      "line": 129,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-lifecycle-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-lifecycle-repository.ts": [
+          "updateVaultEntriesForTrashEntity",
+          "updateVaultEntriesForRestoreEntity"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-lifecycle-repository.ts": []
+      }
+    },
+    {
+      "line": 130,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-receipt-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-receipt-repository.ts": [
+          "selectVaultEntriesForCreateReceiptLink",
+          "updateVaultEntriesForCreateReceiptLink",
+          "updateVaultEntriesForRevokeReceiptLink"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-receipt-repository.ts": []
+      }
+    },
+    {
+      "line": 131,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts",
+        "artifacts/api-server/src/routes/vault-entity-links.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts": [
+          "selectVault",
+          "selectVaultOne",
+          "selectAllVaultEntries",
+          "selectVaultTrash",
+          "selectVaultTrashOne",
+          "hardDeleteVaultEntry",
+          "findVaultEntryByReceiptToken",
+          "selectVaultEntriesForVaultEntryResource",
+          "selectVaultEntityLinksForVaultEntityLinkResource",
+          "selectVaultEntriesForAuditVaultBulkOwnership"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts": []
+      }
+    },
+    {
+      "line": 132,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-update-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-update-repository.ts": [
+          "updateVaultEntriesForUpdateEntity",
+          "selectVaultEntriesForUpdateEntityField",
+          "updateVaultEntriesForUpdateEntityField",
+          "insertVaultFieldHistoryForUpdateEntityField",
+          "selectVaultEntriesForListEntityFieldHistory",
+          "selectVaultFieldHistoryForListEntityFieldHistory"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/entity-update-repository.ts": []
+      }
+    },
+    {
+      "line": 133,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/game-entries.ts",
+        "artifacts/api-server/src/routes/marketplace-game.ts",
+        "artifacts/api-server/src/routes/marketplace-vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts": [
+          "GameEntryWrite",
+          "GameListingFilter",
+          "GameListingWrite",
+          "selectGameEntryOwner",
+          "selectGameEntries",
+          "insertGameEntry",
+          "findGameEntryById",
+          "updateGameEntry",
+          "deleteGameEntry",
+          "selectGameListings",
+          "countActiveGameListings",
+          "insertGameListing",
+          "findActiveGameListingById",
+          "ensureGameWallet",
+          "completeGameListingPurchase",
+          "cancelGameListing",
+          "selectGameMarketplaceStats",
+          "GameTxClient",
+          "selectGameEntryForListing",
+          "transferGameEntryOwnership"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts": []
+      }
+    },
+    {
+      "line": 134,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/kyc-data-entities.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts": [
+          "KycDataEntityWrite",
+          "selectKycDataEntities",
+          "selectKycDataEntityOverview",
+          "insertKycDataEntity",
+          "selectKycDataEntityForUser",
+          "updateKycDataEntity",
+          "findKycEntryLinkedToDataEntity",
+          "findVaultEntryLinkedToDataEntity",
+          "deleteKycDataEntity"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts": []
+      }
+    },
+    {
+      "line": 135,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/kyc.ts",
+        "artifacts/api-server/src/routes/kyc-data-entities.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts": [
+          "KycEntryWrite",
+          "KycEntryFilter",
+          "fetchKycEntryWithData",
+          "selectKycEntries",
+          "insertKycEntry",
+          "selectKycEntryForUser",
+          "updateKycEntry",
+          "updateKycEntryStatus",
+          "deleteKycEntry",
+          "selectKycEnrollments",
+          "selectKycEntryOwnerRow",
+          "executeKycDataEntitiesForKycDataEntityResource"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts": []
+      }
+    },
+    {
+      "line": 136,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/local-account-consumer-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/local-account-consumer-repository.ts": [
+          "findBridgedLocalAccount",
+          "BridgedLocalAccountInsert",
+          "insertBridgedLocalAccount",
+          "selectLocalAccountValueHistory",
+          "updateLocalAccountValue",
+          "insertLocalAccountValueHistory",
+          "deleteLocalAccountsByIds",
+          "updateLocalAccountsCategoryByIds",
+          "selectLocalAccountsForExport"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/local-account-consumer-repository.ts": []
+      }
+    },
+    {
+      "line": 137,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/local-accounts.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts": [
+          "LocalAccountWrite",
+          "LocalAccountFilter",
+          "selectLocalAccounts",
+          "insertLocalAccount",
+          "updateLocalAccount",
+          "updateLocalAccountStatus",
+          "deleteLocalAccount",
+          "deleteLocalAccountValueHistory",
+          "linkLocalAccountToVault",
+          "unlinkLocalAccountFromVault",
+          "findLocalAccountById",
+          "selectLocalAccountCategories",
+          "insertLocalAccountCategory",
+          "deleteLocalAccountCategory",
+          "selectLocalAccountPoints",
+          "insertLocalAccountPoint",
+          "deleteLocalAccountPoint",
+          "selectLocalAccountReceiptRow",
+          "setLocalAccountReceiptToken",
+          "clearLocalAccountReceiptToken",
+          "findLocalAccountByReceiptToken",
+          "selectCategoryReceiptToken",
+          "insertCategoryReceipt",
+          "deleteCategoryReceipt",
+          "selectCategoryAggregateRows",
+          "findCategoryReceiptRowByToken",
+          "selectUserEmailRecipient",
+          "executeLocalAccountsForLocalAccountResource",
+          "executeLocalAccountCategoriesForLocalAccountCategoryResource",
+          "executeLocalAccountPointsForLocalAccountPointResource"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts": []
+      }
+    },
+    {
+      "line": 138,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts": [
+          "selectOrgSeedRevealBlock",
+          "DriveWalletWrite",
+          "updateVaultDriveWallet",
+          "updateVaultWalletWorth"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts": []
+      }
+    },
+    {
+      "line": 139,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-shares.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts": [
+          "ENTITY_TABLES",
+          "notTrashedClause",
+          "VALID_TYPES",
+          "NON_SHAREABLE_COLUMNS",
+          "safe",
+          "ENTITY_TYPE_TO_RESOURCE_TYPE",
+          "isValidType",
+          "FieldPermission",
+          "FieldPermissionMap"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts": []
+      }
+    },
+    {
+      "line": 140,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts": [
+          "DbHandle",
+          "existingVaultKeys",
+          "insertVaultRow",
+          "existingWalletKeys",
+          "insertWalletRow",
+          "existingRawKeys",
+          "insertRawRow",
+          "existingTemplateKeys",
+          "insertTemplateRow",
+          "existingMessageKeys",
+          "insertMessageRow",
+          "existingDataEntityKeys",
+          "insertDataEntityRow",
+          "existingEmailAccountKeys",
+          "insertEmailAccountRow"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts": []
+      }
+    },
+    {
+      "line": 141,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-activity-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-activity-repository.ts": [
+          "selectVaultActivityLogForListMyVaultActivity",
+          "executeVaultActivityLogForListMyVaultActivity",
+          "selectVaultActivityLogForListEntityActivity",
+          "insertVaultActivityLogForLogVaultActivity",
+          "executeVaultEntriesForLogVaultActivity"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-activity-repository.ts": []
+      }
+    },
+    {
+      "line": 142,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-admin-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-admin-repository.ts": [
+          "selectVaultEntriesForAdminListEntities",
+          "executeLocalAccountsForAdminListLocalAccounts",
+          "executeUsersForAdminListVaultUsers",
+          "selectVaultEntriesForAdminGetUserVault",
+          "executeLocalAccountsForAdminGetUserVault",
+          "selectUsersForAdminGetUserVault",
+          "selectVaultActivityLogForAdminVaultActivityFeed"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-admin-repository.ts": []
+      }
+    },
+    {
+      "line": 143,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-attachments.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-attachment-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-attachment-repository.ts": [
+          "assertEntityOwnership",
+          "listAttachmentRows",
+          "insertAttachmentRow",
+          "getAttachmentRow",
+          "updateAttachmentRows",
+          "deleteAttachmentRow",
+          "insertVaultAttachmentsForModule",
+          "selectVaultAttachmentsForModule2",
+          "deleteVaultAttachmentsForModule",
+          "selectVaultEntriesForVaultAttachmentEntityResource"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-attachment-repository.ts": []
+      }
+    },
+    {
+      "line": 144,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-backup-schedule.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-schedule-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-schedule-repository.ts": [
+          "VaultBackupScheduleRow",
+          "selectUsersForRunVaultBackupSchedule",
+          "updateVaultBackupSchedulesForRunVaultBackupSchedule",
+          "updateVaultBackupSchedulesForRunVaultBackupSchedule2",
+          "updateVaultBackupSchedulesForClaimSchedule",
+          "selectVaultBackupSchedulesForSweepDueSchedules",
+          "selectVaultBackupSchedulesForSweepMissedSchedules",
+          "updateVaultBackupSchedulesForSweepMissedSchedules",
+          "selectInterruptedScheduledSnapshot",
+          "hasSuccessfulDelivery"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-schedule-repository.ts": []
+      }
+    },
+    {
+      "line": 145,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-entity-links.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-entity-link-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-entity-link-repository.ts": [
+          "VaultEntityLinkInsert",
+          "selectVaultEntriesForOwnsEntity",
+          "selectVaultEntityLinksForListEntityLinks",
+          "selectVaultEntriesForListEntityLinks",
+          "selectVaultEntityLinksForCreateEntityLink",
+          "insertVaultEntityLinksForCreateEntityLink",
+          "updateVaultEntityLinksForUpdateEntityLink",
+          "deleteVaultEntityLinksForDeleteEntityLink",
+          "executeApiForListAllEntityLinks"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-entity-link-repository.ts": []
+      }
+    },
+    {
+      "line": 146,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-health-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-health-repository.ts": [
+          "updateVaultEntriesForRunHealthCheck",
+          "selectUsersForRunHealthCheck",
+          "executeSqlForPersistRawFlags",
+          "updateWalletsForPersistWalletFlags",
+          "executeKycEntriesForRunDailyHealthScan",
+          "selectWalletsForRunDailyHealthScan",
+          "executeLocalAccountsForRunDailyHealthScan",
+          "executeKycEntriesForRunDailyHealthScan2",
+          "selectUsersForRunDailyHealthScan",
+          "updateUsersForRunDailyHealthScan"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-health-repository.ts": []
+      }
+    },
+    {
+      "line": 147,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/marketplace-vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts": [
+          "VaultListingFilter",
+          "VaultListingWrite",
+          "VaultTxClient",
+          "AssetTransfer",
+          "VaultPurchaseResult",
+          "selectVaultListings",
+          "countActiveVaultListings",
+          "selectVaultEntryForListing",
+          "selectLocalAccountForListing",
+          "selectKycEntryForListing",
+          "insertVaultListing",
+          "findActiveSellListingById",
+          "ensureVaultWallet",
+          "completeVaultListingPurchase",
+          "findActiveVaultListingById",
+          "cancelVaultListing",
+          "selectVaultMarketStats"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts": []
+      }
+    },
+    {
+      "line": 148,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-migration.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-migration-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-migration-repository.ts": [
+          "selectVaultEntriesForModule",
+          "insertVaultEntriesForModule"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-migration-repository.ts": []
+      }
+    },
+    {
+      "line": 149,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-reauth.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-reauth-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-reauth-repository.ts": [
+          "getReauthStatusRow",
+          "listPasskeyIds",
+          "listPasskeyCredentials",
+          "getPasskeyByCredentialId",
+          "recordPasskeyUse",
+          "getUserEmail",
+          "getUserRow",
+          "getVaultPinHashRow",
+          "getVaultSecurityFullRow"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-reauth-repository.ts": []
+      }
+    },
+    {
+      "line": 150,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts",
+        "artifacts/api-server/src/routes/vault-reauth.ts",
+        "artifacts/api-server/src/lib/vault-pin-guard.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts": [
+          "getRow",
+          "upsertAuthStepPolicy",
+          "upsertPinHash",
+          "upsertVaultPasswordHash",
+          "clearVaultPasswordHash",
+          "upsertVaultTwoFaSecret",
+          "setVaultTwoFaEnabled",
+          "disableVaultTwoFa",
+          "hasVaultPin",
+          "selectUsersForSendVaultPinSetupCode",
+          "refSqlForHashColumn",
+          "refSqlForHashColumn2",
+          "selectUsersForSetPin",
+          "selectVaultSecurityForRequireVaultPin"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts": []
+      }
+    },
+    {
+      "line": 151,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-shares.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-share-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-share-repository.ts": [
+          "findOwnedEntityIdRows",
+          "findShareTarget",
+          "upsertShareRow",
+          "listSentShareRows",
+          "listReceivedShareRows",
+          "listEntityRowsByIds",
+          "getOwnedEntityRows",
+          "getActiveShareFor",
+          "getEntityRows",
+          "bulkUpdateShareRows",
+          "bulkDeleteShareRows",
+          "getOwnedShareRow",
+          "updateShareRows",
+          "deleteShareRows",
+          "executeSqlForModule",
+          "executeUsersForModule",
+          "executeVaultSharesForModule",
+          "executeVaultSharesForModule2",
+          "sqlVaultSharesForModule",
+          "sqlVaultSharesForModule2",
+          "executeSqlForModule3",
+          "executeSqlForModule4",
+          "executeVaultSharesForModule3",
+          "executeSqlForModule6",
+          "executeVaultSharesForModule4",
+          "executeSqlForModule7",
+          "executeVaultSharesForModule5",
+          "executeVaultSharesForModule6",
+          "executeVaultSharesForModule7",
+          "executeVaultSharesForModule8",
+          "executeVaultSharesForModule9",
+          "executeInformationSchemaForShareableColumns",
+          "executeVaultSharesForVaultShareResource",
+          "executeVaultSharesForAuditVaultShareBulkOwnership",
+          "executeSqlForAuditVaultShareCreateOwnership"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-share-repository.ts": []
+      }
+    },
+    {
+      "line": 152,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-snapshot.ts",
+        "artifacts/api-server/src/routes/vault-backup-schedule.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-payload-repository.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-payload-repository.ts": [
+          "executeLocalAccountsForBuildVaultSnapshotPayload",
+          "executeKycEntriesForBuildVaultSnapshotPayload",
+          "executeGameEntriesForBuildVaultSnapshotPayload",
+          "selectWalletsForBuildVaultSnapshotPayload",
+          "selectVaultAttachmentsForBuildVaultSnapshotPayload"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-payload-repository.ts": []
+      }
+    },
+    {
+      "line": 153,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-attachments.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/attachment-ownership.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/attachment-ownership.ts": [
+          "VAULT_ATTACHMENT_ENTITY_OWNER_SENTINEL_NONE",
+          "vaultAttachmentEntityResource",
+          "requireVaultAttachmentEntityOwnership"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/attachment-ownership.ts": [
+          "artifacts/api-server/src/routes/vault-attachments.ts"
+        ]
+      }
+    },
+    {
+      "line": 154,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/local-accounts.ts",
+        "artifacts/api-server/src/routes/kyc.ts",
+        "artifacts/api-server/src/routes/kyc-data-entities.ts",
+        "artifacts/api-server/src/routes/game-entries.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/deny-responses.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/deny-responses.ts": [
+          "denyNotFound",
+          "denyNotFoundOrForbidden",
+          "denySilentSuccess"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/deny-responses.ts": [
+          "artifacts/api-server/src/routes/game-entries.ts",
+          "artifacts/api-server/src/routes/kyc-data-entities.ts",
+          "artifacts/api-server/src/routes/kyc.ts",
+          "artifacts/api-server/src/routes/local-accounts.ts"
+        ]
+      }
+    },
+    {
+      "line": 155,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts",
+        "artifacts/api-server/src/routes/vault-entity-links.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/entity-ownership.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/entity-ownership.ts": [
+          "vaultEntryResource",
+          "vaultEntityLinkResource",
+          "requireVaultEntryOwnership",
+          "requireVaultEntryOwnershipOr404",
+          "requireVaultEntityLinkOwnership",
+          "vaultBulkOwnershipEngine",
+          "auditVaultBulkOwnership"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/entity-ownership.ts": [
+          "artifacts/api-server/src/routes/entities.ts",
+          "artifacts/api-server/src/routes/value-history.ts",
+          "artifacts/api-server/src/routes/vault-entity-links.ts",
+          "artifacts/api-server/src/routes/vault.ts",
+          "scripts/src/test-route-ownership-regression.ts"
+        ]
+      }
+    },
+    {
+      "line": 156,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/game-entries.ts",
+        "artifacts/api-server/src/routes/marketplace-game.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/game-ownership.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/game-ownership.ts": [
+          "requireGameEntryOwnership",
+          "authorizeGameListingOwnerOrAdmin",
+          "canCancelGameListing"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/game-ownership.ts": [
+          "artifacts/api-server/src/routes/game-entries.ts",
+          "artifacts/api-server/src/routes/marketplace-game.ts"
+        ]
+      }
+    },
+    {
+      "line": 157,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/kyc.ts",
+        "artifacts/api-server/src/routes/kyc-data-entities.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/kyc-ownership.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/kyc-ownership.ts": [
+          "kycEntryResource",
+          "kycEntryOwnerResource",
+          "requireKycEntryOwnership",
+          "kycDataEntityResource",
+          "requireKycDataEntityOwnership"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/kyc-ownership.ts": [
+          "artifacts/api-server/src/routes/exchange-api.ts",
+          "artifacts/api-server/src/routes/kyc-data-entities.ts",
+          "artifacts/api-server/src/routes/kyc.ts",
+          "artifacts/api-server/src/routes/projects.ts",
+          "scripts/src/test-route-ownership-regression.ts"
+        ]
+      }
+    },
+    {
+      "line": 158,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/local-accounts.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/local-account-ownership.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/local-account-ownership.ts": [
+          "requireLocalAccountOwnership",
+          "denyAccountNotFound",
+          "denyEmptyPoints",
+          "requireLocalAccountCategoryOwnership",
+          "requireLocalAccountPointOwnership"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/local-account-ownership.ts": [
+          "artifacts/api-server/src/routes/local-accounts.ts",
+          "artifacts/api-server/src/routes/value-history.ts"
+        ]
+      }
+    },
+    {
+      "line": 159,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts",
+        "artifacts/api-server/src/routes/vault-reauth.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/lockout.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/lockout.ts": [
+          "PinKind",
+          "LockoutKind",
+          "isLockedOut",
+          "recordFailure",
+          "clearFailures"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/lockout.ts": []
+      }
+    },
+    {
+      "line": 160,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/marketplace-vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/market-listing-ownership.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/market-listing-ownership.ts": [
+          "canCancelVaultListing"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/market-listing-ownership.ts": [
+          "artifacts/api-server/src/routes/marketplace-vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 161,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts",
+        "artifacts/api-server/src/lib/vault-pin-guard.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/pin-guard.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/pin-guard.ts": [
+          "isVaultPinLockedOut",
+          "clearVaultPinFailures",
+          "VaultPinCheckResult",
+          "requireVaultPin"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/pin-guard.ts": [
+          "artifacts/api-server/src/lib/vault-pin-guard.ts",
+          "artifacts/api-server/src/routes/passkey.ts"
+        ]
+      }
+    },
+    {
+      "line": 162,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-reauth.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/reauth-ownership.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/reauth-ownership.ts": [
+          "VAULT_REAUTH_OWNER_SENTINEL_NONE",
+          "isPasskeyOwnedBySession"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/reauth-ownership.ts": []
+      }
+    },
+    {
+      "line": 163,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/receipt-token.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/receipt-token.ts": [
+          "VaultReceiptKind",
+          "generateVaultReceiptToken",
+          "vaultReceiptLink"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/receipt-token.ts": []
+      }
+    },
+    {
+      "line": 164,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-reauth.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/request-context.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/request-context.ts": [
+          "VaultRequest",
+          "VaultResponse"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/request-context.ts": []
+      }
+    },
+    {
+      "line": 165,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-security.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/reveal-token.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/reveal-token.ts": [
+          "REVEAL_TOKEN_TTL_MS",
+          "mintRevealToken",
+          "consumeRevealToken",
+          "hasNoEntityPin"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/reveal-token.ts": [
+          "artifacts/api-server/src/routes/vault.ts",
+          "artifacts/api-server/src/routes/wallets.ts"
+        ]
+      }
+    },
+    {
+      "line": 166,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/vault-shares.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/security/share-ownership.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/security/share-ownership.ts": [
+          "VAULT_SHARE_OWNER_SENTINEL_NONE",
+          "vaultShareResource",
+          "requireVaultShareOwnership",
+          "denyVaultShareNotFound",
+          "vaultShareBulkOwnershipEngine",
+          "auditVaultShareBulkOwnership",
+          "vaultShareCandidateOwnershipEngine",
+          "auditVaultShareCreateOwnership"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/security/share-ownership.ts": [
+          "artifacts/api-server/src/routes/vault-shares.ts"
+        ]
+      }
+    },
+    {
+      "line": 167,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/shared/index.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/shared/index.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/shared/index.ts": []
+      }
+    },
+    {
+      "line": 168,
+      "kind": "EXTRACTED",
+      "old": [
+        "artifacts/api-server/src/routes/marketplace-vault.ts"
+      ],
+      "new": [
+        "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts": [
+          "UseCaseResult",
+          "listVaultMarketListings",
+          "createVaultMarketListing",
+          "buyVaultMarketListing",
+          "cancelVaultMarketListing",
+          "getVaultMarketStats"
+        ]
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts": [
+          "artifacts/api-server/src/routes/marketplace-vault.ts"
+        ]
+      }
+    },
+    {
+      "line": 169,
+      "kind": "NEW-SEAM",
+      "old": [],
+      "new": [
+        "artifacts/api-server/src/vault/shared/sharing/entity-types.ts"
+      ],
+      "symbols_moved": {
+        "artifacts/api-server/src/vault/shared/sharing/entity-types.ts": []
+      },
+      "old_importers": {},
+      "callers_of_new_outside_vault": {
+        "artifacts/api-server/src/vault/shared/sharing/entity-types.ts": [
+          "artifacts/api-server/src/routes/organizations.ts"
+        ]
+      }
+    }
+  ],
+  "evidence": {
+    "10": {
+      "retire": null,
+      "gate": null,
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-10/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "08-extract",
+        "binding": "3b143d1a4ed9e99ba76e2a775e1ad309957953ab18d9983823fcdfb9d52b7f4c",
+        "at": null
+      },
+      "current_proof": null
+    },
+    "11": {
+      "retire": {
+        "file": "reports/antas/vault/gap/VLT-GAP-11/retire-proof.json",
+        "status": "PASS",
+        "sub_phase": "08-retire",
+        "binding": "e76a9d47c2210884d57afcec43a6afac231451f4",
+        "at": null
+      },
+      "gate": null,
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-11/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "08-extract",
+        "binding": "e76a9d47c2210884d57afcec43a6afac231451f4",
+        "at": null
+      },
+      "current_proof": null
+    },
+    "12": {
+      "retire": {
+        "file": "reports/antas/vault/gap/VLT-GAP-12/retire-proof.json",
+        "status": "PASS",
+        "sub_phase": "08-retire",
+        "binding": "e76a9d47c2210884d57afcec43a6afac231451f4",
+        "at": null
+      },
+      "gate": null,
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-12/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "08-extract",
+        "binding": "a0746f5dd63efd7153f9244f75c96577ddd0a8934edaa270df22994b3d567725",
+        "at": null
+      },
+      "current_proof": null
+    },
+    "14": {
+      "retire": null,
+      "gate": {
+        "file": "reports/antas/vault/gap/VLT-GAP-14/gate.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-14-D",
+        "binding": "0dc0bd3d167de8ac34403382ac5ec7dc92d72ba8f282e95b7fbecc120841b27e",
+        "at": "2026-10-09T04:30:30.840Z"
+      },
+      "extraction": null,
+      "current_proof": null
+    },
+    "05": {
+      "retire": null,
+      "gate": {
+        "file": "reports/antas/vault/gap/VLT-GAP-05/gate.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-05-D",
+        "binding": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+        "at": "2026-10-03T06:28:56.284Z"
+      },
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-05/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-05-B",
+        "binding": "bab469c5a9a5c50ab657c6e6383959e61f44519ccfe10c63b69d838e350c3371",
+        "at": "2026-10-02T18:43:16.412Z"
+      },
+      "current_proof": null
+    },
+    "08": {
+      "retire": {
+        "file": "reports/antas/vault/gap/VLT-GAP-08/retire-proof.json",
+        "status": "PASS",
+        "sub_phase": "08-retire",
+        "binding": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+        "at": null
+      },
+      "gate": null,
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-08/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "08-extract",
+        "binding": "524e5e0c5a404eb98c85a22aa9a6678a672e5a4a",
+        "at": null
+      },
+      "current_proof": null
+    },
+    "09": {
+      "retire": {
+        "file": "reports/antas/vault/gap/VLT-GAP-09/retire-proof.json",
+        "status": "PASS",
+        "sub_phase": "08-retire",
+        "binding": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+        "at": null
+      },
+      "gate": null,
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-09/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "08-extract",
+        "binding": "524e5e0c5a404eb98c85a22aa9a6678a672e5a4a",
+        "at": null
+      },
+      "current_proof": null
+    },
+    "02": {
+      "retire": null,
+      "gate": {
+        "file": "reports/antas/vault/gap/VLT-GAP-02/gate.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-02-D",
+        "binding": "75275a30a699f7482fc7f1c024e2dd2a84c11b9c34cbc6e1c5e7e4ba61066ee3",
+        "at": "2026-09-30T05:07:42.440Z"
+      },
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-02/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-02-B",
+        "binding": "c66e0788dc9c8cd2c11da355e84c29d9f964735979b42518a0859c4a9d375f1e",
+        "at": "2026-09-30T04:07:47.229Z"
+      },
+      "current_proof": null
+    },
+    "03": {
+      "retire": null,
+      "gate": {
+        "file": "reports/antas/vault/gap/VLT-GAP-03/gate.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-03-D",
+        "binding": "386d676b6ff44cc0732a2b5a451a7979a27ad4a74c8d9445124224e444169270",
+        "at": "2026-09-30T10:48:29.070Z"
+      },
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-03/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-03-B",
+        "binding": "06bced546dfe77f9a393973a34271eb13b104afae821c067548e2ba6f63a2f9b",
+        "at": "2026-09-30T06:29:43.104Z"
+      },
+      "current_proof": null
+    },
+    "01": {
+      "retire": null,
+      "gate": {
+        "file": "reports/antas/vault/gap/VLT-GAP-01/gate.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-01-D",
+        "binding": "15cc70d7cfef801f9993710ffe3618c0e59df1b52fb75a452e8f900ccae1b3d4",
+        "at": "2026-09-30T03:19:51.298Z"
+      },
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-01/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-01-B",
+        "binding": "fb6d0413ecb28d492887ca0a742e3a8ce4365285de39e131b40c837aa2c8b77f",
+        "at": "2026-09-30T03:20:41.891Z"
+      },
+      "current_proof": null
+    },
+    "04": {
+      "retire": null,
+      "gate": {
+        "file": "reports/antas/vault/gap/VLT-GAP-04/gate.json",
+        "status": "FAIL",
+        "sub_phase": "VLT-GAP-04-D",
+        "binding": "123e12536a8b8cce0869075e26f4e01643e16a095e9f30cf686713268403722f",
+        "at": "2026-10-07T21:13:48.223Z"
+      },
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-04/extraction-proof.json",
+        "status": "FAIL",
+        "sub_phase": "VLT-GAP-04-B",
+        "binding": "2adc008e1d9a6356eebe84c1ebcfaea5c89a26ffd359356093dc5547236349a7",
+        "at": "2026-10-07T21:13:53.143Z"
+      },
+      "current_proof": {
+        "status": "PASS",
+        "sources_checked": 12,
+        "source_mtime_latest": "2026-10-12T14:50:14.000Z",
+        "route_thinness": {
+          "file": "reports/antas/vault/gap/VLT-GAP-13/route-thinness.json",
+          "status": "PASS",
+          "covers_game_routes": true,
+          "fresh": true
+        },
+        "equivalence": {
+          "gate": "reports/antas/vault/gap/VLT-GAP-15/gate.json",
+          "compare": "reports/antas/vault/gap/VLT-GAP-15/compare.json",
+          "status": "PASS",
+          "equal_cells": 2229,
+          "total_cells": null,
+          "residuals_covered": true,
+          "fresh": true
+        }
+      }
+    },
+    "06": {
+      "retire": {
+        "file": "reports/antas/vault/gap/VLT-GAP-06/retire-proof.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-06-D",
+        "binding": "4a1f387e81418d9744085702212aa6b362a934bf113eabe2d238268d7a0c3780",
+        "at": null
+      },
+      "gate": null,
+      "extraction": {
+        "file": "reports/antas/vault/gap/VLT-GAP-06/extraction-proof.json",
+        "status": "PASS",
+        "sub_phase": "VLT-GAP-06-B",
+        "binding": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+        "at": null
+      },
+      "current_proof": null
+    }
+  },
+  "findings": [],
+  "status": "PASS"
+}

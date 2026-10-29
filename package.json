@@ -1,0 +1,92 @@
+{
+  "name": "workspace",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
+    "build": "pnpm run typecheck && pnpm -r --if-present run build",
+    "typecheck:libs": "tsc --build",
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
+    "validate:cloud-phases": "node scripts/validate-cloud-phases.mjs",
+    "validate:cicd-phases": "node scripts/validate-cicd-phases.mjs",
+    "validate:maturity": "node scripts/validate-maturity-phases.mjs",
+    "validate:roadmap-30-70": "node scripts/validate-roadmap-30-70.mjs",
+    "audit:full": "node scripts/full-system-audit.mjs",
+    "detect:affected": "node scripts/detect-affected.mjs",
+    "release:manifest": "node scripts/release-manifest.mjs",
+    "smoke:cloud": "node scripts/cloud-smoke.mjs",
+    "validate:env": "node scripts/validate-env.mjs",
+    "validate:migration-beta": "node scripts/validate-migration-beta.mjs",
+    "validate:connectivity": "node scripts/validate-connectivity.mjs",
+    "validate:roadmap-1-50": "node scripts/validate-roadmap-1-50.mjs",
+    "validate:stra-1-50": "node scripts/validate-stra-1-50.mjs",
+    "validate:identity-1-15": "node scripts/validate-hybrid-identity-1-15.mjs",
+    "validate:api-security-backbone-1-50": "node scripts/validate-api-security-backbone-1-50.mjs",
+    "validate:shared-platform-1-30": "node scripts/validate-shared-platform-1-30.mjs",
+    "validate:enforcement": "node tools/ayzen-validate/index.mjs",
+    "validate:component-registry": "node tools/component-registry/build.mjs",
+    "validate:ui-circuit": "node scripts/validate-ui-circuit.mjs",
+    "build:ui-circuit-registry": "node tools/ui-circuit-validator/build.mjs",
+    "validate:contract-exceptions": "node scripts/validate-contract-exceptions.mjs",
+    "validate:xuka": "node scripts/validate-xuka-1-80.mjs && node scripts/validate-xuka-81-156.mjs",
+    "validate:xuka-completion": "node scripts/validate-xuka-completion.mjs",
+    "validate:xuka-81-156": "node scripts/validate-xuka-81-156.mjs",
+    "validate:track-e": "node scripts/validate-track-e.mjs",
+    "validate:policy-contract": "node scripts/validate-policy-contract.mjs"
+      ,"validate:ziox": "node scripts/validate-ziox.mjs"
+     ,"validate:product-readiness-1-40": "node scripts/validate-product-readiness-1-40.mjs"
+     ,"validate:sota": "node scripts/validate-sota-phase-1-60.mjs"
+     ,"antas:baseline": "node scripts/antas/baseline.mjs"
+     ,"antas:subphases": "node scripts/antas/validate-subphases.mjs"
+      ,"antas:validate": "node scripts/validate-antas-0-18.mjs"
+       ,"validate:finance-boundaries": "node scripts/antas/finance/validate-boundaries.mjs"
+      ,"validate:projects-boundaries": "node scripts/antas/projects/validate-boundaries.mjs"
+      ,"generate:marketplace-inventory": "node scripts/antas/marketplace/generate-inventory.mjs"
+      ,"validate:marketplace-routes": "node scripts/antas/marketplace/generate-inventory.mjs --check"
+      ,"validate:marketplace-boundaries": "node scripts/antas/marketplace/validate-boundaries.mjs"
+      ,"validate:marketplace-boundaries:self-test": "node scripts/antas/marketplace/validate-boundaries.mjs --self-test"
+      ,"test:marketplace-static": "node --test scripts/antas/marketplace/characterization/characterize.test.mjs scripts/antas/marketplace/characterization/db-suite-static.test.mjs"
+      ,"validate:projects-boundaries:self-test": "node scripts/antas/projects/validate-boundaries.mjs --self-test"
+      ,"antas:vault": "node scripts/antas/vault/build-certification.mjs"
+      ,"validate:vault": "node scripts/antas/vault/build-certification.mjs --all"
+      ,"validate:vault-architecture": "node scripts/antas/vault/gap/validate-vlt-gap-14.mjs"
+      ,"validate:vault-architecture:self-test": "node scripts/antas/vault/gap/validate-vlt-gap-14.mjs --self-test"
+      ,"validate:vault-architecture:ci-wiring": "node scripts/antas/vault/gap/validate-vlt-gap-14-C.mjs"
+      ,"validate:vault-architecture:gate": "node scripts/antas/vault/gap/validate-vlt-gap-14-D.mjs"
+      ,"validate:vault-equivalence:census": "node scripts/antas/vault/gap/validate-vlt-gap-15-A.mjs"
+      ,"validate:vault-equivalence:replay": "node scripts/antas/vault/gap/validate-vlt-gap-15-B.mjs"
+      ,"validate:vault-equivalence:compare": "node scripts/antas/vault/gap/validate-vlt-gap-15-C.mjs"
+      ,"validate:vault-equivalence:backup": "node scripts/antas/vault/gap/differential-vlt-gap-15-backup.mjs"
+      ,"validate:vault-duplicates": "node scripts/antas/vault/gap/validate-vlt-gap-16.mjs"
+      ,"validate:vault-duplicates:self-test": "node scripts/antas/vault/gap/validate-vlt-gap-16.mjs --self-test"
+      ,"validate:vault-duplicates:ci-wiring": "node scripts/antas/vault/gap/validate-vlt-gap-16-C.mjs"
+      ,"validate:vault-duplicates:gate": "node scripts/antas/vault/gap/validate-vlt-gap-16-D.mjs"
+      ,"validate:vault-map": "node scripts/antas/vault/gap/validate-vlt-gap-17.mjs"
+      ,"validate:vault-map:self-test": "node scripts/antas/vault/gap/validate-vlt-gap-17.mjs --self-test"
+      ,"generate:vault-map": "node scripts/antas/vault/gap/generate-vlt-gap-17-map.mjs && node scripts/antas/vault/gap/generate-vlt-gap-00-register.mjs"
+      ,"generate:vault-register": "node scripts/antas/vault/gap/generate-vlt-gap-00-register.mjs"
+      ,"validate:vault-chaos": "node scripts/antas/vault/gap/validate-vlt-gap-19.mjs"
+      ,"capture:vault-perf": "node scripts/antas/vault/gap/validate-vlt-gap-20-A.mjs"
+      ,"validate:vault-perf": "node scripts/antas/vault/gap/validate-vlt-gap-20-B.mjs"
+      ,"validate:vault-perf:ci-wiring": "node scripts/antas/vault/gap/validate-vlt-gap-20-C.mjs"
+      ,"validate:vault-perf:gate": "node scripts/antas/vault/gap/validate-vlt-gap-20-D.mjs"
+      ,"validate:vault-final": "node scripts/antas/vault/gap/validate-vlt-gap-final.mjs"
+      ,"validate:vault-tamper": "node scripts/antas/vault/gap/validate-vlt-gap-18.mjs"
+      ,"seal:vault-evidence": "node scripts/antas/vault/gap/validate-vlt-gap-18.mjs --seal"
+      ,"validate:vault-equivalence:gate": "node scripts/antas/vault/gap/validate-vlt-gap-15-D.mjs"
+      ,"validate:vault-routes": "node scripts/antas/vault/gap/validate-vlt-gap-13.mjs"
+      ,"validate:vault-routes:self-test": "node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --self-test"
+      ,"validate:vault-routes:differential": "node scripts/antas/vault/gap/differential-vlt-gap-13-E.mjs"
+      ,"validate:vault-routes:ci-wiring": "node scripts/antas/vault/gap/validate-vlt-gap-13-C.mjs"
+      ,"validate:vault-routes:gate": "node scripts/antas/vault/gap/validate-vlt-gap-13-D.mjs"
+  },
+  "private": true,
+  "dependencies": {
+    "@replit/connectors-sdk": "^0.4.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6",
+    "typescript": "~5.9.3"
+  },
+  "packageManager": "pnpm@10.26.1"
+}

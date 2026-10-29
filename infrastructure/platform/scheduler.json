@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "runtime": "apps/worker",
+  "executionService": "services/workflow",
+  "shared": true,
+  "leaseProvider": "workflow.idempotency-store",
+  "target": "workflow-runtime",
+  "duplicateTriggerPolicy": "lease-and-idempotency",
+  "clockSkewToleranceMs": 30000,
+  "missedRunPolicies": ["skip", "run-once", "catch-up"],
+  "pauseResumeRequiresPolicy": "scheduler.manage",
+  "observability": ["scheduler.triggered", "scheduler.skipped", "scheduler.lease_lost", "scheduler.failed"]
+}

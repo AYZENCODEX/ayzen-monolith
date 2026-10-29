@@ -1,0 +1,352 @@
+name: ayzen
+
+services:
+  gateway:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/api-gateway"
+    command: ["pnpm", "--filter", "@ayzen/api-gateway", "start"]
+    environment:
+      PORT: 5000
+      MONOLITH_URL: http://monolith:8080
+      GATEWAY_REQUEST_TIMEOUT_MS: 15000
+      TRUSTED_PROXY_HOPS: 1
+      EVENT_BUS_REDIS_URL: redis://redis:6379
+      # Extracted-service routing (packages/endpoint-registry's
+      # SERVICE_ROUTE_TABLE): unset means the gateway falls back to the
+      # monolith for that prefix.
+      ADMIN_SERVICE_URL: http://admin:8111
+      AI_SERVICE_URL: http://ai:8106
+      FINANCE_SERVICE_URL: http://finance:8101
+      INTELLIGENCE_SERVICE_URL: http://intelligence:8109
+      MARKETPLACE_SERVICE_URL: http://marketplace:8107
+      NOTIFICATION_SERVICE_URL: http://notification:8104
+      VAULT_SERVICE_URL: http://vault:8102
+      WISP_SERVICE_URL: http://mail:8103
+      WORKFLOW_SERVICE_URL: http://workflow:8105
+      SEARCH_SERVICE_URL: http://search:8108
+      IDENTITY_SERVICE_URL: http://identity:8100
+    ports:
+      - "5000:5000"
+    depends_on:
+      monolith:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  identity:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/identity-service"
+    command: ["pnpm", "--filter", "@ayzen/identity-service", "start"]
+    environment:
+      PORT: 8100
+      IDENTITY_BACKEND_URL: http://monolith:8080
+      SERVICE_JWKS_URL: http://monolith:8080/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+      SERVICE_JWT_AUDIENCE: ayzen-internal
+      TRUSTED_PROXY_HOPS: 1
+    depends_on:
+      monolith:
+        condition: service_started
+
+  admin:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/admin-service"
+    command: ["pnpm", "--filter", "@ayzen/admin-service", "start"]
+    environment:
+      PORT: 8111
+      # Phase H5.1: EVENT_BUS_HTTP_URL is the dedicated HTTP-publish var
+      # (distinct from the gateway/worker's EVENT_BUS_REDIS_URL) — it's
+      # what createHttpEventPublisher POSTs envelopes to; the gateway's
+      # /events route (Phase H5.2) bridges them onto the Redis stream.
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+    depends_on:
+      gateway:
+        condition: service_started
+
+  ai:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/ai-service"
+    command: ["pnpm", "--filter", "@ayzen/ai-service", "start"]
+    environment:
+      PORT: 8106
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+      # Phase H6.2: durable state instead of a wiped-on-restart Map().
+      DATABASE_URL: postgres://ayzen:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/ayzen
+    depends_on:
+      gateway:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  finance:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/finance-service"
+    command: ["pnpm", "--filter", "@ayzen/finance-service", "start"]
+    environment:
+      PORT: 8101
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+      # Phase H6.2: durable state instead of a wiped-on-restart Map().
+      DATABASE_URL: postgres://ayzen:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/ayzen
+    depends_on:
+      gateway:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  intelligence:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/intelligence-service"
+    command: ["pnpm", "--filter", "@ayzen/intelligence-service", "start"]
+    environment:
+      PORT: 8109
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+    depends_on:
+      gateway:
+        condition: service_started
+
+  mail:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/mail-service"
+    command: ["pnpm", "--filter", "@ayzen/mail-service", "start"]
+    environment:
+      PORT: 8103
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+      # Phase H6.2: durable state instead of a wiped-on-restart Map().
+      DATABASE_URL: postgres://ayzen:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/ayzen
+    depends_on:
+      gateway:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  marketplace:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/marketplace-service"
+    command: ["pnpm", "--filter", "@ayzen/marketplace-service", "start"]
+    environment:
+      PORT: 8107
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+      # Phase H6.2: durable state instead of a wiped-on-restart Map().
+      DATABASE_URL: postgres://ayzen:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/ayzen
+    depends_on:
+      gateway:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  search:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/search-service"
+    command: ["pnpm", "--filter", "@ayzen/search-service", "start"]
+    environment:
+      PORT: 8108
+      EVENT_BUS_REDIS_URL: redis://redis:6379
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      WISP_SERVICE_URL: http://mail:8103
+      FINANCE_SERVICE_URL: http://finance:8101
+      DATABASE_URL: postgres://ayzen:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/ayzen
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+    depends_on:
+      gateway:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  notification:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/notification-service"
+    command: ["pnpm", "--filter", "@ayzen/notification-service", "start"]
+    environment:
+      PORT: 8104
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+      # Phase H6.2: durable state instead of a wiped-on-restart Map().
+      DATABASE_URL: postgres://ayzen:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/ayzen
+    depends_on:
+      gateway:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  vault:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/vault-service"
+    command: ["pnpm", "--filter", "@ayzen/vault-service", "start"]
+    environment:
+      PORT: 8102
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+      # Phase H6.2: durable state instead of a wiped-on-restart Map().
+      DATABASE_URL: postgres://ayzen:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/ayzen
+    depends_on:
+      gateway:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  workflow:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/workflow-service"
+    command: ["pnpm", "--filter", "@ayzen/workflow-service", "start"]
+    environment:
+      PORT: 8105
+      EVENT_BUS_HTTP_URL: http://gateway:5000
+      TRUSTED_PROXY_HOPS: 1
+      SERVICE_JWKS_URL: http://identity:8100/.well-known/jwks.json
+      SERVICE_JWT_ISSUER: https://account.ayzen.tech
+      # Phase H6.2: durable state instead of a wiped-on-restart Map().
+      DATABASE_URL: postgres://ayzen:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/ayzen
+    depends_on:
+      gateway:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  monolith:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@workspace/api-server"
+    command: ["pnpm", "--filter", "@workspace/api-server", "start"]
+    environment:
+      PORT: 8080
+      NODE_ENV: production
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET must be set}
+      EVENT_BUS_REDIS_URL: redis://redis:6379
+      # Telegram domain adapters call capability routes through the gateway so
+      # extracted services are reached; the gateway falls back to this monolith.
+      TELEGRAM_ADAPTER_API_BASE_URL: http://gateway:5000
+      # Admin bot denies everyone until this is set to the owner's Telegram user id.
+      TELEGRAM_ADMIN_OWNER_ID: ${TELEGRAM_ADMIN_OWNER_ID:-}
+    expose:
+      - "8080"
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ayzen
+      POSTGRES_USER: ayzen
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+    volumes:
+      - ayzen-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ayzen -d ayzen"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - ayzen-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  worker:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/worker"
+    command: ["pnpm", "--filter", "@ayzen/worker", "start"]
+    environment:
+      PORT: 8110
+      EVENT_BUS_REDIS_URL: redis://redis:6379
+      EVENT_BUS_CONSUMER_GROUP: ayzen-workers
+      SERVICE_NAME: worker
+      DATABASE_URL: postgres://ayzen:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}@postgres:5432/ayzen
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+  telegram-gateway:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+      args:
+        APP_PATH: "@ayzen/telegram-gateway"
+    command: ["pnpm", "--filter", "@ayzen/telegram-gateway", "start"]
+    environment:
+      PORT: 8090
+      TELEGRAM_HANDLER_URL: http://monolith:8080/api/telegram/gateway
+      # Bearer token for GET /api/telegram/gateway/failures; empty disables the endpoint.
+      TELEGRAM_GATEWAY_ADMIN_TOKEN: ${TELEGRAM_GATEWAY_ADMIN_TOKEN:-}
+      EVENT_BUS_REDIS_URL: redis://redis:6379
+    depends_on:
+      monolith:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+volumes:
+  ayzen-postgres:
+  ayzen-redis:

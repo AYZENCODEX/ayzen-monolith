@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "environmentIsolation": "development-staging-production",
+  "workloadIdentity": true,
+  "networkPolicy": "deny-by-default",
+  "egressAllowlist": true,
+  "privilegedContainers": false,
+  "secretInjection": "managed-runtime-only"
+}

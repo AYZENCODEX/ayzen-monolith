@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-11",
+  "sub_phase": "08-census",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "74d0e9590b85cbef5996025e049b66ef17d7e9713cbeb1308ca0ab796f0003b6",
+  "source_hashes": {
+    "artifacts/api-server/src/lib/vault-health-scan.ts": "544709220a6d99c0ca02a2b9c8fa843cbb6824325103fd7bb2375e82f375cef0",
+    "artifacts/api-server/src/lib/vault-health-cron.ts": "33bf4814731060294679de6ad87b8f360bfbefd3d16ed9e5634b2f7937c57c98",
+    "artifacts/api-server/src/routes/vault.ts": "1d4fd569c08ab4c53aa5dc1eafdf1b2e92f0ad1f84d0e20ab1278e72d1f00e2e"
+  },
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-11/baseline/sources/artifacts__api__server__src__lib__vault__health__scan__ts",
+      "sha256": "544709220a6d99c0ca02a2b9c8fa843cbb6824325103fd7bb2375e82f375cef0",
+      "lines": 320,
+      "symbols": 9,
+      "exported": 2
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-cron.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-11/baseline/sources/artifacts__api__server__src__lib__vault__health__cron__ts",
+      "sha256": "33bf4814731060294679de6ad87b8f360bfbefd3d16ed9e5634b2f7937c57c98",
+      "lines": 45,
+      "symbols": 2,
+      "exported": 1
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-11/baseline/sources/artifacts__api__server__src__routes__vault__ts",
+      "sha256": "1d4fd569c08ab4c53aa5dc1eafdf1b2e92f0ad1f84d0e20ab1278e72d1f00e2e",
+      "lines": 517,
+      "symbols": 6,
+      "exported": 1
+    }
+  ],
+  "moves": {
+    "artifacts/api-server/src/lib/vault-health-scan.ts": "artifacts/api-server/src/vault/application/health-scan.ts",
+    "artifacts/api-server/src/lib/vault-health-cron.ts": "artifacts/api-server/src/vault/application/health-cron.ts"
+  },
+  "status": "PASS"
+}

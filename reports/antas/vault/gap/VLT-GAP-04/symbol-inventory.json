@@ -1,0 +1,3909 @@
+{
+  "phase": "VLT-GAP-04",
+  "sub_phase": "VLT-GAP-04-A",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "3a908faa9ac0b32f0e0e31e504bc6ec5c81818a2c5fe6b172eb4c2f6e04a3100",
+  "validator_version": "1.0.0",
+  "validator_sha256": "c8d054187612da635b851ba555bd69512e195104702c9f449d526b7297477d7c",
+  "generated_at": "2026-09-30T11:43:21.015Z",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/game-entries.ts": "8503b842bcab4d907147488d12288d533fe38a0aa402a4514a63aabe27d8fc58",
+    "artifacts/api-server/src/routes/marketplace-game.ts": "414f1877b0a876725353697a9d95675092ef57c5cec29e42c7f2a198a00ea0f6",
+    "artifacts/ayzen/src/components/game-entries.tsx": "b02dc911f54197ee0766bb1bc2cc54f7a29a3579f693c48f2e7cd85db929d20b",
+    "artifacts/api-server/src/vault/domain/game.ts": "30d9c413af407177b9d39817eb87d2c68badac68cb9f8efe8068e99a57a5eb82"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-04-A.mjs"
+  ],
+  "exit_codes": {
+    "validator": 0,
+    "typescript_parse": 0
+  },
+  "symbols_moved": [],
+  "consumers_migrated": [],
+  "old_business_symbols_remaining": [
+    "artifacts/api-server/src/routes/game-entries.ts#gameEntryResource",
+    "artifacts/api-server/src/routes/game-entries.ts#requireGameEntryOwnership",
+    "artifacts/api-server/src/routes/game-entries.ts#safe",
+    "artifacts/api-server/src/routes/game-entries.ts#safeTags",
+    "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+    "artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+    "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91",
+    "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108",
+    "artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+    "artifacts/api-server/src/routes/marketplace-game.ts#gameListingOwnerOrAdminEngine",
+    "artifacts/api-server/src/routes/marketplace-game.ts#rule@17",
+    "artifacts/api-server/src/routes/marketplace-game.ts#rule@18",
+    "artifacts/api-server/src/routes/marketplace-game.ts#ensureWallet",
+    "artifacts/api-server/src/routes/marketplace-game.ts#parseListing",
+    "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/listings@42",
+    "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/listings@66",
+    "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96",
+    "artifacts/api-server/src/routes/marketplace-game.ts#route:DELETE /marketplace/game/listings/:id@163",
+    "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/stats@185",
+    "artifacts/ayzen/src/components/game-entries.tsx#GameEntry",
+    "artifacts/ayzen/src/components/game-entries.tsx#EMPTY_FORM",
+    "artifacts/ayzen/src/components/game-entries.tsx#rowToForm",
+    "artifacts/ayzen/src/components/game-entries.tsx#FORM_TABS",
+    "artifacts/ayzen/src/components/game-entries.tsx#FormTab",
+    "artifacts/ayzen/src/components/game-entries.tsx#INFO_SCHEMA_FIELDS",
+    "artifacts/ayzen/src/components/game-entries.tsx#CategoryBadge",
+    "artifacts/ayzen/src/components/game-entries.tsx#TagInput",
+    "artifacts/ayzen/src/components/game-entries.tsx#GameDialog",
+    "artifacts/ayzen/src/components/game-entries.tsx#GameEntries"
+  ],
+  "duplicate_implementations": [],
+  "summary": {
+    "files": 3,
+    "total_records": 33,
+    "per_file": {
+      "artifacts/api-server/src/routes/game-entries.ts": {
+        "kind": "route",
+        "lines": 151,
+        "records": 11
+      },
+      "artifacts/api-server/src/routes/marketplace-game.ts": {
+        "kind": "route",
+        "lines": 204,
+        "records": 12
+      },
+      "artifacts/ayzen/src/components/game-entries.tsx": {
+        "kind": "component",
+        "lines": 472,
+        "records": 10
+      }
+    },
+    "by_kind": {
+      "router-instance": 2,
+      "arrow-function": 3,
+      "function": 8,
+      "route-handler": 10,
+      "export-assignment": 2,
+      "constant": 4,
+      "rule-registration": 2,
+      "interface": 1,
+      "type": 1
+    },
+    "by_classification": {
+      "adapter": 8,
+      "security": 5,
+      "domain": 9,
+      "API": 10,
+      "application": 1
+    },
+    "by_behavior_domain": {
+      "shared-support": 4,
+      "ownership": 5,
+      "sql-support": 1,
+      "metadata": 6,
+      "game-entry": 5,
+      "access": 1,
+      "marketplace-boundary": 7,
+      "vault-entity": 3,
+      "ui-view": 1
+    },
+    "required_behaviors": {
+      "game-entry": [
+        "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+        "artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+        "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108",
+        "artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+        "artifacts/ayzen/src/components/game-entries.tsx#GameDialog"
+      ],
+      "vault-entity": [
+        "artifacts/ayzen/src/components/game-entries.tsx#GameEntry",
+        "artifacts/ayzen/src/components/game-entries.tsx#EMPTY_FORM",
+        "artifacts/ayzen/src/components/game-entries.tsx#rowToForm"
+      ],
+      "metadata": [
+        "artifacts/api-server/src/routes/game-entries.ts#safeTags",
+        "artifacts/ayzen/src/components/game-entries.tsx#FORM_TABS",
+        "artifacts/ayzen/src/components/game-entries.tsx#FormTab",
+        "artifacts/ayzen/src/components/game-entries.tsx#INFO_SCHEMA_FIELDS",
+        "artifacts/ayzen/src/components/game-entries.tsx#CategoryBadge",
+        "artifacts/ayzen/src/components/game-entries.tsx#TagInput"
+      ],
+      "ownership": [
+        "artifacts/api-server/src/routes/game-entries.ts#gameEntryResource",
+        "artifacts/api-server/src/routes/game-entries.ts#requireGameEntryOwnership",
+        "artifacts/api-server/src/routes/marketplace-game.ts#gameListingOwnerOrAdminEngine",
+        "artifacts/api-server/src/routes/marketplace-game.ts#rule@17",
+        "artifacts/api-server/src/routes/marketplace-game.ts#rule@18"
+      ],
+      "access": [
+        "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91"
+      ],
+      "marketplace-boundary": [
+        "artifacts/api-server/src/routes/marketplace-game.ts#ensureWallet",
+        "artifacts/api-server/src/routes/marketplace-game.ts#parseListing",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/listings@42",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/listings@66",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:DELETE /marketplace/game/listings/:id@163",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/stats@185"
+      ]
+    },
+    "route_handlers": 10,
+    "routes_with_business_behavior": 10,
+    "routes_touching_db": 10,
+    "routes_total_branches": 48,
+    "ui_components_with_api_calls": [
+      "GameDialog",
+      "GameEntries"
+    ],
+    "external_consumer_files": 3,
+    "external_consumer_edges": 4,
+    "db_tables": [
+      "game_entries",
+      "game_market_listings"
+    ],
+    "table_consumer_files": 11,
+    "endpoint_caller_files": 12,
+    "destination_state": [
+      {
+        "file": "artifacts/api-server/src/vault/domain/game.ts",
+        "holds_business_logic": false,
+        "exports": [
+          "GAME_ENTRY_OWNER_SENTINEL_NONE",
+          "GAME_SENSITIVE_FIELDS"
+        ]
+      }
+    ],
+    "findings_high": 0,
+    "findings_low": 0,
+    "findings_info": 18
+  },
+  "checks": [
+    {
+      "name": "parse:artifacts/api-server/src/routes/game-entries.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "parse:artifacts/api-server/src/routes/marketplace-game.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "parse:artifacts/ayzen/src/components/game-entries.tsx",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "all-records-classified",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-unknown-top-level-statements",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:artifacts/api-server/src/routes/game-entries.ts",
+      "passed": true,
+      "details": "statements=11 records=11 unmapped=0"
+    },
+    {
+      "name": "coverage:artifacts/api-server/src/routes/marketplace-game.ts",
+      "passed": true,
+      "details": "statements=12 records=12 unmapped=0"
+    },
+    {
+      "name": "coverage:artifacts/ayzen/src/components/game-entries.tsx",
+      "passed": true,
+      "details": "statements=10 records=10 unmapped=0"
+    },
+    {
+      "name": "independent-route-count:artifacts/api-server/src/routes/game-entries.ts",
+      "passed": true,
+      "details": "regex=5 ast=5"
+    },
+    {
+      "name": "independent-function-count:artifacts/api-server/src/routes/game-entries.ts",
+      "passed": true,
+      "details": "regex=1 ast=1"
+    },
+    {
+      "name": "independent-type-count:artifacts/api-server/src/routes/game-entries.ts",
+      "passed": true,
+      "details": "regex=0 ast=0"
+    },
+    {
+      "name": "independent-const-count:artifacts/api-server/src/routes/game-entries.ts",
+      "passed": true,
+      "details": "regex=4 ast=4"
+    },
+    {
+      "name": "independent-route-count:artifacts/api-server/src/routes/marketplace-game.ts",
+      "passed": true,
+      "details": "regex=5 ast=5"
+    },
+    {
+      "name": "independent-function-count:artifacts/api-server/src/routes/marketplace-game.ts",
+      "passed": true,
+      "details": "regex=2 ast=2"
+    },
+    {
+      "name": "independent-type-count:artifacts/api-server/src/routes/marketplace-game.ts",
+      "passed": true,
+      "details": "regex=0 ast=0"
+    },
+    {
+      "name": "independent-const-count:artifacts/api-server/src/routes/marketplace-game.ts",
+      "passed": true,
+      "details": "regex=2 ast=2"
+    },
+    {
+      "name": "independent-function-count:artifacts/ayzen/src/components/game-entries.tsx",
+      "passed": true,
+      "details": "regex=5 ast=5"
+    },
+    {
+      "name": "independent-type-count:artifacts/ayzen/src/components/game-entries.tsx",
+      "passed": true,
+      "details": "regex=2 ast=2"
+    },
+    {
+      "name": "independent-const-count:artifacts/ayzen/src/components/game-entries.tsx",
+      "passed": true,
+      "details": "regex=3 ast=3"
+    },
+    {
+      "name": "records-have-ranges-and-fingerprints",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "record-ids-unique",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "db-touching-records-enumerate-operations",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-handlers-complete",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census-non-empty",
+      "passed": true,
+      "details": "records=33"
+    },
+    {
+      "name": "exported-symbols-have-consumer-inventory",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumer-scan-found-consumers",
+      "passed": true,
+      "details": "consumers=4"
+    },
+    {
+      "name": "required-behavior-present:game-entry",
+      "passed": true,
+      "details": "records=5"
+    },
+    {
+      "name": "required-behavior-present:vault-entity",
+      "passed": true,
+      "details": "records=3"
+    },
+    {
+      "name": "required-behavior-present:metadata",
+      "passed": true,
+      "details": "records=6"
+    },
+    {
+      "name": "required-behavior-present:ownership",
+      "passed": true,
+      "details": "records=5"
+    },
+    {
+      "name": "required-behavior-present:access",
+      "passed": true,
+      "details": "records=1"
+    },
+    {
+      "name": "required-behavior-present:marketplace-boundary",
+      "passed": true,
+      "details": "records=7"
+    },
+    {
+      "name": "file-contributes-behaviors:artifacts/api-server/src/routes/game-entries.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "file-contributes-behaviors:artifacts/api-server/src/routes/marketplace-game.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "file-contributes-behaviors:artifacts/ayzen/src/components/game-entries.tsx",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "routes-with-no-middleware-enumerated",
+      "passed": true,
+      "details": "unguarded=0"
+    },
+    {
+      "name": "table-scan-derived-from-source",
+      "passed": true,
+      "details": "tables=game_entries,game_market_listings"
+    },
+    {
+      "name": "endpoint-caller-scan-derived-from-source",
+      "passed": true,
+      "details": "route_paths=6 callers=12"
+    },
+    {
+      "name": "all-fixed-sources-present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "db-access-detected-in-every-game-route",
+      "passed": true,
+      "details": "every game route handler must enumerate DB access (sql.raw and pool.query included)"
+    },
+    {
+      "name": "marketplace-tables-derived-from-string-sql",
+      "passed": true,
+      "details": "pool.query(\"...\") string-literal SQL must be parsed into tables"
+    },
+    {
+      "name": "related-game-files-recorded",
+      "passed": true,
+      "details": "related=3"
+    },
+    {
+      "name": "destination-context-recorded",
+      "passed": true,
+      "details": "artifacts/api-server/src/vault/domain/game.ts:true"
+    },
+    {
+      "name": "census-reproducible",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unrecognised-symbol-is-unclassified",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-function-not-domain",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:pure-function-is-domain",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:jsx-function-is-ui-adapter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ast-detects-db-branch-status",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ast-detects-jsx-hook-api-call",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:string-built-sql-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:bypass-detector-rejects-flags",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:behavior-mapping-game",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:string-literal-sql-parsed",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "inventory_sha256": "d3151aad1676a6f6d6b6de4a6cf5f5748f9ba24cafff897bcf3db71e89a4f4e3",
+  "notes": [
+    "04-A is a census only: no code was moved; symbols_moved/consumers_migrated are intentionally empty.",
+    "duplicate_implementations is computed in 04-B/04-D; it is not asserted here.",
+    "Build/typecheck and behavioral differential tests are required from 04-B onward; a frozen pre-extraction baseline is written to baseline/.",
+    "vault/domain/game.ts is recorded as destination context: it holds GAME_SENSITIVE_FIELDS and GAME_ENTRY_OWNER_SENTINEL_NONE constants only; no executable business logic has been extracted yet.",
+    "Behavior mapping: `access` = the ownership-gated, credit-metered single-entry view (GET /game-entries/:id); `ownership` = gameEntryResource/requireGameEntryOwnership plus the marketplace seller-OR-admin listing engine; `marketplace-boundary` = every route/helper in routes/marketplace-game.ts; `vault-entity` = the GameEntry shape/form mapping in the UI component; `metadata` = category/tags/rank/level handling. No behavior is invented: a required behavior with zero evidencing symbols fails the census.",
+    "routes/marketplace-game.ts operates on game_market_listings/marketplace_wallets/marketplace_transactions only; it does not touch game_entries (see findings). Game-entry transfer/copy on sale, if any, is in routes/marketplace-vault.ts, which GAP-02/03-C deferred to GAP-04 and which is NOT a roadmap Source here.",
+    "related_game_files lists Game-named files outside the roadmap Sources (pages/user/marketplace-game.tsx, config/vault-game.ts, config/fields/game-create.ts, ...); they are recorded but NOT censused, and need an explicit scope decision before 04-B."
+  ],
+  "status": "PASS",
+  "findings": [
+    {
+      "id": "destination-constants-only:game",
+      "severity": "INFO",
+      "kind": "destination-holds-no-business-logic",
+      "detail": "artifacts/api-server/src/vault/domain/game.ts exports constants only (GAME_ENTRY_OWNER_SENTINEL_NONE, GAME_SENSITIVE_FIELDS); all game business logic still lives in the legacy sources."
+    },
+    {
+      "id": "marketplace-game-does-not-touch-game-entries",
+      "severity": "INFO",
+      "kind": "marketplace-boundary-gap",
+      "detail": "routes/marketplace-game.ts operates only on {game_market_listings,marketplace_transactions,marketplace_wallets,users}; it never reads/copies/transfers a game_entries row when a listing sells. Any game-entry ownership transfer on sale lives elsewhere (see table_consumers; routes/marketplace-vault.ts is deferred to GAP-04 by GAP-02/03-C). 04-B must preserve this exactly and not add transfer logic."
+    },
+    {
+      "id": "route-mutates-wallet:artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96",
+      "severity": "INFO",
+      "kind": "route-mutates-marketplace-wallet",
+      "symbol": "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96",
+      "detail": "POST /marketplace/game/buy debits/credits marketplace_wallets inside a transaction (BEGIN/COMMIT on a dedicated pool client). 04-B must keep the transaction and guarded UPDATE semantics byte-for-byte."
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+      "detail": "DELETE /game-entries/:id performs DB access inline (db.execute)"
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+      "detail": "GET /game-entries performs DB access inline (db.execute)"
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91",
+      "detail": "GET /game-entries/:id performs DB access inline (db.execute)"
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+      "detail": "POST /game-entries performs DB access inline (db.execute)"
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108",
+      "detail": "PUT /game-entries/:id performs DB access inline (db.execute)"
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/marketplace-game.ts#route:DELETE /marketplace/game/listings/:id@163",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/marketplace-game.ts#route:DELETE /marketplace/game/listings/:id@163",
+      "detail": "DELETE /marketplace/game/listings/:id performs DB access inline (pool.query)"
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/listings@42",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/listings@42",
+      "detail": "GET /marketplace/game/listings performs DB access inline (pool.query)"
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/stats@185",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/stats@185",
+      "detail": "GET /marketplace/game/stats performs DB access inline (pool.query)"
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96",
+      "detail": "POST /marketplace/game/buy performs DB access inline (client.query,pool.query)"
+    },
+    {
+      "id": "route-owns-db:artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/listings@66",
+      "severity": "INFO",
+      "kind": "route-handler-owns-db-access",
+      "symbol": "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/listings@66",
+      "detail": "POST /marketplace/game/listings performs DB access inline (pool.query)"
+    },
+    {
+      "id": "string-built-sql:artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+      "severity": "INFO",
+      "kind": "route-uses-string-built-sql",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+      "detail": "DELETE /game-entries/:id builds SQL via sql.raw/string interpolation; extraction (04-B) must preserve SQL semantics exactly and may not silently change it."
+    },
+    {
+      "id": "string-built-sql:artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+      "severity": "INFO",
+      "kind": "route-uses-string-built-sql",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+      "detail": "GET /game-entries builds SQL via sql.raw/string interpolation; extraction (04-B) must preserve SQL semantics exactly and may not silently change it."
+    },
+    {
+      "id": "string-built-sql:artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91",
+      "severity": "INFO",
+      "kind": "route-uses-string-built-sql",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91",
+      "detail": "GET /game-entries/:id builds SQL via sql.raw/string interpolation; extraction (04-B) must preserve SQL semantics exactly and may not silently change it."
+    },
+    {
+      "id": "string-built-sql:artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+      "severity": "INFO",
+      "kind": "route-uses-string-built-sql",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+      "detail": "POST /game-entries builds SQL via sql.raw/string interpolation; extraction (04-B) must preserve SQL semantics exactly and may not silently change it."
+    },
+    {
+      "id": "string-built-sql:artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108",
+      "severity": "INFO",
+      "kind": "route-uses-string-built-sql",
+      "symbol": "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108",
+      "detail": "PUT /game-entries/:id builds SQL via sql.raw/string interpolation; extraction (04-B) must preserve SQL semantics exactly and may not silently change it."
+    }
+  ],
+  "destination_context": [
+    {
+      "file": "artifacts/api-server/src/vault/domain/game.ts",
+      "exists": true,
+      "sha256": "30d9c413af407177b9d39817eb87d2c68badac68cb9f8efe8068e99a57a5eb82",
+      "lines": 9,
+      "exports": [
+        "GAME_ENTRY_OWNER_SENTINEL_NONE",
+        "GAME_SENSITIVE_FIELDS"
+      ],
+      "function_count": 0,
+      "holds_business_logic": false,
+      "note": "constants-only destination: contains no executable business logic"
+    }
+  ],
+  "table_consumers": {
+    "tables": [
+      "game_entries",
+      "game_market_listings"
+    ],
+    "consumers": [
+      {
+        "file": "artifacts/api-server/src/lib/mail-sync.ts",
+        "kind": "source",
+        "tables": {
+          "game_entries": 2
+        }
+      },
+      {
+        "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+        "kind": "schema-or-migration",
+        "tables": {
+          "game_entries": 2,
+          "game_market_listings": 3
+        }
+      },
+      {
+        "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+        "kind": "source",
+        "tables": {
+          "game_entries": 1
+        }
+      },
+      {
+        "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+        "kind": "source",
+        "tables": {
+          "game_entries": 2
+        }
+      },
+      {
+        "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+        "kind": "source",
+        "tables": {
+          "game_entries": 2
+        }
+      },
+      {
+        "file": "artifacts/api-server/src/routes/search.ts",
+        "kind": "source",
+        "tables": {
+          "game_entries": 1
+        }
+      },
+      {
+        "file": "artifacts/api-server/src/routes/vault-shares.ts",
+        "kind": "source",
+        "tables": {
+          "game_entries": 2
+        }
+      },
+      {
+        "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+        "kind": "source",
+        "tables": {
+          "game_entries": 1
+        }
+      },
+      {
+        "file": "artifacts/api-server/src/services/credit-meter.ts",
+        "kind": "source",
+        "tables": {
+          "game_entries": 1
+        }
+      },
+      {
+        "file": "packages/domain-boundaries/src/index.mjs",
+        "kind": "source",
+        "tables": {
+          "game_entries": 1
+        }
+      },
+      {
+        "file": "scripts/src/reencrypt-vault.ts",
+        "kind": "source",
+        "tables": {
+          "game_entries": 1
+        }
+      }
+    ]
+  },
+  "endpoint_callers": {
+    "route_paths": [
+      "/game-entries",
+      "/game-entries/:id",
+      "/marketplace/game/buy",
+      "/marketplace/game/listings",
+      "/marketplace/game/listings/:id",
+      "/marketplace/game/stats"
+    ],
+    "callers": [
+      {
+        "file": "artifacts/api-server/src/routes/vault-shares.ts",
+        "endpoints": [
+          "game-entries.ts"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/config/marketplace.ts",
+        "endpoints": [
+          "/marketplace/game"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/lib/route-config.tsx",
+        "endpoints": [
+          "/marketplace/game"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/marketplace-game.tsx",
+        "endpoints": [
+          "/marketplace/game/buy",
+          "/marketplace/game/listings",
+          "/marketplace/game/listings/:param",
+          "/marketplace/game/listings?:param",
+          "/marketplace/game/stats"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/marketplace-vault.tsx",
+        "endpoints": [
+          "/game-entries"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-2fa-category.tsx",
+        "endpoints": [
+          "/game-entries"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-2fa-entity.tsx",
+        "endpoints": [
+          "/game-entries"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-backup-entity.tsx",
+        "endpoints": [
+          "/game-entries"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-backup.tsx",
+        "endpoints": [
+          "/game-entries"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-mail-category.tsx",
+        "endpoints": [
+          "/game-entries"
+        ]
+      },
+      {
+        "file": "artifacts/ayzen/src/pages/user/vault-mail-entity.tsx",
+        "endpoints": [
+          "/game-entries"
+        ]
+      },
+      {
+        "file": "packages/endpoint-registry/src/index.mjs",
+        "endpoints": [
+          "/api/game-entries",
+          "/api/game-entries/:id",
+          "/api/marketplace/game/buy",
+          "/api/marketplace/game/listings",
+          "/api/marketplace/game/listings/:id",
+          "/api/marketplace/game/stats"
+        ]
+      }
+    ]
+  },
+  "related_game_files": [
+    {
+      "file": "artifacts/ayzen/src/config/fields/game-create.ts",
+      "reason": "path-contains-game",
+      "in_roadmap_sources": false
+    },
+    {
+      "file": "artifacts/ayzen/src/config/vault-game.ts",
+      "reason": "path-contains-game",
+      "in_roadmap_sources": false
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/marketplace-game.tsx",
+      "reason": "path-contains-game",
+      "in_roadmap_sources": false
+    }
+  ],
+  "files": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "kind": "route",
+      "sha256": "8503b842bcab4d907147488d12288d533fe38a0aa402a4514a63aabe27d8fc58",
+      "lines": 151,
+      "top_level_statements": 11,
+      "records": 11,
+      "imports": [
+        {
+          "local": "Router",
+          "module": "express",
+          "imported": "Router"
+        },
+        {
+          "local": "Request",
+          "module": "express",
+          "imported": "Request"
+        },
+        {
+          "local": "Response",
+          "module": "express",
+          "imported": "Response"
+        },
+        {
+          "local": "db",
+          "module": "@workspace/db",
+          "imported": "db"
+        },
+        {
+          "local": "sql",
+          "module": "drizzle-orm",
+          "imported": "sql"
+        },
+        {
+          "local": "requireAuth",
+          "module": "../middlewares/auth",
+          "imported": "requireAuth"
+        },
+        {
+          "local": "pepDecisionObserver",
+          "module": "../middlewares/auth",
+          "imported": "pepDecisionObserver"
+        },
+        {
+          "local": "encryptField",
+          "module": "../lib/vault-crypto",
+          "imported": "encryptField"
+        },
+        {
+          "local": "decryptRow",
+          "module": "../lib/vault-crypto",
+          "imported": "decryptRow"
+        },
+        {
+          "local": "decryptRows",
+          "module": "../lib/vault-crypto",
+          "imported": "decryptRows"
+        },
+        {
+          "local": "requireOwnership",
+          "module": "../lib/policy/pep/middleware",
+          "imported": "requireOwnership"
+        },
+        {
+          "local": "ResourceRefBuilder",
+          "module": "../lib/policy/pep/types",
+          "imported": "ResourceRefBuilder"
+        },
+        {
+          "local": "requireCreditBalance",
+          "module": "../services/credit-meter",
+          "imported": "requireCreditBalance"
+        },
+        {
+          "local": "chargeCredits",
+          "module": "../services/credit-meter",
+          "imported": "chargeCredits"
+        },
+        {
+          "local": "GAME_ENTRY_OWNER_SENTINEL_NONE",
+          "module": "../vault/domain/game",
+          "imported": "GAME_ENTRY_OWNER_SENTINEL_NONE"
+        },
+        {
+          "local": "GAME_SENSITIVE_FIELDS",
+          "module": "../vault/domain/game",
+          "imported": "GAME_SENSITIVE_FIELDS"
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "kind": "route",
+      "sha256": "414f1877b0a876725353697a9d95675092ef57c5cec29e42c7f2a198a00ea0f6",
+      "lines": 204,
+      "top_level_statements": 12,
+      "records": 12,
+      "imports": [
+        {
+          "local": "Router",
+          "module": "express",
+          "imported": "Router"
+        },
+        {
+          "local": "pool",
+          "module": "@workspace/db",
+          "imported": "pool"
+        },
+        {
+          "local": "requireAuth",
+          "module": "../middlewares/auth",
+          "imported": "requireAuth"
+        },
+        {
+          "local": "pepDecisionObserver",
+          "module": "../middlewares/auth",
+          "imported": "pepDecisionObserver"
+        },
+        {
+          "local": "getMarketConfig",
+          "module": "../lib/market-config",
+          "imported": "getMarketConfig"
+        },
+        {
+          "local": "PolicyEngine",
+          "module": "../lib/policy/policy-engine",
+          "imported": "PolicyEngine"
+        },
+        {
+          "local": "createResourceOwnershipRule",
+          "module": "../lib/policy/resource",
+          "imported": "createResourceOwnershipRule"
+        },
+        {
+          "local": "createRoleOverrideRule",
+          "module": "../lib/policy/resource",
+          "imported": "createRoleOverrideRule"
+        },
+        {
+          "local": "authorize",
+          "module": "../lib/policy/pep",
+          "imported": "authorize"
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "kind": "component",
+      "sha256": "b02dc911f54197ee0766bb1bc2cc54f7a29a3579f693c48f2e7cd85db929d20b",
+      "lines": 472,
+      "top_level_statements": 10,
+      "records": 10,
+      "imports": [
+        {
+          "local": "useState",
+          "module": "react",
+          "imported": "useState"
+        },
+        {
+          "local": "useEffect",
+          "module": "react",
+          "imported": "useEffect"
+        },
+        {
+          "local": "useCallback",
+          "module": "react",
+          "imported": "useCallback"
+        },
+        {
+          "local": "useRef",
+          "module": "react",
+          "imported": "useRef"
+        },
+        {
+          "local": "KeyboardEvent",
+          "module": "react",
+          "imported": "KeyboardEvent"
+        },
+        {
+          "local": "Button",
+          "module": "@/components/ui/button",
+          "imported": "Button"
+        },
+        {
+          "local": "Badge",
+          "module": "@/components/ui/badge",
+          "imported": "Badge"
+        },
+        {
+          "local": "Checkbox",
+          "module": "@/components/ui/checkbox",
+          "imported": "Checkbox"
+        },
+        {
+          "local": "Dialog",
+          "module": "@/components/ui/dialog",
+          "imported": "Dialog"
+        },
+        {
+          "local": "DialogContent",
+          "module": "@/components/ui/dialog",
+          "imported": "DialogContent"
+        },
+        {
+          "local": "DialogHeader",
+          "module": "@/components/ui/dialog",
+          "imported": "DialogHeader"
+        },
+        {
+          "local": "DialogTitle",
+          "module": "@/components/ui/dialog",
+          "imported": "DialogTitle"
+        },
+        {
+          "local": "DialogFooter",
+          "module": "@/components/ui/dialog",
+          "imported": "DialogFooter"
+        },
+        {
+          "local": "Plus",
+          "module": "lucide-react",
+          "imported": "Plus"
+        },
+        {
+          "local": "Trash2",
+          "module": "lucide-react",
+          "imported": "Trash2"
+        },
+        {
+          "local": "Edit2",
+          "module": "lucide-react",
+          "imported": "Edit2"
+        },
+        {
+          "local": "Gamepad2",
+          "module": "lucide-react",
+          "imported": "Gamepad2"
+        },
+        {
+          "local": "Loader2",
+          "module": "lucide-react",
+          "imported": "Loader2"
+        },
+        {
+          "local": "Search",
+          "module": "lucide-react",
+          "imported": "Search"
+        },
+        {
+          "local": "User",
+          "module": "lucide-react",
+          "imported": "User"
+        },
+        {
+          "local": "MailIcon",
+          "module": "lucide-react",
+          "imported": "Mail"
+        },
+        {
+          "local": "InfoIcon",
+          "module": "lucide-react",
+          "imported": "Info"
+        },
+        {
+          "local": "X",
+          "module": "lucide-react",
+          "imported": "X"
+        },
+        {
+          "local": "TagIcon",
+          "module": "lucide-react",
+          "imported": "Tag"
+        },
+        {
+          "local": "Share2",
+          "module": "lucide-react",
+          "imported": "Share2"
+        },
+        {
+          "local": "Users",
+          "module": "lucide-react",
+          "imported": "Users"
+        },
+        {
+          "local": "MoreVertical",
+          "module": "lucide-react",
+          "imported": "MoreVertical"
+        },
+        {
+          "local": "Ban",
+          "module": "lucide-react",
+          "imported": "Ban"
+        },
+        {
+          "local": "useToast",
+          "module": "@/hooks/use-toast",
+          "imported": "useToast"
+        },
+        {
+          "local": "cn",
+          "module": "@/lib/utils",
+          "imported": "cn"
+        },
+        {
+          "local": "customFetch",
+          "module": "@workspace/api-client-react",
+          "imported": "customFetch"
+        },
+        {
+          "local": "SchemaForm",
+          "module": "@/components/schema/SchemaForm",
+          "imported": "SchemaForm"
+        },
+        {
+          "local": "GAME_FIELDS",
+          "module": "@/config/fields/game-create",
+          "imported": "GAME_FIELDS"
+        },
+        {
+          "local": "GAME_CATEGORIES",
+          "module": "@/config/vault-game",
+          "imported": "GAME_CATEGORIES"
+        },
+        {
+          "local": "getGameCategoryMeta",
+          "module": "@/config/vault-game",
+          "imported": "getGameCategoryMeta"
+        },
+        {
+          "local": "ShareEntityDialog",
+          "module": "@/components/vault/share-entity-dialog",
+          "imported": "ShareEntityDialog"
+        },
+        {
+          "local": "ShareTarget",
+          "module": "@/components/vault/share-entity-dialog",
+          "imported": "ShareTarget"
+        },
+        {
+          "local": "ManageSharesDialog",
+          "module": "@/components/vault/manage-shares-dialog",
+          "imported": "ManageSharesDialog"
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 11,
+      "line_end": 11,
+      "line_count": 1,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#router",
+      "name": "router",
+      "kind": "router-instance",
+      "initializer_kind": "call-adapter",
+      "operations": {},
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "express::Router",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+      "raw_sha256": "b8d1e219654826154f8fc7f5830b9b8dcb35a59096adf45fa07fe835d686ff67",
+      "classification": "adapter",
+      "classification_rule": "R01:express-router-instance",
+      "behavior_domain": "shared-support",
+      "required_behavior": null,
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/api-server/src/routes/game-entries.ts#export-default",
+        "artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+        "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91",
+        "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+        "artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+        "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 17,
+      "line_end": 23,
+      "line_count": 7,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#gameEntryResource",
+      "name": "gameEntryResource",
+      "kind": "arrow-function",
+      "initializer_kind": "arrow-function",
+      "operations": {
+        "raw-sql-call": [
+          "sql.raw"
+        ],
+        "db": [
+          "db.execute"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "game_entries"
+            ],
+            "string_built": true,
+            "parameterized": false
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "@workspace/db::db",
+          "count": 1
+        },
+        {
+          "target": "drizzle-orm::sql",
+          "count": 1
+        },
+        {
+          "target": "local::parseInt",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 1,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 1,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 2,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [
+        "req.params",
+        "req.params.id"
+      ],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": true,
+      "fingerprint_sha256": "eaf8ac52f124b10557016abc177f3cde5002ad2bc353312f3cda9c0fce6cd9ed",
+      "raw_sha256": "25285a9c54ebf83373e575d3c13f7a68752028bf42b01188daae40a818570b4d",
+      "classification": "security",
+      "classification_rule": "R06:ownership-resource-builder",
+      "behavior_domain": "ownership",
+      "required_behavior": "ownership",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/api-server/src/routes/game-entries.ts#requireGameEntryOwnership"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 24,
+      "line_end": 26,
+      "line_count": 3,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#requireGameEntryOwnership",
+      "name": "requireGameEntryOwnership",
+      "kind": "function",
+      "default_export": false,
+      "operations": {
+        "authz": [
+          "requireOwnership"
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/policy/pep/middleware::requireOwnership",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "7882928f4eb8e18104935685feb0e6193358a7a2dab8feaae8e57947aac13daf",
+      "raw_sha256": "4a8f5ede32687f95c2ef0fdd86c2ef3fb1dd82dd773a948980576cc2b25ab722",
+      "async": false,
+      "parameters": [
+        "action",
+        "onDeny"
+      ],
+      "classification": "security",
+      "classification_rule": "R06:ownership-resource-builder",
+      "behavior_domain": "ownership",
+      "required_behavior": "ownership",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+        "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91",
+        "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 29,
+      "line_end": 29,
+      "line_count": 1,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#safe",
+      "name": "safe",
+      "kind": "arrow-function",
+      "initializer_kind": "arrow-function",
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 1,
+        "logical": 2,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 3,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "6527d7a036786c20607062129f78d86e9716ff82408837f7d77360c1a2ce4b97",
+      "raw_sha256": "7fe32382b4621a56a15b5be91ab9f00d19c3f49ec475c59b039e5294b03dba0b",
+      "classification": "domain",
+      "classification_rule": "R12:pure-computation",
+      "behavior_domain": "sql-support",
+      "required_behavior": null,
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+        "artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+        "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 31,
+      "line_end": 34,
+      "line_count": 4,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#safeTags",
+      "name": "safeTags",
+      "kind": "arrow-function",
+      "initializer_kind": "arrow-function",
+      "operations": {},
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "local::filter",
+          "count": 1
+        },
+        {
+          "target": "local::map",
+          "count": 1
+        },
+        {
+          "target": "local::trim",
+          "count": 2
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 1,
+        "logical": 1,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 2,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "b664332373e57023dfa60eeeae14e7aa7052b728d5e8f53585578d3ee449d013",
+      "raw_sha256": "3ecd3c52a73d6b78780b41cf2e9306e5b2bd690430e6d71c1e06a2604f192994",
+      "classification": "domain",
+      "classification_rule": "R12:pure-computation",
+      "behavior_domain": "metadata",
+      "required_behavior": "metadata",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+        "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 37,
+      "line_end": 49,
+      "line_count": 13,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+      "name": "GET /game-entries",
+      "kind": "route-handler",
+      "method": "GET",
+      "route_path": "/game-entries",
+      "middleware": [
+        "requireAuth"
+      ],
+      "handler_line_count": 13,
+      "handler_is_inline": true,
+      "ordinal": 1,
+      "operations": {
+        "raw-sql-call": [
+          "sql.raw"
+        ],
+        "crypto": [
+          "decryptRows"
+        ],
+        "db": [
+          "db.execute"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "game_entries"
+            ],
+            "string_built": true,
+            "parameterized": false
+          },
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "game_entries"
+            ],
+            "string_built": true,
+            "parameterized": false
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/vault-crypto::decryptRows",
+          "count": 1
+        },
+        {
+          "target": "@workspace/db::db",
+          "count": 1
+        },
+        {
+          "target": "drizzle-orm::sql",
+          "count": 2
+        },
+        {
+          "target": "local::get",
+          "count": 1
+        },
+        {
+          "target": "local::safe",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 1,
+        "logical": 1,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 3,
+      "response_statuses": [
+        500
+      ],
+      "error_literals": [
+        "DB error"
+      ],
+      "request_inputs": [
+        "req.query",
+        "req.query.category"
+      ],
+      "transactional": false,
+      "response_calls": 2,
+      "touches_db": true,
+      "fingerprint_sha256": "2254852408ff8acc2591db37c9c1ba7d7d9dde98d7b8fce243338db679112f0a",
+      "raw_sha256": "7f9d3652a5b7477d586c99c1a543b1af4479cd65c92f9f533d774eea52c34bf7",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "game-entry",
+      "required_behavior": "game-entry",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 52,
+      "line_end": 82,
+      "line_count": 31,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+      "name": "POST /game-entries",
+      "kind": "route-handler",
+      "method": "POST",
+      "route_path": "/game-entries",
+      "middleware": [
+        "requireAuth"
+      ],
+      "handler_line_count": 31,
+      "handler_is_inline": true,
+      "ordinal": 2,
+      "operations": {
+        "raw-sql-call": [
+          "sql.raw"
+        ],
+        "crypto": [
+          "decryptRow",
+          "encryptField"
+        ],
+        "db": [
+          "db.execute"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "INSERT INTO"
+            ],
+            "tables": [
+              "game_entries"
+            ],
+            "string_built": true,
+            "parameterized": false
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/vault-crypto::decryptRow",
+          "count": 1
+        },
+        {
+          "target": "../lib/vault-crypto::encryptField",
+          "count": 4
+        },
+        {
+          "target": "@workspace/db::db",
+          "count": 1
+        },
+        {
+          "target": "drizzle-orm::sql",
+          "count": 1
+        },
+        {
+          "target": "local::post",
+          "count": 1
+        },
+        {
+          "target": "local::safe",
+          "count": 11
+        },
+        {
+          "target": "local::safeTags",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 1,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 2,
+      "response_statuses": [
+        201,
+        400,
+        500
+      ],
+      "error_literals": [
+        "Category required",
+        "DB error"
+      ],
+      "request_inputs": [
+        "req.body"
+      ],
+      "transactional": false,
+      "response_calls": 3,
+      "touches_db": true,
+      "fingerprint_sha256": "00734e47bff182c099cf3df78eefdd07f93b0f87c6712744918e22508bb4b410",
+      "raw_sha256": "473ea367ce2689481b6fd4be5df6ead326a35b68fdeb9f57c170ce8a3a01eb72",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "game-entry",
+      "required_behavior": "game-entry",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 91,
+      "line_end": 105,
+      "line_count": 15,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91",
+      "name": "GET /game-entries/:id",
+      "kind": "route-handler",
+      "method": "GET",
+      "route_path": "/game-entries/:id",
+      "middleware": [
+        "requireAuth",
+        "requireGameEntryOwnership(\"game_entry.read\", (_req, res) => { res.status(404).json({ e)",
+        "requireCreditBalance(\"sylo.game_entry_view\")"
+      ],
+      "handler_line_count": 15,
+      "handler_is_inline": true,
+      "ordinal": 3,
+      "operations": {
+        "billing": [
+          "chargeCredits",
+          "requireCreditBalance"
+        ],
+        "raw-sql-call": [
+          "sql.raw"
+        ],
+        "crypto": [
+          "decryptRow"
+        ],
+        "db": [
+          "db.execute"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "game_entries"
+            ],
+            "string_built": true,
+            "parameterized": false
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/vault-crypto::decryptRow",
+          "count": 1
+        },
+        {
+          "target": "../services/credit-meter::chargeCredits",
+          "count": 1
+        },
+        {
+          "target": "../services/credit-meter::requireCreditBalance",
+          "count": 1
+        },
+        {
+          "target": "@workspace/db::db",
+          "count": 1
+        },
+        {
+          "target": "drizzle-orm::sql",
+          "count": 1
+        },
+        {
+          "target": "local::get",
+          "count": 1
+        },
+        {
+          "target": "local::isNaN",
+          "count": 1
+        },
+        {
+          "target": "local::parseInt",
+          "count": 1
+        },
+        {
+          "target": "local::requireGameEntryOwnership",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 2,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 1,
+        "logical": 0,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 4,
+      "response_statuses": [
+        400,
+        404,
+        500
+      ],
+      "error_literals": [
+        "DB error",
+        "Invalid ID",
+        "Not found"
+      ],
+      "request_inputs": [
+        "req.params",
+        "req.params.id"
+      ],
+      "transactional": false,
+      "response_calls": 5,
+      "touches_db": true,
+      "fingerprint_sha256": "f35606e9a2051378ace22c426562b6246566f8e1a8428f5116db51e905c5b30d",
+      "raw_sha256": "13a09e83d48b3c306768a4471c73964bf1c85234057d0d111e10a90a1bfd0363",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "access",
+      "required_behavior": "access",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 108,
+      "line_end": 135,
+      "line_count": 28,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108",
+      "name": "PUT /game-entries/:id",
+      "kind": "route-handler",
+      "method": "PUT",
+      "route_path": "/game-entries/:id",
+      "middleware": [
+        "requireAuth",
+        "requireGameEntryOwnership(\"game_entry.update\", (_req, res) => { res.status(404).json({)"
+      ],
+      "handler_line_count": 28,
+      "handler_is_inline": true,
+      "ordinal": 4,
+      "operations": {
+        "raw-sql-call": [
+          "sql.raw"
+        ],
+        "crypto": [
+          "decryptRow",
+          "encryptField"
+        ],
+        "db": [
+          "db.execute"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "UPDATE"
+            ],
+            "tables": [
+              "game_entries"
+            ],
+            "string_built": true,
+            "parameterized": false
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/vault-crypto::decryptRow",
+          "count": 1
+        },
+        {
+          "target": "../lib/vault-crypto::encryptField",
+          "count": 4
+        },
+        {
+          "target": "@workspace/db::db",
+          "count": 1
+        },
+        {
+          "target": "drizzle-orm::sql",
+          "count": 1
+        },
+        {
+          "target": "local::isNaN",
+          "count": 1
+        },
+        {
+          "target": "local::parseInt",
+          "count": 1
+        },
+        {
+          "target": "local::put",
+          "count": 1
+        },
+        {
+          "target": "local::requireGameEntryOwnership",
+          "count": 1
+        },
+        {
+          "target": "local::safe",
+          "count": 11
+        },
+        {
+          "target": "local::safeTags",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 2,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 1,
+        "logical": 0,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 4,
+      "response_statuses": [
+        400,
+        404,
+        500
+      ],
+      "error_literals": [
+        "DB error",
+        "Invalid ID",
+        "Not found or forbidden"
+      ],
+      "request_inputs": [
+        "req.body",
+        "req.params",
+        "req.params.id"
+      ],
+      "transactional": false,
+      "response_calls": 5,
+      "touches_db": true,
+      "fingerprint_sha256": "9b59387926cd51707db9a792bdd335894c3a4a3c31d7c38a3522beb8157e141c",
+      "raw_sha256": "5cc8a443b67c8095d0895ccaebd39cefa9df4e50246d1b80c76514c21c7376bd",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "game-entry",
+      "required_behavior": "game-entry",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 138,
+      "line_end": 148,
+      "line_count": 11,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+      "name": "DELETE /game-entries/:id",
+      "kind": "route-handler",
+      "method": "DELETE",
+      "route_path": "/game-entries/:id",
+      "middleware": [
+        "requireAuth",
+        "requireGameEntryOwnership(\"game_entry.delete\", (_req, res) => { res.json({ success: tr)"
+      ],
+      "handler_line_count": 11,
+      "handler_is_inline": true,
+      "ordinal": 5,
+      "operations": {
+        "raw-sql-call": [
+          "sql.raw"
+        ],
+        "db": [
+          "db.execute"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "DELETE FROM"
+            ],
+            "tables": [
+              "game_entries"
+            ],
+            "string_built": true,
+            "parameterized": false
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "@workspace/db::db",
+          "count": 1
+        },
+        {
+          "target": "drizzle-orm::sql",
+          "count": 1
+        },
+        {
+          "target": "local::delete",
+          "count": 1
+        },
+        {
+          "target": "local::isNaN",
+          "count": 1
+        },
+        {
+          "target": "local::parseInt",
+          "count": 1
+        },
+        {
+          "target": "local::requireGameEntryOwnership",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 1,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 2,
+      "response_statuses": [
+        400,
+        500
+      ],
+      "error_literals": [
+        "DB error",
+        "Invalid ID"
+      ],
+      "request_inputs": [
+        "req.params",
+        "req.params.id"
+      ],
+      "transactional": false,
+      "response_calls": 4,
+      "touches_db": true,
+      "fingerprint_sha256": "4e8362cb31fdf6dcff4b7eec113cba98114f4d98dc3c7323c1263185457a0592",
+      "raw_sha256": "0bdeed0aff889f6a5c6f2c8ca21d7a6994f97910da7b5bcbf6d18f17ef2d9e46",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "game-entry",
+      "required_behavior": "game-entry",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "file_kind": "route",
+      "line_start": 150,
+      "line_end": 150,
+      "line_count": 1,
+      "exported": true,
+      "id": "artifacts/api-server/src/routes/game-entries.ts#export-default",
+      "name": "default",
+      "kind": "export-assignment",
+      "exports": "router",
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+      "raw_sha256": "446aaf4abedbce1d9a77dfc444a1fc6662bdf2667332132445e7019251f9bcd8",
+      "classification": "adapter",
+      "classification_rule": "R02:default-export-router",
+      "behavior_domain": "shared-support",
+      "required_behavior": null,
+      "owner_gap": "GAP-04",
+      "external_consumers": [
+        {
+          "consumer": "artifacts/api-server/src/routes/index.ts",
+          "kind": "import",
+          "line": 87
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 9,
+      "line_end": 9,
+      "line_count": 1,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#router",
+      "name": "router",
+      "kind": "router-instance",
+      "initializer_kind": "call-adapter",
+      "operations": {},
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "express::Router",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+      "raw_sha256": "b8d1e219654826154f8fc7f5830b9b8dcb35a59096adf45fa07fe835d686ff67",
+      "classification": "adapter",
+      "classification_rule": "R01:express-router-instance",
+      "behavior_domain": "shared-support",
+      "required_behavior": null,
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/api-server/src/routes/marketplace-game.ts#export-default",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:DELETE /marketplace/game/listings/:id@163",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/listings@42",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/stats@185",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/listings@66"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 16,
+      "line_end": 16,
+      "line_count": 1,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#gameListingOwnerOrAdminEngine",
+      "name": "gameListingOwnerOrAdminEngine",
+      "kind": "constant",
+      "initializer_kind": "new-engine",
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "aa8f53ab41f354fd5e83494caecdf9eab25b47cb3c52dcc7437cc97c78cb2faf",
+      "raw_sha256": "25e5b9eee159a89808dc24f21c441fed9498a798f99328cffe5e485ed4bb04cf",
+      "classification": "security",
+      "classification_rule": "R15:policy-engine-instance",
+      "behavior_domain": "ownership",
+      "required_behavior": "ownership",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:DELETE /marketplace/game/listings/:id@163",
+        "artifacts/api-server/src/routes/marketplace-game.ts#rule@17",
+        "artifacts/api-server/src/routes/marketplace-game.ts#rule@18"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 17,
+      "line_end": 17,
+      "line_count": 1,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#rule@17",
+      "name": "gameListingOwnerOrAdminEngine.registerRule",
+      "kind": "rule-registration",
+      "operations": {
+        "authz": [
+          "createResourceOwnershipRule"
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/policy/resource::createResourceOwnershipRule",
+          "count": 1
+        },
+        {
+          "target": "local::registerRule",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "a9f45a8e24af0fd3b85ba3a01bfd3a726c01ddabb0dde50c38d5b7952befc7b5",
+      "raw_sha256": "52b61175b1b570c529c8cf8c7461b9bfefe4e3af971f2f44d24f6aa0b71d3995",
+      "classification": "security",
+      "classification_rule": "R04:policy-rule-registration",
+      "behavior_domain": "ownership",
+      "required_behavior": "ownership",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 18,
+      "line_end": 18,
+      "line_count": 1,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#rule@18",
+      "name": "gameListingOwnerOrAdminEngine.registerRule",
+      "kind": "rule-registration",
+      "operations": {},
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/policy/resource::createRoleOverrideRule",
+          "count": 1
+        },
+        {
+          "target": "local::registerRule",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "93886a2be3955c91295ad285110947b5ba3360cc2ee5581bdb02dbedb77047d3",
+      "raw_sha256": "fc177f4876b09e3e35c70a3fb4c80fcae010d1442737903d03b0890f80a03556",
+      "classification": "security",
+      "classification_rule": "R04:policy-rule-registration",
+      "behavior_domain": "ownership",
+      "required_behavior": "ownership",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 20,
+      "line_end": 31,
+      "line_count": 12,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#ensureWallet",
+      "name": "ensureWallet",
+      "kind": "function",
+      "default_export": false,
+      "operations": {
+        "db": [
+          "pool.query"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "INSERT INTO"
+            ],
+            "tables": [
+              "marketplace_wallets"
+            ],
+            "string_built": false,
+            "parameterized": true
+          },
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "marketplace_wallets"
+            ],
+            "string_built": false,
+            "parameterized": true
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "@workspace/db::pool",
+          "count": 2
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 1,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 1,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": true,
+      "fingerprint_sha256": "8fd1344c48aa8a81d03387e22b6ee7a179845e2328dcd36c31548d54b3b563b7",
+      "raw_sha256": "84b6a6466dce34df63a4b8ddd3d8d4b57815acec26bed85af10955b20375eadb",
+      "async": true,
+      "parameters": [
+        "userId"
+      ],
+      "classification": "application",
+      "classification_rule": "R10:orchestrates-io",
+      "behavior_domain": "marketplace-boundary",
+      "required_behavior": "marketplace-boundary",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 33,
+      "line_end": 39,
+      "line_count": 7,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#parseListing",
+      "name": "parseListing",
+      "kind": "function",
+      "default_export": false,
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 2,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 2,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "ccb74122c26dbac60ddd27258255a555305d7ca7aeed81f9362cc82dce8ef9aa",
+      "raw_sha256": "83a560b6b3e55f1e0dd368695e482f03819c20046504f6e9a953a09a349edbff",
+      "async": false,
+      "parameters": [
+        "row"
+      ],
+      "classification": "domain",
+      "classification_rule": "R12:pure-computation",
+      "behavior_domain": "marketplace-boundary",
+      "required_behavior": "marketplace-boundary",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/listings@42",
+        "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/listings@66"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 42,
+      "line_end": 63,
+      "line_count": 22,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/listings@42",
+      "name": "GET /marketplace/game/listings",
+      "kind": "route-handler",
+      "method": "GET",
+      "route_path": "/marketplace/game/listings",
+      "middleware": [
+        "requireAuth"
+      ],
+      "handler_line_count": 22,
+      "handler_is_inline": true,
+      "ordinal": 1,
+      "operations": {
+        "config": [
+          "getMarketConfig"
+        ],
+        "db": [
+          "pool.query"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "SELECT",
+              "JOIN"
+            ],
+            "tables": [
+              "game_market_listings",
+              "users"
+            ],
+            "string_built": false,
+            "parameterized": false
+          },
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "game_market_listings"
+            ],
+            "string_built": false,
+            "parameterized": false
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/market-config::getMarketConfig",
+          "count": 1
+        },
+        {
+          "target": "@workspace/db::pool",
+          "count": 2
+        },
+        {
+          "target": "local::get",
+          "count": 1
+        },
+        {
+          "target": "local::map",
+          "count": 1
+        },
+        {
+          "target": "local::push",
+          "count": 5
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 4,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 5,
+      "response_statuses": [
+        500
+      ],
+      "error_literals": [],
+      "request_inputs": [
+        "req.query"
+      ],
+      "transactional": false,
+      "response_calls": 2,
+      "touches_db": true,
+      "fingerprint_sha256": "335422dfe4d4c102780db4a982518d379f9bc8c71e74d632b0004da6488a2a1f",
+      "raw_sha256": "85efb6b087b6330200c2d5badf9ae2e5f6ed4ca469b33e1c5206d5fde93af23f",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "marketplace-boundary",
+      "required_behavior": "marketplace-boundary",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 66,
+      "line_end": 93,
+      "line_count": 28,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/listings@66",
+      "name": "POST /marketplace/game/listings",
+      "kind": "route-handler",
+      "method": "POST",
+      "route_path": "/marketplace/game/listings",
+      "middleware": [
+        "requireAuth"
+      ],
+      "handler_line_count": 28,
+      "handler_is_inline": true,
+      "ordinal": 2,
+      "operations": {
+        "config": [
+          "getMarketConfig"
+        ],
+        "db": [
+          "pool.query"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "INSERT INTO"
+            ],
+            "tables": [
+              "game_market_listings"
+            ],
+            "string_built": false,
+            "parameterized": true
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/market-config::getMarketConfig",
+          "count": 1
+        },
+        {
+          "target": "@workspace/db::pool",
+          "count": 1
+        },
+        {
+          "target": "local::parseListing",
+          "count": 1
+        },
+        {
+          "target": "local::post",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 5,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 1,
+        "logical": 4,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 11,
+      "response_statuses": [
+        400,
+        403,
+        500
+      ],
+      "error_literals": [
+        "Game Market is currently disabled",
+        "game_name required",
+        "photos must be an array",
+        "title required",
+        "valid price required"
+      ],
+      "request_inputs": [
+        "req.body"
+      ],
+      "transactional": false,
+      "response_calls": 7,
+      "touches_db": true,
+      "fingerprint_sha256": "7798f5629ce2fb5eeb4d90ef9705b7e23f350d1c9c50c38b718586e9f5dfaf0f",
+      "raw_sha256": "8041edb3eb979c1eebc8c66fde58a696af6dc53e4309bbb8d9b8ea9f4c362db3",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "marketplace-boundary",
+      "required_behavior": "marketplace-boundary",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 96,
+      "line_end": 160,
+      "line_count": 65,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96",
+      "name": "POST /marketplace/game/buy",
+      "kind": "route-handler",
+      "method": "POST",
+      "route_path": "/marketplace/game/buy",
+      "middleware": [
+        "requireAuth"
+      ],
+      "handler_line_count": 65,
+      "handler_is_inline": true,
+      "ordinal": 3,
+      "operations": {
+        "config": [
+          "getMarketConfig"
+        ],
+        "db": [
+          "client.query",
+          "pool.query"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "game_market_listings"
+            ],
+            "string_built": false,
+            "parameterized": true
+          },
+          {
+            "verbs": [
+              "UPDATE"
+            ],
+            "tables": [
+              "marketplace_wallets"
+            ],
+            "string_built": false,
+            "parameterized": true
+          },
+          {
+            "verbs": [
+              "INSERT INTO"
+            ],
+            "tables": [
+              "marketplace_wallets"
+            ],
+            "string_built": false,
+            "parameterized": true
+          },
+          {
+            "verbs": [
+              "UPDATE"
+            ],
+            "tables": [
+              "marketplace_wallets"
+            ],
+            "string_built": false,
+            "parameterized": true
+          },
+          {
+            "verbs": [
+              "UPDATE"
+            ],
+            "tables": [
+              "game_market_listings"
+            ],
+            "string_built": false,
+            "parameterized": true
+          },
+          {
+            "verbs": [
+              "INSERT INTO"
+            ],
+            "tables": [
+              "marketplace_transactions"
+            ],
+            "string_built": false,
+            "parameterized": true
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/market-config::getMarketConfig",
+          "count": 1
+        },
+        {
+          "target": "@workspace/db::pool",
+          "count": 2
+        },
+        {
+          "target": "local::ensureWallet",
+          "count": 1
+        },
+        {
+          "target": "local::post",
+          "count": 1
+        },
+        {
+          "target": "local::query",
+          "count": 10
+        },
+        {
+          "target": "local::release",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 6,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 2,
+        "loop": 0,
+        "throw": 1
+      },
+      "branch_total": 9,
+      "response_statuses": [
+        400,
+        404,
+        409,
+        500
+      ],
+      "error_literals": [
+        "Cannot buy your own listing",
+        "Insufficient game wallet balance",
+        "Listing not found or already sold",
+        "Listing was already sold or cancelled",
+        "listing_id required"
+      ],
+      "request_inputs": [
+        "req.body"
+      ],
+      "transactional": false,
+      "response_calls": 8,
+      "touches_db": true,
+      "fingerprint_sha256": "f5c46727a06b75b17751006d0b50ad6f65a98f69a41a1fe1e75aa6354c8551a9",
+      "raw_sha256": "6dac04d923f6298bc4295a408562148da9b416dca569a91cf9597de44f045482",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "marketplace-boundary",
+      "required_behavior": "marketplace-boundary",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 163,
+      "line_end": 182,
+      "line_count": 20,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:DELETE /marketplace/game/listings/:id@163",
+      "name": "DELETE /marketplace/game/listings/:id",
+      "kind": "route-handler",
+      "method": "DELETE",
+      "route_path": "/marketplace/game/listings/:id",
+      "middleware": [
+        "requireAuth"
+      ],
+      "handler_line_count": 20,
+      "handler_is_inline": true,
+      "ordinal": 4,
+      "operations": {
+        "db": [
+          "pool.query"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "game_market_listings"
+            ],
+            "string_built": false,
+            "parameterized": true
+          },
+          {
+            "verbs": [
+              "UPDATE"
+            ],
+            "tables": [
+              "game_market_listings"
+            ],
+            "string_built": false,
+            "parameterized": true
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/policy/pep::authorize",
+          "count": 1
+        },
+        {
+          "target": "@workspace/db::pool",
+          "count": 2
+        },
+        {
+          "target": "local::delete",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 2,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 1,
+        "logical": 0,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 4,
+      "response_statuses": [
+        403,
+        404,
+        500
+      ],
+      "error_literals": [
+        "Forbidden",
+        "Not found"
+      ],
+      "request_inputs": [
+        "req.params",
+        "req.params.id"
+      ],
+      "transactional": false,
+      "response_calls": 4,
+      "touches_db": true,
+      "fingerprint_sha256": "f0d63f86eb87bc4b1171242e19add73b6e6d38e4c5f779a098d753054ffe8ad2",
+      "raw_sha256": "8ff24a2831ac6149e3255d12de323045d9842a1a085f58de3daed7b7aa45df42",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "marketplace-boundary",
+      "required_behavior": "marketplace-boundary",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 185,
+      "line_end": 201,
+      "line_count": 17,
+      "exported": false,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/stats@185",
+      "name": "GET /marketplace/game/stats",
+      "kind": "route-handler",
+      "method": "GET",
+      "route_path": "/marketplace/game/stats",
+      "middleware": [
+        "requireAuth"
+      ],
+      "handler_line_count": 17,
+      "handler_is_inline": true,
+      "ordinal": 5,
+      "operations": {
+        "config": [
+          "getMarketConfig"
+        ],
+        "db": [
+          "pool.query"
+        ],
+        "raw_sql": [
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "game_market_listings"
+            ],
+            "string_built": false,
+            "parameterized": false
+          },
+          {
+            "verbs": [
+              "SELECT"
+            ],
+            "tables": [
+              "marketplace_transactions"
+            ],
+            "string_built": false,
+            "parameterized": false
+          }
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "../lib/market-config::getMarketConfig",
+          "count": 1
+        },
+        {
+          "target": "@workspace/db::pool",
+          "count": 2
+        },
+        {
+          "target": "local::get",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 3,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 4,
+      "response_statuses": [
+        500
+      ],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 2,
+      "touches_db": true,
+      "fingerprint_sha256": "10cf94a74b6121c8d2a56596bdbfd4a81f21d3a76b3de61fb4b1f1e0ce20c597",
+      "raw_sha256": "75b9f5633f5212cd1c7aeb1520faec6c5d233dba2c006dcd819b9dd87d7934b1",
+      "classification": "API",
+      "classification_rule": "R00:express-route-handler",
+      "business_behavior_in_route": true,
+      "behavior_domain": "marketplace-boundary",
+      "required_behavior": "marketplace-boundary",
+      "owner_gap": "GAP-04",
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "file_kind": "route",
+      "line_start": 203,
+      "line_end": 203,
+      "line_count": 1,
+      "exported": true,
+      "id": "artifacts/api-server/src/routes/marketplace-game.ts#export-default",
+      "name": "default",
+      "kind": "export-assignment",
+      "exports": "router",
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+      "raw_sha256": "446aaf4abedbce1d9a77dfc444a1fc6662bdf2667332132445e7019251f9bcd8",
+      "classification": "adapter",
+      "classification_rule": "R02:default-export-router",
+      "behavior_domain": "shared-support",
+      "required_behavior": null,
+      "owner_gap": "GAP-04",
+      "external_consumers": [
+        {
+          "consumer": "artifacts/api-server/src/routes/index.ts",
+          "kind": "import",
+          "line": 125
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 21,
+      "line_end": 36,
+      "line_count": 16,
+      "exported": true,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#GameEntry",
+      "name": "GameEntry",
+      "kind": "interface",
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "99eb3c479a5e1d992cbfea9eda59178e78a920d32d464bc86d7b341b52e1b25b",
+      "raw_sha256": "b7afac58b87658fb9438c7120c80ab7f8e09228cef8644c5bbb3a08aacb98665",
+      "classification": "domain",
+      "classification_rule": "R03:type-declaration",
+      "behavior_domain": "vault-entity",
+      "required_behavior": "vault-entity",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/ayzen/src/components/game-entries.tsx#GameDialog",
+        "artifacts/ayzen/src/components/game-entries.tsx#GameEntries",
+        "artifacts/ayzen/src/components/game-entries.tsx#rowToForm"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 38,
+      "line_end": 42,
+      "line_count": 5,
+      "exported": false,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#EMPTY_FORM",
+      "name": "EMPTY_FORM",
+      "kind": "constant",
+      "initializer_kind": "object",
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "5e87bf6fa65282b9f575dbc7754a79f79dc16008c70022b46c489347bdd62158",
+      "raw_sha256": "b62595a0d66dd74c3f73fd48eea5fcd579fc35d423789fc497cae552753f1bed",
+      "classification": "domain",
+      "classification_rule": "R16:pure-constant",
+      "behavior_domain": "vault-entity",
+      "required_behavior": "vault-entity",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/ayzen/src/components/game-entries.tsx#GameDialog"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 45,
+      "line_end": 52,
+      "line_count": 8,
+      "exported": false,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#rowToForm",
+      "name": "rowToForm",
+      "kind": "function",
+      "default_export": false,
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 1,
+        "logical": 11,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 12,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "c81f14eccda92c443f19fff909bdbea6ddf58fe04b63d510442c63347821a3ad",
+      "raw_sha256": "8bfac949b7bff80295cdb20696f90c690b79b441cf8bcc75dea3957006ef3169",
+      "async": false,
+      "parameters": [
+        "e"
+      ],
+      "classification": "domain",
+      "classification_rule": "R12:pure-computation",
+      "behavior_domain": "vault-entity",
+      "required_behavior": "vault-entity",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/ayzen/src/components/game-entries.tsx#GameDialog"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 54,
+      "line_end": 58,
+      "line_count": 5,
+      "exported": false,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#FORM_TABS",
+      "name": "FORM_TABS",
+      "kind": "constant",
+      "initializer_kind": "array",
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "e3e5666bf3923831b3d0945e7297995ca2c831f8e1009ffa1e9fca0afe3e4e77",
+      "raw_sha256": "be6a1fb29f9d69dd51a5c4694a3aca0675000a9b7f2eb94220e1e7aeed39f9a4",
+      "classification": "domain",
+      "classification_rule": "R16:pure-constant",
+      "behavior_domain": "metadata",
+      "required_behavior": "metadata",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/ayzen/src/components/game-entries.tsx#FormTab",
+        "artifacts/ayzen/src/components/game-entries.tsx#GameDialog"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 59,
+      "line_end": 59,
+      "line_count": 1,
+      "exported": false,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#FormTab",
+      "name": "FormTab",
+      "kind": "type",
+      "operations": {},
+      "tables": [],
+      "external_calls": [],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "b7a3c54ba030c00721f5a9571125911e920517e3f882778c86b80aecffdc6601",
+      "raw_sha256": "fab132e74519c6745595dc6fbc9b3088e259fb79a63aafe81456945e471f7237",
+      "classification": "domain",
+      "classification_rule": "R03:type-declaration",
+      "behavior_domain": "metadata",
+      "required_behavior": "metadata",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/ayzen/src/components/game-entries.tsx#GameDialog"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 64,
+      "line_end": 64,
+      "line_count": 1,
+      "exported": false,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#INFO_SCHEMA_FIELDS",
+      "name": "INFO_SCHEMA_FIELDS",
+      "kind": "constant",
+      "initializer_kind": "call-pure",
+      "operations": {},
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "@/config/fields/game-create::GAME_FIELDS",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": false,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 1,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 1,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "e99cf33d96d54564432a648927487ee426e2763f214dc55017c13c4f0982e58c",
+      "raw_sha256": "568a4f917c1b3a72cb0b473578231f9053cdf21f3d696c0a3b31e6ab996e5b7c",
+      "classification": "domain",
+      "classification_rule": "R17:pure-derived-constant",
+      "behavior_domain": "metadata",
+      "required_behavior": "metadata",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/ayzen/src/components/game-entries.tsx#GameDialog"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 66,
+      "line_end": 77,
+      "line_count": 12,
+      "exported": false,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#CategoryBadge",
+      "name": "CategoryBadge",
+      "kind": "function",
+      "default_export": false,
+      "operations": {},
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "@/config/vault-game::getGameCategoryMeta",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [],
+      "renders_jsx": true,
+      "branches": {
+        "if": 0,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 0,
+        "logical": 0,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 0,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "84066fa54c275331aa6883667b760f66a4bfd00f4edd8ab399ec7ff373359976",
+      "raw_sha256": "df299ea253ff9d24ec69ffa95beadf3d9301b869741222635e9a7fc7e5a4ea65",
+      "async": false,
+      "parameters": [
+        "{ category }"
+      ],
+      "classification": "adapter",
+      "classification_rule": "R20:react-ui-component",
+      "behavior_domain": "metadata",
+      "required_behavior": "metadata",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/ayzen/src/components/game-entries.tsx#GameEntries"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 80,
+      "line_end": 136,
+      "line_count": 57,
+      "exported": false,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#TagInput",
+      "name": "TagInput",
+      "kind": "function",
+      "default_export": false,
+      "operations": {
+        "hook": [
+          "useRef",
+          "useState"
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "local::commit",
+          "count": 2
+        },
+        {
+          "target": "local::filter",
+          "count": 1
+        },
+        {
+          "target": "local::focus",
+          "count": 1
+        },
+        {
+          "target": "local::includes",
+          "count": 1
+        },
+        {
+          "target": "local::map",
+          "count": 1
+        },
+        {
+          "target": "local::onChange",
+          "count": 3
+        },
+        {
+          "target": "local::preventDefault",
+          "count": 1
+        },
+        {
+          "target": "local::removeTag",
+          "count": 1
+        },
+        {
+          "target": "local::setDraft",
+          "count": 2
+        },
+        {
+          "target": "local::slice",
+          "count": 1
+        },
+        {
+          "target": "local::stopPropagation",
+          "count": 1
+        },
+        {
+          "target": "local::trim",
+          "count": 1
+        },
+        {
+          "target": "react::useRef",
+          "count": 1
+        },
+        {
+          "target": "react::useState",
+          "count": 1
+        }
+      ],
+      "api_endpoints_called": [],
+      "react_state_vars": [
+        "draft"
+      ],
+      "renders_jsx": true,
+      "branches": {
+        "if": 4,
+        "else": 1,
+        "switch_case": 0,
+        "ternary": 1,
+        "logical": 4,
+        "catch": 0,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 10,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "5c7cf796dd607b8c644d2d91fc792cfb26d787fbcafb08323694f4e6714db3a0",
+      "raw_sha256": "7e87f868f9b266c1b3bc6a0346bcc53265a77db8e1233ec1c00646fbb732eb92",
+      "async": false,
+      "parameters": [
+        "{ value, onChange }"
+      ],
+      "classification": "adapter",
+      "classification_rule": "R20:react-ui-component",
+      "behavior_domain": "metadata",
+      "required_behavior": "metadata",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/ayzen/src/components/game-entries.tsx#GameDialog"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 139,
+      "line_end": 281,
+      "line_count": 143,
+      "exported": false,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#GameDialog",
+      "name": "GameDialog",
+      "kind": "function",
+      "default_export": false,
+      "operations": {
+        "hook": [
+          "useEffect",
+          "useState",
+          "useToast"
+        ],
+        "api-client": [
+          "customFetch"
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "@/config/vault-game::GAME_CATEGORIES",
+          "count": 1
+        },
+        {
+          "target": "@/config/vault-game::getGameCategoryMeta",
+          "count": 1
+        },
+        {
+          "target": "@/hooks/use-toast::useToast",
+          "count": 1
+        },
+        {
+          "target": "@/lib/utils::cn",
+          "count": 2
+        },
+        {
+          "target": "@workspace/api-client-react::customFetch",
+          "count": 2
+        },
+        {
+          "target": "local::map",
+          "count": 1
+        },
+        {
+          "target": "local::onClose",
+          "count": 2
+        },
+        {
+          "target": "local::onSaved",
+          "count": 1
+        },
+        {
+          "target": "local::rowToForm",
+          "count": 1
+        },
+        {
+          "target": "local::setField",
+          "count": 2
+        },
+        {
+          "target": "local::setForm",
+          "count": 3
+        },
+        {
+          "target": "local::setFormTab",
+          "count": 2
+        },
+        {
+          "target": "local::setSaving",
+          "count": 2
+        },
+        {
+          "target": "local::setStep",
+          "count": 4
+        },
+        {
+          "target": "local::toast",
+          "count": 4
+        },
+        {
+          "target": "react::useEffect",
+          "count": 1
+        },
+        {
+          "target": "react::useState",
+          "count": 4
+        }
+      ],
+      "api_endpoints_called": [
+        "\"/api/game-entries\"",
+        "`/api/game-entries/${editEntry.id}`"
+      ],
+      "react_state_vars": [
+        "form",
+        "formTab",
+        "saving",
+        "step"
+      ],
+      "renders_jsx": true,
+      "branches": {
+        "if": 4,
+        "else": 2,
+        "switch_case": 0,
+        "ternary": 6,
+        "logical": 8,
+        "catch": 1,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 21,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "7e4e0e700005c09b803a25ea8ac5f455cb47c02dca1240ff6a505a21b0345ed9",
+      "raw_sha256": "27593e0a5070863e3bf6e528684fdd7f1f9618c5a9ea1a516f4542b9479832ad",
+      "async": false,
+      "parameters": [
+        "{ open, editEntry, onClose, onSaved }"
+      ],
+      "classification": "adapter",
+      "classification_rule": "R20:react-ui-component",
+      "behavior_domain": "game-entry",
+      "required_behavior": "game-entry",
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [
+        "artifacts/ayzen/src/components/game-entries.tsx#GameEntries"
+      ],
+      "external_consumers": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "file_kind": "component",
+      "line_start": 284,
+      "line_end": 471,
+      "line_count": 188,
+      "exported": true,
+      "id": "artifacts/ayzen/src/components/game-entries.tsx#GameEntries",
+      "name": "GameEntries",
+      "kind": "function",
+      "default_export": true,
+      "operations": {
+        "hook": [
+          "useCallback",
+          "useEffect",
+          "useState",
+          "useToast"
+        ],
+        "api-client": [
+          "customFetch"
+        ]
+      },
+      "tables": [],
+      "external_calls": [
+        {
+          "target": "@/hooks/use-toast::useToast",
+          "count": 1
+        },
+        {
+          "target": "@/lib/utils::cn",
+          "count": 2
+        },
+        {
+          "target": "@workspace/api-client-react::customFetch",
+          "count": 2
+        },
+        {
+          "target": "local::action",
+          "count": 1
+        },
+        {
+          "target": "local::add",
+          "count": 1
+        },
+        {
+          "target": "local::delete",
+          "count": 1
+        },
+        {
+          "target": "local::filter",
+          "count": 1
+        },
+        {
+          "target": "local::has",
+          "count": 3
+        },
+        {
+          "target": "local::includes",
+          "count": 1
+        },
+        {
+          "target": "local::load",
+          "count": 2
+        },
+        {
+          "target": "local::map",
+          "count": 1
+        },
+        {
+          "target": "local::openEdit",
+          "count": 1
+        },
+        {
+          "target": "local::remove",
+          "count": 1
+        },
+        {
+          "target": "local::setDeleteId",
+          "count": 4
+        },
+        {
+          "target": "local::setDialogOpen",
+          "count": 3
+        },
+        {
+          "target": "local::setEditEntry",
+          "count": 2
+        },
+        {
+          "target": "local::setEntries",
+          "count": 1
+        },
+        {
+          "target": "local::setLoading",
+          "count": 2
+        },
+        {
+          "target": "local::setManagingShares",
+          "count": 2
+        },
+        {
+          "target": "local::setOpenMenuId",
+          "count": 2
+        },
+        {
+          "target": "local::setQuery",
+          "count": 1
+        },
+        {
+          "target": "local::setSelectedIds",
+          "count": 2
+        },
+        {
+          "target": "local::setShareItems",
+          "count": 3
+        },
+        {
+          "target": "local::setShareLabel",
+          "count": 2
+        },
+        {
+          "target": "local::shareOne",
+          "count": 1
+        },
+        {
+          "target": "local::toast",
+          "count": 3
+        },
+        {
+          "target": "local::toggleSelected",
+          "count": 1
+        },
+        {
+          "target": "local::toLowerCase",
+          "count": 2
+        },
+        {
+          "target": "local::trim",
+          "count": 1
+        },
+        {
+          "target": "react::useCallback",
+          "count": 1
+        },
+        {
+          "target": "react::useEffect",
+          "count": 1
+        },
+        {
+          "target": "react::useState",
+          "count": 11
+        }
+      ],
+      "api_endpoints_called": [
+        "\"/api/game-entries\"",
+        "`/api/game-entries/${id}`"
+      ],
+      "react_state_vars": [
+        "deleteId",
+        "dialogOpen",
+        "editEntry",
+        "entries",
+        "loading",
+        "managingShares",
+        "openMenuId",
+        "query",
+        "selectedIds",
+        "shareItems",
+        "shareLabel"
+      ],
+      "renders_jsx": true,
+      "branches": {
+        "if": 1,
+        "else": 0,
+        "switch_case": 0,
+        "ternary": 7,
+        "logical": 15,
+        "catch": 2,
+        "loop": 0,
+        "throw": 0
+      },
+      "branch_total": 25,
+      "response_statuses": [],
+      "error_literals": [],
+      "request_inputs": [],
+      "transactional": false,
+      "response_calls": 0,
+      "touches_db": false,
+      "fingerprint_sha256": "13405642e15fcbc29a85c3e5ec86cac93895adce9d289383a70cd9d696f95e07",
+      "raw_sha256": "f826a9cabb0e6b0dc31f3d3d3bf0f0316139fb91d93f9d8308eb8c540cd99dba",
+      "async": false,
+      "parameters": [],
+      "classification": "adapter",
+      "classification_rule": "R20:react-ui-component",
+      "behavior_domain": "ui-view",
+      "required_behavior": null,
+      "owner_gap": "GAP-04",
+      "intra_file_callers": [],
+      "external_consumers": [
+        {
+          "consumer": "artifacts/ayzen/src/pages/user/vault.tsx",
+          "kind": "import",
+          "line": 32
+        }
+      ]
+    }
+  ],
+  "consumers": [
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "consumer_kind": "source",
+      "kind": "import",
+      "specifier": "./game-entries",
+      "target": "artifacts/api-server/src/routes/game-entries.ts",
+      "line": 87,
+      "names": [
+        {
+          "imported": "default",
+          "local": "gameEntriesRouter",
+          "resolved": true
+        }
+      ],
+      "local_usage_counts": {
+        "gameEntriesRouter": 1
+      },
+      "unused_import": false
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "consumer_kind": "source",
+      "kind": "import",
+      "specifier": "./marketplace-game",
+      "target": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "line": 125,
+      "names": [
+        {
+          "imported": "default",
+          "local": "marketplaceGameRouter",
+          "resolved": true
+        }
+      ],
+      "local_usage_counts": {
+        "marketplaceGameRouter": 1
+      },
+      "unused_import": false
+    },
+    {
+      "consumer": "artifacts/api-server/src/vault/index.ts",
+      "consumer_kind": "source",
+      "kind": "re-export",
+      "specifier": "./domain/game",
+      "target": "artifacts/api-server/src/vault/domain/game.ts",
+      "line": 6,
+      "names": [
+        {
+          "imported": "*",
+          "local": "*",
+          "resolved": true
+        }
+      ],
+      "local_usage_counts": {},
+      "unused_import": false
+    },
+    {
+      "consumer": "artifacts/ayzen/src/pages/user/vault.tsx",
+      "consumer_kind": "source",
+      "kind": "import",
+      "specifier": "@/components/game-entries",
+      "target": "artifacts/ayzen/src/components/game-entries.tsx",
+      "line": 32,
+      "names": [
+        {
+          "imported": "default",
+          "local": "GameEntries",
+          "resolved": true
+        }
+      ],
+      "local_usage_counts": {
+        "GameEntries": 1
+      },
+      "unused_import": false
+    }
+  ]
+}

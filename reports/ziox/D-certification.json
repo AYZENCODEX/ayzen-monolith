@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "AYZEN ZIOX Public Production Readiness",
+  "phase": "D",
+  "name": "Runtime Reliability",
+  "generatedAt": "2026-09-29T06:07:58.140Z",
+  "status": "PASS",
+  "implementation": "complete",
+  "subphases": [
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "D7"
+  ],
+  "checks": [
+    {
+      "id": "D1",
+      "description": "Event and backbone contract tests",
+      "status": "PASS",
+      "command": "node --test tests/contracts/platform-contracts.test.mjs tests/event-contracts/compatibility.test.mjs",
+      "exitCode": 0,
+      "output": "✔ platform contracts require ownership, policy and recovery metadata (1.384446ms)\n✔ event compatibility rejects removed required fields (0.641961ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 95.591969"
+    },
+    {
+      "id": "D2",
+      "description": "Workflow and scheduler tests",
+      "status": "PASS",
+      "command": "node --test tests/scheduler/shared-scheduler.test.mjs apps/worker/src/schedule-trigger.test.mjs apps/worker/src/wait-for-event.test.mjs",
+      "exitCode": 0,
+      "output": "✔ _tick lists active schedules and fires each one (1.6112ms)\n✔ _tick counts a failed list call as an error and fires nothing (0.53866ms)\n✔ _tick counts one failed fire without aborting the remaining schedules (0.328558ms)\n✔ fails fast with a clear error when no service URL is configured (0.197829ms)\n✔ start() polls immediately without waiting for the interval, and stop() clears it (9.289885ms)\n✔ waitForEvent resolves once a matching (eventType, correlationId) event is notified (1.527646ms)\n✔ waitForEvent times out if nothing matching ever arrives (20.244057ms)\n✔ with no timeoutMs, waitForEvent waits indefinitely until notified (31.164566ms)\n✔ two independent correlationIds for the same eventType don't cross-resolve (0.332562ms)\n✔ waitForEvent requires an eventType and a correlationId (0.477787ms)\n✔ a second wait on the same (eventType, correlationId) pair fails loudly instead of silently overwriting the first (20.577505ms)\n✔ notify() is a safe no-op when nothing is waiting (0.232971ms)\n✔ scheduler uses a lease to prevent duplicate execution (2.249108ms)\nℹ tests 13\nℹ suites 0\nℹ pass 13\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 153.070887"
+    },
+    {
+      "id": "D3",
+      "description": "Scheduler reliability implementation exists",
+      "status": "PASS",
+      "required": [
+        "apps/worker/src/schedule-trigger.mjs",
+        "services/workflow/src/schedules.mjs"
+      ],
+      "missing": []
+    },
+    {
+      "id": "D4",
+      "description": "Worker recovery runbook exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/runtime-recovery-runbook.md",
+        "apps/worker/src/index.mjs"
+      ],
+      "missing": []
+    },
+    {
+      "id": "D5",
+      "description": "Failure drill matrix exists",
+      "status": "PASS",
+      "required": [
+        "docs/operations/failure-drill-matrix.md",
+        "config/chaos/matrix.json"
+      ],
+      "missing": []
+    },
+    {
+      "id": "D6",
+      "description": "Idempotency and resilience contracts exist",
+      "status": "PASS",
+      "required": [
+        "packages/idempotency/src/index.mjs",
+        "packages/resilience/src/index.mjs"
+      ],
+      "missing": []
+    },
+    {
+      "id": "D7",
+      "description": "ZIOX-D certification",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "evidence": {
+    "sourceDocument": "attached_assets/AYZEN_ZIOX_Public_Production_Readiness_Roadmap_1790636953669.md",
+    "validator": "scripts/validate-ziox.mjs"
+  }
+}

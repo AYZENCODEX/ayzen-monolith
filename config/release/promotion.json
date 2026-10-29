@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "immutableArtifactRequired": true,
+  "requiredFields": ["releaseId", "commit", "imageDigest", "gateResults", "rolloutCohort", "monitoringWindow", "rollbackOwner"],
+  "criticalGateAction": "block",
+  "rollback": {"switchRequired": true, "auditRequired": true, "previousDigestRequired": true}
+}

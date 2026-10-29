@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "phase": "PRJ-04",
+  "title": "ROI / P&L extraction (Projects-owned, ledger read isolated)",
+  "timestamp": "2026-10-21T21:45:40.698176+00:00",
+  "status": "PASS",
+  "statusScope": "PRJ-04 as redefined by decision D2' (below): Projects keeps its own project-level ROI and P&L and receipts, extracted into domain/application/security/infrastructure; its single Finance table read is isolated and recorded. This is NOT the roadmap's original PRJ-04 ('call finance/application's P&L use case'); that plan was found non-equivalent in PRJ-01 and D2's replacement was superseded. Typecheck, build and tests ran in a scratch copy installed with --no-frozen-lockfile; the repo's own frozen install still fails. Parity was shown against a fake database, not real Postgres or the real PDF renderer.",
+  "commit": {
+    "sha": "UNAVAILABLE",
+    "reason": "Uploaded snapshot has no .git directory."
+  },
+  "dependsOn": [
+    "reports/antas/projects/prj-01-evidence.json",
+    "reports/antas/projects/prj-02-evidence.json",
+    "reports/antas/projects/prj-03-evidence.json"
+  ],
+  "decision": {
+    "id": "D2-prime",
+    "supersedes": "D2",
+    "summary": "Projects owns project-level ROI/P&L and public receipts. The one read of finance_ledger_entries lives in projects/infrastructure/repositories/project-ledger-reader.ts (raw SUM per kind, no conversion). No Finance code changed; Projects imports nothing from Finance; PRJ-04 does not depend on Finance's WP-8/WP-9 pack.",
+    "trigger": "Project owner asked why Projects' ROI/P&L, which was written separately for projects, should move into Finance.",
+    "confirmed": false,
+    "note": "Taken on the owner's question and implemented as the lowest-risk reading. The original D2 (Finance-owned per-project use case) remains possible later; it would change who owns the receipt arithmetic."
+  },
+  "oldToNewMapping": [
+    {
+      "old": "routes/projects.ts roi-summary roll-up math",
+      "new": "projects/domain/roi.ts (entityRoi, summarizeRoi)"
+    },
+    {
+      "old": "routes/projects.ts computeProjectPnlSummary arithmetic",
+      "new": "projects/domain/roi.ts (computeProjectPnl)"
+    },
+    {
+      "old": "routes/projects.ts computeProjectPnlSummary ledger query",
+      "new": "projects/infrastructure/repositories/project-ledger-reader.ts (sumLedgerByKind)"
+    },
+    {
+      "old": "routes/projects.ts fmtPublicProjectReceipt and the inline PDF layout object",
+      "new": "projects/domain/pnl-receipt.ts (formatPublicReceipt, buildProjectReceiptPdfSpec)"
+    },
+    {
+      "old": "routes/projects.ts generateProjectReceiptToken, projectReceiptUrl",
+      "new": "projects/security/receipt-token.ts"
+    },
+    {
+      "old": "routes/projects.ts roi-summary query",
+      "new": "projects/infrastructure/repositories/roi-repo.ts"
+    },
+    {
+      "old": "routes/projects.ts receipt queries (find/insert/delete/by token, issuer name)",
+      "new": "projects/infrastructure/repositories/pnl-receipts-repo.ts"
+    },
+    {
+      "old": "routes/projects.ts handler logic for 5 routes",
+      "new": "projects/application/roi-receipts.ts (getRoiSummary, mintPnlReceipt, revokePnlReceipt, getPublicReceipt, getPublicReceiptPdfSpec)"
+    }
+  ],
+  "filesChangedThisPhase": [
+    "artifacts/api-server/src/projects/domain/roi.ts, roi.test.ts, pnl-receipt.ts, pnl-receipt.test.ts (new)",
+    "artifacts/api-server/src/projects/security/receipt-token.ts, receipt-token.test.ts (new)",
+    "artifacts/api-server/src/projects/application/roi-receipts.ts (new)",
+    "artifacts/api-server/src/projects/infrastructure/repositories/roi-repo.ts, pnl-receipts-repo.ts, project-ledger-reader.ts (new); projects-repo.ts (projectExists)",
+    "artifacts/api-server/src/routes/projects.ts (5 handlers thinned, 1108 -> 985 lines; crypto and three table imports removed)",
+    "artifacts/api-server/package.json (test:projects-static also runs security tests)",
+    "scripts/antas/projects/boundaries.manifest.json, validate-boundaries.mjs unchanged logic; manifest updated",
+    "scripts/antas/projects/differential/prj04-* (harness) and README.md",
+    "docs/antas/projects/projects-boundaries.md (PRJ-04 section), projects-cross-module-contract.md (D2')",
+    "reports/antas/projects/prj-04-* (generated + this file)"
+  ],
+  "behaviorPreserved": [
+    "All 47 route paths, methods, middleware chains and registration order unchanged; PEP audit actions project_pnl_receipt.view and .pdf still pinned.",
+    "No rounding and no currency conversion: sums are plain doubles of the stored amounts; receipts still print '$' regardless of currency.",
+    "roiPct: null only with no spend and no earnings; 100 for earnings without spend; a stored entity ROI of 0 is kept.",
+    "Mint stays idempotent with up to 3 attempts on a token collision, then 500 'Could not generate a receipt link, please try again'; revoke deletes the row.",
+    "Handlers keep their try/catch layout (roi-summary and mint have one; revoke and the public routes do not).",
+    "The comment claiming the receipt is 'kept in lockstep' with GET /finance/investments was removed because it was untrue; the replacement comment states the difference."
+  ],
+  "commands": [
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs --self-test",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS: 47 routes, 0 findings"
+    },
+    {
+      "command": "negative tests P1-P7 (ledger read back in route, second ledger reader, Projects imports Finance, token generator redeclared, public PEP action removed, rogue receipt-table writer, restored)",
+      "exitCode": 0,
+      "result": "Each produced FAIL with the expected finding; restored copy PASS."
+    },
+    {
+      "command": "differential test, ROI + receipts: original handlers (sliced verbatim) vs current, fake DB, deterministic crypto stub, PDF spec captured",
+      "exitCode": 0,
+      "result": "35 scenarios, 35 identical (status, body, receipt rows, captured PDF specs); statuses 200/400/401/404/500; PDF specs captured in 3 scenarios."
+    },
+    {
+      "command": "harness sensitivity: six mutations of the new bundle (roiPct formula, earned-only roiPct, '$' prefix, mint attempts, ?? to ||, rounding invested)",
+      "exitCode": 0,
+      "result": "All six detected (3, 2, 3, 1, 1 and 3 scenarios differed). The first seed data missed two of them (could not tell ?? from ||, and could not see rounding on a whole-number amount); the seed data was strengthened and the check repeated."
+    },
+    {
+      "command": "scratch copy (final src): tsc -p artifacts/api-server --noEmit",
+      "exitCode": 0,
+      "result": "0 errors"
+    },
+    {
+      "command": "scratch copy: pnpm test:projects-static",
+      "exitCode": 0,
+      "result": "30 tests, 30 pass (dates 4, ratings 3, templates 5, project 6, raw sets 3, roi 4, pnl-receipt 3, receipt-token 2)"
+    },
+    {
+      "command": "scratch copy: pnpm build",
+      "exitCode": 0,
+      "result": "esbuild bundle produced"
+    }
+  ],
+  "checkedAndCleared": [
+    "ledger amount is doublePrecision, so SUM returns a JS number and 'invested += r.total' does not concatenate strings."
+  ],
+  "notRun": [
+    {
+      "check": "repo-level pnpm install --frozen-lockfile",
+      "status": "FAIL",
+      "reason": "Unchanged since PRJ-01: lockfile overrides mismatch. Scratch results use a non-frozen resolution."
+    },
+    {
+      "check": "repo-level pnpm typecheck (all artifacts and scripts)",
+      "status": "NOT_RUN",
+      "reason": "Only artifacts/api-server was typechecked."
+    },
+    {
+      "check": "DB-backed tests / real Postgres",
+      "status": "NOT_RUN",
+      "reason": "No test database; parity shown against a fake DB."
+    },
+    {
+      "check": "real PDF renderer (lib/receipt-theme)",
+      "status": "NOT_RUN",
+      "reason": "Stubbed in the differential test; only the layout spec handed to it was compared."
+    },
+    {
+      "check": "Finance WP-8/WP-9 pack",
+      "status": "NOT_REQUIRED_BY_D2'",
+      "reason": "PRJ-04 no longer depends on Finance code; the pack is still BLOCKED per finance evidence and still gates any future Finance-owned P&L."
+    }
+  ],
+  "openQuestions": [
+    "Should project receipts convert to base currency like /finance/investments? Not decided; current behavior is pinned by tests.",
+    "Confirm D2' (it was taken on the owner's question, not an explicit instruction).",
+    "Receipts label every amount with '$' whatever currency the ledger rows used; a user with non-USD rows sees a mislabeled figure. Pre-existing, pinned, not fixed."
+  ],
+  "carriedFromPriorPhases": [
+    "PRJ-ISSUE-1 (unescaped SQL in POST/PATCH /projects) preserved",
+    "PRJ-ISSUE-2 (POST /projects may 500 after creating, unconfirmed on a real DB) preserved",
+    "ai-actions.ts parallel project insert undecided",
+    "orphan rows after project delete unchecked",
+    "entities.ts and services/sync.ts still write entity_project_roi outside the module"
+  ],
+  "nextSafeStep": "PRJ-05 (enrollment, Vault-coupled, plus legacy retirement). It is the highest-risk phase: three enrollment write paths (enroll, teams, bulk) and the frozen PEP wiring. Before it, confirm PRJ-ISSUE-2 and D2' and fix the repo install so a real baseline exists."
+}

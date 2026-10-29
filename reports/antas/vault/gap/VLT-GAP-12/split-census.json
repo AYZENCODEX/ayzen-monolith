@@ -1,0 +1,1252 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-12",
+  "sub_phase": "12-split-census",
+  "commit_sha": "e76a9d47c2210884d57afcec43a6afac231451f4",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "363cc0fea5286f89bb08bdc1ea41bbc2726aa4b1817719dcbfac08ea580a4d11",
+  "totals": {
+    "db": 118,
+    "bareDb": 1,
+    "cron": 6,
+    "ports": 21
+  },
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__game__entries__ts",
+      "sha256": "61a3dfbad6464bee905dc4546a3191a369a05f31e82cad29d208b3b1925b15d9",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__kyc__data__entities__ts",
+      "sha256": "18733afba6989a9d6456c7b072f2e056e052bd92647dd38ee66474fe03cda63b",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__kyc__ts",
+      "sha256": "9788b5e5d94b225a8d8dfeb70b9993b980d5161f41eadb42c20511549c327d4b",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/local-accounts.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__local__accounts__ts",
+      "sha256": "31cc99b5beaa534b284f9a4b1ead209bbd3a34e890425d2aa8c8f0a57548c963",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__attachments__ts",
+      "sha256": "88165a98bb0b9299b6a6769271be27c3a559f253a543886e5b94f4ceba6a7f8b",
+      "roots": {
+        "db": 5,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultAttachmentsTable",
+          "drizzle-orm:and",
+          "drizzle-orm:eq"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__backup__cloud__ts",
+      "sha256": "b74aa25d54dd1f43fefe18519e73afe4c2ccb1d67bf47444456f6fa8b69189c4",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__backup__key__ts",
+      "sha256": "af908320b6903338b7747a73677e85a8fd8457426453837e31d387af69a5ac38",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__backup__schedule__ts",
+      "sha256": "c3303ef481326b160e88e0e8c0da7967465ce732bf8316ad10cef04e0a8d3e6d",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__entity__links__ts",
+      "sha256": "60208e6af6ffb2e8f12a7d906ef8bd623db896724040218f52e574f65fe157b7",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-migration.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__migration__ts",
+      "sha256": "0695e1de47e3dd102c44bef5650c9e108bbb24d62be768791dc4f780acb21922",
+      "roots": {
+        "db": 2,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "drizzle-orm:and",
+          "drizzle-orm:eq",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-reauth.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__reauth__ts",
+      "sha256": "dc000c0eeb730f5b227760a87fa430cf2815683d6fc6d1cfe35c019f7023c68e",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-security.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__security__ts",
+      "sha256": "946398581b8d3b77c52380e8848094c7d2f890e43a690d596e1861f7c553ecf6",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__shares__ts",
+      "sha256": "1f9a23713ecbc8140442d9ed54c3762c8d904f8a2a2940abd463bf1f096b94b7",
+      "roots": {
+        "db": 18,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 7,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "drizzle-orm:sql",
+          "artifacts/api-server/src/routes/notifications:createNotification",
+          "artifacts/api-server/src/lib/mega-engine/domain-events:publishAyzenDomainEvent"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__snapshot__ts",
+      "sha256": "ac0dc9cd8b32d5001e070eabb79727820810498b9b2891d6696978c5e4798a07",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__routes__vault__ts",
+      "sha256": "c08337402899153b5ae5a484228c52a09f300203173f3c8b7b6e3cc2ff63d8b7",
+      "roots": {
+        "db": 2,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 2,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "@workspace/db:usersTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:and",
+          "artifacts/api-server/src/routes/notifications:createNotification",
+          "artifacts/api-server/src/lib/telegram:sendToUser"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/attachment/use-cases.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__attachment__use__cases__ts",
+      "sha256": "37b5d2ed7e4030e933da2609e7adf2fcd45a44137fe4ad769172902e1fc4fced",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/cloud-connection.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__backup__cloud__connection__ts",
+      "sha256": "682b45c82e89896af504e99291e7dc93ac2666fccfdcb15a2ce2892a1cca27c3",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/key.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__backup__key__ts",
+      "sha256": "5ec902011c776bb3a37278650bcba5fcdbc4415c166eb2300bab5d748fa27eea",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__backup__schedule__cron__ts",
+      "sha256": "3394c83a6c4491be301be683e0245aa628978f0de0cc4e8b13ff7f4a7965e7b9",
+      "roots": {
+        "db": 7,
+        "bareDb": 0,
+        "cron": 4,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "node-cron",
+          "drizzle-orm:eq",
+          "drizzle-orm:and",
+          "drizzle-orm:lte",
+          "drizzle-orm:isNull",
+          "drizzle-orm:or",
+          "drizzle-orm:lt",
+          "@workspace/db:db",
+          "@workspace/db:vaultBackupSchedulesTable",
+          "@workspace/db:usersTable"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/backup/schedule.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__backup__schedule__ts",
+      "sha256": "32f86d50d7be29985d37450e9b169f3726f2a94f4e82d72474fcd48217d6cc30",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__activity__feed__ts",
+      "sha256": "a4bf78776781b0e552e61121be1b9e94963dff76eadd86b2de664ab0aa98ce12",
+      "roots": {
+        "db": 3,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "@workspace/db:vaultActivityLogTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:sql",
+          "drizzle-orm:desc"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__activity__ts",
+      "sha256": "bc6d73f180041ef79aaa67f8d33b255d0e993e0dfff98c84b0b13b115fb33de2",
+      "roots": {
+        "db": 2,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultActivityLogTable",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__admin__ts",
+      "sha256": "7c2b8519c9e22d492f6d4905daaac4f49d7172afbabd46fb7e1ab9f36f5d4869",
+      "roots": {
+        "db": 8,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "@workspace/db:usersTable",
+          "@workspace/db:vaultActivityLogTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:sql",
+          "drizzle-orm:desc"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__analytics__ts",
+      "sha256": "47f9c349d5a32ffa239ec6e47e9f6a6fadabf8c3b18d9e379ed04592fb621a4d",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "drizzle-orm:eq",
+          "drizzle-orm:and"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__bulk__ts",
+      "sha256": "868f6400a9543b9d0b276b187dca5e94ea627f29c76f78a72cafc29a724091f3",
+      "roots": {
+        "db": 4,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:and",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/create.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__create__ts",
+      "sha256": "a275844ac1ed1ccd80294a0b430d5a87ab360da4265ed52384edf11075b0611e",
+      "roots": {
+        "db": 2,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__lifecycle__ts",
+      "sha256": "4dfcffbcd72a3680e4586b9f7bd5eb6de1f7370fc0e5480c23810ac59d54a0da",
+      "roots": {
+        "db": 2,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:and"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/links.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__links__ts",
+      "sha256": "4b2c75abf91865eb58a011269028dfbb5e9228487347cfbcfa84ef1d8b1a466e",
+      "roots": {
+        "db": 8,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "@workspace/db:vaultEntityLinksTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:and",
+          "drizzle-orm:or",
+          "drizzle-orm:inArray",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__receipt__ts",
+      "sha256": "79051607d35aa4790d5aa1c344e1f357db730cd90b44561c80f4919b2af55916",
+      "roots": {
+        "db": 3,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:and",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/representation.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__representation__ts",
+      "sha256": "3c6d1da46f30aeb69d06ac6f4936bb7c4a638f4c711b06d309a95b1b8356eca4",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__entity__update__ts",
+      "sha256": "d6d2955504ca60d8e8144dfe438022d138e1115f2c2a75f304c2268acbad731a",
+      "roots": {
+        "db": 7,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "@workspace/db:vaultFieldHistoryTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:and",
+          "drizzle-orm:desc"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__game__entries__ts",
+      "sha256": "018a001799a4591d08905b284e9181b05022c7dd3035881d616e350c74a10561",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/listing.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__game__listing__ts",
+      "sha256": "55acc03cadf57475609df9dd276e793d33fbfd8ac57209e1b3aa550410a148a2",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__game__marketplace__ts",
+      "sha256": "6760d8357fb0acd4502438c00def3e7da5ccd99323fe2dd356f21f0716106a8e",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-cron.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__health__cron__ts",
+      "sha256": "12427b36eaedd2595e97157032029d395138b6b10b54d2a3175bff5d755f9f2e",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 2,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "node-cron"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health-scan.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__health__scan__ts",
+      "sha256": "9db93f73ba13db645dfebc121a19cc53d2e4c77644960e44cd00814f9268d4fd",
+      "roots": {
+        "db": 9,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 3,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "@workspace/db:walletsTable",
+          "@workspace/db:usersTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:and",
+          "drizzle-orm:inArray",
+          "drizzle-orm:sql",
+          "artifacts/api-server/src/routes/notifications:createNotification",
+          "artifacts/api-server/src/lib/telegram:sendToUser",
+          "artifacts/api-server/src/lib/email:sendVaultHealthDigestEmail"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/health.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__health__ts",
+      "sha256": "55d0a5260a7a93426b73a17f30f3f9e92c4d66379c1e027f282bcdf0f7755d3b",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/index.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__index__ts",
+      "sha256": "b1bbd446d548d8adcf829c93ef5a4ac649df9175155513c42fcf14d4198e8ea2",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__kyc__data__entities__ts",
+      "sha256": "e60392ea287860fcc8335c79ededdcc09686dd3e8bec8e54e42b7e6113613cb9",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__kyc__enrollment__ts",
+      "sha256": "40d35a9902fa857a53fa765c0fb17dd8004d56c0054f7b00b479d7d42b42e1e8",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__kyc__entries__ts",
+      "sha256": "8498aecb688c66e1dd619a88e0797ee599f4570ef03c0ecc5861802792eacc02",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__kyc__exchange__ts",
+      "sha256": "432226a75663b50562d5ce4a4c3771e185db9833179c7fb5ccd6cd1a29f7d7f7",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__local__account__accounts__ts",
+      "sha256": "d5cf1e627c46b96b5d213000ad55af0ef5875bcc4eb51b793dac30c0d22d5201",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__local__account__bridge__ts",
+      "sha256": "d2db4530fab07c7182f018821e2a9bbedbe19cb20a8b1f4fd737942b61361a38",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/bulk.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__local__account__bulk__ts",
+      "sha256": "4deeb19d31a03fc966e4be05c65f6ff2b515f3ba47c6ff55e4d6b8729ed0398f",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__local__account__receipt__ts",
+      "sha256": "a7a11f335dc8d93ca9c23e78dda1ab563362a4424157c2a197995f9e1bed47e8",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "dynamic import artifacts/api-server/src/lib/email"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__local__account__value__ts",
+      "sha256": "94d13e707401e21d391697df34cabfcc38392acafd7a06b53bac362fd4cfe097",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/secret/reveal.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__secret__reveal__ts",
+      "sha256": "43d84760eb483738266e79eb6c8ce142fcb343fec6a21c91fd8117784375c642",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/secret/wallet.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__secret__wallet__ts",
+      "sha256": "0063c89c80719e40f237167cd60598e9d34a6b57a451855b2d7de4446400f00c",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/auth-policy.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__security__auth__policy__ts",
+      "sha256": "7b384b744baea8e020099f1182262bead6417135b7761c7dbfcd9016efbd2ccb",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:AUTH_STEP_POLICIES"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/password.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__security__password__ts",
+      "sha256": "a530b8339a5d11dd7ce8184aefc76594867ae0e1c13cf560b77e0108f60b95da",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/pin-setup-code.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__security__pin__setup__code__ts",
+      "sha256": "92dc700b03e33f1db8baf88dab4ccfbda171c26390333286753a64ab46adade4",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 1,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:usersTable",
+          "drizzle-orm:eq",
+          "artifacts/api-server/src/lib/email:sendEmail"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/pin.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__security__pin__ts",
+      "sha256": "c5b1ef8f38b03a1be166f12df070ababf661bd689f4043e1294c582c47d66775",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:usersTable",
+          "@workspace/db:vaultSecurityTable",
+          "drizzle-orm:eq"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/reauth.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__security__reauth__ts",
+      "sha256": "f2501605a64454a259f54d2606f773b3ee9b2f2f98f0ecc68b06525d307cd6a7",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 1,
+        "tx": 0,
+        "illegalImports": [
+          "artifacts/api-server/src/lib/email:sendEmail"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/status.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__security__status__ts",
+      "sha256": "a77decac5a9ca7524d20036c430704f36b9a9a43cc246d47fd169ef20b52813c",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/two-fa.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__security__two__fa__ts",
+      "sha256": "dfa554903a107078950f071316e509355873556d21058ecd9f8f1e9e94664768",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:usersTable",
+          "drizzle-orm:eq"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/security/verify.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__security__verify__ts",
+      "sha256": "cce1808471c267da5011f8916345acf401717a4823d2d884f6e7aeea304ff6c1",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/entity-types.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__share__entity__types__ts",
+      "sha256": "ba0dc205857267e23fb418ad85c839b7bd4d0ba1d08db0f7d282f53e2b5d650a",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/field-permissions.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__share__field__permissions__ts",
+      "sha256": "cbd26a8efd8ba6288b0fd8d7761f73b947dbff24b188be0853d66cc319af131a",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/share/use-cases.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__share__use__cases__ts",
+      "sha256": "09fff2dab4652d3dc4271732cb2ae36c73462b622fa0c1661f67e2bca5278d2a",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 7,
+        "tx": 0,
+        "illegalImports": [
+          "artifacts/api-server/src/routes/notifications:createNotification",
+          "artifacts/api-server/src/lib/mega-engine/domain-events:publishAyzenDomainEvent"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/blob.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__snapshot__blob__ts",
+      "sha256": "f14c4d9185c1d6727962da057e1462eb169f1e8c6052f5fee910db4f65b42ba2",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/payload.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__snapshot__payload__ts",
+      "sha256": "48c652a2c7248cdf207d22b523bd4db11d690101bcb2cd547f9d12ff8b632280",
+      "roots": {
+        "db": 6,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "drizzle-orm:and",
+          "drizzle-orm:eq",
+          "drizzle-orm:sql",
+          "@workspace/db:db",
+          "@workspace/db:vaultAttachmentsTable",
+          "@workspace/db:vaultEntriesTable",
+          "@workspace/db:walletsTable"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__snapshot__restore__ts",
+      "sha256": "4d498daf8157c2093e0bb19d04a7219c8c02f73a6ece0bb89df01459e1f88c58",
+      "roots": {
+        "db": 0,
+        "bareDb": 1,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "drizzle-orm:and",
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "@workspace/db:walletsTable"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/store.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__snapshot__store__ts",
+      "sha256": "65f7d4cbd711cee939bd607667bcede48f8289c8efcd505f02ea4343cb54dbe1",
+      "roots": {
+        "db": 3,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "drizzle-orm:and",
+          "drizzle-orm:desc",
+          "drizzle-orm:eq",
+          "drizzle-orm:isNull",
+          "@workspace/db:db",
+          "@workspace/db:vaultSnapshotsTable"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/snapshot/use-cases.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__application__snapshot__use__cases__ts",
+      "sha256": "4adf2d4f9f65cd56416072fd58391a0dd5cddc6bcef5831962142fdcda26476f",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "drizzle-orm:and",
+          "drizzle-orm:eq",
+          "drizzle-orm:isNull",
+          "@workspace/db:db",
+          "@workspace/db:vaultSnapshotsTable"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__crypto__backup__envelope__ts",
+      "sha256": "0e17dba4b241012688963102e85365a0862b144afd5a4769880d3450324c798d",
+      "roots": {
+        "db": 4,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__crypto__field__encryption__ts",
+      "sha256": "4fd7b4c29c0a9c1d274f6d8cd378bab90c8b7c9df6ac88a0d73725dbdca2d7f4",
+      "roots": {
+        "db": 4,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/seed-phrase.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__crypto__seed__phrase__ts",
+      "sha256": "06c3ef19dc4fbb1da2736fae1a38052e17a008bef34a1776617c8dd75281a993",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/index.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__index__ts",
+      "sha256": "bed7b74b8872228dd785f91013d165c8c9ab91a406230c04eaba43f854699ba7",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/attachment-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__attachment__ownership__ts",
+      "sha256": "64457cf6a91fb5bce72316e15747a084f08641705411a95c394eff251b51d714",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "drizzle-orm:and",
+          "drizzle-orm:eq",
+          "drizzle-orm:sql",
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__entity__ownership__ts",
+      "sha256": "7da2e892e29c3a5db08d510a4bb7da19d7af33088850b738278d005e3abf8328",
+      "roots": {
+        "db": 3,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultEntriesTable",
+          "@workspace/db:vaultEntityLinksTable",
+          "drizzle-orm:eq",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/game-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__game__ownership__ts",
+      "sha256": "d5c8460686d908f73bb16516ff7a7bd98ff242bca5a03d8ea1201b547add6f0d",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__kyc__ownership__ts",
+      "sha256": "a94b85620afc753793faf58e6da8c2abd4993b0f5f5aff2dc81e346890b74d69",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__local__account__ownership__ts",
+      "sha256": "be5dfd065857a55370c139e69b46f9836f8ab2b3d0f4d91d5e36415a0c6c704b",
+      "roots": {
+        "db": 3,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/lockout.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__lockout__ts",
+      "sha256": "8965482f9596bff6aac1a7d64d375b638e6eadad5687a813f61284d53b344f11",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__pin__guard__ts",
+      "sha256": "d778a495d355b89438e726ecb2edd8d64e47350606584730e5d02c9dd246322d",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultSecurityTable",
+          "drizzle-orm:eq"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/reauth-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__reauth__ownership__ts",
+      "sha256": "dee093ca850adebc0f902aace1de40b15dd4e3a10aa7624576172641943ec527",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/reveal-token.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__reveal__token__ts",
+      "sha256": "ed69fa396c12e76df4e208b41f037e129a81927530d3bc04f1a5f1a0b409b917",
+      "roots": {
+        "db": 0,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": []
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/share-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__share__ownership__ts",
+      "sha256": "415fd1e25cbd044e4d92f2b24a74201d0d6afd1a3133d84ac232525053f0fe2b",
+      "roots": {
+        "db": 3,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "drizzle-orm:sql"
+        ]
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/snapshot-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-12/split-baseline/sources/artifacts__api__server__src__vault__security__snapshot__ownership__ts",
+      "sha256": "deb999d14bf551b3b2c19813a6039fcff14dbff3214e072097cd81d6f13da248",
+      "roots": {
+        "db": 1,
+        "bareDb": 0,
+        "cron": 0,
+        "ports": 0,
+        "tx": 0,
+        "illegalImports": [
+          "@workspace/db:db",
+          "@workspace/db:vaultSnapshotsTable",
+          "drizzle-orm:eq"
+        ]
+      }
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,336 @@
+import type { Request } from "express";
+import type { AuthStepPolicy } from "@workspace/db";
+import {
+  generateAuthenticationOptions,
+  verifyAuthenticationResponse,
+} from "@simplewebauthn/server";
+import { verifyPassword } from "../../../lib/password";
+import { totpVerify } from "../../../lib/totp";
+import { getWebAuthnConfig, newChallengeKey, storeChallenge, consumeChallenge } from "../../../lib/passkey";
+import { generateOtp, storeOtp, verifyOtp } from "../../../lib/otp-store";
+import { sendEmail } from "../../../lib/email";
+import { isLockedOut, recordFailure, clearFailures } from "../../security/lockout";
+import { isPasskeyOwnedBySession } from "../../security/reauth-ownership";
+import {
+  getReauthStatusRow, listPasskeyIds, listPasskeyCredentials, getPasskeyByCredentialId, recordPasskeyUse,
+  getUserEmail, getUserRow, getVaultPinHashRow, getVaultSecurityFullRow,
+} from "../../infrastructure/repositories/vault-reauth-repository";
+
+export interface VaultReauthResult { status: number; body: unknown }
+
+/**
+ * Vault re-authentication use cases. Moved unchanged from routes/vault-reauth.ts
+ * (VLT-GAP-06-D): every status code, error code, message, lockout limit and the
+ * email template are identical. The route file is now a thin adapter.
+ *
+ * Methods (any one, or several, per vault_security.auth_step_policy):
+ *   1. passkey            — passkeyOptions + verifyPasskey
+ *   2. Vault PIN/password — verifyVaultCredentials (+ Vault 2FA TOTP). The
+ *                           account login password is NEVER checked here.
+ *   3. email code + PIN   — sendReauthEmailCode + verifyStep3 (fail-over when
+ *                           step 2 can't be completed; needs a Vault PIN).
+ * All methods share ONE lockout tracker ("reauth", vault/security/lockout.ts).
+ * The server only verifies credentials; the "inside the 3h / same-day window"
+ * decision lives client-side (lib/vault-lock.ts).
+ */
+
+// OTP key for Vault re-auth's step 3 — namespaced separately from every other
+// otp-store key, including the vault-pin-setup one (pin-setup-code.ts).
+export function vaultReauthOtpKey(userId: number): string {
+  return `vault-reauth-step3:${userId}`;
+}
+
+const locked = (lockedMs: number): VaultReauthResult => ({
+  status: 429,
+  body: {
+    error: "Too many attempts",
+    code: "REAUTH_LOCKED",
+    solution: `Wait ${Math.ceil(lockedMs / 1000)}s before trying again.`,
+    retryAfterMs: lockedMs,
+  },
+});
+
+const pinNotSet = (): VaultReauthResult => ({
+  status: 428,
+  body: {
+    error: "Set a Vault PIN before using this fail-over",
+    code: "CREDENTIAL_NOT_SET",
+    solution: "Set a Vault PIN under Vault → Security, then try again.",
+  },
+});
+
+/** GET /vault/reauth/status — what can this account use to unlock Vault? */
+export async function getReauthStatus(userId: number): Promise<VaultReauthResult> {
+  const vaultSec = await getReauthStatusRow(userId);
+  const passkeys = await listPasskeyIds(userId);
+  return {
+    status: 200,
+    body: {
+      twoFaEnabled: !!vaultSec?.vaultTwoFaEnabled,
+      hasPasskey: passkeys.length > 0,
+      // PIN takes priority when both are set. usesVaultPassword is kept for
+      // backward compatibility with older frontend builds.
+      usesVaultPassword: !!vaultSec?.vaultPasswordHash,
+      usesVaultPin: !!vaultSec?.vaultPinHash,
+      hasCredential: !!vaultSec?.vaultPasswordHash || !!vaultSec?.vaultPinHash,
+      // Step 3 only has ONE possible credential (the Vault PIN).
+      step3Available: !!vaultSec?.vaultPinHash,
+      // "any" (default) | "step12" | "step123" — see schema/vault-security.ts.
+      authStepPolicy: (vaultSec?.authStepPolicy ?? "any") as AuthStepPolicy,
+    },
+  };
+}
+
+/** POST /vault/reauth/email-code/send — step 3 email half. */
+export async function sendReauthEmailCode(userId: number): Promise<VaultReauthResult> {
+  const user = await getUserEmail(userId);
+  if (!user) return { status: 404, body: { error: "User not found" } };
+
+  const vaultSec = await getVaultPinHashRow(userId);
+  if (!vaultSec?.vaultPinHash) return pinNotSet();
+
+  const code = generateOtp();
+  await storeOtp(vaultReauthOtpKey(userId), code);
+
+  const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><style>
+  body{margin:0;padding:0;background:#0a0d12;font-family:'Courier New',monospace;color:#e0f7f7;}
+  .wrap{max-width:520px;margin:40px auto;background:#0d1117;border:1px solid #1a3a3a;border-radius:8px;overflow:hidden;}
+  .header{padding:24px 32px;border-bottom:1px solid #1a3a3a;background:#070a0f;}
+  .logo{font-size:20px;font-weight:bold;letter-spacing:4px;color:#00d4cc;}
+  .sub{font-size:10px;letter-spacing:3px;color:#4a8080;margin-top:4px;text-transform:uppercase;}
+  .body{padding:32px;}
+  h2{color:#00d4cc;font-size:16px;letter-spacing:2px;text-transform:uppercase;margin:0 0 16px;}
+  p{color:#a0c8c8;font-size:13px;line-height:1.7;margin:0 0 12px;}
+  .otp{display:block;font-size:36px;font-weight:bold;letter-spacing:12px;color:#00d4cc;margin:24px 0;text-align:center;background:#070a0f;padding:20px;border-radius:6px;border:1px solid #1a3a3a;}
+  .footer{padding:20px 32px;border-top:1px solid #1a3a3a;font-size:10px;color:#2a5050;letter-spacing:1px;}
+</style></head>
+<body><div class="wrap">
+  <div class="header"><div class="logo">&gt;_ AYZEN</div><div class="sub">Vault Re-auth</div></div>
+  <div class="body">
+    <h2>Vault Unlock Code</h2>
+    <p>Use this code with your Vault PIN to unlock Vault:</p>
+    <span class="otp">${code}</span>
+    <p>This code expires in <strong>10 minutes</strong>. If you didn't request this, secure your account immediately.</p>
+  </div>
+  <div class="footer">&copy; 2026 AYZEN &mdash; Vault re-auth fail-over.</div>
+</div></body></html>`;
+
+  const result = await sendEmail({ to: user.email, subject: "AYZEN — Vault Unlock Code", html, text: `Your Vault unlock code: ${code} (expires in 10 minutes)` });
+  if (!result.success) {
+    return { status: 503, body: { error: "Failed to send email. Please check email config.", detail: result.error } };
+  }
+  return { status: 200, body: { message: "Verification code sent to your email." } };
+}
+
+/** POST /vault/reauth/verify-step3 — email code + Vault PIN. Body: { pin, emailCode }. */
+export async function verifyStep3(userId: number, body: any): Promise<VaultReauthResult> {
+  const lockedMs = isLockedOut(userId, "reauth");
+  if (lockedMs > 0) return locked(lockedMs);
+
+  const { pin, emailCode } = body ?? {};
+  const vaultSec = await getVaultPinHashRow(userId);
+
+  if (!vaultSec?.vaultPinHash) return pinNotSet();
+
+  if (typeof pin !== "string" || !pin) {
+    return { status: 400, body: { error: "Vault PIN is required", code: "CREDENTIAL_REQUIRED" } };
+  }
+  const pinOk = await verifyPassword(pin, vaultSec.vaultPinHash);
+  if (!pinOk) {
+    recordFailure(userId, "reauth");
+    return { status: 401, body: { error: "Incorrect Vault PIN", code: "WRONG_PIN" } };
+  }
+
+  if (typeof emailCode !== "string" || !emailCode.trim()) {
+    return { status: 400, body: { error: "Email code is required", code: "EMAIL_CODE_REQUIRED" } };
+  }
+  const codeOk = await verifyOtp(vaultReauthOtpKey(userId), emailCode);
+  if (!codeOk) {
+    recordFailure(userId, "reauth");
+    return { status: 401, body: { error: "Invalid or expired email code", code: "WRONG_EMAIL_CODE" } };
+  }
+
+  clearFailures(userId, "reauth");
+  return { status: 200, body: { ok: true } };
+}
+
+/**
+ * POST /vault/reauth/passkey/options — scoped to only the current user's own
+ * passkeys (never an empty/anonymous allow-list like routes/passkey.ts login).
+ */
+export async function passkeyOptions(req: Request, userId: number): Promise<VaultReauthResult> {
+  const lockedMs = isLockedOut(userId, "reauth");
+  if (lockedMs > 0) return locked(lockedMs);
+
+  const creds = await listPasskeyCredentials(userId);
+  if (creds.length === 0) return { status: 404, body: { error: "No passkeys registered for this account" } };
+
+  const webAuthn = getWebAuthnConfig(req);
+  const options = await generateAuthenticationOptions({
+    rpID: webAuthn.rpID,
+    allowCredentials: creds.map((c) => ({
+      id: c.credentialId,
+      transports: c.transports ? (c.transports.split(",") as any[]) : undefined,
+    })),
+    userVerification: "preferred",
+  });
+
+  const challengeKey = newChallengeKey();
+  storeChallenge(challengeKey, options.challenge);
+  return { status: 200, body: { options, challengeKey } };
+}
+
+/**
+ * POST /vault/reauth/passkey/verify — Body: { challengeKey, response }. Never
+ * issues a new session token; proves possession of a passkey belonging to the
+ * CURRENT session's account.
+ */
+export async function verifyPasskey(req: Request, userId: number, body: unknown): Promise<VaultReauthResult> {
+  const lockedMs = isLockedOut(userId, "reauth");
+  if (lockedMs > 0) return locked(lockedMs);
+
+  const { challengeKey, response } = body as { challengeKey?: string; response?: any };
+  if (!challengeKey || !response) return { status: 400, body: { error: "challengeKey and response are required" } };
+
+  const entry = consumeChallenge(challengeKey);
+  if (!entry) return { status: 400, body: { error: "Challenge expired or invalid. Try again." } };
+
+  const credentialId: string | undefined = response.id;
+  if (!credentialId) return { status: 400, body: { error: "Malformed passkey response" } };
+
+  const cred = await getPasskeyByCredentialId(credentialId);
+  // Must both exist AND belong to the currently signed-in account — a passkey
+  // for a *different* AYZEN account must never clear *this* session's Vault
+  // gate, even if the browser happens to have both saved.
+  if (!(await isPasskeyOwnedBySession(req, cred, credentialId))) {
+    return { status: 401, body: { error: "This passkey does not belong to your account" } };
+  }
+  if (!cred) {
+    // Unreachable in practice (a missing `cred` gets the sentinel ownerId,
+    // which the ownership rule can never ALLOW); kept so TypeScript narrows.
+    return { status: 401, body: { error: "This passkey does not belong to your account" } };
+  }
+
+  try {
+    const webAuthn = getWebAuthnConfig(req);
+    const verification = await verifyAuthenticationResponse({
+      response,
+      expectedChallenge: entry.challenge,
+      expectedOrigin: webAuthn.origin,
+      expectedRPID: webAuthn.rpID,
+      credential: {
+        id: cred.credentialId,
+        publicKey: new Uint8Array(Buffer.from(cred.publicKey, "base64url")),
+        counter: cred.counter,
+        transports: cred.transports ? (cred.transports.split(",") as any[]) : undefined,
+      },
+    });
+
+    if (!verification.verified) {
+      recordFailure(userId, "reauth");
+      return { status: 401, body: { error: "Passkey verification failed" } };
+    }
+
+    await recordPasskeyUse(cred.id, verification.authenticationInfo.newCounter);
+
+    clearFailures(userId, "reauth");
+    return { status: 200, body: { ok: true } };
+  } catch (err: any) {
+    recordFailure(userId, "reauth");
+    return { status: 401, body: { error: err.message || "Passkey verification failed" } };
+  }
+}
+
+/**
+ * POST /vault/reauth/verify — Vault PIN/password + Vault 2FA check.
+ * Body: { password?, pin?, totpCode? }. Exactly one of password/pin is expected
+ * (PIN takes priority when both exist). The account login password is never accepted.
+ */
+export async function verifyVaultCredentials(userId: number, body: any): Promise<VaultReauthResult> {
+  const lockedMs = isLockedOut(userId, "reauth");
+  if (lockedMs > 0) return locked(lockedMs);
+
+  const { password, pin, totpCode } = body ?? {};
+
+  const user = await getUserRow(userId);
+  if (!user) return { status: 401, body: { error: "Unauthorized" } };
+
+  // Vault 2FA is mandatory for this fallback — set up separately from account
+  // 2FA on /vault/security.
+  const vaultSec = await getVaultSecurityFullRow(userId);
+
+  const hasVaultPin = !!vaultSec?.vaultPinHash;
+  const hasVaultPassword = !!vaultSec?.vaultPasswordHash;
+
+  if (!hasVaultPin && !hasVaultPassword) {
+    return {
+      status: 428,
+      body: {
+        error: "Set a Vault PIN or password to unlock Vault",
+        code: "CREDENTIAL_NOT_SET",
+        solution: "Set a Vault PIN or password under Vault → Security, then try again.",
+      },
+    };
+  }
+
+  let credentialKind: "pin" | "password";
+  let credentialHash: string;
+  let providedValue: unknown;
+
+  if (hasVaultPin) {
+    credentialKind = "pin";
+    credentialHash = vaultSec!.vaultPinHash!;
+    providedValue = pin;
+  } else {
+    credentialKind = "password";
+    credentialHash = vaultSec!.vaultPasswordHash!;
+    providedValue = password;
+  }
+
+  if (typeof providedValue !== "string" || !providedValue) {
+    return {
+      status: 400,
+      body: {
+        error: credentialKind === "pin" ? "Vault PIN is required" : "Vault password is required",
+        code: "CREDENTIAL_REQUIRED",
+      },
+    };
+  }
+
+  const credentialOk = await verifyPassword(providedValue, credentialHash);
+  if (!credentialOk) {
+    recordFailure(userId, "reauth");
+    return {
+      status: 401,
+      body: {
+        error: credentialKind === "pin" ? "Incorrect Vault PIN" : "Incorrect Vault password",
+        code: credentialKind === "pin" ? "WRONG_PIN" : "WRONG_PASSWORD",
+      },
+    };
+  }
+
+  if (!vaultSec?.vaultTwoFaEnabled || !vaultSec?.vaultTwoFaSecret) {
+    return {
+      status: 428,
+      body: {
+        error: "Vault 2FA is required to access Vault",
+        code: "2FA_NOT_ENABLED",
+        solution: "Enable 2FA under Vault → Security, then try again.",
+      },
+    };
+  }
+
+  if (typeof totpCode !== "string" || !totpCode.trim()) {
+    return { status: 400, body: { error: "Authenticator code is required", code: "TOTP_REQUIRED" } };
+  }
+
+  const totpOk = totpVerify(totpCode, vaultSec.vaultTwoFaSecret);
+  if (!totpOk) {
+    recordFailure(userId, "reauth");
+    return { status: 401, body: { error: "Invalid authenticator code", code: "WRONG_TOTP" } };
+  }
+
+  clearFailures(userId, "reauth");
+  return { status: 200, body: { ok: true } };
+}

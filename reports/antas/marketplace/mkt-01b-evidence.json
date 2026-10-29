@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-01b-1 and 01b-2a",
+  "status": "WRITTEN_NOT_RUN",
+  "date": "2026-10-25",
+  "commitSha": "UNAVAILABLE",
+  "written": [
+    "artifacts/api-server/src/marketplace/characterization: marketplace-db-runner.mjs, standins.mjs, register-stubs.mjs, stub-hooks.mjs, stubs/{auth,pep-middleware,notification-bus,credit-meter}.stub.ts, harness.ts",
+    "tests: p2p-orders.db.test.ts (9), race-defects.db.test.ts (4), txn-hygiene.db.test.ts (1)",
+    "pnpm --filter @workspace/api-server test:marketplace-db; tsconfig excludes src/marketplace/characterization",
+    "01b-2a: wallet-and-markets.db.test.ts (13 tests) and cart.db.test.ts (5 tests); harness gained seedUsdtSellListing, seedCartItem, near; runner lists 5 files",
+    "runner fallback: MKT_STUB_ORDER=first swaps the order of the tsx and stub-hook imports; total 32 DB tests in 5 files (cart 5, p2p-orders 9, race-defects 4, txn-hygiene 1, wallet-and-markets 13)"
+  ],
+  "verifiedWithoutDatabase": [
+    "syntax of every TS file (node module.stripTypeScriptTypes)",
+    "scripts/antas/marketplace/characterization/db-suite-static.test.mjs (7 tests, part of pnpm test:marketplace-static): every INSERT/SELECT column in the fixtures and tests exists in the DDL or stand-ins, every NOT NULL column without a default is supplied, the runner's table creation order satisfies REFERENCES, stubs export every name the mounted routers import; negative controls (a typo column, an omitted NOT NULL column) fail it",
+    "stub resolve hook: swaps the module under a simulated loader chain; without it the real module is loaded",
+    "static pin for MKT-ISSUE-8 (unrolledEarlyReturns) with a mutation check"
+  ],
+  "notVerified": [
+    "nothing in the suite has been executed: no Postgres, tsx, pg or express in the sandbox",
+    "expected values come from reading the handlers; a first-run failure may be a wrong expectation or a harness error, not a bug in the route",
+    "the stand-in tables (users, credits, credit_transactions) carry only the columns the tested statements use",
+    "authorization (PEP), notifications and the credit meter are stubbed and not characterized",
+    "expected outcomes that depend on PostgreSQL concurrency semantics (parallel deposit/withdraw/cart checkout/NFT buy each expected to succeed exactly once) come from reading the SQL guards and locks; a first-run difference there is a finding, not necessarily a harness error"
+  ],
+  "newFinding": "MKT-ISSUE-8 (PATCH /admin/marketplace/orders/:id leaves a connection idle in transaction on an unknown id), found by a path-by-path scan; corrects the earlier per-handler hygiene claim; MKT-ISSUE-9 (NFT sale credits nobody when the seller has no nft wallet row), found while reading the NFT buy handler for 01b-2a",
+  "howToRun": "pnpm install --frozen-lockfile && pnpm --filter @workspace/api-server test:marketplace-db   (needs a test Postgres reachable through DATABASE_URL; the runner creates and drops its own schema)",
+  "sendBack": "the full TAP output; the t.diagnostic lines for MKT-ISSUE-7, 6 and 5 say whether each race reproduced",
+  "next": "MKT-01b-2 after the first green run; MKT-04 only after 01b is green"
+}

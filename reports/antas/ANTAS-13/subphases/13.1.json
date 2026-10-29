@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-13.1",
+  "phase": "ANTAS-13",
+  "name": "Backup Verification",
+  "generatedAt": "2026-09-29T06:06:06.719Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "infrastructure/platform/backup-policy.json",
+    "docs/antas/dr/recovery-drill.md"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

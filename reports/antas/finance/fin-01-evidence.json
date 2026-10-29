@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-01",
+  "title": "Finance module boundaries",
+  "timestamp": "2026-10-14T03:51:55.484Z",
+  "status": "BLOCKED",
+  "statusReason": "The boundaries are documented and no import cycle or impure domain dependency was found, but the first dependency scan found duplicate invoice-total implementations. FIN-02 is the planned compatibility-preserving resolution.",
+  "commit": {
+    "sha": "a5df0e678ef4a11706c2b86c3b4e4df62ea3a49f",
+    "workingTreeAtStart": "Source tree at the recorded base commit; user-uploaded roadmap and import attachment were outside tracked source."
+  },
+  "objective": "Assign current Finance responsibilities and define allowed/forbidden dependencies without changing public route or money contracts.",
+  "inspectedFiles": [
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/routes/finance-invoices.ts",
+    "artifacts/api-server/src/lib/finance-accounting.ts",
+    "artifacts/api-server/src/lib/finance-invoice.ts",
+    "artifacts/api-server/src/lib/finance-wallet-bridge.ts",
+    "artifacts/api-server/src/lib/finance-networth.ts",
+    "artifacts/api-server/src/lib/finance-ai.ts",
+    "artifacts/api-server/src/lib/finance-*-cron.ts",
+    "artifacts/api-server/src/finance/domain/invoice-totals.ts",
+    "lib/db/src/schema/finance.ts",
+    "services/finance/src/index.mjs",
+    "packages/events",
+    "packages/endpoint-registry",
+    "reports/antas/finance/FIN-00-A.md",
+    "reports/antas/finance/fin-00-a-migration-map.csv"
+  ],
+  "filesChanged": [
+    "docs/antas/finance/finance-boundaries.md",
+    "scripts/antas/finance/validate-boundaries.mjs",
+    "package.json",
+    "artifacts/api-server/package.json",
+    "pnpm-lock.yaml",
+    "reports/antas/finance/fin-01-dependency-scan.json",
+    "reports/antas/finance/fin-01-evidence.json"
+  ],
+  "oldToNewMapping": [
+    {
+      "responsibility": "Pure invoice totals",
+      "oldOwner": "Duplicate declarations in artifacts/api-server/src/finance/domain/invoice-totals.ts and artifacts/api-server/src/lib/finance-invoice.ts",
+      "targetOwner": "artifacts/api-server/src/finance/domain/invoice-totals.ts",
+      "consumers": "Finance invoice routes keep using the established lib/finance-invoice.ts import path"
+    }
+  ],
+  "migratedConsumers": [],
+  "commands": [
+    { "command": "pnpm install --frozen-lockfile", "exitCode": 0 },
+    { "command": "pnpm --filter @workspace/api-server typecheck", "exitCode": 0 },
+    { "command": "pnpm --filter @workspace/api-server exec node --test --import tsx src/finance/domain/invoice-totals.test.ts", "exitCode": 0 },
+    { "command": "pnpm validate:finance-boundaries", "exitCode": 1, "result": "Expected initial blocker: two function declarations for each invoice calculator and no compatibility re-exports yet." },
+    { "command": "node --check scripts/antas/finance/validate-boundaries.mjs && git diff --check", "exitCode": 0 }
+  ],
+  "testsAndInvariants": {
+    "invoiceArithmeticBaseline": "PASS: 4 existing characterization tests",
+    "financeDomainImports": "PASS: no imports found",
+    "financeImportCycles": "PASS: no cycles including Finance sources",
+    "duplicateInvoiceCalculationOwner": "BLOCKED: existing duplicate definitions detected",
+    "publicContractChanges": "None"
+  },
+  "diffReview": "Scope limited to owner documentation, a source-derived dependency scan, and the missing API-server tsx dev dependency required by its existing worker/test scripts. No Finance business behavior changed in FIN-01.",
+  "evidencePath": "reports/antas/finance/fin-01-dependency-scan.json",
+  "nextSafeStep": "FIN-02: remove the duplicate calculation bodies and retain the old import path as a re-export adapter; rerun the ownership scan."
+}

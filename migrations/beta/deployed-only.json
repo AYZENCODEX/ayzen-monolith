@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "status": "reconciliation-required",
+  "source": "artifacts/api-server/src/lib/schema-migrations.ts",
+  "description": "Statements known to have been deployed through the legacy startup migration array but without a standalone migrations/*.sql source file.",
+  "policy": "Do not invent or execute a beta SQL file until the deployed SQL text, owner, dependencies, and target database are confirmed.",
+  "requiredEvidence": [
+    "exact deployed SQL text or database introspection",
+    "deployment timestamp or release identifier",
+    "owning app and target database",
+    "dependency and rollback decision"
+  ],
+  "migrationArrayIsNotCopied": true
+}

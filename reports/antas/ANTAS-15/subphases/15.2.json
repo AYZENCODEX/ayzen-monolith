@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-15.2",
+  "phase": "ANTAS-15",
+  "name": "Artifact Security",
+  "generatedAt": "2026-09-29T06:06:06.720Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    ".github/workflows/release.yml",
+    "schemas/provenance/record.v1.json"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

@@ -1,0 +1,300 @@
+{
+  "schemaVersion": 1,
+  "phaseRange": [
+    0,
+    18
+  ],
+  "generatedAt": "2026-09-29T06:06:07.494Z",
+  "status": "UNVERIFIED",
+  "productionReady": false,
+  "p0Unresolved": [],
+  "externalGates": [
+    {
+      "phase": 0,
+      "gate": "production verification",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 1,
+      "gate": "clean reinstall in CI",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 1,
+      "gate": "two-build artifact comparison",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 2,
+      "gate": "independent architecture review",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 3,
+      "gate": "provider-backed OIDC exercise",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 3,
+      "gate": "session revocation exercise",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 4,
+      "gate": "negative endpoint test against staging",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 5,
+      "gate": "provider schema introspection",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 5,
+      "gate": "cross-tenant staging test",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 6,
+      "gate": "staging reconciliation run",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 6,
+      "gate": "concurrent idempotency run",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 7,
+      "gate": "real key rotation",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 7,
+      "gate": "cross-user restore attack test",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 8,
+      "gate": "worker crash and replay drill",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 8,
+      "gate": "DLQ recovery drill",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 9,
+      "gate": "staging abuse test",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 9,
+      "gate": "route contract coverage report",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 10,
+      "gate": "per-service cutover",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 10,
+      "gate": "fallback and rollback drill",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 11,
+      "gate": "mutation testing",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 11,
+      "gate": "chaos test execution",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 12,
+      "gate": "alert detection and recovery drill",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 13,
+      "gate": "destructive staging restore",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 13,
+      "gate": "measured RTO/RPO",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 14,
+      "gate": "staging load profile",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 14,
+      "gate": "measured cost model",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 15,
+      "gate": "CI dependency audit",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 15,
+      "gate": "signed artifact verification",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 16,
+      "gate": "reviewed complexity budget",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 17,
+      "gate": "production-like journey test",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 17,
+      "gate": "accessibility audit",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 18,
+      "gate": "all P0 runtime gates",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 18,
+      "gate": "release owner sign-off",
+      "status": "UNVERIFIED"
+    },
+    {
+      "phase": 18,
+      "gate": "production canary and rollback",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "phases": [
+    {
+      "phase": 0,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-00/report.json"
+    },
+    {
+      "phase": 1,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-01/report.json"
+    },
+    {
+      "phase": 2,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-02/report.json"
+    },
+    {
+      "phase": 3,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-03/report.json"
+    },
+    {
+      "phase": 4,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-04/report.json"
+    },
+    {
+      "phase": 5,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-05/report.json"
+    },
+    {
+      "phase": 6,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-06/report.json"
+    },
+    {
+      "phase": 7,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-07/report.json"
+    },
+    {
+      "phase": 8,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-08/report.json"
+    },
+    {
+      "phase": 9,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-09/report.json"
+    },
+    {
+      "phase": 10,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-10/report.json"
+    },
+    {
+      "phase": 11,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-11/report.json"
+    },
+    {
+      "phase": 12,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-12/report.json"
+    },
+    {
+      "phase": 13,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-13/report.json"
+    },
+    {
+      "phase": 14,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-14/report.json"
+    },
+    {
+      "phase": 15,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-15/report.json"
+    },
+    {
+      "phase": 16,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-16/report.json"
+    },
+    {
+      "phase": 17,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-17/report.json"
+    },
+    {
+      "phase": 18,
+      "status": "PASS",
+      "criticalFailures": 0,
+      "report": "reports/antas/ANTAS-18/report.json"
+    }
+  ],
+  "rule": "Production certification is blocked until runtime evidence and release-owner sign-off are recorded."
+}

@@ -1,0 +1,7 @@
+{
+  "app": "admin",
+  "roles": { "operator": ["admin.read"], "owner": ["admin.read", "admin.remediate", "admin.deploy", "event.replay"] },
+  "resources": ["platform", "operations"],
+  "defaultDeny": true,
+  "stepUpRequired": ["admin.remediate", "admin.deploy", "event.replay"]
+}

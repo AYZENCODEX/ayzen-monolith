@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "defaultDeny": true,
+  "stepUpForSensitiveActions": true,
+  "apps": {
+    "ayzenx": {"roles": ["member", "owner"], "scopePrefix": "ayzenx"},
+    "warde": {"roles": ["member", "manager", "owner"], "scopePrefix": "warde"},
+    "verve": {"roles": ["member", "owner"], "scopePrefix": "verve"},
+    "ryft": {"roles": ["viewer", "operator", "owner"], "scopePrefix": "ryft"},
+    "sylo": {"roles": ["viewer", "operator", "owner"], "scopePrefix": "sylo"},
+    "skarn": {"roles": ["viewer", "operator", "owner"], "scopePrefix": "skarn"},
+    "zynth": {"roles": ["user", "operator", "owner"], "scopePrefix": "zynth"},
+    "wisp": {"roles": ["member", "operator", "owner"], "scopePrefix": "wisp"},
+    "admin": {"roles": ["owner", "operator", "auditor"], "scopePrefix": "admin"}
+  }
+}

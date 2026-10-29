@@ -1,0 +1,428 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "ANTAS Vault Modularization",
+  "status": "PASS",
+  "generatedAt": "2026-10-12T15:51:46.899Z",
+  "gates": [
+    {
+      "gate": "VLT-00-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-00-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-00-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-00-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-01-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-01-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-01-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-01-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-02-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-02-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-02-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-02-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-03-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-03-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-03-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-03-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-04-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-04-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-04-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-04-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-05-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-05-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-05-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-05-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-06-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-06-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-06-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-06-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-07-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-07-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-07-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-07-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-08-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-08-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-08-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-08-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-09-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-09-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-09-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-09-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-10-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-10-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-10-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-10-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-11-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-11-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-11-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-11-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-12-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-12-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-12-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-12-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-13-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-13-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-13-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-13-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-14-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-14-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-14-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-14-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-15-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-15-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-15-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-15-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-16-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-16-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-16-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-16-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-17-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-17-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-17-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-17-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-18-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-18-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-18-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-18-D",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-19-A",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-19-B",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-19-C",
+      "status": "PASS",
+      "failureCount": 0
+    },
+    {
+      "gate": "VLT-19-D",
+      "status": "PASS",
+      "failureCount": 0
+    }
+  ],
+  "summary": {
+    "requiredGates": 80,
+    "passedGates": 80,
+    "apiContractRegressions": 0,
+    "securityRegressions": 0,
+    "crossTenantLeaks": 0,
+    "cryptoCompatibilityFailures": 0,
+    "duplicateBusinessImplementations": 0,
+    "forbiddenImports": 0,
+    "unexplainedSchemaChanges": 0,
+    "backupRestoreFailures": 0,
+    "snapshotRestoreFailures": 0,
+    "criticalHighBlockers": 0,
+    "evidenceCompleteness": 100,
+    "migrationMapCompleteness": 100
+  },
+  "limitations": [
+    "Provider-backed staging/production, destructive restore, and sustained load measurements remain deployment-specific drills.",
+    "No secret values or plaintext fixtures are included."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "registryId": "ayzen-capabilities",
+  "source": "packages/capabilities/src/index.mjs",
+  "defaultDeny": true,
+  "requiredFields": ["capability", "domain", "method", "route", "status", "permission", "auditEvent", "owner", "policy"],
+  "adminIncluded": true,
+  "coverageRule": "every registered capability must have an owner, scope, policy and audit event",
+  "validator": "tools/capability-validator/index.mjs"
+}

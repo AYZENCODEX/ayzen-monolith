@@ -1,0 +1,153 @@
+{
+  "gap": "VLT-GAP-15",
+  "sub": "module-differential-backup",
+  "checked_at": "2026-10-12T16:40:11.981Z",
+  "modules": [
+    "vault/crypto/backup-envelope",
+    "vault/infrastructure/backup/cloud",
+    "vault/infrastructure/backup/alerts"
+  ],
+  "old_sources": [
+    "VLT-GAP-08 baseline lib/vault-backup-envelope",
+    "VLT-GAP-08 baseline lib/vault-backup-cloud",
+    "VLT-GAP-08 baseline lib/vault-backup-alerts"
+  ],
+  "real_not_faked": [
+    "node:crypto",
+    "packages/vault-crypto aes-gcm",
+    "NEW key-store port + repository SQL (via crypto-key-stores)",
+    "module bodies on both sides"
+  ],
+  "faked": [
+    "encryption_keys table (interprets the exact SQL)",
+    "fetch (scripted, every request recorded)",
+    "connection/users tables",
+    "email/telegram/notification sinks",
+    "clock",
+    "field-encryption & jwt in cloud (covered by their own gaps)"
+  ],
+  "cells": 124,
+  "equal_cells": 124,
+  "groups": {
+    "envelope": {
+      "cells": 15,
+      "equal": 15
+    },
+    "envelope-cross": {
+      "cells": 10,
+      "equal": 10
+    },
+    "cloud": {
+      "cells": 31,
+      "equal": 31
+    },
+    "cloud-intentional": {
+      "cells": 3,
+      "equal": 3
+    },
+    "alerts": {
+      "cells": 65,
+      "equal": 65
+    }
+  },
+  "mutants": [
+    {
+      "group": "envelope",
+      "mutation": "encrypt without AAD",
+      "applied": true,
+      "detected_cells": 11
+    },
+    {
+      "group": "envelope",
+      "mutation": "drop legacy KEK fallback on unwrap",
+      "applied": true,
+      "detected_cells": 2
+    },
+    {
+      "group": "envelope",
+      "mutation": "encrypt writes ENV1 prefix",
+      "applied": true,
+      "detected_cells": 12
+    },
+    {
+      "group": "envelope",
+      "mutation": "rotate forgets to deactivate old key",
+      "applied": true,
+      "detected_cells": 4
+    },
+    {
+      "group": "envelope",
+      "mutation": "decrypt ignores ENV2 AAD",
+      "applied": true,
+      "detected_cells": 12
+    },
+    {
+      "group": "cloud",
+      "mutation": "refresh window 60s -> 30s",
+      "applied": true,
+      "detected_cells": 1
+    },
+    {
+      "group": "cloud",
+      "mutation": "re-auth overwrites refresh token with null",
+      "applied": true,
+      "detected_cells": 1
+    },
+    {
+      "group": "cloud",
+      "mutation": "dropbox path changed",
+      "applied": true,
+      "detected_cells": 4
+    },
+    {
+      "group": "cloud",
+      "mutation": "dropbox upload mode changed",
+      "applied": true,
+      "detected_cells": 4
+    },
+    {
+      "group": "cloud",
+      "mutation": "dropbox upload adds an auto-renamed copy again",
+      "applied": true,
+      "detected_cells": 1
+    },
+    {
+      "group": "cloud",
+      "mutation": "drive upload no longer skips an existing file",
+      "applied": true,
+      "detected_cells": 1
+    },
+    {
+      "group": "cloud",
+      "mutation": "disconnect swallows db error",
+      "applied": true,
+      "detected_cells": 1
+    },
+    {
+      "group": "alerts",
+      "mutation": "failure alert drops telegram",
+      "applied": true,
+      "detected_cells": 7
+    },
+    {
+      "group": "alerts",
+      "mutation": "stale-key loop stops at first admin",
+      "applied": true,
+      "detected_cells": 3
+    },
+    {
+      "group": "alerts",
+      "mutation": "anomalous alert verbs swapped",
+      "applied": true,
+      "detected_cells": 6
+    },
+    {
+      "group": "alerts",
+      "mutation": "missed alert rounds hours down",
+      "applied": true,
+      "detected_cells": 6
+    }
+  ],
+  "errors": [],
+  "status": "PASS"
+}

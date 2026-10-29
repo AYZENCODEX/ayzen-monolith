@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "CI dependency audit",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "signed artifact verification",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

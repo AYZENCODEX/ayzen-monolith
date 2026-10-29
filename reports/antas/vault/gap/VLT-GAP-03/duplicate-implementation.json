@@ -1,0 +1,191 @@
+{
+  "phase": "VLT-GAP-03",
+  "sub_phase": "VLT-GAP-03-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "386d676b6ff44cc0732a2b5a451a7979a27ad4a74c8d9445124224e444169270",
+  "validator_version": "1.0.0",
+  "validator_sha256": "b7ce83bf8f53cb06c268ea3092740f096d8aaeb19dae761c541e96b7ada7342a",
+  "description": "Duplicate implementation scan (name-agnostic token fingerprints + normalized SQL)",
+  "added_copies_outside_owner": [],
+  "added_sql_outside_repositories": [],
+  "baseline_bodies_surviving_in_old_routes": [],
+  "owner_module_duplicates": [],
+  "pre_existing_function_overlaps_reported_to_GAP_16": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "symbol": "safe",
+      "duplicates": "baseline#safe",
+      "tokens": 35,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/value-history.ts",
+      "symbol": "safe",
+      "duplicates": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts#safe",
+      "tokens": 31,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "symbol": "safe",
+      "duplicates": "baseline#safe",
+      "tokens": 35,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "dbError",
+      "duplicates": "artifacts/api-server/src/vault/application/kyc/entries.ts#dbError",
+      "tokens": 31,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "d",
+      "duplicates": "artifacts/api-server/src/vault/domain/kyc-values.ts#d",
+      "tokens": 23,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "symbol": "safe",
+      "duplicates": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts#safe",
+      "tokens": 31,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/local-account-values.ts",
+      "symbol": "safeDate",
+      "duplicates": "baseline#safeDate",
+      "tokens": 25,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "symbol": "denyNotFoundOrForbidden",
+      "duplicates": "artifacts/api-server/src/vault/security/kyc-ownership.ts#denyKycNotFoundOrForbidden",
+      "tokens": 30,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "symbol": "denyNotFound",
+      "duplicates": "artifacts/api-server/src/vault/security/kyc-ownership.ts#denyKycNotFound",
+      "tokens": 30,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "symbol": "denySilentSuccess",
+      "duplicates": "artifacts/api-server/src/vault/security/kyc-ownership.ts#denyKycSilentSuccess",
+      "tokens": 25,
+      "reason": "file unchanged since the 03-C seal; pre-dates GAP-03 (independent idiom, reported to GAP-16)"
+    }
+  ],
+  "pre_existing_sql_overlaps_with_deferred_consumers": [],
+  "corpus": {
+    "baseline_fingerprints": 22,
+    "owner_functions_fingerprinted": 55,
+    "owner_sql_statements": 22
+  },
+  "hidden_import_edges": [
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "module": "./kyc",
+      "symbols": [
+        "default"
+      ],
+      "kind": "import",
+      "line": 85,
+      "verdict": "router-mount"
+    },
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "module": "./kyc-data-entities",
+      "symbols": [
+        "default"
+      ],
+      "kind": "import",
+      "line": 86,
+      "verdict": "router-mount"
+    }
+  ],
+  "hidden_import_violations": [],
+  "layering_violations": [],
+  "frontend_deferrals": [
+    {
+      "symbol": "calcAge",
+      "deferred_to": "VLT-GAP-16",
+      "copies": 3,
+      "files": [
+        "artifacts/ayzen/src/components/local-accounts.tsx",
+        "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+        "artifacts/ayzen/src/pages/user/vault-local-detail.tsx"
+      ],
+      "distinct_bodies": 3
+    },
+    {
+      "symbol": "calcROI",
+      "deferred_to": "VLT-GAP-16",
+      "copies": 4,
+      "files": [
+        "artifacts/ayzen/src/components/local-accounts.tsx",
+        "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx",
+        "artifacts/ayzen/src/pages/user/vault-local-dashboard.tsx",
+        "artifacts/ayzen/src/pages/user/vault-local-detail.tsx"
+      ],
+      "distinct_bodies": 2
+    },
+    {
+      "symbol": "kycHealthScore",
+      "deferred_to": "VLT-GAP-11",
+      "copies": 1,
+      "files": [
+        "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+      ],
+      "distinct_bodies": 1
+    },
+    {
+      "symbol": "getRisks",
+      "deferred_to": "VLT-GAP-11",
+      "copies": 1,
+      "files": [
+        "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+      ],
+      "distinct_bodies": 1
+    },
+    {
+      "symbol": "KYC_HEALTH_CHECKS",
+      "deferred_to": "VLT-GAP-11",
+      "copies": 1,
+      "files": [
+        "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+      ],
+      "distinct_bodies": 1
+    },
+    {
+      "symbol": "healthLabel",
+      "deferred_to": "VLT-GAP-11",
+      "copies": 3,
+      "files": [
+        "artifacts/ayzen/src/components/vault/health-checklist.tsx",
+        "artifacts/ayzen/src/pages/user/vault-entity-detail.tsx",
+        "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+      ],
+      "distinct_bodies": 2
+    },
+    {
+      "symbol": "healthColor",
+      "deferred_to": "VLT-GAP-11",
+      "copies": 4,
+      "files": [
+        "artifacts/ayzen/src/components/finance/finance-insights.tsx",
+        "artifacts/ayzen/src/components/vault/health-checklist.tsx",
+        "artifacts/ayzen/src/pages/user/vault-entity-detail.tsx",
+        "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx"
+      ],
+      "distinct_bodies": 2
+    }
+  ]
+}

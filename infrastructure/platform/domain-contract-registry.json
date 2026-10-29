@@ -1,0 +1,23 @@
+{
+  "version": "v1",
+  "policy": {
+    "defaultDeny": true,
+    "crossDomainImports": "public-contracts-only",
+    "databaseAccess": "owner-mediated"
+  },
+  "domains": [
+    { "name": "identity", "owner": "Identity", "data": ["users", "credentials", "sessions", "mfa"], "api": ["authenticate", "issue-session", "refresh", "revoke-session"], "events": ["user.created", "session.created", "session.revoked"] },
+    { "name": "workspace", "owner": "Workspace", "data": ["workspaces", "workspace_memberships"], "api": ["get-workspace", "list-members", "add-member", "remove-member"], "events": ["workspace.created", "workspace.member.added"] },
+    { "name": "finance", "owner": "RYFT", "data": ["finance_accounts", "finance_transactions", "finance_ledger"], "api": ["list-accounts", "create-account", "post-transaction"], "events": ["finance.transaction.created", "finance.transaction.updated"] },
+    { "name": "vault", "owner": "SYLO", "data": ["vault_records", "vault_versions", "vault_access_audit"], "api": ["list-secrets", "create-secret", "read-secret"], "events": ["vault.secret.accessed", "vault.secret.updated"] },
+    { "name": "mail", "owner": "WISP", "data": ["mailboxes", "mail_messages", "mail_threads", "mail_attachments", "mailbox_permissions"], "api": ["list-messages", "send-message", "create-draft", "read-thread", "search", "update-message", "manage-permissions"], "events": ["wisp.message.received", "wisp.message.sent", "mail.delivery.requested"] },
+    { "name": "notification", "owner": "Notification", "data": ["notification_templates", "notification_deliveries"], "api": ["create-notification", "list-notifications"], "events": ["notification.requested", "notification.sent"] },
+    { "name": "workflow", "owner": "SKARN", "data": ["workflows", "workflow_executions", "workflow_steps"], "api": ["create-workflow", "start-execution", "cancel-execution"], "events": ["workflow.started", "workflow.completed", "workflow.cancelled"] },
+    { "name": "ai", "owner": "ZYNTH", "data": ["ai_runs", "ai_usage", "ai_audit"], "api": ["run-agent", "list-models"], "events": ["ai.task.completed", "ai.task.failed"] },
+    { "name": "search", "owner": "Search", "data": ["search_documents", "search_indexes"], "api": ["search", "index-document"], "events": ["search.document.indexed"] },
+    { "name": "marketplace", "owner": "VERVE", "data": ["marketplace_listings", "marketplace_orders", "marketplace_reviews"], "api": ["list-listings", "create-listing", "place-order"], "events": ["marketplace.listing.created", "marketplace.order.created"] },
+    { "name": "intelligence", "owner": "Intelligence", "data": ["intelligence_observations", "intelligence_signals", "technical_gaps"], "api": ["list-signals", "read-observation"], "events": ["intelligence.observation.created", "technical_gap.detected"] },
+    { "name": "admin", "owner": "Admin", "data": ["admin_configuration", "admin_alerts", "admin_gaps", "admin_deployments"], "api": ["read-control-plane", "query-data", "mutate-data", "issue-break-glass"], "events": ["audit.created", "alert.created", "incident.created"] },
+    { "name": "telegram", "owner": "Telegram Platform", "data": ["telegram_bots", "telegram_update_receipts", "telegram_sessions"], "api": ["receive-update", "resolve-command", "render-menu"], "events": ["telegram.update.received", "telegram.auth.linked"] }
+  ]
+}

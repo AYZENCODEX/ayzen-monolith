@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": "ANTAS-05",
+  "name": "Data Isolation & Database Integrity",
+  "owner": "platform",
+  "priority": "P0",
+  "generatedAt": "2026-09-29T06:06:07.458Z",
+  "status": "PASS",
+  "required": 5,
+  "passed": 5,
+  "failed": 0,
+  "waived": 0,
+  "criticalFailures": 0,
+  "productionReady": false,
+  "externalGates": [
+    {
+      "gate": "provider schema introspection",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "cross-tenant staging test",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "findings": [],
+  "note": "PASS means repository evidence and static controls are present; it does not certify runtime or production behavior."
+}

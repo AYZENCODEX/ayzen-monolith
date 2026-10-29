@@ -1,0 +1,16 @@
+{
+  "phase": "F10c",
+  "date": "2026-10-19",
+  "title": "Out-of-order depreciation posting",
+  "status": "BLOCKED",
+  "blockedBecause": "No node_modules or Postgres here: typecheck and test:finance-db not run.",
+  "change": "postDepreciationPeriod locks the asset row (FOR UPDATE), claims the period, posts the journal, then sets totalValue to the book value of the highest-numbered posted period.",
+  "files": [
+    "artifacts/api-server/src/finance/application/assets.ts",
+    "artifacts/api-server/src/finance/application/wp4-use-cases.db.test.ts (2 new tests)",
+    "docs/antas/finance/finance-safety-findings.md"
+  ],
+  "notVerified": ["drizzle .for(\"update\") typing and behaviour", "both new DB tests", "existing F10a/F10b tests after the change"],
+  "notChanged": "regenerating a schedule after periods were posted does not recompute totalValue",
+  "nextSafeStep": "pnpm typecheck, pnpm test:finance-db"
+}

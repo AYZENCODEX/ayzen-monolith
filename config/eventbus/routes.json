@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "routes": [
+    { "eventPrefix": "identity.", "bus": "security", "consumers": ["audit", "intelligence"] },
+    { "eventPrefix": "workflow.", "bus": "workflow", "consumers": ["workflow-worker", "audit"] },
+    { "eventPrefix": "telegram.", "bus": "integration", "consumers": ["intelligence", "audit"] },
+    { "eventPrefix": "deployment.", "bus": "platform", "consumers": ["admin", "intelligence"] }
+  ]
+}

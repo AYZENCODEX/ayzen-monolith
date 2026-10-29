@@ -1,0 +1,4014 @@
+{
+  "phase": "VLT-GAP-01",
+  "sub_phase": "VLT-GAP-01-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "15cc70d7cfef801f9993710ffe3618c0e59df1b52fb75a452e8f900ccae1b3d4",
+  "validator_version": "1.0.0",
+  "validator_sha256": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+  "description": "Current vs pre-extraction fingerprint and disposition of every symbol in the four old source files",
+  "files": [
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "baseline_sha256": "caa19f200d2fa364a5858d71e12c79dd5f50cfa1f5d817eefa781e02115213df",
+      "current_sha256": "d8c4b257cd4c9abec0cc56aabc7abe3481b1678c8af48261955704c76d7fdcec",
+      "baseline_lines": 1899,
+      "current_lines": 680,
+      "baseline_tokens": 17491,
+      "current_tokens": 5193,
+      "symbols": [
+        {
+          "symbol": "router",
+          "kind": "const",
+          "baseline_lines": [
+            33,
+            33
+          ],
+          "baseline_fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 8
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "shared-support",
+          "disposition": "ADAPTER_ROUTER"
+        },
+        {
+          "symbol": "requireVaultEntryOwnership",
+          "kind": "function",
+          "baseline_lines": [
+            52,
+            54
+          ],
+          "baseline_fingerprint": "9dfd15e6853e8aff3ce813b169c48947a3f15b390f20b509dd03ced93eea6633",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 39
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "ownership-resource-builders",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/security/entity-ownership.ts#requireVaultEntryOwnership",
+          "new_metrics": {
+            "tokens": 40,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "BRIDGE_PLATFORMS",
+          "kind": "const",
+          "baseline_lines": [
+            67,
+            67
+          ],
+          "baseline_fingerprint": "3942e7cbd9ccca24772d78815b02a040fcb3475d347a31666fef93e67a1cf5d3",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 13
+          },
+          "owner_gap": "GAP-02",
+          "behavior_domain": "entity-crud",
+          "reclassified": {
+            "from": "GAP-01",
+            "proof": "all 1 references are inside autoCreateLocalAccountsForEntity; declaration unchanged"
+          },
+          "disposition": "DEFERRED_GAP-02"
+        },
+        {
+          "symbol": "autoCreateLocalAccountsForEntity",
+          "kind": "function",
+          "baseline_lines": [
+            76,
+            115
+          ],
+          "baseline_fingerprint": "19c5ec2bcabb2fdff0f20876365b061d48d9286db6c5364d3ec0d435bbe9be65",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [],
+            "sql_templates": 2,
+            "branches": 12,
+            "calls": 9,
+            "tokens": 247
+          },
+          "owner_gap": "GAP-02",
+          "behavior_domain": "local-account",
+          "disposition": "DEFERRED_GAP-02"
+        },
+        {
+          "symbol": "logVaultActivity",
+          "kind": "function",
+          "baseline_lines": [
+            118,
+            140
+          ],
+          "baseline_fingerprint": "bf2766c2186bf509931a86a13180dff8892c86a6b271bd7aada2a3d9f1f61e45",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultActivityLogTable"
+            ],
+            "sql_templates": 0,
+            "branches": 8,
+            "calls": 7,
+            "tokens": 154
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/application/entity/activity.ts#logVaultActivity",
+          "new_metrics": {
+            "tokens": 155,
+            "db_chains": 2
+          }
+        },
+        {
+          "symbol": "toHealthInput",
+          "kind": "function",
+          "baseline_lines": [
+            145,
+            158
+          ],
+          "baseline_fingerprint": "19300f7c31859efbf18c7ec4e7943b56f1ffe94caddf623970334ecd10a818f3",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 8,
+            "calls": 1,
+            "tokens": 183
+          },
+          "owner_gap": "GAP-11",
+          "behavior_domain": "health",
+          "disposition": "DEFERRED_GAP-11"
+        },
+        {
+          "symbol": "runHealthCheck",
+          "kind": "function",
+          "baseline_lines": [
+            160,
+            219
+          ],
+          "baseline_fingerprint": "e769bf1ef09891dd461399bbc1267c0d08dfa56bf9366034aeb2d76b6b85e738",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "usersTable",
+              "usersTable.id",
+              "usersTable.telegramChatId",
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 15,
+            "calls": 36,
+            "tokens": 517
+          },
+          "owner_gap": "GAP-11",
+          "behavior_domain": "health",
+          "disposition": "DEFERRED_GAP-11"
+        },
+        {
+          "symbol": "SAFE_COLS",
+          "kind": "const",
+          "baseline_lines": [
+            225,
+            264
+          ],
+          "baseline_fingerprint": "dbe8bf5a2fc75d440162e8ef9abd8634b49d2d186677f3e49efc4cb3081b2f62",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 5
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#SAFE_COLS",
+          "new_metrics": {
+            "tokens": 5,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "selectVault",
+          "kind": "function",
+          "baseline_lines": [
+            270,
+            278
+          ],
+          "baseline_fingerprint": "00110eb8cc652123ce1de0804401eb66f261a3eaf3dbba4ccb2a790620ec282a",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.deletedAt",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 1,
+            "branches": 2,
+            "calls": 7,
+            "tokens": 111
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectVault",
+          "new_metrics": {
+            "tokens": 112,
+            "db_chains": 2
+          }
+        },
+        {
+          "symbol": "selectVaultOne",
+          "kind": "function",
+          "baseline_lines": [
+            280,
+            289
+          ],
+          "baseline_fingerprint": "e913b6fc0eb511bfe0121c1b217ce8747cbc69c8cfa4238e88c93beb4d914447",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.deletedAt",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 1,
+            "branches": 4,
+            "calls": 8,
+            "tokens": 139
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectVaultOne",
+          "new_metrics": {
+            "tokens": 140,
+            "db_chains": 2
+          }
+        },
+        {
+          "symbol": "selectAllVaultEntries",
+          "kind": "function",
+          "baseline_lines": [
+            297,
+            304
+          ],
+          "baseline_fingerprint": "aa384139ad44e2f9c067b92c140ad196d1de6fabbf8405ecb45768ac27ae0532",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.deletedAt"
+            ],
+            "sql_templates": 1,
+            "branches": 2,
+            "calls": 5,
+            "tokens": 96
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectAllVaultEntries",
+          "new_metrics": {
+            "tokens": 96,
+            "db_chains": 2
+          }
+        },
+        {
+          "symbol": "selectVaultTrash",
+          "kind": "function",
+          "baseline_lines": [
+            307,
+            316
+          ],
+          "baseline_fingerprint": "5b32dc246d2c71c53a6a0ff212184cbe3612b9cbdc9d86147f1f532330976244",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.deletedAt",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 1,
+            "branches": 2,
+            "calls": 9,
+            "tokens": 121
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectVaultTrash",
+          "new_metrics": {
+            "tokens": 122,
+            "db_chains": 2
+          }
+        },
+        {
+          "symbol": "selectVaultTrashOne",
+          "kind": "function",
+          "baseline_lines": [
+            321,
+            330
+          ],
+          "baseline_fingerprint": "937bf920df7a667d01a274982967b43ef2f8d18daf286278322dea6f2f72adc3",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.deletedAt",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 1,
+            "branches": 4,
+            "calls": 8,
+            "tokens": 139
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectVaultTrashOne",
+          "new_metrics": {
+            "tokens": 140,
+            "db_chains": 2
+          }
+        },
+        {
+          "symbol": "hardDeleteVaultEntry",
+          "kind": "function",
+          "baseline_lines": [
+            335,
+            339
+          ],
+          "baseline_fingerprint": "3862cc2cc5a2bcaf93d9f706f2f84abd8394c95082e4e3360aa91c301ceaf341",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 1,
+            "branches": 0,
+            "calls": 8,
+            "tokens": 80
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#hardDeleteVaultEntry",
+          "new_metrics": {
+            "tokens": 81,
+            "db_chains": 2
+          }
+        },
+        {
+          "symbol": "legacyFormatRow",
+          "kind": "function",
+          "baseline_lines": [
+            341,
+            468
+          ],
+          "baseline_fingerprint": "f5a3fadee6afd57d6aa1528617ef363da9f48cb4320db431af51a4d130475070",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 201,
+            "calls": 57,
+            "tokens": 1943
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "RETIRED_DEAD_DUPLICATE",
+          "retirement_proof": {
+            "references_in_baseline": 1,
+            "exported": false,
+            "canonical": "vault/application/entity/representation.ts#formatVaultEntry",
+            "properties_only_in_dead_copy": [],
+            "still_declared_in_old_file": false
+          }
+        },
+        {
+          "symbol": "NEW_VAULT_FIELDS",
+          "kind": "const",
+          "baseline_lines": [
+            470,
+            489
+          ],
+          "baseline_fingerprint": "aadecc2a98e84d002e5439e5f308bc56b4e65867c915ca716e5a4a5215b69f18",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [
+              "vaultEntriesTable"
+            ],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 156
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/domain/entity/fields.ts#NEW_VAULT_FIELDS",
+          "new_metrics": {
+            "tokens": 157,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "BASE_VAULT_FIELDS",
+          "kind": "const",
+          "baseline_lines": [
+            494,
+            501
+          ],
+          "baseline_fingerprint": "ce5fc43e93989fdeb05f12d894e11e8976208523acddf02d49e557664fee5810",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 30
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/domain/entity/fields.ts#BASE_VAULT_FIELDS",
+          "new_metrics": {
+            "tokens": 31,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "DATE_FIELDS",
+          "kind": "const",
+          "baseline_lines": [
+            503,
+            508
+          ],
+          "baseline_fingerprint": "2e2366ac872332f5d710f155225c7cab81b1b44cbbddfb495f3e9d2a211f073a",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 34
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/domain/entity/fields.ts#DATE_FIELDS",
+          "new_metrics": {
+            "tokens": 35,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "SINGLE_FIELD_EDITABLE",
+          "kind": "const",
+          "baseline_lines": [
+            515,
+            515
+          ],
+          "baseline_fingerprint": "9f12b71505f14013f5ed7ecc42f64c1605e7aabb4c7425caafd85033eed7f004",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 26
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/domain/entity/fields.ts#SINGLE_FIELD_EDITABLE",
+          "new_metrics": {
+            "tokens": 27,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "fieldLabel",
+          "kind": "function",
+          "baseline_lines": [
+            519,
+            521
+          ],
+          "baseline_fingerprint": "24cc98963ce1d177ae9bec3267b7a80005396288e0afe4376e0f73d219a4aa2f",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 4,
+            "tokens": 42
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/domain/entity/fields.ts#fieldLabel",
+          "new_metrics": {
+            "tokens": 43,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "GET /vault",
+          "kind": "route",
+          "baseline_lines": [
+            524,
+            528
+          ],
+          "baseline_fingerprint": "a83a2ee23e1f8f794ccd850b0245a6da579ce590fd093ad513a6643d7df65e25",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 3,
+            "tokens": 60
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/lifecycle.ts#listEntities"
+        },
+        {
+          "symbol": "ENTITY_GAS_CHAINS",
+          "kind": "const",
+          "baseline_lines": [
+            534,
+            534
+          ],
+          "baseline_fingerprint": "37ab6c1a503cf48e7b18e0660f655ff9195e5d0291a1ff65833f8b69a54b6952",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 19
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "shared-support",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/domain/entity/calculations.ts#ENTITY_GAS_CHAINS",
+          "new_metrics": {
+            "tokens": 20,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "addressesFor",
+          "kind": "function",
+          "baseline_lines": [
+            536,
+            543
+          ],
+          "baseline_fingerprint": "f322151a4ccd8f38d088fd0dd3548d94311db51a9da7eb57c4f58117f8c0b509",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 6,
+            "calls": 1,
+            "tokens": 110
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-calculations",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/domain/entity/calculations.ts#addressesFor",
+          "new_metrics": {
+            "tokens": 111,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "GET /vault/gas-overview",
+          "kind": "route",
+          "baseline_lines": [
+            551,
+            588
+          ],
+          "baseline_fingerprint": "a1a0ff03309c1be9f815c8f4bf133f19b662494ac834e86e8d71341fa22aaffd",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 8,
+            "calls": 14,
+            "tokens": 341
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-calculations",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/analytics.ts#getGasOverviewForUser"
+        },
+        {
+          "symbol": "GET /vault/:id/gas",
+          "kind": "route",
+          "baseline_lines": [
+            594,
+            618
+          ],
+          "baseline_fingerprint": "1176324df58f8819763bfcfd60597b53e36bb33f52cd46f0805c255cd61c5270",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 6,
+            "calls": 6,
+            "tokens": 263
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-calculations",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/analytics.ts#getEntityGas"
+        },
+        {
+          "symbol": "POST /vault",
+          "kind": "route",
+          "baseline_lines": [
+            621,
+            757
+          ],
+          "baseline_fingerprint": "aa381592fd7bcc0f75979a260b5efeadb682351e1745e0ec5cd4cb032325e29e",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable"
+            ],
+            "sql_templates": 0,
+            "branches": 85,
+            "calls": 74,
+            "tokens": 1180
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/create.ts#createEntity"
+        },
+        {
+          "symbol": "GET /vault/tags",
+          "kind": "route",
+          "baseline_lines": [
+            760,
+            777
+          ],
+          "baseline_fingerprint": "46de3daa2efa6d82a59b33ae24fb1b6d804bb7f0a30e5e90e7b05924958115f1",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 12,
+            "calls": 10,
+            "tokens": 216
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/lifecycle.ts#listEntityTags"
+        },
+        {
+          "symbol": "vaultBulkOwnershipEngine",
+          "kind": "const",
+          "baseline_lines": [
+            793,
+            793
+          ],
+          "baseline_fingerprint": "f32208fb73da8255d00cf82cfc3af6ba00889b5aa3bc9479f8b932e27757ccaa",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 13
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "ownership-resource-builders",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/security/entity-ownership.ts#vaultBulkOwnershipEngine",
+          "new_metrics": {
+            "tokens": 14,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "vaultBulkOwnershipEngine.registerRule",
+          "kind": "rule-registration",
+          "baseline_lines": [
+            794,
+            794
+          ],
+          "baseline_fingerprint": "a9e9b12fa445be1fc3d22e564b86b17b9f41c00b585f851ba5d107d8b5d64452",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 2,
+            "tokens": 12
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "ownership-resource-builders",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "vault/security/entity-ownership.ts#vaultBulkOwnershipEngine.registerRule"
+        },
+        {
+          "symbol": "auditVaultBulkOwnership",
+          "kind": "function",
+          "baseline_lines": [
+            805,
+            819
+          ],
+          "baseline_fingerprint": "6c0ea80962072d536304bbc3c7a3e2a59ffe812eb9ba9475f7bd7ff1da5337ba",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 3,
+            "branches": 3,
+            "calls": 10,
+            "tokens": 188
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "ownership-resource-builders",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/security/entity-ownership.ts#auditVaultBulkOwnership",
+          "new_metrics": {
+            "tokens": 189,
+            "db_chains": 1
+          }
+        },
+        {
+          "symbol": "PATCH /vault/bulk-tag",
+          "kind": "route",
+          "baseline_lines": [
+            822,
+            857
+          ],
+          "baseline_fingerprint": "4cc57a621fe01d788c3c186509839268993d1ddbf7dbd7e7eca4cb8b27a383c2",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 12,
+            "calls": 29,
+            "tokens": 493
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 2,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/bulk.ts#bulkTagEntities"
+        },
+        {
+          "symbol": "BULK_ALLOWED_STATUSES",
+          "kind": "const",
+          "baseline_lines": [
+            866,
+            866
+          ],
+          "baseline_fingerprint": "48f3e922c6e6efd5a4ea24da3a395d05ad37c6aca9ae984978ccdb7cfb716c44",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 17
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/domain/entity/fields.ts#BULK_ALLOWED_STATUSES",
+          "new_metrics": {
+            "tokens": 18,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "PATCH /vault/bulk-action",
+          "kind": "route",
+          "baseline_lines": [
+            868,
+            961
+          ],
+          "baseline_fingerprint": "7d07dbcffad2e2353ea3a85e74afb2a36e910963ceffd6c1a85d9f1b7abd4247",
+          "metrics_baseline": {
+            "db_chains": 3,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.deletedAt",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 1,
+            "branches": 26,
+            "calls": 62,
+            "tokens": 1074
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 2,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/bulk.ts#bulkActionEntities"
+        },
+        {
+          "symbol": "GET /vault/health-report",
+          "kind": "route",
+          "baseline_lines": [
+            964,
+            999
+          ],
+          "baseline_fingerprint": "9a0759ab42a586e8b75893fc77585ca0c0662ea55ce09c03a735e317959cf30f",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 9,
+            "calls": 11,
+            "tokens": 310
+          },
+          "owner_gap": "GAP-11",
+          "behavior_domain": "health",
+          "disposition": "DEFERRED_GAP-11"
+        },
+        {
+          "symbol": "POST /vault/health-check",
+          "kind": "route",
+          "baseline_lines": [
+            1004,
+            1013
+          ],
+          "baseline_fingerprint": "e7df8725a7cce9f4b4f95a65e2d75d463ce583eb047a2d96df2531cd5b5e3132",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 6,
+            "tokens": 131
+          },
+          "owner_gap": "GAP-11",
+          "behavior_domain": "health",
+          "disposition": "DEFERRED_GAP-11"
+        },
+        {
+          "symbol": "GET /vault/analytics",
+          "kind": "route",
+          "baseline_lines": [
+            1017,
+            1087
+          ],
+          "baseline_fingerprint": "de9974f5ec99f63ec02010add76a1c77aaf0d84958c5aef54f7a99623eab2d90",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 25,
+            "calls": 35,
+            "tokens": 780
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-calculations",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/analytics.ts#getEntityAnalytics"
+        },
+        {
+          "symbol": "GET /vault/analytics/value-history",
+          "kind": "route",
+          "baseline_lines": [
+            1090,
+            1101
+          ],
+          "baseline_fingerprint": "6f540939cf85df2cacfaa56fc815f087dcb65f0373ce41ae6caeecb4298b8391",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "valueHistoryTable",
+              "valueHistoryTable.createdAt",
+              "valueHistoryTable.sourceType",
+              "valueHistoryTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 10,
+            "tokens": 159
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-calculations",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/analytics.ts#getEntityValueHistory"
+        },
+        {
+          "symbol": "GET /vault/activity",
+          "kind": "route",
+          "baseline_lines": [
+            1114,
+            1152
+          ],
+          "baseline_fingerprint": "c0b878e1c07321ab2f8b9048afabd86cb7f7a5bbba993017e823fd1985da5592",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultActivityLogTable",
+              "vaultActivityLogTable.createdAt",
+              "vaultActivityLogTable.userId",
+              "vaultActivityLogTable.vaultEntryId",
+              "vaultEntriesTable",
+              "vaultEntriesTable.entitySerial",
+              "vaultEntriesTable.id"
+            ],
+            "sql_templates": 1,
+            "branches": 8,
+            "calls": 18,
+            "tokens": 326
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "activity",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/activity-feed.ts#listMyVaultActivity"
+        },
+        {
+          "symbol": "GET /vault/trash",
+          "kind": "route",
+          "baseline_lines": [
+            1159,
+            1168
+          ],
+          "baseline_fingerprint": "25f70dae87a3fdbfcf31025a2132d131f6e484669cb13c763f52d8722926ad0e",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 7,
+            "tokens": 120
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/lifecycle.ts#listTrashedEntities"
+        },
+        {
+          "symbol": "GET /vault/:id",
+          "kind": "route",
+          "baseline_lines": [
+            1174,
+            1188
+          ],
+          "baseline_fingerprint": "9e96d02374a1325aa6d8d02a13835bba0c5fb9b7683d8381e1e068cbb029971d",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 5,
+            "calls": 6,
+            "tokens": 217
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/lifecycle.ts#getEntity"
+        },
+        {
+          "symbol": "GET /vault/:id/seed",
+          "kind": "route",
+          "baseline_lines": [
+            1204,
+            1256
+          ],
+          "baseline_fingerprint": "cd9772ca79a491e429b50847a67c97070bbb199989a084b94c1e85b9da77a983",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 1,
+            "branches": 11,
+            "calls": 10,
+            "tokens": 391
+          },
+          "owner_gap": "GAP-05",
+          "behavior_domain": "secret-wallet",
+          "disposition": "DEFERRED_GAP-05"
+        },
+        {
+          "symbol": "PATCH /vault/:id/drive-wallet",
+          "kind": "route",
+          "baseline_lines": [
+            1261,
+            1289
+          ],
+          "baseline_fingerprint": "767ebc0fb9034aef516865775d143723bdefbcf8a0e6e980ffffc6de9e9db7d6",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 14,
+            "calls": 18,
+            "tokens": 416
+          },
+          "owner_gap": "GAP-05",
+          "behavior_domain": "secret-wallet",
+          "disposition": "DEFERRED_GAP-05"
+        },
+        {
+          "symbol": "POST /vault/validate-key",
+          "kind": "route",
+          "baseline_lines": [
+            1299,
+            1307
+          ],
+          "baseline_fingerprint": "868517713f33bca9cadc06a62dff994503beeb51fc2a8c3e2698c44707c5bf1f",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 3,
+            "tokens": 96
+          },
+          "owner_gap": "GAP-05",
+          "behavior_domain": "secret-wallet",
+          "disposition": "DEFERRED_GAP-05"
+        },
+        {
+          "symbol": "POST /vault/:id/refresh-wallet-worth",
+          "kind": "route",
+          "baseline_lines": [
+            1314,
+            1354
+          ],
+          "baseline_fingerprint": "691e6d0aa9681fe8279c6f18d8ca87687bdbf8d435e1b05fc41e4c01e21cfa21",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 14,
+            "calls": 17,
+            "tokens": 465
+          },
+          "owner_gap": "GAP-05",
+          "behavior_domain": "secret-wallet",
+          "disposition": "DEFERRED_GAP-05"
+        },
+        {
+          "symbol": "PATCH /vault/:id",
+          "kind": "route",
+          "baseline_lines": [
+            1357,
+            1446
+          ],
+          "baseline_fingerprint": "3351d47b20d9807eaaa3c95477da304811d91c5bd4b9efbf2869342a86a04ff0",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 35,
+            "calls": 58,
+            "tokens": 1092
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/update.ts#updateEntity"
+        },
+        {
+          "symbol": "PATCH /vault/:id/field",
+          "kind": "route",
+          "baseline_lines": [
+            1454,
+            1520
+          ],
+          "baseline_fingerprint": "19ef86b3fb68256dc3f0b038ddf48a85e7a460b001215e9b71eb5e278660bb7f",
+          "metrics_baseline": {
+            "db_chains": 3,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId",
+              "vaultFieldHistoryTable"
+            ],
+            "sql_templates": 0,
+            "branches": 25,
+            "calls": 48,
+            "tokens": 776
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/update.ts#updateEntityField"
+        },
+        {
+          "symbol": "GET /vault/:id/field-history",
+          "kind": "route",
+          "baseline_lines": [
+            1525,
+            1552
+          ],
+          "baseline_fingerprint": "d7fea02d2d73b7c84ad13f9a461fa41ec6d7f5618434be0dc965b86eacb71bf1",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId",
+              "vaultFieldHistoryTable",
+              "vaultFieldHistoryTable.changedAt",
+              "vaultFieldHistoryTable.field",
+              "vaultFieldHistoryTable.vaultEntryId"
+            ],
+            "sql_templates": 0,
+            "branches": 7,
+            "calls": 23,
+            "tokens": 354
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "activity",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/update.ts#listEntityFieldHistory"
+        },
+        {
+          "symbol": "DELETE /vault/trash",
+          "kind": "route",
+          "baseline_lines": [
+            1558,
+            1566
+          ],
+          "baseline_fingerprint": "a90a3bb83eee4cec6ea9169ed8659f833522340fa9784be2f51da76016968ded",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 4,
+            "tokens": 93
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/lifecycle.ts#emptyTrash"
+        },
+        {
+          "symbol": "DELETE /vault/:id",
+          "kind": "route",
+          "baseline_lines": [
+            1572,
+            1590
+          ],
+          "baseline_fingerprint": "ac484e17576ef7bf7ebc9d1a24dbcda48f8111860a79d48a0818042a48827556",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 14,
+            "tokens": 236
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/lifecycle.ts#trashEntity"
+        },
+        {
+          "symbol": "POST /vault/:id/restore",
+          "kind": "route",
+          "baseline_lines": [
+            1596,
+            1607
+          ],
+          "baseline_fingerprint": "51d6ac8ffe58e560f2d19b35cffe5386d51fe7f218479a5f4ff9466f13645a3c",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 11,
+            "tokens": 210
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/lifecycle.ts#restoreEntity"
+        },
+        {
+          "symbol": "DELETE /vault/trash/:id",
+          "kind": "route",
+          "baseline_lines": [
+            1613,
+            1621
+          ],
+          "baseline_fingerprint": "ec09a8be7e2967ae88dab94178316dc70b1007b4242f4fb6ad6d111567f41f88",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 5,
+            "tokens": 168
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-crud",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/lifecycle.ts#purgeTrashedEntity"
+        },
+        {
+          "symbol": "GET /admin/vault",
+          "kind": "route",
+          "baseline_lines": [
+            1624,
+            1639
+          ],
+          "baseline_fingerprint": "556b481db365a6d0ebb6c67bbf35e75664267a86b42d3281949a3ed85ca01ae4",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "usersTable",
+              "usersTable.email",
+              "usersTable.id",
+              "usersTable.username",
+              "vaultEntriesTable",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 9,
+            "tokens": 148
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "admin",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/admin.ts#adminListEntities"
+        },
+        {
+          "symbol": "GET /admin/vault/full",
+          "kind": "route",
+          "baseline_lines": [
+            1642,
+            1661
+          ],
+          "baseline_fingerprint": "e3512bda09c9db2f319b6b9afa4c83efbf05e73297cbd4a4a360212c54bc991c",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "usersTable",
+              "usersTable.email",
+              "usersTable.id",
+              "usersTable.username",
+              "vaultEntriesTable",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 7,
+            "calls": 7,
+            "tokens": 201
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "admin",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/admin.ts#adminFullVault"
+        },
+        {
+          "symbol": "GET /admin/vault/local-accounts",
+          "kind": "route",
+          "baseline_lines": [
+            1664,
+            1676
+          ],
+          "baseline_fingerprint": "6cdb373da8ac8835d920548e5acd7e91e329cbaefb50fb0590be33950c87a6a8",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 1,
+            "branches": 3,
+            "calls": 2,
+            "tokens": 97
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "admin",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/admin.ts#adminListLocalAccounts"
+        },
+        {
+          "symbol": "GET /admin/vault/users",
+          "kind": "route",
+          "baseline_lines": [
+            1679,
+            1697
+          ],
+          "baseline_fingerprint": "9b61c81236d3368ea888ad2b8e34e74254d45beff717066faaf98e98e139652e",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 1,
+            "branches": 3,
+            "calls": 1,
+            "tokens": 78
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "admin",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/admin.ts#adminListVaultUsers"
+        },
+        {
+          "symbol": "GET /admin/vault/users/:userId",
+          "kind": "route",
+          "baseline_lines": [
+            1700,
+            1726
+          ],
+          "baseline_fingerprint": "dd3b24fe75fe5251e72f99a7509be7fbd144516093a305e38ab427dc2af63c59",
+          "metrics_baseline": {
+            "db_chains": 3,
+            "tables": [
+              "usersTable",
+              "usersTable.id",
+              "vaultEntriesTable",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 1,
+            "branches": 9,
+            "calls": 16,
+            "tokens": 319
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "admin",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/admin.ts#adminGetUserVault"
+        },
+        {
+          "symbol": "GET /vault/:id/activity",
+          "kind": "route",
+          "baseline_lines": [
+            1729,
+            1742
+          ],
+          "baseline_fingerprint": "9a4e3be63079aab58d147abc0c340b1fa9acdd45f7fd308b75c81b3af30fdccd",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultActivityLogTable",
+              "vaultActivityLogTable.createdAt",
+              "vaultActivityLogTable.vaultEntryId"
+            ],
+            "sql_templates": 0,
+            "branches": 5,
+            "calls": 11,
+            "tokens": 235
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "activity",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/activity-feed.ts#listEntityActivity"
+        },
+        {
+          "symbol": "GET /admin/vault/activity",
+          "kind": "route",
+          "baseline_lines": [
+            1745,
+            1766
+          ],
+          "baseline_fingerprint": "367c994f42bf2cfd1194906363126e1b14b8edc39c25801aaf41381337d3f6e8",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "usersTable",
+              "usersTable.id",
+              "usersTable.username",
+              "vaultActivityLogTable",
+              "vaultActivityLogTable.createdAt",
+              "vaultActivityLogTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 6,
+            "calls": 14,
+            "tokens": 245
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "admin",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/admin.ts#adminVaultActivityFeed"
+        },
+        {
+          "symbol": "generateVaultReceiptToken",
+          "kind": "function",
+          "baseline_lines": [
+            1776,
+            1778
+          ],
+          "baseline_fingerprint": "fd20814981ebbcb4b171a02b7fc518a39b6df1c22f47a665d5c545e0e82c4750",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 2,
+            "tokens": 22
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "receipt",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "vault/application/entity/receipt.ts#generateVaultReceiptToken",
+          "new_metrics": {
+            "tokens": 22,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "vaultReceiptUrl",
+          "kind": "function",
+          "baseline_lines": [
+            1779,
+            1781
+          ],
+          "baseline_fingerprint": "38f42f5f087086263076576e1105f151c793810b440a0f4fc90cf218bb9e8a57",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 0,
+            "tokens": 24
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "receipt",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "vault/application/entity/receipt.ts#vaultReceiptUrl",
+          "new_metrics": {
+            "tokens": 24,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "POST /vault/:id/receipt",
+          "kind": "route",
+          "baseline_lines": [
+            1784,
+            1812
+          ],
+          "baseline_fingerprint": "abaef66eb4d118e29ba234f49de232d5b649f3b8b101c3d041b07bc8c308ddd5",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.deletedAt",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.receiptToken",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 1,
+            "branches": 12,
+            "calls": 17,
+            "tokens": 395
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "receipt",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/receipt.ts#createReceiptLink"
+        },
+        {
+          "symbol": "DELETE /vault/:id/receipt",
+          "kind": "route",
+          "baseline_lines": [
+            1815,
+            1825
+          ],
+          "baseline_fingerprint": "71687a5bab74fce5671661abe60d95132046a422390ff0a9d2f3583747209c6e",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 11,
+            "tokens": 229
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "receipt",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/receipt.ts#revokeReceiptLink"
+        },
+        {
+          "symbol": "findVaultEntryByReceiptToken",
+          "kind": "function",
+          "baseline_lines": [
+            1827,
+            1833
+          ],
+          "baseline_fingerprint": "e59771663ce8549140c29c81d92f4b0ff853efa381f44626822cbb027e230764",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "usersTable",
+              "usersTable.id",
+              "usersTable.username",
+              "vaultEntriesTable",
+              "vaultEntriesTable.deletedAt",
+              "vaultEntriesTable.receiptToken"
+            ],
+            "sql_templates": 1,
+            "branches": 3,
+            "calls": 11,
+            "tokens": 119
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "receipt",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "vault/application/entity/receipt.ts#findVaultEntryByReceiptToken",
+          "new_metrics": {
+            "tokens": 119,
+            "db_chains": 2
+          }
+        },
+        {
+          "symbol": "fmtPublicVaultReceipt",
+          "kind": "function",
+          "baseline_lines": [
+            1835,
+            1856
+          ],
+          "baseline_fingerprint": "6db3774831ef99057609bc664b6fb70df717c7d10973fe7b8956a0dd835d0332",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 6,
+            "tokens": 133
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "receipt",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "vault/application/entity/receipt.ts#fmtPublicVaultReceipt",
+          "new_metrics": {
+            "tokens": 133,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "GET /vault/receipt/:token",
+          "kind": "route",
+          "baseline_lines": [
+            1859,
+            1865
+          ],
+          "baseline_fingerprint": "1cd4be5ccc8dd88fb87a88df95da7f82dcffa3162eeeca498b4c4ed2a5a0051d",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 3,
+            "tokens": 137
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "receipt",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/receipt.ts#{resolvePublicReceipt,findVaultEntryByReceiptToken,fmtPublicVaultReceipt}"
+        },
+        {
+          "symbol": "GET /vault/receipt/:token/pdf",
+          "kind": "route",
+          "baseline_lines": [
+            1868,
+            1896
+          ],
+          "baseline_fingerprint": "9bb001522029f3b818e35911c31199ee543d09ffc9eca40a371f2fd4b292b7db",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 19,
+            "calls": 12,
+            "tokens": 447
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "receipt",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 1,
+              "delegated_calls": 2,
+              "statements": 3
+            }
+          },
+          "new_owner": "vault/application/entity/receipt.ts#{resolvePublicReceipt,buildReceiptPdfSpec,findVaultEntryByReceiptToken,fmtPublicVaultReceipt}"
+        },
+        {
+          "symbol": "default",
+          "kind": "export-default",
+          "baseline_lines": [
+            1898,
+            1898
+          ],
+          "baseline_fingerprint": "445e7382cb36dfcc33fab57c8c6071c671a4062cb9629c93be8236ab7ad22ef1",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 4
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "shared-support",
+          "disposition": "ADAPTER_ROUTER"
+        },
+        {
+          "symbol": "lifecycleDeps",
+          "kind": "const",
+          "disposition": "NEW_ADAPTER_WIRING",
+          "lines": [
+            39,
+            39
+          ]
+        },
+        {
+          "symbol": "updateDeps",
+          "kind": "const",
+          "disposition": "NEW_ADAPTER_WIRING",
+          "lines": [
+            43,
+            43
+          ]
+        }
+      ],
+      "exports": [
+        "toHealthInput",
+        "default"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "baseline_sha256": "082faae119f14eaba5d0241b2c037c1821460dc36c42b93ff4db939264055e10",
+      "current_sha256": "60208e6af6ffb2e8f12a7d906ef8bd623db896724040218f52e574f65fe157b7",
+      "baseline_lines": 277,
+      "current_lines": 47,
+      "baseline_tokens": 2228,
+      "current_tokens": 367,
+      "symbols": [
+        {
+          "symbol": "router",
+          "kind": "const",
+          "baseline_lines": [
+            17,
+            17
+          ],
+          "baseline_fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 8
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-links",
+          "disposition": "ADAPTER_ROUTER"
+        },
+        {
+          "symbol": "vaultEntryResource",
+          "kind": "const",
+          "baseline_lines": [
+            48,
+            54
+          ],
+          "baseline_fingerprint": "29cde985ab33f06093b0aeba3f99f7b0bf4b965cff023c823349e7db934933f5",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 4,
+            "calls": 8,
+            "tokens": 137
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "ownership-resource-builders",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/security/entity-ownership.ts#vaultEntryResource",
+          "new_metrics": {
+            "tokens": 137,
+            "db_chains": 1
+          }
+        },
+        {
+          "symbol": "vaultEntityLinkResource",
+          "kind": "const",
+          "baseline_lines": [
+            56,
+            62
+          ],
+          "baseline_fingerprint": "2af2c679d9f8189c94276f79261abd9af447e9713e2fd194390e15e442f944b1",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntityLinksTable",
+              "vaultEntityLinksTable.id",
+              "vaultEntityLinksTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 7,
+            "tokens": 118
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "ownership-resource-builders",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/security/entity-ownership.ts#vaultEntityLinkResource",
+          "new_metrics": {
+            "tokens": 119,
+            "db_chains": 1
+          }
+        },
+        {
+          "symbol": "requireVaultEntryOwnership",
+          "kind": "function",
+          "baseline_lines": [
+            64,
+            71
+          ],
+          "baseline_fingerprint": "35ebf1fa88bfb5737f2322c51c64cf3b4e257d4f2366391eaa1caa9219fb82e5",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 55
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "ownership-resource-builders",
+          "disposition": "MOVED_RENAMED",
+          "new_owner": "artifacts/api-server/src/vault/security/entity-ownership.ts#requireVaultEntryOwnershipOr404",
+          "new_metrics": {
+            "tokens": 56,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "requireVaultEntityLinkOwnership",
+          "kind": "function",
+          "baseline_lines": [
+            73,
+            80
+          ],
+          "baseline_fingerprint": "de9bbea3d01e986b40ecf0e6e8dced0b0dba30dbb850c99cd7e6837a0d6b9dff",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 55
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "ownership-resource-builders",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/security/entity-ownership.ts#requireVaultEntityLinkOwnership",
+          "new_metrics": {
+            "tokens": 56,
+            "db_chains": 0
+          }
+        },
+        {
+          "symbol": "ownsEntity",
+          "kind": "function",
+          "baseline_lines": [
+            93,
+            107
+          ],
+          "baseline_fingerprint": "8de48b9cd50a10f808d0e1295585eff1e600806c8de5f4d97c253e299864cd8d",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntriesTable",
+              "vaultEntriesTable.category",
+              "vaultEntriesTable.deletedAt",
+              "vaultEntriesTable.entitySerial",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.projectName",
+              "vaultEntriesTable.status",
+              "vaultEntriesTable.userId",
+              "vaultEntriesTable.username"
+            ],
+            "sql_templates": 1,
+            "branches": 1,
+            "calls": 6,
+            "tokens": 130
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "ownership-resource-builders",
+          "disposition": "MOVED_VERBATIM",
+          "new_owner": "artifacts/api-server/src/vault/application/entity/links.ts#ownsEntity",
+          "new_metrics": {
+            "tokens": 131,
+            "db_chains": 1
+          }
+        },
+        {
+          "symbol": "GET /vault/:id/links",
+          "kind": "route",
+          "baseline_lines": [
+            110,
+            158
+          ],
+          "baseline_fingerprint": "1bade8d61c26366e815114f29ec3d3750e8c889f6b20474dc1a63866e7c1627b",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntityLinksTable",
+              "vaultEntityLinksTable.entityId",
+              "vaultEntityLinksTable.linkedEntityId",
+              "vaultEntityLinksTable.userId",
+              "vaultEntriesTable",
+              "vaultEntriesTable.category",
+              "vaultEntriesTable.id",
+              "vaultEntriesTable.projectName",
+              "vaultEntriesTable.status",
+              "vaultEntriesTable.userId",
+              "vaultEntriesTable.username"
+            ],
+            "sql_templates": 0,
+            "branches": 12,
+            "calls": 26,
+            "tokens": 509
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-links",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/links.ts#listEntityLinks"
+        },
+        {
+          "symbol": "POST /vault-entity-links",
+          "kind": "route",
+          "baseline_lines": [
+            162,
+            208
+          ],
+          "baseline_fingerprint": "e4fa8cb99093611c2cefea1f2cf5ac60d8ddf6014c914b3dd95be4e3710c03d5",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultEntityLinksTable",
+              "vaultEntityLinksTable.entityId",
+              "vaultEntityLinksTable.linkedEntityId",
+              "vaultEntityLinksTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 13,
+            "calls": 28,
+            "tokens": 514
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-links",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/links.ts#createEntityLink"
+        },
+        {
+          "symbol": "PATCH /vault-entity-links/:id",
+          "kind": "route",
+          "baseline_lines": [
+            211,
+            231
+          ],
+          "baseline_fingerprint": "a1dc7b11e5d3af76e98ba641743f30f6c70f32a435fceacd8e72fb33fde04dfe",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntityLinksTable",
+              "vaultEntityLinksTable.id",
+              "vaultEntityLinksTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 11,
+            "calls": 13,
+            "tokens": 321
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-links",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/links.ts#updateEntityLink"
+        },
+        {
+          "symbol": "DELETE /vault-entity-links/:id",
+          "kind": "route",
+          "baseline_lines": [
+            234,
+            247
+          ],
+          "baseline_fingerprint": "7e86b5bcb18b9bbf511e38073d0889e7c822c680423cc7ed936f5a01721f00d9",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultEntityLinksTable",
+              "vaultEntityLinksTable.id",
+              "vaultEntityLinksTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 5,
+            "calls": 8,
+            "tokens": 199
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-links",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/links.ts#deleteEntityLink"
+        },
+        {
+          "symbol": "GET /vault/links/all",
+          "kind": "route",
+          "baseline_lines": [
+            252,
+            274
+          ],
+          "baseline_fingerprint": "591116af08a180d67cd68cda81bd5e8c9d43be47ce2a2ab6768c8168386daeae",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 2,
+            "tokens": 94
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-links",
+          "disposition": "ADAPTER_THIN",
+          "thinness": {
+            "thin": true,
+            "violations": [],
+            "metrics": {
+              "db_chains": 0,
+              "tables": 0,
+              "sql_templates": 0,
+              "branches": 0,
+              "delegated_calls": 1,
+              "statements": 2
+            }
+          },
+          "new_owner": "vault/application/entity/links.ts#listAllEntityLinks"
+        },
+        {
+          "symbol": "default",
+          "kind": "export-default",
+          "baseline_lines": [
+            276,
+            276
+          ],
+          "baseline_fingerprint": "445e7382cb36dfcc33fab57c8c6071c671a4062cb9629c93be8236ab7ad22ef1",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 4
+          },
+          "owner_gap": "GAP-01",
+          "behavior_domain": "entity-links",
+          "disposition": "ADAPTER_ROUTER"
+        }
+      ],
+      "exports": [
+        "default"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "baseline_sha256": "62d41bf7504052ddcada8a8e00f96d2e11f3be77262fa559976521713eedcb4c",
+      "current_sha256": "62d41bf7504052ddcada8a8e00f96d2e11f3be77262fa559976521713eedcb4c",
+      "baseline_lines": 1106,
+      "current_lines": 1106,
+      "baseline_tokens": 6423,
+      "current_tokens": 6423,
+      "symbols": [
+        {
+          "symbol": "router",
+          "kind": "const",
+          "baseline_lines": [
+            94,
+            94
+          ],
+          "baseline_fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 8
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "BLOB_PREFIX_V1",
+          "kind": "const",
+          "baseline_lines": [
+            108,
+            108
+          ],
+          "baseline_fingerprint": "e91bff1c23ac022fa0dad001dfae619506035f129792b7d041a7329a30f7e84c",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 5
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "BLOB_PREFIX_V2",
+          "kind": "const",
+          "baseline_lines": [
+            109,
+            109
+          ],
+          "baseline_fingerprint": "6ae019044d8e03ad08535fe0e3b73f05348b90452099ba239a1b59f79b6c437a",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 5
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "MIN_SNAPSHOT_PASSWORD_LENGTH",
+          "kind": "const",
+          "baseline_lines": [
+            110,
+            110
+          ],
+          "baseline_fingerprint": "880749121c4bd4565823ae210ea20f6e244f1d30b34ce894f83235814bdc7242",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 5
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "SCRYPT_KEYLEN",
+          "kind": "const",
+          "baseline_lines": [
+            111,
+            111
+          ],
+          "baseline_fingerprint": "44dff1ed637309e05f5ffae2a48977d033eee1615e4d0dc3dd791fe5ce93a0a0",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 5
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "SCRYPT_V2_COST",
+          "kind": "const",
+          "baseline_lines": [
+            112,
+            112
+          ],
+          "baseline_fingerprint": "47e7899598738e637af8847df786c12feae184c35786205b9ebaa94fc8f90027",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 29
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "MAX_STORED_SNAPSHOTS",
+          "kind": "const",
+          "baseline_lines": [
+            116,
+            116
+          ],
+          "baseline_fingerprint": "59e52dc5718a01721b289e5eeeba2a037dfee4fd5471842a0ee4d649fa0341f3",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 5
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "DEFAULT_STORAGE_QUOTA_BYTES",
+          "kind": "const",
+          "baseline_lines": [
+            125,
+            125
+          ],
+          "baseline_fingerprint": "80a887b22fbb4f07fc5887e3a99dab6cdfd5105a0f80e2228cf77a83f8f5fb4a",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 9
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "VAULT_SNAPSHOT_OWNER_SENTINEL_NONE",
+          "kind": "const",
+          "baseline_lines": [
+            154,
+            154
+          ],
+          "baseline_fingerprint": "237d4eff0f42d7df1022d19d0db3613e6edca5392e589e2162ca84474687459e",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 6
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "vaultSnapshotResource",
+          "kind": "const",
+          "baseline_lines": [
+            155,
+            163
+          ],
+          "baseline_fingerprint": "0e3609b1835cfbf6807e81f750e0ba4f3f9a6fcada2dcc655c5eefff311fbf88",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 7,
+            "tokens": 112
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "requireVaultSnapshotOwnershipStrictId",
+          "kind": "function",
+          "baseline_lines": [
+            164,
+            173
+          ],
+          "baseline_fingerprint": "9919c968d7f39be21a3d33d7b7f4c372cf051cb1744bbc47dc6ebe1244594484",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 3,
+            "tokens": 101
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "MAX_TOTAL_SNAPSHOT_BYTES",
+          "kind": "const",
+          "baseline_lines": [
+            174,
+            174
+          ],
+          "baseline_fingerprint": "717529efc1153d4bf10d64fdf19f46477dfd769c92e5d83e27041341b2f322da",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 1,
+            "tokens": 14
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "snapshotBodyParser",
+          "kind": "const",
+          "baseline_lines": [
+            178,
+            178
+          ],
+          "baseline_fingerprint": "b5aafa88ea11a37837476941a66d1e5ef65c96ac15d2419bb56c913c6ccaeef2",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 14
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "deriveKey",
+          "kind": "function",
+          "baseline_lines": [
+            180,
+            183
+          ],
+          "baseline_fingerprint": "b651957c8e1adf3fab4715db0c69c80631261def8eb62d1784af95cdf07ac1b6",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 2,
+            "tokens": 53
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "encryptBlob",
+          "kind": "function",
+          "baseline_lines": [
+            185,
+            193
+          ],
+          "baseline_fingerprint": "ca124615931410458afe2938ad578d4e9aa8ce6f794a6c96780578c593c78c99",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 13,
+            "tokens": 135
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "decryptBlob",
+          "kind": "function",
+          "baseline_lines": [
+            195,
+            215
+          ],
+          "baseline_fingerprint": "7833d2a12514de81c5b8586587afcfbba50f29f003e39c8fef2f55e51aca0f4a",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 8,
+            "calls": 15,
+            "tokens": 216
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "safeDecryptPhrase",
+          "kind": "function",
+          "baseline_lines": [
+            217,
+            219
+          ],
+          "baseline_fingerprint": "b2d450d7525659e4fe168620b41135c4f337d5810faf018ed2d1d16c4d304a33",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 1,
+            "tokens": 28
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "verifyStoredChecksum",
+          "kind": "function",
+          "baseline_lines": [
+            228,
+            234
+          ],
+          "baseline_fingerprint": "2dc6245418335b11c338bbe0cea1827de21a06f195acb74241a0eaaaa3113205",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 4,
+            "tokens": 72
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "pruneOldSnapshots",
+          "kind": "function",
+          "baseline_lines": [
+            252,
+            282
+          ],
+          "baseline_fingerprint": "d8e04415782f15289de4a78f7fbcd8cf79219369f31745220d39ce192d5afbc8",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.createdAt",
+              "vaultSnapshotsTable.deletedAt",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.sizeBytes",
+              "vaultSnapshotsTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 5,
+            "calls": 21,
+            "tokens": 242
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "buildVaultSnapshotPayload",
+          "kind": "function",
+          "baseline_lines": [
+            293,
+            594
+          ],
+          "baseline_fingerprint": "8bdf0392c5b3cfbdd09d8cf8fcb03dac117254b597bde7d8cff2f2ca9dbdde94",
+          "metrics_baseline": {
+            "db_chains": 6,
+            "tables": [
+              "vaultAttachmentsTable",
+              "vaultAttachmentsTable.userId",
+              "vaultEntriesTable",
+              "vaultEntriesTable.deletedAt",
+              "vaultEntriesTable.userId",
+              "walletsTable",
+              "walletsTable.userId"
+            ],
+            "sql_templates": 4,
+            "branches": 8,
+            "calls": 51,
+            "tokens": 1507
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "StoreSnapshotRowInput",
+          "kind": "type",
+          "baseline_lines": [
+            596,
+            646
+          ],
+          "baseline_fingerprint": "dab29148a9a17f64556a7413e1e048cddb9d6632b6b8cccb2ea6a1565bd6c9a0",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 125
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "storeSnapshotRow",
+          "kind": "function",
+          "baseline_lines": [
+            655,
+            687
+          ],
+          "baseline_fingerprint": "4cea3a8622915e361d03fd038a66d08e8cfbce178d873c44d8dbb3e4294c100d",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.id"
+            ],
+            "sql_templates": 0,
+            "branches": 16,
+            "calls": 8,
+            "tokens": 285
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "POST /vault/snapshot/export",
+          "kind": "route",
+          "baseline_lines": [
+            694,
+            730
+          ],
+          "baseline_fingerprint": "fb02a12b2202649a2b2f1376accc769fe79fdf708d91296bde21920e8eb10afa",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 6,
+            "calls": 14,
+            "tokens": 404
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "GET /vault/snapshots",
+          "kind": "route",
+          "baseline_lines": [
+            735,
+            771
+          ],
+          "baseline_fingerprint": "07c64f230b582088f2a7e4af3c483f30975839697a7a7f07a4244a5af0035a9b",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.accountExtrasCount",
+              "vaultSnapshotsTable.activityCount",
+              "vaultSnapshotsTable.backupSystemCount",
+              "vaultSnapshotsTable.createdAt",
+              "vaultSnapshotsTable.deletedAt",
+              "vaultSnapshotsTable.earningCount",
+              "vaultSnapshotsTable.emailAccountsCount",
+              "vaultSnapshotsTable.emergencyAccessCount",
+              "vaultSnapshotsTable.encryptionMode",
+              "vaultSnapshotsTable.entityCoverageCount",
+              "vaultSnapshotsTable.entriesCount",
+              "vaultSnapshotsTable.externalMailCount",
+              "vaultSnapshotsTable.financeCount",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.includesAttachments",
+              "vaultSnapshotsTable.label",
+              "vaultSnapshotsTable.mailboxCount",
+              "vaultSnapshotsTable.mailboxReputationCount",
+              "vaultSnapshotsTable.projectsCount",
+              "vaultSnapshotsTable.sizeBytes",
+              "vaultSnapshotsTable.source",
+              "vaultSnapshotsTable.tasksCount",
+              "vaultSnapshotsTable.teamCount",
+              "vaultSnapshotsTable.userId",
+              "vaultSnapshotsTable.walletHubCount",
+              "vaultSnapshotsTable.walletsCount"
+            ],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 9,
+            "tokens": 265
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "GET /vault/snapshots/storage",
+          "kind": "route",
+          "baseline_lines": [
+            778,
+            795
+          ],
+          "baseline_fingerprint": "1f42d88369d6d930551cd0243825d80d3fef9b7b4519f34b0b08423aef01a74e",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.deletedAt",
+              "vaultSnapshotsTable.sizeBytes",
+              "vaultSnapshotsTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 10,
+            "tokens": 169
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "GET /vault/snapshots/:id/download",
+          "kind": "route",
+          "baseline_lines": [
+            804,
+            844
+          ],
+          "baseline_fingerprint": "cc30e569f2357eacd22a920f3a3ace518a70ac5e100746424116ce1dfd891cdf",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.deletedAt",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 9,
+            "calls": 22,
+            "tokens": 346
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "PATCH /vault/snapshots/:id",
+          "kind": "route",
+          "baseline_lines": [
+            849,
+            862
+          ],
+          "baseline_fingerprint": "19a25d9c8a2edc5b9f9eaf8946ee230d56f60f4b47fd44cc245615725bfab5e3",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 6,
+            "calls": 12,
+            "tokens": 244
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "DELETE /vault/snapshots/:id",
+          "kind": "route",
+          "baseline_lines": [
+            872,
+            887
+          ],
+          "baseline_fingerprint": "e294be884542d6580a7ca470fb771d0fa9b98539e8dc65f54ba7870d36b41bcd",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.deletedAt",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 14,
+            "tokens": 254
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "GET /vault/snapshots/trash",
+          "kind": "route",
+          "baseline_lines": [
+            893,
+            920
+          ],
+          "baseline_fingerprint": "21cb166131c3f28c9372332c81051516a08651cda3f9c6603002c4923f7c5e97",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.createdAt",
+              "vaultSnapshotsTable.deletedAt",
+              "vaultSnapshotsTable.encryptionMode",
+              "vaultSnapshotsTable.entriesCount",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.label",
+              "vaultSnapshotsTable.sizeBytes",
+              "vaultSnapshotsTable.source",
+              "vaultSnapshotsTable.userId",
+              "vaultSnapshotsTable.walletsCount"
+            ],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 14,
+            "tokens": 225
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "POST /vault/snapshots/:id/restore",
+          "kind": "route",
+          "baseline_lines": [
+            927,
+            942
+          ],
+          "baseline_fingerprint": "10a46f99ade8cc70d90fde232a5d4a2da57d39ebe01e074dea051d4eb95fca9b",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.deletedAt",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 13,
+            "tokens": 246
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "DELETE /vault/snapshots/trash/:id",
+          "kind": "route",
+          "baseline_lines": [
+            953,
+            975
+          ],
+          "baseline_fingerprint": "ab1b0f79ece4def88528bec465fdc82b34149e9d6b02645d2fe2d4123fe83c5a",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.deletedAt",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 7,
+            "calls": 17,
+            "tokens": 302
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "decryptSnapshotFromRequest",
+          "kind": "function",
+          "baseline_lines": [
+            1002,
+            1046
+          ],
+          "baseline_fingerprint": "d05d6fe28b4b1382866f84fcf70d0751cda320de85da49020e10befb866fbfc2",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [
+              "vaultSnapshotsTable",
+              "vaultSnapshotsTable.deletedAt",
+              "vaultSnapshotsTable.id",
+              "vaultSnapshotsTable.userId"
+            ],
+            "sql_templates": 0,
+            "branches": 25,
+            "calls": 19,
+            "tokens": 394
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "POST /vault/snapshot/restore-preview",
+          "kind": "route",
+          "baseline_lines": [
+            1057,
+            1066
+          ],
+          "baseline_fingerprint": "f2b77682b039a3d2af8a1eae81138e221f2440dff22856beaa3ff4c833f76b03",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 3,
+            "tokens": 124
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "POST /vault/snapshot/restore",
+          "kind": "route",
+          "baseline_lines": [
+            1081,
+            1103
+          ],
+          "baseline_fingerprint": "3d39ca069fcd6c2236c0c22d2700d64b33204fe8571424389bc7cc07ad16be8c",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [
+              "byTable"
+            ],
+            "sql_templates": 0,
+            "branches": 5,
+            "calls": 13,
+            "tokens": 271
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        },
+        {
+          "symbol": "default",
+          "kind": "export-default",
+          "baseline_lines": [
+            1105,
+            1105
+          ],
+          "baseline_fingerprint": "445e7382cb36dfcc33fab57c8c6071c671a4062cb9629c93be8236ab7ad22ef1",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 4
+          },
+          "owner_gap": "GAP-09",
+          "behavior_domain": "snapshot",
+          "disposition": "DEFERRED_GAP-09"
+        }
+      ],
+      "exports": [
+        "verifyStoredChecksum",
+        "buildVaultSnapshotPayload",
+        "storeSnapshotRow",
+        "default"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "baseline_sha256": "0e48c9fe8fea7ef89002e96ad50fcb1e854cf9d487434e9a627b57c114f8f212",
+      "current_sha256": "0e48c9fe8fea7ef89002e96ad50fcb1e854cf9d487434e9a627b57c114f8f212",
+      "baseline_lines": 786,
+      "current_lines": 786,
+      "baseline_tokens": 6138,
+      "current_tokens": 6138,
+      "symbols": [
+        {
+          "symbol": "router",
+          "kind": "const",
+          "baseline_lines": [
+            16,
+            16
+          ],
+          "baseline_fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 8
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "ENTITY_TABLES",
+          "kind": "const",
+          "baseline_lines": [
+            37,
+            71
+          ],
+          "baseline_fingerprint": "78c7fb43b7d659f6982f4eef3b8a8ee4b6038b4f0308d281cf343d3bc0b0eefd",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 8,
+            "calls": 0,
+            "tokens": 204
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "notTrashedClause",
+          "kind": "function",
+          "baseline_lines": [
+            76,
+            78
+          ],
+          "baseline_fingerprint": "8bfa942106c6651045ec8c14863bce0912416ed932c9950690e25cb15bb19be0",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 0,
+            "tokens": 29
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "VALID_TYPES",
+          "kind": "const",
+          "baseline_lines": [
+            80,
+            80
+          ],
+          "baseline_fingerprint": "92880ff4b2b7232203bf5b565e751d21d47e3e3cde3028fc28251e13379a4f50",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 11
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "NON_SHAREABLE_COLUMNS",
+          "kind": "const",
+          "baseline_lines": [
+            85,
+            85
+          ],
+          "baseline_fingerprint": "a60c0e0c1d8a2ba4b0ecd023e7413d66dded5e837809888dd0189032ad9b0836",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 19
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "safe",
+          "kind": "const",
+          "baseline_lines": [
+            87,
+            87
+          ],
+          "baseline_fingerprint": "3f03bfb333b431d661531cdc00e5ae7603642f836705f7b6373908724f68c6d1",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 2,
+            "tokens": 37
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "VAULT_SHARE_OWNER_SENTINEL_NONE",
+          "kind": "const",
+          "baseline_lines": [
+            106,
+            106
+          ],
+          "baseline_fingerprint": "19d2e38a5f6956dc4aa82cb7a3acad2108461e851fd7af2e2f5779729f593480",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 6
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "vaultShareResource",
+          "kind": "const",
+          "baseline_lines": [
+            108,
+            113
+          ],
+          "baseline_fingerprint": "691badd2d7ec116f4a78179ff626f0017ab5ca6c7f55c40d913a02ad9bb41b4a",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 1,
+            "branches": 3,
+            "calls": 3,
+            "tokens": 102
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "requireVaultShareOwnership",
+          "kind": "function",
+          "baseline_lines": [
+            115,
+            117
+          ],
+          "baseline_fingerprint": "80eb33bf7d98a03961af36666c51dff56f70eddc2992d7b9b83d224915d62990",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 39
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "denyVaultShareNotFound",
+          "kind": "const",
+          "baseline_lines": [
+            118,
+            118
+          ],
+          "baseline_fingerprint": "1e6affed9e1d4577a218b6700b49fd927bec037d5f9406cae000b2c540d76df5",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 32
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "vaultShareBulkOwnershipEngine",
+          "kind": "const",
+          "baseline_lines": [
+            134,
+            134
+          ],
+          "baseline_fingerprint": "6a43e48b8ea2391eda0230b0aa73adf479104fd5d86a74d84a5e244028f5d190",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 13
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "vaultShareBulkOwnershipEngine.registerRule",
+          "kind": "rule-registration",
+          "baseline_lines": [
+            135,
+            135
+          ],
+          "baseline_fingerprint": "001d08e7c1abbf94272540847ff2f1230e88e281dc39090f517644558a8bae7e",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 2,
+            "tokens": 12
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "auditVaultShareBulkOwnership",
+          "kind": "function",
+          "baseline_lines": [
+            146,
+            161
+          ],
+          "baseline_fingerprint": "574cc755513de6cf9bf93095c2a3d574679fdeb233905eda17dafbc34ae3273d",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 3,
+            "calls": 8,
+            "tokens": 161
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "vaultShareCandidateOwnershipEngine",
+          "kind": "const",
+          "baseline_lines": [
+            175,
+            175
+          ],
+          "baseline_fingerprint": "c134fa0cb6e29bf93db67bb4f1edec5614a8619aea575ea119e5f1a413590c4d",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 1,
+            "tokens": 13
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "vaultShareCandidateOwnershipEngine.registerRule",
+          "kind": "rule-registration",
+          "baseline_lines": [
+            176,
+            176
+          ],
+          "baseline_fingerprint": "4345f4bb72067bce41974bfcc372b24ba4e98fc65f66e97f57ff62dd97d270e4",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 2,
+            "tokens": 12
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "ENTITY_TYPE_TO_RESOURCE_TYPE",
+          "kind": "const",
+          "baseline_lines": [
+            178,
+            183
+          ],
+          "baseline_fingerprint": "1a5db60898ad03cf8258ab07e867b88e609bd1489a17bf60cda67957cadab837",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 31
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "auditVaultShareCreateOwnership",
+          "kind": "function",
+          "baseline_lines": [
+            195,
+            227
+          ],
+          "baseline_fingerprint": "4d07ebc7dff0fc958327bb750a98f5a867b2e2a0b870f267e8601a6ace244975",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 11,
+            "calls": 14,
+            "tokens": 314
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "isValidType",
+          "kind": "function",
+          "baseline_lines": [
+            229,
+            231
+          ],
+          "baseline_fingerprint": "2adae804f4d8f0a01c2d3fabc31b2e248e29e411f0bc85222b93be54bef46249",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 1,
+            "calls": 1,
+            "tokens": 29
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "FieldPermission",
+          "kind": "type",
+          "baseline_lines": [
+            233,
+            233
+          ],
+          "baseline_fingerprint": "dd1a567f13888e2e162766826e54825c0d5a848611ffdf294328e50af5b0f889",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 7
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "FieldPermissionMap",
+          "kind": "type",
+          "baseline_lines": [
+            234,
+            234
+          ],
+          "baseline_fingerprint": "d7a1b898ba3a8c0a9862a6f42de54f8f87ea6610f8d332dcc7f8c55fb844d647",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 10
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "shareableColumns",
+          "kind": "function",
+          "baseline_lines": [
+            237,
+            243
+          ],
+          "baseline_fingerprint": "d988b306342b30e41563464ad3650706001ef383bf0c22aa916b3d33ac86930b",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 6,
+            "tokens": 87
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "parseFieldPermissions",
+          "kind": "function",
+          "baseline_lines": [
+            252,
+            266
+          ],
+          "baseline_fingerprint": "162b4b3be845a33ec9c4f365e532622b947c702b39d223d57739615f156f2fe7",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 12,
+            "calls": 8,
+            "tokens": 167
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "filterToAllowedFields",
+          "kind": "function",
+          "baseline_lines": [
+            269,
+            275
+          ],
+          "baseline_fingerprint": "099a2be9ffcecb7b3d060ba1111756e4373af791f605d4533bc360f709d985f9",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 2,
+            "calls": 1,
+            "tokens": 76
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "POST /vault-shares",
+          "kind": "route",
+          "baseline_lines": [
+            279,
+            358
+          ],
+          "baseline_fingerprint": "4e637a293fb05cbc7e55f8961c3905fb1dfb670fb5bdd9c2372a25a0c05ede88",
+          "metrics_baseline": {
+            "db_chains": 3,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 16,
+            "calls": 36,
+            "tokens": 736
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "GET /vault-shares/fields/:entityType",
+          "kind": "route",
+          "baseline_lines": [
+            364,
+            373
+          ],
+          "baseline_fingerprint": "6f7bc0d2fca49b50fd5fbbd270e4f6f7f7c36d3e7ebd4ff1d751c536ad85c1f8",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 4,
+            "calls": 3,
+            "tokens": 130
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "POST /vault-shares/bulk",
+          "kind": "route",
+          "baseline_lines": [
+            379,
+            469
+          ],
+          "baseline_fingerprint": "dd2bba58e2d57f21f454da3bf2793dbe64c313ae02be5baf2b40343ce96ea32d",
+          "metrics_baseline": {
+            "db_chains": 3,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 29,
+            "calls": 44,
+            "tokens": 899
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "GET /vault-shares/sent",
+          "kind": "route",
+          "baseline_lines": [
+            473,
+            518
+          ],
+          "baseline_fingerprint": "fbe5d71476beab16ceffe7b31b40044f22979a27d639e83c3e6ff248d9547863",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 13,
+            "calls": 13,
+            "tokens": 410
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "GET /vault-shares/received",
+          "kind": "route",
+          "baseline_lines": [
+            521,
+            566
+          ],
+          "baseline_fingerprint": "1cb6b2035356955eca4f8fe594593aa20986eebc1e39ee6072c0ea695b053042",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 14,
+            "calls": 15,
+            "tokens": 441
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "GET /vault-shares/entity/:entityType/:entityId",
+          "kind": "route",
+          "baseline_lines": [
+            572,
+            618
+          ],
+          "baseline_fingerprint": "f8750ce01e629d643f3c4d9b4f4280900d38671f26855e0aaae97a676df0d7b7",
+          "metrics_baseline": {
+            "db_chains": 3,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 10,
+            "calls": 17,
+            "tokens": 465
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "PATCH /vault-shares/bulk",
+          "kind": "route",
+          "baseline_lines": [
+            624,
+            663
+          ],
+          "baseline_fingerprint": "8e172ea7533ffd929cffc8d7900b9eae914af225f2126ee4509ebca6cc993118",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 15,
+            "calls": 19,
+            "tokens": 445
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "DELETE /vault-shares/bulk",
+          "kind": "route",
+          "baseline_lines": [
+            668,
+            685
+          ],
+          "baseline_fingerprint": "a01491a6bc99f5124c2e7c1f7e516b5f9a7c8de348109ee8206c8957297196e9",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 6,
+            "calls": 9,
+            "tokens": 226
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "PATCH /vault-shares/:id",
+          "kind": "route",
+          "baseline_lines": [
+            690,
+            761
+          ],
+          "baseline_fingerprint": "c0e2bdd397882a4eaff1f6cbbf3bd3a5b782fb2a9cb0a00ead113466333edcb2",
+          "metrics_baseline": {
+            "db_chains": 2,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 20,
+            "calls": 25,
+            "tokens": 626
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "DELETE /vault-shares/:id",
+          "kind": "route",
+          "baseline_lines": [
+            764,
+            783
+          ],
+          "baseline_fingerprint": "2743baae255679bcac9d1593734cfc6d7d0f7af77c64d61bfc4a9176d15b9470",
+          "metrics_baseline": {
+            "db_chains": 1,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 5,
+            "calls": 8,
+            "tokens": 229
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        },
+        {
+          "symbol": "default",
+          "kind": "export-default",
+          "baseline_lines": [
+            785,
+            785
+          ],
+          "baseline_fingerprint": "445e7382cb36dfcc33fab57c8c6071c671a4062cb9629c93be8236ab7ad22ef1",
+          "metrics_baseline": {
+            "db_chains": 0,
+            "tables": [],
+            "sql_templates": 0,
+            "branches": 0,
+            "calls": 0,
+            "tokens": 4
+          },
+          "owner_gap": "GAP-10",
+          "behavior_domain": "share",
+          "disposition": "DEFERRED_GAP-10"
+        }
+      ],
+      "exports": [
+        "ENTITY_TABLES",
+        "VALID_TYPES",
+        "isValidType",
+        "default"
+      ]
+    }
+  ],
+  "deferred_later_gap_code_remaining": {
+    "GAP-02": {
+      "symbols": 2,
+      "db_chains": 2,
+      "tokens": 260
+    },
+    "GAP-11": {
+      "symbols": 4,
+      "db_chains": 2,
+      "tokens": 1141
+    },
+    "GAP-05": {
+      "symbols": 4,
+      "db_chains": 3,
+      "tokens": 1368
+    },
+    "GAP-09": {
+      "symbols": 35,
+      "db_chains": 20,
+      "tokens": 6229
+    },
+    "GAP-10": {
+      "symbols": 34,
+      "db_chains": 22,
+      "tokens": 6030
+    }
+  },
+  "dispositions": [
+    [
+      "ADAPTER_ROUTER",
+      4
+    ],
+    [
+      "ADAPTER_THIN",
+      35
+    ],
+    [
+      "DEFERRED_GAP-02",
+      2
+    ],
+    [
+      "DEFERRED_GAP-05",
+      4
+    ],
+    [
+      "DEFERRED_GAP-09",
+      35
+    ],
+    [
+      "DEFERRED_GAP-10",
+      34
+    ],
+    [
+      "DEFERRED_GAP-11",
+      4
+    ],
+    [
+      "MOVED_RENAMED",
+      1
+    ],
+    [
+      "MOVED_VERBATIM",
+      28
+    ],
+    [
+      "RETIRED_DEAD_DUPLICATE",
+      1
+    ]
+  ]
+}

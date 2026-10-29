@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "source": "infrastructure/platform/telegram-command-registry.json",
+  "requiredFields": ["command", "bot", "capability", "apiPath", "auditEvent"],
+  "defaultDeny": true,
+  "orphanCommands": "block",
+  "unauthorizedCommand": "deny-and-audit"
+}

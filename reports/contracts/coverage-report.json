@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-29",
+  "generatedBy": "scripts/validate-contract-exceptions.mjs",
+  "current": {
+    "ownersWithoutContract": [],
+    "contractsWithoutEndpoints": [
+      "authorization"
+    ],
+    "unresolvedOperations": [
+      "ai:run-agent",
+      "authorization:authorize",
+      "authorization:explain-policy",
+      "telegram:render-menu",
+      "telegram:resolve-command"
+    ]
+  },
+  "exceptionCount": 6,
+  "unresolved": [],
+  "expired": [],
+  "stale": [],
+  "status": "READY"
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "owner": "identity",
+  "privacy": "no-credentials-or-raw-tokens",
+  "events": [
+    "identity.local.created",
+    "identity.local.verified",
+    "identity.local.disabled",
+    "identity.local.recovery_required",
+    "identity.ayzen.verified",
+    "identity.link.created",
+    "identity.link.revoked",
+    "identity.session.created",
+    "identity.session.revoked",
+    "identity.profile.synced",
+    "identity.security.failure"
+  ],
+  "transport": ["EventBus", "Workflow", "Audit", "Intelligence"],
+  "idempotency": "event-id-and-aggregate-identity"
+}

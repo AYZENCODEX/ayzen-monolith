@@ -1,0 +1,590 @@
+[
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#router",
+    "kind": "router-instance",
+    "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+    "line_start": 11,
+    "line_end": 11
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#val",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "c259c7a41c9db416bd628ffcc03d2806fa04b1493cdd39c2f24c1082a068a56a",
+    "line_start": 14,
+    "line_end": 14
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#numVal",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "85d18429a09c692ea0fe5669cbe1e0786d5410055fe0d50f1b926f65e27a7fb1",
+    "line_start": 15,
+    "line_end": 15
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#DATA_ENTITY_JOIN",
+    "kind": "constant",
+    "fingerprint_sha256": "ad5e264155e704c14ff3da77d22b719d47ebe3b163596ee4cdc37a0d4877f200",
+    "line_start": 23,
+    "line_end": 25
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#DATA_ENTITY_SELECT",
+    "kind": "constant",
+    "fingerprint_sha256": "86399c0dc4a6bb4303493bca713336e67600c010904469f0bc2b2177081e75b2",
+    "line_start": 26,
+    "line_end": 29
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#fetchWithData",
+    "kind": "function",
+    "fingerprint_sha256": "1e43856927762bf6ea38718373999dbb587c3832b3c2b77cb908b68386781abb",
+    "line_start": 33,
+    "line_end": 41
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#kycEntryResource",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "d5b527f904f48badf7f7a08f85e4ae30fabb0874e6124e2fbde1947ceb230401",
+    "line_start": 50,
+    "line_end": 56
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#requireKycEntryOwnership",
+    "kind": "function",
+    "fingerprint_sha256": "79003ab2a8e38660e994c104faf408814c9bbcea56277576be9ae1cb56958d28",
+    "line_start": 57,
+    "line_end": 59
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#route:GET /kyc-entries@62",
+    "kind": "route-handler",
+    "fingerprint_sha256": "091232c5a87cfff0b71e700746529da269d1be308417406f560fe2a3867c65b4",
+    "line_start": 62,
+    "line_end": 90
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#route:POST /kyc-entries@93",
+    "kind": "route-handler",
+    "fingerprint_sha256": "e57dd1090c36f281514e93441f116a2a673e15a5f76a719fd7956c3b4fa192ef",
+    "line_start": 93,
+    "line_end": 147
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#route:GET /kyc-entries/:id@150",
+    "kind": "route-handler",
+    "fingerprint_sha256": "4a3ad9e3bf4970588e0d16fbbef847e373bd756e638e223a1aeceba46485a701",
+    "line_start": 150,
+    "line_end": 167
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#route:PUT /kyc-entries/:id@170",
+    "kind": "route-handler",
+    "fingerprint_sha256": "9ab8cc13226fd75f8288c6bce88f2c837a1689e9188874eb2ffef070becfd141",
+    "line_start": 170,
+    "line_end": 220
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#route:PATCH /kyc-entries/:id/status@223",
+    "kind": "route-handler",
+    "fingerprint_sha256": "1ad5d1809ccdd83028103f3073376bb5bc83215bade61ef2a28f0193b6c9f447",
+    "line_start": 223,
+    "line_end": 243
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#route:DELETE /kyc-entries/:id@246",
+    "kind": "route-handler",
+    "fingerprint_sha256": "73897b6e6234bd20480a3cc13f1e0bbcc7c21e2d16c036b08aad88d99b44ab05",
+    "line_start": 246,
+    "line_end": 256
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#route:GET /kyc-entries/enrollments@264",
+    "kind": "route-handler",
+    "fingerprint_sha256": "614b1971628194a6f0119ff41c4b88751ec02f30bdd1a0ea3b223d67af524fec",
+    "line_start": 264,
+    "line_end": 284
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc.ts#export-default",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+    "line_start": 286,
+    "line_end": 286
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#router",
+    "kind": "router-instance",
+    "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+    "line_start": 9,
+    "line_end": 9
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#DATA_ENTITY_SENSITIVE_FIELDS",
+    "kind": "constant",
+    "fingerprint_sha256": "e886ed489a139f1414b8c5a6f2c75663aaeb945480e27bb56630805bbd5491c9",
+    "line_start": 14,
+    "line_end": 14
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#safe",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "6527d7a036786c20607062129f78d86e9716ff82408837f7d77360c1a2ce4b97",
+    "line_start": 17,
+    "line_end": 17
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#safeDate",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "e84b596b5bc2cc89ec42953b60cf4e66fc97191cacb0e7f4ffbc8df41353d69d",
+    "line_start": 18,
+    "line_end": 18
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#USED_BY_KYC",
+    "kind": "constant",
+    "fingerprint_sha256": "b13ebc47e98e7a0734339ec75f89dab3e687e8a311a5c7ef97e6a34ac06258ef",
+    "line_start": 27,
+    "line_end": 27
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#USED_BY_VAULT",
+    "kind": "constant",
+    "fingerprint_sha256": "1e059cf79a706ebb36dd9318b85a020ed9595b2f8aeaf56a372424b9e26496bc",
+    "line_start": 28,
+    "line_end": 28
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#USED_EXPR",
+    "kind": "constant",
+    "fingerprint_sha256": "5f7a18ca550e1a15050b937d29d60d4e7988c4874ca2c7a20cf6d21491874c95",
+    "line_start": 29,
+    "line_end": 29
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#KYC_DATA_ENTITY_OWNER_SENTINEL_NONE",
+    "kind": "constant",
+    "fingerprint_sha256": "15bd9bf203b9b1131d9f5034740891017db02bfa4797cb3c363e86d03c7e96c8",
+    "line_start": 35,
+    "line_end": 35
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#kycDataEntityResource",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "2e391b516a0b6701f7b142bbac98e5783ae6bcd734f68f29ab28e6af8cf7ce6a",
+    "line_start": 36,
+    "line_end": 42
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#requireKycDataEntityOwnership",
+    "kind": "function",
+    "fingerprint_sha256": "845ee34fece3e1093135fe337002430c2ea27315d5406f233af6dbb329d189ae",
+    "line_start": 43,
+    "line_end": 45
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#route:GET /kyc-data-entities@48",
+    "kind": "route-handler",
+    "fingerprint_sha256": "e48fc40e8f595e9bf5e829af126c27e3ebbfa7f46b872f3b59a878ef176c7263",
+    "line_start": 48,
+    "line_end": 69
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#route:GET /kyc-data-entities/overview@72",
+    "kind": "route-handler",
+    "fingerprint_sha256": "e0fe3d3a6c709ab841bd8cae59c508c53bc0c400bac2f8d8e4dc660eaee4213d",
+    "line_start": 72,
+    "line_end": 87
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#route:POST /kyc-data-entities@90",
+    "kind": "route-handler",
+    "fingerprint_sha256": "1ab9c3b098a01dff67a18d989b4f321fe7ae41edd2d34f6a40897761e72b7ace",
+    "line_start": 90,
+    "line_end": 110
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#route:GET /kyc-data-entities/:id@113",
+    "kind": "route-handler",
+    "fingerprint_sha256": "77159b435b9b6ef2ed74fe5008ed90bed2d9a2429062ba4027d4119a5376f84e",
+    "line_start": 113,
+    "line_end": 130
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#route:PUT /kyc-data-entities/:id@133",
+    "kind": "route-handler",
+    "fingerprint_sha256": "14cef096bf287251214b9dd0fd5a0c5c68f82504e5d6163409a473eb1a529486",
+    "line_start": 133,
+    "line_end": 157
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#route:DELETE /kyc-data-entities/:id@162",
+    "kind": "route-handler",
+    "fingerprint_sha256": "b4c25299060dc9bf305c2b584ba390e763f7ec2fe2037eb0b4afc39639981ac7",
+    "line_start": 162,
+    "line_end": 182
+  },
+  {
+    "id": "artifacts/api-server/src/routes/kyc-data-entities.ts#export-default",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+    "line_start": 184,
+    "line_end": 184
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#MAIL_BASE",
+    "kind": "constant",
+    "fingerprint_sha256": "925cd1561c493c958d4e41c8263de30fd8618e9f04b20c70c4937e178265cbe4",
+    "line_start": 24,
+    "line_end": 24
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#KycEntry",
+    "kind": "interface",
+    "fingerprint_sha256": "06521281ca1110d9f5fc22039c5f55c9c871629cda4772d1013ef354ee4a4b7d",
+    "line_start": 27,
+    "line_end": 67
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#EMPTY_FORM",
+    "kind": "constant",
+    "fingerprint_sha256": "aef9f4e2e44983e88f99edd11919aca27207610de65c8d0eb191792ea9adebdb",
+    "line_start": 69,
+    "line_end": 85
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#rowToForm",
+    "kind": "function",
+    "fingerprint_sha256": "37e98b57dbd9cc78d9d19f3fd11ed45691948940d77ff9ad3db8053617c63d7d",
+    "line_start": 88,
+    "line_end": 116
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#FORM_TABS",
+    "kind": "constant",
+    "fingerprint_sha256": "f5db8365d91f36d17e0c06351aadd3a9dba5c5571d1c987fa13a5f609a0f621f",
+    "line_start": 118,
+    "line_end": 122
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#FormTab",
+    "kind": "type",
+    "fingerprint_sha256": "b7a3c54ba030c00721f5a9571125911e920517e3f882778c86b80aecffdc6601",
+    "line_start": 123,
+    "line_end": 123
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#AccountSubTab",
+    "kind": "type",
+    "fingerprint_sha256": "3fa86402d63c6151e71258d098c868099635bf67539fcbf8aefa3af8c209b1a1",
+    "line_start": 124,
+    "line_end": 124
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#KYC_SUBTABS",
+    "kind": "constant",
+    "fingerprint_sha256": "06641073c58ea5ff903cff72631ff0dc125a824a9805f6218dc2340990f4912d",
+    "line_start": 126,
+    "line_end": 129
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#KycSubTab",
+    "kind": "type",
+    "fingerprint_sha256": "198e7623f2ad38fa0811ced005164d6d123ba2534f70ba82b7216883e2e7af61",
+    "line_start": 130,
+    "line_end": 130
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#SELLER_SCHEMA_FIELDS",
+    "kind": "constant",
+    "fingerprint_sha256": "e5acf2e6fba820828258f3cc9823645f511f49825c0ce1a2db8073a32de735b2",
+    "line_start": 134,
+    "line_end": 134
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#KycDialog",
+    "kind": "function",
+    "fingerprint_sha256": "f1a76f8836339757b4b8ee4443dd2cb77bcf0fdab8197e18b71562a8e2e24ef3",
+    "line_start": 136,
+    "line_end": 141
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#CategoryBadge",
+    "kind": "function",
+    "fingerprint_sha256": "c20a1ff3540d367f0a45ecc3c999af2a67cd3357383a6db05239d34a02291c11",
+    "line_start": 143,
+    "line_end": 154
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#KycDialogInner",
+    "kind": "function",
+    "fingerprint_sha256": "acf845592a35fab815e3edba1f8bf20b7be919cda047a3db1748291c088b37a7",
+    "line_start": 157,
+    "line_end": 440
+  },
+  {
+    "id": "artifacts/ayzen/src/components/kyc-entries.tsx#KycEntries",
+    "kind": "function",
+    "fingerprint_sha256": "f934a6ed90dfe96b7749cd64d9113b30bda17c60ba32dd1dec1958bc24f9299d",
+    "line_start": 443,
+    "line_end": 652
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx#KycEntryRow",
+    "kind": "interface",
+    "fingerprint_sha256": "480bc35c466c98140a8d786053e15d73f48bee90916ff364b534ac2a8db82503",
+    "line_start": 15,
+    "line_end": 26
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx#calcROI",
+    "kind": "function",
+    "fingerprint_sha256": "79d705d980371d91436b45122432631aab857ee8efdaa83326ac16efa31f6896",
+    "line_start": 28,
+    "line_end": 31
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx#ROIBadge",
+    "kind": "function",
+    "fingerprint_sha256": "328d97399838d2b4388dcde081678d93f6a40ccdb760e5559b4af85773e76d3c",
+    "line_start": 33,
+    "line_end": 42
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx#catStyle",
+    "kind": "function",
+    "fingerprint_sha256": "1ebe004d8327794be963ffa7825165d7bffb2d19980cc42d6796a0211aa84570",
+    "line_start": 47,
+    "line_end": 53
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx#OverviewTab",
+    "kind": "function",
+    "fingerprint_sha256": "a89a45540be7753e854a992ef64b9aab15c1824adb362cfc744207fd051a3630",
+    "line_start": 56,
+    "line_end": 174
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx#CategoryTab",
+    "kind": "function",
+    "fingerprint_sha256": "da8e7611e07b730efb5ec783a99f2726e3152ae89dfdc0c806af1193ed52b2ec",
+    "line_start": 177,
+    "line_end": 294
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx#VaultKycDashboard",
+    "kind": "function",
+    "fingerprint_sha256": "76f506396ea107e56db2979eae59a4437353fafc68faf9182934c53d9a6b4c1c",
+    "line_start": 297,
+    "line_end": 350
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-data-detail.tsx#VaultKycDataDetail",
+    "kind": "function",
+    "fingerprint_sha256": "0bddb582c5dd70233cb64394d871a41714884aa8e78150a0bf6e09449f73dd5d",
+    "line_start": 22,
+    "line_end": 192
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-data-list.tsx#DataEntity",
+    "kind": "interface",
+    "fingerprint_sha256": "60e217e9134edbfca3b23802ff98384b3b48c9fb6c085d8243fee0e07695c6ff",
+    "line_start": 28,
+    "line_end": 43
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-data-list.tsx#EMPTY_FORM",
+    "kind": "constant",
+    "fingerprint_sha256": "be29e0808f639a8a552052ce368c8dca166212ef559f23afc1444e66feb05c7b",
+    "line_start": 45,
+    "line_end": 45
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-data-list.tsx#CreateDataEntityDialog",
+    "kind": "function",
+    "fingerprint_sha256": "c1fc367d146ee8ed09b1eb5e841b64653cce54dce5df0ce1a214568fc8ab7a6a",
+    "line_start": 48,
+    "line_end": 91
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-data-list.tsx#VaultKycDataList",
+    "kind": "function",
+    "fingerprint_sha256": "d01bea6fd716344e5e3380d51539ed87553a7e9c4cd0114239c7d610129f5dd4",
+    "line_start": 93,
+    "line_end": 205
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-data-overview.tsx#VaultKycDataOverview",
+    "kind": "function",
+    "fingerprint_sha256": "b3e58f1b36bb8b34d81e0ba83c3591e0782cf93ea77f989691190abeb29520aa",
+    "line_start": 3,
+    "line_end": 5
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-data-unused.tsx#VaultKycDataUnused",
+    "kind": "function",
+    "fingerprint_sha256": "17a9a6d9d10a5b2a3d55e4348434fd6e893451e80c65157386ef6bc45e437bc7",
+    "line_start": 3,
+    "line_end": 5
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-data-used.tsx#VaultKycDataUsed",
+    "kind": "function",
+    "fingerprint_sha256": "8a7095d73f5185e28ecf771bccf383e45af0ceae3aa314d1ede1e6195d5797c1",
+    "line_start": 3,
+    "line_end": 5
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#ACCESS_TABS",
+    "kind": "constant",
+    "fingerprint_sha256": "be4fab52ca3d41ac5e86081de021c4709974c523a82c98f0891f78a9e22b3108",
+    "line_start": 27,
+    "line_end": 31
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#AccessTab",
+    "kind": "type",
+    "fingerprint_sha256": "573eb1940b27ad4cc3ea3ef28dff65763071d5c356ddf84d1bb6ebc0a7baa776",
+    "line_start": 32,
+    "line_end": 32
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#TABS",
+    "kind": "constant",
+    "fingerprint_sha256": "117d0cc3d7c3db6080d55a602008d223174db9eea4dc03b1676ea29768ec1199",
+    "line_start": 34,
+    "line_end": 40
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#KycDetailTab",
+    "kind": "type",
+    "fingerprint_sha256": "e1e86609582865cce267c8a038405be0638498c27984a2085426fd6928e7a98c",
+    "line_start": 41,
+    "line_end": 41
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#KYC_HEALTH_CHECKS",
+    "kind": "constant",
+    "fingerprint_sha256": "fa35c475c40f6baf743b4b7fc8849f356b000a392c5e7d2db2f89cede1e3f80f",
+    "line_start": 44,
+    "line_end": 57
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#kycHealthScore",
+    "kind": "function",
+    "fingerprint_sha256": "a91899a71cc531de3a59017dc7c943a84c17967f3628c0ce740513f26448835a",
+    "line_start": 59,
+    "line_end": 62
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#healthColor",
+    "kind": "function",
+    "fingerprint_sha256": "5d437cefda69599371e61d9996eaf51ed8bb50b938a53a284b5d6ad281ecd255",
+    "line_start": 63,
+    "line_end": 67
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#healthLabel",
+    "kind": "function",
+    "fingerprint_sha256": "ec9f56e4be25a16800dcec14cb38937db572cb62991ee2b340e55195830bf632",
+    "line_start": 68,
+    "line_end": 72
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#getRisks",
+    "kind": "function",
+    "fingerprint_sha256": "3f69fcb82d483a9b31a2f25993845a2fe1f732faee1c1b56054867bcfcd8bea0",
+    "line_start": 75,
+    "line_end": 84
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#calcAge",
+    "kind": "function",
+    "fingerprint_sha256": "67ff825341cb193c29c795183c7b906f58f286a7787c3c5ac2b898fafd4b09c3",
+    "line_start": 86,
+    "line_end": 95
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#SecretField",
+    "kind": "function",
+    "fingerprint_sha256": "7ccfb3aac709f32c9703d97c6ddd6685df9063a30aeaa71a756b51b97f52e48a",
+    "line_start": 97,
+    "line_end": 122
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#InfoRow",
+    "kind": "function",
+    "fingerprint_sha256": "7caad8ec25f756a97088c6fab319b1f786c322ff6b15f73c5f535b7011493fc1",
+    "line_start": 124,
+    "line_end": 132
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx#VaultKycDetail",
+    "kind": "function",
+    "fingerprint_sha256": "33c3faa37418440497d407b0f5756a2c064787f378831f0e7c23064bdd867e6d",
+    "line_start": 134,
+    "line_end": 770
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx#EnrolledRow",
+    "kind": "interface",
+    "fingerprint_sha256": "333ec48f99db71fe343d7110f3ca9427cda04c8f0fee45fc95ee62951149d9e1",
+    "line_start": 29,
+    "line_end": 42
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx#KycEntryRow",
+    "kind": "interface",
+    "fingerprint_sha256": "3900293cefac1e17dd14828401e4f8c8d8b750ea04d48c3a9f4be1d389ed76bb",
+    "line_start": 44,
+    "line_end": 50
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx#STATUS_COLOR",
+    "kind": "constant",
+    "fingerprint_sha256": "6b8e884add009729e75c4ff74ba4c01cef6b5d03b5ff6b049d30b8cbe479c0d8",
+    "line_start": 52,
+    "line_end": 58
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx#STATUS_META",
+    "kind": "constant",
+    "fingerprint_sha256": "1d07a1f818a03478686df42b226c0fa061d3423ebac33d584e2981a695fadc6e",
+    "line_start": 60,
+    "line_end": 66
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx#useEnrollmentData",
+    "kind": "function",
+    "fingerprint_sha256": "0434d78edb44bcaa7977feb34b3726d91e245b99d31527026273b962d19e5ff7",
+    "line_start": 68,
+    "line_end": 90
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx#StatCard",
+    "kind": "function",
+    "fingerprint_sha256": "71836c0bfd67c37c90175a3f030892d0a346cbf10aefe54afda1a7c9b829a8da",
+    "line_start": 92,
+    "line_end": 102
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx#OverviewTab",
+    "kind": "function",
+    "fingerprint_sha256": "6ff88185c8e1f3b4d726fe77f1e716eada7d0f1d583c5e2dc6411e1ea4ffbac2",
+    "line_start": 104,
+    "line_end": 162
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx#ActiveTab",
+    "kind": "function",
+    "fingerprint_sha256": "d511d8749b63f25af84ff6a67cd0a510eeaeed1e643cab535e0671e62c6086ad",
+    "line_start": 164,
+    "line_end": 201
+  },
+  {
+    "id": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx#VaultKycEnrolled",
+    "kind": "function",
+    "fingerprint_sha256": "297600ffcba372f93933c6a6b3553993d77e96489e2f0ab4dc61e46947689b66",
+    "line_start": 203,
+    "line_end": 226
+  }
+]

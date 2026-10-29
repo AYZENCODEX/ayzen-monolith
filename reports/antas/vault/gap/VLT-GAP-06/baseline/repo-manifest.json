@@ -1,0 +1,466 @@
+{
+  "sub_phase": "VLT-GAP-06-A",
+  "purpose": "Frozen pre-extraction sources for OLD→NEW differential proof in 06-B/06-D. Write-once: 06-A never overwrites an existing baseline.",
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/routes/vault-security.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__routes__vault-security.ts",
+      "sha256": "08248de670f095ce5d601a223e9c3328b30ebe1f51a0cf4ce5e66f58a05db296",
+      "lines": 567
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-reauth.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__routes__vault-reauth.ts",
+      "sha256": "bd740f54e86019032a298b698c8e2df7ecb9f4d1892659d9a3ea52ee3868f9ef",
+      "lines": 510
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-pin-guard.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__vault-pin-guard.ts",
+      "sha256": "134c2e1fc70a1068cefcd80209badf892f5715d9d8ef19354b76fedd54b966db",
+      "lines": 117
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/pep/authorize-many.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__pep__authorize-many.ts",
+      "sha256": "261dc5687dac65e37fb03bb730c5e7cdc0eb073896f76a90d5d6b73616603730",
+      "lines": 213
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/pep/authorize.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__pep__authorize.ts",
+      "sha256": "8ceca1d91b8567df4d059c8614816fcab8587b8f0477f40ff5cf7bd56d1bd34f",
+      "lines": 207
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/pep/enforce.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__pep__enforce.ts",
+      "sha256": "93b8fce0371851108f22f6f7b6b8e705b75291111185a3f3d1888370bce7b649",
+      "lines": 168
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/pep/index.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__pep__index.ts",
+      "sha256": "833c71b3f270cb93bef752e678071a4a10ec0d8a567062b6c3601d3b2c6283aa",
+      "lines": 27
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/pep/middleware.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__pep__middleware.ts",
+      "sha256": "4b7837275d034c4b5b5eda1a217460353f2de26c18dd09785ef7533f750c3313",
+      "lines": 328
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/pep/types.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__pep__types.ts",
+      "sha256": "6deecdd0cafb679418a7c9ce4f0faec118d280dc40d45350a5076c3e2de500c3",
+      "lines": 193
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/policy-engine.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__policy-engine.ts",
+      "sha256": "602537b6364443b961c660eb56de422780905cb0a6c3aeaf323e19d3a451320e",
+      "lines": 405
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/resource/explicit-grant-rule.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__resource__explicit-grant-rule.ts",
+      "sha256": "7e5e1b96a7b4ce6360b33a2ec183cc1a42fc05a1fc4588201d6f6f22963bf7a7",
+      "lines": 79
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/resource/group-membership-rule.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__resource__group-membership-rule.ts",
+      "sha256": "8b78bc82da5da1e5e0abad1a3642d0bc3d3466514143b414bbf91f77e910acf7",
+      "lines": 122
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/resource/index.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__resource__index.ts",
+      "sha256": "2e67d18f63f0a9076811b2ae65de482a8bdf45f4753ae824b94ef31627c44005",
+      "lines": 43
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/resource/locked-resource-rule.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__resource__locked-resource-rule.ts",
+      "sha256": "cc2e2c05e6be6225741a5b8a0371c3715293c77d36c037b96a34bdf3e14233c8",
+      "lines": 62
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/resource/organization-access-rule.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__resource__organization-access-rule.ts",
+      "sha256": "4ce985c11d1bc1a1c8aca479b91e8809b39ebc7f2cbb03ccb1e9aaa546b88b0a",
+      "lines": 100
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/resource/ownership-rule.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__resource__ownership-rule.ts",
+      "sha256": "9629fc4ba0608ba37733c3c3deddd16009d8fcedebe6222242a80dcf8a598188",
+      "lines": 83
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/resource/role-override-rule.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__resource__role-override-rule.ts",
+      "sha256": "a21e4aa6a1a578e2b42facd3161de7eb9ad9f150cb320338775deb6b1258ac2c",
+      "lines": 77
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/resource/types.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__lib__policy__resource__types.ts",
+      "sha256": "9aaa03e9b4c6fa1a1507aa14c7133405ed23e935be92f09a391d23237052eedc",
+      "lines": 48
+    },
+    {
+      "file": "artifacts/api-server/src/vault/index.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__vault__index.ts",
+      "sha256": "bed7b74b8872228dd785f91013d165c8c9ab91a406230c04eaba43f854699ba7",
+      "lines": 8
+    },
+    {
+      "file": "artifacts/api-server/src/vault/api/index.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__vault__api__index.ts",
+      "sha256": "83c31f0c31fd773713380f3a5f7c843e0ddd1a748165d562b4d738ec4b3f8ed3",
+      "lines": 9
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__vault__security__entity-ownership.ts",
+      "sha256": "7da2e892e29c3a5db08d510a4bb7da19d7af33088850b738278d005e3abf8328",
+      "lines": 85
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/game-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__vault__security__game-ownership.ts",
+      "sha256": "d5c8460686d908f73bb16516ff7a7bd98ff242bca5a03d8ea1201b547add6f0d",
+      "lines": 62
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__vault__security__kyc-ownership.ts",
+      "sha256": "8af586a462bec5104c8a57bb6cf6e06489aa8e636daf7a5b7f6b10a5ea28d1b4",
+      "lines": 72
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__vault__security__local-account-ownership.ts",
+      "sha256": "be5dfd065857a55370c139e69b46f9836f8ab2b3d0f4d91d5e36415a0c6c704b",
+      "lines": 69
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/secret/reveal.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-06/baseline/sources/artifacts__api-server__src__vault__application__secret__reveal.ts",
+      "sha256": "43d84760eb483738266e79eb6c8ce142fcb343fec6a21c91fd8117784375c642",
+      "lines": 79
+    }
+  ],
+  "consumer_files": [
+    {
+      "file": "artifacts/api-server/src/lib/mega-engine/lifecycle.ts",
+      "sha256": "6be7741e5d18869ea43c41b39c3846b1acbc50ceaaf10f9305fc9141ffaf7798"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/abac/abac-rule.ts",
+      "sha256": "7f062cea5c609c009443ccc3908a4d91d6896aad5c6b9f0f55b3be710d857e36"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/approval/approval-gate-rule.ts",
+      "sha256": "c6d32cbad3e7b356450622d361f6f8c8b96b4a1612c74dcd6a34073cfe9587c5"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/assurance/assurance-rule.ts",
+      "sha256": "4ce6bb6e943171229da329ccb0ec909806ec5dd09b97817337cb3ae2e63e2f1b"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/audit/audit-observer.ts",
+      "sha256": "ef9abf2d705cb56c2f63c683dee477e151f67ae34596bbc501accde81abe5aa8"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/decision-observer.ts",
+      "sha256": "97b48f4229007aa8c7deba90e5a51909ba594c2140ba3063b97c08dc8d25ab02"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/events/decision-event-observer.ts",
+      "sha256": "3320796d3963698fe15d53cbe7903e5629230944c50da8dcb3ccc3abda11ae1f"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/index.ts",
+      "sha256": "f70ea2696eec6226c6c3e74c2a53eee6faf541320b4a744114fb629d002db802"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/observability/access-pattern-observer.ts",
+      "sha256": "75dfed053a6a6c821a02fb518bc098d62964cbcfd4b730e95fb026a90326d97b"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/observability/metrics-observer.ts",
+      "sha256": "08d86c8cc7f5fc57f73243026963e766a69f34ecd11e0bf87851dd8f83e5fabb"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/precedence-engine.ts",
+      "sha256": "6942ca8d4973203756bd6e3839a7cb619d98db449b98ef8acf36897d8f3d7327"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/rbac/any-permission-rule.ts",
+      "sha256": "033b31ab2cec2ab792ac404766b27b759f319a9fc9c1d60f38a82b1043b1e4ef"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/rbac/rbac-rule.ts",
+      "sha256": "5dd6b6def7f698dc97d889c76ba443b747bc975eb4501f92fdb07fa3e6e5fe3b"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/rebac/rebac-rule.ts",
+      "sha256": "3e586c98c47ea1574afe8285b958beaa4dfcfced7b7ee499f037db289a9d10e5"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/registry/registry-rule-loader.ts",
+      "sha256": "a13f66a633f715507d3bba6a8a8bc35c694f33a7e14cd7dab2053717e228c339"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/resource/drizzle-resource-grant-provider.ts",
+      "sha256": "06ad0626754f566efcf889793b0ef4200b5fac98e167a388119fa76f1f4eb12c"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/risk/risk-rule.ts",
+      "sha256": "540dcdee6a4a6be9eed924fbc5a4428212dcc8bf57a17b36ebf8ae6c464e8bd7"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/simulation/policy-simulator.ts",
+      "sha256": "fbc621a83d269ad71f45b76bbb9da6d8203665e3887089e77588360468ee6ca7"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/sod/separation-of-duties-rule.ts",
+      "sha256": "8c0eebdb6372e2b87b51d9499753078f5710bff750c6ea1fd3eb27ae816c9518"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/policy/temporary-access/temporary-access-rule.ts",
+      "sha256": "df7ce85da908b15742d253d108bc2e082e8ad7502a6a0a78abe90ec5ffe72bea"
+    },
+    {
+      "file": "artifacts/api-server/src/middlewares/auth.ts",
+      "sha256": "757960bc470498f6203cb3dab1207892ba189ebb82824cf7f193bcb5e512b47b"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/admin-policy-console.ts",
+      "sha256": "ed9b3eb9f13048e1a062b10e8313e5b480537ab1aca1decfa6eb520c23653381"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/admin-rbac-console.ts",
+      "sha256": "cc9e0c7a03e129764974527537a1a4758c3c1199435437b9ccf970e08018c2d4"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/admin-resource-console.ts",
+      "sha256": "87f49792c953b324c05b8eeabb58966596537bdd6cd3c77b9e10f36cbf25141c"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/api-keys.ts",
+      "sha256": "d739243de16aa20d6d489f5904bc974bd5cbb5486ce6a08e3c6eda9a9b252faa"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/authorization-telemetry.ts",
+      "sha256": "b9193eaeae38c1fde9d084d804bc5d7522c2ac8e4f0288a2770db048e618fb94"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ayzen-mail.ts",
+      "sha256": "84289d574f51a3ceed8136956d37b3facad834245e74ee0956e78f3d386d24e3"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+      "sha256": "6e9db9c278666458b28185ee902cdbf4f4c1a954e748376ec5686637035d6f96"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/bulk.ts",
+      "sha256": "6f041f687f525c7f5c42623f95b154cd7911f0f8ac41f709bc9a1cbc5cc933be"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/earn-links.ts",
+      "sha256": "325e919066077293acbf7064f87b42d3cc3b9e1750707d4a56615cad3b9e0ce7"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/email-accounts.ts",
+      "sha256": "ea794c905f818918e5b614978d772b55b2972be42ed64556d65fbb4e09b68327"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/email-compose.ts",
+      "sha256": "db87d36faaedd81bb7ec83dce02efbfb11881b44d990473cbb4f250e2a340959"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/emergency-access.ts",
+      "sha256": "e585f7df7be03bdb657d710aff9274b44cfed5c02814ae18333fd882e64ee114"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/entities.ts",
+      "sha256": "c400596bdb9d73561750374296eb152aae6a4c6aa3d688367518cdaac00495aa"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/exchange-api.ts",
+      "sha256": "754c840c3546f1d80da976f4b2824294d392cd76e38c45c19bf56c5936990fa3"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/finance-invoices.ts",
+      "sha256": "cea25c691bf3653d6da981be0577007f64c520e937ad25da59b5f6fe55963665"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/finance.ts",
+      "sha256": "713fe1c79e47ac3fe49476564d0ad91b3df8a452e01c43669f7c6c30776151ed"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "sha256": "61a3dfbad6464bee905dc4546a3191a369a05f31e82cad29d208b3b1925b15d9"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/index.ts",
+      "sha256": "d8db8b5357ab4a6216b5ac6d080fcbc9d41495ca553f1a306e140ab7d19b5619"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "sha256": "18733afba6989a9d6456c7b072f2e056e052bd92647dd38ee66474fe03cda63b"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "sha256": "9788b5e5d94b225a8d8dfeb70b9993b980d5161f41eadb42c20511549c327d4b"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/local-accounts.ts",
+      "sha256": "31cc99b5beaa534b284f9a4b1ead209bbd3a34e890425d2aa8c8f0a57548c963"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-alerts.ts",
+      "sha256": "26f7a62cf280317b19ff5bda99b24faaec733a992d0d387911ca85e674d133e4"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-azn.ts",
+      "sha256": "a775a8e932e53843bf18b72b9fc74dddd705e58678756008b622be2bd3ce977d"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-bundles.ts",
+      "sha256": "8bea77739ec60ef348697493a7edc62b22adfae1a710b76d421f605116214fa8"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-cart.ts",
+      "sha256": "3e1a7548da68762b2605cb5c91f989d824b405dd0fa5a75b66abeaec4ca6289b"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "sha256": "411dd71b0f220b7c3eb018ea4fe4122060f6b71a9438d749bc7014e717a3ca50"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-offers.ts",
+      "sha256": "2a6c7e971f41a716a07cebb5cf81000d95e6912d7b1e38e7f072d81bdaa6c8d2"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-reviews.ts",
+      "sha256": "5a5e57bc8a94c4053d390e0bcbe2d6ff5cb7d38bbfeba06ddf9c39bfb501ffcd"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-spot.ts",
+      "sha256": "071e65764d64023967974a3dde43e2bf50b34b37ac1a68a42025f07dc5d0529c"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-usdt.ts",
+      "sha256": "48a712d4073fff0a801aec4f766d84ceebeb4b4a032703f385ff84f394b62439"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "sha256": "87fc9ff5ba7fb74f9d163ab7970b9c2ab514d65f2973387f01168ed3c2bb0baa"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace.ts",
+      "sha256": "3cce33e0e2e9c510c5dc0c02921d2a535c04ad16818d57cbec03b4975a09b2bb"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/nft-subscriptions.ts",
+      "sha256": "d85cf2089011c7d9a69dc02b1d9287d9cab01dcec5e29299c5d8a9373a6cfe9a"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/notifications.ts",
+      "sha256": "c1d2d816ebd014f056c4888963722e262f4afea1ad95758c51837351e0d8d0fd"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/passkey.ts",
+      "sha256": "17632e09b3cef88a077f548054eca5173a7d8b5e0a3f16b0695cfb593aa8fc7a"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/projects.ts",
+      "sha256": "fd28954bc2780e4fdd0fc065f79ba26b835fbfd4c2eec43419438f91ee4ea097"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/security.ts",
+      "sha256": "5ecab0713b94ac7d216f13a322b09c962867802dae54be0355cab28036e66693"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/support.ts",
+      "sha256": "8d2cc5e083d3c547c5b35393657326d156b44449643420fd4931f20e9a54e6ff"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/tasks.ts",
+      "sha256": "c90153a69b2618a5167bd84c4a2e7be57bae9b22cf50c2b6fbefc23ef62c0f69"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/teams.ts",
+      "sha256": "3206f51ebfe5c38834bd1d8b0f8d4dbeae591ec437d4012d970cfc9736543034"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/two-factor.ts",
+      "sha256": "0c1ad1037eba13fb57bc068fa6de5ccb10c72337d2bc555b2b027b07473f479b"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/value-history.ts",
+      "sha256": "0899fc00226a547574a0c05c0c2ce6facc0c6ea826bd476c25a8f89c1e4faca0"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "sha256": "2f700c2dfbb078972cd25c84c557fab1b16b02327afc53e1102b2a134d128cea"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "sha256": "60208e6af6ffb2e8f12a7d906ef8bd623db896724040218f52e574f65fe157b7"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "sha256": "9b33fa8f0d1276debe9e58d8204a9f1b0504f5f9f24506798b651b8adf151758"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "sha256": "b076525cfcd4ec6512d2eba2b345606220aee49ff9f644a7f29e026e9edb38b2"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "sha256": "e9dcd905a02ebe4ce99235bc923d0b20a155733ee1efd70413abf65737fbb4d1"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/wallets.ts",
+      "sha256": "4d13f3abbcfb298cfcf197932de2c65b865f03621ee32670b037dfd3419a7b6b"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/api/index.ts",
+      "sha256": "83c31f0c31fd773713380f3a5f7c843e0ddd1a748165d562b4d738ec4b3f8ed3"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/secret/wallet.ts",
+      "sha256": "0063c89c80719e40f237167cd60598e9d34a6b57a451855b2d7de4446400f00c"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/entity-links.ts",
+      "sha256": "736f6e6345218c9a287bf0633be2421a485d37eb65ebc2e0fe40bfdf5c5d0316"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "sha256": "7da2e892e29c3a5db08d510a4bb7da19d7af33088850b738278d005e3abf8328"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/game-ownership.ts",
+      "sha256": "d5c8460686d908f73bb16516ff7a7bd98ff242bca5a03d8ea1201b547add6f0d"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "sha256": "8af586a462bec5104c8a57bb6cf6e06489aa8e636daf7a5b7f6b10a5ea28d1b4"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "sha256": "be5dfd065857a55370c139e69b46f9836f8ab2b3d0f4d91d5e36415a0c6c704b"
+    },
+    {
+      "file": "scripts/src/test-route-ownership-regression.ts",
+      "sha256": "5adbd518112fb514a8ffb1936bab7a5d33036471201dd1735a2b21a3bcd46f94"
+    }
+  ]
+}

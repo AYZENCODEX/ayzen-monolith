@@ -1,0 +1,247 @@
+{
+  "phase": "VLT-GAP-18",
+  "sub_phase": "VLT-GAP-18",
+  "validator_version": "18.1",
+  "checked_at": "2026-10-12T17:36:48.760Z",
+  "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "5055bf776152a5ead0a6e237b9256e65fb5e109eed1cde495598fed81b357e38",
+  "source_hashes": {
+    "scripts/antas/vault/gap/validate-vlt-gap-18.mjs": "add293a220631c55ab62a84994ee3fd7a403074bab792a287700cb7cec3146fe",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b"
+  },
+  "duration_ms": 175529,
+  "bypass": {
+    "gates_tested": 60,
+    "rejected": 60,
+    "accepted": [],
+    "probes": [
+      "--skip-validation",
+      "VALIDATION_DISABLED=true"
+    ]
+  },
+  "integrity": {
+    "evidence_files": 70,
+    "findings": [],
+    "stale_source_refs": 15,
+    "stale_sample": [
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-01/extraction-proof.json",
+        "path": "scripts/antas/vault/gap/harness.mjs",
+        "why": "changed since evidence"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-01/gate.json",
+        "path": "scripts/antas/vault/gap/harness.mjs",
+        "why": "changed since evidence"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-02/extraction-proof.json",
+        "path": "scripts/antas/vault/gap/harness.mjs",
+        "why": "changed since evidence"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-02/gate.json",
+        "path": "scripts/antas/vault/gap/harness.mjs",
+        "why": "changed since evidence"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-03/extraction-proof.json",
+        "path": "scripts/antas/vault/gap/harness.mjs",
+        "why": "changed since evidence"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-03/gate.json",
+        "path": "scripts/antas/vault/gap/harness.mjs",
+        "why": "changed since evidence"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-05/extraction-proof.json",
+        "path": "scripts/antas/vault/gap/harness.mjs",
+        "why": "changed since evidence"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-05/gate.json",
+        "path": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+        "why": "missing"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-05/gate.json",
+        "path": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+        "why": "missing"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-05/gate.json",
+        "path": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+        "why": "missing"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-05/gate.json",
+        "path": "scripts/antas/vault/gap/harness.mjs",
+        "why": "changed since evidence"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-05/gate.json",
+        "path": "artifacts/api-server/src/lib/vault-crypto.ts",
+        "why": "missing"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-06/retire-proof.json",
+        "path": "scripts/antas/vault/gap/differential-vlt-gap-06-D.mjs",
+        "why": "changed since evidence"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-10/extraction-proof.json",
+        "path": "artifacts/api-server/src/vault/application/share/entity-types.ts",
+        "why": "missing"
+      },
+      {
+        "file": "reports/antas/vault/gap/VLT-GAP-11/retire-proof.json",
+        "path": "scripts/antas/vault/gap/differential-vlt-gap-11.mjs",
+        "why": "changed since evidence"
+      }
+    ]
+  },
+  "ledger": {
+    "file": "reports/antas/vault/gap/VLT-GAP-18/evidence-ledger.json",
+    "hmac_signed_and_verified": false,
+    "findings": []
+  },
+  "regeneration": {
+    "gates": [
+      {
+        "script": "scripts/antas/vault/gap/validate-vlt-gap-13.mjs",
+        "exit": 0
+      },
+      {
+        "script": "scripts/antas/vault/gap/validate-vlt-gap-13-C.mjs",
+        "exit": 0
+      },
+      {
+        "script": "scripts/antas/vault/gap/validate-vlt-gap-14.mjs",
+        "exit": 0
+      },
+      {
+        "script": "scripts/antas/vault/gap/validate-vlt-gap-14-C.mjs",
+        "exit": 0
+      },
+      {
+        "script": "scripts/antas/vault/gap/validate-vlt-gap-15-A.mjs",
+        "exit": 0
+      },
+      {
+        "script": "scripts/antas/vault/gap/validate-vlt-gap-16.mjs",
+        "exit": 0
+      },
+      {
+        "script": "scripts/antas/vault/gap/validate-vlt-gap-16-C.mjs",
+        "exit": 0
+      },
+      {
+        "script": "scripts/antas/vault/gap/validate-vlt-gap-17.mjs",
+        "exit": 0
+      },
+      {
+        "script": "scripts/antas/vault/gap/validate-vlt-gap-20-C.mjs",
+        "exit": 0
+      }
+    ],
+    "differences": []
+  },
+  "mutations": [
+    {
+      "mutation": "flip VLT-GAP-04 gate.json FAIL->PASS by hand",
+      "must_be_caught_by": [
+        "ledger"
+      ],
+      "caught_by": [
+        "ledger"
+      ],
+      "caught": true
+    },
+    {
+      "mutation": "delete VLT-GAP-04 gate.json (hide a FAIL)",
+      "must_be_caught_by": [
+        "ledger"
+      ],
+      "caught_by": [
+        "ledger"
+      ],
+      "caught": true
+    },
+    {
+      "mutation": "fabricate a bare PASS gate.json for VLT-GAP-07",
+      "must_be_caught_by": [
+        "integrity",
+        "ledger"
+      ],
+      "caught_by": [
+        "integrity",
+        "ledger"
+      ],
+      "caught": true
+    },
+    {
+      "mutation": "edit source_tree_sha256 in VLT-GAP-16 gate.json",
+      "must_be_caught_by": [
+        "integrity",
+        "ledger"
+      ],
+      "caught_by": [
+        "integrity",
+        "ledger"
+      ],
+      "caught": true
+    },
+    {
+      "mutation": "edit a source_hashes value in VLT-GAP-16 gate.json",
+      "must_be_caught_by": [
+        "integrity",
+        "ledger"
+      ],
+      "caught_by": [
+        "integrity",
+        "ledger"
+      ],
+      "caught": true
+    },
+    {
+      "mutation": "hand-edit map-check.json, then re-seal the ledger over it",
+      "must_be_caught_by": [
+        "regen"
+      ],
+      "caught_by": [
+        "regen"
+      ],
+      "caught": true
+    },
+    {
+      "mutation": "--seal over a hand-flipped VLT-GAP-04 FAIL->PASS",
+      "must_be_caught_by": [
+        "seal-refuses"
+      ],
+      "caught_by": [
+        "seal-refuses"
+      ],
+      "caught": true
+    },
+    {
+      "mutation": "plant a gate script that ignores --skip-validation",
+      "must_be_caught_by": [
+        "bypass"
+      ],
+      "caught_by": [
+        "bypass"
+      ],
+      "caught": true
+    }
+  ],
+  "wiring": [],
+  "limits": [
+    "The ledger is tamper-evident, not tamper-proof: without VLT_EVIDENCE_HMAC_KEY (a CI secret) anyone with write access can re-run --seal. --seal refuses FAIL->PASS flips and unreproduced PASS changes, and regeneration catches edits to reproducible evidence.",
+    "Evidence the fast gates cannot regenerate (04, 07-12 point-in-time proofs, 13-D/14-D/15-B..D/16-D heavy wrappers) is protected by the ledger and integrity shape only.",
+    "First seal is trust-on-first-use: it pins the evidence present at that moment, FAIL entries included."
+  ],
+  "findings": [],
+  "status": "PASS"
+}

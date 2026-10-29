@@ -1,0 +1,52 @@
+import { type Request, type Response } from "express";
+import { type ResourceRefBuilder } from "../../lib/policy/pep/types";
+import { pepDecisionObserver } from "../../middlewares/auth";
+import { requireOwnership } from "../../lib/policy/pep/middleware";
+import { selectVaultEntriesForVaultAttachmentEntityResource } from "../infrastructure/repositories/vault-attachment-repository";
+
+/** Extracted verbatim from the pre-extraction route (VLT-GAP-10); bodies unchanged. */
+
+// ─── Route Integration Roadmap — Season E, Phase E5 (new resource builder:
+// vault-attachments.ts) ───────────────────────────────────────────────────
+// This file's own `assertEntityOwnership()` (below) has always been a
+// genuine single-row ownership check — `:id` names a `vault_entries` row,
+// `vaultEntriesTable.userId` is a real, distinct owner column a caller
+// could mismatch against — the same shape every `*Resource`/
+// `requireXOwnership()` pair in `finance.ts`/`projects.ts` already covers.
+// It just predates `requireOwnership()`/`ResourceRefBuilder` existing in
+// this codebase (this file is older than the PEP), so it was never
+// migrated to the pattern — `check-ownership-gate-coverage.ts` doesn't
+// recognize a bespoke inline async boolean helper as wiring, correctly.
+//
+// New `ResourceRefBuilder` below, reusing the EXACT same query
+// `assertEntityOwnership()` already runs (including the `deletedAt IS
+// NULL` condition — a soft-deleted entity must deny the same way a
+// nonexistent one does, not silently skip the filter and leak a
+// soft-deleted entity's attachments). `assertEntityOwnership()` itself is
+// NOT removed — every handler below keeps its own inline call as
+// defense-in-depth, same "keep the working inline check alongside the new
+// router-level gate" precedent E1's book/entry-derived groups already
+// established for `finance.ts`.
+//
+// All 5 routes in this file share one resource type and one pre-existing
+// 404 body (`{ error: "Entity not found" }`) — a single parametrized
+// `requireVaultAttachmentEntityOwnership(action)` factory covers all of
+// them, same shape as `ayzen-mailbox.ts`'s `requireAyzenMailboxSubOwnership`.
+export const VAULT_ATTACHMENT_ENTITY_OWNER_SENTINEL_NONE = -1;
+export const vaultAttachmentEntityResource: ResourceRefBuilder = async (req: Request) => {
+  const raw = req.params.id;
+  const id = parseInt(String(raw), 10);
+  if (!Number.isFinite(id)) {
+    return { type: "vault_entry", id: raw, ownerId: VAULT_ATTACHMENT_ENTITY_OWNER_SENTINEL_NONE };
+  }
+  const [row] = await selectVaultEntriesForVaultAttachmentEntityResource(id);
+  return { type: "vault_entry", id, ownerId: row?.userId ?? VAULT_ATTACHMENT_ENTITY_OWNER_SENTINEL_NONE };
+};
+export function requireVaultAttachmentEntityOwnership(action: string) {
+  return requireOwnership(action, vaultAttachmentEntityResource, {
+    onDecision: pepDecisionObserver,
+    onDeny: (_req: Request, res: Response) => {
+      res.status(404).json({ error: "Entity not found" });
+    },
+  });
+}

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "registryId": "ayzen-events",
+  "defaultDeny": true,
+  "requiredFields": ["eventType", "version", "producer", "consumers", "securityScope", "failurePolicy", "audit"],
+  "compatibility": "backward-compatible-consumers-only",
+  "replayScope": "event:replay",
+  "retentionDays": 30
+}

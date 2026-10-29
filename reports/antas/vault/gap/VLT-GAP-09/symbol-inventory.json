@@ -1,0 +1,1224 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-09",
+  "sub_phase": "08-census",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "0bd2864cc82069220a449f58b3ea75a463663b66985dcfba4946194835863bf6",
+  "source_hashes": {
+    "artifacts/api-server/src/lib/vault-snapshot-restore.ts": "817d33707c22e1ef93167ad1f843f1d45bf601f6ae6fca8877efde1c34d2d7e0",
+    "artifacts/api-server/src/lib/vault-snapshot-extra.ts": "8fd93e4bc3a3480f8b780ff2c680c2e6f522ed96515e4b1856a13ec63cebb0fb",
+    "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts": "8fefe3e230c82d475a50762839fbc920d32f10eea621373d4ca2bb789e87b139",
+    "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts": "79cb434bd019add875632d9fa42b21b0a3107a751ec08f0a15b632a192420565",
+    "artifacts/api-server/src/lib/vault-trash-purge.ts": "5e6c593fc70192fb39c0eace19f88aff188fcdf772883dade3d3e3eb2e2143fd",
+    "artifacts/api-server/src/lib/vault-trash-cron.ts": "cbdebe51aae8205de1f5a6a6a8e33c87e45b318ccb7ab2bc69989d8e94be6635",
+    "artifacts/api-server/src/routes/vault-snapshot.ts": "6ca28fe215532300042e545a3784d7c86e6f526b95ef8958a60566fd51022dc5"
+  },
+  "records": [
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "norm",
+      "kind": "function-value",
+      "exported": false,
+      "lines": [
+        154,
+        154
+      ],
+      "body_sha256": "462c9abb1565cdc45f284bb2dd04351aa744865ee16bf8df11a23ae1847493da",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "vaultKey",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        157,
+        159
+      ],
+      "body_sha256": "b467fa4db8ecabef42018ff42146564dbff3db02df2ac21811b14f0f6fb47541",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "existingVaultKeys",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        160,
+        165
+      ],
+      "body_sha256": "c143d44c33a0deecb54de93767e6f6b60f906a2a162399445c8800300be4fe86",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "insertVaultRow",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        166,
+        174
+      ],
+      "body_sha256": "b9b39c5ebd42a6d392e6a9e353725b366e289c497299844461770e8da7be4d9c",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "walletKey",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        177,
+        180
+      ],
+      "body_sha256": "2f8adf2e821420f7c3ffd93b5cd9c4e8e38128c7fad6ec2cb7c1280b9d52cc4d",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "existingWalletKeys",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        181,
+        185
+      ],
+      "body_sha256": "8798dad9aa50b741016fa6186356c3da8497a44752712d08d6fcfa87a6c254b5",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "insertWalletRow",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        186,
+        196
+      ],
+      "body_sha256": "09caea3d851913bd2abcab064747191a3559fa0411ce5c720e15bb1930578e53",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "RAW_PLANS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        208,
+        307
+      ],
+      "body_sha256": "363a7d024b19cbcd07f1d520f0c69283d22d58e528376d98d152363502b866b4",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "RESTORE_TABLE_SQL_NAMES",
+      "kind": "const",
+      "exported": true,
+      "lines": [
+        317,
+        330
+      ],
+      "body_sha256": "dcd345d5581912d26f631f7a834db3d722e114fb5b1797d29fbb54a9db65d675",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "rawRowKey",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        332,
+        335
+      ],
+      "body_sha256": "b9e15a7b66c7d3766a43163586d4b4010bc151e1a88983f6253f4b58057fd88e",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "rawRowDisplay",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        336,
+        339
+      ],
+      "body_sha256": "70faf8e754ba3f2d125227beff5bb4ed86989abadc0901035923dc28596e96bd",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "existingRawKeys",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        340,
+        346
+      ],
+      "body_sha256": "0b2381b06ba8a14394602df03c313abf92289d5834f69843bed4ca0b94d54202",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "insertRawRow",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        347,
+        352
+      ],
+      "body_sha256": "098328cdea5e34e5576de31424929b7f54c972b143fd6f53cf740293c0e56031",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "templateKey",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        355,
+        357
+      ],
+      "body_sha256": "bceb58e3009c31a7827656b46dcc67aa15ae2c43aadb81750298d5f2fae2e132",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "existingTemplateKeys",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        358,
+        361
+      ],
+      "body_sha256": "0c2ff9c4908f60be8b4ca32af95b9c7ec5dfd67b6234d7555b405037c5d1448c",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "insertTemplateRow",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        362,
+        368
+      ],
+      "body_sha256": "9d3d0e2f45c90161b8609d860b1b7359bcadddcc258fb8cdb0a8baa32e84e53d",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "messageKey",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        374,
+        376
+      ],
+      "body_sha256": "9e41098ea0428b24cfd46266e5b22c0a4067424f2fcc8f16ffa021b5499ae0d6",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "existingMessageKeys",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        377,
+        380
+      ],
+      "body_sha256": "e0b32ef2642801343f45c89ce33c0feb15f802a9f26aad9b2fa16d8b7e80579f",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "MESSAGE_INSERT_COLS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        381,
+        386
+      ],
+      "body_sha256": "ae5c668f3ea702970e15c9fbc7ae1640b61c613210804bda44cf9edcf0269046",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "insertMessageRow",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        387,
+        399
+      ],
+      "body_sha256": "a9fbba6e5b6192092811f44bc2f3aa50aa702d1686f74b648c73d142b69b4f70",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "dataEntityKey",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        406,
+        409
+      ],
+      "body_sha256": "fb87135060f4778edfef3228a1cf436e4e212e6d0e774040e18f099be7411ba0",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "existingDataEntityKeys",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        410,
+        413
+      ],
+      "body_sha256": "6eb8ed3c9e4ebaf65815e8f0ad78b426c1cdc9cc5467297b25ff12eac267565e",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "DATA_ENTITY_INSERT_COLS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        414,
+        414
+      ],
+      "body_sha256": "0da4bf8aa1ebdb1386dd24ebd33a39cfcc08dd34f0020c0594f4a7abbdc27a0f",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "insertDataEntityRow",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        415,
+        421
+      ],
+      "body_sha256": "a2bfbe79906579869e8c1012bd36b918bb5865b730eaa86a5c8f76e909c880fa",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "emailAccountKey",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        442,
+        445
+      ],
+      "body_sha256": "d5c96cedc9db07cebf3a5c250d9098a4ccff75a1f21fd6f3d9da260f915a4598",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "existingEmailAccountKeys",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        446,
+        449
+      ],
+      "body_sha256": "bb43548d94bd70aa52f9a3104287b2804f7696e1f020e2de1d1e2bebfb160684",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "EMAIL_ACCOUNT_INSERT_COLS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        450,
+        454
+      ],
+      "body_sha256": "bf36fc588c6198b1645c34b1977df2ff64475a3d6cdeea98e794c9040590a417",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "insertEmailAccountRow",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        455,
+        462
+      ],
+      "body_sha256": "1afc7aef6043632db946509239779b15833583a1a2322f65f45088101157c02b",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "buildRestoreDiff",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        465,
+        551
+      ],
+      "body_sha256": "253d543278144703a66934765ff350f1d68412d114215a3f862400cd6821a8df",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "name": "applyRestoreDiff",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        563,
+        698
+      ],
+      "body_sha256": "2541d1d529142804b1e5c98e5d2e9675ea5ef1b0145e5297d8be3c7f3c6dbe5f",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "rows",
+      "kind": "function-value",
+      "exported": false,
+      "lines": [
+        57,
+        57
+      ],
+      "body_sha256": "904a8c8a0cf36a464017b554e4586dde48e4a0ff3759199b1058592509ef6655",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherMailboxSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        71,
+        125
+      ],
+      "body_sha256": "abbe55193a69e03b0334a2cd6521a2557eac2edbf9a86b7c83aafdf8e805c7a0",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherProjectsSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        136,
+        145
+      ],
+      "body_sha256": "2eda8dc54ec754caff142a0a9db97814254010c5ac87bcacc7153884d59f1715",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherTasksSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        152,
+        155
+      ],
+      "body_sha256": "d697a57ebe5ae2ad193b705dc43fc59cf0d68ea12c079f6a349064862b28927e",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherFinanceSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        185,
+        266
+      ],
+      "body_sha256": "fab351a848e5e1eeced1f04a3e00dc441e0d80570b37d1e7293feeaac811a4c9",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "USER_PROFILE_EXCLUDE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        274,
+        274
+      ],
+      "body_sha256": "63e56b3a6e4f73610b605cea2a059ebe997d69e836665a152bd7f495fbe613aa",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherUserProfileSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        276,
+        285
+      ],
+      "body_sha256": "1fe0f4259eb341013e97c1308636bcabd772a2e4234685b9f81ff5b56d32e27a",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "reencryptMailboxMessageForRestore",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        287,
+        293
+      ],
+      "body_sha256": "4faf773d6de147eea7970bb2005bb4e482475eda6e4dd5b0b92993827451cfa8",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "reencryptMailboxTemplateForRestore",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        295,
+        300
+      ],
+      "body_sha256": "3acb9d3b3fdb389c785c540eac9d84b69da8bcd53eaadd2b92b4d16918bdf01d",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherWalletHubSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        314,
+        325
+      ],
+      "body_sha256": "d89c57aa9bf7f54c4ec55eb78021f7383f578623f112ac13acb2fec8808184c8",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "ACTIVITY_TRACE_LIMIT",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        353,
+        353
+      ],
+      "body_sha256": "81a83544cf93c245178cbc1620030f1123f435af867c79d87135983c52ab39d9",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherActivitySnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        361,
+        377
+      ],
+      "body_sha256": "6a0848780fcfeeb41f040f2446f701ae3e08ecd6b7a66a600d7306b5aadde310",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherEntityCoverageSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        446,
+        465
+      ],
+      "body_sha256": "00638e5bae9528792ddf436b3d375e8c6bf73aa80f451e8810ce10680c5ec1e7",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherEmergencyAccessSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        498,
+        509
+      ],
+      "body_sha256": "476925fd74d32dfeb82308fd2610c1df0dbef6044a791f565900d25b3c6d48e1",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "reencryptDataEntityForRestore",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        512,
+        517
+      ],
+      "body_sha256": "9d7a3e656f7af72214db8b493e52527d8a059fcf11025b43f259468884ac5ba8",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "ACCOUNT_EXTRAS_LIMIT",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        584,
+        584
+      ],
+      "body_sha256": "81a83544cf93c245178cbc1620030f1123f435af867c79d87135983c52ab39d9",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "API_KEY_EXCLUDE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        586,
+        586
+      ],
+      "body_sha256": "95cb89a7b29fcb2ed9c845e632d25e7d41d88cb507a84b3a3c11da97659725ce",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherAccountExtrasSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        600,
+        641
+      ],
+      "body_sha256": "9802de0d14e47fdba3002c61a9dcbe10dad8f37ae12cccae21d1632603b249e9",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "TEAM_ACTIVITY_LIMIT",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        702,
+        702
+      ],
+      "body_sha256": "81a83544cf93c245178cbc1620030f1123f435af867c79d87135983c52ab39d9",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherTeamSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        716,
+        742
+      ],
+      "body_sha256": "9408514acaa03933cef98ef6b8b5da8e5f6482e8fd242504462b42db7d9aed59",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherEarningSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        765,
+        768
+      ],
+      "body_sha256": "9ff24e42663136954b0693addb59e93a7614e6df64aeeaa4751627d81ef8e96b",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "BACKUP_SYSTEM_AUDIT_LIMIT",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        827,
+        827
+      ],
+      "body_sha256": "0604cd3138feed202ef293e062da2f4720f77a05d25ee036a7a01c9cfcdd1f0a",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "WEBHOOK_SECRET_EXCLUDE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        828,
+        828
+      ],
+      "body_sha256": "9abb8fd023d06f62dde41ddef72ba2c7d572a4dc7181943a851c5605222e76da",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "CLOUD_CONNECTION_EXCLUDE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        829,
+        829
+      ],
+      "body_sha256": "1d504ce63d19e24a2e0c1974fddec18cbb74eb5eac026b3b90ecde44d6003c7f",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "stripKeys",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        831,
+        838
+      ],
+      "body_sha256": "a6b4b058573321eac79bad59aa457b1c9aefad30fca7ea72bae2dc23ea38d344",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherBackupSystemSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        849,
+        879
+      ],
+      "body_sha256": "b28e9ce6fa3b23056fad500acae68ccce316085836d18b0b9e2c2bd02f31ed54",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherEmailAccountsSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        926,
+        934
+      ],
+      "body_sha256": "23973f537d67acd463374e923d0165c30ac162a06517a4c5fce8f7e5868517c0",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "reencryptEmailAccountForRestore",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        947,
+        953
+      ],
+      "body_sha256": "01ef36294885cf9e630379e6580104d3eef7faa1e4986b00233697c243cc5053",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherMailboxReputationSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        1004,
+        1011
+      ],
+      "body_sha256": "7255ca33df6a2543004b448546d68e3700d0f2fc47859c1cc50892d044c7488f",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "name": "gatherExternalMailSnapshot",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        1045,
+        1052
+      ],
+      "body_sha256": "f1d951900a29a477b1338dad05c6cec745850d65bb3cd064782f9b2a6cf46be0",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts",
+      "name": "VAULT_SNAPSHOT_TRASH_RETENTION_DAYS",
+      "kind": "const",
+      "exported": true,
+      "lines": [
+        30,
+        30
+      ],
+      "body_sha256": "9e26547f9f6b47727d457d88bbc90096d303b1e2ceafdf769d22b2ed852c6045",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts",
+      "name": "purgeExpiredVaultSnapshotTrash",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        36,
+        61
+      ],
+      "body_sha256": "3e094890b120b59a6dd83914a0f8e7aa1ed806f315b9b67f1a35e8fe752d18c9",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts",
+      "name": "scheduled",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        20,
+        20
+      ],
+      "body_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts",
+      "name": "startVaultSnapshotTrashCron",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        22,
+        46
+      ],
+      "body_sha256": "8f60f0616be51812fdb498ee05d6802b017e0b6432b8a8cc2c71f573f91b0437",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-trash-purge.ts",
+      "name": "VAULT_TRASH_RETENTION_DAYS",
+      "kind": "const",
+      "exported": true,
+      "lines": [
+        23,
+        23
+      ],
+      "body_sha256": "dc6659917d070a53138ffd9dbd0d287429e9aab472915768188e2800fa4e150f",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-trash-purge.ts",
+      "name": "purgeExpiredVaultTrash",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        29,
+        51
+      ],
+      "body_sha256": "7dc952ea43eace94c1d354884150a02a9c3728b3be26e5eb09c6e41fe9f5f1eb",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-trash-cron.ts",
+      "name": "scheduled",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        19,
+        19
+      ],
+      "body_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-trash-cron.ts",
+      "name": "startVaultTrashCron",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        21,
+        45
+      ],
+      "body_sha256": "30b92f6710799e395ce7aedf0279f065a63f50a1c1cd05fe5c88dd9a52f97452",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "router",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        95,
+        95
+      ],
+      "body_sha256": "bda692dc52aa8238226acd3c84b38be744a6ff60086dd7ce0929fb8c12f36d87",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "BLOB_PREFIX_V1",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        109,
+        109
+      ],
+      "body_sha256": "1258479fed134e31a133729e4f9d026bc0e6529f69259c5cdc412d4f7f514308",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "BLOB_PREFIX_V2",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        110,
+        110
+      ],
+      "body_sha256": "d17cc3476fc3b0a83aefedb162d116e1577ac7f08c4065934db196558228b386",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "MIN_SNAPSHOT_PASSWORD_LENGTH",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        111,
+        111
+      ],
+      "body_sha256": "4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "SCRYPT_KEYLEN",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        112,
+        112
+      ],
+      "body_sha256": "e29c9c180c6279b0b02abd6a1801c7c04082cf486ec027aa13515e4f3884bb6b",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "SCRYPT_V2_COST",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        113,
+        113
+      ],
+      "body_sha256": "0c3d71d1f104e05dafdaa7a18cdbffa2256485e4a330614ec17e6fe2bbf84423",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "MAX_STORED_SNAPSHOTS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        117,
+        117
+      ],
+      "body_sha256": "f5ca38f748a1d6eaf726b8a42fb575c3c71f1864a8143301782de13da2d9202b",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "DEFAULT_STORAGE_QUOTA_BYTES",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        126,
+        126
+      ],
+      "body_sha256": "90b445cf8a8c4b5ed9a994832bd55217f45997886c7e9b30e2cfcffcf9dfeb68",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "VAULT_SNAPSHOT_OWNER_SENTINEL_NONE",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        155,
+        155
+      ],
+      "body_sha256": "1bad6b8cf97131fceab8543e81f7757195fbb1d36b376ee994ad1cf17699c464",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "vaultSnapshotResource",
+      "kind": "function-value",
+      "exported": false,
+      "lines": [
+        156,
+        164
+      ],
+      "body_sha256": "963c8cb5b19bca6f43566ebe4100a48baa7696729ad40d839ef71c9ebb7b1bdf",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "requireVaultSnapshotOwnershipStrictId",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        165,
+        174
+      ],
+      "body_sha256": "b16f77a5dab1adb0a4858e07254376315837601c319d478a033423dec54f1a8c",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "MAX_TOTAL_SNAPSHOT_BYTES",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        175,
+        175
+      ],
+      "body_sha256": "4e73f15a27e201741ef207237f52c7c49d04e07dd0513dac23cf7c263110a774",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "snapshotBodyParser",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        179,
+        179
+      ],
+      "body_sha256": "b283f4a271b3a512142b9d6e54c7022b91510aee31432f72b6b25f201c9d0028",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "deriveKey",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        181,
+        184
+      ],
+      "body_sha256": "150890c4dfb22a65731eb18d36738232aaadc1c9e3c0268242ae2da6d972563b",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "encryptBlob",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        186,
+        191
+      ],
+      "body_sha256": "71d7c5399d56f96daab725fd5d7a1c4fa0a3f2ccd189c03a160e65b7189e9853",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "decryptBlob",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        193,
+        211
+      ],
+      "body_sha256": "7da0d564d7156420bb062c6fa32f75137d8ccf2e5539e354ce9f7b67ae2350ed",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "safeDecryptPhrase",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        213,
+        215
+      ],
+      "body_sha256": "3eb0330c8337c387fca005c7873cfc831ab3a173362dba55ed8750accdb0d9e4",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "verifyStoredChecksum",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        224,
+        230
+      ],
+      "body_sha256": "b29cc7a30a8e13882c1702a61efd30ef4845a6165318e2019a6be85a012fa1ff",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "pruneOldSnapshots",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        248,
+        278
+      ],
+      "body_sha256": "3e1dff676fa13b3a7da20700737ecfe7c204dc071c1007d4a4b7e5b1e32515a6",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "buildVaultSnapshotPayload",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        289,
+        590
+      ],
+      "body_sha256": "e371330300946b0d14d29a04c1d3e9f2bd922e33989280961ee9769044db6be1",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "storeSnapshotRow",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        651,
+        683
+      ],
+      "body_sha256": "9ede58c462e80b5a742c1d1e07e80ad0f4f194e3f1fe3cd1703cc51ba150c832",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "name": "decryptSnapshotFromRequest",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        998,
+        1042
+      ],
+      "body_sha256": "70fd11604df2b693d9719c93653a1fe3bbac4fcfa737ebfe2f76233262229e13",
+      "db_ops": true,
+      "provider_ops": false
+    }
+  ],
+  "consumers": {
+    "artifacts/api-server/src/lib/vault-trash-cron.ts": [
+      "artifacts/api-server/src/index.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts": [
+      "artifacts/api-server/src/index.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-snapshot-restore.ts": [
+      "artifacts/api-server/src/lib/dr-test-runner.ts",
+      "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "artifacts/api-server/src/vault/application/index.ts",
+      "artifacts/api-server/src/vault/infrastructure/index.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-snapshot-extra.ts": [
+      "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "artifacts/api-server/src/routes/vault-snapshot.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts": [
+      "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts",
+      "artifacts/api-server/src/routes/vault-snapshot.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-trash-purge.ts": [
+      "artifacts/api-server/src/lib/vault-trash-cron.ts",
+      "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "artifacts/api-server/src/vault/application/entity/lifecycle.ts"
+    ]
+  },
+  "summary": {
+    "files": 7,
+    "symbols": 90,
+    "db_symbols": 34,
+    "provider_symbols": 2,
+    "consumers": 13
+  },
+  "status": "PASS"
+}

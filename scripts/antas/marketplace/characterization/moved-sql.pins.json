@@ -1,0 +1,146 @@
+{
+ "note": "Normalized SQL of routes BEFORE they moved out of the route files (MKT-05). The files listed in `repos` together must hold exactly these statements (compared as a sorted list).",
+ "files": {
+  "marketplace-discovery.ts": {
+   "statements": [
+    "SELECT listing_type, price_azn FROM marketplace_listings WHERE id=$1",
+    "SELECT * FROM marketplace_listings WHERE id <> $1 AND status='active' AND listing_type=$2 ORDER BY ABS(price_azn - $3) ASC LIMIT 10",
+    "SELECT * FROM marketplace_listings WHERE status='active' AND created_at >= NOW() - INTERVAL '14 days' ORDER BY view_count DESC, created_at DESC LIMIT $1",
+    "SELECT listing_type, COUNT(*)::int as count FROM marketplace_listings WHERE status='active' GROUP BY listing_type ORDER BY count DESC",
+    "SELECT ml.*, u.username as seller_username FROM marketplace_listings ml LEFT JOIN users u ON u.id = ml.seller_id WHERE ml.status='active' AND ml.is_featured=TRUE AND (ml.featured_until IS NULL OR ml.featured_until > NOW()) ORDER BY ml.created_at DESC LIMIT $1"
+   ],
+   "repos": [
+    "marketplace/catalog/infrastructure/discovery-repo.ts"
+   ]
+  },
+  "marketplace-analytics.ts": {
+   "statements": [
+    "SELECT (SELECT COUNT(*)::int FROM marketplace_listings WHERE seller_id=$1 AND status='active') as active_listings, (SELECT COUNT(*)::int FROM marketplace_listings WHERE seller_id=$1 AND status='sold') as sold_listings, (SELECT COUNT(*)::int FROM marketplace_orders WHERE seller_id=$1 AND status='completed') as completed_sales, (SELECT COALESCE(SUM(seller_receives),0) FROM marketplace_orders WHERE seller_id=$1 AND status IN ('approved','completed')) as total_earned_azn, (SELECT COALESCE(AVG(rating),0)::float FROM marketplace_reviews WHERE seller_id=$1) as avg_rating, (SELECT COUNT(*)::int FROM marketplace_reviews WHERE seller_id=$1) as review_count",
+    "SELECT DATE(resolved_at) as date, COALESCE(SUM(seller_receives),0) as revenue_azn, COUNT(*)::int as orders FROM marketplace_orders WHERE seller_id=$1 AND status IN ('approved','completed') AND resolved_at >= NOW() - ($2 || ' days')::interval GROUP BY DATE(resolved_at) ORDER BY date ASC",
+    "SELECT ml.id, ml.title, ml.view_count, COUNT(mo.id) FILTER (WHERE mo.status IN ('approved','completed'))::int as sales_count, COALESCE(SUM(mo.seller_receives) FILTER (WHERE mo.status IN ('approved','completed')),0) as revenue_azn FROM marketplace_listings ml LEFT JOIN marketplace_orders mo ON mo.listing_id = ml.id WHERE ml.seller_id = $1 GROUP BY ml.id ORDER BY revenue_azn DESC LIMIT 10",
+    "SELECT view_count FROM marketplace_listings WHERE id=$1",
+    "UPDATE marketplace_listings SET view_count = view_count + 1 WHERE id=$1 RETURNING view_count",
+    "SELECT DATE(resolved_at) as date, COUNT(*)::int as orders, COALESCE(SUM(price_azn),0) as volume_azn, COALESCE(SUM(fee_azn),0) as fees_azn FROM marketplace_orders WHERE status IN ('approved','completed') AND resolved_at >= NOW() - ($1 || ' days')::interval GROUP BY DATE(resolved_at) ORDER BY date ASC"
+   ],
+   "repos": [
+    "marketplace/analytics/infrastructure/analytics-repo.ts"
+   ]
+  },
+  "marketplace-alerts.ts": {
+   "repos": [
+    "marketplace/engagement/infrastructure/alerts-repo.ts",
+    "marketplace/engagement/domain/alerts.ts"
+   ],
+   "statements": [
+    "SELECT user_id FROM marketplace_alerts WHERE id=$1 LIMIT 1",
+    "INSERT INTO marketplace_alerts (user_id, keyword, listing_type, max_price_azn, platform, is_active, created_at) VALUES ($1,$2,$3,$4,$5,TRUE,NOW()) RETURNING *",
+    "SELECT * FROM marketplace_alerts WHERE user_id=$1 ORDER BY created_at DESC",
+    "UPDATE marketplace_alerts SET ${sets.join(\", \")} WHERE id=$${params.length - 1} AND user_id=$${params.length} RETURNING *",
+    "DELETE FROM marketplace_alerts WHERE id=$1 AND user_id=$2 RETURNING id",
+    "INSERT INTO marketplace_saved_searches (user_id, name, filters, created_at) VALUES ($1,$2,$3,NOW()) RETURNING *",
+    "SELECT * FROM marketplace_saved_searches WHERE user_id=$1 ORDER BY created_at DESC"
+   ]
+  },
+  "marketplace-reviews.ts": {
+   "repos": [
+    "marketplace/engagement/infrastructure/reviews-repo.ts"
+   ],
+   "statements": [
+    "SELECT buyer_id FROM marketplace_orders WHERE id=$1 LIMIT 1",
+    "SELECT buyer_id FROM marketplace_reviews WHERE id=$1 LIMIT 1",
+    "SELECT seller_id FROM marketplace_reviews WHERE id=$1 LIMIT 1",
+    "SELECT * FROM marketplace_orders WHERE id=$1 AND buyer_id=$2 AND status='completed'",
+    "INSERT INTO marketplace_reviews (order_id, listing_id, buyer_id, seller_id, rating, comment, created_at, updated_at) VALUES ($1,$2,$3,$4,$5,$6,NOW(),NOW()) ON CONFLICT (order_id) DO UPDATE SET rating=$5, comment=$6, updated_at=NOW() RETURNING *",
+    "SELECT mr.*, ml.title as listing_title, u.username as buyer_username FROM marketplace_reviews mr JOIN marketplace_listings ml ON ml.id = mr.listing_id LEFT JOIN users u ON u.id = mr.buyer_id WHERE mr.seller_id = $1 ORDER BY mr.created_at DESC LIMIT $2 OFFSET $3",
+    "SELECT COUNT(*)::int as review_count, COALESCE(AVG(rating),0)::float as avg_rating, COUNT(*) FILTER (WHERE rating=5)::int as five_star, COUNT(*) FILTER (WHERE rating=4)::int as four_star, COUNT(*) FILTER (WHERE rating=3)::int as three_star, COUNT(*) FILTER (WHERE rating=2)::int as two_star, COUNT(*) FILTER (WHERE rating=1)::int as one_star FROM marketplace_reviews WHERE seller_id=$1",
+    "UPDATE marketplace_reviews SET rating = COALESCE($1, rating), comment = COALESCE($2, comment), updated_at=NOW() WHERE id=$3 AND buyer_id=$4 RETURNING *",
+    "DELETE FROM marketplace_reviews WHERE id=$1 AND buyer_id=$2 RETURNING id",
+    "UPDATE marketplace_reviews SET seller_response=$1, seller_response_at=NOW(), updated_at=NOW() WHERE id=$2 AND seller_id=$3 RETURNING *",
+    "SELECT mr.*, ml.title as listing_title FROM marketplace_reviews mr JOIN marketplace_listings ml ON ml.id = mr.listing_id WHERE mr.buyer_id = $1 ORDER BY mr.created_at DESC"
+   ]
+  },
+  "marketplace-reports.ts": {
+   "repos": [
+    "marketplace/engagement/infrastructure/reports-repo.ts"
+   ],
+   "statements": [
+    "SELECT id FROM marketplace_listings WHERE id=$1",
+    "INSERT INTO marketplace_reports (listing_id, reporter_id, reason, details, status, created_at) VALUES ($1,$2,$3,$4,'pending',NOW()) RETURNING *",
+    "SELECT mr.*, ml.title as listing_title, u.username as reporter_username FROM marketplace_reports mr LEFT JOIN marketplace_listings ml ON ml.id = mr.listing_id LEFT JOIN users u ON u.id = mr.reporter_id WHERE mr.status = $1 ORDER BY mr.created_at ASC",
+    "SELECT * FROM marketplace_reports WHERE id=$1 AND status='pending' FOR UPDATE",
+    "UPDATE marketplace_listings SET status='removed', updated_at=NOW() WHERE id=$1",
+    "UPDATE marketplace_reports SET status='resolved', admin_note=$1, resolved_at=NOW() WHERE id=$2",
+    "SELECT mr.*, ml.title as listing_title FROM marketplace_reports mr LEFT JOIN marketplace_listings ml ON ml.id = mr.listing_id WHERE mr.reporter_id = $1 ORDER BY mr.created_at DESC",
+    "INSERT INTO marketplace_reports (reported_user_id, reporter_id, reason, details, status, created_at) VALUES ($1,$2,$3,$4,'pending',NOW()) RETURNING *"
+   ]
+  },
+  "marketplace.ts#05f": {
+   "routeFile": "marketplace.ts",
+   "routes": [
+    "GET /marketplace/settings",
+    "PATCH /marketplace/settings",
+    "GET /admin/marketplace/activity",
+    "GET /marketplace/stats",
+    "GET /marketplace/azn/chart"
+   ],
+   "filter": "sqlish",
+   "repos": [
+    "marketplace/admin/infrastructure/settings-repo.ts",
+    "marketplace/admin/domain/activity.ts",
+    "marketplace/admin/infrastructure/activity-repo.ts",
+    "marketplace/analytics/infrastructure/market-stats-repo.ts"
+   ],
+   "statements": [
+    "SELECT * FROM marketplace_settings LIMIT 1",
+    "INSERT INTO marketplace_settings (id, fee_pct, enabled, updated_at) VALUES (1, $1, $2, NOW()) ON CONFLICT (id) DO UPDATE SET fee_pct = $1, enabled = $2, updated_at = NOW()",
+    "SELECT * FROM marketplace_activity_log",
+    "WHERE event_type = $${params.length + 1}",
+    "ORDER BY created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}",
+    "SELECT COUNT(*) FROM marketplace_activity_log${event_type ? \" WHERE event_type=$1\" : \"\"}",
+    "SELECT (SELECT COUNT(*) FROM marketplace_listings WHERE status='active') as active_listings, (SELECT COUNT(*) FROM marketplace_orders WHERE status='approved') as completed_trades, (SELECT COALESCE(SUM(price_azn),0) FROM marketplace_orders WHERE status='approved') as total_volume_azn, (SELECT COALESCE(SUM(fee_azn),0) FROM marketplace_orders WHERE status='approved') as total_fees_azn"
+   ]
+  },
+  "marketplace.ts#05g": {
+   "routeFile": "marketplace.ts",
+   "routes": [
+    "GET /marketplace/listings",
+    "GET /marketplace/listings/:id",
+    "GET /marketplace/my-listings",
+    "GET /admin/marketplace/listings",
+    "GET /marketplace/favorites",
+    "POST /marketplace/listings/:id/favorite",
+    "DELETE /marketplace/listings/:id/favorite",
+    "GET /marketplace/search",
+    "GET /marketplace/listings/:id/history"
+   ],
+   "filter": "sqlish",
+   "repos": [
+    "marketplace/catalog/domain/listing-queries.ts",
+    "marketplace/catalog/infrastructure/listings-repo.ts",
+    "marketplace/engagement/infrastructure/favorites-repo.ts"
+   ],
+   "statements": [
+    "SELECT ml.*, u.username as seller_username FROM marketplace_listings ml LEFT JOIN users u ON u.id = ml.seller_id WHERE ml.status = 'active' AND (ml.listing_expires_at IS NULL OR ml.listing_expires_at > NOW())",
+    "AND ml.listing_type = $${params.length + 1}",
+    "ORDER BY ml.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}",
+    "SELECT COUNT(*) FROM marketplace_listings WHERE status = 'active'${type ? \" AND listing_type = $1\" : \"\"}",
+    "SELECT ml.*, u.username as seller_username, (SELECT COUNT(*)::int FROM marketplace_favorites WHERE listing_id = ml.id) as favorite_count FROM marketplace_listings ml LEFT JOIN users u ON u.id = ml.seller_id WHERE ml.id = $1",
+    "SELECT platform, price_azn FROM marketplace_listing_platform_pricing WHERE listing_id=$1 ORDER BY platform",
+    "SELECT ml.*, u.username as buyer_username FROM marketplace_listings ml LEFT JOIN users u ON u.id = ml.buyer_id WHERE ml.seller_id = $1 ORDER BY ml.created_at DESC",
+    "SELECT ml.*, u.username as seller_username FROM marketplace_listings ml LEFT JOIN users u ON u.id = ml.seller_id ORDER BY ml.created_at DESC LIMIT 100",
+    "SELECT mf.id as favorite_id, mf.created_at as favorited_at, ml.*, u.username as seller_username FROM marketplace_favorites mf JOIN marketplace_listings ml ON ml.id = mf.listing_id LEFT JOIN users u ON u.id = ml.seller_id WHERE mf.user_id = $1 ORDER BY mf.created_at DESC",
+    "SELECT id FROM marketplace_listings WHERE id=$1",
+    "INSERT INTO marketplace_favorites (user_id, listing_id) VALUES ($1,$2) ON CONFLICT (user_id, listing_id) DO NOTHING RETURNING *",
+    "DELETE FROM marketplace_favorites WHERE user_id=$1 AND listing_id=$2",
+    "SELECT ml.*, u.username as seller_username FROM marketplace_listings ml LEFT JOIN users u ON u.id = ml.seller_id WHERE ml.status = 'active' AND (ml.listing_expires_at IS NULL OR ml.listing_expires_at > NOW())",
+    "AND (ml.title ILIKE $${params.length} OR ml.description ILIKE $${params.length})",
+    "AND ml.listing_type = $${params.length}",
+    "AND ml.condition = $${params.length}",
+    "AND ml.price_azn >= $${params.length}",
+    "AND ml.price_azn <= $${params.length}",
+    "ORDER BY (ml.is_featured AND (ml.featured_until IS NULL OR ml.featured_until > NOW())) DESC, ml.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}",
+    "SELECT * FROM marketplace_activity_log WHERE target_id = $1 AND target_type IN ('entity','local_account','nft','azn','username_nft','badge_nft') ORDER BY created_at DESC LIMIT 50"
+   ]
+  }
+ }
+}

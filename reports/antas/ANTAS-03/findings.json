@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "provider-backed OIDC exercise",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "session revocation exercise",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

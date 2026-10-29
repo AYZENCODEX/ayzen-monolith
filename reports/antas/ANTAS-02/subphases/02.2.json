@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-02.2",
+  "phase": "ANTAS-02",
+  "name": "Forbidden Dependency Graph",
+  "generatedAt": "2026-09-29T06:06:06.715Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "scripts/validate-domain-boundaries.mjs",
+    "docs/architecture/dependency-map.md"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

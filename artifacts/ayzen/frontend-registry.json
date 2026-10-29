@@ -1,0 +1,6002 @@
+{
+  "schemaVersion": 1,
+  "registryId": "frontend-registry",
+  "generatedAt": "2026-09-27",
+  "generatedBy": "tools/ui-circuit-validator/build.mjs",
+  "schema": "schemas/ui-circuit/frontend-route-entry.v1.json",
+  "sourceRegistries": [
+    "artifacts/ayzen/src/lib/route-config.tsx (ADMIN_ROUTES, USER_ROUTES)",
+    "artifacts/ayzen/src/App.tsx (public <Route> declarations)",
+    "artifacts/ayzen/src/pages/**/*.tsx (static regex scan, not full AST)",
+    "artifacts/ayzen/src/hooks/*.ts (one import-hop only)",
+    "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
+  ],
+  "completeness": {
+    "totalRoutes": 183,
+    "resolvedToPage": 183,
+    "totalPageFiles": 188,
+    "deadPages": 11,
+    "routesWithNoApiCalls": 118,
+    "routesWithOrphanCalls": 0,
+    "routesOk": 65
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/project-templates",
+      "pageFile": "pages/admin/project-templates.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/tools/wallet",
+      "pageFile": "pages/admin/tools/wallet.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/revenue",
+      "pageFile": "pages/admin/revenue.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/tools/streak",
+      "pageFile": "pages/admin/tools/streak.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/tools/networks",
+      "pageFile": "pages/admin/tools/networks.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/leaderboard",
+      "pageFile": "pages/admin/leaderboard.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/vault",
+      "pageFile": "pages/admin/vault.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/emergency-access",
+      "pageFile": "pages/admin/emergency-access.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/categories",
+      "pageFile": "pages/admin/categories.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/health-rules",
+      "pageFile": "pages/admin/health-rules.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/mail-sending-config",
+      "pageFile": "pages/admin/mail-sending-config.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/teams",
+      "pageFile": "pages/admin/teams.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/team-vault",
+      "pageFile": "pages/admin/team-vault.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/ai-agent",
+      "pageFile": "pages/admin/ai-agent.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/mcp-agents",
+      "pageFile": "pages/admin/mcp-agents.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/mega-engine",
+      "pageFile": "pages/admin/mega-engine.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/mega-engine/observability",
+      "pageFile": "pages/admin/mega-engine-observability.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/custom/:slug",
+      "pageFile": "pages/admin/custom-page.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/moderator/custom/:slug",
+      "pageFile": "pages/moderator/custom-page.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/team_leader/custom/:slug",
+      "pageFile": "pages/team-leader/custom-page.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/projects",
+      "pageFile": "pages/user/projects.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/calendar",
+      "pageFile": "pages/user/airdrop-calendar.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/hub",
+      "pageFile": "pages/user/vault-hub.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/wallet-hub",
+      "pageFile": "pages/user/vault-wallet-hub.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/wallet-hub/:subtab",
+      "pageFile": "pages/user/vault-wallet-hub.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/enrollment/overview",
+      "pageFile": "pages/user/vault-enrollment-overview.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/enrollment/entity",
+      "pageFile": "pages/user/vault-enrollment-entity.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/enrollment/entity/:view",
+      "pageFile": "pages/user/vault-enrollment-entity.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/enrollment/project",
+      "pageFile": "pages/user/vault-enrollment-project.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/enrollment/project/:id",
+      "pageFile": "pages/user/vault-enrollment-project-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/enrollment/linked",
+      "pageFile": "pages/user/vault-enrollment-linked.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/enrollment/linked/:entityId",
+      "pageFile": "pages/user/vault-enrollment-linked-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/security",
+      "pageFile": "pages/user/vault-security.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/backup/:category/:id",
+      "pageFile": "pages/user/vault-backup-entity.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/backup/:category",
+      "pageFile": "pages/user/vault-backup.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/backup",
+      "pageFile": "pages/user/vault-backup.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/shared",
+      "pageFile": "pages/user/vault-shared.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/shared/:entityType/:entityId",
+      "pageFile": "pages/user/vault-shared-entity.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/banned",
+      "pageFile": "pages/user/vault-banned.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/trash",
+      "pageFile": "pages/user/vault-trash.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/activity",
+      "pageFile": "pages/user/vault-activity.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/migration",
+      "pageFile": "pages/user/vault-migration.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/snapshot",
+      "pageFile": "pages/user/vault-snapshot.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/compliance",
+      "pageFile": "pages/user/vault-compliance.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/emergency-access",
+      "pageFile": "pages/user/vault-emergency-access.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/projects",
+      "pageFile": "pages/user/project-entities.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/entity/:id/access",
+      "pageFile": "pages/user/vault-entity-access.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/kyc/data/overview",
+      "pageFile": "pages/user/vault-kyc-data-overview.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/kyc/data/used",
+      "pageFile": "pages/user/vault-kyc-data-used.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/kyc/data/unused",
+      "pageFile": "pages/user/vault-kyc-data-unused.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/kyc/data/:id",
+      "pageFile": "pages/user/vault-kyc-data-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/kyc/enrolled",
+      "pageFile": "pages/user/vault-kyc-enrolled.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/kyc/:id",
+      "pageFile": "pages/user/vault-kyc-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/2fa/:category/:id",
+      "pageFile": "pages/user/vault-2fa-entity.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/2fa/:category",
+      "pageFile": "pages/user/vault-2fa-category.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/mail-hub/:category",
+      "pageFile": "pages/user/vault-mail-category.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/enroll/projects",
+      "pageFile": "pages/user/enroll-projects.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/enroll/projects/:id",
+      "pageFile": "pages/user/project-dashboard.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/enroll/entities",
+      "pageFile": "pages/user/enroll-entities.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/enroll/entities/:id",
+      "pageFile": "pages/user/entity-dashboard.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/calculator",
+      "pageFile": "pages/user/calculator.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/teams",
+      "pageFile": "pages/user/teams.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/content",
+      "pageFile": "pages/user/content.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/assistant",
+      "pageFile": "pages/user/assistant.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/dashboard",
+      "pageFile": "pages/user/finance/dashboard.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/receivables",
+      "pageFile": "pages/user/finance/receivables.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/payables",
+      "pageFile": "pages/user/finance/payables.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/borrowed",
+      "pageFile": "pages/user/finance/borrowed.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/lending",
+      "pageFile": "pages/user/finance/lending.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/interest",
+      "pageFile": "pages/user/finance/interest.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/investments/:id",
+      "pageFile": "pages/user/finance/investment-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/investments",
+      "pageFile": "pages/user/finance/investments.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/assets",
+      "pageFile": "pages/user/finance/assets.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/expenses",
+      "pageFile": "pages/user/finance/expenses.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/pnl",
+      "pageFile": "pages/user/finance/pnl.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/ledger",
+      "pageFile": "pages/user/finance/ledger.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/projections",
+      "pageFile": "pages/user/finance/projections.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/recurring",
+      "pageFile": "pages/user/finance/recurring.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/budgets",
+      "pageFile": "pages/user/finance/budgets.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/analytics",
+      "pageFile": "pages/user/finance/analytics.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/currencies",
+      "pageFile": "pages/user/finance/currencies.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/accounts",
+      "pageFile": "pages/user/finance/accounts.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/journal",
+      "pageFile": "pages/user/finance/journal.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/trial-balance",
+      "pageFile": "pages/user/finance/trial-balance.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/balance-sheet",
+      "pageFile": "pages/user/finance/balance-sheet.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/income-statement",
+      "pageFile": "pages/user/finance/income-statement.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/cash-flow",
+      "pageFile": "pages/user/finance/cash-flow.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/goals",
+      "pageFile": "pages/user/finance/goals.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/books",
+      "pageFile": "pages/user/finance/books.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/custom-report",
+      "pageFile": "pages/user/finance/custom-report.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/invoices",
+      "pageFile": "pages/user/finance/invoices.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/payment-methods",
+      "pageFile": "pages/user/finance/payment-methods.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance",
+      "pageFile": "pages/user/finance/dashboard.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/hub",
+      "pageFile": "pages/user/marketplace-hub.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/azn",
+      "pageFile": "pages/user/marketplace-azn.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/p2p",
+      "pageFile": "pages/user/marketplace-azn.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/vault",
+      "pageFile": "pages/user/marketplace-vault.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/game",
+      "pageFile": "pages/user/marketplace-game.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/wallet",
+      "pageFile": "pages/user/marketplace-wallet.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/spot",
+      "pageFile": "pages/user/marketplace-spot.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/staking",
+      "pageFile": "pages/user/marketplace-staking.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/order-history",
+      "pageFile": "pages/user/marketplace-order-history.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/authenticator",
+      "pageFile": "pages/user/authenticator.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/mailbox/:id",
+      "pageFile": "pages/user/mailbox.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/mailbox",
+      "pageFile": "pages/user/mailbox.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/user/custom/:slug",
+      "pageFile": "pages/user/custom-page.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/oidc/callback",
+      "pageFile": "pages/oidc-callback.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/oidc/consent",
+      "pageFile": "pages/oidc-consent.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/emergency-access/confirm/:token",
+      "pageFile": "pages/emergency-access/confirm.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/emergency-access/view/:token",
+      "pageFile": "pages/emergency-access/view.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/receipt/:token",
+      "pageFile": "pages/finance/receipt.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/invoice/:token",
+      "pageFile": "pages/finance/invoice-public.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/payment-agreement/:token",
+      "pageFile": "pages/finance/payment-agreement-public.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/receipt/local/:token",
+      "pageFile": "pages/receipt/local.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/receipt/entity/:token",
+      "pageFile": "pages/receipt/entity.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/receipt/project/:token",
+      "pageFile": "pages/receipt/project.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/receipt/task/:token",
+      "pageFile": "pages/receipt/task.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/receipt/vault-category/:token",
+      "pageFile": "pages/receipt/vault-category.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/admin/theme-palette-builder.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/landing.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/not-found.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/user/marketplace-nft.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/user/nft-marketplace.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/user/vault-entity-dashboard.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/user/vault-kyc-dashboard.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/user/vault-kyc-data-list.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/user/vault-local-dashboard.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/user/vault-mail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/user/vault-wallet-seed.tsx"
+    }
+  ],
+  "routes": [
+    {
+      "path": "/admin/dashboard",
+      "component": "AdminDashboard",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/dashboard.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/users",
+            "raw": "/api/users",
+            "backend": {
+              "method": "GET",
+              "path": "/api/users"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/tasks/submissions",
+            "raw": "/api/tasks/submissions",
+            "backend": {
+              "method": "GET",
+              "path": "/api/tasks/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/users",
+      "component": "AdminUsers",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/users.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "PATCH",
+            "path": "/api/users/:param",
+            "raw": "/api/users/${id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/users/:id"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/users/:param",
+            "raw": "/api/users/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/users/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/projects",
+      "component": "AdminProjects",
+      "adminOnly": false,
+      "allowedRoles": [
+        "admin",
+        "dev",
+        "moderator"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/projects.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/projects",
+            "raw": "/api/projects",
+            "backend": {
+              "method": "POST",
+              "path": "/api/projects"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/project-templates",
+      "component": "AdminProjectTemplates",
+      "adminOnly": false,
+      "allowedRoles": [
+        "admin",
+        "dev",
+        "moderator"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/project-templates.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/projects/:id",
+      "component": "AdminProjectDetail",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/project-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/projects/:param/entity-enrollments",
+            "raw": "/api/admin/projects/${projectId}/entity-enrollments",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/projects/:id/entity-enrollments"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/tasks",
+            "raw": "/api/tasks",
+            "backend": {
+              "method": "GET",
+              "path": "/api/tasks"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/projects/:param/members",
+            "raw": "/api/projects/${projectId}/members",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects/:id/members"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/tasks/:param",
+            "raw": "/api/tasks/${taskId}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/tasks/:id"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/projects/:param/enrollments/:param/status",
+            "raw": "/api/projects/${projectId}/enrollments/${enrollmentId}/status",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/projects/:id/enrollments/:enrollmentId/status"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/projects/:param",
+            "raw": "/api/projects/${projectId}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/projects/:id"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/project-templates",
+            "raw": "/api/project-templates",
+            "backend": {
+              "method": "GET",
+              "path": "/api/project-templates"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/projects/:param",
+            "raw": "/api/projects/${projectId}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/projects/:id"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/project-templates/:param/apply",
+            "raw": "/api/project-templates/${t.id}/apply",
+            "backend": {
+              "method": "POST",
+              "path": "/api/project-templates/:id/apply"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/project-templates/from-project/:param",
+            "raw": "/api/project-templates/from-project/${projectId}",
+            "backend": {
+              "method": "POST",
+              "path": "/api/project-templates/:id/apply"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/operator-progress",
+      "component": "AdminOperatorProgress",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/operator-progress.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/projects/:param/members",
+            "raw": "/api/projects/${projectId}/members",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects/:id/members"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/projects",
+            "raw": "/api/projects",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/projects/:param/members",
+            "raw": "/api/projects/${p.id}/members",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects/:id/members"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/projects",
+            "raw": "/api/projects",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/users",
+            "raw": "/api/users",
+            "backend": {
+              "method": "GET",
+              "path": "/api/users"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/tasks",
+      "component": "AdminTasks",
+      "adminOnly": false,
+      "allowedRoles": [
+        "admin",
+        "dev",
+        "moderator"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/tasks.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/projects",
+            "raw": "/api/projects",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/tasks/submissions",
+            "raw": "/api/tasks/submissions",
+            "backend": {
+              "method": "GET",
+              "path": "/api/tasks/:id"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/tasks/:param/verify",
+            "raw": "/api/tasks/${sub.taskId}/verify",
+            "backend": {
+              "method": "POST",
+              "path": "/api/tasks/:id/verify"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/tasks/:param/verify",
+            "raw": "/api/tasks/${rejectDialog.taskId}/verify",
+            "backend": {
+              "method": "POST",
+              "path": "/api/tasks/:id/verify"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/tools/gas",
+      "component": "AdminGas",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/tools/gas.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/tools/gas",
+            "raw": "/api/tools/gas",
+            "backend": {
+              "method": "GET",
+              "path": "/api/tools/gas"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/tools/wallet",
+      "component": "AdminWallet",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/tools/wallet.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/revenue",
+      "component": "AdminRevenue",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/revenue.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/tools/streak",
+      "component": "AdminStreak",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/tools/streak.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/tools/networks",
+      "component": "AdminNetworks",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/tools/networks.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/broadcast",
+      "component": "AdminBroadcast",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/broadcast.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/broadcast",
+            "raw": "/api/broadcast",
+            "backend": {
+              "method": "GET",
+              "path": "/api/broadcast"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/broadcast",
+            "raw": "/api/broadcast",
+            "backend": {
+              "method": "POST",
+              "path": "/api/broadcast"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/leaderboard",
+      "component": "AdminLeaderboard",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/leaderboard.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/vault",
+      "component": "AdminVault",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/vault.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/plugins",
+      "component": "AdminPlugins",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/plugins.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/plugins",
+            "raw": "/api/admin/plugins",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/plugins"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/plugins/:param",
+            "raw": "/api/admin/plugins/${p.slug}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/plugins/:slug"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/plugins",
+            "raw": "/api/admin/plugins",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/plugins"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/plugins/:param",
+            "raw": "/api/admin/plugins/${slug}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/plugins/:slug"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/plugins/:param",
+            "raw": "/api/admin/plugins/${slug}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/plugins/:slug"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/settings",
+      "component": "AdminSettings",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "PATCH",
+            "path": "/api/settings",
+            "raw": "/api/settings",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/settings"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/settings",
+            "raw": "/api/settings",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/settings"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/settings",
+            "raw": "/api/settings",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/settings"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/settings/email/test",
+            "raw": "/api/settings/email/test",
+            "backend": {
+              "method": "POST",
+              "path": "/api/settings/email/test"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/developer",
+      "component": "AdminDeveloper",
+      "adminOnly": false,
+      "allowedRoles": [
+        "admin",
+        "dev"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/developer.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/ai/models",
+            "raw": "/api/ai/models",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ai/models"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/ai/chat",
+            "raw": "/api/ai/chat",
+            "backend": {
+              "method": "POST",
+              "path": "/api/ai/chat"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/shell/exec",
+            "raw": "/api/admin/shell/exec",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/shell/exec"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/ai-agent/chat",
+            "raw": "/api/admin/ai-agent/chat",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/ai-agent/chat"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/shell/exec",
+            "raw": "/api/admin/shell/exec",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/shell/exec"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/ai/models",
+            "raw": "/api/ai/models",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ai/models"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/ai/chat",
+            "raw": "/api/ai/chat",
+            "backend": {
+              "method": "POST",
+              "path": "/api/ai/chat"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/support",
+      "component": "AdminSupport",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/support.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/support/tickets",
+            "raw": "/api/support/tickets",
+            "backend": {
+              "method": "GET",
+              "path": "/api/support/tickets"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/support/stats",
+            "raw": "/api/support/stats",
+            "backend": {
+              "method": "GET",
+              "path": "/api/support/stats"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/support/tickets/:param",
+            "raw": "/api/support/tickets/${t.id}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/support/tickets/:id"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/support/tickets/:param",
+            "raw": "/api/support/tickets/${id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/support/tickets/:id"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/support/tickets/:param/messages",
+            "raw": "/api/support/tickets/${active.id}/messages",
+            "backend": {
+              "method": "POST",
+              "path": "/api/support/tickets/:id/messages"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/kyc",
+      "component": "AdminKyc",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/kyc.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/kyc",
+            "raw": "/api/admin/kyc",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/kyc"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/kyc/:param/approve",
+            "raw": "/api/admin/kyc/${id}/approve",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/kyc/:userId/approve"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/kyc/:param/reject",
+            "raw": "/api/admin/kyc/${id}/reject",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/kyc/:userId/reject"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/emergency-access",
+      "component": "AdminEmergencyAccess",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/emergency-access.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/referrals",
+      "component": "AdminReferrals",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/referrals.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/referrals",
+            "raw": "/api/admin/referrals",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/referrals"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/referrals/leaderboard",
+            "raw": "/api/admin/referrals/leaderboard",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/referrals/leaderboard"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/referrals/:param/reward",
+            "raw": "/api/admin/referrals/${id}/reward",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/referrals/:id/reward"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/credits",
+      "component": "AdminCreditsPage",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/credits.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/credits",
+            "raw": "/api/admin/credits",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/credits"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/credits/actions",
+            "raw": "/api/admin/credits/actions",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/credits/actions"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/credits/usage",
+            "raw": "/api/admin/credits/usage",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/credits/usage"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/credits/actions/:param",
+            "raw": "/api/admin/credits/actions/${key}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/credits/actions/:key"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/credits/actions/:param",
+            "raw": "/api/admin/credits/actions/${key}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/credits/actions/:key"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/admin/credits/actions/:param",
+            "raw": "/api/admin/credits/actions/${key}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/admin/credits/actions/:key"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/credits/:param/approve",
+            "raw": "/api/admin/credits/${id}/approve",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/credits/:id/approve"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/credits/:param/reject",
+            "raw": "/api/admin/credits/${id}/reject",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/credits/:id/reject"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/subscriptions",
+      "component": "AdminSubscriptions",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/subscriptions.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/subscriptions",
+            "raw": "/api/admin/subscriptions",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/subscriptions"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/subscriptions/:param/approve",
+            "raw": "/api/admin/subscriptions/${userId}/approve",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/subscriptions/:userId/approve"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/subscriptions/:param/reject",
+            "raw": "/api/admin/subscriptions/${userId}/reject",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/subscriptions/:userId/reject"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/activity",
+      "component": "AdminActivity",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/activity.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/history",
+            "raw": "/api/admin/history",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/history"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/categories",
+      "component": "AdminCategories",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/categories.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/health-rules",
+      "component": "AdminHealthRules",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/health-rules.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/mail-sending-config",
+      "component": "AdminMailSendingConfig",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/mail-sending-config.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/teams",
+      "component": "AdminTeams",
+      "adminOnly": false,
+      "allowedRoles": [
+        "admin",
+        "dev",
+        "moderator"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/teams.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/team-vault",
+      "component": "AdminTeamVault",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/team-vault.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/marketplace",
+      "component": "AdminMarketplace",
+      "adminOnly": false,
+      "allowedRoles": [
+        "admin",
+        "dev"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/marketplace.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "PATCH",
+            "path": "/api/admin/marketplace/orders/:param",
+            "raw": "/api/admin/marketplace/orders/${order.id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/marketplace/orders/:id"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/marketplace/listings",
+            "raw": "/api/admin/marketplace/listings",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/marketplace/listings"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/users",
+            "raw": "/api/users",
+            "backend": {
+              "method": "GET",
+              "path": "/api/users"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/marketplace/orders",
+            "raw": "/api/admin/marketplace/orders",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/marketplace/orders"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/marketplace/orders/:param",
+            "raw": "/api/admin/marketplace/orders/${orderId}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/marketplace/orders/:id"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/marketplace/orders/:param/edit",
+            "raw": "/api/admin/marketplace/orders/${order.id}/edit",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/marketplace/orders/:id/edit"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/marketplace/settings",
+            "raw": "/api/marketplace/settings",
+            "backend": {
+              "method": "GET",
+              "path": "/api/marketplace/settings"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/marketplace/settings",
+            "raw": "/api/marketplace/settings",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/marketplace/settings"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/nft-subscriptions",
+            "raw": "/api/admin/nft-subscriptions",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/nft-subscriptions"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/marketplace/activity",
+            "raw": "/api/admin/marketplace/activity",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/marketplace/activity"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/marketplace/orders",
+            "raw": "/api/admin/marketplace/orders${q}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/marketplace/orders"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/marketplace/listings",
+            "raw": "/api/admin/marketplace/listings",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/marketplace/listings"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/marketplace/stats",
+            "raw": "/api/marketplace/stats",
+            "backend": {
+              "method": "GET",
+              "path": "/api/marketplace/stats"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/ai-agent",
+      "component": "AdminAiAgent",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/ai-agent.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/mcp-agents",
+      "component": "AdminMcpAgents",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/mcp-agents.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/mega-engine",
+      "component": "AdminMegaEngine",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/mega-engine.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/mega-engine/observability",
+      "component": "AdminMegaEngineObservability",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/mega-engine-observability.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/admin/xuka",
+      "component": "AdminXukaControlCenter",
+      "adminOnly": false,
+      "allowedRoles": [
+        "admin",
+        "dev"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/xuka-control-center.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/xuka/registry",
+            "raw": "/api/admin/xuka/registry",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/xuka/registry"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/key-manager",
+      "component": "AdminKeyManager",
+      "adminOnly": false,
+      "allowedRoles": [
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/key-manager.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/key-manager/keys",
+            "raw": "/api/key-manager/keys",
+            "backend": {
+              "method": "POST",
+              "path": "/api/key-manager/keys"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/key-manager/keys/:param",
+            "raw": "/api/key-manager/keys/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/key-manager/keys/:id"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/key-manager/keys/:param/toggle",
+            "raw": "/api/key-manager/keys/${id}/toggle",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/key-manager/keys/:id/toggle"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/key-manager/keys",
+            "raw": "/api/key-manager/keys",
+            "backend": {
+              "method": "GET",
+              "path": "/api/key-manager/keys"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/key-manager/status",
+            "raw": "/api/key-manager/status",
+            "backend": {
+              "method": "GET",
+              "path": "/api/key-manager/status"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/dev-nav-builder",
+      "component": "AdminDevNavBuilder",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/dev-nav-builder.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/nav/:param",
+            "raw": "/api/admin/nav/${navType}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/nav/:navType"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/nav/:param",
+            "raw": "/api/admin/nav/${navType}",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/nav/:navType"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/nav/:param/:param",
+            "raw": "/api/admin/nav/${navType}/${id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/nav/:navType/:id"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/admin/nav/:param/:param",
+            "raw": "/api/admin/nav/${navType}/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/admin/nav/:navType/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/marketplace-categories",
+      "component": "AdminMarketplaceCategories",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/marketplace-categories.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/nft-market-categories",
+            "raw": "/api/admin/nft-market-categories",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/nft-market-categories"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/nft-market-categories/:param",
+            "raw": "/api/admin/nft-market-categories/${editing.id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/nft-market-categories/:id"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/nft-subscriptions/categories",
+            "raw": "/api/nft-subscriptions/categories",
+            "backend": {
+              "method": "POST",
+              "path": "/api/nft-subscriptions/categories"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/nft-market-categories/:param",
+            "raw": "/api/admin/nft-market-categories/${cat.id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/nft-market-categories/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/marketplace-market-config",
+      "component": "AdminMarketplaceMarketConfig",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/marketplace-market-config.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "PATCH",
+            "path": "/api/admin/marketplace/market-config/:param",
+            "raw": "/api/admin/marketplace/market-config/${config.marketType}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/marketplace/market-config/:marketType"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/marketplace/market-config",
+            "raw": "/api/admin/marketplace/market-config",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/marketplace/market-config"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/config-manager",
+      "component": "AdminConfigManager",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/config-manager.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/config/domains",
+            "raw": "/api/admin/config/domains",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/config/:domain"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/config/:param",
+            "raw": "/api/admin/config/${domain}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/config/:domain"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/config/:param",
+            "raw": "/api/admin/config/${domain}",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/config/:domain"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/config/:param/:param",
+            "raw": "/api/admin/config/${domain}/${id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/config/:domain/:id"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/admin/config/:param/:param",
+            "raw": "/api/admin/config/${domain}/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/admin/config/:domain/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/layout-builder",
+      "component": "AdminLayoutBuilder",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/layout-builder.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/layout/pages",
+            "raw": "/api/admin/layout/pages",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/layout/:pageKey"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/layout/:param",
+            "raw": "/api/admin/layout/${pageKey}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/layout/:pageKey"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/layout/:param",
+            "raw": "/api/admin/layout/${pageKey}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/layout/:pageKey"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/layout/:param",
+            "raw": "/api/layout/${pageKey}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/layout/:pageKey"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/theme-studio",
+      "component": "AdminThemeStudio",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/theme-studio.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/ui-theme/custom-themes",
+            "raw": "/api/ui-theme/custom-themes",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ui-theme/custom-themes"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/ui-theme",
+            "raw": "/api/ui-theme",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ui-theme"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/ui-theme/custom-themes",
+            "raw": "/api/ui-theme/custom-themes",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ui-theme/custom-themes"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/ui-theme/page-overrides",
+            "raw": "/api/ui-theme/page-overrides",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ui-theme/page-overrides"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/ui-theme",
+            "raw": "/api/admin/ui-theme",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/ui-theme"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/ui-theme/custom-themes",
+            "raw": "/api/admin/ui-theme/custom-themes",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/ui-theme/custom-themes"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/admin/ui-theme/custom-themes/:param",
+            "raw": "/api/admin/ui-theme/custom-themes/${dbId}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/admin/ui-theme/custom-themes/:id"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/ui-theme/page-overrides",
+            "raw": "/api/admin/ui-theme/page-overrides",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/ui-theme/page-overrides"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/admin/ui-theme/page-overrides/:param",
+            "raw": "/api/admin/ui-theme/page-overrides/${existing.dbId}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/admin/ui-theme/page-overrides/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/custom-buttons",
+      "component": "AdminCustomButtons",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/custom-buttons.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/ui-custom-buttons",
+            "raw": "/api/ui-custom-buttons",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ui-custom-buttons"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/admin/ui-custom-buttons",
+            "raw": "/api/admin/ui-custom-buttons",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/ui-custom-buttons"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/admin/ui-custom-buttons",
+            "raw": "/api/admin/ui-custom-buttons",
+            "backend": {
+              "method": "POST",
+              "path": "/api/admin/ui-custom-buttons"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/ui-custom-buttons/:param",
+            "raw": "/api/admin/ui-custom-buttons/${id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/ui-custom-buttons/:id"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/admin/ui-custom-buttons/:param",
+            "raw": "/api/admin/ui-custom-buttons/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/admin/ui-custom-buttons/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/dev/azn-deploy",
+      "component": "DevAznDeploy",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/dev/azn-deploy.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/dev/system-info",
+            "raw": "/api/dev/system-info",
+            "backend": {
+              "method": "GET",
+              "path": "/api/dev/system-info"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/dev/azn/deploy",
+            "raw": "/api/dev/azn/deploy",
+            "backend": {
+              "method": "POST",
+              "path": "/api/dev/azn/deploy"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/dev/custom/:slug",
+      "component": "DevCustomPage",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/dev/custom-page.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/admin/nav/:param/by-href",
+            "raw": "/api/admin/nav/${navType}/by-href",
+            "backend": {
+              "method": "GET",
+              "path": "/api/admin/nav/:navType/by-href"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/admin/nav/:param/:param",
+            "raw": "/api/admin/nav/${navType}/${item.id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/admin/nav/:navType/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/custom/:slug",
+      "component": "AdminNavCustomPage",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/custom-page.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/moderator/custom/:slug",
+      "component": "ModeratorCustomPage",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin",
+        "moderator"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/moderator/custom-page.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/team_leader/custom/:slug",
+      "component": "TeamLeaderCustomPage",
+      "adminOnly": false,
+      "allowedRoles": [
+        "dev",
+        "admin",
+        "team_leader"
+      ],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/team-leader/custom-page.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/home",
+      "component": "UserHome",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/home.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/checkin/status",
+            "raw": "/api/checkin/status",
+            "backend": {
+              "method": "GET",
+              "path": "/api/checkin/status"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/checkin",
+            "raw": "/api/checkin",
+            "backend": {
+              "method": "POST",
+              "path": "/api/checkin"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/dashboard",
+      "component": "UserDashboard",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/dashboard.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/history/chart",
+            "raw": "/api/history/chart",
+            "backend": {
+              "method": "GET",
+              "path": "/api/history/chart"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/wallets",
+            "raw": "/api/wallets",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/profile",
+      "component": "UserProfile",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/profile.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/profile",
+            "raw": "/api/profile",
+            "backend": {
+              "method": "GET",
+              "path": "/api/profile"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/telegram/status",
+            "raw": "/api/telegram/status",
+            "backend": {
+              "method": "GET",
+              "path": "/api/telegram/status"
+            }
+          },
+          {
+            "method": "PUT",
+            "path": "/api/profile",
+            "raw": "/api/profile",
+            "backend": {
+              "method": "PUT",
+              "path": "/api/profile"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/profile/kyc/submit",
+            "raw": "/api/profile/kyc/submit",
+            "backend": {
+              "method": "POST",
+              "path": "/api/profile/kyc/submit"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/telegram/connect/verify",
+            "raw": "/api/telegram/connect/verify",
+            "backend": {
+              "method": "POST",
+              "path": "/api/telegram/connect/verify"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/settings",
+      "component": "UserSettings",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/users/me/digest",
+            "raw": "/api/users/me/digest",
+            "backend": {
+              "method": "GET",
+              "path": "/api/users/me/digest"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/notification-preferences",
+            "raw": "/api/notification-preferences",
+            "backend": {
+              "method": "GET",
+              "path": "/api/notification-preferences"
+            }
+          },
+          {
+            "method": "PUT",
+            "path": "/api/notification-preferences/:param",
+            "raw": "/api/notification-preferences/${category}",
+            "backend": {
+              "method": "PUT",
+              "path": "/api/notification-preferences/:category"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/users/me/digest",
+            "raw": "/api/users/me/digest",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/users/me/digest"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/users/me/undo-send-window",
+            "raw": "/api/users/me/undo-send-window",
+            "backend": {
+              "method": "GET",
+              "path": "/api/users/me/undo-send-window"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/users/me/undo-send-window",
+            "raw": "/api/users/me/undo-send-window",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/users/me/undo-send-window"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/ayzen-email/mailbox/sending-health",
+            "raw": "/api/ayzen-email/mailbox/sending-health",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ayzen-email/mailbox/:id"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/ayzen-email/mailbox/sending-health/resume",
+            "raw": "/api/ayzen-email/mailbox/sending-health/resume",
+            "backend": {
+              "method": "POST",
+              "path": "/api/ayzen-email/mailbox/sending-health/resume"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/ayzen-email/mailbox/problematic-recipients",
+            "raw": "/api/ayzen-email/mailbox/problematic-recipients",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ayzen-email/mailbox/:id"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/ayzen-email/mailbox/problematic-recipients/:param",
+            "raw": "/api/ayzen-email/mailbox/problematic-recipients/${encodeURIComponent(email)}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/ayzen-email/mailbox/problematic-recipients/:email"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/email-accounts",
+            "raw": "/api/email-accounts",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/telegram/me",
+            "raw": "/api/telegram/me",
+            "backend": {
+              "method": "GET",
+              "path": "/api/telegram/me"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/telegram/status",
+            "raw": "/api/telegram/status",
+            "backend": {
+              "method": "GET",
+              "path": "/api/telegram/status"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/telegram/connect/verify",
+            "raw": "/api/telegram/connect/verify",
+            "backend": {
+              "method": "POST",
+              "path": "/api/telegram/connect/verify"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/telegram/disconnect",
+            "raw": "/api/telegram/disconnect",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/telegram/disconnect"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/developer",
+      "component": "UserDeveloper",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/developer.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/api-keys",
+            "raw": "/api/api-keys",
+            "backend": {
+              "method": "GET",
+              "path": "/api/api-keys"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/api-keys",
+            "raw": "/api/api-keys",
+            "backend": {
+              "method": "POST",
+              "path": "/api/api-keys"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/api-keys/:param/revoke",
+            "raw": "/api/api-keys/${id}/revoke",
+            "backend": {
+              "method": "POST",
+              "path": "/api/api-keys/:id/revoke"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/api-keys/:param",
+            "raw": "/api/api-keys/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/api-keys/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/security",
+      "component": "UserSecurity",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/security.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/users/change-password",
+            "raw": "/api/users/change-password",
+            "backend": {
+              "method": "POST",
+              "path": "/api/users/change-password"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/auth/sessions",
+            "raw": "/api/auth/sessions",
+            "backend": {
+              "method": "GET",
+              "path": "/api/auth/sessions"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/sessions/:param/revoke",
+            "raw": "/api/auth/sessions/${s.id}/revoke",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/sessions/:id/revoke"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/sessions/revoke-others",
+            "raw": "/api/auth/sessions/revoke-others",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/sessions/revoke-others"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/security/2fa/status",
+            "raw": "/api/security/2fa/status",
+            "backend": {
+              "method": "GET",
+              "path": "/api/security/2fa/status"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/security/2fa/setup",
+            "raw": "/api/security/2fa/setup",
+            "backend": {
+              "method": "POST",
+              "path": "/api/security/2fa/setup"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/security/2fa/verify",
+            "raw": "/api/security/2fa/verify",
+            "backend": {
+              "method": "POST",
+              "path": "/api/security/2fa/verify"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/security/2fa/disable",
+            "raw": "/api/security/2fa/disable",
+            "backend": {
+              "method": "POST",
+              "path": "/api/security/2fa/disable"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/security/backup-codes",
+            "raw": "/api/security/backup-codes",
+            "backend": {
+              "method": "GET",
+              "path": "/api/security/backup-codes"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/security/backup-codes/generate",
+            "raw": "/api/security/backup-codes/generate",
+            "backend": {
+              "method": "POST",
+              "path": "/api/security/backup-codes/generate"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/security/magic-codes",
+            "raw": "/api/security/magic-codes",
+            "backend": {
+              "method": "GET",
+              "path": "/api/security/magic-codes"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/security/magic-codes",
+            "raw": "/api/security/magic-codes",
+            "backend": {
+              "method": "POST",
+              "path": "/api/security/magic-codes"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/security/magic-codes/:param",
+            "raw": "/api/security/magic-codes/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/security/magic-codes/:id"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/security/recovery-email",
+            "raw": "/api/security/recovery-email",
+            "backend": {
+              "method": "GET",
+              "path": "/api/security/recovery-email"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/security/recovery-email",
+            "raw": "/api/security/recovery-email",
+            "backend": {
+              "method": "POST",
+              "path": "/api/security/recovery-email"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/security/recovery-email",
+            "raw": "/api/security/recovery-email",
+            "backend": {
+              "method": "POST",
+              "path": "/api/security/recovery-email"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/api-keys",
+            "raw": "/api/api-keys",
+            "backend": {
+              "method": "GET",
+              "path": "/api/api-keys"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/api-keys/scopes",
+            "raw": "/api/api-keys/scopes",
+            "backend": {
+              "method": "GET",
+              "path": "/api/api-keys/scopes"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/api-keys",
+            "raw": "/api/api-keys",
+            "backend": {
+              "method": "POST",
+              "path": "/api/api-keys"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/api-keys/:param/rotate",
+            "raw": "/api/api-keys/${id}/rotate",
+            "backend": {
+              "method": "POST",
+              "path": "/api/api-keys/:id/rotate"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/api-keys/:param/revoke",
+            "raw": "/api/api-keys/${id}/revoke",
+            "backend": {
+              "method": "POST",
+              "path": "/api/api-keys/:id/revoke"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/api-keys/:param",
+            "raw": "/api/api-keys/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/api-keys/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/projects",
+      "component": "UserProjects",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/projects.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/calendar",
+      "component": "AirdropCalendar",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/airdrop-calendar.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/projects/compare",
+      "component": "UserProjectCompare",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/project-compare.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/projects/:param/enrollments",
+            "raw": "/api/projects/${id}/enrollments",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects/:id/enrollments"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/projects/:id",
+      "component": "UserProjectDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/project-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/tasks/:param/submit",
+            "raw": "/api/tasks/${task.id}/submit",
+            "backend": {
+              "method": "POST",
+              "path": "/api/tasks/:id/submit"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/projects/entity/:param/overview",
+            "raw": "/api/projects/entity/${entity.vaultEntryId}/overview",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects/:id/enrollments/overview"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/projects/entity-leaderboard",
+            "raw": "/api/projects/entity-leaderboard",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects/:id"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/projects/:param/enrollments",
+            "raw": "/api/projects/${projectId}/enrollments",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects/:id/enrollments"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/projects/:param/entity-tasks",
+            "raw": "/api/projects/${projectId}/entity-tasks",
+            "backend": {
+              "method": "GET",
+              "path": "/api/projects/:id/entity-tasks"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/projects/:param/enroll",
+            "raw": "/api/projects/${projectId}/enroll",
+            "backend": {
+              "method": "POST",
+              "path": "/api/projects/:id/enroll"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/projects/:param/enrollments/:param",
+            "raw": "/api/projects/${projectId}/enrollments/${enrollmentId}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/projects/:id/enrollments/:enrollmentId"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/projects/:param",
+            "raw": "/api/projects/${projectId}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/projects/:id"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/projects/:param",
+            "raw": "/api/projects/${projectId}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/projects/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/tasks",
+      "component": "UserTasks",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/tasks.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/tasks/:param/visit",
+            "raw": "/api/tasks/${task.id}/visit",
+            "backend": {
+              "method": "POST",
+              "path": "/api/tasks/:id/visit"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/tasks/:param/submit",
+            "raw": "/api/tasks/${task.id}/submit",
+            "backend": {
+              "method": "POST",
+              "path": "/api/tasks/:id/submit"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/leaderboard",
+      "component": "UserLeaderboard",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/leaderboard.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/leaderboard/entities",
+            "raw": "/api/leaderboard/entities",
+            "backend": {
+              "method": "GET",
+              "path": "/api/leaderboard/entities"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault",
+      "component": "UserVault",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/email-accounts",
+            "raw": "/api/email-accounts",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/vault/bulk-tag",
+            "raw": "/api/vault/bulk-tag",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/vault/:id"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/vault/bulk-action",
+            "raw": "/api/vault/bulk-action",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/vault/:id"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/vault/bulk-action",
+            "raw": "/api/vault/bulk-action",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/vault/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/hub",
+      "component": "VaultHub",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-hub.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/wallet-hub",
+      "component": "VaultWalletHub",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-wallet-hub.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/wallet-hub/:subtab",
+      "component": "VaultWalletHub",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-wallet-hub.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/enrollment/overview",
+      "component": "VaultEnrollmentOverview",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-enrollment-overview.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/enrollment/entity",
+      "component": "VaultEnrollmentEntity",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-enrollment-entity.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/enrollment/entity/:view",
+      "component": "VaultEnrollmentEntity",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-enrollment-entity.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/enrollment/project",
+      "component": "VaultEnrollmentProject",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-enrollment-project.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/enrollment/project/:id",
+      "component": "VaultEnrollmentProjectDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-enrollment-project-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/enrollment/linked",
+      "component": "VaultEnrollmentLinked",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-enrollment-linked.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/enrollment/linked/:entityId",
+      "component": "VaultEnrollmentLinkedDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-enrollment-linked-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/security",
+      "component": "VaultSecurity",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-security.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/backup/:category/:id",
+      "component": "VaultBackupEntity",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-backup-entity.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/backup/:category",
+      "component": "VaultBackup",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-backup.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/backup",
+      "component": "VaultBackup",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-backup.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/shared",
+      "component": "VaultShared",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-shared.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/shared/:entityType/:entityId",
+      "component": "VaultSharedEntity",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-shared-entity.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/banned",
+      "component": "VaultBanned",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-banned.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/trash",
+      "component": "VaultTrash",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-trash.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/activity",
+      "component": "VaultActivity",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-activity.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/migration",
+      "component": "VaultMigration",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-migration.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/snapshot",
+      "component": "VaultSnapshot",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-snapshot.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/compliance",
+      "component": "VaultCompliance",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-compliance.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/emergency-access",
+      "component": "VaultEmergencyAccess",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-emergency-access.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/projects",
+      "component": "UserProjectEntities",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/project-entities.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/entity/:id/access",
+      "component": "VaultEntityAccess",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-entity-access.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/entity/:id",
+      "component": "VaultEntityDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-entity-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/email-accounts",
+            "raw": "/api/email-accounts",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/local/:id",
+      "component": "VaultLocalDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-local-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/email-accounts",
+            "raw": "/api/email-accounts",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/kyc/data/overview",
+      "component": "VaultKycDataOverview",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-kyc-data-overview.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/kyc/data/used",
+      "component": "VaultKycDataUsed",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-kyc-data-used.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/kyc/data/unused",
+      "component": "VaultKycDataUnused",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-kyc-data-unused.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/kyc/data/:id",
+      "component": "VaultKycDataDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-kyc-data-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/kyc/enrolled",
+      "component": "VaultKycEnrolled",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-kyc-enrolled.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/kyc/:id",
+      "component": "VaultKycDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-kyc-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/2fa/:category/:id",
+      "component": "VaultTwoFaEntity",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-2fa-entity.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/2fa/:category",
+      "component": "VaultTwoFaCategory",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-2fa-category.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/mail-hub/:category/:id/mail/:msgId",
+      "component": "VaultMailMessageDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-mail-message-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/mail-messages/:param",
+            "raw": "/api/mail-messages/${params.msgId}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/mail-messages/:msgId"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/mail-hub/:category/:id",
+      "component": "VaultMailEntity",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-mail-entity.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/email-accounts",
+            "raw": "/api/email-accounts",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/email-accounts/:param/stored-messages",
+            "raw": "/api/email-accounts/${acc.id}/stored-messages",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts/:id/stored-messages"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/mail-messages/search",
+            "raw": "/api/mail-messages/search",
+            "backend": {
+              "method": "GET",
+              "path": "/api/mail-messages/:msgId"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/email-accounts/:param/fetch-inbox",
+            "raw": "/api/email-accounts/${acc.id}/fetch-inbox",
+            "backend": {
+              "method": "POST",
+              "path": "/api/email-accounts/:id/fetch-inbox"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/mail-hub/:category",
+      "component": "VaultMailCategory",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-mail-category.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/mail/:accountId/:seqno",
+      "component": "VaultMailMessage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-mail-message.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/email-accounts/:param/fetch-body",
+            "raw": "/api/email-accounts/${accountId}/fetch-body",
+            "backend": {
+              "method": "POST",
+              "path": "/api/email-accounts/:id/fetch-body"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/mail/:accountId",
+      "component": "VaultMailInbox",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/vault-mail-inbox.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/email-accounts/:param",
+            "raw": "/api/email-accounts/${accountId}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts/:id"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/email-accounts/:param/fetch-inbox",
+            "raw": "/api/email-accounts/${accountId}/fetch-inbox",
+            "backend": {
+              "method": "POST",
+              "path": "/api/email-accounts/:id/fetch-inbox"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/enroll/projects",
+      "component": "EnrollProjects",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/enroll-projects.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/enroll/projects/:id",
+      "component": "ProjectDashboard",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/project-dashboard.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/enroll/entities",
+      "component": "EnrollEntities",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/enroll-entities.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/enroll/entities/:id",
+      "component": "EntityDashboard",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/entity-dashboard.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/checkin",
+      "component": "CheckinPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/checkin.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/checkin/status",
+            "raw": "/api/checkin/status",
+            "backend": {
+              "method": "GET",
+              "path": "/api/checkin/status"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/checkin",
+            "raw": "/api/checkin",
+            "backend": {
+              "method": "POST",
+              "path": "/api/checkin"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/watchlist",
+      "component": "WatchlistPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/watchlist.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/watchlist",
+            "raw": "/api/watchlist",
+            "backend": {
+              "method": "GET",
+              "path": "/api/watchlist"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/watchlist/:param",
+            "raw": "/api/watchlist/${projectId}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/watchlist/:projectId"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/earn",
+      "component": "EarnPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/earn.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/earn-links",
+            "raw": "/api/earn-links",
+            "backend": {
+              "method": "GET",
+              "path": "/api/earn-links"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/earn-links",
+            "raw": "/api/earn-links",
+            "backend": {
+              "method": "POST",
+              "path": "/api/earn-links"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/earn-links/:param",
+            "raw": "/api/earn-links/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/earn-links/:id"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/earn-links/:param",
+            "raw": "/api/earn-links/${link.id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/earn-links/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/calculator",
+      "component": "CalculatorPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/calculator.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/history",
+      "component": "UserHistory",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/history.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/history",
+            "raw": "/api/history",
+            "backend": {
+              "method": "GET",
+              "path": "/api/history"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/teams",
+      "component": "TeamsPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/teams.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/inbox",
+      "component": "UserInbox",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/inbox.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/messages/conversations",
+            "raw": "/api/messages/conversations",
+            "backend": {
+              "method": "GET",
+              "path": "/api/messages/:otherUserId"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/messages/:param",
+            "raw": "/api/messages/${otherId}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/messages/:otherUserId"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/messages/users/search",
+            "raw": "/api/messages/users/search",
+            "backend": {
+              "method": "GET",
+              "path": "/api/messages/users/search"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/messages/:param",
+            "raw": "/api/messages/${activeUserId}",
+            "backend": {
+              "method": "POST",
+              "path": "/api/messages/:toUserId"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/content",
+      "component": "ContentPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/content.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/wallet",
+      "component": "WalletHub",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/wallet-hub.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/wallets/ayzen-balance",
+            "raw": "/api/wallets/ayzen-balance",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets/ayzen-balance"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/wallets/transfers",
+            "raw": "/api/wallets/transfers",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets/transfers"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/wallets",
+            "raw": "/api/wallets",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/auth/me",
+            "raw": "/api/auth/me",
+            "backend": {
+              "method": "GET",
+              "path": "/api/auth/me"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/wallets/deposits",
+            "raw": "/api/wallets/deposits",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets/deposits"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/wallets/deposits",
+            "raw": "/api/wallets/deposits",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets/deposits"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/wallets/builtin/create",
+            "raw": "/api/wallets/builtin/create",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets/builtin/create"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/wallets/:param/sync",
+            "raw": "/api/wallets/${walletId}/sync",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets/:id/sync"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/wallets/gas-price",
+            "raw": "/api/wallets/gas-price",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets/gas-price"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/wallets/:param/withdraw",
+            "raw": "/api/wallets/${walletId}/withdraw",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets/:id/withdraw"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/wallets/transfer",
+            "raw": "/api/wallets/transfer",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets/transfer"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/wallets",
+      "component": "UserWallets",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/wallets.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/wallets/:param/phrase",
+            "raw": "/api/wallets/${wallet.id}/phrase",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets/:id/phrase"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/wallets/:param/phrase",
+            "raw": "/api/wallets/${wallet.id}/phrase",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets/:id/phrase"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/wallets/:param/send",
+            "raw": "/api/wallets/${wallet.id}/send",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets/:id/send"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/wallets/:param/send",
+            "raw": "/api/wallets/${wallet.id}/send",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets/:id/send"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/wallets",
+            "raw": "/api/wallets",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/wallets/tokens",
+            "raw": "/api/wallets/tokens",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets/tokens"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/nft-subscriptions/my-nfts",
+            "raw": "/api/nft-subscriptions/my-nfts",
+            "backend": {
+              "method": "GET",
+              "path": "/api/nft-subscriptions/my-nfts"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/wallets/builtin/create",
+            "raw": "/api/wallets/builtin/create",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets/builtin/create"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/wallets",
+            "raw": "/api/wallets",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/wallets/:param/sync",
+            "raw": "/api/wallets/${id}/sync",
+            "backend": {
+              "method": "POST",
+              "path": "/api/wallets/:id/sync"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/wallets/:param",
+            "raw": "/api/wallets/${id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/wallets/:id"
+            }
+          },
+          {
+            "method": "PATCH",
+            "path": "/api/wallets/:param",
+            "raw": "/api/wallets/${id}",
+            "backend": {
+              "method": "PATCH",
+              "path": "/api/wallets/:id"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/wallets/:param",
+            "raw": "/api/wallets/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/wallets/:id"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/credits",
+      "component": "CreditsPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/credits.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/credits/transfer",
+            "raw": "/api/credits/transfer",
+            "backend": {
+              "method": "POST",
+              "path": "/api/credits/transfer"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/credits/sell-azn",
+            "raw": "/api/credits/sell-azn",
+            "backend": {
+              "method": "POST",
+              "path": "/api/credits/sell-azn"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/credits",
+            "raw": "/api/credits",
+            "backend": {
+              "method": "GET",
+              "path": "/api/credits"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/credits/purchase",
+            "raw": "/api/credits/purchase",
+            "backend": {
+              "method": "POST",
+              "path": "/api/credits/purchase"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/credits/swap",
+            "raw": "/api/credits/swap",
+            "backend": {
+              "method": "POST",
+              "path": "/api/credits/swap"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/subscription",
+      "component": "SubscriptionPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/subscription.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/nft-subscriptions/mint",
+            "raw": "/api/nft-subscriptions/mint",
+            "backend": {
+              "method": "POST",
+              "path": "/api/nft-subscriptions/mint"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/credits/buy-subscription",
+            "raw": "/api/credits/buy-subscription",
+            "backend": {
+              "method": "POST",
+              "path": "/api/credits/buy-subscription"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/plans",
+            "raw": "/api/plans",
+            "backend": {
+              "method": "GET",
+              "path": "/api/plans"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/subscription",
+            "raw": "/api/subscription",
+            "backend": {
+              "method": "GET",
+              "path": "/api/subscription"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/subscription/upgrade",
+            "raw": "/api/subscription/upgrade",
+            "backend": {
+              "method": "POST",
+              "path": "/api/subscription/upgrade"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/subscription/manual-upgrade",
+            "raw": "/api/subscription/manual-upgrade",
+            "backend": {
+              "method": "POST",
+              "path": "/api/subscription/manual-upgrade"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/subscription/check",
+            "raw": "/api/subscription/check",
+            "backend": {
+              "method": "POST",
+              "path": "/api/subscription/check"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/referrals",
+      "component": "UserReferrals",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/referrals.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/referrals/me",
+            "raw": "/api/referrals/me",
+            "backend": {
+              "method": "GET",
+              "path": "/api/referrals/me"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/referrals/list",
+            "raw": "/api/referrals/list",
+            "backend": {
+              "method": "GET",
+              "path": "/api/referrals/list"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/referrals/apply",
+            "raw": "/api/referrals/apply",
+            "backend": {
+              "method": "POST",
+              "path": "/api/referrals/apply"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/assistant",
+      "component": "Assistant",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/assistant.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/dashboard",
+      "component": "FinanceDashboard",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/dashboard.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/receivables",
+      "component": "FinanceReceivables",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/receivables.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/payables",
+      "component": "FinancePayables",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/payables.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/borrowed",
+      "component": "FinanceBorrowed",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/borrowed.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/lending",
+      "component": "FinanceLending",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/lending.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/interest",
+      "component": "FinanceInterest",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/interest.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/investments/:id",
+      "component": "FinanceInvestmentDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/investment-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/investments",
+      "component": "FinanceInvestments",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/investments.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/assets",
+      "component": "FinanceAssets",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/assets.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/expenses",
+      "component": "FinanceExpenses",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/expenses.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/pnl",
+      "component": "FinancePnl",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/pnl.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/ledger",
+      "component": "FinanceLedger",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/ledger.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/projections",
+      "component": "FinanceProjections",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/projections.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/recurring",
+      "component": "FinanceRecurring",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/recurring.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/budgets",
+      "component": "FinanceBudgets",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/budgets.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/analytics",
+      "component": "FinanceAnalytics",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/analytics.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/currencies",
+      "component": "FinanceCurrencies",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/currencies.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/accounts",
+      "component": "FinanceAccounts",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/accounts.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/journal",
+      "component": "FinanceJournal",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/journal.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/trial-balance",
+      "component": "FinanceTrialBalance",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/trial-balance.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/balance-sheet",
+      "component": "FinanceBalanceSheet",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/balance-sheet.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/income-statement",
+      "component": "FinanceIncomeStatement",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/income-statement.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/cash-flow",
+      "component": "FinanceCashFlow",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/cash-flow.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/goals",
+      "component": "FinanceGoals",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/goals.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/books",
+      "component": "FinanceBooks",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/books.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/custom-report",
+      "component": "FinanceCustomReport",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/custom-report.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/invoices",
+      "component": "FinanceInvoices",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/invoices.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/payment-methods",
+      "component": "FinancePaymentMethods",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/payment-methods.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance",
+      "component": "FinanceDashboard",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/finance/dashboard.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/hub",
+      "component": "MarketHub",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-hub.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/azn",
+      "component": "MarketplaceAzn",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-azn.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/p2p",
+      "component": "MarketplaceAzn",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-azn.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/vault",
+      "component": "MarketplaceVault",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-vault.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/game",
+      "component": "MarketplaceGame",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-game.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/wallet",
+      "component": "MarketplaceWallet",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-wallet.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/spot",
+      "component": "MarketplaceSpot",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-spot.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/staking",
+      "component": "MarketplaceStaking",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-staking.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/polymarket",
+      "component": "MarketplacePolymarket",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-polymarket.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/wallets",
+            "raw": "/api/wallets",
+            "backend": {
+              "method": "GET",
+              "path": "/api/wallets"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/polymarket/balance",
+            "raw": "/api/polymarket/balance",
+            "backend": {
+              "method": "GET",
+              "path": "/api/polymarket/balance"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/polymarket/markets",
+            "raw": "/api/polymarket/markets",
+            "backend": {
+              "method": "GET",
+              "path": "/api/polymarket/markets"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/polymarket/trades",
+            "raw": "/api/polymarket/trades",
+            "backend": {
+              "method": "GET",
+              "path": "/api/polymarket/trades"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/polymarket/trade",
+            "raw": "/api/polymarket/trade",
+            "backend": {
+              "method": "POST",
+              "path": "/api/polymarket/trade"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/marketplace/order-history",
+      "component": "MarketplaceOrderHistory",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace-order-history.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace",
+      "component": "Marketplace",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/marketplace.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/marketplace/azn/chart",
+            "raw": "/api/marketplace/azn/chart",
+            "backend": {
+              "method": "GET",
+              "path": "/api/marketplace/azn/chart"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/marketplace/vault-items",
+            "raw": "/api/marketplace/vault-items",
+            "backend": {
+              "method": "GET",
+              "path": "/api/marketplace/vault-items"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/nft-subscriptions/my-nfts",
+            "raw": "/api/nft-subscriptions/my-nfts",
+            "backend": {
+              "method": "GET",
+              "path": "/api/nft-subscriptions/my-nfts"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/marketplace/listings",
+            "raw": "/api/marketplace/listings",
+            "backend": {
+              "method": "POST",
+              "path": "/api/marketplace/listings"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/marketplace/listings/:param/buy",
+            "raw": "/api/marketplace/listings/${listing.id}/buy",
+            "backend": {
+              "method": "POST",
+              "path": "/api/marketplace/listings/:id/buy"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/marketplace/orders/:param",
+            "raw": "/api/marketplace/orders/${endpoint}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/marketplace/orders/:id"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/marketplace/my-listings",
+            "raw": "/api/marketplace/my-listings",
+            "backend": {
+              "method": "GET",
+              "path": "/api/marketplace/my-listings"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/marketplace/listings/:param",
+            "raw": "/api/marketplace/listings/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/marketplace/listings/:id"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/marketplace/listings",
+            "raw": "/api/marketplace/listings${q}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/marketplace/listings"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/marketplace/stats",
+            "raw": "/api/marketplace/stats",
+            "backend": {
+              "method": "GET",
+              "path": "/api/marketplace/stats"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/authenticator",
+      "component": "Authenticator",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/authenticator.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/ayzen-email",
+      "component": "AyzenEmail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/ayzen-email.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/ayzen-email/status",
+            "raw": "/api/ayzen-email/status",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ayzen-email/status"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/ayzen-email/claim-native",
+            "raw": "/api/ayzen-email/claim-native",
+            "backend": {
+              "method": "POST",
+              "path": "/api/ayzen-email/claim-native"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/ayzen-email/check/:param",
+            "raw": "/api/ayzen-email/check/${encodeURIComponent(username.trim())}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/ayzen-email/check/:username"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/ayzen-email/claim",
+            "raw": "/api/ayzen-email/claim",
+            "backend": {
+              "method": "POST",
+              "path": "/api/ayzen-email/claim"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/mailbox/:id",
+      "component": "Mailbox",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/mailbox.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/mailbox",
+      "component": "Mailbox",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/mailbox.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/email-accounts",
+      "component": "EmailAccounts",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/email-accounts.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/email-accounts",
+            "raw": "/api/email-accounts",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/email-accounts/:param",
+            "raw": "/api/email-accounts/${id}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts/:id"
+            }
+          },
+          {
+            "method": "DELETE",
+            "path": "/api/email-accounts/:param",
+            "raw": "/api/email-accounts/${id}",
+            "backend": {
+              "method": "DELETE",
+              "path": "/api/email-accounts/:id"
+            }
+          },
+          {
+            "method": "PUT",
+            "path": "/api/email-accounts/:param",
+            "raw": "/api/email-accounts/${id}",
+            "backend": {
+              "method": "PUT",
+              "path": "/api/email-accounts/:id"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/email-accounts/:param/test",
+            "raw": "/api/email-accounts/${acc.id}/test",
+            "backend": {
+              "method": "POST",
+              "path": "/api/email-accounts/:id/test"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/email-accounts/:param/inbox",
+            "raw": "/api/email-accounts/${acc.id}/inbox",
+            "backend": {
+              "method": "GET",
+              "path": "/api/email-accounts/:id/inbox"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/email-accounts/:param/send",
+            "raw": "/api/email-accounts/${composeAcc.id}/send",
+            "backend": {
+              "method": "POST",
+              "path": "/api/email-accounts/:id/send"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/support",
+      "component": "UserSupport",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/support.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/support/tickets",
+            "raw": "/api/support/tickets",
+            "backend": {
+              "method": "GET",
+              "path": "/api/support/tickets"
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/support/tickets/:param",
+            "raw": "/api/support/tickets/${ticket.id}",
+            "backend": {
+              "method": "GET",
+              "path": "/api/support/tickets/:id"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/support/tickets",
+            "raw": "/api/support/tickets",
+            "backend": {
+              "method": "POST",
+              "path": "/api/support/tickets"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/support/tickets/:param/messages",
+            "raw": "/api/support/tickets/${activeTicket.id}/messages",
+            "backend": {
+              "method": "POST",
+              "path": "/api/support/tickets/:id/messages"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/user/custom/:slug",
+      "component": "UserCustomPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/custom-page.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/login",
+      "component": "Login",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/login.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/auth/login",
+            "raw": "/api/auth/login",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/login"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/register",
+            "raw": "/api/auth/register",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/register"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/send-otp",
+            "raw": "/api/auth/send-otp",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/send-otp"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/send-otp",
+            "raw": "/api/auth/send-otp",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/send-otp"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/magic-link/verify",
+            "raw": "/api/auth/magic-link/verify",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/magic-link/verify"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/send-otp",
+            "raw": "/api/auth/send-otp",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/send-otp"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/verify-otp",
+            "raw": "/api/auth/verify-otp",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/verify-otp"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/send-otp",
+            "raw": "/api/auth/send-otp",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/send-otp"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/login/step-up/verify",
+            "raw": "/api/auth/login/step-up/verify",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/login/step-up/verify"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/magic-link",
+            "raw": "/api/auth/magic-link",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/magic-link"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/register",
+      "component": "Register",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/register.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/auth/send-otp",
+            "raw": "/api/auth/send-otp",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/send-otp"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/send-otp",
+            "raw": "/api/auth/send-otp",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/send-otp"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/register",
+            "raw": "/api/auth/register",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/register"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/forgot-password",
+      "component": "ForgotPassword",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/forgot-password.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "POST",
+            "path": "/api/auth/forgot-password",
+            "raw": "/api/auth/forgot-password",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/forgot-password"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/reset-password",
+            "raw": "/api/auth/reset-password",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/reset-password"
+            }
+          },
+          {
+            "method": "POST",
+            "path": "/api/auth/forgot-password",
+            "raw": "/api/auth/forgot-password",
+            "backend": {
+              "method": "POST",
+              "path": "/api/auth/forgot-password"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/status",
+      "component": "StatusPage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/status.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [
+          {
+            "method": "GET",
+            "path": "/api/uptime/status",
+            "raw": "/api/uptime/status",
+            "backend": {
+              "method": "GET",
+              "path": "/api/uptime/status"
+            }
+          }
+        ],
+        "classification": "OK"
+      }
+    },
+    {
+      "path": "/oidc/callback",
+      "component": "OidcCallback",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/oidc-callback.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/oidc/consent",
+      "component": "OidcConsent",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/oidc-consent.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/emergency-access/confirm/:token",
+      "component": "EmergencyAccessConfirm",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/emergency-access/confirm.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/emergency-access/view/:token",
+      "component": "EmergencyAccessView",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/emergency-access/view.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/receipt/:token",
+      "component": "FinanceReceiptPublic",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/finance/receipt.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/invoice/:token",
+      "component": "FinanceInvoicePublic",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/finance/invoice-public.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/payment-agreement/:token",
+      "component": "FinancePaymentAgreementPublic",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/finance/payment-agreement-public.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/receipt/local/:token",
+      "component": "LocalEntityReceiptPublic",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/receipt/local.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/receipt/entity/:token",
+      "component": "VaultEntityReceiptPublic",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/receipt/entity.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/receipt/project/:token",
+      "component": "ProjectPnlReceiptPublic",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/receipt/project.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/receipt/task/:token",
+      "component": "TaskSubmissionReceiptPublic",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/receipt/task.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/receipt/vault-category/:token",
+      "component": "VaultCategoryReceiptPublic",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/receipt/vault-category.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    }
+  ],
+  "deadPages": [
+    "pages/admin/theme-palette-builder.tsx",
+    "pages/landing.tsx",
+    "pages/not-found.tsx",
+    "pages/user/marketplace-nft.tsx",
+    "pages/user/nft-marketplace.tsx",
+    "pages/user/vault-entity-dashboard.tsx",
+    "pages/user/vault-kyc-dashboard.tsx",
+    "pages/user/vault-kyc-data-list.tsx",
+    "pages/user/vault-local-dashboard.tsx",
+    "pages/user/vault-mail.tsx",
+    "pages/user/vault-wallet-seed.tsx"
+  ]
+}

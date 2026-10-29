@@ -1,0 +1,7 @@
+/**
+ * Application boundary: use-case modules compose domain rules with ports.
+ * Existing route handlers remain compatibility adapters during migration.
+ */
+export * from "./health";
+export * from "./snapshot/restore";
+export * from "./health-scan";

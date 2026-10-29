@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "architectureVersion": "1.0.0",
+  "repository": "ayzen",
+  "sourceOfTruth": "current-state-plus-governed-target",
+  "dependencyDirection": [
+    "frontend->api-client",
+    "api-gateway->service",
+    "service->public-contract",
+    "service->owned-resource",
+    "eventbus->registered-consumer",
+    "workflow->policy-context",
+    "admin->audited-api"
+  ],
+  "components": [
+    { "id": "api-gateway", "type": "app", "owner": "platform", "boundary": "public-edge", "source": "apps/api-gateway" },
+    { "id": "telegram-gateway", "type": "app", "owner": "telegram-platform", "boundary": "telegram-edge", "source": "apps/telegram-gateway" },
+    { "id": "event-worker", "type": "worker", "owner": "platform", "boundary": "async", "source": "apps/worker" },
+    { "id": "monolith", "type": "app", "owner": "core", "boundary": "compatibility", "source": "artifacts/api-server" },
+    { "id": "identity", "type": "service", "owner": "identity", "boundary": "domain", "source": "services/identity" },
+    { "id": "finance", "type": "service", "owner": "ryft", "boundary": "domain", "source": "services/finance" },
+    { "id": "vault", "type": "service", "owner": "sylo", "boundary": "domain", "source": "services/vault" },
+    { "id": "mail", "type": "service", "owner": "wisp", "boundary": "domain", "source": "services/mail" },
+    { "id": "notification", "type": "service", "owner": "platform", "boundary": "domain", "source": "services/notification" },
+    { "id": "workflow", "type": "service", "owner": "skarn", "boundary": "domain", "source": "services/workflow" },
+    { "id": "ai-agent", "type": "service", "owner": "zynth", "boundary": "domain", "source": "services/ai" },
+    { "id": "marketplace", "type": "service", "owner": "verve", "boundary": "domain", "source": "services/marketplace" },
+    { "id": "search", "type": "service", "owner": "platform", "boundary": "domain", "source": "services/search" },
+    { "id": "intelligence", "type": "service", "owner": "intelligence", "boundary": "async-intelligence", "source": "services/intelligence" },
+    { "id": "admin", "type": "service", "owner": "admin", "boundary": "control-plane", "source": "services/admin" }
+  ]
+}

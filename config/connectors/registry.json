@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "defaultDeny": true,
+  "connectors": [
+    { "id": "billing", "version": 1, "auth": "service-signed", "timeoutMs": 10000, "retryAttempts": 2 },
+    { "id": "telegram", "version": 1, "auth": "bot-token", "timeoutMs": 10000, "retryAttempts": 2 },
+    { "id": "email", "version": 1, "auth": "managed-secret", "timeoutMs": 15000, "retryAttempts": 2 }
+  ]
+}

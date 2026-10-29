@@ -1,0 +1,93 @@
+#!/usr/bin/env node
+// PRJ-00: generates docs/antas/projects/projects-inventory.md and reports/antas/projects/projects-migration-map.json
+// from the tree and boundaries.manifest.json. Static only (no DB, no network). Re-run after any Projects change.
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(here, "../../..");
+const manifest = JSON.parse(fs.readFileSync(path.join(here, "boundaries.manifest.json"), "utf8"));
+const src = path.join(root, "artifacts/api-server/src");
+const moduleRoot = path.join(root, manifest.sources.moduleRoot);
+const rel = (f) => path.relative(root, f).split(path.sep).join("/");
+const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) =>
+  e.name === "node_modules" ? [] : e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
+const isTs = (f) => /\.(ts|tsx|mjs)$/.test(f);
+const isTest = (f) => /\.test\.[^.]+$/.test(f);
+const lines = (f) => fs.readFileSync(f, "utf8").split("\n").length - (fs.readFileSync(f, "utf8").endsWith("\n") ? 1 : 0);
+
+// 1. Module files by layer
+const moduleFiles = walk(moduleRoot).filter(isTs).map((f) => {
+  const r = path.relative(moduleRoot, f).split(path.sep);
+  const text = fs.readFileSync(f, "utf8");
+  return { file: rel(f), layer: r[0], lines: lines(f), isTest: isTest(f), tests: isTest(f) ? (text.match(/^\s*test\(/gm) || []).length : 0 };
+});
+const byLayer = {};
+for (const f of moduleFiles.filter((x) => !x.isTest)) {
+  const l = (byLayer[f.layer] ??= { files: 0, lines: 0 }); l.files++; l.lines += f.lines;
+}
+const testCount = moduleFiles.reduce((n, f) => n + f.tests, 0);
+
+// 2. Routes and their owners
+const routeFiles = manifest.sources.routes.map((r) => ({ file: r, lines: lines(path.join(root, r)) }));
+const routeOwners = manifest.routeOwners.map((r) => ({ method: r.method, path: r.path, routeFile: `routes/${r.file}.ts`, owner: `projects/${r.owner}`, extractedIn: r.extractedIn }));
+
+// 3. Table owners
+const tableIds = Object.values(manifest.tableOwnership.projects).flat();
+const tables = Object.entries(manifest.tableOwnership).flatMap(([module, ts]) =>
+  Object.entries(ts).map(([table, ids]) => ({ table, module, identifiers: ids,
+    ownerFile: manifest.tableOwnerFiles.find((t) => t.table === table)?.ownerFile ?? null })));
+
+// 4. Code outside the module that touches Projects tables
+const outside = walk(src).filter((f) => isTs(f) && !isTest(f) && !f.startsWith(moduleRoot + path.sep));
+const idRe = new RegExp(`\\b(${tableIds.join("|")})\\b`);
+const rawRe = /\b(?:FROM|JOIN|INTO|UPDATE)\s+(?:public\.)?(projects|user_projects|project_enrollments|entity_project_roi|project_ratings|project_dates|project_pnl_receipts|ayzen_project_templates)\b/gi;
+const outsideTouch = [];
+for (const f of outside) {
+  const t = fs.readFileSync(f, "utf8");
+  const ids = [...new Set(t.match(new RegExp(idRe, "g")) || [])];
+  const raw = [...new Set([...t.matchAll(rawRe)].map((m) => m[1].toLowerCase()))];
+  if (ids.length || raw.length) {
+    const writes = /\.(insert|update|delete)\(\s*(?:\w+\.)?(?:projectsTable|userProjectsTable|projectEnrollmentsTable|entityProjectRoiTable|projectRatingsTable|projectDatesTable|projectPnlReceiptsTable|projectTemplatesTable)/.test(t)
+      || /\b(?:INSERT\s+INTO|UPDATE|DELETE\s+FROM)\s+(?:projects|user_projects|project_enrollments)\b/i.test(t);
+    const decided = [...manifest.knownExternalConsumers, ...(manifest.billedEnrollmentWriters || []), ...(manifest.exemptEnrollmentWriters || [])].some((c) => c.file === rel(f));
+    outsideTouch.push({ file: rel(f), identifiers: ids, rawTables: raw, writes, recordedInManifest: decided });
+  }
+}
+
+const migrationMap = {
+  schemaVersion: 1,
+  phase: "PRJ-00 (generated after PRJ-07)",
+  generatedBy: "scripts/antas/projects/generate-inventory.mjs",
+  basis: "static scan of the tree plus scripts/antas/projects/boundaries.manifest.json; no database, no commit SHA (no .git)",
+  moduleFiles: { sourceFiles: moduleFiles.filter((f) => !f.isTest).length, testFiles: moduleFiles.filter((f) => f.isTest).length, tests: testCount, byLayer },
+  routeFiles, routeCount: routeOwners.length, routes: routeOwners,
+  tables, outsideModuleAccess: outsideTouch,
+  externalConsumers: manifest.knownExternalConsumers, crossModuleImports: manifest.allowedCrossModuleImports,
+  unscannedDynamicConsumers: manifest.unscannedDynamicConsumers,
+  issuesFixed: manifest.issuesFixed.map((i) => ({ id: i.id, status: i.status })),
+  issuesOpen: manifest.knownIssuesPreserved.map((i) => ({ id: i.id, status: i.status })),
+};
+fs.mkdirSync(path.join(root, "reports/antas/projects"), { recursive: true });
+fs.writeFileSync(path.join(root, "reports/antas/projects/projects-migration-map.json"), JSON.stringify(migrationMap, null, 2) + "\n");
+
+// 5. Markdown inventory
+const L = [];
+L.push("# Projects module inventory (PRJ-00)", "");
+L.push("Generated by `node scripts/antas/projects/generate-inventory.mjs` from the tree and `boundaries.manifest.json`. Static count: no database, no commit SHA (no `.git`). Machine-readable twin: `reports/antas/projects/projects-migration-map.json`.", "");
+L.push("## Routes", "", "| Route file | Lines | Routes |", "|---|---|---|");
+for (const rf of routeFiles) L.push(`| \`${rf.file.replace("artifacts/api-server/src/", "")}\` | ${rf.lines} | ${routeOwners.filter((r) => `routes/${path.basename(rf.file)}` === r.routeFile).length} |`);
+L.push("", `Total: ${routeOwners.length} routes, all adapters over \`projects/application/*\`.`, "");
+L.push("## Module files", "", "| Layer | Source files | Lines |", "|---|---|---|");
+for (const [k, v] of Object.entries(byLayer).sort()) L.push(`| \`${k}\` | ${v.files} | ${v.lines} |`);
+L.push("", `Plus ${migrationMap.moduleFiles.testFiles} test files holding ${testCount} tests.`, "");
+L.push("## Route to owner", "", "| Method | Path | Owner | Extracted in |", "|---|---|---|---|");
+for (const r of routeOwners) L.push(`| ${r.method} | \`${r.path}\` | \`${r.owner}\` | ${r.extractedIn} |`);
+L.push("", "## Table ownership", "", "| Table | Module | Owner file |", "|---|---|---|");
+for (const t of tables) L.push(`| \`${t.table}\` | ${t.module} | ${t.ownerFile ? `\`${t.ownerFile.replace("artifacts/api-server/src/", "")}\`` : "n/a"} |`);
+L.push("", "## Code outside `projects/` that touches Projects tables", "", "| File | Tables | Writes | In manifest |", "|---|---|---|---|");
+for (const o of outsideTouch) L.push(`| \`${o.file.replace("artifacts/api-server/src/", "")}\` | ${[...new Set([...o.identifiers.map((i) => i.replace(/Table$/, "")), ...o.rawTables])].join(", ")} | ${o.writes ? "yes" : "no"} | ${o.recordedInManifest ? "yes" : "**no**"} |`);
+L.push("", "## Issues", "", `Fixed: ${manifest.issuesFixed.map((i) => i.id).join(", ")}. Open: ${manifest.knownIssuesPreserved.map((i) => i.id).join(", ") || "none"}.`, "");
+fs.writeFileSync(path.join(root, "docs/antas/projects/projects-inventory.md"), L.join("\n"));
+console.log(`Inventory: ${routeOwners.length} routes, ${moduleFiles.filter((f) => !f.isTest).length} module files, ${testCount} tests, ${outsideTouch.length} outside files touching Projects tables`);

@@ -1,0 +1,51 @@
+{
+  "_doc": "VLT-GAP-20-C/20-D pins. Read ONLY by the 20-C wiring check and the 20-D gate (not by the 20-A capture or the 20-B judge, so editing it does not invalidate the capture). Loosening any value here means editing and reviewing this file AND the gate that pins it.",
+  "pins": {
+    "timing_max": {
+      "p50_factor": 1.5,
+      "p95_factor": 1.5,
+      "p99_factor": 2,
+      "total_factor": 1.35,
+      "abs_slack_ms": 2,
+      "p99_abs_slack_ms": 10,
+      "total_abs_slack_ms": 5,
+      "retries": 2
+    },
+    "min_reps": 5,
+    "required_scenarios": [
+      "row-db",
+      "row-db-two-rows",
+      "row-db-linked",
+      "row-db-import"
+    ],
+    "max_intentional_changes": 0,
+    "max_unmeasurable_routes": 1,
+    "route_groups_expected": [
+      "entity-secret",
+      "local-account",
+      "kyc",
+      "game-marketplace",
+      "security-access",
+      "backup-restore",
+      "snapshot-trash",
+      "share-attachment"
+    ],
+    "scenario_groups": {
+      "row-db-linked": [
+        "kyc",
+        "entity-secret",
+        "snapshot-trash"
+      ],
+      "row-db-import": [
+        "migration"
+      ]
+    },
+    "current_only_groups": {
+      "migration": [
+        "routes/vault-migration.ts"
+      ]
+    }
+  },
+  "route_scope_name_regex": "^(vault|kyc|local-account|game|marketplace-game)",
+  "route_scope_exclusions": []
+}

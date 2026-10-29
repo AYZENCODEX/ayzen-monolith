@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "decision": "approval-required",
+  "qualifyingReasons": ["independent-scaling", "independent-deployment", "security-isolation", "failure-isolation", "independent-ownership"],
+  "minimumEvidence": ["measured-load", "data-boundary", "contract", "health-readiness", "rollback", "oncall-owner", "cost-estimate"],
+  "antiPattern": ["extract-for-service-count", "duplicate-shared-runtime", "cross-app-database-access"],
+  "requiredApprovals": ["domain-owner", "platform-owner", "security-owner"]
+}

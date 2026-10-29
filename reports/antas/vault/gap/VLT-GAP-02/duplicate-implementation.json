@@ -1,0 +1,180 @@
+{
+  "phase": "VLT-GAP-02",
+  "sub_phase": "VLT-GAP-02-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "75275a30a699f7482fc7f1c024e2dd2a84c11b9c34cbc6e1c5e7e4ba61066ee3",
+  "validator_version": "1.0.0",
+  "validator_sha256": "a51059099be8c41fd9ef6f681b2598b189a1ec78efc516ed77c2d5161f9d8ce2",
+  "description": "Duplicate implementation scan (name-agnostic token fingerprints + normalized SQL)",
+  "added_copies_outside_owner": [],
+  "added_sql_outside_repositories": [],
+  "baseline_bodies_surviving_in_old_route": [],
+  "owner_module_duplicates": [],
+  "pre_existing_function_overlaps_reported_to_GAP_16": [
+    {
+      "file": "artifacts/api-server/src/lib/finance-accounting.ts",
+      "symbol": "generateReceiptToken",
+      "duplicates": "baseline#generateCategoryReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/finance-invoice.ts",
+      "symbol": "generateInvoiceToken",
+      "duplicates": "baseline#generateCategoryReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/finance-invoice.ts",
+      "symbol": "generateAgreementToken",
+      "duplicates": "baseline#generateCategoryReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/exchange-api.ts",
+      "symbol": "safe",
+      "duplicates": "baseline#safe",
+      "tokens": 31,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "symbol": "safeDate",
+      "duplicates": "baseline#safeDate",
+      "tokens": 25,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/projects.ts",
+      "symbol": "generateProjectReceiptToken",
+      "duplicates": "baseline#generateCategoryReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/tasks.ts",
+      "symbol": "generateTaskReceiptToken",
+      "duplicates": "baseline#generateCategoryReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/value-history.ts",
+      "symbol": "safe",
+      "duplicates": "baseline#safe",
+      "tokens": 31,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/value-history.ts",
+      "symbol": "num",
+      "duplicates": "artifacts/api-server/src/vault/application/local-account/value.ts#num",
+      "tokens": 24,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "symbol": "generateVaultReceiptToken",
+      "duplicates": "baseline#generateCategoryReceiptToken",
+      "tokens": 22,
+      "reason": "file unchanged since the 02-C seal; pre-dates GAP-02 (independent idiom, reported to GAP-16)"
+    }
+  ],
+  "pre_existing_sql_overlaps_with_deferred_consumers": [],
+  "corpus": {
+    "baseline_fingerprints": 50,
+    "owner_functions_fingerprinted": 90,
+    "owner_sql_statements": 33
+  },
+  "hidden_import_edges": [
+    {
+      "consumer": "artifacts/api-server/src/routes/index.ts",
+      "symbols": [
+        "default"
+      ],
+      "kind": "import",
+      "line": 84,
+      "verdict": "router-mount"
+    }
+  ],
+  "hidden_import_violations": [],
+  "layering_violations": [],
+  "frontend_duplicated_display_helpers": {
+    "helpers": {
+      "calcAge": [
+        {
+          "file": "artifacts/ayzen/src/components/local-accounts.tsx",
+          "fingerprint": "e830746775f907bd",
+          "lines": [
+            80,
+            90
+          ]
+        },
+        {
+          "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+          "fingerprint": "67ff825341cb193c",
+          "lines": [
+            86,
+            95
+          ]
+        },
+        {
+          "file": "artifacts/ayzen/src/pages/user/vault-local-detail.tsx",
+          "fingerprint": "2e352989ab99992f",
+          "lines": [
+            65,
+            74
+          ]
+        }
+      ],
+      "calcROI": [
+        {
+          "file": "artifacts/ayzen/src/components/local-accounts.tsx",
+          "fingerprint": "7f78d561bb3990fc",
+          "lines": [
+            92,
+            95
+          ]
+        },
+        {
+          "file": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx",
+          "fingerprint": "79d705d980371d91",
+          "lines": [
+            28,
+            31
+          ]
+        },
+        {
+          "file": "artifacts/ayzen/src/pages/user/vault-local-dashboard.tsx",
+          "fingerprint": "79d705d980371d91",
+          "lines": [
+            41,
+            44
+          ]
+        },
+        {
+          "file": "artifacts/ayzen/src/pages/user/vault-local-detail.tsx",
+          "fingerprint": "7f78d561bb3990fc",
+          "lines": [
+            76,
+            79
+          ]
+        }
+      ]
+    },
+    "calcAge_distinct_bodies": 3,
+    "calcROI_distinct_bodies": 2,
+    "server_owner": {
+      "calcAgeLabel": true,
+      "calcRoiPct": true
+    }
+  },
+  "frontend_deferral": {
+    "gap": "VLT-GAP-16",
+    "reason": "calcAge/calcROI are display formatters copy-pasted across the frontend (component + local/KYC pages); removing one copy would not retire anything, and the frontend has no shared owner module. GAP-16 finds and removes duplicate account/KYC logic repo-wide.",
+    "still_current": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-02.1",
+  "phase": "ANTAS-02",
+  "name": "Domain Ownership Matrix",
+  "generatedAt": "2026-09-29T06:06:06.715Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "config/antas/domain-ownership.json",
+    "docs/antas/architecture/domain-ownership.md"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

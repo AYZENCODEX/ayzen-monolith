@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": "ANTAS-15",
+  "name": "Supply Chain / CI-CD / Release Security",
+  "owner": "platform",
+  "priority": "P1",
+  "generatedAt": "2026-09-29T06:06:07.462Z",
+  "status": "PASS",
+  "required": 6,
+  "passed": 6,
+  "failed": 0,
+  "waived": 0,
+  "criticalFailures": 0,
+  "productionReady": false,
+  "externalGates": [
+    {
+      "gate": "CI dependency audit",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "signed artifact verification",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "findings": [],
+  "note": "PASS means repository evidence and static controls are present; it does not certify runtime or production behavior."
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-00.2",
+  "phase": "ANTAS-00",
+  "name": "Claim vs Reality Matrix",
+  "generatedAt": "2026-09-29T06:06:06.714Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "docs/antas/baseline/claim-reality-matrix.md",
+    "reports/antas/baseline/claim-reality.json"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

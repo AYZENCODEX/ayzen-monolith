@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-1-F7",
+  "title": "Fix F7: atomic goal contributions",
+  "timestamp": "2026-10-18T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Statically verified (syntax, 26 static tests, mutation test). The three DB tests (10 concurrent contributions, non-active status, linked-asset goal) could not run here: no Postgres, pnpm or node_modules. PASS requires the Replit run.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; bound by content via fin-provenance-manifest.json."
+  },
+  "behaviorChanges": [
+    "POST /finance/goals/:id/contribute: increment, achieved flip and the linked-asset guard are one UPDATE scoped to the caller. Concurrent contributions no longer lose updates. Responses, status codes and messages unchanged (404 Goal not found, 400 linked asset message, 200 with the goal row).",
+    "The update now also filters by user_id (it previously filtered by id only, after a user-scoped read)."
+  ],
+  "notes": "No schema change. Double-precision arithmetic (::float8) matches the JS number arithmetic it replaces; results are stored back into the REAL column.",
+  "filesChanged": [
+    "artifacts/api-server/src/finance/application/goals-budgets.ts",
+    "artifacts/api-server/src/finance/application/wp2-use-cases.db.test.ts (+3 tests)",
+    "artifacts/api-server/src/finance/route-security.test.ts (+1 static gate)",
+    "docs/antas/finance/*",
+    "reports/antas/finance/fin-wp1-evidence.json",
+    "reports/antas/finance/fin-wp2a-evidence.json"
+  ],
+  "commands": [
+    {
+      "command": "node --test --import tsx src/finance/domain/*.test.ts src/finance/route-security.test.ts",
+      "exitCode": 0,
+      "tests": 26,
+      "passed": 26,
+      "failed": 0
+    },
+    {
+      "command": "mutation: reintroduce a JS read-modify-write in contributeToGoal (copy)",
+      "exitCode": 1,
+      "result": "F7 gate fails as intended"
+    },
+    {
+      "command": "node --experimental-strip-types --check on changed files",
+      "exitCode": 0,
+      "result": "syntax only"
+    }
+  ],
+  "notRun": [
+    "pnpm typecheck/build (sql template with ::float8 casts in .set(), isNull import)",
+    "pnpm test:finance-db (wp2-use-cases: 12 tests)",
+    "Authenticated HTTP test of POST /finance/goals/:id/contribute"
+  ],
+  "nextSafeStep": "Replit run: typecheck, build, test:finance-static, test:finance-db; if green promote WP-1a, F1-F7 and WP-2a together."
+}

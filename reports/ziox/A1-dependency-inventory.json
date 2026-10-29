@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-29T06:07:10.770Z",
+  "packageManager": "pnpm@10.26.1",
+  "runtimeDependencies": [
+    "@replit/connectors-sdk"
+  ],
+  "devDependencies": [
+    "prettier",
+    "typescript"
+  ],
+  "workspace": true,
+  "lockfileSha256": "c64eed9138041d19cef95479b773fd85c5a6d77446c5037fc348707f060ded47",
+  "reproducible": true
+}

@@ -1,0 +1,356 @@
+{
+  "sub_phase": "VLT-GAP-05-A",
+  "purpose": "Frozen pre-extraction sources for OLD→NEW differential proof in 05-B/05-D. Write-once: 05-A never overwrites an existing baseline.",
+  "sources": [
+    {
+      "file": "services/vault/src/index.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__index.mjs",
+      "sha256": "ec653c3b40526c2f781fb4a327154e707645ecb2ae74b7acfd69790ba22fc705",
+      "lines": 35
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__routes__vault.ts",
+      "sha256": "615125c0947e28e6a67d82aade5c1009f4f9ba9b29ce21b3dc7a91c576218e77",
+      "lines": 629
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-crypto.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__lib__vault-crypto.ts",
+      "sha256": "e60ad62262d6fa3c5da4ba86097285dc0861f5329b20fc7e6cf22c1c23d29f43",
+      "lines": 14
+    },
+    {
+      "file": "services/vault/src/access.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__access.mjs",
+      "sha256": "11dcc61744e438ce997db5be8d4736740a7cfc3903f3107911fd50e705634763",
+      "lines": 3
+    },
+    {
+      "file": "services/vault/src/api/contracts.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__api__contracts.mjs",
+      "sha256": "764570d6665ce877bf17192b3dfaf5a84018d40f2ff72b583d82c7c86b9fe778",
+      "lines": 14
+    },
+    {
+      "file": "services/vault/src/api/http-handler.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__api__http-handler.mjs",
+      "sha256": "d7e74c408289c75a7c258208beae912ef04bc3ec953144fa28362a6e8c768c32",
+      "lines": 39
+    },
+    {
+      "file": "services/vault/src/api/index.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__api__index.mjs",
+      "sha256": "1077c873541936edffea600eab400cc86598e905deb9c02737101b3ed2e52d38",
+      "lines": 3
+    },
+    {
+      "file": "services/vault/src/application/secret-service.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__application__secret-service.mjs",
+      "sha256": "802f8c0cecf1cd8132c38478bc3708e53ed443cb9695f0e2bf45679563d40048",
+      "lines": 55
+    },
+    {
+      "file": "services/vault/src/contracts.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__contracts.mjs",
+      "sha256": "c6c72733d9fcdc2dc5383a7d8906959a854f25ad4120c502bff95b342ff0c1f0",
+      "lines": 3
+    },
+    {
+      "file": "services/vault/src/crypto.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__crypto.mjs",
+      "sha256": "5478f870ec8f7dc06aa269d59ff2f5e01af68b6719b415d52a0c0137aa9f7292",
+      "lines": 4
+    },
+    {
+      "file": "services/vault/src/crypto/envelope.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__crypto__envelope.mjs",
+      "sha256": "78cad9099ee469a4f29e3fe5d2681125bc55dc1b30da719de3da78e015962583",
+      "lines": 36
+    },
+    {
+      "file": "services/vault/src/domain.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__domain.mjs",
+      "sha256": "68feaac07289e73fc0505c339f8ca53d6fd950d89d74ce689e30280a467b1d87",
+      "lines": 3
+    },
+    {
+      "file": "services/vault/src/domain/secret.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__domain__secret.mjs",
+      "sha256": "39711f21a51481416e29d24a759173616d368d82971073303e0d2e073ba208bf",
+      "lines": 22
+    },
+    {
+      "file": "services/vault/src/infrastructure/dependencies.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__infrastructure__dependencies.mjs",
+      "sha256": "9a9aec4c4a3336d642e4e931f1f624f691cc906a9033e09a3e1004bd1bbe6f36",
+      "lines": 27
+    },
+    {
+      "file": "services/vault/src/security/access.mjs",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/services__vault__src__security__access.mjs",
+      "sha256": "6c9f09408eadbd2145301a69fe99abe0ea37f8a03cefed94165e6224c668ae27",
+      "lines": 23
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__crypto__field-encryption.ts",
+      "sha256": "ef6ae643860ec4d4e8339b1467869798fb4a97baf9496cc430c0065d73a14057",
+      "lines": 141
+    },
+    {
+      "file": "artifacts/api-server/src/vault/crypto/seed-phrase.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__crypto__seed-phrase.ts",
+      "sha256": "482f1aa3a199d0838da138671268322c51bb350d9721f19c50fb730e7dea621b",
+      "lines": 36
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/secret-fields.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__domain__secret-fields.ts",
+      "sha256": "0326f6a472fe8b88193439eb4aa731dc75d2e793cb3fa0f85d65efdfc6e51b02",
+      "lines": 39
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__security__entity-ownership.ts",
+      "sha256": "7da2e892e29c3a5db08d510a4bb7da19d7af33088850b738278d005e3abf8328",
+      "lines": 85
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/create.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__create.ts",
+      "sha256": "a275844ac1ed1ccd80294a0b430d5a87ab360da4265ed52384edf11075b0611e",
+      "lines": 158
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__lifecycle.ts",
+      "sha256": "c3ffea10dfbe6961bdd5970141b692a4415ff009cc33c5e14da95d324bce0978",
+      "lines": 132
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__update.ts",
+      "sha256": "d6d2955504ca60d8e8144dfe438022d138e1115f2c2a75f304c2268acbad731a",
+      "lines": 218
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/representation.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__representation.ts",
+      "sha256": "3c6d1da46f30aeb69d06ac6f4936bb7c4a638f4c711b06d309a95b1b8356eca4",
+      "lines": 138
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__activity.ts",
+      "sha256": "bc6d73f180041ef79aaa67f8d33b255d0e993e0dfff98c84b0b13b115fb33de2",
+      "lines": 31
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__activity-feed.ts",
+      "sha256": "a4bf78776781b0e552e61121be1b9e94963dff76eadd86b2de664ab0aa98ce12",
+      "lines": 72
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__bulk.ts",
+      "sha256": "882345a36355611eec126ef2144a8dd669ac358534984d4ccba0d23236b0bd7d",
+      "lines": 172
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__analytics.ts",
+      "sha256": "47f9c349d5a32ffa239ec6e47e9f6a6fadabf8c3b18d9e379ed04592fb621a4d",
+      "lines": 172
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__admin.ts",
+      "sha256": "7c2b8519c9e22d492f6d4905daaac4f49d7172afbabd46fb7e1ab9f36f5d4869",
+      "lines": 139
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__application__entity__receipt.ts",
+      "sha256": "a5297f18cce294ca416c16a14071189dcca002524a5c00351764c84f6212829e",
+      "lines": 138
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-05/baseline/sources/artifacts__api-server__src__vault__infrastructure__repositories__entity-repository.ts",
+      "sha256": "1bac9901cc4f37e9dd50bcca3126fd5397605374a4c4176b1e50b178d26f0a8b",
+      "lines": 125
+    }
+  ],
+  "consumer_files": [
+    {
+      "file": "artifacts/api-server/src/index.ts",
+      "sha256": "dcdedd202ccc921ce56dc7635073c59a8f49c3304ce85a2fbab89761891d764f"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-attachment-content.ts",
+      "sha256": "ccaf2a8618e49b5fca493e2e0d152f34a931721a28da7adee2754f688a32e79a"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-send-queue.ts",
+      "sha256": "9bcb40ee0211f9f4043a14c35cd2df9e2f2b3eca9fd99e30d7717bcd8eae631d"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "sha256": "5b4a5ddc38ed3c512ef60eb7a0a63962086c522d3c758424606fc7bb6bb351a6"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "sha256": "d5d9fee64b7774bdf8e274b1a48f125ffa289168e5cbbd153371daa715805f25"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "sha256": "544709220a6d99c0ca02a2b9c8fa843cbb6824325103fd7bb2375e82f375cef0"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "sha256": "a18608a98c7b724b0b458d0c3f02c694638940133b3846d80b611b5821b0cf07"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "sha256": "880e85c2f9162bb1ac5175f9fbd88a8f572fd837d456024e76644b11a2962479"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+      "sha256": "2729ce8b153ee6c18d7e64b0337ae9a3308aa302253eb56ae69b14d92994a067"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/email-accounts.ts",
+      "sha256": "d92d465ced2111e4d857aa2ebb66053cad79eb371d933ab76c3bbe1e1556522d"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/emergency-access.ts",
+      "sha256": "873fa426447e886a887471ee928de399e94f1ba42830e14f05f11e922c428908"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/entities.ts",
+      "sha256": "c400596bdb9d73561750374296eb152aae6a4c6aa3d688367518cdaac00495aa"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/index.ts",
+      "sha256": "d8db8b5357ab4a6216b5ac6d080fcbc9d41495ca553f1a306e140ab7d19b5619"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/organizations.ts",
+      "sha256": "6f0564e192cb3621d0c85d483c9ff24f243a253e17344536b8ddb6f315d32e84"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/resend-webhook.ts",
+      "sha256": "4cf43a8743dcc06ce2b50d61063c09fb2a039528a08286ff447e1826964dfb19"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/teams.ts",
+      "sha256": "6c2d41a5eca7946909d853c499c621ead8aa3c1577ee9bb1329ca372e20131b9"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/two-factor.ts",
+      "sha256": "1c456558f92fc6d130dd51dff74f077057929a8443bff79dc7fc062592038456"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/value-history.ts",
+      "sha256": "aff03450348d25b8eb00056eae8aec6a35d30df140638bad20f3dbef5596db6a"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "sha256": "88c182aac4943fbc4e6c3966585dfd4b615b80e263cfd9ca5bbe3a36b1ca1f2f"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "sha256": "60208e6af6ffb2e8f12a7d906ef8bd623db896724040218f52e574f65fe157b7"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-migration.ts",
+      "sha256": "8e547ca701003aa9e449425d57b37c955e7ae462f3c2bb0b93a05b22c2f6776a"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "sha256": "0e48c9fe8fea7ef89002e96ad50fcb1e854cf9d487434e9a627b57c114f8f212"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "sha256": "62d41bf7504052ddcada8a8e00f96d2e11f3be77262fa559976521713eedcb4c"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/api/index.ts",
+      "sha256": "83c31f0c31fd773713380f3a5f7c843e0ddd1a748165d562b4d738ec4b3f8ed3"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "sha256": "a4bf78776781b0e552e61121be1b9e94963dff76eadd86b2de664ab0aa98ce12"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "sha256": "7c2b8519c9e22d492f6d4905daaac4f49d7172afbabd46fb7e1ab9f36f5d4869"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "sha256": "47f9c349d5a32ffa239ec6e47e9f6a6fadabf8c3b18d9e379ed04592fb621a4d"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "sha256": "882345a36355611eec126ef2144a8dd669ac358534984d4ccba0d23236b0bd7d"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/create.ts",
+      "sha256": "a275844ac1ed1ccd80294a0b430d5a87ab360da4265ed52384edf11075b0611e"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "sha256": "c3ffea10dfbe6961bdd5970141b692a4415ff009cc33c5e14da95d324bce0978"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "sha256": "a5297f18cce294ca416c16a14071189dcca002524a5c00351764c84f6212829e"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/representation.ts",
+      "sha256": "3c6d1da46f30aeb69d06ac6f4936bb7c4a638f4c711b06d309a95b1b8356eca4"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/entity/update.ts",
+      "sha256": "d6d2955504ca60d8e8144dfe438022d138e1115f2c2a75f304c2268acbad731a"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "sha256": "6c8678b94985b66049ec09b9c2fcb95882c6df9c1652e69c5a16523a989bfe25"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "sha256": "2c16402277b19dc90c79cbefdc9ece39ea3b6b05ad90e4ed41a9005d657a4901"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "sha256": "b8987a668f5d899fa607c9329b14f125aec579d731dc1071295a5bc4c484cc16"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "sha256": "3e021b6a5c2ea876fbcde996d467c847cdc7e16fbbb5ee91e8945b1bf0cad3c4"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "sha256": "7855f1e9f16127ac3997e41033259358acaf4226aa71e58d87477b038fa05ecd"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "sha256": "bcb8cff17e632716682a24f1002c3f8f4dd805ed04a7925a0e1fd815d36aa8c8"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "sha256": "1ab2d0574939de6162eccfbf78ef50deb191760d2d2ad7a1e7bdc160bb61ff41"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "sha256": "147cdbf41162308df32933ea41139761fcab29354b2e61d4c586d46b1698ea03"
+    },
+    {
+      "file": "scripts/src/test-route-ownership-regression.ts",
+      "sha256": "5adbd518112fb514a8ffb1936bab7a5d33036471201dd1735a2b21a3bcd46f94"
+    }
+  ]
+}

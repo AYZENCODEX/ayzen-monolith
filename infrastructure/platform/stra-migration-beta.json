@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "workstream": "migration-beta-2.0",
+  "registry": "migrations/beta/registry.json",
+  "catalogBoundary": {
+    "applicationOwnership": "app-or-service",
+    "sharedInfrastructure": "separate-catalog",
+    "metadata": ["owner", "version", "environment", "isolationKey", "stage"]
+  },
+  "states": ["pending", "planned", "running", "succeeded", "failed", "recovery", "verified"],
+  "gates": ["backup", "characterization", "backfill", "validation", "rollback"],
+  "controls": {
+    "dependencyGraph": "declared-dependsOn",
+    "locking": "database-appropriate-lock-or-lease",
+    "preflight": ["db-version", "compatibility", "config", "service-version", "backup-status"],
+    "security": ["migration-identity", "environment-restriction", "least-privilege", "audit", "secret-isolation"],
+    "recovery": "forward-fix-or-explicit-intervention"
+  },
+  "adminEvidence": "services/admin",
+  "validator": "scripts/validate-migration-beta.mjs"
+}

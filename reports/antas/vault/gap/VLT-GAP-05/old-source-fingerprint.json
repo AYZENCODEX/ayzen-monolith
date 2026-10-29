@@ -1,0 +1,33 @@
+{
+  "phase": "VLT-GAP-05",
+  "sub_phase": "VLT-GAP-05-D",
+  "commit_sha": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "24632c57068a52091de19e44d6e60f5987ca10e846739f920d68908e43c7399c",
+  "validator_version": "1.0.0",
+  "validator_sha256": "dd4837fd94acabb481411b49bfbe09403108fff0368208e37f997e9d91f20406",
+  "description": "Roadmap source files for GAP-05 as sealed before extraction (baseline/sources) and as certified by 05-C",
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "pre_extraction_sha256": "615125c0947e28e6a67d82aade5c1009f4f9ba9b29ce21b3dc7a91c576218e77",
+      "pre_extraction_lines": 629,
+      "pre_extraction_symbols": 42,
+      "certified_by_05C_sha256": "e9dcd905a02ebe4ce99235bc923d0b20a155733ee1efd70413abf65737fbb4d1"
+    },
+    {
+      "file": "services/vault/src/index.mjs",
+      "pre_extraction_sha256": "ec653c3b40526c2f781fb4a327154e707645ecb2ae74b7acfd69790ba22fc705",
+      "pre_extraction_lines": 35,
+      "pre_extraction_symbols": 6,
+      "certified_by_05C_sha256": "ec653c3b40526c2f781fb4a327154e707645ecb2ae74b7acfd69790ba22fc705"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-crypto.ts",
+      "pre_extraction_sha256": "e60ad62262d6fa3c5da4ba86097285dc0861f5329b20fc7e6cf22c1c23d29f43",
+      "pre_extraction_lines": 14,
+      "pre_extraction_symbols": 1,
+      "certified_by_05C_sha256": "e60ad62262d6fa3c5da4ba86097285dc0861f5329b20fc7e6cf22c1c23d29f43"
+    }
+  ]
+}

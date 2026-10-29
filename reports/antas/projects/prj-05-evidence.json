@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "phase": "PRJ-05",
+  "title": "Enrollment (Vault-coupled) extraction and legacy route retirement",
+  "timestamp": "2026-10-22T09:43:29.753048+00:00",
+  "status": "PASS",
+  "statusScope": "PRJ-05 as scoped: everything that lived in routes/projects.ts is extracted; the three legacy route files are thin adapters with no DB access and no outside importers. NOT unified: the enrollment write paths in routes/teams.ts and routes/bulk.ts and the delete cascade in services/sync.ts (different semantics; unifying would change behavior), so the roadmap gate 'no duplicate enrollment logic' is met for logic inside routes/projects.ts only. Typecheck, build and tests ran in a scratch copy installed with --no-frozen-lockfile; the repo's frozen install still fails. Parity was shown against fake databases and stubbed PEP/credits/activity-log, not real Postgres or the real policy engine.",
+  "commit": {
+    "sha": "UNAVAILABLE",
+    "reason": "Uploaded snapshot has no .git directory."
+  },
+  "dependsOn": [
+    "prj-01-evidence.json",
+    "prj-02-evidence.json",
+    "prj-03-evidence.json",
+    "prj-04-evidence.json"
+  ],
+  "oldToNewMapping": [
+    {
+      "old": "routes/projects.ts PEP: projectEnrollmentResource, requireProjectEnrollmentOwnership",
+      "new": "projects/security/enrollment-ownership.ts (queries via enrollments-repo)"
+    },
+    {
+      "old": "routes/projects.ts PEP: vaultEntryOwnerResource, requireProjectsVaultEntryOwnership, projectEntityOverviewSilentDeny, kycEntryAuditEngine, auditProjectsOwnership",
+      "new": "projects/security/entity-ownership.ts (queries via vault-entries-reader)"
+    },
+    {
+      "old": "join, enroll, status, admin entity-enrollments, per-project enrollments, delete enrollment, enrollment activity",
+      "new": "projects/application/enrollment.ts + domain/enrollment-status.ts + repositories/enrollments-repo.ts"
+    },
+    {
+      "old": "enrolled, enrolled-entities, mine/enrolled, mine/enrolled-entities, mine/overview, mine/entities-overview, enrollments/overview",
+      "new": "projects/application/enrollment-overview.ts + domain/enrollment-overview.ts + repositories/enrollment-overview-repo.ts"
+    },
+    {
+      "old": "entity overview and entity-leaderboard",
+      "new": "projects/application/entity-overview.ts + domain/entity-overview.ts + repositories/entity-overview-repo.ts"
+    },
+    {
+      "old": "members, stats, entity-tasks",
+      "new": "projects/application/members.ts + domain/members.ts + repositories/members-repo.ts"
+    }
+  ],
+  "filesChangedThisPhase": [
+    "artifacts/api-server/src/projects/{domain,application,security,infrastructure/repositories}/* (new: enrollment-status, entity-overview, enrollment-overview, members domain + tests; enrollment, enrollment-overview, entity-overview, members application; enrollment-ownership, entity-ownership security; enrollment-overview-repo, entity-overview-repo, members-repo, vault-entries-reader; enrollments-repo extended)",
+    "artifacts/api-server/src/routes/projects.ts (rewritten as a pure adapter, 985 -> 377 lines; 1302 originally)",
+    "scripts/antas/projects/validate-boundaries.mjs (legacy-retirement check; PEP pin follows the audit call into the use case)",
+    "scripts/antas/projects/boundaries.manifest.json (symbols, Vault allowlist moved to application/enrollment.ts, 11 foreign-table edges moved, adapter guard for all 34 routes, PRJ-ISSUE-3)",
+    "scripts/antas/projects/differential/prj05-* (whole-file harness) and README.md",
+    "docs/antas/projects/projects-boundaries.md (PRJ-05 section), reports/antas/projects/prj-05-*"
+  ],
+  "authorizationUnchanged": [
+    "Frozen route surface (method, path, middleware chain, registration order) passes for all 47 routes; the four gated routes keep their exact gate calls and onDeny bodies.",
+    "PEP actions pinned: project_enrollment.delete, project_enrollment.activity.read, project.entity_overview.read, project.enroll, project.enroll.kyc_entry (audit-only, now inside the enroll use case), project_pnl_receipt.view, project_pnl_receipt.pdf.",
+    "Vault contract D1: the two pinned imports moved with the code to application/enrollment.ts; the allowlist moved with them and still pins the exact symbols. No Vault file changed; no KYC logic copied.",
+    "Registration order preserved, including the unreachable GET /projects/mine/enrolled-entities."
+  ],
+  "commands": [
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs --self-test",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS: 47 routes, 0 findings"
+    },
+    {
+      "command": "negative tests Q1-Q8 (db import in adapter, rogue importer of a legacy route, named import from the legacy route in the mount, enrollment delete gate removed, KYC audit removed, extra Vault symbol, route order changed, restored)",
+      "exitCode": 0,
+      "result": "Each produced FAIL with the expected finding; restored copy PASS."
+    },
+    {
+      "command": "whole-file differential: ORIGINAL 1302-line routes/projects.ts vs the new adapter, every dependency stubbed, same seed and requests",
+      "exitCode": 0,
+      "result": "106 scenarios, 106 identical across status, body, raw SQL text, activity-log writes, credit charges, PEP gate checks, KYC audits, events, Telegram/sync, PDF specs and rows. Statuses 200/201/400/401/402/403/404/409/500. 13 scenarios with SQL, 16 activity-log writes, 10 credit charges, 34 PEP gate checks, 3 KYC audits."
+    },
+    {
+      "command": "differential for the unreachable GET /projects/mine/enrolled-entities, original handler vs new, mounted on their own",
+      "exitCode": 0,
+      "result": "3 scenarios, 3 identical; a mutation was detected."
+    },
+    {
+      "command": "harness sensitivity: 8 applied mutations (409 text, two owner sentinels, KYC audit removed, reactivation log meta, leaderboard SQL, leave log guard, reactivation charge removed)",
+      "exitCode": 0,
+      "result": "All 8 detected (1 to 3 scenarios each). Two probe patterns did not apply and were discarded, not counted."
+    },
+    {
+      "command": "scratch copy (final src): tsc -p artifacts/api-server --noEmit",
+      "exitCode": 0,
+      "result": "0 errors"
+    },
+    {
+      "command": "scratch copy: pnpm test:projects-static",
+      "exitCode": 0,
+      "result": "44 tests, 44 pass. One initial failure was a test of mine that turned up PRJ-ISSUE-3 (below), then characterized it."
+    },
+    {
+      "command": "scratch copy: pnpm build",
+      "exitCode": 0,
+      "result": "esbuild bundle produced"
+    }
+  ],
+  "legacyRetirement": {
+    "importersOfLegacyRouteFiles": "only artifacts/api-server/src/routes/index.ts, default-import mount, verified by a new validator check across the whole API server",
+    "filesKept": "routes/projects.ts, project-dates.ts, project-templates.ts remain as thin compatibility adapters (as the roadmap specified); none contains DB access",
+    "finalSizes": "projects.ts 1302 -> 377 lines; project-dates.ts 161 -> 84; project-templates.ts 282 -> 120"
+  },
+  "newFinding": {
+    "id": "PRJ-ISSUE-3",
+    "severity": "low (admin and moderator only)",
+    "summary": "PATCH /projects/:id/enrollments/:enrollmentId/status checks the status with an index lookup on a plain object, so toString, constructor and hasOwnProperty pass validation and become the enrollment's status. Same in the original; preserved and pinned."
+  },
+  "notUnifiedOnPurpose": [
+    "routes/teams.ts team enroll: writes user_projects and project_enrollments directly; no credit charge, no PEP enrollment resource, no activity log.",
+    "routes/bulk.ts bulk enroll: raw INSERT INTO project_enrollments.",
+    "services/sync.ts: project-delete cascade; covers three tables only.",
+    "routes/ai-actions.ts: separate project insert (from PRJ-03).",
+    "routes/entities.ts: writes entity_project_roi, the table roi-summary reads."
+  ],
+  "notRun": [
+    {
+      "check": "repo-level pnpm install --frozen-lockfile",
+      "status": "FAIL",
+      "reason": "Unchanged since PRJ-01: lockfile overrides mismatch. Scratch results use a non-frozen resolution."
+    },
+    {
+      "check": "repo-level pnpm typecheck (all artifacts and scripts)",
+      "status": "NOT_RUN",
+      "reason": "Only artifacts/api-server was typechecked."
+    },
+    {
+      "check": "DB-backed tests / real Postgres",
+      "status": "NOT_RUN",
+      "reason": "No test database."
+    },
+    {
+      "check": "real PEP/policy engine, credit meter and activity log",
+      "status": "NOT_RUN",
+      "reason": "Stubbed in the differential; only that Projects calls them identically was compared. The gate resource builders now call repository functions instead of inline queries; same queries, but the real policy engine was not run against them."
+    },
+    {
+      "check": "lib/activity-log aggregates (mine/overview etc.)",
+      "status": "NOT_RUN",
+      "reason": "Stubbed; unchanged and still called as before."
+    }
+  ],
+  "carriedFromPriorPhases": [
+    "PRJ-ISSUE-1 unescaped SQL in POST/PATCH /projects",
+    "PRJ-ISSUE-2 POST /projects may 500 after creating (unconfirmed on a real DB)",
+    "D2' confirmed by the project owner",
+    "receipt currency conversion undecided",
+    "orphan rows after project delete unchecked at the DB level",
+    "unreachable GET /projects/mine/enrolled-entities (the frontend calls it)"
+  ],
+  "nextSafeStep": "Not a code phase: (1) fix the repo's frozen install so a real baseline exists and rerun typecheck/build/tests there; (2) confirm PRJ-ISSUE-2 on a real database; (3) decide the open behavior questions (shadowed route, parallel enrollment writers, receipt currency, PRJ-ISSUE-1 and -3 fixes). Each is a visible behavior change and needs approval."
+}

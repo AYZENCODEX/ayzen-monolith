@@ -1,0 +1,58 @@
+{
+  "sub_phase": "VLT-GAP-02-A",
+  "purpose": "Frozen pre-extraction sources for OLD→NEW differential proof in 02-B/02-D.",
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/routes/local-accounts.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__api-server__src__routes__local-accounts.ts",
+      "sha256": "476a564b98a0ee8416f4415db1a857fed54080eadee4c28f0916e58a309ef7a7",
+      "lines": 797
+    },
+    {
+      "file": "artifacts/ayzen/src/components/local-accounts.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__ayzen__src__components__local-accounts.tsx",
+      "sha256": "dcec1d3b042320bf02b0ce034f48c2f208d6ffaee15bd9cb2e8907c4825e6fac",
+      "lines": 1441
+    },
+    {
+      "file": "artifacts/ayzen/src/config/fields/local-account-create.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__ayzen__src__config__fields__local-account-create.ts",
+      "sha256": "1ff35082271661214838526b54c2068b1f45cd21cb752b223564b154ca811e5a",
+      "lines": 82
+    },
+    {
+      "file": "artifacts/ayzen/src/config/fields/local-account-buy.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__ayzen__src__config__fields__local-account-buy.ts",
+      "sha256": "5a1b8637ac2ba872ee1e858fb036c9d207460a73c581563aee8d7ef0216773cb",
+      "lines": 42
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/local-account.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-02/baseline/sources/artifacts__api-server__src__vault__domain__local-account.ts",
+      "sha256": "7ecd2b66e23880a841fa50162fc32985e479096866db9a170c3a011ab9e82bbf",
+      "lines": 16
+    }
+  ],
+  "consumer_files": [
+    {
+      "file": "artifacts/api-server/src/routes/index.ts",
+      "sha256": "d8db8b5357ab4a6216b5ac6d080fcbc9d41495ca553f1a306e140ab7d19b5619"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/value-history.ts",
+      "sha256": "79948d6aff356fe6bbf61029ac25e65b9d285a1d1c1aa5a3553e1ee2f32916c3"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/index.ts",
+      "sha256": "bed7b74b8872228dd785f91013d165c8c9ab91a406230c04eaba43f854699ba7"
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/marketplace-vault.tsx",
+      "sha256": "5f0e71e2b6e8cc4d869435dcb84d96ee20005478b2f7b7f03c414d5e381922a8"
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault.tsx",
+      "sha256": "7ce32ec61bc6b1784e8d2ee2e02651be6be3c3c98c3908fa2351f2cee80041f8"
+    }
+  ]
+}

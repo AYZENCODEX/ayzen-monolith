@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "staging abuse test",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "route contract coverage report",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ayzen://schemas/events/envelope.v1.json",
+  "type": "object",
+  "required": ["eventId", "eventType", "eventVersion", "occurredAt", "traceId", "correlationId", "payload"],
+  "properties": {
+    "eventId": { "type": "string", "minLength": 8 },
+    "eventType": { "type": "string" },
+    "eventVersion": { "type": "integer", "minimum": 1 },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "traceId": { "type": "string" },
+    "correlationId": { "type": "string" },
+    "causationId": { "type": "string" },
+    "app": { "type": "string" },
+    "securityClass": { "enum": ["public", "internal", "sensitive", "restricted"] },
+    "payload": {}
+  },
+  "additionalProperties": true
+}

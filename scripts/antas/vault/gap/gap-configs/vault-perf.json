@@ -1,0 +1,50 @@
+{
+  "_doc": "VLT-GAP-20 (Hardening H3) config. Edit here, not in the validators. Profiles run the frozen pre-extraction routes and the current routes under the GAP-15 deterministic fakes. Counts are exact; wall time is coarse (in-memory fakes, no Postgres). row-db-linked is a perf-only scenario (rows carry data_entity_id) run only for the groups in scenario_groups, so the branches gated on row.data_entity_id are executed.",
+  "scenarios": [
+    "empty-db",
+    "row-db",
+    "row-db-two-rows",
+    "row-db-admin",
+    "row-db-linked",
+    "row-db-import"
+  ],
+  "n_plus_one": {
+    "one_row": "row-db",
+    "many_rows": "row-db-two-rows"
+  },
+  "reps": 7,
+  "timing": {
+    "p95_factor": 1.5,
+    "p50_factor": 1.5,
+    "p99_factor": 2,
+    "p99_abs_slack_ms": 10,
+    "total_factor": 1.35,
+    "abs_slack_ms": 2,
+    "retries": 2,
+    "total_abs_slack_ms": 5
+  },
+  "intentional_changes": [],
+  "allowed_unmeasurable": {
+    "entity-secret": {
+      "GET /vault/gas-overview": "handler never answers under the replay fakes (same on OLD and NEW; GAP-15 lists it as allowed_shallow); reported, not timed"
+    }
+  },
+  "scenario_groups": {
+    "row-db-linked": [
+      "kyc",
+      "entity-secret",
+      "snapshot-trash"
+    ],
+    "row-db-import": [
+      "migration"
+    ]
+  },
+  "current_only_groups": {
+    "migration": {
+      "files": [
+        "routes/vault-migration.ts"
+      ],
+      "reason": "routes/vault-migration.ts has no frozen pre-extraction original (224 -> 48 lines in GAP-13, no sealed baseline), so there is no OLD side to compare. It is profiled CURRENT-ONLY: the capture pins its query/boundary counts and route list, and the judge flags any drift from that capture. OLD==NEW by construction there, so V2/V4/V5 cannot fire; only V6 (drift) and V1 (captured cell vanished) protect it."
+    }
+  }
+}

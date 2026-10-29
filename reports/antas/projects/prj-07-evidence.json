@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "phase": "PRJ-07",
+  "title": "Enrollment billing: team and bulk enroll charge credits",
+  "timestamp": "2026-10-22T22:43:15.703077+00:00",
+  "status": "PASS",
+  "statusScope": "Closes the billing gap on team and bulk enrollment. This phase changes behavior on purpose (it adds a charge, a 402 response, and an additive `_credits` field). Verified with a fake DB and fake credit meter, plus scratch-copy typecheck/build/tests; the repo's frozen install still fails; the real credit ledger, price overrides and concurrent spends were not exercised.",
+  "commit": {
+    "sha": "UNAVAILABLE",
+    "reason": "Uploaded snapshot has no .git directory."
+  },
+  "request": "Project owner: 'Credit charge billing gap' in answer to the PRJ-06 question whether team/bulk enroll should be free. Interpreted as: it is a gap, close it.",
+  "policy": {
+    "action": "workspace.project_use (2 credits at the current price)",
+    "payer": "the user performing the action (the leader for team enroll)",
+    "quantity": "one unit per enrollment row actually created (bulk: rows actually inserted, via rowCount)",
+    "check": "whole quantity before any write; 402 OUT_OF_CREDITS body like single enroll plus quantity and required",
+    "charge": "after the writes; if it fails the enrollments stay and _credits is null, like single enroll",
+    "nothingCreatedNothingCharged": [
+      "team: all members already enrolled",
+      "team: no vaultEntryId (join only)",
+      "bulk: every row conflicts"
+    ],
+    "whyQuantityAwareCheck": "chargeCredits charges nothing when the balance is too low, so a one-unit check would let a large request through for free; both handlers were mutation-tested against exactly that loophole."
+  },
+  "filesChangedThisPhase": [
+    "artifacts/api-server/src/services/credit-meter.ts (hasCreditBalance gained optional quantity, default 1: existing callers unchanged)",
+    "artifacts/api-server/src/projects/application/enrollment-billing.ts (new: ENROLL_CREDIT_ACTION, checkEnrollCredits, chargeEnrollCredits)",
+    "artifacts/api-server/src/projects/application/enrollment.ts (single enroll uses the shared constant; behavior identical)",
+    "artifacts/api-server/src/routes/teams.ts (enroll-project: pre-check, charge, _credits)",
+    "artifacts/api-server/src/routes/bulk.ts (bulk-enroll: pre-check, charge per inserted row, _credits)",
+    "scripts/antas/projects/validate-boundaries.mjs (billing guard), boundaries.manifest.json, differential/prj07-* and prj05-stubs.mjs",
+    "docs/antas/projects/projects-boundaries.md, projects-roadmap-status.md, reports/antas/projects/prj-07-*"
+  ],
+  "commands": [
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs --self-test",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS: 47 routes, 0 findings"
+    },
+    {
+      "command": "negative tests B1-B4 (bulk stops charging, team stops checking balance, a new unbilled enrollment writer, restored)",
+      "exitCode": 0,
+      "result": "Each produced FAIL with the expected finding; restored copy PASS."
+    },
+    {
+      "command": "billing differential: original vs new team and bulk handlers, fake DB + quantity-aware fake credit meter",
+      "exitCode": 0,
+      "result": "25 scenarios, 25 as expected, 0 problems: 10 charged with the exact quantity and balance debit, 4 returned 402 before any write, all other behavior identical to the original after stripping _credits."
+    },
+    {
+      "command": "harness sensitivity: 5 mutations (charge off by one; one-unit pre-check in team; one-unit pre-check in bulk; charging conflicting rows; never charging)",
+      "exitCode": 0,
+      "result": "All 5 detected (7, 2, 2, 2 and 6 scenarios flagged)."
+    },
+    {
+      "command": "whole-file differential, original 1302-line projects.ts vs the adapter (re-run: single enroll now uses the shared constant)",
+      "exitCode": 0,
+      "result": "108 scenarios, 103 identical, 5 intended differences from PRJ-06, 0 unexpected. A missing hasCreditBalance stub in the harness was added; it was a harness gap, not a code problem."
+    },
+    {
+      "command": "scratch copy: tsc -p artifacts/api-server --noEmit",
+      "exitCode": 0,
+      "result": "0 errors"
+    },
+    {
+      "command": "scratch copy: pnpm test:projects-static",
+      "exitCode": 0,
+      "result": "44 tests, 44 pass (no new unit tests: billing logic depends on the credit meter, covered by the differential harness)"
+    },
+    {
+      "command": "scratch copy: pnpm build",
+      "exitCode": 0,
+      "result": "esbuild bundle produced"
+    }
+  ],
+  "assumptionsToConfirm": [
+    "team enroll is charged to the leader, not the members",
+    "price equals single enroll (2 credits per enrollment), no bulk discount",
+    "the bulk pre-check uses the requested count as an upper bound, so a partly conflicting request can be refused when the balance covers only the new rows"
+  ],
+  "newFinding": {
+    "id": "PRJ-ISSUE-4",
+    "severity": "probable data-quality bug, NOT confirmed on the live database",
+    "summary": "No unique constraint on project_enrollments (project, user, entity) was found in the schema or any .sql file, so bulk enroll's ON CONFLICT DO NOTHING probably never conflicts and repeated bulk enrolls likely insert duplicate rows. Each inserted row is now charged, so repeating a bulk enroll charges again.",
+    "recommendation": "skip entities that already have a non-cancelled enrollment (as single enroll does) and/or add the unique constraint; not done because it changes behavior beyond billing"
+  },
+  "frontend": "No change made. The bulk dialog shows the server message on error; the team page shows the generic 'Failed to enroll team' toast on a 402, which could name the cause.",
+  "notRun": [
+    {
+      "check": "real credit ledger, admin price overrides (credit_action_pricing), concurrent spends",
+      "status": "NOT_RUN",
+      "reason": "Fake credit meter only."
+    },
+    {
+      "check": "repo-level pnpm install --frozen-lockfile",
+      "status": "FAIL",
+      "reason": "Unchanged since PRJ-01: lockfile overrides mismatch."
+    },
+    {
+      "check": "real Postgres (rowCount semantics of ON CONFLICT DO NOTHING; the unique constraint question)",
+      "status": "NOT_RUN",
+      "reason": "No database. The bulk charge assumes pg returns rowCount 1 for an inserted row and 0 for a skipped one, and falls back to 1 if rowCount is absent."
+    }
+  ],
+  "stillOpen": [
+    "PRJ-ISSUE-2 confirmation on a real database",
+    "repo frozen install",
+    "PRJ-ISSUE-4 dedupe decision",
+    "billing assumptions above",
+    "team page error message (optional)"
+  ]
+}

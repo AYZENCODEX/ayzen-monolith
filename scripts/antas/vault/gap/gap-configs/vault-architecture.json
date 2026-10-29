@@ -1,0 +1,161 @@
+{
+  "_doc": "VLT-GAP-14 architecture rules (allowlist/denylist). Layer = first path segment under artifacts/api-server/src/vault. Consumed by validate-vlt-gap-14.mjs; edit here, never in the scanner.",
+  "src_root": "artifacts/api-server/src",
+  "vault_root": "artifacts/api-server/src/vault",
+  "layers": [
+    "api",
+    "shared",
+    "application",
+    "security",
+    "domain",
+    "crypto",
+    "infrastructure",
+    "(root)"
+  ],
+  "allowed_layer_imports": {
+    "api": [
+      "api",
+      "shared",
+      "application",
+      "security",
+      "domain",
+      "crypto"
+    ],
+    "shared": [
+      "shared",
+      "application",
+      "security",
+      "domain",
+      "crypto",
+      "infrastructure"
+    ],
+    "application": [
+      "application",
+      "security",
+      "domain",
+      "crypto",
+      "infrastructure"
+    ],
+    "security": [
+      "security",
+      "domain",
+      "crypto",
+      "infrastructure"
+    ],
+    "domain": [
+      "domain"
+    ],
+    "crypto": [
+      "crypto",
+      "domain"
+    ],
+    "infrastructure": [
+      "infrastructure",
+      "domain",
+      "crypto"
+    ],
+    "(root)": [
+      "(root)",
+      "domain",
+      "crypto",
+      "security",
+      "application",
+      "shared",
+      "infrastructure"
+    ]
+  },
+  "external_bans": {
+    "_doc": "Package / path patterns a layer must never import (value OR type-only; type-only is recorded as type_only=true).",
+    "db": {
+      "pattern": "^(@workspace/db|drizzle-orm|pg|postgres|mysql2?|better-sqlite3)(/|$)",
+      "banned_in": [
+        "domain",
+        "application",
+        "shared",
+        "crypto",
+        "api"
+      ]
+    },
+    "http": {
+      "pattern": "^(express|cors|helmet)(/|$)",
+      "banned_in": [
+        "domain",
+        "application",
+        "shared",
+        "crypto",
+        "infrastructure"
+      ]
+    },
+    "provider": {
+      "pattern": "^((node:)?(fs|fs/promises|child_process|net|http|https)|nodemailer|@aws-sdk/.*|aws-sdk|googleapis|axios|node-fetch|stripe|twilio|node-cron)$",
+      "banned_in": [
+        "domain",
+        "application",
+        "shared",
+        "crypto",
+        "api"
+      ]
+    },
+    "frontend": {
+      "pattern": "^(react|react-dom|@workspace/api-client-react|@tanstack/.*|wouter|lucide-react)(/|$)",
+      "banned_in": [
+        "*"
+      ]
+    }
+  },
+  "frontend_path_pattern": "(^|/)artifacts/(ayzen|astra-extension)(/|$)|(^|/)components/|(^|/)pages/",
+  "route_layer": {
+    "_doc": "Code in routes/ (and middlewares/) is the HTTP adapter layer. Vault must not depend on it, except guards in security/api.",
+    "route_dirs": [
+      "routes"
+    ],
+    "middleware_dirs": [
+      "middlewares"
+    ],
+    "routes_banned_in": [
+      "*"
+    ],
+    "middlewares_banned_in": [
+      "domain",
+      "application",
+      "shared",
+      "crypto",
+      "infrastructure"
+    ]
+  },
+  "legacy": {
+    "_doc": "Compatibility shims / retired implementations. Nothing may import them; consumers import the Vault owner.",
+    "files": [
+      "artifacts/api-server/src/lib/vault-pin-guard.ts"
+    ],
+    "glob_dirs": [
+      "artifacts/api-server/src/lib"
+    ],
+    "glob_name": "^vault-.*\\.ts$"
+  },
+  "outside_may_import_from_vault": [
+    "api",
+    "shared",
+    "application",
+    "security",
+    "domain",
+    "crypto",
+    "(root)"
+  ],
+  "cross_feature": {
+    "_doc": "Features = sub-directories of application/ and shared/. Importing another feature's file is a private import unless the target is listed here (its public surface) or sits directly in application/ (shared kernel). index.ts barrels are exempt as importers (a barrel's job is to re-export features).",
+    "layers": [
+      "application",
+      "shared"
+    ],
+    "public_surface": []
+  },
+  "composition_roots": {
+    "_doc": "Process entry points that wire jobs/cron/providers together; they may import vault/infrastructure directly (A8 exempt).",
+    "files": [
+      "artifacts/api-server/src/index.ts",
+      "artifacts/api-server/src/worker.ts",
+      "artifacts/api-server/src/app.ts"
+    ]
+  }
+}

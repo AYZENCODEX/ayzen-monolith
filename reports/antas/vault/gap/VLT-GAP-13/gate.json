@@ -1,0 +1,309 @@
+{
+  "phase": "VLT-GAP-13",
+  "sub_phase": "VLT-GAP-13-D",
+  "validator_version": "13-D.1",
+  "checked_at": "2026-10-09T06:58:43.609Z",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "0875090dcfc855821070658d7aac926775514eebb2f164d91b333faac13add02",
+  "source_hashes": {
+    "scripts/antas/vault/gap/validate-vlt-gap-13.mjs": "f80d3e5a32b827a979a7fd165441b7521154d2d28693228077831558d5526059",
+    "scripts/antas/vault/gap/validate-vlt-gap-13-C.mjs": "1bbeeb2a9167cce2a5945d489dfb96c17cdd5498cdf521340c3b751df0682c18",
+    "scripts/antas/vault/gap/validate-vlt-gap-13-D.mjs": "e5438ef43cc614a9a40d2e4e8a7d3c0d8e9ea71776c573c573c536b2240d4694",
+    "artifacts/api-server/src/routes/game-entries.ts": "361808b394d2e8def24bae2de47d66c056f8c43da55084a3c74eb47605da9b7e",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts": "055e093bfbbd03de1f85f3ff1219984f484fa7f3845d6a446048328bc5b39e61",
+    "artifacts/api-server/src/routes/kyc.ts": "532f195a9e77d6985c1027bd063a71cbbe8ebd8ddb794a0e9c44d61fe6e2d958",
+    "artifacts/api-server/src/routes/local-accounts.ts": "ab6b4beb876dfcefdcf332ed58666a26c87e88a51a2c1d71abff9c0ba7cbbb4e",
+    "artifacts/api-server/src/routes/marketplace-game.ts": "411dd71b0f220b7c3eb018ea4fe4122060f6b71a9438d749bc7014e717a3ca50",
+    "artifacts/api-server/src/routes/marketplace-vault.ts": "ee7c98a9c61b1c8ab711a1de81ed4a5290a1638b11d89e20ef7aa8e4106bd49f",
+    "artifacts/api-server/src/routes/vault-attachments.ts": "5c7ec3457652eafa35bb9a98291a38d231571c9172afd26636c89fec248218a9",
+    "artifacts/api-server/src/routes/vault-backup-cloud.ts": "b74aa25d54dd1f43fefe18519e73afe4c2ccb1d67bf47444456f6fa8b69189c4",
+    "artifacts/api-server/src/routes/vault-backup-key.ts": "af908320b6903338b7747a73677e85a8fd8457426453837e31d387af69a5ac38",
+    "artifacts/api-server/src/routes/vault-backup-schedule.ts": "c3303ef481326b160e88e0e8c0da7967465ce732bf8316ad10cef04e0a8d3e6d",
+    "artifacts/api-server/src/routes/vault-entity-links.ts": "60208e6af6ffb2e8f12a7d906ef8bd623db896724040218f52e574f65fe157b7",
+    "artifacts/api-server/src/routes/vault-migration.ts": "deb9a9e5cc10a81c4306304290edcddea634df1d2c0b8da53abe990d47a0d3ee",
+    "artifacts/api-server/src/routes/vault-reauth.ts": "dc000c0eeb730f5b227760a87fa430cf2815683d6fc6d1cfe35c019f7023c68e",
+    "artifacts/api-server/src/routes/vault-security.ts": "946398581b8d3b77c52380e8848094c7d2f890e43a690d596e1861f7c553ecf6",
+    "artifacts/api-server/src/routes/vault-shares.ts": "02298be396f2e3035ff5b8ca39c54361680d5b7d2b30e30af7afcc7084e4e29e",
+    "artifacts/api-server/src/routes/vault-snapshot.ts": "24f87b134c48df46d9776374f838ba048fb75cd856e31ba0cac09cb3549e966a",
+    "artifacts/api-server/src/routes/vault.ts": "0ae82155f1ea2de4c94abf6407b62e69af2604ebd19fa4b3d7cce289f750b459"
+  },
+  "commands": [
+    "real-scan: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs",
+    "control-unmodified-copy: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R1: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R2: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R2b: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R3: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R4: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R4b: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R5: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R6: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R7: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R8: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "plant-R9: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <tmp>",
+    "bypass-arg--force: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --force",
+    "bypass-arg--skip: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --skip",
+    "bypass-arg--skip-validation: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --skip-validation",
+    "bypass-arg--continue-on-error: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --continue-on-error",
+    "bypass-arg--ignore-failures: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --ignore-failures",
+    "bypass-env-VALIDATION_DISABLED: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs",
+    "bypass-env-ANTAS_BYPASS: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs",
+    "fail-closed-empty-scope: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <empty>",
+    "fail-closed-missing-dir: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --root <missing>",
+    "scanner-self-test: node scripts/antas/vault/gap/validate-vlt-gap-13.mjs --self-test",
+    "differential-marketplace-vault: node scripts/antas/vault/gap/differential-vlt-gap-13-E.mjs",
+    "ci-wiring-13-C: node scripts/antas/vault/gap/validate-vlt-gap-13-C.mjs"
+  ],
+  "exit_codes": {
+    "real-scan": 0,
+    "control-unmodified-copy": 0,
+    "plant-R1": 1,
+    "plant-R2": 1,
+    "plant-R2b": 1,
+    "plant-R3": 1,
+    "plant-R4": 1,
+    "plant-R4b": 1,
+    "plant-R5": 1,
+    "plant-R6": 1,
+    "plant-R7": 1,
+    "plant-R8": 1,
+    "plant-R9": 1,
+    "bypass-arg--force": 1,
+    "bypass-arg--skip": 1,
+    "bypass-arg--skip-validation": 1,
+    "bypass-arg--continue-on-error": 1,
+    "bypass-arg--ignore-failures": 1,
+    "bypass-env-VALIDATION_DISABLED": 1,
+    "bypass-env-ANTAS_BYPASS": 1,
+    "fail-closed-empty-scope": 1,
+    "fail-closed-missing-dir": 1,
+    "scanner-self-test": 0,
+    "differential-marketplace-vault": 0,
+    "ci-wiring-13-C": 0
+  },
+  "route_files": 17,
+  "handlers_scanned": 149,
+  "violations_in_real_tree": 0,
+  "scope": {
+    "scanned": [
+      "game-entries.ts",
+      "kyc-data-entities.ts",
+      "kyc.ts",
+      "local-accounts.ts",
+      "marketplace-game.ts",
+      "marketplace-vault.ts",
+      "vault-attachments.ts",
+      "vault-backup-cloud.ts",
+      "vault-backup-key.ts",
+      "vault-backup-schedule.ts",
+      "vault-entity-links.ts",
+      "vault-migration.ts",
+      "vault-reauth.ts",
+      "vault-security.ts",
+      "vault-shares.ts",
+      "vault-snapshot.ts",
+      "vault.ts"
+    ],
+    "excluded_with_reason": {},
+    "unscanned_found": []
+  },
+  "ci_fail_proof": {
+    "control_copy_exit": 0,
+    "planted_cases": 11,
+    "all_caught_at_planted_line": true,
+    "proofs": [
+      {
+        "id": "R1",
+        "file": "vault-shares.ts",
+        "rule": "R1-db-import",
+        "planted_line": 5,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 5,
+            "rule": "R1-db-import"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R2",
+        "file": "vault-attachments.ts",
+        "rule": "R2-raw-sql/db",
+        "planted_line": 25,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 25,
+            "rule": "R2-raw-sql/db"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R2b",
+        "file": "vault-snapshot.ts",
+        "rule": "R2-raw-sql/db",
+        "planted_line": 89,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 89,
+            "rule": "R2-raw-sql/db"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R3",
+        "file": "vault-migration.ts",
+        "rule": "R3-provider-access",
+        "planted_line": 35,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 35,
+            "rule": "R3-provider-access"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R4",
+        "file": "vault-reauth.ts",
+        "rule": "R4-business-calc",
+        "planted_line": 31,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 31,
+            "rule": "R4-business-calc"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R4b",
+        "file": "game-entries.ts",
+        "rule": "R4-business-calc",
+        "planted_line": 23,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 23,
+            "rule": "R4-business-calc"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R5",
+        "file": "vault-backup-key.ts",
+        "rule": "R5-state-mutation",
+        "planted_line": 18,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 18,
+            "rule": "R5-state-mutation"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R6",
+        "file": "vault-security.ts",
+        "rule": "R6-security-policy",
+        "planted_line": 60,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 60,
+            "rule": "R6-security-policy"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R7",
+        "file": "vault.ts",
+        "rule": "R7-route-to-route",
+        "planted_line": 28,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 28,
+            "rule": "R7-route-to-route"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R8",
+        "file": "kyc.ts",
+        "rule": "R8-handler-size",
+        "planted_line": null,
+        "scanner_exit": 1,
+        "reported": [
+          {
+            "line": 22,
+            "rule": "R8-handler-size"
+          },
+          {
+            "line": 22,
+            "rule": "R8-handler-size"
+          }
+        ],
+        "ok": true
+      },
+      {
+        "id": "R9",
+        "file": "vault-shares.ts",
+        "rule": "R9-no-delegate",
+        "scanner_exit": 1,
+        "ok": true
+      }
+    ]
+  },
+  "bypass_and_fail_closed": [
+    {
+      "via": "--force",
+      "ok": true
+    },
+    {
+      "via": "--skip",
+      "ok": true
+    },
+    {
+      "via": "--skip-validation",
+      "ok": true
+    },
+    {
+      "via": "--continue-on-error",
+      "ok": true
+    },
+    {
+      "via": "--ignore-failures",
+      "ok": true
+    },
+    {
+      "via": "VALIDATION_DISABLED=true",
+      "ok": true
+    },
+    {
+      "via": "ANTAS_BYPASS=true",
+      "ok": true
+    },
+    {
+      "via": "empty scope",
+      "ok": true
+    },
+    {
+      "via": "missing scope dir",
+      "ok": true
+    }
+  ],
+  "errors": [],
+  "status": "PASS"
+}

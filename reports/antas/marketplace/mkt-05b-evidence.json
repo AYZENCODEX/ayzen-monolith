@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-05b",
+  "status": "PASS_STATIC_AND_UNIT_ONLY",
+  "date": "2026-10-25",
+  "commitSha": "UNAVAILABLE",
+  "scope": "routes/marketplace-analytics.ts (6 routes: overview, revenue, top-listings, listing views, record view, platform analytics); MKT-05 so far: 10 of 44 routes (discovery 4, analytics 6)",
+  "done": [
+    "routes/marketplace-analytics.ts is a thin adapter over marketplace/analytics/application/analytics.wired.ts; the 6 statements (5 SELECT, 1 UPDATE) live in marketplace/analytics/infrastructure/analytics-repo.ts",
+    "SQL text equals the pre-move route file (moved-sql.pins.json, captured before editing; the pin format now covers UPDATE/INSERT/DELETE and names the repo file per route file)",
+    "response status codes and keys of all 6 routes (and of the 4 discovery routes) compared with the ORIGINAL uploaded files by an independent script that does not use the inventory map: all SAME",
+    "metering order preserved: query, then chargeCredits, then the response (revenue and top-listings); the credit meter middleware order is unchanged",
+    "5 unit tests with a fake database (days -> String(Number(days)), 404 results, errors not swallowed)",
+    "validator: classOverrides records that POST /marketplace/listings/:id/view is still a public write although its route body no longer holds SQL; an override is a finding while the body still has SQL or when the route no longer exists (3 new self-tests, 27 total)",
+    "baseline ratchet: SQL calls in route files 353 -> 347; the route no longer writes marketplace_listings (the write moved to the repo)"
+  ],
+  "toolFix": "collectFacts() used the line numbers in the migration map, which can be stale after a route file is rewritten; it now regenerates the map first. With a fresh map, the write order, transaction/lock order and response shapes of 59 of the 60 pinned write/tx routes are identical to the MKT-01a pins taken from the original code; the 60th is the analytics view route that moved.",
+  "notVerified": [
+    "no handler executed, no database; TypeScript syntax and import resolution only; typecheck/build UNAVAILABLE",
+    "the 6 routes have no DB test (the race-defects DB test for MKT-ISSUE-1 mounts this router and will exercise the new code on the first real run)"
+  ],
+  "keptOnPurpose": [
+    "MKT-ISSUE-1 (public, unauthenticated view counter) is not changed",
+    "days is not validated; a non-numeric value still reaches the database as 'NaN' and answers 500 with the error message"
+  ],
+  "next": "more MKT-05 features in the same pattern (alerts, reviews, reports, coupons reads, favorites, settings, market-config, admin activity, listing GETs). Still waiting for the first real run of the DB suite; MKT-04 waits for it."
+}

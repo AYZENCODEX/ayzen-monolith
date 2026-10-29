@@ -1,0 +1,12 @@
+{
+  "name": "@ayzen/service-template",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "dependencies": {
+    "@ayzen/service-runtime": "workspace:*"
+  }
+}

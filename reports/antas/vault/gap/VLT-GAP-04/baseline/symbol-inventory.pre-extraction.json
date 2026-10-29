@@ -1,0 +1,233 @@
+[
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#router",
+    "kind": "router-instance",
+    "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+    "line_start": 11,
+    "line_end": 11
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#gameEntryResource",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "eaf8ac52f124b10557016abc177f3cde5002ad2bc353312f3cda9c0fce6cd9ed",
+    "line_start": 17,
+    "line_end": 23
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#requireGameEntryOwnership",
+    "kind": "function",
+    "fingerprint_sha256": "7882928f4eb8e18104935685feb0e6193358a7a2dab8feaae8e57947aac13daf",
+    "line_start": 24,
+    "line_end": 26
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#safe",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "6527d7a036786c20607062129f78d86e9716ff82408837f7d77360c1a2ce4b97",
+    "line_start": 29,
+    "line_end": 29
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#safeTags",
+    "kind": "arrow-function",
+    "fingerprint_sha256": "b664332373e57023dfa60eeeae14e7aa7052b728d5e8f53585578d3ee449d013",
+    "line_start": 31,
+    "line_end": 34
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries@37",
+    "kind": "route-handler",
+    "fingerprint_sha256": "2254852408ff8acc2591db37c9c1ba7d7d9dde98d7b8fce243338db679112f0a",
+    "line_start": 37,
+    "line_end": 49
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#route:POST /game-entries@52",
+    "kind": "route-handler",
+    "fingerprint_sha256": "00734e47bff182c099cf3df78eefdd07f93b0f87c6712744918e22508bb4b410",
+    "line_start": 52,
+    "line_end": 82
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#route:GET /game-entries/:id@91",
+    "kind": "route-handler",
+    "fingerprint_sha256": "f35606e9a2051378ace22c426562b6246566f8e1a8428f5116db51e905c5b30d",
+    "line_start": 91,
+    "line_end": 105
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#route:PUT /game-entries/:id@108",
+    "kind": "route-handler",
+    "fingerprint_sha256": "9b59387926cd51707db9a792bdd335894c3a4a3c31d7c38a3522beb8157e141c",
+    "line_start": 108,
+    "line_end": 135
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#route:DELETE /game-entries/:id@138",
+    "kind": "route-handler",
+    "fingerprint_sha256": "4e8362cb31fdf6dcff4b7eec113cba98114f4d98dc3c7323c1263185457a0592",
+    "line_start": 138,
+    "line_end": 148
+  },
+  {
+    "id": "artifacts/api-server/src/routes/game-entries.ts#export-default",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+    "line_start": 150,
+    "line_end": 150
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#router",
+    "kind": "router-instance",
+    "fingerprint_sha256": "a2648bc7da73ccd222938ad98ec85752afc9cf108a6b20560483c10d8ade5aa6",
+    "line_start": 9,
+    "line_end": 9
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#gameListingOwnerOrAdminEngine",
+    "kind": "constant",
+    "fingerprint_sha256": "aa8f53ab41f354fd5e83494caecdf9eab25b47cb3c52dcc7437cc97c78cb2faf",
+    "line_start": 16,
+    "line_end": 16
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#rule@17",
+    "kind": "rule-registration",
+    "fingerprint_sha256": "a9f45a8e24af0fd3b85ba3a01bfd3a726c01ddabb0dde50c38d5b7952befc7b5",
+    "line_start": 17,
+    "line_end": 17
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#rule@18",
+    "kind": "rule-registration",
+    "fingerprint_sha256": "93886a2be3955c91295ad285110947b5ba3360cc2ee5581bdb02dbedb77047d3",
+    "line_start": 18,
+    "line_end": 18
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#ensureWallet",
+    "kind": "function",
+    "fingerprint_sha256": "8fd1344c48aa8a81d03387e22b6ee7a179845e2328dcd36c31548d54b3b563b7",
+    "line_start": 20,
+    "line_end": 31
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#parseListing",
+    "kind": "function",
+    "fingerprint_sha256": "ccb74122c26dbac60ddd27258255a555305d7ca7aeed81f9362cc82dce8ef9aa",
+    "line_start": 33,
+    "line_end": 39
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/listings@42",
+    "kind": "route-handler",
+    "fingerprint_sha256": "335422dfe4d4c102780db4a982518d379f9bc8c71e74d632b0004da6488a2a1f",
+    "line_start": 42,
+    "line_end": 63
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/listings@66",
+    "kind": "route-handler",
+    "fingerprint_sha256": "7798f5629ce2fb5eeb4d90ef9705b7e23f350d1c9c50c38b718586e9f5dfaf0f",
+    "line_start": 66,
+    "line_end": 93
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:POST /marketplace/game/buy@96",
+    "kind": "route-handler",
+    "fingerprint_sha256": "f5c46727a06b75b17751006d0b50ad6f65a98f69a41a1fe1e75aa6354c8551a9",
+    "line_start": 96,
+    "line_end": 160
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:DELETE /marketplace/game/listings/:id@163",
+    "kind": "route-handler",
+    "fingerprint_sha256": "f0d63f86eb87bc4b1171242e19add73b6e6d38e4c5f779a098d753054ffe8ad2",
+    "line_start": 163,
+    "line_end": 182
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#route:GET /marketplace/game/stats@185",
+    "kind": "route-handler",
+    "fingerprint_sha256": "10cf94a74b6121c8d2a56596bdbfd4a81f21d3a76b3de61fb4b1f1e0ce20c597",
+    "line_start": 185,
+    "line_end": 201
+  },
+  {
+    "id": "artifacts/api-server/src/routes/marketplace-game.ts#export-default",
+    "kind": "export-assignment",
+    "fingerprint_sha256": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279",
+    "line_start": 203,
+    "line_end": 203
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#GameEntry",
+    "kind": "interface",
+    "fingerprint_sha256": "99eb3c479a5e1d992cbfea9eda59178e78a920d32d464bc86d7b341b52e1b25b",
+    "line_start": 21,
+    "line_end": 36
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#EMPTY_FORM",
+    "kind": "constant",
+    "fingerprint_sha256": "5e87bf6fa65282b9f575dbc7754a79f79dc16008c70022b46c489347bdd62158",
+    "line_start": 38,
+    "line_end": 42
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#rowToForm",
+    "kind": "function",
+    "fingerprint_sha256": "c81f14eccda92c443f19fff909bdbea6ddf58fe04b63d510442c63347821a3ad",
+    "line_start": 45,
+    "line_end": 52
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#FORM_TABS",
+    "kind": "constant",
+    "fingerprint_sha256": "e3e5666bf3923831b3d0945e7297995ca2c831f8e1009ffa1e9fca0afe3e4e77",
+    "line_start": 54,
+    "line_end": 58
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#FormTab",
+    "kind": "type",
+    "fingerprint_sha256": "b7a3c54ba030c00721f5a9571125911e920517e3f882778c86b80aecffdc6601",
+    "line_start": 59,
+    "line_end": 59
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#INFO_SCHEMA_FIELDS",
+    "kind": "constant",
+    "fingerprint_sha256": "e99cf33d96d54564432a648927487ee426e2763f214dc55017c13c4f0982e58c",
+    "line_start": 64,
+    "line_end": 64
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#CategoryBadge",
+    "kind": "function",
+    "fingerprint_sha256": "84066fa54c275331aa6883667b760f66a4bfd00f4edd8ab399ec7ff373359976",
+    "line_start": 66,
+    "line_end": 77
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#TagInput",
+    "kind": "function",
+    "fingerprint_sha256": "5c7cf796dd607b8c644d2d91fc792cfb26d787fbcafb08323694f4e6714db3a0",
+    "line_start": 80,
+    "line_end": 136
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#GameDialog",
+    "kind": "function",
+    "fingerprint_sha256": "7e4e0e700005c09b803a25ea8ac5f455cb47c02dca1240ff6a505a21b0345ed9",
+    "line_start": 139,
+    "line_end": 281
+  },
+  {
+    "id": "artifacts/ayzen/src/components/game-entries.tsx#GameEntries",
+    "kind": "function",
+    "fingerprint_sha256": "13405642e15fcbc29a85c3e5ec86cac93895adce9d289383a70cd9d696f95e07",
+    "line_start": 284,
+    "line_end": 471
+  }
+]

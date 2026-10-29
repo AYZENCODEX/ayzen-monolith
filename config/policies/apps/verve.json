@@ -1,0 +1,6 @@
+{
+  "app": "verve",
+  "roles": { "member": ["marketplace.read"], "owner": ["marketplace.read", "marketplace.write"] },
+  "resources": ["marketplace"],
+  "defaultDeny": true
+}

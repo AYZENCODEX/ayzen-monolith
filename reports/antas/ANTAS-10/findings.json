@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "per-service cutover",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "fallback and rollback drill",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

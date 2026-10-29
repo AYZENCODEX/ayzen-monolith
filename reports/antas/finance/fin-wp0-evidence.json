@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-0",
+  "title": "Closure items before any further Finance extraction",
+  "timestamp": "2026-10-17T00:00:00Z",
+  "status": "PASS",
+  "statusReason": "All four WP-0 items are resolved and verified where this environment can verify them. WP-0 changes no Finance runtime code; it changes evidence, documentation, one shared test and one provenance script. Workspace typecheck/build/test:finance-db were not re-run here (no pnpm, node_modules, database) and are not needed for these changes except as a final re-run after commit.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "baseShaSource": "fin-02d-evidence.json",
+    "workingTree": "Uploaded archive without .git; work since the base SHA is uncommitted. Bound by content via fin-provenance-manifest.json."
+  },
+  "items": [
+    {
+      "item": "Promote FIN-02B and FIN-02C",
+      "result": "Promoted BLOCKED -> PASS; each file keeps previousStatus/previousStatusReason and gains a promotion block citing the FIN-02D full verification.",
+      "caveat": "Indirect proof; re-run after commit to bind to a SHA."
+    },
+    {
+      "item": "Commit provenance",
+      "result": "Base SHA 93ed6054... recorded from FIN-02D. Added scripts/antas/finance/provenance.mjs and reports/antas/finance/fin-provenance-manifest.json (41 Finance files, git-blob sha1). Algorithm cross-checked against git hash-object on a sample file (identical). Tamper test: edit detected (exit 1), restore passes (exit 0).",
+      "remaining": "A SHA for the extraction itself needs a commit in the Replit checkout, then `git hash-object` per file should equal the manifest."
+    },
+    {
+      "item": "capability-gate failing test",
+      "result": "Diagnosed as a stale test, not a defect. CAPABILITY_AUTHZ_GATE defaults to 'enforce' (H9.2: src/index.mjs line 511; test header; sibling test 'default is enforce'). The report-mode test left it unset and expected 200 with scopes: [], so the correct fine-grained 403 MISSING_SCOPE tripped it. Fix: pin CAPABILITY_AUTHZ_GATE to 'off' in that one test so it isolates the coarse gate's report mode.",
+      "decision": "Separate test-only fix, not a Finance baseline exemption.",
+      "verification": "With workspace packages linked locally: before 11/12 pass (1 fail, the named test), after 12/12 pass."
+    },
+    {
+      "item": "/finance/investments placement",
+      "result": "Assigned to finance/application/reports.ts (read-only; reports.ts already owns getRateMap/toBase and imports projectsTable). Extraction itself deferred to the first WP-2 slice."
+    }
+  ],
+  "commands": [
+    {
+      "command": "node --test packages/service-runtime/test/capability-gate.test.mjs (original)",
+      "exitCode": 1,
+      "result": "11/12; 'SERVICE_CAPABILITY_GATE=report logs the coarse denial but does not block the request' fails (403 vs 200)."
+    },
+    {
+      "command": "node --test packages/service-runtime/test/capability-gate.test.mjs (after fix)",
+      "exitCode": 0,
+      "result": "12/12."
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 27 Finance sources, 0 findings."
+    },
+    {
+      "command": "node --test --import tsx src/finance/domain/*.test.ts",
+      "exitCode": 0,
+      "result": "11/11."
+    },
+    {
+      "command": "node scripts/antas/finance/provenance.mjs --write / --verify",
+      "exitCode": 0,
+      "result": "41 files; verify 0 changed, 0 missing."
+    }
+  ],
+  "filesChanged": [
+    "packages/service-runtime/test/capability-gate.test.mjs",
+    "reports/antas/finance/fin-02b-evidence.json",
+    "reports/antas/finance/fin-02c-evidence.json",
+    "reports/antas/finance/fin-04-evidence.json (followUps note; status unchanged)",
+    "reports/antas/finance/fin-01-dependency-scan.json (regenerated)",
+    "docs/antas/finance/finance-target-tree-status.md",
+    "docs/antas/finance/finance-remaining-scope.md (new)"
+  ],
+  "filesCreated": [
+    "scripts/antas/finance/provenance.mjs",
+    "reports/antas/finance/fin-provenance-manifest.json",
+    "reports/antas/finance/fin-wp0-evidence.json",
+    "docs/antas/finance/finance-remaining-scope.md"
+  ],
+  "notRun": [
+    "pnpm typecheck, build and test:finance-db after these edits (no Finance runtime code changed; run once after commit).",
+    "Workspace-wide test suite; only capability-gate was run for the shared-package change."
+  ],
+  "limitations": [
+    "capability-gate fix touches a shared package outside Finance; review it as its own change and consider a separate commit.",
+    "Provenance proves content, not authorship or a commit; it becomes a SHA binding only after commit."
+  ],
+  "nextSafeStep": "Commit in the Replit checkout (suggest two commits: the capability-gate test fix; then Finance extraction + evidence), run `node scripts/antas/finance/provenance.mjs --verify`, then start WP-1 (FIN-03 safety gate)."
+}

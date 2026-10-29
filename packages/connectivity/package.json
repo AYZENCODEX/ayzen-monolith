@@ -1,0 +1,13 @@
+{
+  "name": "@ayzen/connectivity",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "dependencies": {
+    "@ayzen/contracts": "workspace:*",
+    "@ayzen/events": "workspace:*"
+  }
+}

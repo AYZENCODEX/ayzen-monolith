@@ -1,0 +1,441 @@
+{
+  "phase": "VLT-GAP-04",
+  "sub_phase": "VLT-GAP-04-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "123e12536a8b8cce0869075e26f4e01643e16a095e9f30cf686713268403722f",
+  "validator_version": "1.0.0",
+  "validator_sha256": "46f2283906076ae8603a1dba5db1fadd024e45b27431d89eea8396850e221b3d",
+  "description": "Pre-extraction (04-A frozen) vs current fingerprint and disposition of every top-level symbol in the old Game sources",
+  "routes": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "metrics": {
+        "baseline_lines": 151,
+        "current_lines": 54,
+        "baseline_db_refs": 15,
+        "current_db_refs": 0,
+        "baseline_sql_literals": 7,
+        "current_sql_literals": 0,
+        "baseline_branches": 33,
+        "current_branches": 0,
+        "baseline_crypto_calls": 15,
+        "current_crypto_calls": 0,
+        "baseline_tokens": 1473,
+        "current_tokens": 395
+      },
+      "sha256": {
+        "baseline": "8503b842bcab4d907147488d12288d533fe38a0aa402a4514a63aabe27d8fc58",
+        "current": "61a3dfbad6464bee905dc4546a3191a369a05f31e82cad29d208b3b1925b15d9"
+      },
+      "symbols": [
+        {
+          "symbol": "router",
+          "kind": "const",
+          "lines": [
+            11,
+            11
+          ],
+          "baseline_fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49",
+          "disposition": "ADAPTER_WIRING"
+        },
+        {
+          "symbol": "gameEntryResource",
+          "kind": "const",
+          "lines": [
+            17,
+            23
+          ],
+          "baseline_fingerprint": "c56e126ca980726ad6b4892f6b62392251d01f6afe480d995af06ae3f6595956",
+          "disposition": "MOVED_REFACTORED_WITH_EXECUTED_PROOF"
+        },
+        {
+          "symbol": "requireGameEntryOwnership",
+          "kind": "function",
+          "lines": [
+            24,
+            26
+          ],
+          "baseline_fingerprint": "7882928f4eb8e18104935685feb0e6193358a7a2dab8feaae8e57947aac13daf",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "safe",
+          "kind": "const",
+          "lines": [
+            29,
+            29
+          ],
+          "baseline_fingerprint": "3f03bfb333b431d661531cdc00e5ae7603642f836705f7b6373908724f68c6d1",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "safeTags",
+          "kind": "const",
+          "lines": [
+            31,
+            34
+          ],
+          "baseline_fingerprint": "9661862c1d7eb34df653908bdcc1403c26047aef71889acc66726c432cdd204d",
+          "disposition": "MOVED_REFACTORED_WITH_EXECUTED_PROOF"
+        },
+        {
+          "symbol": "GET /game-entries",
+          "kind": "route",
+          "lines": [
+            37,
+            49
+          ],
+          "baseline_fingerprint": "2254852408ff8acc2591db37c9c1ba7d7d9dde98d7b8fce243338db679112f0a",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "POST /game-entries",
+          "kind": "route",
+          "lines": [
+            52,
+            82
+          ],
+          "baseline_fingerprint": "00734e47bff182c099cf3df78eefdd07f93b0f87c6712744918e22508bb4b410",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "GET /game-entries/:id",
+          "kind": "route",
+          "lines": [
+            91,
+            105
+          ],
+          "baseline_fingerprint": "f35606e9a2051378ace22c426562b6246566f8e1a8428f5116db51e905c5b30d",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "PUT /game-entries/:id",
+          "kind": "route",
+          "lines": [
+            108,
+            135
+          ],
+          "baseline_fingerprint": "9b59387926cd51707db9a792bdd335894c3a4a3c31d7c38a3522beb8157e141c",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "DELETE /game-entries/:id",
+          "kind": "route",
+          "lines": [
+            138,
+            148
+          ],
+          "baseline_fingerprint": "4e8362cb31fdf6dcff4b7eec113cba98114f4d98dc3c7323c1263185457a0592",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "default",
+          "kind": "export-default",
+          "lines": [
+            150,
+            150
+          ],
+          "baseline_fingerprint": "445e7382cb36dfcc33fab57c8c6071c671a4062cb9629c93be8236ab7ad22ef1",
+          "disposition": "ADAPTER_WIRING"
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "metrics": {
+        "baseline_lines": 204,
+        "current_lines": 48,
+        "baseline_db_refs": 12,
+        "current_db_refs": 0,
+        "baseline_sql_literals": 13,
+        "current_sql_literals": 0,
+        "baseline_branches": 43,
+        "current_branches": 0,
+        "baseline_crypto_calls": 0,
+        "current_crypto_calls": 0,
+        "baseline_tokens": 1791,
+        "current_tokens": 335
+      },
+      "sha256": {
+        "baseline": "414f1877b0a876725353697a9d95675092ef57c5cec29e42c7f2a198a00ea0f6",
+        "current": "411dd71b0f220b7c3eb018ea4fe4122060f6b71a9438d749bc7014e717a3ca50"
+      },
+      "symbols": [
+        {
+          "symbol": "router",
+          "kind": "const",
+          "lines": [
+            9,
+            9
+          ],
+          "baseline_fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49",
+          "disposition": "ADAPTER_WIRING"
+        },
+        {
+          "symbol": "gameListingOwnerOrAdminEngine",
+          "kind": "const",
+          "lines": [
+            16,
+            16
+          ],
+          "baseline_fingerprint": "cb4095f8ab2dd0a4889b446b4677eaac7c4b992fad455243b9ad00076a805993",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "stmt@17",
+          "kind": "unknown-statement",
+          "lines": [
+            17,
+            17
+          ],
+          "baseline_fingerprint": "a9f45a8e24af0fd3b85ba3a01bfd3a726c01ddabb0dde50c38d5b7952befc7b5",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "stmt@18",
+          "kind": "unknown-statement",
+          "lines": [
+            18,
+            18
+          ],
+          "baseline_fingerprint": "93886a2be3955c91295ad285110947b5ba3360cc2ee5581bdb02dbedb77047d3",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "ensureWallet",
+          "kind": "function",
+          "lines": [
+            20,
+            31
+          ],
+          "baseline_fingerprint": "8fd1344c48aa8a81d03387e22b6ee7a179845e2328dcd36c31548d54b3b563b7",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "parseListing",
+          "kind": "function",
+          "lines": [
+            33,
+            39
+          ],
+          "baseline_fingerprint": "ccb74122c26dbac60ddd27258255a555305d7ca7aeed81f9362cc82dce8ef9aa",
+          "disposition": "MOVED_VERBATIM"
+        },
+        {
+          "symbol": "GET /marketplace/game/listings",
+          "kind": "route",
+          "lines": [
+            42,
+            63
+          ],
+          "baseline_fingerprint": "335422dfe4d4c102780db4a982518d379f9bc8c71e74d632b0004da6488a2a1f",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "POST /marketplace/game/listings",
+          "kind": "route",
+          "lines": [
+            66,
+            93
+          ],
+          "baseline_fingerprint": "7798f5629ce2fb5eeb4d90ef9705b7e23f350d1c9c50c38b718586e9f5dfaf0f",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "POST /marketplace/game/buy",
+          "kind": "route",
+          "lines": [
+            96,
+            160
+          ],
+          "baseline_fingerprint": "f5c46727a06b75b17751006d0b50ad6f65a98f69a41a1fe1e75aa6354c8551a9",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "DELETE /marketplace/game/listings/:id",
+          "kind": "route",
+          "lines": [
+            163,
+            182
+          ],
+          "baseline_fingerprint": "f0d63f86eb87bc4b1171242e19add73b6e6d38e4c5f779a098d753054ffe8ad2",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "GET /marketplace/game/stats",
+          "kind": "route",
+          "lines": [
+            185,
+            201
+          ],
+          "baseline_fingerprint": "10cf94a74b6121c8d2a56596bdbfd4a81f21d3a76b3de61fb4b1f1e0ce20c597",
+          "disposition": "ADAPTER_THIN"
+        },
+        {
+          "symbol": "default",
+          "kind": "export-default",
+          "lines": [
+            203,
+            203
+          ],
+          "baseline_fingerprint": "445e7382cb36dfcc33fab57c8c6071c671a4062cb9629c93be8236ab7ad22ef1",
+          "disposition": "ADAPTER_WIRING"
+        }
+      ]
+    }
+  ],
+  "disposition_summary": {
+    "ADAPTER_WIRING": 4,
+    "MOVED_REFACTORED_WITH_EXECUTED_PROOF": 2,
+    "MOVED_VERBATIM": 7,
+    "ADAPTER_THIN": 10
+  },
+  "frontend": [
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "kind": "ui-component",
+      "disposition": "UI_ADAPTER",
+      "sha256": "b02dc911f54197ee0766bb1bc2cc54f7a29a3579f693c48f2e7cd85db929d20b",
+      "baseline_sha256": "b02dc911f54197ee0766bb1bc2cc54f7a29a3579f693c48f2e7cd85db929d20b",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 472,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "symbols": [
+        {
+          "symbol": "GameEntry",
+          "lines": [
+            21,
+            36
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "EMPTY_FORM",
+          "lines": [
+            38,
+            42
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "rowToForm",
+          "lines": [
+            45,
+            52
+          ],
+          "disposition": "COMPAT_MAPPING_API_TO_FORM"
+        },
+        {
+          "symbol": "FORM_TABS",
+          "lines": [
+            54,
+            58
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "FormTab",
+          "lines": [
+            59,
+            59
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "INFO_SCHEMA_FIELDS",
+          "lines": [
+            64,
+            64
+          ],
+          "disposition": "UI_CONFIG_DATA"
+        },
+        {
+          "symbol": "CategoryBadge",
+          "lines": [
+            66,
+            77
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 0,
+          "db_refs": 0
+        },
+        {
+          "symbol": "TagInput",
+          "lines": [
+            80,
+            136
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 10,
+          "db_refs": 0
+        },
+        {
+          "symbol": "GameDialog",
+          "lines": [
+            139,
+            281
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 2,
+          "branches": 20,
+          "db_refs": 0
+        },
+        {
+          "symbol": "GameEntries",
+          "lines": [
+            284,
+            471
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 2,
+          "branches": 28,
+          "db_refs": 0
+        }
+      ]
+    }
+  ],
+  "related_ui_files": [
+    {
+      "file": "artifacts/ayzen/src/pages/user/marketplace-game.tsx",
+      "unchanged_since_04C_seal": true
+    },
+    {
+      "file": "artifacts/ayzen/src/config/vault-game.ts",
+      "unchanged_since_04C_seal": true
+    },
+    {
+      "file": "artifacts/ayzen/src/config/fields/game-create.ts",
+      "unchanged_since_04C_seal": true
+    }
+  ],
+  "census_consistency_with_04A": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "records": 11,
+      "scan": 11,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "records": 12,
+      "scan": 12,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "records": 10,
+      "scan": 10,
+      "missing_from_scan": [],
+      "extra_in_scan": []
+    }
+  ]
+}

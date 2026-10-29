@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "workstream": "telegram-command-os",
+  "commandRegistry": "infrastructure/platform/telegram-command-registry.json",
+  "botContract": "infrastructure/platform/telegram-bot-contract.json",
+  "gateway": "apps/telegram-gateway/src/index.mjs",
+  "sharedBusinessLogic": "capability-and-service-paths",
+  "coverageRule": "one-supported-sub-feature-to-one-command",
+  "hierarchy": ["app", "category", "feature", "sub-feature", "action", "confirmation", "result"],
+  "navigation": ["back", "home", "context-preserving-callback-state"],
+  "policy": ["identity", "session", "permission", "step-up-for-privileged-actions"],
+  "observability": ["command", "callback", "capability", "outcome", "service", "event", "workflow", "privacy-safe-identity"],
+  "verification": "catalog-vs-command-completeness"
+}

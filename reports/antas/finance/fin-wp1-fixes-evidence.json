@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-1-FIXES",
+  "title": "Fix F1 (run-now scope) and F2 (unknown account codes dropped silently)",
+  "timestamp": "2026-10-17T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Both fixes are minimal and statically verified (syntax, 21/21 static tests, boundary scan, mutation test, caller audit). They change runtime behavior and their database-level tests (ledger-invariants, due-rules) have not been executed: no Postgres, pnpm or node_modules here. PASS requires typecheck, build, test:finance-static and test:finance-db in the Replit checkout.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; bound by content via fin-provenance-manifest.json."
+  },
+  "behaviorChanges": [
+    {
+      "id": "F1",
+      "change": "POST /finance/recurring/run-now now runs and counts only the caller's due recurring rules (401 if no authenticated user). Scheduled cron unchanged (no userId, all users). Response shape unchanged; counts are now per-user instead of global."
+    },
+    {
+      "id": "F2",
+      "change": "postJournal returns null, before opening its transaction, when any line names an account code that does not exist in the book. Previously the line was dropped and an unbalanced journal was stored. The manual journal route already returns 400 on null; automatic postings use only system-account codes and are unaffected."
+    }
+  ],
+  "oldToNewMapping": [
+    {
+      "symbol": "due-rule query",
+      "from": "lib/finance-recurring-cron.ts runFinanceRecurringSweep (inline)",
+      "to": "finance/jobs/due-rules.ts selectDueRecurringRules(now, userId?)",
+      "compatibility": "sweep signature gains optional options.userId; no existing call site breaks"
+    }
+  ],
+  "filesCreated": [
+    "artifacts/api-server/src/finance/jobs/due-rules.ts",
+    "artifacts/api-server/src/finance/jobs/due-rules.db.test.ts"
+  ],
+  "filesChanged": [
+    "artifacts/api-server/src/lib/finance-recurring-cron.ts",
+    "artifacts/api-server/src/lib/finance-accounting.ts",
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/finance/route-security.test.ts",
+    "artifacts/api-server/src/finance/ledger-invariants.db.test.ts",
+    "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs",
+    "docs/antas/finance/finance-safety-findings.md",
+    "docs/antas/finance/finance-remaining-scope.md",
+    "docs/antas/finance/finance-target-tree-status.md",
+    "reports/antas/finance/fin-wp1-evidence.json",
+    "reports/antas/finance/fin-01-dependency-scan.json (regenerated)",
+    "reports/antas/finance/fin-provenance-manifest.json (regenerated)"
+  ],
+  "commands": [
+    {
+      "command": "node --test --import tsx src/finance/domain/*.test.ts src/finance/route-security.test.ts",
+      "exitCode": 0,
+      "tests": 21,
+      "passed": 21,
+      "failed": 0
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 28 Finance sources, 0 findings"
+    },
+    {
+      "command": "mutation: revert run-now to unscoped sweep call on a copy",
+      "exitCode": 1,
+      "result": "F1 test fails as intended"
+    },
+    {
+      "command": "caller audit: all hard-coded posting account codes vs SYSTEM_ACCOUNTS",
+      "exitCode": 0,
+      "result": "every production code is a system account (6000 and 9999 appear only in tests); manual journal route takes codes from the user's own book accounts"
+    },
+    {
+      "command": "node --experimental-strip-types --check on changed runtime and test files",
+      "exitCode": 0,
+      "result": "syntax only"
+    }
+  ],
+  "notRun": [
+    "pnpm typecheck / build (type of options param, removed unused drizzle imports)",
+    "pnpm test:finance-static",
+    "pnpm test:finance-db (includes ledger-invariants 12 tests and due-rules 2 tests; the pre-existing journal rollback test is expected to be unaffected because both accounts it posts to exist)",
+    "Authenticated HTTP test of run-now (needs the WP-1b auth harness)"
+  ],
+  "risks": [
+    "Any caller outside this repo's Finance code that posts to an account code absent from the book now gets null instead of a short journal.",
+    "run-now consumers expecting global counts will now see per-user counts."
+  ],
+  "nextSafeStep": "Run pnpm --filter @workspace/api-server typecheck, build, test:finance-static and test:finance-db in Replit and send the output; if green, FIN-WP-1-FIXES and FIN-WP-1a become PASS."
+}

@@ -1,0 +1,247 @@
+{
+  "gap": "VLT-GAP-14",
+  "kind": "intentional-violation-self-test",
+  "config_sha256": "52ed84cb4393ae86153857cc36ef37854cabf3a816cf5dece12ac457bef9fff2",
+  "cases": [
+    {
+      "case": "clean-tree(+composition-root,+mjs-package,+barrel)",
+      "expected": [],
+      "caught": [],
+      "ok": true
+    },
+    {
+      "case": "A1-cycle",
+      "expected": [
+        "A1-cycle"
+      ],
+      "caught": [
+        "A1-cycle"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A2-infrastructure→application",
+      "expected": [
+        "A2-layer-direction"
+      ],
+      "caught": [
+        "A2-layer-direction"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A2-crypto→infrastructure",
+      "expected": [
+        "A2-layer-direction"
+      ],
+      "caught": [
+        "A2-layer-direction"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A3-domain→platform-lib",
+      "expected": [
+        "A3-domain-purity"
+      ],
+      "caught": [
+        "A3-domain-purity"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A3-domain→vault-layer",
+      "expected": [
+        "A3-domain-purity",
+        "A2-layer-direction"
+      ],
+      "caught": [
+        "A2-layer-direction",
+        "A3-domain-purity"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A4-domain→db",
+      "expected": [
+        "A4-db-import"
+      ],
+      "caught": [
+        "A4-db-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A4-application→drizzle(type-only)",
+      "expected": [
+        "A4-db-import"
+      ],
+      "caught": [
+        "A4-db-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A4-application→express",
+      "expected": [
+        "A4-http-import"
+      ],
+      "caught": [
+        "A4-http-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A4-application→dynamic-db",
+      "expected": [
+        "A4-db-import"
+      ],
+      "caught": [
+        "A4-db-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A4-application→require(pg)",
+      "expected": [
+        "A4-db-import"
+      ],
+      "caught": [
+        "A4-db-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A4-application→provider(fs)",
+      "expected": [
+        "A4-provider-import"
+      ],
+      "caught": [
+        "A4-provider-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A4-application→frontend(react)",
+      "expected": [
+        "A4-frontend-import"
+      ],
+      "caught": [
+        "A4-frontend-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A4-infrastructure→express",
+      "expected": [
+        "A4-http-import"
+      ],
+      "caught": [
+        "A4-http-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A5-application→route",
+      "expected": [
+        "A5-route-import"
+      ],
+      "caught": [
+        "A5-route-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A5-api→route",
+      "expected": [
+        "A5-route-import"
+      ],
+      "caught": [
+        "A5-route-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A5-infrastructure→route",
+      "expected": [
+        "A5-route-import"
+      ],
+      "caught": [
+        "A5-route-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A5-application→middleware",
+      "expected": [
+        "A5-middleware-import"
+      ],
+      "caught": [
+        "A5-middleware-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A6-cross-feature-private",
+      "expected": [
+        "A6-cross-feature-private"
+      ],
+      "caught": [
+        "A6-cross-feature-private"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A7-legacy-import(outside)",
+      "expected": [
+        "A7-legacy-import"
+      ],
+      "caught": [
+        "A7-legacy-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A7-legacy-import(vault)",
+      "expected": [
+        "A7-legacy-import"
+      ],
+      "caught": [
+        "A7-legacy-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A8-outside-deep-import",
+      "expected": [
+        "A8-outside-deep-import"
+      ],
+      "caught": [
+        "A8-outside-deep-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A8-composition-root-exempt-but-routes-not",
+      "expected": [
+        "A8-outside-deep-import"
+      ],
+      "caught": [
+        "A8-outside-deep-import"
+      ],
+      "ok": true
+    },
+    {
+      "case": "A0-unresolved",
+      "expected": [
+        "A0-unresolved"
+      ],
+      "caught": [
+        "A0-unresolved"
+      ],
+      "ok": true
+    }
+  ],
+  "fail_closed_probes": 2,
+  "status": "PASS"
+}

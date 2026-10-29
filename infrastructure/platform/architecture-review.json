@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "checks": [
+    "service-manifest-owner",
+    "service-runtime-health",
+    "forbidden-private-imports",
+    "database-ownership-guard",
+    "event-producer-consumer-registration",
+    "workflow-policy-context",
+    "telegram-command-registration",
+    "gateway-only-public-ingress",
+    "admin-policy-boundary",
+    "rollback-metadata"
+  ],
+  "exceptionPolicy": {
+    "requiresDocument": true,
+    "requiresOwner": true,
+    "requiresExpiry": true,
+    "cannotBypassSecurity": true
+  }
+}

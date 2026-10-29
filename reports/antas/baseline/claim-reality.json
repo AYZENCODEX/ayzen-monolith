@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-29T06:06:06.484Z",
+  "claims": [
+    {
+      "claim": "Repository inventory exists",
+      "claimed": "YES",
+      "implemented": "YES",
+      "unitTested": "YES",
+      "integrationTested": "YES",
+      "stagingVerified": "UNVERIFIED",
+      "productionVerified": "UNVERIFIED"
+    },
+    {
+      "claim": "Frozen dependency install is configured",
+      "claimed": "YES",
+      "implemented": "YES",
+      "unitTested": "YES",
+      "integrationTested": "YES",
+      "stagingVerified": "UNVERIFIED",
+      "productionVerified": "UNVERIFIED"
+    },
+    {
+      "claim": "Identity controls exist",
+      "claimed": "YES",
+      "implemented": "YES",
+      "unitTested": "YES",
+      "integrationTested": "YES",
+      "stagingVerified": "UNVERIFIED",
+      "productionVerified": "UNVERIFIED"
+    },
+    {
+      "claim": "Authorization controls exist",
+      "claimed": "YES",
+      "implemented": "YES",
+      "unitTested": "YES",
+      "integrationTested": "YES",
+      "stagingVerified": "UNVERIFIED",
+      "productionVerified": "UNVERIFIED"
+    },
+    {
+      "claim": "Tenant/database ownership is declared",
+      "claimed": "YES",
+      "implemented": "YES",
+      "unitTested": "YES",
+      "integrationTested": "YES",
+      "stagingVerified": "UNVERIFIED",
+      "productionVerified": "UNVERIFIED"
+    },
+    {
+      "claim": "Backup restore policy is declared",
+      "claimed": "YES",
+      "implemented": "YES",
+      "unitTested": "YES",
+      "integrationTested": "YES",
+      "stagingVerified": "UNVERIFIED",
+      "productionVerified": "UNVERIFIED"
+    },
+    {
+      "claim": "Production readiness",
+      "claimed": "YES",
+      "implemented": "NO",
+      "unitTested": "NO",
+      "integrationTested": "NO",
+      "stagingVerified": "UNVERIFIED",
+      "productionVerified": "UNVERIFIED"
+    }
+  ],
+  "rule": "Unsupported staging and production claims are UNVERIFIED, never silently passed."
+}

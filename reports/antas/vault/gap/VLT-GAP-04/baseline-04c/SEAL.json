@@ -1,0 +1,68 @@
+{
+  "sub_phase": "VLT-GAP-04-C",
+  "sealed_at": "2026-10-01T04:19:21.511Z",
+  "matches_04B_certified_state": true,
+  "tree_manifest_sha256": "d0d55b219477cb2671fab2883448782305768dd9e8a207345401659151d9657e",
+  "file_count": 2213,
+  "certified_by": {
+    "sub_phase": "VLT-GAP-04-B",
+    "source_tree_sha256": "fab9262af4d50fe1c9488c64808a594eb93d8bb2729e6e67cea044cd4534b3a7",
+    "commit_sha": null,
+    "validator_sha256": "977ee9a585ac4785123ab2929c3c0149237abb5010bec813c55d32217388ea44",
+    "source_hashes_checked": 9
+  },
+  "frozen_consumers": {
+    "marketplace-vault.ts": {
+      "source": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "sha256": "f47e176554ba572b542893b7a9ba73c00300e09392c293abe0dfac63b68d9272"
+    },
+    "game-repository.ts": {
+      "source": "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts",
+      "sha256": "cf4b959765e0638d10507dd116c6e0624c1f69dce5eb6f8740fe0d99e56f4310"
+    },
+    "game-entries.route.ts": {
+      "source": "artifacts/api-server/src/routes/game-entries.ts",
+      "sha256": "61a3dfbad6464bee905dc4546a3191a369a05f31e82cad29d208b3b1925b15d9"
+    },
+    "marketplace-game.route.ts": {
+      "source": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "sha256": "0fc301a03796c74695fdbd17fdcfd261919f014f273886fa0db79814a2a41964"
+    },
+    "game-ownership.ts": {
+      "source": "artifacts/api-server/src/vault/security/game-ownership.ts",
+      "sha256": "4049bc1aa296b8814e30c9e6115a9e5fae8384cdfec27594706b723e63f0e396"
+    },
+    "entries.ts": {
+      "source": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "sha256": "6c8678b94985b66049ec09b9c2fcb95882c6df9c1652e69c5a16523a989bfe25"
+    },
+    "marketplace.ts": {
+      "source": "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "sha256": "6760d8357fb0acd4502438c00def3e7da5ccd99323fe2dd356f21f0716106a8e"
+    }
+  },
+  "gap_scripts_at_freeze": {
+    "scripts/antas/vault/gap/freeze-vlt-gap-02-C-baseline.mjs": "45af9e6efba2b140e6094b57028c0a7549fe3a062ea43b8c992b9f35c0c0ad6a",
+    "scripts/antas/vault/gap/freeze-vlt-gap-02-D-baseline.mjs": "13979343099305c17bb071cf071abea5b1d8002eed51c658578a428096528026",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-B-baseline.mjs": "857983dacac88cdc69d7f9ab7f0758f47127d2bd271412f58673b3b26b86171f",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-C-baseline.mjs": "1e522f3a1ba1755aeeb230acc1a8f3e2903de19adc149209679350c87496bb6b",
+    "scripts/antas/vault/gap/freeze-vlt-gap-03-D-baseline.mjs": "f1db2ed08722cd8ddcb7468d997029d63a9331a0f822bda86b5bfa18d7f256b9",
+    "scripts/antas/vault/gap/freeze-vlt-gap-04-B-baseline.mjs": "439e19b8fb274459244646422d7a0b83de3970132e52bc0815e55c3c92612eab",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-A.mjs": "77a4b3b76d7aaae1a5d60869253b0d102fcaa6de37cf71e103fb674e3f861a7f",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-B.mjs": "bf0a6a746e0680dbabf5aff4bb4217a68304cd7ee70e3e757831afff0d6c8153",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-C.mjs": "765a3d1259a8dd043bdc0405289024dc0313dfc86d8ff1dbc4f8908a95345b9d",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-D.mjs": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-A.mjs": "b48a0758dd09d98a242cb7cfda4b7a689eaa1d83312e6a554444c2314d357cff",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-B.mjs": "27ebd3bb00c4efd2bfccfead5fdc10dba3edb4d539f90970bb58e96c84259fa6",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-C.mjs": "1f1df1e80eee29f3e57f117bb054bcd5f477fa287250ae35f9f37b742079ce59",
+    "scripts/antas/vault/gap/validate-vlt-gap-02-D.mjs": "a51059099be8c41fd9ef6f681b2598b189a1ec78efc516ed77c2d5161f9d8ce2",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-A.mjs": "5e48e0b5e9e6439fc5a6d1bba0077e9bf3e4eb974ca3fa6425a98465eca11834",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-B.mjs": "2d5e688634fc2ec8684faa8fb01be101675b0979da309b974969248bd43f67b0",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-C.mjs": "c4967407d57b188b834f2bfac48d6aee5b55c26f54e9895ac0964cc6e9b36287",
+    "scripts/antas/vault/gap/validate-vlt-gap-03-D.mjs": "b7ce83bf8f53cb06c268ea3092740f096d8aaeb19dae761c541e96b7ada7342a",
+    "scripts/antas/vault/gap/validate-vlt-gap-04-A.mjs": "c8d054187612da635b851ba555bd69512e195104702c9f449d526b7297477d7c",
+    "scripts/antas/vault/gap/validate-vlt-gap-04-B.mjs": "977ee9a585ac4785123ab2929c3c0149237abb5010bec813c55d32217388ea44"
+  }
+}

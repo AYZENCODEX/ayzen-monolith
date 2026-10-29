@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "source": "infrastructure/platform/backup-policy.json",
+  "criticalDataRequiresRestoreEvidence": true,
+  "isolatedRestoreRequired": true,
+  "checksumRequired": true,
+  "rtoRpoRequired": true,
+  "approvalRequiredForProduction": true
+}

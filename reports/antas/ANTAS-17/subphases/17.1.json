@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-17.1",
+  "phase": "ANTAS-17",
+  "name": "Critical User Journeys",
+  "generatedAt": "2026-09-29T06:06:06.721Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "docs/antas/product/ux-readiness.md",
+    "infrastructure/platform/feature-circuits.json"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "roadmap": "ANTAS",
+  "source": "attached_assets/ANTAS_Roadmap_1790661459231.md",
+  "rule": "Each sub-phase requires repository evidence. Runtime, provider, staging, and production proof remains UNVERIFIED until recorded.",
+  "subphases": [
+    {"id":"00.1","phase":0,"name":"Repository Inventory","evidence":["scripts/antas/inventory-repository.mjs","reports/antas/baseline/repository-inventory.json"]},
+    {"id":"00.2","phase":0,"name":"Claim vs Reality Matrix","evidence":["docs/antas/baseline/claim-reality-matrix.md","reports/antas/baseline/claim-reality.json"]},
+    {"id":"00.3","phase":0,"name":"Baseline Metrics","evidence":["reports/antas/baseline/metrics.json"]},
+    {"id":"00.4","phase":0,"name":"Reproducible Audit Runner","evidence":["scripts/antas/baseline.mjs","scripts/validate-antas-0-18.mjs"]},
+
+    {"id":"01.1","phase":1,"name":"Toolchain","evidence":[".nvmrc","package.json","scripts/antas/verify-toolchain.mjs","docs/antas/build/reproducibility.md"]},
+    {"id":"01.2","phase":1,"name":"Clean Build","evidence":["docs/operations/build-verification.md","package.json","pnpm-lock.yaml"]},
+    {"id":"01.3","phase":1,"name":"Generated Artifact Hygiene","evidence":["docs/antas/build/reproducibility.md","scripts/antas/inventory-lib.mjs"]},
+    {"id":"01.4","phase":1,"name":"Deterministic Build","evidence":["docs/antas/build/reproducibility.md","scripts/antas/verify-toolchain.mjs"]},
+
+    {"id":"02.1","phase":2,"name":"Domain Ownership Matrix","evidence":["config/antas/domain-ownership.json","docs/antas/architecture/domain-ownership.md"]},
+    {"id":"02.2","phase":2,"name":"Forbidden Dependency Graph","evidence":["scripts/validate-domain-boundaries.mjs","docs/architecture/dependency-map.md"]},
+    {"id":"02.3","phase":2,"name":"Circular Dependency Detection","evidence":["scripts/validate-domain-boundaries.mjs","docs/architecture/dependency-map.md"]},
+    {"id":"02.4","phase":2,"name":"API Boundary Enforcement","evidence":["packages/domain-boundaries/src/index.mjs","docs/architecture/api-governance.md"]},
+
+    {"id":"03.1","phase":3,"name":"Session Security","evidence":["packages/auth-client/src/index.mjs","docs/security/session-policy.md"]},
+    {"id":"03.2","phase":3,"name":"OIDC","evidence":["packages/identity/src/index.mjs","docs/antas/security/identity-lifecycle.md"]},
+    {"id":"03.3","phase":3,"name":"Credential Lifecycle","evidence":["scripts/antas/security/test-identity-controls.mjs","docs/security/key-management.md"]},
+
+    {"id":"04.1","phase":4,"name":"Authorization Matrix","evidence":["config/antas/authorization-matrix.json","packages/authorization/src/index.mjs"]},
+    {"id":"04.2","phase":4,"name":"Negative Tests","evidence":["tests/cross-app/authorization-matrix.test.mjs","docs/antas/security/authorization.md"]},
+    {"id":"04.3","phase":4,"name":"TOCTOU","evidence":["config/security/capabilities.json","packages/authorization/src/index.mjs"]},
+    {"id":"04.4","phase":4,"name":"Fail-Closed","evidence":["packages/authorization/src/index.mjs","docs/antas/security/authorization.md"]},
+
+    {"id":"05.1","phase":5,"name":"Tenant Isolation","evidence":["docs/security/tenant-isolation.md","tests/security/tenant-scope.test.mjs"]},
+    {"id":"05.2","phase":5,"name":"Database Ownership","evidence":["config/antas/database-ownership.json","packages/domain-boundaries/src/index.mjs"]},
+    {"id":"05.3","phase":5,"name":"Migration Safety","evidence":["artifacts/api-server/src/lib/migration-registry.ts","scripts/validate-migration-beta.mjs"]},
+    {"id":"05.4","phase":5,"name":"Schema Drift","evidence":["docs/antas/data/database-integrity.md","scripts/validate-migration-beta.mjs"]},
+
+    {"id":"06.1","phase":6,"name":"Ledger Invariants","evidence":["services/finance/src/index.mjs","docs/antas/finance/ledger-integrity.md"]},
+    {"id":"06.2","phase":6,"name":"Idempotency","evidence":["artifacts/api-server/src/lib/idempotency-service.ts","tests/failure-injection/matrix.test.mjs"]},
+    {"id":"06.3","phase":6,"name":"Failure Injection","evidence":["tests/failure-injection/matrix.test.mjs","docs/operations/failure-drill-matrix.md"]},
+    {"id":"06.4","phase":6,"name":"Reconciliation","evidence":["scripts/antas/finance/reconcile.mjs","reports/antas/ANTAS-06/reconciliation.json"]},
+
+    {"id":"07.1","phase":7,"name":"Cryptographic Inventory","evidence":["config/security/key-management.json","docs/antas/security/cryptography.md"]},
+    {"id":"07.2","phase":7,"name":"Key Rotation","evidence":["services/vault/src/index.mjs","docs/security/key-management.md"]},
+    {"id":"07.3","phase":7,"name":"Cross-User Restore Attack","evidence":["services/vault/src/index.mjs","docs/antas/security/cryptography.md"]},
+    {"id":"07.4","phase":7,"name":"SSRF Defense","evidence":["scripts/antas/security/test-ssrf-policy.mjs","services/vault/src/index.mjs"]},
+
+    {"id":"08.1","phase":8,"name":"Event Envelope","evidence":["config/antas/event-envelope.json","packages/events/src/index.mjs"]},
+    {"id":"08.2","phase":8,"name":"Delivery Semantics","evidence":["packages/event-client/src/index.mjs","docs/antas/events/reliability.md"]},
+    {"id":"08.3","phase":8,"name":"Outbox / Inbox","evidence":["packages/event-client/src/index.mjs","docs/antas/events/reliability.md"]},
+    {"id":"08.4","phase":8,"name":"Workflow Reliability","evidence":["services/workflow/src/index.mjs","schemas/workflow/recovery.v1.json"]},
+
+    {"id":"09.1","phase":9,"name":"Route Contract","evidence":["config/antas/api-policy.json","packages/api-spec/src/index.mjs","lib/api-spec/openapi.yaml"]},
+    {"id":"09.2","phase":9,"name":"Error Sanitization","evidence":["config/antas/api-policy.json","docs/antas/api/route-contracts.md"]},
+    {"id":"09.3","phase":9,"name":"Abuse Testing","evidence":["docs/security/abuse-protection.md","docs/antas/api/route-contracts.md"]},
+
+    {"id":"10.1","phase":10,"name":"Extraction Order","evidence":["docs/architecture/service-extraction-policy.md","infrastructure/deployment/service-catalog.json"]},
+    {"id":"10.2","phase":10,"name":"Per-Service Exit Criteria","evidence":["docs/antas/architecture/extraction-exit-criteria.md","scripts/validate-cloud-phases.mjs"]},
+
+    {"id":"11.1","phase":11,"name":"Test Pyramid","evidence":["docs/antas/testing/test-pyramid.md","tests/contracts/platform-contracts.test.mjs"]},
+    {"id":"11.2","phase":11,"name":"Critical Path Coverage","evidence":["tests/security/backbone-security.test.mjs","tests/restore/restore-evidence.test.mjs"]},
+    {"id":"11.3","phase":11,"name":"Property-Based Testing","evidence":["tests/contracts/platform-contracts.test.mjs","docs/antas/testing/test-pyramid.md"]},
+    {"id":"11.4","phase":11,"name":"Mutation Testing","evidence":["docs/antas/testing/test-pyramid.md","tests/failure-injection/matrix.test.mjs"]},
+
+    {"id":"12.1","phase":12,"name":"Golden Signals","evidence":["config/observability/coverage.json","docs/antas/operations/observability.md"]},
+    {"id":"12.2","phase":12,"name":"Domain Metrics","evidence":["packages/telemetry/src/index.mjs","docs/antas/operations/observability.md"]},
+    {"id":"12.3","phase":12,"name":"Correlation","evidence":["packages/tracing/src/index.mjs","docs/antas/operations/observability.md"]},
+    {"id":"12.4","phase":12,"name":"Alert Verification","evidence":["config/observability/coverage.json","docs/operations/alert-runbook.md"]},
+
+    {"id":"13.1","phase":13,"name":"Backup Verification","evidence":["infrastructure/platform/backup-policy.json","docs/antas/dr/recovery-drill.md"]},
+    {"id":"13.2","phase":13,"name":"Restore Scenarios","evidence":["scripts/backup-restore-check.mjs","tests/restore/restore-evidence.test.mjs"]},
+    {"id":"13.3","phase":13,"name":"RTO / RPO","evidence":["docs/operations/backup-restore-runbook.md","docs/antas/dr/recovery-drill.md"]},
+    {"id":"13.4","phase":13,"name":"Destructive DR Drill","evidence":["docs/antas/dr/recovery-drill.md","scripts/backup-restore-check.mjs"]},
+
+    {"id":"14.1","phase":14,"name":"Performance Baseline","evidence":["infrastructure/platform/capacity-plan.json","docs/operations/performance-baseline.md"]},
+    {"id":"14.2","phase":14,"name":"Load Profiles","evidence":["tests/load/gateway-smoke.js","docs/antas/operations/performance.md"]},
+    {"id":"14.3","phase":14,"name":"Bottleneck Analysis","evidence":["docs/antas/operations/performance.md","infrastructure/platform/capacity-plan.json"]},
+    {"id":"14.4","phase":14,"name":"Cost Model","evidence":["infrastructure/platform/capacity-plan.json","docs/antas/operations/performance.md"]},
+
+    {"id":"15.1","phase":15,"name":"Dependency Security","evidence":[".github/workflows/security.yml","docs/antas/release/supply-chain.md"]},
+    {"id":"15.2","phase":15,"name":"Artifact Security","evidence":[".github/workflows/release.yml","schemas/provenance/record.v1.json"]},
+    {"id":"15.3","phase":15,"name":"Secret Security","evidence":[".github/workflows/security.yml","docs/antas/release/supply-chain.md"]},
+
+    {"id":"16.1","phase":16,"name":"Any Reduction","evidence":["scripts/antas/maintainability.mjs","reports/antas/baseline/metrics.json"]},
+    {"id":"16.2","phase":16,"name":"Giant Module Reduction","evidence":["docs/antas/quality/maintainability.md","scripts/antas/maintainability.mjs"]},
+    {"id":"16.3","phase":16,"name":"Complexity Controls","evidence":["docs/antas/quality/maintainability.md","tsconfig.json"]},
+    {"id":"16.4","phase":16,"name":"Dead Code","evidence":["docs/antas/quality/maintainability.md","scripts/antas/maintainability.mjs"]},
+
+    {"id":"17.1","phase":17,"name":"Critical User Journeys","evidence":["docs/antas/product/ux-readiness.md","infrastructure/platform/feature-circuits.json"]},
+    {"id":"17.2","phase":17,"name":"UI States","evidence":["scripts/validate-ui-circuit.mjs","tests/ui-circuit/registry.test.mjs"]},
+    {"id":"17.3","phase":17,"name":"Accessibility","evidence":["docs/antas/product/ux-readiness.md","tests/ui-circuit/registry.test.mjs"]},
+    {"id":"17.4","phase":17,"name":"Product Telemetry","evidence":["docs/antas/product/ux-readiness.md","packages/telemetry/src/index.mjs"]},
+
+    {"id":"18.1","phase":18,"name":"Certification Matrix","evidence":["services/certification-registry/src/index.mjs","scripts/antas/certification.mjs"]},
+    {"id":"18.2","phase":18,"name":"Final Gate and Evidence Pack","evidence":["docs/antas/certification/go-live.md","docs/operations/go-live-checklist.md","reports/antas/ANTAS-18/certification.json"]}
+  ]
+}

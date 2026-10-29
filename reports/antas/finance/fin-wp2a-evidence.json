@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-2a",
+  "title": "Non-money use cases: parties, currencies, report schedules, goals, budgets, investments",
+  "timestamp": "2026-10-17T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Mechanical, behavior-preserving move verified statically (syntax, 25 static tests, boundary scan, mutation test, line-by-line comparison of each moved body). The 9 characterization tests could not run (no Postgres here), and the WP-1 DB suite they depend on has not been run in Replit yet.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; bound by content via fin-provenance-manifest.json."
+  },
+  "oldToNewMapping": [
+    {
+      "routes": "GET /finance/investments",
+      "to": "finance/application/reports.ts#getProjectInvestments"
+    },
+    {
+      "routes": "GET/POST/PUT/DELETE /finance/parties",
+      "to": "finance/application/parties.ts#listParties/createParty/updateParty/deleteParty"
+    },
+    {
+      "routes": "GET /finance/currencies, PUT /finance/currencies/:currency",
+      "to": "finance/application/currencies.ts#listCurrencyRates/upsertCurrencyRate"
+    },
+    {
+      "routes": "GET/POST/PUT/DELETE /finance/report-schedules",
+      "to": "finance/application/report-schedules.ts#listReportSchedules/createReportSchedule/updateReportSchedule/deleteReportSchedule (+REPORT_SCHEDULE_TYPES, normalizeDayOfMonth)"
+    },
+    {
+      "routes": "GET/POST/PUT/DELETE /finance/goals, POST /finance/goals/:id/contribute",
+      "to": "finance/application/goals-budgets.ts#listGoals/createGoal/updateGoal/contributeToGoal/deleteGoal"
+    },
+    {
+      "routes": "GET/POST/DELETE /finance/budgets",
+      "to": "finance/application/goals-budgets.ts#listBudgetsWithSpent/upsertBudget/deleteBudget"
+    }
+  ],
+  "behaviorChanges": "None intended in the move itself. contributeToGoal was later fixed separately (see fin-wp1-f7-evidence.json).",
+  "filesCreated": [
+    "artifacts/api-server/src/finance/application/parties.ts",
+    "artifacts/api-server/src/finance/application/currencies.ts",
+    "artifacts/api-server/src/finance/application/report-schedules.ts",
+    "artifacts/api-server/src/finance/application/goals-budgets.ts",
+    "artifacts/api-server/src/finance/application/wp2-use-cases.db.test.ts"
+  ],
+  "filesChanged": [
+    "artifacts/api-server/src/finance/application/reports.ts (getProjectInvestments)",
+    "artifacts/api-server/src/routes/finance.ts (19 routes, imports)",
+    "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs (finance_goals, finance_report_schedules, new test registered)",
+    "artifacts/api-server/src/finance/route-security.test.ts (WP-2 adapter gate, ratchet 78 -> 59)",
+    "docs/antas/finance/*"
+  ],
+  "metrics": {
+    "routesFinanceTsLines": {
+      "before": 2957,
+      "after": 2222
+    },
+    "routesWithDirectDb": {
+      "before": 78,
+      "after": 59,
+      "of": 109
+    },
+    "handlersExtractedTotal": 36
+  },
+  "commands": [
+    {
+      "command": "node --test --import tsx src/finance/domain/*.test.ts src/finance/route-security.test.ts",
+      "exitCode": 0,
+      "tests": 25,
+      "passed": 25,
+      "failed": 0
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 32 Finance sources, 0 findings"
+    },
+    {
+      "command": "mutation: parties list back to a direct db call (copy)",
+      "exitCode": 1,
+      "result": "ratchet and WP-2 adapter gate fail as intended"
+    }
+  ],
+  "notRun": [
+    "pnpm typecheck/build",
+    "pnpm test:finance-db (wp2-use-cases: 12 tests)",
+    "DB test of GET /finance/investments (needs the projects table in the isolated schema)",
+    "Authenticated HTTP tests of any moved route"
+  ],
+  "openForWp2b": [
+    "ai (9 handlers)",
+    "invoice-branding (2)",
+    "receipts (2, public token routes and PDF)",
+    "books-accounts (9, including the 281-line book delete)",
+    "lib/finance-report-schedule-cron.ts (221 lines) to jobs/"
+  ],
+  "nextSafeStep": "Run the Replit commands from the WP-1 evidence; if green, promote WP-1a, F1-F6 and WP-2a together; then WP-2b."
+}

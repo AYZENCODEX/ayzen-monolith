@@ -1,0 +1,585 @@
+{
+  "phase": "VLT-GAP-04",
+  "sub_phase": "VLT-GAP-04-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "123e12536a8b8cce0869075e26f4e01643e16a095e9f30cf686713268403722f",
+  "validator_version": "1.0.0",
+  "validator_sha256": "46f2283906076ae8603a1dba5db1fadd024e45b27431d89eea8396850e221b3d",
+  "description": "Security regression: middleware chains and route order identical to baseline; ownership/deny/cancel-decision gates imported from vault/security; bypass attempts rejected; gate mutation tests",
+  "route_middleware_chains": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "same_order": true,
+      "differences": [],
+      "per_route": [
+        {
+          "key": "GET /game-entries",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "POST /game-entries",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "GET /game-entries/:id",
+          "mw": [
+            "requireAuth",
+            "requireGameEntryOwnership(\"game_entry.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})",
+            "requireCreditBalance(\"sylo.game_entry_view\")"
+          ]
+        },
+        {
+          "key": "PUT /game-entries/:id",
+          "mw": [
+            "requireAuth",
+            "requireGameEntryOwnership(\"game_entry.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+          ]
+        },
+        {
+          "key": "DELETE /game-entries/:id",
+          "mw": [
+            "requireAuth",
+            "requireGameEntryOwnership(\"game_entry.delete\", DENY{{ res.json({ success: true }); }})"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "same_order": true,
+      "differences": [],
+      "per_route": [
+        {
+          "key": "GET /marketplace/game/listings",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "POST /marketplace/game/listings",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "POST /marketplace/game/buy",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "DELETE /marketplace/game/listings/:id",
+          "mw": [
+            "requireAuth"
+          ]
+        },
+        {
+          "key": "GET /marketplace/game/stats",
+          "mw": [
+            "requireAuth"
+          ]
+        }
+      ]
+    }
+  ],
+  "ownership_gates": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "gates": [
+        {
+          "gate": "requireGameEntryOwnership",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyGameEntryNotFound",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyGameEntryNotFoundOrForbidden",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyGameEntrySilentSuccess",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "gates": [
+        {
+          "gate": "canCancelGameListing",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        }
+      ]
+    }
+  ],
+  "security_04B_on_post_04D_bytes": {
+    "passed": 20,
+    "total": 20
+  },
+  "validator_bypass_test": [
+    {
+      "attempt": "flag --skip-tests",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "flag --force-pass",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "flag --ignore-failures",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "flag --continue-on-error",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "unknown flag --whatever",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "env ANTAS_BYPASS=true",
+      "exit_code": 1,
+      "rejected": true
+    },
+    {
+      "attempt": "env VALIDATION_DISABLED=true",
+      "exit_code": 1,
+      "rejected": true
+    }
+  ],
+  "mutation_evidence": [
+    {
+      "name": "selftest:mutation-anchor-a1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-query-in-entries-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:pool-query-in-market-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:crypto-call-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:fee-calculation-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ternary-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:if-branch-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:try-catch-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-c1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:altered-response-mapping-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-c2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:non-canonical-response-mapping-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-policy-engine-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-e1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-import-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-e2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:market-config-import-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-ownership-middleware-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-deny-behavior-on-delete-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unresolvable-deny-handler-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-credit-middleware-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f5",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-ownership-action-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-g",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:route-reorder-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:compat-reexport-restored-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-listGameEntries-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-buyGameMarketListing-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-cancelGameMarketListing-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-security-decision-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:hidden-import-of-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:compat-import-of-ownership-gate-from-old-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dynamic-import-of-old-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-copy-outside-vault-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-repository-copy-outside-vault-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-l",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:moved-sql-pasted-outside-repository-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-routes-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:express-runtime-import-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:req-res-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:sql-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:domain-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:infrastructure-importing-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:security-importing-db-directly-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:sql-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:provider-call-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unknown-game-endpoint-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unclassified-ui-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:modified-ui-file-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:modified-related-ui-file-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ownership-gate-from-wrong-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:cancel-decision-from-wrong-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-r1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:decision-compare-in-cancel-callback-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-r2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:inline-owner-check-in-cancel-callback-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-r3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:block-bodied-callback-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-r4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:always-allow-callback-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:tampered-seal-manifest-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:refactored-move-without-executed-proof-is-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-s",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:altered-policy-registration-is-detected",
+      "passed": true,
+      "details": ""
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "negative endpoint test against staging",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

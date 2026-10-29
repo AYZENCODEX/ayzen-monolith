@@ -1,0 +1,44 @@
+{
+  "sub_phase": "VLT-GAP-04-A",
+  "purpose": "Frozen pre-extraction sources for OLD→NEW differential proof in 04-B/04-D.",
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__api-server__src__routes__game-entries.ts",
+      "sha256": "8503b842bcab4d907147488d12288d533fe38a0aa402a4514a63aabe27d8fc58",
+      "lines": 151
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__api-server__src__routes__marketplace-game.ts",
+      "sha256": "414f1877b0a876725353697a9d95675092ef57c5cec29e42c7f2a198a00ea0f6",
+      "lines": 204
+    },
+    {
+      "file": "artifacts/ayzen/src/components/game-entries.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__ayzen__src__components__game-entries.tsx",
+      "sha256": "b02dc911f54197ee0766bb1bc2cc54f7a29a3579f693c48f2e7cd85db929d20b",
+      "lines": 472
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/game.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__api-server__src__vault__domain__game.ts",
+      "sha256": "30d9c413af407177b9d39817eb87d2c68badac68cb9f8efe8068e99a57a5eb82",
+      "lines": 9
+    }
+  ],
+  "consumer_files": [
+    {
+      "file": "artifacts/api-server/src/routes/index.ts",
+      "sha256": "d8db8b5357ab4a6216b5ac6d080fcbc9d41495ca553f1a306e140ab7d19b5619"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/index.ts",
+      "sha256": "bed7b74b8872228dd785f91013d165c8c9ab91a406230c04eaba43f854699ba7"
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault.tsx",
+      "sha256": "7ce32ec61bc6b1784e8d2ee2e02651be6be3c3c98c3908fa2351f2cee80041f8"
+    }
+  ]
+}

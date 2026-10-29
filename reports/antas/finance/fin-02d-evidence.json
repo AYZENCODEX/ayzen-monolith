@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-02D",
+  "title": "Extract Finance leaf owners and isolate Replit database tests",
+  "timestamp": "2026-10-16T09:13:53Z",
+  "status": "PASS",
+  "statusReason": "Net-worth, AI parsing/insight, notification, and receipt-token implementations now have canonical Finance owners with compatibility re-exports. Their consumers were rewired and the finance boundary scan, API typecheck/build, domain tests, and isolated Replit database tests passed. The wider target tree and money-critical cutover gates remain incomplete.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTreeAtStart": "Clean except for the two user-provided attached plans; implementation and generated validation evidence are uncommitted."
+  },
+  "objective": "Move existing low-risk Finance leaf implementations into their target owners without changing HTTP contracts, database schema, money calculations, or provider behavior; run DB-backed checks in a disposable isolated schema on Replit's development database.",
+  "oldToNewMapping": [
+    {
+      "source": "artifacts/api-server/src/lib/finance-networth.ts",
+      "target": "artifacts/api-server/src/finance/networth/networth.ts",
+      "compatibility": "The old path re-exports the functions; the Finance route, net-worth job, and notification owner import the new owner."
+    },
+    {
+      "source": "artifacts/api-server/src/lib/finance-ai.ts",
+      "target": "artifacts/api-server/src/finance/ai/finance-ai.ts",
+      "compatibility": "The old path re-exports the API; Finance routes import the new owner."
+    },
+    {
+      "source": "artifacts/api-server/src/lib/finance-notify.ts",
+      "target": "artifacts/api-server/src/finance/notifications/notify.ts",
+      "compatibility": "The old path re-exports the API; Finance routes and the daily digest job import the new owner."
+    },
+    {
+      "source": "Receipt-token functions in artifacts/api-server/src/lib/finance-accounting.ts",
+      "target": "artifacts/api-server/src/finance/receipts/receipt-tokens.ts",
+      "compatibility": "The accounting library re-exports the old symbols; the Finance route and notification owner import the new owner."
+    }
+  ],
+  "migratedConsumers": [
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/lib/finance-networth-cron.ts",
+    "artifacts/api-server/src/lib/finance-digest-cron.ts",
+    "artifacts/api-server/src/finance/notifications/notify.ts"
+  ],
+  "filesChangedOrAdded": [
+    "artifacts/api-server/package.json",
+    "artifacts/api-server/src/finance/ai/finance-ai.ts",
+    "artifacts/api-server/src/finance/ai/finance-ai.test.ts",
+    "artifacts/api-server/src/finance/networth/networth.ts",
+    "artifacts/api-server/src/finance/networth/networth.db.test.ts",
+    "artifacts/api-server/src/finance/notifications/notify.ts",
+    "artifacts/api-server/src/finance/receipts/receipt-tokens.ts",
+    "artifacts/api-server/src/finance/receipts/receipt-tokens.db.test.ts",
+    "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs",
+    "artifacts/api-server/src/lib/finance-accounting.ts",
+    "artifacts/api-server/src/lib/finance-ai.ts",
+    "artifacts/api-server/src/lib/finance-digest-cron.ts",
+    "artifacts/api-server/src/lib/finance-networth-cron.ts",
+    "artifacts/api-server/src/lib/finance-networth.ts",
+    "artifacts/api-server/src/lib/finance-notify.ts",
+    "artifacts/api-server/src/routes/finance.ts",
+    "docs/antas/finance/finance-boundaries.md",
+    "docs/antas/finance/finance-target-tree-status.md",
+    "scripts/antas/finance/validate-boundaries.mjs",
+    "reports/antas/finance/fin-01-dependency-scan.json"
+  ],
+  "databaseTestIsolation": {
+    "target": "Replit-managed development database selected with DATABASE_URL_TARGET=replit-test.",
+    "schema": "Each run creates a uniquely named finance_test_* schema, applies only allowlisted Finance table/create-index/add-column DDL, uses that schema alone as search_path, and drops it in finally.",
+    "publicSchemaWrites": false,
+    "dataBackfill": false,
+    "cleanupVerified": true
+  },
+  "commands": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0,
+      "result": "Workspace dependencies installed from the existing lockfile; no dependency versions changed."
+    },
+    {
+      "command": "pnpm validate:finance-boundaries",
+      "exitCode": 0,
+      "result": "26 Finance sources scanned; 0 findings."
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server build",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server exec node --test --import tsx src/finance/domain/*.test.ts",
+      "exitCode": 0,
+      "tests": 11,
+      "passed": 11,
+      "failed": 0
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server test:finance-db",
+      "exitCode": 0,
+      "tests": 7,
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "invariants": {
+    "journalDebitCreditBalance": "PASS for the controlled balanced-journal fixture.",
+    "concurrentPrincipalDecrements": "PASS for two controlled concurrent repayments.",
+    "netWorthCurrencyConversionAndOwnershipShare": "PASS for one controlled multi-currency/partial-ownership fixture.",
+    "receiptTokenIdempotencyAndOwnerScope": "PASS for a controlled entry fixture.",
+    "quickEntryParsing": "PASS for compound input and USD/INR SMS cases.",
+    "failedPostingRollback": "NOT VERIFIED.",
+    "duplicateJournalOrRepaymentRequest": "NOT VERIFIED.",
+    "authenticatedFinanceRouteAuthorization": "NOT VERIFIED.",
+    "providerBackedBehaviorAndServiceParity": "NOT VERIFIED."
+  },
+  "runtimeVerification": {
+    "status": "BLOCKED",
+    "workflow": "Start application",
+    "result": "API and web builds completed, but the API process exits because APP_DATABASE_URL is not configured. The Replit test database was not used as the application database."
+  },
+  "limitations": [
+    "This is a leaf-module extraction tranche, not completion of the full proposed Finance tree.",
+    "Application use cases and all 109 Finance handlers remain in the route files; ledger, schedule, invoice, payment-method, wallet-bridge, late-fee, and cron owners still need extraction.",
+    "No schema migration or service cutover was performed.",
+    "No full app preview was available because the required APP_DATABASE_URL is absent."
+  ],
+  "diffReview": "Moved existing implementations and changed only import paths/compatibility exports, except for the test runner and tests. The notification module retains its pre-existing dependency on routes/notifications. No Finance endpoint, event contract, schema, authorization rule, money formula, rounding, or provider behavior was changed.",
+  "evidencePath": "reports/antas/finance/fin-02d-evidence.json",
+  "nextSafeStep": "Add isolated database-backed rollback, retry/idempotency, and authenticated route-authorization tests, then extract the read-only Finance report use cases before gated ledger and invoice moves."
+}

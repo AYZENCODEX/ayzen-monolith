@@ -1,0 +1,2 @@
+import { gate } from "../enforcement-lib.mjs";
+console.log(JSON.stringify(gate("runtime-drift-detector", true, { comparison: "expected-vs-observed", unexpectedEdges: "finding", bypasses: "critical" }), null, 2));

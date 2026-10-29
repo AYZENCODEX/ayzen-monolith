@@ -1,0 +1,507 @@
+{
+  "phase": "VLT-GAP-04",
+  "sub_phase": "VLT-GAP-04-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "123e12536a8b8cce0869075e26f4e01643e16a095e9f30cf686713268403722f",
+  "validator_version": "1.0.0",
+  "validator_sha256": "46f2283906076ae8603a1dba5db1fadd024e45b27431d89eea8396850e221b3d",
+  "description": "Per-route thinness of every route left in the old files",
+  "allowed_in_old_route": [
+    "request parsing (req.user.userId / req.params.* / req.body / req.query[.*])",
+    "auth-context construction: one expression-bodied callback that binds `req` to a vault/security decision function",
+    "exactly one `const out = await <use-case>(...)`",
+    "exactly one canonical response mapping `res.status(out.status).json(out.body)`",
+    "middleware wiring (auth / ownership gate with resolved deny behavior / credit gate)",
+    "router default export"
+  ],
+  "rejected_in_old_route": [
+    "db/sql/table access",
+    "provider/crypto/event/sync calls",
+    "domain calculations",
+    "decision trees (if/ternary/switch/loops/try, &&/||/??)",
+    "duplicated authorization (decision.effect comparisons) or persistence logic",
+    "non-adapter imports",
+    "compat re-exports",
+    "any second statement or non-canonical response mapping"
+  ],
+  "routes": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "route": "GET /game-entries",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/entries.ts#listGameEntries",
+      "security_delegates": [],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "route": "POST /game-entries",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/entries.ts#createGameEntry",
+      "security_delegates": [],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "route": "GET /game-entries/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/entries.ts#getGameEntry",
+      "security_delegates": [],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireGameEntryOwnership(\"game_entry.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})",
+        "requireCreditBalance(\"sylo.game_entry_view\")"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "route": "PUT /game-entries/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/entries.ts#editGameEntry",
+      "security_delegates": [],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireGameEntryOwnership(\"game_entry.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "route": "DELETE /game-entries/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/entries.ts#removeGameEntry",
+      "security_delegates": [],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth",
+        "requireGameEntryOwnership(\"game_entry.delete\", DENY{{ res.json({ success: true }); }})"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "route": "GET /marketplace/game/listings",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/marketplace.ts#listGameMarketListings",
+      "security_delegates": [],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "route": "POST /marketplace/game/listings",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/marketplace.ts#createGameMarketListing",
+      "security_delegates": [],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "route": "POST /marketplace/game/buy",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/marketplace.ts#buyGameMarketListing",
+      "security_delegates": [],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "route": "DELETE /marketplace/game/listings/:id",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/marketplace.ts#cancelGameMarketListing",
+      "security_delegates": [
+        "artifacts/api-server/src/vault/security/game-ownership.ts#canCancelGameListing"
+      ],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "route": "GET /marketplace/game/stats",
+      "thin": true,
+      "violations": [],
+      "use_case": "artifacts/api-server/src/vault/application/game/marketplace.ts#getGameMarketStats",
+      "security_delegates": [],
+      "metrics": {
+        "db_refs": 0,
+        "tables": 0,
+        "sql_literals": 0,
+        "branches": 0,
+        "delegated_calls": 1,
+        "statements": 2,
+        "awaits": 1
+      },
+      "middleware": [
+        "requireAuth"
+      ]
+    }
+  ],
+  "per_file": [
+    {
+      "file": "artifacts/api-server/src/routes/game-entries.ts",
+      "imports": [
+        {
+          "spec": "express",
+          "line": 1,
+          "allowed": true
+        },
+        {
+          "spec": "../middlewares/auth",
+          "line": 2,
+          "allowed": true
+        },
+        {
+          "spec": "../services/credit-meter",
+          "line": 3,
+          "allowed": true
+        },
+        {
+          "spec": "../vault/security/game-ownership",
+          "line": 4,
+          "allowed": true
+        },
+        {
+          "spec": "../vault/application/game/entries",
+          "line": 7,
+          "allowed": true
+        }
+      ],
+      "route_table": {
+        "baseline": [
+          {
+            "key": "GET /game-entries",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /game-entries",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /game-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireGameEntryOwnership(\"game_entry.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})",
+              "requireCreditBalance(\"sylo.game_entry_view\")"
+            ]
+          },
+          {
+            "key": "PUT /game-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireGameEntryOwnership(\"game_entry.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+            ]
+          },
+          {
+            "key": "DELETE /game-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireGameEntryOwnership(\"game_entry.delete\", DENY{{ res.json({ success: true }); }})"
+            ]
+          }
+        ],
+        "current": [
+          {
+            "key": "GET /game-entries",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /game-entries",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /game-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireGameEntryOwnership(\"game_entry.read\", DENY{{ res.status(404).json({ error: \"Not found\" }); }})",
+              "requireCreditBalance(\"sylo.game_entry_view\")"
+            ]
+          },
+          {
+            "key": "PUT /game-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireGameEntryOwnership(\"game_entry.update\", DENY{{ res.status(404).json({ error: \"Not found or forbidden\" }); }})"
+            ]
+          },
+          {
+            "key": "DELETE /game-entries/:id",
+            "mw": [
+              "requireAuth",
+              "requireGameEntryOwnership(\"game_entry.delete\", DENY{{ res.json({ success: true }); }})"
+            ]
+          }
+        ],
+        "same_order": true,
+        "middleware_diffs": [],
+        "routes_baseline": 5,
+        "routes_current": 5
+      },
+      "ownership_gates": [
+        {
+          "gate": "requireGameEntryOwnership",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyGameEntryNotFound",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyGameEntryNotFoundOrForbidden",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        },
+        {
+          "gate": "denyGameEntrySilentSuccess",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+      "imports": [
+        {
+          "spec": "express",
+          "line": 1,
+          "allowed": true
+        },
+        {
+          "spec": "../middlewares/auth",
+          "line": 2,
+          "allowed": true
+        },
+        {
+          "spec": "../vault/security/game-ownership",
+          "line": 3,
+          "allowed": true
+        },
+        {
+          "spec": "../vault/application/game/marketplace",
+          "line": 4,
+          "allowed": true
+        }
+      ],
+      "route_table": {
+        "baseline": [
+          {
+            "key": "GET /marketplace/game/listings",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /marketplace/game/listings",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /marketplace/game/buy",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "DELETE /marketplace/game/listings/:id",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /marketplace/game/stats",
+            "mw": [
+              "requireAuth"
+            ]
+          }
+        ],
+        "current": [
+          {
+            "key": "GET /marketplace/game/listings",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /marketplace/game/listings",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "POST /marketplace/game/buy",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "DELETE /marketplace/game/listings/:id",
+            "mw": [
+              "requireAuth"
+            ]
+          },
+          {
+            "key": "GET /marketplace/game/stats",
+            "mw": [
+              "requireAuth"
+            ]
+          }
+        ],
+        "same_order": true,
+        "middleware_diffs": [],
+        "routes_baseline": 5,
+        "routes_current": 5
+      },
+      "ownership_gates": [
+        {
+          "gate": "canCancelGameListing",
+          "imported_from": "../vault/security/game-ownership",
+          "exported_by_owner": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "routes": 10,
+    "thin": 10,
+    "not_thin": 0,
+    "per_file_metrics": [
+      {
+        "file": "artifacts/api-server/src/routes/game-entries.ts",
+        "baseline_lines": 151,
+        "current_lines": 54,
+        "baseline_db_refs": 15,
+        "current_db_refs": 0,
+        "baseline_sql_literals": 7,
+        "current_sql_literals": 0,
+        "baseline_branches": 33,
+        "current_branches": 0,
+        "baseline_crypto_calls": 15,
+        "current_crypto_calls": 0,
+        "baseline_tokens": 1473,
+        "current_tokens": 395
+      },
+      {
+        "file": "artifacts/api-server/src/routes/marketplace-game.ts",
+        "baseline_lines": 204,
+        "current_lines": 48,
+        "baseline_db_refs": 12,
+        "current_db_refs": 0,
+        "baseline_sql_literals": 13,
+        "current_sql_literals": 0,
+        "baseline_branches": 43,
+        "current_branches": 0,
+        "baseline_crypto_calls": 0,
+        "current_crypto_calls": 0,
+        "baseline_tokens": 1791,
+        "current_tokens": 335
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "alert detection and recovery drill",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

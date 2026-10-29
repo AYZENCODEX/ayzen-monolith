@@ -1,0 +1,103 @@
+{
+  "phase": "VLT-GAP-05",
+  "sub_phase": "VLT-GAP-05-D",
+  "commit_sha": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "24632c57068a52091de19e44d6e60f5987ca10e846739f920d68908e43c7399c",
+  "validator_version": "1.0.0",
+  "validator_sha256": "dd4837fd94acabb481411b49bfbe09403108fff0368208e37f997e9d91f20406",
+  "checks": [
+    {
+      "name": "crypto:owner-code-token-identical-to-the-05-C-sealed-owner (only comments may differ)",
+      "passed": true,
+      "details": "1152 vs 1152 tokens"
+    },
+    {
+      "name": "crypto:aes-256-gcm-hkdf-sha256-and-12-byte-iv-parameters-intact",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "crypto:fail-closed-boot-without-a-32-char-key",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "crypto:key-table-sql-is-parameterised (no string concatenation into SQL)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "step-up:reveal-use-case-checks-pin-state-and-consumes-the-single-use-token-before-decrypting",
+      "passed": true,
+      "details": "{\"posPin\":2306,\"posConsume\":2431,\"posDecrypt\":3087}"
+    },
+    {
+      "name": "credits:charge-happens-only-after-a-successful-decrypt",
+      "passed": true,
+      "details": "{\"posDecrypt\":3087,\"posCharge\":3465}"
+    },
+    {
+      "name": "org-policy:reveal-use-case-consults-the-organization-seed-reveal-policy-before-decrypting",
+      "passed": true,
+      "details": "{\"posPolicy\":2025,\"posDecrypt\":3087}"
+    },
+    {
+      "name": "audit:seed-reveal-is-audited-via-logVaultActivity(seed_revealed)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "tenant-scope:every-secret-repository-write-filters-by-owner-user-id",
+      "passed": true,
+      "details": "2 where() clauses"
+    },
+    {
+      "name": "tenant-scope:org-membership-lookup-is-parameterised-and-scoped-to-the-user",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "logging:no-plaintext-secret-key-material-passed-to-console-or-logger",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "access:secret-route-middleware-chains-are-the-sealed-chains (auth, ownership PDP, credit meter)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "access:drive-wallet-remains-write-once-and-tenant-scoped",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "executed_tamper_and_passthrough_cases": [
+    {
+      "name": "passthrough:null-undefined-empty-and-unprefixed-values-are-returned-unchanged",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "tamper:modified-ciphertext-yields-failure-marker-not-plaintext",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "tamper:unknown-key-version-is-reported-not-guessed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "tamper:malformed-envelope-is-reported",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-leak:wrapped-dek-in-the-key-table-is-ciphertext",
+      "passed": true,
+      "details": ""
+    }
+  ]
+}

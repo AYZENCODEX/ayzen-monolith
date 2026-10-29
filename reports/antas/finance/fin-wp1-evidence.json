@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-1",
+  "title": "Safety gate (FIN-03 prerequisites): static authorization gate, ledger invariant suite, findings",
+  "timestamp": "2026-10-17T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "The DB-free half is verified here (route-security 9/9, domain 11/11, boundary scan PASS, mutation-tested). The 11-test ledger invariant suite and the runner/package changes could not be executed: this environment has no Postgres, pnpm or node_modules. HTTP-level authenticated tests were not written. WP-1 is therefore split: 1a written (this record), 1b open.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; bound by content via fin-provenance-manifest.json."
+  },
+  "delivered": [
+    {
+      "file": "artifacts/api-server/src/finance/route-security.test.ts",
+      "tests": 15,
+      "ranHere": true,
+      "result": "15/15 pass on the real tree"
+    },
+    {
+      "file": "artifacts/api-server/src/finance/ledger-invariants.db.test.ts",
+      "tests": 32,
+      "ranHere": false,
+      "result": "UNRUN: syntax-checked only; assertions derived from reading lib/finance-accounting.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs",
+      "change": "registers ledger-invariants.db.test.ts",
+      "ranHere": false
+    },
+    {
+      "file": "artifacts/api-server/package.json",
+      "change": "adds test:finance-static script",
+      "ranHere": false
+    },
+    {
+      "file": "docs/antas/finance/finance-safety-findings.md",
+      "change": "findings F1-F5 with suggested fixes (none applied)"
+    },
+    {
+      "file": "artifacts/api-server/src/finance/jobs/due-rules.db.test.ts",
+      "tests": 2,
+      "ranHere": false,
+      "result": "UNRUN: syntax-checked only"
+    }
+  ],
+  "commands": [
+    {
+      "command": "node --test --import tsx src/finance/domain/*.test.ts src/finance/route-security.test.ts",
+      "exitCode": 0,
+      "tests": 20,
+      "passed": 20,
+      "failed": 0
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 27 Finance sources, 0 findings"
+    },
+    {
+      "command": "mutation tests on a throwaway copy of the route files",
+      "exitCode": 1,
+      "result": "Caught: requireAuth removed from a route; owner read from req.body (5 syntactic forms incl. destructuring); db call added to a report route; new direct-db route (ratchet); run-now fixed (ratchet flips). Initial regex missed `(req as any).body.userId` and destructuring; tightened and re-verified."
+    },
+    {
+      "command": "node --experimental-strip-types --check ledger-invariants.db.test.ts and db-runner.mjs",
+      "exitCode": 0,
+      "result": "syntax only"
+    }
+  ],
+  "findings": [
+    "F1 run-now global sweep (FIXED in FIN-WP-1-FIXES)",
+    "F2 postJournal drops unknown accounts leaving unbalanced journals (FIXED in FIN-WP-1-FIXES; DB test unrun)",
+    "F3 accounts unique index is user+code, blocking second-book seeding (FIXED in FIN-WP-1-FIXES-2; DB test unrun)",
+    "F4 repayment has no duplicate protection, non-atomic status write, missing entry returns 0 (FIXED in FIN-WP-1-FIXES-2; DB tests unrun)",
+    "F5 deleteJournalForEntry not transactional (FIXED in FIN-WP-1-F5; DB tests unrun)",
+    "F6 two other repayment paths (installment pay, agreement verify) repeated the non-atomic sequence (FIXED in FIN-WP-1-F6; agreement path has no DB test)",
+    "F7 goal contribute lost update (FIXED in FIN-WP-1-F7; DB tests unrun)"
+  ],
+  "alreadyCovered": [
+    "Journal header rollback on failed line insert and concurrent principal decrement are in finance-accounting.db.test.ts (pre-existing); docs previously listed rollback as unproven."
+  ],
+  "notRun": [
+    "pnpm test:finance-db (includes the new 11 tests)",
+    "pnpm test:finance-static",
+    "pnpm typecheck / build for the new test files",
+    "Authenticated HTTP contract tests for the 10 report endpoints",
+    "HTTP-level cross-user tests (needs users table in the isolated schema or module mocking)",
+    "Rollback tests for non-journal paths (repayment record plus journal, invoice flows)"
+  ],
+  "limitations": [
+    "Static gate is a regression heuristic, not an authorization proof.",
+    "Ratchet MAX_ROUTES_WITH_DIRECT_DB = 80 must be lowered in the same change as each route extraction.",
+    "KNOWN GAP test for F3 asserts current behavior inferred from the migration text; if it fails on first run, the inference was wrong and the finding must be re-examined, not the test silently loosened."
+  ],
+  "nextSafeStep": "In the Replit checkout run `pnpm --filter @workspace/api-server test:finance-static` and `pnpm --filter @workspace/api-server test:finance-db`, then send the output. If green, WP-1a becomes PASS; then decide on F1 (small fix) and the HTTP harness (WP-1b)."
+}

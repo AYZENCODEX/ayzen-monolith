@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ayzen.policy.decision.v1",
+  "type": "object",
+  "required": ["subject", "actorType", "app", "action", "resource", "decision", "traceId", "audit"],
+  "properties": {
+    "subject": { "type": "string", "minLength": 1 },
+    "actorType": { "enum": ["user", "service", "client"] },
+    "app": { "type": "string", "minLength": 1 },
+    "action": { "type": "string", "minLength": 1 },
+    "resource": { "type": "string", "minLength": 1 },
+    "decision": { "enum": ["allow", "deny", "conditional"] },
+    "scopes": { "type": "array", "items": { "type": "string" } },
+    "traceId": { "type": "string", "minLength": 8 },
+    "audit": { "const": true },
+    "namespace": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Phase 07 (Unified Policy Decision Contract). App-scoped namespace this decision was evaluated under. Defaults to `app` when the caller does not set it separately -- kept as its own field (rather than reusing `app`) so a future multi-tenant-per-app split does not need another schema revision."
+    },
+    "consumer": {
+      "enum": ["api", "service", "event", "workflow", "scheduler", "telegram", "admin"],
+      "description": "Phase 07 (Unified Policy Decision Contract). Which of the roadmap's seven required consumer kinds produced this decision. Optional for Phase 06-era callers; every packages/policy-contract client sets it."
+    },
+    "conditions": {
+      "type": "array",
+      "description": "Phase 07 (Unified Policy Decision Contract). Populated only when decision is \"conditional\": what must additionally be true (e.g. a step-up re-authentication) before the request can proceed. Empty/absent for allow and deny, which are already final.",
+      "items": {
+        "type": "object",
+        "required": ["code"],
+        "properties": {
+          "code": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

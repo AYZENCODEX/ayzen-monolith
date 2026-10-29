@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ayzen.provenance.v1",
+  "type": "object",
+  "required": ["id", "source", "commit", "buildId", "artifactDigest", "deploymentId"],
+  "properties": {
+    "id": {"type": "string"},
+    "source": {"type": "string"},
+    "commit": {"type": "string"},
+    "buildId": {"type": "string"},
+    "artifactDigest": {"type": "string"},
+    "sbomDigest": {"type": "string"},
+    "deploymentId": {"type": "string"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "workflows": [
+    {
+      "id": "deployment-promotion",
+      "owner": "platform",
+      "version": 1,
+      "steps": ["validate", "stage", "smoke", "approve", "promote", "audit"],
+      "timeoutMs": 86400000,
+      "retryPolicy": {"maxAttempts": 2, "backoff": "exponential"},
+      "requiresPolicy": "admin.deploy"
+    },
+    {
+      "id": "incident-response",
+      "owner": "admin",
+      "version": 1,
+      "steps": ["detect", "deduplicate", "notify", "acknowledge", "mitigate", "resolve", "reaudit"],
+      "timeoutMs": 86400000,
+      "retryPolicy": {"maxAttempts": 3, "backoff": "exponential"},
+      "requiresPolicy": "admin.remediate"
+    },
+    {
+      "id": "backup-restore-verification",
+      "owner": "platform",
+      "version": 1,
+      "steps": ["snapshot", "restore-isolated", "reconcile", "record-evidence"],
+      "timeoutMs": 86400000,
+      "retryPolicy": {"maxAttempts": 1, "backoff": "none"},
+      "requiresPolicy": "admin.remediate"
+    }
+  ],
+  "rules": {
+    "arbitraryCodeExecution": false,
+    "allActionsRequirePolicyContext": true,
+    "longRunningWorkUsesWorker": true,
+    "terminalExecutionsAreImmutable": true
+  }
+}

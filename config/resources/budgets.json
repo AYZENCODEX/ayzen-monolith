@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "units": {"latencyMs": "milliseconds", "queueLag": "seconds", "concurrency": "active executions"},
+  "features": {
+    "workflow.start-execution": {"concurrency": 100, "queueLag": 60},
+    "notification.create-notification": {"concurrency": 500, "queueLag": 30},
+    "finance.post-transaction": {"concurrency": 50, "queueLag": 10}
+  },
+  "unsafeStateAction": "block-and-create-gap",
+  "sharedEnginesMustBeReused": true
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "synchronousPath": ["edge", "frontend", "auth-policy", "cache", "required-service", "db", "response"],
+  "asyncOnly": ["architecture-audit", "dependency-analysis", "large-graph-analysis", "optimization-analysis", "bulk-intelligence"],
+  "latencyBudgetsMs": {
+    "interactive-api": 500,
+    "health": 100,
+    "admin-read": 1000
+  },
+  "enforcement": "architecture-and-performance-gates"
+}

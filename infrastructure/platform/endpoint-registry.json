@@ -1,0 +1,7 @@
+{
+  "version": "v1",
+  "source": "@ayzen/endpoint-registry",
+  "strictModeEnv": "AYZEN_STRICT_ENDPOINT_REGISTRY",
+  "registryModule": "packages/endpoint-registry/src/index.mjs",
+  "requiredFields": ["owner", "version", "method", "path", "auth", "permission", "timeoutMs", "retry", "idempotency", "audit"]
+}

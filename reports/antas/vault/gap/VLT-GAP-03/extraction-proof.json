@@ -1,0 +1,1252 @@
+{
+  "phase": "VLT-GAP-03",
+  "sub_phase": "VLT-GAP-03-B",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "06bced546dfe77f9a393973a34271eb13b104afae821c067548e2ba6f63a2f9b",
+  "validator_version": "1.0.0",
+  "validator_sha256": "2d5e688634fc2ec8684faa8fb01be101675b0979da309b974969248bd43f67b0",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/kyc.ts": "157f024deef8d4521ba937058e064a28ba244ed160e42f5d27f0a501e29c1b5c",
+    "artifacts/api-server/src/routes/kyc-data-entities.ts": "18733afba6989a9d6456c7b072f2e056e052bd92647dd38ee66474fe03cda63b",
+    "artifacts/api-server/src/vault/domain/kyc-values.ts": "476cad2f092fd3accd4e2c000bb5c02a17ad394b9937afe5a3c1a528e8fe4277",
+    "artifacts/api-server/src/vault/domain/kyc.ts": "19ce1058dd84efa5e68076c51e0e5cf1a3d27789f797788cf9b7e1a146168c18",
+    "artifacts/api-server/src/vault/security/kyc-ownership.ts": "df4c0e8f566f6a79ece33b4dd63bb0bd1ebbea3a58cfe051a68f122e45fd01c1",
+    "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts": "5571d448c9a391dc03c28a3c3fec341182226f4f9b6aec4c6ef727f811cc47a1",
+    "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts": "ed84865e38eeff6e81da6042e58ef69700a8cf62ca291fe701311cde66120fdf",
+    "artifacts/api-server/src/vault/application/kyc/entries.ts": "59fabc73cf27749214b4597154993d6185952864fb39a8299f225320cbe4338b",
+    "artifacts/api-server/src/vault/application/kyc/data-entities.ts": "2c16402277b19dc90c79cbefdc9ece39ea3b6b05ad90e4ed41a9005d657a4901",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-03-B.mjs",
+    "in-process differential suite (frozen baseline routes vs new source)",
+    "in-process differential typecheck"
+  ],
+  "exit_codes": {
+    "differential_suite": 0,
+    "security_suite": 0,
+    "unit_parity": 0,
+    "mutation_suite": 0,
+    "typecheck_differential": 0
+  },
+  "symbols_moved": [
+    "routes/kyc.ts#val → vault/domain/kyc-values.ts#val",
+    "routes/kyc.ts#numVal → vault/domain/kyc-values.ts#numVal",
+    "routes/kyc-data-entities.ts#safe → vault/domain/kyc-values.ts#safe",
+    "routes/kyc-data-entities.ts#safeDate → vault/domain/kyc-values.ts#safeDate",
+    "routes/kyc.ts#DATA_ENTITY_JOIN → vault/infrastructure/repositories/kyc-repository.ts#DATA_ENTITY_JOIN",
+    "routes/kyc.ts#DATA_ENTITY_SELECT → vault/infrastructure/repositories/kyc-repository.ts#DATA_ENTITY_SELECT",
+    "routes/kyc.ts#fetchWithData → vault/infrastructure/repositories/kyc-repository.ts#fetchKycEntryWithData",
+    "routes/kyc.ts#kycEntryResource → vault/security/kyc-ownership.ts#kycEntryResource",
+    "routes/kyc.ts#requireKycEntryOwnership → vault/security/kyc-ownership.ts#requireKycEntryOwnership",
+    "routes/kyc-data-entities.ts#DATA_ENTITY_SENSITIVE_FIELDS → vault/domain/kyc.ts#KYC_DATA_ENTITY_SENSITIVE_FIELDS",
+    "routes/kyc-data-entities.ts#KYC_DATA_ENTITY_OWNER_SENTINEL_NONE → vault/domain/kyc.ts#KYC_DATA_ENTITY_OWNER_SENTINEL_NONE",
+    "routes/kyc-data-entities.ts#kycDataEntityResource → vault/security/kyc-ownership.ts#kycDataEntityResource",
+    "routes/kyc-data-entities.ts#requireKycDataEntityOwnership → vault/security/kyc-ownership.ts#requireKycDataEntityOwnership",
+    "routes/kyc-data-entities.ts#USED_BY_KYC → vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_BY_KYC",
+    "routes/kyc-data-entities.ts#USED_BY_VAULT → vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_BY_VAULT",
+    "routes/kyc-data-entities.ts#USED_EXPR → vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_EXPR",
+    "routes/kyc.ts#allowed → vault/domain/kyc.ts#KYC_ENTRY_BAN_STATUSES"
+  ],
+  "handlers_extracted": [
+    {
+      "method": "GET",
+      "path": "/kyc-entries",
+      "use_case": "vault/application/kyc/entries.ts#listKycEntries",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "POST",
+      "path": "/kyc-entries",
+      "use_case": "vault/application/kyc/entries.ts#createKycEntry",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "GET",
+      "path": "/kyc-entries/:id",
+      "use_case": "vault/application/kyc/entries.ts#getKycEntry",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "PUT",
+      "path": "/kyc-entries/:id",
+      "use_case": "vault/application/kyc/entries.ts#editKycEntry",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "PATCH",
+      "path": "/kyc-entries/:id/status",
+      "use_case": "vault/application/kyc/entries.ts#setKycEntryStatus",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/kyc-entries/:id",
+      "use_case": "vault/application/kyc/entries.ts#removeKycEntry",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "GET",
+      "path": "/kyc-entries/enrollments",
+      "use_case": "vault/application/kyc/entries.ts#listKycEnrollments",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "GET",
+      "path": "/kyc-data-entities",
+      "use_case": "vault/application/kyc/data-entities.ts#listKycDataEntities",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "GET",
+      "path": "/kyc-data-entities/overview",
+      "use_case": "vault/application/kyc/data-entities.ts#getKycDataEntityOverview",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "POST",
+      "path": "/kyc-data-entities",
+      "use_case": "vault/application/kyc/data-entities.ts#createKycDataEntity",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "GET",
+      "path": "/kyc-data-entities/:id",
+      "use_case": "vault/application/kyc/data-entities.ts#getKycDataEntity",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "PUT",
+      "path": "/kyc-data-entities/:id",
+      "use_case": "vault/application/kyc/data-entities.ts#editKycDataEntity",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/kyc-data-entities/:id",
+      "use_case": "vault/application/kyc/data-entities.ts#removeKycDataEntity",
+      "route_calls_use_case": true,
+      "use_case_defined": true
+    }
+  ],
+  "consumers_migrated": [],
+  "old_business_symbols_remaining": {
+    "route_declares_business_symbols": [],
+    "route_handlers_with_db_refs": []
+  },
+  "duplicate_implementations": [],
+  "route_thinness": {
+    "before": {
+      "routes": 13,
+      "with_inline_refs": 13,
+      "handler_lines": 329
+    },
+    "after": {
+      "routes": 13,
+      "with_inline_refs": 0,
+      "handler_lines": 52
+    }
+  },
+  "sql": {
+    "old_statements": 22,
+    "new_statements": 22
+  },
+  "destination_functions": {
+    "vault/domain/kyc-values.ts": [
+      "val",
+      "numVal",
+      "safe",
+      "safeDate",
+      "d"
+    ],
+    "vault/domain/kyc.ts": [
+      "isKycStatus",
+      "isKycBanStatus"
+    ],
+    "vault/security/kyc-ownership.ts": [
+      "kycEntryResource",
+      "requireKycEntryOwnership",
+      "kycDataEntityResource",
+      "requireKycDataEntityOwnership",
+      "denyKycNotFound",
+      "denyKycNotFoundOrForbidden",
+      "denyKycSilentSuccess"
+    ],
+    "vault/infrastructure/repositories/kyc-repository.ts": [
+      "fetchKycEntryWithData",
+      "selectKycEntries",
+      "insertKycEntry",
+      "selectKycEntryForUser",
+      "updateKycEntry",
+      "updateKycEntryStatus",
+      "deleteKycEntry",
+      "selectKycEnrollments"
+    ],
+    "vault/infrastructure/repositories/kyc-data-entity-repository.ts": [
+      "selectKycDataEntities",
+      "selectKycDataEntityOverview",
+      "insertKycDataEntity",
+      "selectKycDataEntityForUser",
+      "updateKycDataEntity",
+      "findKycEntryLinkedToDataEntity",
+      "findVaultEntryLinkedToDataEntity",
+      "deleteKycDataEntity"
+    ],
+    "vault/application/kyc/entries.ts": [
+      "dbError",
+      "listKycEntries",
+      "createKycEntry",
+      "getKycEntry",
+      "editKycEntry",
+      "setKycEntryStatus",
+      "removeKycEntry",
+      "listKycEnrollments"
+    ],
+    "vault/application/kyc/data-entities.ts": [
+      "listKycDataEntities",
+      "getKycDataEntityOverview",
+      "createKycDataEntity",
+      "getKycDataEntity",
+      "editKycDataEntity",
+      "removeKycDataEntity"
+    ]
+  },
+  "diff_audit": {
+    "changed": [
+      "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "artifacts/api-server/src/routes/kyc.ts",
+      "artifacts/api-server/src/vault/domain/kyc.ts"
+    ],
+    "added": [
+      "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "artifacts/api-server/src/vault/domain/kyc-values.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts",
+      "artifacts/api-server/src/vault/security/kyc-ownership.ts"
+    ],
+    "removed": [],
+    "unexpected": [],
+    "earlier_validators_edited": []
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build is NOT executed)",
+    "before_total": 32,
+    "after_total": 35,
+    "syntactic_errors": [],
+    "new_diagnostics": [],
+    "before_by_class": {
+      "__external_unresolved": 6,
+      "7006: Parameter '…' implicitly has an '…' type.": 26
+    },
+    "after_by_class": {
+      "__external_unresolved": 9,
+      "7006: Parameter '…' implicitly has an '…' type.": 26
+    }
+  },
+  "tests": {
+    "differential_cases": 64,
+    "differential_passed": 64,
+    "security_checks": 29,
+    "security_passed": 29,
+    "unit_parity": 4,
+    "unit_passed": 4,
+    "mutations_seeded": 18,
+    "mutations_detected": 18
+  },
+  "notes": [
+    "consumers_migrated is empty by design: exchange-api.ts and scripts/src/test-route-ownership-regression.ts still import requireKycEntryOwnership/kycEntryResource from routes/kyc.ts through the compatibility re-export; they are rewired in 03-C.",
+    "Behavior is preserved exactly, including pre-existing quirks: PATCH status accepts only {active, banned} (isKycStatus in domain/kyc.ts is still unused and still disagrees), and GET /kyc-entries/enrollments is registered after GET /kyc-entries/:id so the :id route shadows it. Neither is fixed here.",
+    "The project's own test suites and full tsc/build cannot run in this environment (dependencies are not installed); the differential suite executes the frozen OLD routes and the NEW tree under identical stubbed dependencies and compares every DB call, crypto call, credit charge, status code and body. Run the repo's build and tests in CI before certifying.",
+    "The frontend sources in the 03-A census (components/kyc-entries.tsx and pages/user/vault-kyc-*.tsx) are API clients only and are not part of this backend extraction."
+  ],
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "destination-exists:vault/domain/kyc-values.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/domain/kyc.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/security/kyc-ownership.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/infrastructure/repositories/kyc-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/infrastructure/repositories/kyc-data-entity-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/kyc/entries.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/kyc/data-entities.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "03A-evidence-is-PASS",
+      "passed": true,
+      "details": "status=PASS"
+    },
+    {
+      "name": "baseline-kyc-route-matches-03A-evidence-hash",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "baseline-data-route-matches-03A-evidence-hash",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "baseline-domain-matches-03A-evidence-hash",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "baseline-is-pre-extraction-shape",
+      "passed": true,
+      "details": "frozen baseline routes must still contain inline DB access"
+    },
+    {
+      "name": "tree-seal-present-and-consistent",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-count-preserved",
+      "passed": true,
+      "details": "before=13 after=13 declared=13"
+    },
+    {
+      "name": "route-order-and-middleware-identical:kyc",
+      "passed": true,
+      "details": "route table (order, paths, middleware chains incl. ownership action names / credit keys) must be unchanged"
+    },
+    {
+      "name": "route-order-and-middleware-identical:data",
+      "passed": true,
+      "details": "route table (order, paths, middleware chains incl. ownership action names / credit keys) must be unchanged"
+    },
+    {
+      "name": "route-shadowing-order-preserved",
+      "passed": true,
+      "details": "GET /kyc-entries/enrollments is (still) registered after GET /kyc-entries/:id — pre-existing behavior, preserved, not fixed"
+    },
+    {
+      "name": "route-has-zero-db-sql-crypto-refs",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-handlers-are-thin",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-declares-only-router",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-templates-contain-no-sql",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "sql-every-old-statement-preserved-in-destination",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "sql-no-new-statements-introduced",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "sql-statement-count-equal",
+      "passed": true,
+      "details": "old=22 new=22"
+    },
+    {
+      "name": "no-sql-statement-implemented-in-two-files",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-new-error-messages",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-repository-executes-sql",
+      "passed": true,
+      "details": "kyc-repository db.execute=8 data-entity-repository db.execute=8"
+    },
+    {
+      "name": "destination-application-has-use-cases",
+      "passed": true,
+      "details": "entries=8 dataEntities=6"
+    },
+    {
+      "name": "destination-domain-has-logic",
+      "passed": true,
+      "details": "values fns=5"
+    },
+    {
+      "name": "destination-security-has-logic",
+      "passed": true,
+      "details": "functions=7"
+    },
+    {
+      "name": "no-scaffold-only-destination",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "every-handler-delegates-to-a-defined-use-case",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:routes/kyc.ts#val→vault/domain/kyc-values.ts#val",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":50,\"inSame\":0,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc.ts#numVal→vault/domain/kyc-values.ts#numVal",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":8,\"inSame\":0,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc-data-entities.ts#safe→vault/domain/kyc-values.ts#safe",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":12,\"inSame\":0,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc-data-entities.ts#safeDate→vault/domain/kyc-values.ts#safeDate",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":2,\"inSame\":0,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc.ts#DATA_ENTITY_JOIN→vault/infrastructure/repositories/kyc-repository.ts#DATA_ENTITY_JOIN",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":0,\"inSame\":3,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc.ts#DATA_ENTITY_SELECT→vault/infrastructure/repositories/kyc-repository.ts#DATA_ENTITY_SELECT",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":0,\"inSame\":3,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc.ts#fetchWithData→vault/infrastructure/repositories/kyc-repository.ts#fetchKycEntryWithData",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":2,\"inSame\":0,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc.ts#kycEntryResource→vault/security/kyc-ownership.ts#kycEntryResource",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":1,\"inSame\":1,\"reexported\":true}"
+    },
+    {
+      "name": "moved:routes/kyc.ts#requireKycEntryOwnership→vault/security/kyc-ownership.ts#requireKycEntryOwnership",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":4,\"inSame\":0,\"reexported\":true}"
+    },
+    {
+      "name": "moved:routes/kyc-data-entities.ts#DATA_ENTITY_SENSITIVE_FIELDS→vault/domain/kyc.ts#KYC_DATA_ENTITY_SENSITIVE_FIELDS",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":4,\"inSame\":0,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc-data-entities.ts#KYC_DATA_ENTITY_OWNER_SENTINEL_NONE→vault/domain/kyc.ts#KYC_DATA_ENTITY_OWNER_SENTINEL_NONE",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":2,\"inSame\":0,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc-data-entities.ts#kycDataEntityResource→vault/security/kyc-ownership.ts#kycDataEntityResource",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":1,\"inSame\":1,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc-data-entities.ts#requireKycDataEntityOwnership→vault/security/kyc-ownership.ts#requireKycDataEntityOwnership",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":3,\"inSame\":0,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc-data-entities.ts#USED_BY_KYC→vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_BY_KYC",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":0,\"inSame\":1,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc-data-entities.ts#USED_BY_VAULT→vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_BY_VAULT",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":0,\"inSame\":1,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc-data-entities.ts#USED_EXPR→vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_EXPR",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":0,\"inSame\":6,\"reexported\":null}"
+    },
+    {
+      "name": "moved:routes/kyc.ts#allowed→vault/domain/kyc.ts#KYC_ENTRY_BAN_STATUSES",
+      "passed": true,
+      "details": "{\"wasInOld\":true,\"stillInRoute\":false,\"definedNew\":true,\"inOthers\":1,\"inSame\":1,\"reexported\":null}"
+    },
+    {
+      "name": "moved-symbols-are-used",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-copied-but-unused-destination-functions",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-duplicate-implementation-between-files",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "old-function-bodies-not-left-in-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-no-longer-imports-persistence-or-crypto",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-only-keeps-requireCreditBalance-middleware",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "application-imports-no-db-drizzle-or-express",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "domain-imports-nothing",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "infrastructure-does-not-import-application-routes-or-express",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-vault-module-imports-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "crypto-orchestration-only-in-application-layer",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-public-exports-unchanged:kyc",
+      "passed": true,
+      "details": "old=default,kycEntryResource,requireKycEntryOwnership new=default,kycEntryResource,requireKycEntryOwnership"
+    },
+    {
+      "name": "route-public-exports-unchanged:data",
+      "passed": true,
+      "details": "old=default new=default"
+    },
+    {
+      "name": "domain-exports-only-additive",
+      "passed": true,
+      "details": "removed="
+    },
+    {
+      "name": "domain-original-content-untouched",
+      "passed": true,
+      "details": "existing domain/kyc.ts content must be preserved byte-for-byte; 03-B only appends"
+    },
+    {
+      "name": "vault-index-still-exports-domain-kyc",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "vault-index-has-no-export-name-collisions",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:list:no-filters",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:list:all-filters",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:list:unused-not-true",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:list:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:create:full-with-data-entity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:create:no-data-entity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:create:empty-body-defaults",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:create:blank-strings-null",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:create:category-empty-400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:create:insert-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:create:refetch-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:get:found-charged",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:get:found-charge-declined",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:get:not-found-no-charge",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:get:invalid-id-400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:get:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:update:full",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:update:empty-body-keeps-link-and-paid",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:update:link-cleared-null",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:update:link-zero-and-paid-true",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:update:not-found-404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:update:invalid-id-400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:update:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:status:banned",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:status:active",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:status:inactive-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:status:suspended-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:status:missing-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:status:not-found-404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:status:invalid-id-400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:status:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:delete:ok",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:delete:invalid-id-400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:delete:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:enrollments:rows",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:enrollments:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-list:all",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-list:used",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-list:unused",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-list:unknown-status",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-list:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-overview:row",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-overview:no-row-default",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-overview:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-create:full",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-create:empty-body",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-create:quote-injection-escaped",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-create:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-get:found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-get:not-found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-get:invalid-id-400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-get:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-update:full",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-update:empty-body-nulls",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-update:not-found-404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-update:invalid-id-400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-update:db-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-delete:ok",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-delete:blocked-by-kyc-409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-delete:blocked-by-vault-409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-delete:invalid-id-400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-delete:kyc-check-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-delete:vault-check-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:de-delete:delete-error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:kyc:ownership-builder:5:value:{\"user_id\":7}",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:kyc:ownership-builder:5:value:{\"user_id\":99}",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:kyc:ownership-builder:5:value:null",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:kyc:ownership-builder:abc:none:null",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:kyc:ownership-builder:5:throw:\"own down\"",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:data:ownership-builder:5:value:{\"user_id\":7}",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:data:ownership-builder:5:value:{\"user_id\":99}",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:data:ownership-builder:5:value:null",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:data:ownership-builder:abc:none:null",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:data:ownership-builder:5:throw:\"own down\"",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:deny-and-wiring:GET /kyc-entries/:id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:deny-and-wiring:PUT /kyc-entries/:id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:deny-and-wiring:PATCH /kyc-entries/:id/status",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:deny-and-wiring:DELETE /kyc-entries/:id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:deny-and-wiring:GET /kyc-data-entities/:id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:deny-and-wiring:PUT /kyc-data-entities/:id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:deny-and-wiring:DELETE /kyc-data-entities/:id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:auth-precedes-ownership:GET /kyc-entries/:id",
+      "passed": true,
+      "details": "requireAuth,OWN,requireCreditBalance(sylo.kyc_entry_view)"
+    },
+    {
+      "name": "security:auth-precedes-ownership:PUT /kyc-entries/:id",
+      "passed": true,
+      "details": "requireAuth,OWN"
+    },
+    {
+      "name": "security:auth-precedes-ownership:PATCH /kyc-entries/:id/status",
+      "passed": true,
+      "details": "requireAuth,OWN"
+    },
+    {
+      "name": "security:auth-precedes-ownership:DELETE /kyc-entries/:id",
+      "passed": true,
+      "details": "requireAuth,OWN"
+    },
+    {
+      "name": "security:auth-precedes-ownership:GET /kyc-data-entities/:id",
+      "passed": true,
+      "details": "requireAuth,OWN"
+    },
+    {
+      "name": "security:auth-precedes-ownership:PUT /kyc-data-entities/:id",
+      "passed": true,
+      "details": "requireAuth,OWN"
+    },
+    {
+      "name": "security:auth-precedes-ownership:DELETE /kyc-data-entities/:id",
+      "passed": true,
+      "details": "requireAuth,OWN"
+    },
+    {
+      "name": "security:decrypt-field-list:list:no-filters",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:decrypt-field-list:de-list:all",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "compat:kycEntryResource-exported-and-equivalent",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "compat:requireKycEntryOwnership-exported-and-equivalent",
+      "passed": true,
+      "details": "old=kycEntryResource,requireKycEntryOwnership,default new=kycEntryResource,requireKycEntryOwnership,default"
+    },
+    {
+      "name": "compat:requireKycEntryOwnership-behaves-the-same",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:val-parity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:numVal-parity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:safe-parity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:safeDate-parity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:UPDATE drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:DELETE drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:list drops user scope",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:GET :id stops charging credits",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:GET :id 404 body changed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:account password no longer encrypted on create",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:NID no longer encrypted on data entity create",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:status vocabulary widened",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:entry ownership sentinel changed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:data entity ownership sentinel changed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:deny handler leaks 403",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:delete guard drops vault-link check",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:SQL escaping removed from safe()",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:numVal NaN fallback changed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:unused filter loses active-status predicate",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:route ownership gate removed from PUT",
+      "passed": true,
+      "details": "detected via suite exception: Cannot read properties of undefined (reading 'opts')"
+    },
+    {
+      "name": "mutation-detected:route ownership gate removed from data-entity DELETE",
+      "passed": true,
+      "details": "detected via suite exception: Cannot read properties of undefined (reading 'opts')"
+    },
+    {
+      "name": "mutation-detected:refetch-with-data skipped after create",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:security",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:every-route-has-differential-case",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:every-route-has-success-and-failure-case",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-skipped-tests",
+      "passed": true,
+      "details": "64/64"
+    },
+    {
+      "name": "differential-cases-executed-db-calls",
+      "passed": true,
+      "details": "53 cases recorded interactions"
+    },
+    {
+      "name": "mutation-suite-size",
+      "passed": true,
+      "details": "18 seeded regressions"
+    },
+    {
+      "name": "diff-audit:no-unrelated-changes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:no-earlier-validator-edited",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-syntax-errors",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-diagnostics-vs-baseline",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "generated_at": "2026-09-30T06:29:43.104Z",
+  "evidence_body_sha256": "2548c89e36158d2f32e0b17c311f1fe5bc55c7133dad810af9087dca5f1c92d0"
+}

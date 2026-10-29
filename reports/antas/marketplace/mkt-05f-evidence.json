@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-05f",
+  "status": "PASS_STATIC_AND_UNIT_ONLY",
+  "date": "2026-10-27",
+  "commitSha": "UNAVAILABLE",
+  "scope": "first 5 routes moved OUT of routes/marketplace.ts: GET and PATCH /marketplace/settings, GET /admin/marketplace/activity, GET /marketplace/stats, GET /marketplace/azn/chart; MKT-05 so far: 33 of 44 routes",
+  "done": [
+    "marketplace/admin: settings rule and the dynamic activity-log SQL builder in domain (pure), settings and activity repositories, use cases in application/admin.ts; marketplace/analytics: market stats repository and use case, the AZN chart in domain/azn-chart.ts; *.wired.ts composition roots are the only files importing the pool",
+    "all 38 route declaration lines of marketplace.ts are byte-identical to the original; only the five handler bodies and three import lines changed",
+    "status codes and response keys of ALL 38 routes of marketplace.ts compared with the ORIGINAL uploaded file by a script that does not use the inventory map: SAME 38, DIFF 0",
+    "the 7 SQL-bearing literals of the five routes (including the pieces of the dynamic activity query) equal the pre-move text (moved-sql.pins.json now supports per-route entries with a sqlish filter; the moved routes are checked to contain no SQL)",
+    "differential tests against verbatim copies of the original logic: the activity list and count builders for 13^3 = 2,197 combinations of event_type, limit and offset; the AZN chart for 30 date and random-value combinations including month, year and leap-day boundaries",
+    "8 further unit tests (settings parameters, application with a fake database: the settings read runs WITHOUT a parameter array, list before count, errors not swallowed)",
+    "marketplace.ts: 1,084 -> 1,020 lines, 86 -> 81 SQL calls, 38 -> 33 routes still holding SQL or logic of their own; baseline ratchet 317 -> 312 SQL calls in route files",
+    "kept on purpose: GET /marketplace/settings still swallows ANY error and answers the default body"
+  ],
+  "newFinding": "MKT-ISSUE-10: GET /marketplace/azn/chart returns synthetic data (date-seeded pseudo random series around a fixed base, last point uses Math.random), not trade or price data; recorded, behavior kept; product decision",
+  "notVerified": [
+    "no handler executed, no database; TypeScript syntax and import resolution only; typecheck/build UNAVAILABLE",
+    "PATCH /marketplace/settings and the settings read were not exercised on PostgreSQL"
+  ],
+  "next": "the remaining 9 MKT-05 routes of marketplace.ts: listing reads (GET /marketplace/listings, /marketplace/listings/:id, /marketplace/my-listings, /admin/marketplace/listings), search, history, favorites (3). Then MKT-06 (8 listing-write routes) and MKT-07 (16 order routes). Still waiting for the first real run of the DB suite; MKT-04 and MKT-07 wait for it."
+}

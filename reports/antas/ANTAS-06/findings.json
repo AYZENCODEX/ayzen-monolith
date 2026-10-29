@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "staging reconciliation run",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "concurrent idempotency run",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

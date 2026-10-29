@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-1-F6",
+  "title": "Fix F6: atomic, claim-first installment payment and payment-agreement verification",
+  "timestamp": "2026-10-17T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Statically verified (syntax, 24 static tests at the time, boundary scan, two mutation tests). The six installment DB tests could not run (no Postgres here). The agreement-verify path has no DB test at all because finance_invoices and finance_payment_agreements are not in the isolated schema. PASS requires the Replit run, and a staging check of the verify flow.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; bound by content via fin-provenance-manifest.json."
+  },
+  "behaviorChanges": [
+    "PUT /finance/amortization/:id/pay: payAmortizationInstallment runs claim (UPDATE ... WHERE status <> 'paid'), principal and interest repayment rows, the entry balance+status (one statement) and interest paid in ONE transaction. A repeat or concurrent request for a paid installment returns it unchanged (same as the old early return) without writing again. Previously two concurrent requests could both record repayments.",
+    "POST /finance/payment-agreements/:id/verify: one transaction that first claims the agreement (status must still be passkey_confirmed), then posts the repayment, applies the balance change, and updates invoice paidAmount and status in one statement. A concurrent or repeated verification returns 409 instead of double-posting. Invoice status now comes from the database's current amount, not the value read at request start.",
+    "Journal postings, notifications and invoice events remain best-effort after commit."
+  ],
+  "newExports": [
+    "applyPrincipalRepaymentTx(tx, entryId, amount)",
+    "payAmortizationInstallment(id, userId)",
+    "type PayInstallmentResult",
+    "type FinanceDbTransaction"
+  ],
+  "filesChanged": [
+    "artifacts/api-server/src/lib/finance-accounting.ts",
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/routes/finance-invoices.ts",
+    "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs (finance_amortization added to the isolated schema)",
+    "artifacts/api-server/src/finance/ledger-invariants.db.test.ts (6 installment tests)",
+    "artifacts/api-server/src/finance/route-security.test.ts (F6 gate)",
+    "docs/antas/finance/*"
+  ],
+  "commands": [
+    {
+      "command": "node --test --import tsx src/finance/domain/*.test.ts src/finance/route-security.test.ts",
+      "exitCode": 0,
+      "result": "all pass after ratchet 79 -> 78"
+    },
+    {
+      "command": "mutation: make the agreement claim unconditional (copy)",
+      "exitCode": 1,
+      "result": "F6 gate fails as intended"
+    },
+    {
+      "command": "mutation: write outside the transaction in the installment route (copy)",
+      "exitCode": 1,
+      "result": "ratchet and F6 gate fail as intended"
+    }
+  ],
+  "notRun": [
+    "pnpm typecheck/build (tx typing via FinanceDbTransaction, ne import, status SQL expression on finance_invoices)",
+    "pnpm test:finance-db (6 new installment tests)",
+    "Any test of POST /finance/payment-agreements/:id/verify against a database"
+  ],
+  "nextSafeStep": "Replit run (typecheck, build, test:finance-static, test:finance-db) plus a staging walk-through: create an invoice linked to a loan entry, submit and passkey-confirm an agreement, verify it twice (second must be 409), check the entry balance and invoice paidAmount changed once."
+}

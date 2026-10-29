@@ -1,0 +1,34 @@
+{
+  "sub_phase": "VLT-GAP-02-C",
+  "sealed_at": "2026-09-30T04:32:04.119Z",
+  "matches_02B_certified_state": true,
+  "certified_by": {
+    "sub_phase": "VLT-GAP-02-B",
+    "source_tree_sha256": "c66e0788dc9c8cd2c11da355e84c29d9f964735979b42518a0859c4a9d375f1e",
+    "validator_sha256": "27ebd3bb00c4efd2bfccfead5fdc10dba3edb4d539f90970bb58e96c84259fa6",
+    "source_hashes_checked": 8
+  },
+  "frozen_consumers": {
+    "value-history.ts": {
+      "source": "artifacts/api-server/src/routes/value-history.ts",
+      "sha256": "79948d6aff356fe6bbf61029ac25e65b9d285a1d1c1aa5a3553e1ee2f32916c3"
+    },
+    "vault.ts": {
+      "source": "artifacts/api-server/src/routes/vault.ts",
+      "sha256": "d8c4b257cd4c9abec0cc56aabc7abe3481b1678c8af48261955704c76d7fdcec"
+    },
+    "bulk.ts": {
+      "source": "artifacts/api-server/src/routes/bulk.ts",
+      "sha256": "4ace985d9038e30e723cdaa45def8437196a6c2b5a11d673657c24c6ffe9b5ff"
+    },
+    "local-accounts.route.ts": {
+      "source": "artifacts/api-server/src/routes/local-accounts.ts",
+      "sha256": "dc2e9ad68537f5cf6a85803d98e0055f7cfdeeb13d298c5dc3a827245f01e5c7"
+    },
+    "check-ownership-gate-coverage.ts": {
+      "source": "scripts/src/check-ownership-gate-coverage.ts",
+      "sha256": "de8bcefcc05128aabc1374dc4746ccd5cb54393b027291beec52988f2ef79ef9"
+    }
+  },
+  "tree_manifest_sha256": "c3830708f33e1d170723da341023214a23a7fc4911db4385ee97c92e9eab1b7b"
+}

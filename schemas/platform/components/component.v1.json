@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ayzen.internal/schemas/platform/components/component.v1.json",
+  "title": "AYZEN Canonical Component",
+  "description": "One entry in the platform-wide component registry (Phase 01). Every production app, feature, sub-feature, function, module, API, service, database, event, workflow, worker, scheduler job, notification channel, Telegram command, UI route, artifact, engine or control-plane is represented as one of these.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "owner", "app", "environment", "lifecycle", "source"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$",
+      "description": "Stable, globally unique registry id. Convention: '<kind>:<original-id>' to prevent cross-source collisions."
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "app", "domain", "feature", "sub-feature", "function", "module",
+        "api", "service", "database", "event", "workflow", "worker-pool",
+        "scheduler-job", "notification-channel", "telegram-command",
+        "ui-route", "artifact", "engine", "control-plane"
+      ]
+    },
+    "owner": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$",
+      "description": "Owning team/domain. Required — components without an owner fail registration (Phase 01 owner-required gate)."
+    },
+    "app": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$",
+      "description": "Owning app boundary. Defaults to owner when the source has no separate app concept."
+    },
+    "environment": {
+      "type": "string",
+      "enum": ["production", "staging", "development", "preview"]
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": ["DRAFT", "READY", "ACTIVE", "PAUSED", "DEPRECATED", "QUARANTINED"]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registry", "originalId"],
+      "properties": {
+        "registry": {
+          "type": "string",
+          "description": "Path (relative to repo root) of the registry this component was bootstrapped from."
+        },
+        "originalId": {
+          "type": "string",
+          "description": "The id/command/name as it appears in the source registry, before namespacing."
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional passthrough fields preserved from the source registry for traceability (e.g. capability, group, deploymentTarget)."
+    }
+  }
+}

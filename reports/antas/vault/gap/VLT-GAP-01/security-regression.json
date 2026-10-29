@@ -1,0 +1,292 @@
+{
+  "phase": "VLT-GAP-01",
+  "sub_phase": "VLT-GAP-01-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "15cc70d7cfef801f9993710ffe3618c0e59df1b52fb75a452e8f900ccae1b3d4",
+  "validator_version": "1.0.0",
+  "validator_sha256": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+  "description": "Ownership / isolation regression: identical PEP action, deny bodies and middleware order old vs new; foreign/missing-owner paths executed",
+  "ownership_gated_routes": {
+    "GET /vault/:id/gas": [
+      "vault_entry.gas.read"
+    ],
+    "GET /vault/:id/activity": [
+      "vault_entry.activity.read"
+    ],
+    "PATCH /vault/:id": [
+      "vault_entry.update"
+    ],
+    "PATCH /vault/:id/field": [
+      "vault_entry.field.update"
+    ],
+    "GET /vault/:id/field-history": [
+      "vault_entry.field_history.read"
+    ],
+    "POST /vault/:id/receipt": [
+      "vault_entry.receipt.create"
+    ],
+    "DELETE /vault/:id/receipt": [
+      "vault_entry.receipt.delete"
+    ],
+    "GET /vault/:id": [
+      "vault_entry.read"
+    ],
+    "DELETE /vault/:id": [
+      "vault_entry.delete"
+    ],
+    "POST /vault/:id/restore": [
+      "vault_entry.restore"
+    ],
+    "DELETE /vault/trash/:id": [
+      "vault_entry.purge"
+    ],
+    "GET /vault/:id/links": [
+      "vault_entry.links.read"
+    ],
+    "PATCH /vault-entity-links/:id": [
+      "vault_entity_link.update"
+    ],
+    "DELETE /vault-entity-links/:id": [
+      "vault_entity_link.delete"
+    ]
+  },
+  "security_cases": [
+    {
+      "name": "entity gas: not owned -> 404",
+      "route": "GET /vault/:id/gas",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "bulk-action: delete (soft) + foreign row not touched",
+      "route": "PATCH /vault/bulk-action",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 22,
+      "calls_new": 22,
+      "response_status": 200,
+      "exercised": true
+    },
+    {
+      "name": "entity activity: not owned -> 404",
+      "route": "GET /vault/:id/activity",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "update: not found -> 404",
+      "route": "PATCH /vault/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "update: fallback row missing -> 404",
+      "route": "PATCH /vault/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 15,
+      "calls_new": 15,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "field: not owned -> 404",
+      "route": "PATCH /vault/:id/field",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "field: update returns no row -> 404",
+      "route": "PATCH /vault/:id/field",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 9,
+      "calls_new": 9,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "field-history: not owned -> 404",
+      "route": "GET /vault/:id/field-history",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "receipt create: not owned -> 404",
+      "route": "POST /vault/:id/receipt",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "receipt revoke: not owned -> 404",
+      "route": "DELETE /vault/:id/receipt",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "public receipt: unknown -> 404",
+      "route": "GET /vault/receipt/:token",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "public receipt pdf: unknown -> 404",
+      "route": "GET /vault/receipt/:token/pdf",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "get entity: not found -> 404, no charge",
+      "route": "GET /vault/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "trash entity: foreign/missing -> 404",
+      "route": "DELETE /vault/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "restore entity: not trashed/foreign -> 404",
+      "route": "POST /vault/:id/restore",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "purge entity: not trashed/foreign -> 404",
+      "route": "DELETE /vault/trash/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "entity links: not owned -> 404",
+      "route": "GET /vault/:id/links",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "update link: foreign/missing -> 404",
+      "route": "PATCH /vault-entity-links/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 5,
+      "calls_new": 5,
+      "response_status": 404,
+      "exercised": true
+    },
+    {
+      "name": "delete link: foreign/missing -> 404",
+      "route": "DELETE /vault-entity-links/:id",
+      "category": "security",
+      "passed": true,
+      "differences": [],
+      "calls_old": 4,
+      "calls_new": 4,
+      "response_status": 404,
+      "exercised": true
+    }
+  ],
+  "mutation_evidence": [
+    {
+      "name": "selftest:ownership-action-change-is-detected-by-differential",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-owner-scope-is-detected-by-differential",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-owner-scope-is-detected-by-static-parity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:hidden-import-of-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-routes-is-detected",
+      "passed": true,
+      "details": ""
+    }
+  ]
+}

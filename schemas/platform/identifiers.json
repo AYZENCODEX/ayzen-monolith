@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ayzen.internal/schemas/platform/identifiers.json",
+  "title": "AYZEN Universal Identifier Standard",
+  "description": "Phase 02. The single source of truth for every instance-scoped identifier the platform mints: request, trace, correlation, causation, event, workflow-run and deployment ids. Distinct from Phase 01's component ids, which are stable, human-authored slugs registered in infrastructure/platform/component-registry.json. Implemented by packages/identity-context (generation + validation) and packages/correlation (chain verification).",
+  "definitions": {
+    "instanceId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "description": "Shared format for every id type below. Deliberately narrower than a component id (no '@' or '/') because these are runtime-minted values (typically UUIDv4), not registry slugs."
+    }
+  },
+  "identifierTypes": {
+    "requestId": {
+      "description": "One per inbound request/RPC. Minted at the edge if absent; never regenerated on internal re-entry.",
+      "pattern": "#/definitions/instanceId",
+      "generator": "crypto.randomUUID",
+      "propagation": { "http": "x-request-id", "eventEnvelope": null, "workflowContext": null }
+    },
+    "traceId": {
+      "description": "One per end-to-end distributed trace. Set once at the entrypoint and carried unchanged through every synchronous and asynchronous hop.",
+      "pattern": "#/definitions/instanceId",
+      "generator": "crypto.randomUUID",
+      "propagation": { "http": "x-trace-id", "eventEnvelope": "traceId", "workflowContext": "traceId" }
+    },
+    "correlationId": {
+      "description": "One per business transaction. Identical to traceId at the entrypoint but kept as a separate field because a correlation can legitimately span multiple traces (e.g. a workflow retried under a new traceId still belongs to the same correlation).",
+      "pattern": "#/definitions/instanceId",
+      "generator": "crypto.randomUUID",
+      "propagation": { "http": "x-correlation-id", "eventEnvelope": "correlationId", "workflowContext": "correlationId" }
+    },
+    "causationId": {
+      "description": "The id of the specific message/request/run that directly caused this one. Optional at the entrypoint (nothing caused the first hop); mandatory on every subsequent hop. Forms a resolvable parent pointer, not a duplicate of correlationId.",
+      "pattern": "#/definitions/instanceId",
+      "generator": "derived-from-parent-hop-id",
+      "propagation": { "http": "x-causation-id", "eventEnvelope": "causationId", "workflowContext": "causationId" }
+    },
+    "eventId": {
+      "description": "One per published event/outbox row. Becomes the causationId of every consumer that reacts to it.",
+      "pattern": "#/definitions/instanceId",
+      "generator": "crypto.randomUUID",
+      "propagation": { "http": null, "eventEnvelope": "eventId", "workflowContext": null }
+    },
+    "workflowRunId": {
+      "description": "One per workflow execution (not per workflow definition — see Phase 01 component id for that). Becomes the causationId of every step/worker job the run schedules.",
+      "pattern": "#/definitions/instanceId",
+      "generator": "crypto.randomUUID",
+      "propagation": { "http": null, "eventEnvelope": "workflowRunId", "workflowContext": "runId" }
+    },
+    "deploymentId": {
+      "description": "One per release/deployment action. Not part of the request-scoped causation chain; used to correlate runtime evidence back to a specific rollout (feeds Phase 26 artifact provenance).",
+      "pattern": "#/definitions/instanceId",
+      "generator": "crypto.randomUUID",
+      "propagation": { "http": "x-deployment-id", "eventEnvelope": "deploymentId", "workflowContext": null }
+    }
+  },
+  "causationRule": "Every hop after the entrypoint MUST set causationId to the id of the specific upstream item that produced it (the inbound requestId, the eventId being consumed, or the workflowRunId that scheduled the step) — never to correlationId or traceId, which stay constant across the whole chain and therefore cannot serve as a resolvable parent pointer.",
+  "propagationRequirement": "traceId and correlationId MUST be read from an incoming request/event/workflow context and forwarded unchanged; they are only minted when genuinely absent (the entrypoint). A hop that discards a valid incoming traceId/correlationId and mints a new one breaks the chain and is a Phase 02 defect.",
+  "verification": "tools/identity/validate.mjs simulates API -> event -> workflow -> worker and asserts one correlationId end-to-end with a resolvable causationId chain; packages/correlation/src/index.mjs is the reusable chain verifier."
+}

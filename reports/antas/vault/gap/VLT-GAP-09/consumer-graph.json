@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-09",
+  "sub_phase": "08-rewire",
+  "commit_sha": "524e5e0c5a404eb98c85a22aa9a6678a672e5a4a",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "bb82bee2a4482931ad67cd11b4d57d2ff7df99ac9051ac3beeed8310d6870c66",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/application/snapshot/restore.ts": "8f136495da3593477b9115a2685e5cfdd04224695135a9d73b97786a4ada8033",
+    "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts": "4f4254f938dd0baf90247d8150059b17de439e1ad99a07f919e1e2715395f2f0",
+    "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts": "38ee1dcf2219ba3cd10d9589eb89a7313594cdf5bca6d47564fb081b54933252",
+    "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts": "43f42cdef22804eae82f01c926e361563dd422d19f7057aeadbcd59994f4c3e7",
+    "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts": "b621ebc8e09120c13779c400acdb6fd4234ea0f148b8877b5a94882e3b957a58",
+    "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts": "0a943e06ac2fa425b23909a9a728696c2f0dfd9dde9f845e3ebb1e2c28322a3a",
+    "artifacts/api-server/src/vault/application/snapshot/use-cases.ts": "d4e370591f9ec9053186fbce56740b99c4d08c7efb1557bef08bb924b16f3315",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-repository.ts": "36630a012f6285ec2ee0883a52d6a3bab97478e07297c4143f97e34de0a54264",
+    "artifacts/api-server/src/vault/application/snapshot/blob.ts": "f14c4d9185c1d6727962da057e1462eb169f1e8c6052f5fee910db4f65b42ba2",
+    "artifacts/api-server/src/vault/application/snapshot/payload.ts": "5f977a1c3f4b478f21933cb183ea5255f7c82000af9e0c61b905186660f6eadd",
+    "artifacts/api-server/src/vault/application/snapshot/store.ts": "c9fe1b48781ba47991fa5e588228ab457ed68a796187196ed971f3ce6557fa85",
+    "artifacts/api-server/src/vault/security/snapshot-ownership.ts": "4f8e9acb3a145baf0d9d71bac0fa8f0141013427e8d899a119d1caf14d52cd80"
+  },
+  "graph": [
+    {
+      "old": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "new": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "consumers": [
+        "artifacts/api-server/src/lib/dr-test-runner.ts",
+        "artifacts/api-server/src/vault/application/index.ts",
+        "artifacts/api-server/src/vault/application/snapshot/use-cases.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/lib/dr-test-runner.ts",
+          "path": "artifacts/api-server/src/lib/dr-test-runner.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-snapshot.ts",
+          "path": "artifacts/api-server/src/vault/application/snapshot/use-cases.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/vault/application/index.ts",
+          "path": "artifacts/api-server/src/vault/application/index.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/vault/infrastructure/index.ts",
+          "path": "artifacts/api-server/src/vault/application/snapshot/use-cases.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts",
+      "intermediate_owner": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "consumers": [
+        "artifacts/api-server/src/vault/application/snapshot/payload.ts",
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+          "path": "artifacts/api-server/src/vault/application/snapshot/restore.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-snapshot.ts",
+          "path": "artifacts/api-server/src/vault/application/snapshot/use-cases.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts",
+      "consumers": [
+        "artifacts/api-server/src/vault/application/snapshot/use-cases.ts",
+        "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts",
+          "path": "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/routes/vault-snapshot.ts",
+          "path": "artifacts/api-server/src/vault/application/snapshot/use-cases.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts",
+      "consumers": [
+        "artifacts/api-server/src/index.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/index.ts",
+          "path": "artifacts/api-server/src/index.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-trash-purge.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts",
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/bulk.ts",
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+        "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/lib/vault-trash-cron.ts",
+          "path": "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/vault/application/entity/bulk.ts",
+          "path": "artifacts/api-server/src/vault/application/entity/bulk.ts"
+        },
+        {
+          "original": "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+          "path": "artifacts/api-server/src/vault/application/entity/lifecycle.ts"
+        }
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-trash-cron.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts",
+      "consumers": [
+        "artifacts/api-server/src/index.ts"
+      ],
+      "reachable_consumer_paths": [
+        {
+          "original": "artifacts/api-server/src/index.ts",
+          "path": "artifacts/api-server/src/index.ts"
+        }
+      ]
+    }
+  ],
+  "old_path_importers_remaining": [],
+  "status": "PASS"
+}

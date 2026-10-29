@@ -1,0 +1,6 @@
+{
+  "app": "sylo",
+  "roles": { "member": ["vault.read"], "owner": ["vault.read", "vault.write"] },
+  "resources": ["vault"],
+  "defaultDeny": true
+}

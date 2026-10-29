@@ -1,0 +1,504 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-00-A",
+  "title": "Finance source inventory and baseline",
+  "timestamp": "2026-10-14T03:35:03.864Z",
+  "status": "BLOCKED",
+  "statusReason": "The inventory and repository build baseline are complete, but required financial invariants remain unverified: no provider-backed ledger dataset and no Finance-specific unit/integration suite exist. Finance ownership and route parity between the monolith and the extracted service are incomplete.",
+  "commit": {
+    "sha": "023e9989c6796476106ecb8c61a79e524fa8b5fd",
+    "branch": "main",
+    "workingTreeAtStart": "Tracked tree clean; user-uploaded roadmap was the only untracked file."
+  },
+  "scope": "Audit-first/read-only FIN-00-A only. No business logic or route ownership changed; later phases were not executed.",
+  "sourceDiscovery": {
+    "query": "rg --files filtered by finance/payment/ledger/accounting/wallet path/name patterns",
+    "financeNamedFileCount": 91,
+    "categoryCounts": {
+      "api-server": 16,
+      "ayzen-ui": 49,
+      "assurance-docs": 1,
+      "migration-registry": 1,
+      "database-schema": 1,
+      "migrations": 17,
+      "other-finance-match": 2,
+      "assurance-script": 1,
+      "finance-service": 3
+    },
+    "files": [
+      "artifacts/api-server/src/lib/finance-accounting.ts",
+      "artifacts/api-server/src/lib/finance-ai.ts",
+      "artifacts/api-server/src/lib/finance-digest-cron.ts",
+      "artifacts/api-server/src/lib/finance-invoice-reminder-cron.ts",
+      "artifacts/api-server/src/lib/finance-invoice.ts",
+      "artifacts/api-server/src/lib/finance-late-fee-cron.ts",
+      "artifacts/api-server/src/lib/finance-networth-cron.ts",
+      "artifacts/api-server/src/lib/finance-networth.ts",
+      "artifacts/api-server/src/lib/finance-notify.ts",
+      "artifacts/api-server/src/lib/finance-recurring-cron.ts",
+      "artifacts/api-server/src/lib/finance-reminder-cron.ts",
+      "artifacts/api-server/src/lib/finance-report-schedule-cron.ts",
+      "artifacts/api-server/src/lib/finance-wallet-bridge.ts",
+      "artifacts/api-server/src/routes/finance-invoices.ts",
+      "artifacts/api-server/src/routes/finance.ts",
+      "artifacts/api-server/src/routes/payments.ts",
+      "artifacts/ayzen/src/components/finance/finance-amortization.tsx",
+      "artifacts/ayzen/src/components/finance/finance-asset-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-attachments.tsx",
+      "artifacts/ayzen/src/components/finance/finance-book-select.tsx",
+      "artifacts/ayzen/src/components/finance/finance-depreciation.tsx",
+      "artifacts/ayzen/src/components/finance/finance-entry-detail-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-entry-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-entry-list.tsx",
+      "artifacts/ayzen/src/components/finance/finance-goal-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-insights.tsx",
+      "artifacts/ayzen/src/components/finance/finance-invoice-lines.tsx",
+      "artifacts/ayzen/src/components/finance/finance-receipt-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-recurring-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-repayment-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-ui.tsx",
+      "artifacts/ayzen/src/components/finance/finance-widgets.tsx",
+      "artifacts/ayzen/src/config/finance.ts",
+      "artifacts/ayzen/src/lib/finance-api.ts",
+      "artifacts/ayzen/src/pages/finance/invoice-public.tsx",
+      "artifacts/ayzen/src/pages/finance/payment-agreement-public.tsx",
+      "artifacts/ayzen/src/pages/finance/receipt.tsx",
+      "artifacts/ayzen/src/pages/user/finance/accounts.tsx",
+      "artifacts/ayzen/src/pages/user/finance/analytics.tsx",
+      "artifacts/ayzen/src/pages/user/finance/assets.tsx",
+      "artifacts/ayzen/src/pages/user/finance/balance-sheet.tsx",
+      "artifacts/ayzen/src/pages/user/finance/books.tsx",
+      "artifacts/ayzen/src/pages/user/finance/borrowed.tsx",
+      "artifacts/ayzen/src/pages/user/finance/budgets.tsx",
+      "artifacts/ayzen/src/pages/user/finance/cash-flow.tsx",
+      "artifacts/ayzen/src/pages/user/finance/currencies.tsx",
+      "artifacts/ayzen/src/pages/user/finance/custom-report.tsx",
+      "artifacts/ayzen/src/pages/user/finance/dashboard.tsx",
+      "artifacts/ayzen/src/pages/user/finance/expenses.tsx",
+      "artifacts/ayzen/src/pages/user/finance/goals.tsx",
+      "artifacts/ayzen/src/pages/user/finance/income-statement.tsx",
+      "artifacts/ayzen/src/pages/user/finance/interest.tsx",
+      "artifacts/ayzen/src/pages/user/finance/investment-detail.tsx",
+      "artifacts/ayzen/src/pages/user/finance/investments.tsx",
+      "artifacts/ayzen/src/pages/user/finance/invoices.tsx",
+      "artifacts/ayzen/src/pages/user/finance/journal.tsx",
+      "artifacts/ayzen/src/pages/user/finance/ledger.tsx",
+      "artifacts/ayzen/src/pages/user/finance/lending.tsx",
+      "artifacts/ayzen/src/pages/user/finance/payables.tsx",
+      "artifacts/ayzen/src/pages/user/finance/payment-methods.tsx",
+      "artifacts/ayzen/src/pages/user/finance/pnl.tsx",
+      "artifacts/ayzen/src/pages/user/finance/projections.tsx",
+      "artifacts/ayzen/src/pages/user/finance/receivables.tsx",
+      "artifacts/ayzen/src/pages/user/finance/recurring.tsx",
+      "artifacts/ayzen/src/pages/user/finance/trial-balance.tsx",
+      "docs/antas/finance/ledger-integrity.md",
+      "infrastructure/migrations/ledger.json",
+      "lib/db/src/schema/finance.ts",
+      "migrations/018_finance.sql",
+      "migrations/019_finance_v2.sql",
+      "migrations/020_finance_attachments.sql",
+      "migrations/021_finance_receipt.sql",
+      "migrations/024_finance_accounting.sql",
+      "migrations/025_finance_wallet_bridge.sql",
+      "migrations/026_finance_depreciation_and_invoicing.sql",
+      "migrations/027_finance_goals_networth.sql",
+      "migrations/028_finance_digest.sql",
+      "migrations/029_finance_sms_webhook.sql",
+      "migrations/030_finance_multi_book.sql",
+      "migrations/031_finance_invoices_payments.sql",
+      "migrations/032_finance_invoice_automation.sql",
+      "migrations/033_finance_invoice_branding.sql",
+      "migrations/034_finance_invoice_enterprise.sql",
+      "migrations/049_finance_networth_lending_investment.sql",
+      "migrations/beta/apps/finance/manifest.json",
+      "reports/antas/ANTAS-06/reconciliation.json",
+      "reports/antas/vault/gap/VLT-GAP-18/evidence-ledger.json",
+      "scripts/antas/finance/reconcile.mjs",
+      "services/finance/README.md",
+      "services/finance/package.json",
+      "services/finance/src/index.mjs"
+    ],
+    "relatedCrossDomainFiles": [
+      "artifacts/api-server/src/index.ts",
+      "artifacts/api-server/src/routes/index.ts",
+      "apps/api-gateway/src/index.mjs",
+      "apps/api-gateway/src/routing.mjs",
+      "apps/worker/src/index.mjs",
+      "apps/worker/src/consumers.mjs",
+      "packages/domain-boundaries/src/index.mjs",
+      "packages/endpoint-registry/src/index.mjs",
+      "services/search/src/index.mjs",
+      "services/search/src/event-handlers.mjs",
+      "services/search/src/event-handlers.test.mjs",
+      "services/notification/src/index.mjs",
+      "services/workflow/src/index.mjs"
+    ],
+    "financeApiCallerFileCount": 39,
+    "financeApiCallerFiles": [
+      "artifacts/ayzen/src/components/finance/finance-amortization.tsx",
+      "artifacts/ayzen/src/components/finance/finance-asset-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-attachments.tsx",
+      "artifacts/ayzen/src/components/finance/finance-book-select.tsx",
+      "artifacts/ayzen/src/components/finance/finance-depreciation.tsx",
+      "artifacts/ayzen/src/components/finance/finance-entry-detail-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-entry-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-entry-list.tsx",
+      "artifacts/ayzen/src/components/finance/finance-goal-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-insights.tsx",
+      "artifacts/ayzen/src/components/finance/finance-invoice-lines.tsx",
+      "artifacts/ayzen/src/components/finance/finance-receipt-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-recurring-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-repayment-dialog.tsx",
+      "artifacts/ayzen/src/components/finance/finance-widgets.tsx",
+      "artifacts/ayzen/src/lib/receipt-api.ts",
+      "artifacts/ayzen/src/pages/finance/receipt.tsx",
+      "artifacts/ayzen/src/pages/user/finance/accounts.tsx",
+      "artifacts/ayzen/src/pages/user/finance/analytics.tsx",
+      "artifacts/ayzen/src/pages/user/finance/assets.tsx",
+      "artifacts/ayzen/src/pages/user/finance/balance-sheet.tsx",
+      "artifacts/ayzen/src/pages/user/finance/books.tsx",
+      "artifacts/ayzen/src/pages/user/finance/budgets.tsx",
+      "artifacts/ayzen/src/pages/user/finance/cash-flow.tsx",
+      "artifacts/ayzen/src/pages/user/finance/currencies.tsx",
+      "artifacts/ayzen/src/pages/user/finance/custom-report.tsx",
+      "artifacts/ayzen/src/pages/user/finance/dashboard.tsx",
+      "artifacts/ayzen/src/pages/user/finance/goals.tsx",
+      "artifacts/ayzen/src/pages/user/finance/income-statement.tsx",
+      "artifacts/ayzen/src/pages/user/finance/interest.tsx",
+      "artifacts/ayzen/src/pages/user/finance/investment-detail.tsx",
+      "artifacts/ayzen/src/pages/user/finance/investments.tsx",
+      "artifacts/ayzen/src/pages/user/finance/invoices.tsx",
+      "artifacts/ayzen/src/pages/user/finance/journal.tsx",
+      "artifacts/ayzen/src/pages/user/finance/ledger.tsx",
+      "artifacts/ayzen/src/pages/user/finance/pnl.tsx",
+      "artifacts/ayzen/src/pages/user/finance/projections.tsx",
+      "artifacts/ayzen/src/pages/user/finance/recurring.tsx",
+      "artifacts/ayzen/src/pages/user/finance/trial-balance.tsx"
+    ]
+  },
+  "architectureInventory": {
+    "monolithApiRouteDeclarations": 109,
+    "separatePaymentsWebhookDeclarations": 1,
+    "endpointRegistryFinanceRecords": 111,
+    "financeServiceHandlerBranches": 4,
+    "financeSchemaTableDefinitions": 24,
+    "financeSqlMigrationCount": 16,
+    "financeSqlMigrations": [
+      "migrations/018_finance.sql",
+      "migrations/019_finance_v2.sql",
+      "migrations/020_finance_attachments.sql",
+      "migrations/021_finance_receipt.sql",
+      "migrations/024_finance_accounting.sql",
+      "migrations/025_finance_wallet_bridge.sql",
+      "migrations/026_finance_depreciation_and_invoicing.sql",
+      "migrations/027_finance_goals_networth.sql",
+      "migrations/028_finance_digest.sql",
+      "migrations/029_finance_sms_webhook.sql",
+      "migrations/030_finance_multi_book.sql",
+      "migrations/031_finance_invoices_payments.sql",
+      "migrations/032_finance_invoice_automation.sql",
+      "migrations/033_finance_invoice_branding.sql",
+      "migrations/034_finance_invoice_enterprise.sql",
+      "migrations/049_finance_networth_lending_investment.sql"
+    ],
+    "databaseModel": "The monolith Finance schema uses real-valued amount columns. The existing finance-accounting layer mirrors the kind-based ledger into journal entries; the kind-based ledger remains the documented day-to-day source of truth.",
+    "extractedServiceModel": "services/finance uses integer amountCents and its own service-state collections for accounts and transactions; it is a partial boundary, not a replacement for the monolith Finance API.",
+    "schedulerAndIntegrationFiles": [
+      "artifacts/api-server/src/index.ts",
+      "artifacts/api-server/src/lib/finance-recurring-cron.ts",
+      "artifacts/api-server/src/lib/finance-reminder-cron.ts",
+      "artifacts/api-server/src/lib/finance-networth-cron.ts",
+      "artifacts/api-server/src/lib/finance-digest-cron.ts",
+      "artifacts/api-server/src/lib/finance-report-schedule-cron.ts",
+      "artifacts/api-server/src/lib/finance-invoice-reminder-cron.ts",
+      "artifacts/api-server/src/lib/finance-late-fee-cron.ts",
+      "artifacts/api-server/src/lib/finance-wallet-bridge.ts",
+      "artifacts/api-server/src/services/deposit-watcher.ts",
+      "artifacts/api-server/src/routes/wallets.ts",
+      "lib/db/src/schema/chain-deposits.ts",
+      "lib/db/src/schema/wallets.ts"
+    ],
+    "eventContract": {
+      "emitted": [
+        "finance.transaction.created"
+      ],
+      "consumers": [
+        "notification",
+        "search",
+        "workflow"
+      ],
+      "searchFetchesTransactionById": true
+    },
+    "financeNamedTestsFound": [],
+    "packageScripts": {
+      "rootBuild": "pnpm run build (runs root typecheck, then recursive builds)",
+      "rootTest": null,
+      "rootLint": null,
+      "financeService": "services/finance has start only; no test/typecheck/build script"
+    },
+    "ci": ".github/workflows/ci.yml installs frozen pnpm lock, runs repository validators and pnpm build; it contains no test command and no Finance-specific invariant test."
+  },
+  "migrationMap": [
+    {
+      "source": "artifacts/api-server/src/routes/finance.ts; artifacts/api-server/src/routes/finance-invoices.ts",
+      "currentOwner": "@workspace/api-server monolith",
+      "targetOwner": "Finance API compatibility boundary; keep monolith authoritative until route parity is proven",
+      "consumers": "Ayzen finance API client (39 caller files); endpoint registry; auth/policy middleware; finance database schema",
+      "status": "RETAINED — 109 handler declarations remain in the monolith; no migration performed",
+      "notes": "Routes include ledger CRUD/repayments, books, assets, reports, invoices, public token/passkey flows. Do not route the whole prefix to the service until every contract has an owner."
+    },
+    {
+      "source": "artifacts/api-server/src/lib/finance-accounting.ts; artifacts/api-server/src/lib/finance-invoice.ts; artifacts/api-server/src/lib/finance-networth.ts; artifacts/api-server/src/lib/finance-ai.ts; artifacts/api-server/src/lib/invoice-pdf.ts; artifacts/api-server/src/lib/receipt-theme.ts",
+      "currentOwner": "@workspace/api-server Finance libraries",
+      "targetOwner": "Finance domain/application/infrastructure modules within the existing server first; service only after dependencies and contracts are proven",
+      "consumers": "finance.ts; finance-invoices.ts; recurring/reminder/report jobs; notification and wallet bridge modules",
+      "status": "PARTIAL MAP — modules are separated by concern but have no finance test suite; extraction ownership/order unproven",
+      "notes": "Current kind-based ledger drives day-to-day UI; finance-accounting mirrors postings into journal tables. Invoice totals use explicit two-decimal rounding."
+    },
+    {
+      "source": "artifacts/api-server/src/lib/finance-*-cron.ts",
+      "currentOwner": "@workspace/api-server scheduled jobs",
+      "targetOwner": "Finance application jobs or existing scheduler boundary; keep current scheduler registrations until ownership is verified",
+      "consumers": "artifacts/api-server/src/index.ts; database tables; email/Telegram and report rendering",
+      "status": "RETAINED — recurring, reminders, digest, net-worth, report schedules, invoice reminders, and late fees are registered in monolith",
+      "notes": "Run/retry and transaction semantics need characterization before moving jobs."
+    },
+    {
+      "source": "artifacts/api-server/src/lib/finance-wallet-bridge.ts; artifacts/api-server/src/services/deposit-watcher.ts; migrations/025_finance_wallet_bridge.sql",
+      "currentOwner": "Finance/Wallet integration in @workspace/api-server",
+      "targetOwner": "Finance integration boundary with wallet/deposit source ownership explicitly preserved",
+      "consumers": "chain-deposit watcher, wallets schema, finance ledger and journal posting",
+      "status": "RETAINED — event/source idempotency consumers mapped; no behavior or provider checks run",
+      "notes": "Keep wallet deposits and withdrawals distinct; bridge is a cross-domain money-movement path."
+    },
+    {
+      "source": "lib/db/src/schema/finance.ts; 16 migrations/*_finance.sql; infrastructure/migrations/ledger.json; migrations/beta/apps/finance/manifest.json",
+      "currentOwner": "@workspace/db shared PostgreSQL schema and migration registry",
+      "targetOwner": "Finance persistence owner (unresolved for extracted service)",
+      "consumers": "monolith routes/jobs; generated DB package; service state store is separately defined",
+      "status": "BLOCKED — monolith Finance uses real-valued monetary columns; finance service uses integer amountCents and separate state stores",
+      "notes": "No schema redesign or migration performed. Define conversion, currency, transaction, and source-of-truth rules before data migration."
+    },
+    {
+      "source": "artifacts/ayzen/src/components/finance/**; artifacts/ayzen/src/pages/user/finance/**; artifacts/ayzen/src/lib/finance-api.ts; artifacts/ayzen/src/config/finance.ts",
+      "currentOwner": "@workspace/ayzen frontend",
+      "targetOwner": "Ayzen UI remains client of stable Finance API compatibility contracts",
+      "consumers": "39 files call financeApi; Finance pages/components and public invoice/receipt routes",
+      "status": "RETAINED — 49 Finance-named frontend files; no client/API contract changes",
+      "notes": "Public and authenticated screens depend on broad monolith route coverage."
+    },
+    {
+      "source": "services/finance/src/index.mjs; services/finance/package.json; services/finance/README.md",
+      "currentOwner": "@ayzen/finance-service candidate boundary",
+      "targetOwner": "Finance service for its explicitly implemented account/transaction subset",
+      "consumers": "endpoint registry and API gateway; worker/search event consumers",
+      "status": "PARTIAL — 4 handler branches found; not a replacement for the monolith API",
+      "notes": "Gateway registry maps /api/finance as a prefix when FINANCE_SERVICE_URL is configured. Service currently handles account GET/POST and transaction POST/GET only; it has separate amountCents/state-store semantics."
+    },
+    {
+      "source": "packages/endpoint-registry/src/index.mjs; packages/domain-boundaries/src/index.mjs; apps/api-gateway/src/routing.mjs",
+      "currentOwner": "Gateway/domain contract registries",
+      "targetOwner": "Keep gateway and domain contract as routing/compatibility metadata; Finance service is not yet route-complete",
+      "consumers": "API gateway; monolith fallback; finance service contract and route tests",
+      "status": "PARTIAL — 111 finance-prefixed registry records; existing routing tests prove fallback/opt-in mechanics, not API parity",
+      "notes": "All /api/finance paths can be forwarded together; service coverage is much smaller, so do not enable it as a cutover."
+    },
+    {
+      "source": "apps/worker/src/consumers.mjs; services/search/src/event-handlers.mjs; services/notification/src/index.mjs; services/workflow/src/index.mjs",
+      "currentOwner": "Existing event consumer services",
+      "targetOwner": "Retain ownership in notification/search/workflow; preserve finance.transaction.created contract",
+      "consumers": "finance service publisher; worker dispatcher; search fetches transaction by id; notification/workflow subscribers",
+      "status": "MAPPED — targeted consumer tests pass; provider-backed delivery/retry behavior not verified",
+      "notes": "Finance service declares finance.transaction.created; consumers are outside Finance source ownership."
+    },
+    {
+      "source": "artifacts/api-server/src/routes/payments.ts",
+      "currentOwner": "@workspace/api-server payments webhook",
+      "targetOwner": "Separate payment-provider/commerce owner pending explicit scope",
+      "consumers": "endpoint registry; Coingate webhook path",
+      "status": "SCOPE UNRESOLVED — adjacent payments webhook is not under /api/finance and is not assumed part of this extraction",
+      "notes": "Do not silently merge subscription/checkout payments into the Finance service boundary."
+    },
+    {
+      "source": "scripts/antas/finance/reconcile.mjs; docs/antas/finance/ledger-integrity.md",
+      "currentOwner": "ANTAS finance assurance evidence",
+      "targetOwner": "ANTAS finance reports / assurance gates",
+      "consumers": "FIN-00-A baseline; finance migration and invariant verification",
+      "status": "STATIC CONTRACT PASS; financial checks UNVERIFIED without provider-backed ledger data",
+      "notes": "Reconciliation script only validates marker presence and explicitly leaves accounting checks UNVERIFIED."
+    }
+  ],
+  "proposedFirstExtraction": {
+    "status": "PROPOSED_NOT_IMPLEMENTED",
+    "source": "computeLineItemsTotal and computeInvoiceTotals in artifacts/api-server/src/lib/finance-invoice.ts",
+    "target": "A small Finance domain module inside the existing API server; retain a compatibility re-export from finance-invoice.ts.",
+    "consumers": [
+      "artifacts/api-server/src/routes/finance-invoices.ts",
+      "artifacts/api-server/src/lib/finance-invoice.ts (recurring invoice generation)"
+    ],
+    "rationale": "These calculation functions are pure and isolated from the database once separated, so they are the smallest existing logic slice to characterize before moving.",
+    "requiredProofBeforeExtraction": [
+      "characterize current rounding at cent and half-cent boundaries",
+      "cover quantity, discount and tax behavior",
+      "preserve callers and public invoice totals",
+      "do not change persistence representation or business behavior"
+    ]
+  },
+  "baselineCommands": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0,
+      "result": "Installed 929 locked packages; lockfile and package manifests unchanged."
+    },
+    {
+      "command": "pnpm run build",
+      "exitCode": 0,
+      "result": "Root typecheck and recursive workspace builds passed. Vite emitted a >500 kB chunk warning; build completed."
+    },
+    {
+      "command": "node --test apps/api-gateway/src/routing.test.mjs",
+      "exitCode": 0,
+      "tests": 10,
+      "passed": 10,
+      "failed": 0,
+      "result": "Gateway fallback/opt-in route selection tests passed."
+    },
+    {
+      "command": "node --test apps/worker/src/consumers.test.mjs",
+      "exitCode": 0,
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "result": "Worker event dispatch tests passed."
+    },
+    {
+      "command": "node --test services/search/src/event-handlers.test.mjs",
+      "exitCode": 0,
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "result": "Search consumer tests passed, including finance.transaction.created lookup and missing-source behavior."
+    },
+    {
+      "command": "node scripts/antas/finance/reconcile.mjs (in isolated temporary copy of the current script and service source)",
+      "exitCode": 0,
+      "result": "Script reported UNVERIFIED: debitsEqualCredits, balanceEquation, postedTransactionsImmutable, and providerBackedReconciliation. No provider-backed ledger data supplied; existing ANTAS-06 report was not overwritten."
+    }
+  ],
+  "currentCheckoutRevalidation": {
+    "timestamp": "2026-10-14T04:21:25.204Z",
+    "commit": {
+      "sha": "45f9ece9b535ee4cf27c605d75cd2da5dee22acc",
+      "workingTreeBeforeChecks": "Tracked tree clean; the user-provided roadmap was untracked."
+    },
+    "commands": [
+      {
+        "command": "pnpm install --frozen-lockfile",
+        "exitCode": 0,
+        "result": "Installed 929 locked packages; lockfile unchanged."
+      },
+      {
+        "command": "pnpm run build",
+        "exitCode": 0,
+        "result": "Workspace typecheck and recursive builds passed; Vite emitted existing sourcemap and large-chunk warnings."
+      },
+      {
+        "command": "pnpm validate:finance-boundaries",
+        "exitCode": 0,
+        "result": "18 Finance sources scanned; zero findings."
+      },
+      {
+        "command": "pnpm --filter @workspace/api-server exec node --test --import tsx src/finance/domain/invoice-totals.test.ts",
+        "exitCode": 0,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0
+      },
+      {
+        "command": "node --test apps/api-gateway/src/routing.test.mjs apps/worker/src/consumers.test.mjs services/search/src/event-handlers.test.mjs packages/service-runtime/test/capability-gate.test.mjs",
+        "exitCode": 1,
+        "tests": 35,
+        "passed": 34,
+        "failed": 1,
+        "result": "Existing SERVICE_CAPABILITY_GATE=report assertion failed at packages/service-runtime/test/capability-gate.test.mjs:217: actual 403, expected 200."
+      }
+    ],
+    "firstPureExtraction": "FIN-02 invoice totals is complete; see fin-02-evidence.json.",
+    "disposableDatabaseAttempt": {
+      "status": "BLOCKED",
+      "result": "A temporary local PostgreSQL cluster was created; drizzle-kit push reported schema changes applied, but the first Finance query failed because relation finance_books did not exist.",
+      "cleanup": "The temporary cluster and data directory were stopped and deleted. No existing project database or production data was used.",
+      "limitation": "The reason the pushed schema did not expose finance_books was not resolved; no database-backed Finance test passed."
+    },
+    "configuredDatabaseConnection": {
+      "status": "FAILED_READ_ONLY_PREFLIGHT",
+      "secretPresence": "DATABASE_URL is configured; its value was not displayed or recorded.",
+      "apiServerPoolSqlState": "XX000",
+      "developmentDatabaseErrorCode": "ENOTFOUND",
+      "result": "The configured database tenant/user was not found.",
+      "writesAttempted": false
+    },
+    "status": "BLOCKED",
+    "statusReason": "No usable disposable Finance database connection or ledger fixture is available; the extracted service remains incomplete and uses different persistence/money semantics; the shared service-runtime baseline retains one failing test.",
+    "businessLogicChanged": false,
+    "notes": [
+      "The build's generated date-only change to infrastructure/platform/feature-circuits.json was restored.",
+      "No Finance routes, schemas, migrations, or consumers were changed."
+    ]
+  },
+  "currentDatabaseRevalidation": {
+    "timestamp": "2026-10-15T20:01:22Z",
+    "databaseTarget": "Replit-managed development database, selected for explicit test runs with DATABASE_URL_TARGET=replit-test.",
+    "databaseConnectionSplit": "Application code selects APP_DATABASE_URL when present; the Replit test target selects the runtime-managed DATABASE_URL. APP_DATABASE_URL is not yet configured, so the app currently falls back to Replit's managed database.",
+    "schemaPush": {
+      "result": "A purported Finance-only Drizzle push ignored the configured tablesFilter and applied the full application schema to public.",
+      "existingRateLimitTable": "rate_limit_buckets remains present.",
+      "dataOperations": "No migration/backfill scripts were run; no tables were dropped. No Supabase schema or data was changed.",
+      "followUp": "Do not run another broad schema push against this test database."
+    },
+    "financeDatabaseTests": {
+      "command": "pnpm --filter @workspace/api-server test:finance-db",
+      "exitCode": 0,
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "coverage": [
+        "Balanced 125.50 journal posting in a resolved Finance book.",
+        "Two concurrent 40.00 principal decrements against a 100.00 ledger amount leave 20.00 and status partial."
+      ],
+      "cleanup": "After-hook deleted all test-owned rows. Follow-up counts were zero for negative-user books, ledger entries, accounts, and journal entries."
+    },
+    "sourceMovement": "Moved the existing atomic principal-decrement SQL and 0.01 status threshold from the repayment route to finance-accounting.ts; calculation semantics were preserved.",
+    "stillUnverified": [
+      "Authenticated Finance HTTP route parity and authorization/cross-account isolation.",
+      "Journal rollback and duplicate journal retries.",
+      "Repayment duplicate-request idempotency and end-to-end transactional rollback.",
+      "Provider-backed reconciliation and production recovery."
+    ],
+    "overallStatus": "BLOCKED",
+    "statusReason": "The Finance service remains a partial account/transaction candidate with different amount and persistence semantics from the monolith. Keep all Finance route cutover and legacy retirement disabled until full route parity and money-critical invariants are demonstrated."
+  },
+  "notRun": [
+    "Finance ledger posting, rollback, retry/idempotency, concurrency, and accounting invariant integration tests: no Finance ledger integration suite or safe disposable database fixture is available; the existing 4 tests cover invoice totals only.",
+    "Provider-backed ledger reconciliation and real accounting invariants: no approved ledger dataset was supplied; no balances were fabricated.",
+    "Runtime/staging/production drills and destructive recovery: not run; outside this audit-only sub-phase.",
+    "Repository-wide CI validators beyond the build: not run because they are not Finance-specific and can generate unrelated evidence."
+  ],
+  "filesChanged": [
+    "reports/antas/finance/FIN-00-A.md",
+    "reports/antas/finance/fin-00-a-evidence.json",
+    "reports/antas/finance/fin-00-a-migration-map.csv"
+  ],
+  "limitations": [
+    "The 109 API handler declarations and 111 finance route-registry records come from different registries and are not asserted to be one-to-one.",
+    "The generated build updated infrastructure/platform/feature-circuits.json generatedAt; that build-only date change was restored to its pre-run value. No unrelated tracked diff remains.",
+    "No Git commit was created."
+  ],
+  "nextSafeStep": "Provide or approve a non-production ledger dataset and add characterization tests for current amount/rounding behavior; then rerun the blocked finance invariant baseline before implementing the proposed extraction.",
+  "evidencePaths": {
+    "report": "reports/antas/finance/FIN-00-A.md",
+    "machineReadable": "reports/antas/finance/fin-00-a-evidence.json",
+    "migrationMap": "reports/antas/finance/fin-00-a-migration-map.csv"
+  },
+  "workingTreeAfterEvidence": "## main\n?? attached_assets/ANTAS_Modular_Finance_Lightweight_Claude_Roadmap_1791948406379.md\n?? reports/antas/finance/"
+}

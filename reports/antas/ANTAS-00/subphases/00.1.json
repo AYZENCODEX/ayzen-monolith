@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-00.1",
+  "phase": "ANTAS-00",
+  "name": "Repository Inventory",
+  "generatedAt": "2026-09-29T06:06:06.714Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "scripts/antas/inventory-repository.mjs",
+    "reports/antas/baseline/repository-inventory.json"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

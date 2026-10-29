@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "signals": ["duplicate-module", "unused-api", "unused-event", "coupling", "latency", "resource-hotspot"],
+  "evidenceRequired": ["runtime-observation", "owner", "measurement-window"],
+  "output": "recommendation",
+  "automaticProductionMutation": false,
+  "approvalRequired": true
+}

@@ -1,0 +1,7 @@
+{
+  "roadmap": "integrated-enforcement-26-30",
+  "status": "READY",
+  "method": "scripts/validate-shared-platform-1-30.mjs",
+  "scope": ["graph", "contracts", "circuit", "runtime-enforcement", "recovery"],
+  "note": "Generated certification evidence is refreshed by the phase 1–30 validator."
+}

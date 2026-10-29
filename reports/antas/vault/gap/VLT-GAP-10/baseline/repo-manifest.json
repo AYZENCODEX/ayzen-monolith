@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-10",
+  "sub_phase": "08-census",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "326e54b0072474e2d269f2bb6974ab08b166267ff4cfd76223d6be85d8f72c64",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/vault-shares.ts": "9b33fa8f0d1276debe9e58d8204a9f1b0504f5f9f24506798b651b8adf151758",
+    "artifacts/api-server/src/routes/vault-attachments.ts": "2f700c2dfbb078972cd25c84c557fab1b16b02327afc53e1102b2a134d128cea"
+  },
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-10/baseline/sources/artifacts__api__server__src__routes__vault__shares__ts",
+      "sha256": "9b33fa8f0d1276debe9e58d8204a9f1b0504f5f9f24506798b651b8adf151758",
+      "lines": 786,
+      "symbols": 21,
+      "exported": 3
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-10/baseline/sources/artifacts__api__server__src__routes__vault__attachments__ts",
+      "sha256": "2f700c2dfbb078972cd25c84c557fab1b16b02327afc53e1102b2a134d128cea",
+      "lines": 300,
+      "symbols": 8,
+      "exported": 0
+    }
+  ],
+  "moves": {},
+  "status": "PASS"
+}

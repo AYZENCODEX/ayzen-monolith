@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-11",
+  "sub_phase": "08-census",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "74d0e9590b85cbef5996025e049b66ef17d7e9713cbeb1308ca0ab796f0003b6",
+  "source_hashes": {
+    "artifacts/api-server/src/lib/vault-health-scan.ts": "544709220a6d99c0ca02a2b9c8fa843cbb6824325103fd7bb2375e82f375cef0",
+    "artifacts/api-server/src/lib/vault-health-cron.ts": "33bf4814731060294679de6ad87b8f360bfbefd3d16ed9e5634b2f7937c57c98",
+    "artifacts/api-server/src/routes/vault.ts": "1d4fd569c08ab4c53aa5dc1eafdf1b2e92f0ad1f84d0e20ab1278e72d1f00e2e"
+  },
+  "records": [
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "name": "FlaggedEntry",
+      "kind": "type",
+      "exported": false,
+      "lines": [
+        44,
+        48
+      ],
+      "body_sha256": "d0c095451ab4a14f27f4f00dc6b0706003012acbe23d49f77e4fc79f15e8ad23",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "name": "DailyScanResult",
+      "kind": "type",
+      "exported": true,
+      "lines": [
+        50,
+        54
+      ],
+      "body_sha256": "1d57aa00b36b78a6dc58146186f5598b49ce5e9de81e3454b1b10bf4c334ec86",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "name": "persistFlags",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        57,
+        67
+      ],
+      "body_sha256": "b32cac1a868ebf20074677ee2d33379374017a9d9a60fa17bfe3c83fd76f36fc",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "name": "persistRawFlags",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        74,
+        84
+      ],
+      "body_sha256": "767620afe17ae03609e1aed2eb9d2bc868340681b109751a05963e44c3eedad0",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "name": "persistWalletFlags",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        86,
+        96
+      ],
+      "body_sha256": "c7163ea3f98081fbcf96f7fec0181a5c959dd5100eb397881b0d47e8ff950558",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "name": "runDailyHealthScan",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        104,
+        274
+      ],
+      "body_sha256": "afdede320f08229c3006fd6eef9c983bbc153ee299f46766c5abb0e0e34bc900",
+      "db_ops": true,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "name": "DIGEST_INTERVAL_MS",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        276,
+        280
+      ],
+      "body_sha256": "541b23075d46b3e9b4f5aa19884692afdc97a494e0ed7439cb12249158504f53",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "name": "isDigestDue",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        283,
+        287
+      ],
+      "body_sha256": "888f985d1b4dccecc362b4bff3ac7d72fa31b72a8ae29aa0f7a10d78ce8a2bea",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "name": "deliverDigest",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        289,
+        319
+      ],
+      "body_sha256": "93da162e97e120cdf431d54e6338658cdc9c752549803899d649f2028b52e1f0",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-cron.ts",
+      "name": "scheduled",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        22,
+        22
+      ],
+      "body_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-health-cron.ts",
+      "name": "startVaultHealthCron",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        24,
+        44
+      ],
+      "body_sha256": "8cd1d0476c807ed8192870f161d8e9794b4d715a44d68a26e56b85a03231d243",
+      "db_ops": false,
+      "provider_ops": true
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "name": "router",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        36,
+        36
+      ],
+      "body_sha256": "bda692dc52aa8238226acd3c84b38be744a6ff60086dd7ce0929fb8c12f36d87",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "name": "lifecycleDeps",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        40,
+        40
+      ],
+      "body_sha256": "6fd593ac236c71cdc77412eee31afeb6ac74ccf6f8130e84f027a631480819e7",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "name": "updateDeps",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        44,
+        44
+      ],
+      "body_sha256": "0398d49fa1107b62e07d3672057120761d92754625e0034398748b903604512f",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "name": "secretDeps",
+      "kind": "const",
+      "exported": false,
+      "lines": [
+        47,
+        47
+      ],
+      "body_sha256": "612330abcaf0cbe565ce6aaad7fcf614bfb2d6a056424cfa3da92e8227931044",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "name": "toHealthInput",
+      "kind": "function",
+      "exported": true,
+      "lines": [
+        80,
+        93
+      ],
+      "body_sha256": "f21592c6f1e8a5728c08e2309cac1bd6b58ed78fb9689ae67a2778b3284b4d77",
+      "db_ops": false,
+      "provider_ops": false
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "name": "runHealthCheck",
+      "kind": "function",
+      "exported": false,
+      "lines": [
+        95,
+        154
+      ],
+      "body_sha256": "6e7b880cb83f74705d9d50e96ecc9a80c7c866413b6f5209f8dc97007b08b225",
+      "db_ops": true,
+      "provider_ops": true
+    }
+  ],
+  "consumers": {
+    "artifacts/api-server/src/lib/vault-health-cron.ts": [
+      "artifacts/api-server/src/index.ts"
+    ],
+    "artifacts/api-server/src/lib/vault-health-scan.ts": [
+      "artifacts/api-server/src/lib/vault-health-cron.ts",
+      "artifacts/api-server/src/vault/infrastructure/index.ts"
+    ]
+  },
+  "summary": {
+    "files": 3,
+    "symbols": 17,
+    "db_symbols": 5,
+    "provider_symbols": 3,
+    "consumers": 3
+  },
+  "status": "PASS"
+}

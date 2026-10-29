@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-18.2",
+  "phase": "ANTAS-18",
+  "name": "Final Gate and Evidence Pack",
+  "generatedAt": "2026-09-29T06:06:06.721Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "docs/antas/certification/go-live.md",
+    "docs/operations/go-live-checklist.md",
+    "reports/antas/ANTAS-18/certification.json"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

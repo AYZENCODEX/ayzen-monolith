@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ayzen.events.compatibility.v1",
+  "type": "object",
+  "required": ["eventType", "version", "producer", "consumers", "fields"],
+  "properties": {
+    "eventType": {"type": "string", "minLength": 1},
+    "version": {"type": "integer", "minimum": 1},
+    "producer": {"type": "string", "minLength": 1},
+    "consumers": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "fields": {"type": "object", "additionalProperties": {"type": "object", "required": ["type", "required"], "properties": {"type": {"type": "string"}, "required": {"type": "boolean"}}}}
+  },
+  "additionalProperties": true
+}

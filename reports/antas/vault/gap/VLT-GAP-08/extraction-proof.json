@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-08",
+  "sub_phase": "08-extract",
+  "commit_sha": "524e5e0c5a404eb98c85a22aa9a6678a672e5a4a",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "d93de6186843ccec6e0f48e2de5b731e0c0a391b6401b1bc7c63789317d6e49e",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/crypto/backup-envelope.ts": "dec7cd169a84dd45151ef24f32e97cd62d4fb8d25e84774f5c370b9c727614c4",
+    "artifacts/api-server/src/vault/infrastructure/backup/audit.ts": "b205da45f2a75e4c7fc2df8406d9fbb1caf9672038fa0f9d4d990728e26e7592",
+    "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts": "610338d0f11597461cf1e51f7e304c779ac1504b32e220854e5ab66aa62cd66b",
+    "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts": "5ca8bf37abb130fab7eb074ef8ce405990c5a73631ee43d43277c18191878a9f",
+    "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts": "86b73dcec2e566ee18e6b3c43d454096fbd96856017c07cd761ea6e92fc74963",
+    "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts": "cc070b7d3fb2917186f90770e3dd660be890d80b8a293db00656e90bf9f5bfe3",
+    "artifacts/api-server/src/vault/application/backup/schedule-cron.ts": "b9e8d9b2a7e4c2fe7f479723abd1ebe596d93bdd2d55e112f1006237721ffa44",
+    "artifacts/api-server/src/vault/application/backup/key.ts": "e4037ac80d22cbe1dbe596e590e7377fd06207bff5af0df3fb25edd4644b9ab5",
+    "artifacts/api-server/src/vault/application/backup/cloud-connection.ts": "13dce75423d1fe5b66e61547dfd67c112f5e479915a1df3d9c0e26927eca3060",
+    "artifacts/api-server/src/vault/application/backup/schedule.ts": "a4b4689a75de20d380405f94ccbf4437d2038a7bdc33c6abcbd086a7cca6a52c",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-repository.ts": "86826e01236c383df99ab02fd3d8be1a4986392cb461f8d260633a02ec4803b2"
+  },
+  "proof": [
+    {
+      "symbol": "deriveKekLegacy",
+      "from": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "to": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "symbol_successor": "packages/vault-crypto/src/aes-gcm.mjs#deriveLegacyAesKey",
+      "successor_reason": "Private KEK derivation now uses the shared crypto package's exported legacy-compatible derivation helper.",
+      "differential_verified": true
+    },
+    {
+      "from": "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "to": "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "symbols_preserved": 24,
+      "identical_modulo_imports": false,
+      "refinement_evidence": "live gap differential",
+      "refinement_reason": "The AES-GCM implementation now uses the shared vault-crypto owner; the live GAP-08 differential verifies the backup-envelope contract."
+    },
+    {
+      "from": "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/backup/audit.ts",
+      "symbols_preserved": 9,
+      "identical_modulo_imports": false,
+      "refinement_evidence": "live gap differential",
+      "refinement_reason": "The owner was subsequently aligned with the GAP-12 repository boundary; the live GAP-08 differential verifies its current behavior."
+    },
+    {
+      "from": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts",
+      "symbols_preserved": 32,
+      "identical_modulo_imports": false,
+      "refinement_evidence": "live gap differential",
+      "refinement_reason": "The owner was subsequently aligned with the GAP-12 infrastructure boundary; the live GAP-08 differential verifies its current behavior."
+    },
+    {
+      "from": "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts",
+      "symbols_preserved": 7,
+      "identical_modulo_imports": false,
+      "refinement_evidence": "live gap differential",
+      "refinement_reason": "The owner was subsequently aligned with the GAP-12 infrastructure boundary; the live GAP-08 differential verifies its current behavior."
+    },
+    {
+      "from": "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts",
+      "symbols_preserved": 5,
+      "identical_modulo_imports": true
+    },
+    {
+      "from": "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts",
+      "symbols_preserved": 5,
+      "identical_modulo_imports": false,
+      "refinement_evidence": "live gap differential",
+      "refinement_reason": "The owner was subsequently aligned with the GAP-12 repository boundary; the live GAP-08 differential verifies its current behavior."
+    },
+    {
+      "from": "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "to": "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "symbols_preserved": 13,
+      "identical_modulo_imports": false,
+      "refinement_evidence": "live gap differential",
+      "refinement_reason": "The owner was subsequently aligned with the GAP-12 repository boundary; the live GAP-08 differential verifies its current behavior."
+    },
+    {
+      "route": "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "owner": "artifacts/api-server/src/vault/application/backup/key.ts",
+      "symbols": [
+        "getBackupKeyStatus",
+        "rotateBackupKey",
+        "getAdminBackupAuditLog"
+      ]
+    },
+    {
+      "route": "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "owner": "artifacts/api-server/src/vault/application/backup/cloud-connection.ts",
+      "symbols": [
+        "listOwnCloudConnections",
+        "startCloudConnect",
+        "handleCloudCallback",
+        "disconnectCloud"
+      ]
+    },
+    {
+      "route": "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "owner": "artifacts/api-server/src/vault/application/backup/schedule.ts",
+      "symbols": [
+        "getSchedule",
+        "saveSchedule",
+        "runScheduleNow",
+        "listDeliveries",
+        "getOwnAuditLog"
+      ]
+    }
+  ],
+  "status": "PASS"
+}

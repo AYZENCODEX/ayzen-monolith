@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-01a",
+  "status": "PASS_STATIC_ONLY",
+  "date": "2026-10-23",
+  "commitSha": "UNAVAILABLE",
+  "done": [
+    "scripts/antas/marketplace/characterization: extractors, pins.json, 23 node:test tests (pnpm test:marketplace-static), runnable with plain node, no install",
+    "pins: fee constants, percent and rounding expressions, status literals, debit guards, FOR UPDATE order per file; ordered write statements, transaction/lock order and response shapes for 60 routes that write or use a transaction; 42 REAL columns",
+    "mutation-checked on the real tree: changed fee, removed NFT status guard and a lock-order change fail; a comment-only change passes",
+    "transaction hygiene read per handler: all 16 BEGIN statements have COMMIT, ROLLBACK and release() in finally (earlier counts of 17 and of extra pool.connect calls were comment text). CORRECTED in MKT-01b: this was a per-handler token count, not a per-path check; the path-by-path scan found one early return without ROLLBACK (MKT-ISSUE-8)"
+  ],
+  "findingsRecorded": [
+    "MKT-ISSUE-6 (AZN/USDT buy not concurrency-safe)",
+    "MKT-ISSUE-7 (P2P buy not atomic)"
+  ],
+  "notDone": [
+    "MKT-01b: no handler was executed; no Postgres, pg driver or express in the sandbox. Plan: docs/antas/marketplace/marketplace-characterization-plan.md",
+    "issues 6 and 7 are read from code and not reproduced",
+    "typecheck/build baseline still UNAVAILABLE"
+  ],
+  "nextPhase": "MKT-01b on the real checkout, then MKT-03 kernel"
+}

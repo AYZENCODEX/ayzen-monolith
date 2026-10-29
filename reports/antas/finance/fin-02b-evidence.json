@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-02B",
+  "title": "Extract pure invoice formatting (formatInvoiceNumber, amountInWords) into finance/domain",
+  "timestamp": "2026-10-16T06:40:00Z",
+  "status": "PASS",
+  "statusReason": "FIN-02B behavior-preservation evidence from the original run is unchanged; the previously unrun typecheck, build, consumer and database checks were later run with exit 0 in the FIN-02D full verification (see promotion).",
+  "commit": {
+    "sha": "UNAVAILABLE",
+    "workingTreeAtStart": "Uploaded archive without .git; earlier FIN evidence cites 023e9989, a5df0e67 and 45f9ece9, which cannot be bound to this tree.",
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "baseShaSource": "fin-02d-evidence.json"
+  },
+  "objective": "Move the pure invoice numbering and amount-in-words implementation to one canonical owner and remove the second identical copy in lib/invoice-pdf.ts, without changing behavior.",
+  "oldToNewMapping": [
+    {
+      "symbol": "formatInvoiceNumber",
+      "from": "artifacts/api-server/src/lib/finance-invoice.ts",
+      "to": "artifacts/api-server/src/finance/domain/invoice-format.ts",
+      "compatibility": "re-exported from lib/finance-invoice.ts"
+    },
+    {
+      "symbol": "amountInWords (+ private ONES, TENS, threeDigitsToWords, integerToWords)",
+      "from": "artifacts/api-server/src/lib/finance-invoice.ts",
+      "to": "artifacts/api-server/src/finance/domain/invoice-format.ts",
+      "compatibility": "re-exported from lib/finance-invoice.ts"
+    },
+    {
+      "symbol": "amountInWords duplicate (+ private helpers)",
+      "from": "artifacts/api-server/src/lib/invoice-pdf.ts",
+      "to": "artifacts/api-server/src/finance/domain/invoice-format.ts",
+      "compatibility": "invoice-pdf.ts now imports the owner; local copy deleted"
+    }
+  ],
+  "migratedConsumers": [
+    "artifacts/api-server/src/lib/invoice-pdf.ts (import from owner)",
+    "artifacts/api-server/src/lib/finance-invoice.ts (local import + compatibility re-export)"
+  ],
+  "unchangedConsumers": [
+    "artifacts/api-server/src/routes/finance-invoices.ts keeps importing formatInvoiceNumber from ../lib/finance-invoice (3 call sites, resolved through the re-export)"
+  ],
+  "filesCreated": [
+    "artifacts/api-server/src/finance/domain/invoice-format.ts",
+    "artifacts/api-server/src/finance/domain/invoice-format.test.ts",
+    "reports/antas/finance/fin-02b-evidence.json"
+  ],
+  "filesChanged": [
+    "artifacts/api-server/src/lib/finance-invoice.ts",
+    "artifacts/api-server/src/lib/invoice-pdf.ts",
+    "scripts/antas/finance/validate-boundaries.mjs",
+    "docs/antas/finance/finance-boundaries.md",
+    "reports/antas/finance/fin-01-dependency-scan.json (regenerated)"
+  ],
+  "filesDeleted": [],
+  "commands": [
+    {
+      "command": "node --experimental-strip-types /tmp/baseline.ts (verbatim pre-extraction functions)",
+      "exitCode": 0,
+      "result": "Captured 6 numbering and 20 amount-in-words baseline outputs from the old implementation, used as test fixtures."
+    },
+    {
+      "command": "node --experimental-strip-types --test invoice-format.test.ts invoice-totals.test.ts (scratch copy, import suffix .ts only)",
+      "exitCode": 0,
+      "tests": 7,
+      "passed": 7,
+      "failed": 0,
+      "result": "Run against the new module before rewiring."
+    },
+    {
+      "command": "node --experimental-strip-types --check on finance-invoice.ts, invoice-pdf.ts, invoice-format.ts",
+      "exitCode": 0,
+      "result": "Syntax-only. Not a type check."
+    },
+    {
+      "command": "node scripts/antas/finance/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS, 19 API Finance sources, 0 findings; one owner for each of formatInvoiceNumber and amountInWords; compatibility re-exports present."
+    },
+    {
+      "command": "validator negative tests on a throwaway copy (duplicate re-added, re-export removed, impure domain import)",
+      "exitCode": 1,
+      "result": "Each regression was detected as intended (3 of 3)."
+    }
+  ],
+  "behaviorNote": "The two former copies of amountInWords were identical except for the unreachable catch fallback: the finance-invoice copy formatted amount.toLocaleString(), the pdf copy called money(), which uses (amount || 0).toLocaleString(). The owner uses the null-safe form. The try body could not be made to throw with any input tried (negative, NaN, null, Infinity-free large values), so no observable change was found; this is reasoning plus tests, not proof for every input.",
+  "preservedQuirks": [
+    "Amounts of 1e12 and above render with 'Ten Hundred Billion' style wording (international scale only); not changed."
+  ],
+  "notRun": [
+    "pnpm install, pnpm typecheck, pnpm run build: no pnpm or network in this environment.",
+    "Tests that import finance-invoice.ts or invoice-pdf.ts: they need the database and PDF dependencies, which are not installed.",
+    "PDF output byte comparison before/after: not run.",
+    "test:finance-db: no database available.",
+    "Route-level tests for routes/finance-invoices.ts."
+  ],
+  "diffReview": "Changes are limited to moving two pure functions, one import line plus one re-export line in finance-invoice.ts, one import line and a deleted duplicate block in invoice-pdf.ts, an added ownership check in the validator, and one documentation row. No unrelated edits. A local-use check found formatInvoiceNumber is used inside finance-invoice.ts at invoice creation, so a local import was added in addition to the re-export.",
+  "limitations": [
+    "Type correctness is unverified; only syntax was checked.",
+    "No commit SHA is available, so this evidence cannot be bound to a revision.",
+    "Does not address the money-critical ledger or schedule generators, which interleave DB writes with calculation and remain for FIN-03."
+  ],
+  "nextSafeStep": "In a real checkout run: pnpm install --frozen-lockfile; pnpm --filter @workspace/api-server typecheck; pnpm --filter @workspace/api-server exec node --test --import tsx src/finance/domain/*.test.ts; pnpm validate:finance-boundaries; compare a generated invoice PDF before and after. If all pass, change this status to PASS.",
+  "previousStatus": "BLOCKED",
+  "previousStatusReason": "Behavior-preservation tests, the extended boundary scan and negative tests pass, but the repository typecheck, build and API-server consumer tests could not be run in this environment (no pnpm, no node_modules, no network, no Git history). PASS is withheld until those run in a real checkout.",
+  "promotion": {
+    "promotedBy": "reports/antas/finance/fin-02d-evidence.json",
+    "promotedIn": "FIN-WP-0",
+    "basis": "FIN-02D ran in the Replit checkout on a tree that already contains this phase's code and tests: pnpm install --frozen-lockfile, pnpm validate:finance-boundaries, pnpm --filter @workspace/api-server typecheck, build, the finance/domain test suite (11/11, includes this phase's tests) and test:finance-db (7/7) all exited 0, with baseSha 93ed60540127c1a4819cf957bfc4ba415199bf48.",
+    "caveat": "Indirect proof: no dedicated run was recorded for this phase alone, and the base SHA describes the checkout, not a commit that contains this work (still uncommitted). Re-run the same commands after committing to bind exact evidence to a SHA."
+  }
+}

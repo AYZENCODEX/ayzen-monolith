@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ayzen://schemas/api/envelope.v1.json",
+  "type": "object",
+  "required": ["version", "context"],
+  "properties": {
+    "version": { "const": "v1" },
+    "context": { "type": "object", "required": ["requestId", "traceId", "correlationId"] },
+    "data": {},
+    "error": { "type": "object" },
+    "meta": { "type": "object" }
+  },
+  "additionalProperties": true
+}

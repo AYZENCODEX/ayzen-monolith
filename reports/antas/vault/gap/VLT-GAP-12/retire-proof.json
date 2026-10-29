@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-12",
+  "sub_phase": "08-retire",
+  "commit_sha": "e76a9d47c2210884d57afcec43a6afac231451f4",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "44e0d77fa014007d712db22b0759ad602d4700a9f4183aed1788660f2e85ac0d",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts": "4f4254f938dd0baf90247d8150059b17de439e1ad99a07f919e1e2715395f2f0",
+    "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts": "39a6e75cef816e213e415f25b1c6a00c648ba5fb181d882cad89dc21689e0fe6",
+    "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts": "9f1a4892d61cef9e75c02df053669cfa6206a2542c16f94ddcda92a9267cf06a",
+    "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts": "23f53a634b09f3a3ae1124bdb76b633b282d08d478065a7894f76c039401bd7f",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts": "b0a54e813802684ccc3db775862f91d05d5350cb429e3079f5a6807f4720997e",
+    "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts": "f3eb8228abec8724947f01b2168a76c8de94d261b7e4937cde7630c1dc78f28f",
+    "scripts/antas/vault/gap/differential-vlt-gap-12.mjs": "2363f01552ae03aaac29e94555042eeebec015bf89c4fd081d62755370af2a2a"
+  },
+  "old_files_removed": [
+    "artifacts/api-server/src/vault/application/snapshot/sections.ts"
+  ],
+  "moves": {
+    "artifacts/api-server/src/vault/application/snapshot/sections.ts": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts"
+  },
+  "consumer_graph": [
+    {
+      "old": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "new": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts",
+      "consumers": [
+        "artifacts/api-server/src/vault/application/snapshot/payload.ts",
+        "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts"
+      ]
+    }
+  ],
+  "routes": [],
+  "duplicate_implementations": [],
+  "executed_differential": "VLT-GAP-12 differential PASS — 25 executed comparisons (16 section readers + re-encryptors, 14 restore helpers, 10 identity probes, 3 lookups; 16 gather runs returned data), 10/10 mutants caught",
+  "typecheck": {
+    "exit_code": 0
+  },
+  "status": "PASS"
+}

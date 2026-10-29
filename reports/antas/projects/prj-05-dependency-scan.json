@@ -1,0 +1,490 @@
+{
+  "schemaVersion": 1,
+  "phase": "PRJ-05",
+  "generatedBy": "scripts/antas/projects/validate-boundaries.mjs",
+  "generatedAt": "2026-10-22T09:43:29.681Z",
+  "status": "PASS",
+  "findings": [],
+  "notes": [],
+  "scan": {
+    "routeCounts": {
+      "projects": 34,
+      "project-dates": 5,
+      "project-templates": 8
+    },
+    "totalRoutes": 47,
+    "surfaceSha256": "45db187e6a03d129c3f3abb754ef51b1b882998d68613e97a0097200768ffd57",
+    "frozenSurfaceSha256": "45db187e6a03d129c3f3abb754ef51b1b882998d68613e97a0097200768ffd57",
+    "mountedSpecifiers": [
+      "./projects",
+      "./project-dates",
+      "./project-templates"
+    ],
+    "shadows": [
+      {
+        "shadowed": "GET /projects/mine/enrolled-entities",
+        "shadowedBy": "GET /projects/:id/enrolled-entities",
+        "kind": "param-shadow"
+      }
+    ],
+    "protectedSymbolOwners": {
+      "projectEnrollmentResource": [
+        "artifacts/api-server/src/projects/security/enrollment-ownership.ts"
+      ],
+      "requireProjectEnrollmentOwnership": [
+        "artifacts/api-server/src/projects/security/enrollment-ownership.ts"
+      ],
+      "vaultEntryOwnerResource": [
+        "artifacts/api-server/src/projects/security/entity-ownership.ts"
+      ],
+      "requireProjectsVaultEntryOwnership": [
+        "artifacts/api-server/src/projects/security/entity-ownership.ts"
+      ],
+      "auditProjectsOwnership": [
+        "artifacts/api-server/src/projects/security/entity-ownership.ts"
+      ],
+      "generateProjectReceiptToken": [
+        "artifacts/api-server/src/projects/security/receipt-token.ts"
+      ],
+      "projectReceiptUrl": [
+        "artifacts/api-server/src/projects/security/receipt-token.ts"
+      ],
+      "computeProjectPnlSummary": [
+        "artifacts/api-server/src/projects/application/roi-receipts.ts"
+      ],
+      "findProjectReceiptByToken": [
+        "artifacts/api-server/src/projects/application/roi-receipts.ts"
+      ],
+      "formatPublicReceipt": [
+        "artifacts/api-server/src/projects/domain/pnl-receipt.ts"
+      ],
+      "formatProject": [
+        "artifacts/api-server/src/projects/domain/project.ts"
+      ],
+      "formatTemplate": [
+        "artifacts/api-server/src/projects/domain/template.ts"
+      ],
+      "formatProjectDate": [
+        "artifacts/api-server/src/projects/domain/project-date.ts"
+      ],
+      "parseRatingValue": [
+        "artifacts/api-server/src/projects/domain/rating.ts"
+      ],
+      "summarizeRatings": [
+        "artifacts/api-server/src/projects/domain/rating.ts"
+      ],
+      "pickTemplateData": [
+        "artifacts/api-server/src/projects/domain/template.ts"
+      ],
+      "buildCreateValues": [
+        "artifacts/api-server/src/projects/domain/project.ts"
+      ],
+      "buildRawCreateSets": [
+        "artifacts/api-server/src/projects/infrastructure/sql/project-raw-sets.ts"
+      ],
+      "buildRawUpdateSets": [
+        "artifacts/api-server/src/projects/infrastructure/sql/project-raw-sets.ts"
+      ],
+      "computeProjectPnl": [
+        "artifacts/api-server/src/projects/domain/roi.ts"
+      ],
+      "summarizeRoi": [
+        "artifacts/api-server/src/projects/domain/roi.ts"
+      ],
+      "buildProjectReceiptPdfSpec": [
+        "artifacts/api-server/src/projects/domain/pnl-receipt.ts"
+      ],
+      "decideEnrollment": [
+        "artifacts/api-server/src/projects/domain/enrollment-status.ts"
+      ],
+      "enrollEntity": [
+        "artifacts/api-server/src/projects/application/enrollment.ts"
+      ],
+      "buildEntityOverview": [
+        "artifacts/api-server/src/projects/domain/entity-overview.ts"
+      ],
+      "buildEntityLeaderboard": [
+        "artifacts/api-server/src/projects/domain/entity-overview.ts"
+      ],
+      "groupEnrolledEntities": [
+        "artifacts/api-server/src/projects/domain/enrollment-overview.ts"
+      ],
+      "mapMembers": [
+        "artifacts/api-server/src/projects/domain/members.ts"
+      ]
+    },
+    "crossModuleImports": [
+      {
+        "from": "artifacts/api-server/src/projects/application/enrollment.ts",
+        "specifier": "../../vault/application/kyc/enrollment",
+        "target": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+        "symbols": [
+          "loadKycEntryForEnrollment",
+          "buildEnrollmentAccountData"
+        ],
+        "targetModule": "vault"
+      },
+      {
+        "from": "artifacts/api-server/src/projects/application/enrollment.ts",
+        "specifier": "../../vault/security/kyc-ownership",
+        "target": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+        "symbols": [
+          "kycEntryOwnerResource"
+        ],
+        "targetModule": "vault"
+      }
+    ],
+    "reverseEdges": [],
+    "foreignTableEdges": [
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/enrollment-overview-repo.ts",
+        "table": "vault_entries",
+        "kind": "read",
+        "owner": "vault"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/enrollments-repo.ts",
+        "table": "vault_entries",
+        "kind": "read",
+        "owner": "vault"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/enrollments-repo.ts",
+        "table": "users",
+        "kind": "read",
+        "owner": "unmodularized-siblings"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/entity-overview-repo.ts",
+        "table": "tasks",
+        "kind": "read",
+        "owner": "unmodularized-siblings"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/entity-overview-repo.ts",
+        "table": "task_submissions",
+        "kind": "read",
+        "owner": "unmodularized-siblings"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/entity-overview-repo.ts",
+        "table": "vault_entries",
+        "kind": "read",
+        "owner": "vault"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/members-repo.ts",
+        "table": "tasks",
+        "kind": "read",
+        "owner": "unmodularized-siblings"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/members-repo.ts",
+        "table": "task_submissions",
+        "kind": "read",
+        "owner": "unmodularized-siblings"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/members-repo.ts",
+        "table": "users",
+        "kind": "read",
+        "owner": "unmodularized-siblings"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/members-repo.ts",
+        "table": "vault_entries",
+        "kind": "read",
+        "owner": "vault"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/pnl-receipts-repo.ts",
+        "table": "users",
+        "kind": "read",
+        "owner": "unmodularized-siblings"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/project-ledger-reader.ts",
+        "table": "finance_ledger_entries",
+        "kind": "read",
+        "owner": "finance"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/projects-repo.ts",
+        "table": "tasks",
+        "kind": "read",
+        "owner": "unmodularized-siblings"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/ratings-repo.ts",
+        "table": "users",
+        "kind": "read",
+        "owner": "unmodularized-siblings"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/roi-repo.ts",
+        "table": "vault_entries",
+        "kind": "read",
+        "owner": "vault"
+      },
+      {
+        "file": "artifacts/api-server/src/projects/infrastructure/repositories/vault-entries-reader.ts",
+        "table": "vault_entries",
+        "kind": "read",
+        "owner": "vault"
+      }
+    ],
+    "externalConsumers": [
+      {
+        "file": "artifacts/api-server/src/finance/application/reports.ts",
+        "access": "read",
+        "tables": [
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/lib/activity-log.ts",
+        "access": "read",
+        "tables": [
+          "project_enrollments",
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/lib/airdrop-reminder-cron.ts",
+        "access": "read",
+        "tables": [
+          "project_enrollments"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/lib/telegram.ts",
+        "access": "read",
+        "tables": [
+          "project_enrollments",
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/mcp/skills.ts",
+        "access": "read",
+        "tables": [
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/ai-actions.ts",
+        "access": "write",
+        "tables": [
+          "projects"
+        ],
+        "writes": [
+          "projects"
+        ]
+      },
+      {
+        "file": "artifacts/api-server/src/routes/ai-agent.ts",
+        "access": "read",
+        "tables": [
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/ai.ts",
+        "access": "read",
+        "tables": [
+          "project_enrollments",
+          "projects",
+          "user_projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/bulk.ts",
+        "access": "write",
+        "tables": [
+          "project_enrollments"
+        ],
+        "writes": [
+          "project_enrollments"
+        ]
+      },
+      {
+        "file": "artifacts/api-server/src/routes/content.ts",
+        "access": "read",
+        "tables": [
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/entities.ts",
+        "access": "write",
+        "tables": [
+          "entity_project_roi",
+          "project_enrollments",
+          "projects"
+        ],
+        "writes": [
+          "entity_project_roi"
+        ]
+      },
+      {
+        "file": "artifacts/api-server/src/routes/finance.ts",
+        "access": "read",
+        "tables": [
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/leaderboard.ts",
+        "access": "read",
+        "tables": [
+          "project_enrollments"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/search.ts",
+        "access": "read",
+        "tables": [
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/sync.ts",
+        "access": "read",
+        "tables": [
+          "entity_project_roi",
+          "project_enrollments",
+          "projects",
+          "user_projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/tasks.ts",
+        "access": "read",
+        "tables": [
+          "project_enrollments",
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/teams.ts",
+        "access": "write",
+        "tables": [
+          "project_enrollments",
+          "projects",
+          "user_projects"
+        ],
+        "writes": [
+          "project_enrollments",
+          "user_projects"
+        ]
+      },
+      {
+        "file": "artifacts/api-server/src/routes/users.ts",
+        "access": "read",
+        "tables": [
+          "user_projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/routes/watchlist.ts",
+        "access": "read",
+        "tables": [
+          "projects",
+          "user_projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/services/sync.ts",
+        "access": "write",
+        "tables": [
+          "entity_project_roi",
+          "project_enrollments",
+          "user_projects"
+        ],
+        "writes": [
+          "entity_project_roi",
+          "project_enrollments",
+          "user_projects"
+        ]
+      },
+      {
+        "file": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts",
+        "access": "read",
+        "tables": [
+          "project_enrollments",
+          "projects"
+        ],
+        "writes": []
+      },
+      {
+        "file": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts",
+        "access": "read",
+        "tables": [
+          "ayzen_project_templates",
+          "entity_project_roi",
+          "project_enrollments",
+          "project_pnl_receipts",
+          "project_ratings",
+          "user_projects"
+        ],
+        "writes": []
+      }
+    ],
+    "importCycles": [],
+    "moduleState": {
+      "exists": true,
+      "files": [
+        "artifacts/api-server/src/projects/application/dates.ts",
+        "artifacts/api-server/src/projects/application/enrollment-overview.ts",
+        "artifacts/api-server/src/projects/application/enrollment.ts",
+        "artifacts/api-server/src/projects/application/entity-overview.ts",
+        "artifacts/api-server/src/projects/application/members.ts",
+        "artifacts/api-server/src/projects/application/projects.ts",
+        "artifacts/api-server/src/projects/application/ratings.ts",
+        "artifacts/api-server/src/projects/application/roi-receipts.ts",
+        "artifacts/api-server/src/projects/application/templates.ts",
+        "artifacts/api-server/src/projects/domain/enrollment-overview.ts",
+        "artifacts/api-server/src/projects/domain/enrollment-status.ts",
+        "artifacts/api-server/src/projects/domain/entity-overview.ts",
+        "artifacts/api-server/src/projects/domain/members.ts",
+        "artifacts/api-server/src/projects/domain/pnl-receipt.ts",
+        "artifacts/api-server/src/projects/domain/project-date.ts",
+        "artifacts/api-server/src/projects/domain/project.ts",
+        "artifacts/api-server/src/projects/domain/rating.ts",
+        "artifacts/api-server/src/projects/domain/roi.ts",
+        "artifacts/api-server/src/projects/domain/template.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/dates-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/enrollment-overview-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/enrollments-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/entity-overview-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/members-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/pnl-receipts-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/project-ledger-reader.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/projects-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/ratings-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/roi-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/templates-repo.ts",
+        "artifacts/api-server/src/projects/infrastructure/repositories/vault-entries-reader.ts",
+        "artifacts/api-server/src/projects/infrastructure/sql/project-raw-sets.ts",
+        "artifacts/api-server/src/projects/security/enrollment-ownership.ts",
+        "artifacts/api-server/src/projects/security/entity-ownership.ts",
+        "artifacts/api-server/src/projects/security/receipt-token.ts"
+      ]
+    }
+  }
+}

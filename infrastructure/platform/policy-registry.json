@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "decisionPoint": "services/policy",
+  "defaultDeny": true,
+  "namespaces": ["ayzen", "ryft", "sylo", "wisp", "skarn", "zynth", "verve", "admin", "platform"],
+  "requiredContext": ["subject", "actorType", "app", "action", "resource", "traceId", "tenantScope"],
+  "enforcedSurfaces": ["api", "eventbus", "workflow", "scheduler", "notification", "admin", "telegram"],
+  "audit": { "decisionEvents": ["policy.decision.allowed", "policy.decision.denied"], "includeReason": true, "includeTraceId": true },
+  "simulation": { "deterministic": true, "noSideEffects": true, "requiresRegressionCases": true }
+}

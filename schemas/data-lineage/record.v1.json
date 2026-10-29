@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ayzen.data.lineage.v1",
+  "type": "object",
+  "required": ["id", "featureId", "source", "destination", "owner", "classification"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "featureId": {"type": "string", "minLength": 1},
+    "source": {"type": "object"},
+    "destination": {"type": "object"},
+    "owner": {"type": "string", "minLength": 1},
+    "classification": {"enum": ["public", "internal", "confidential", "restricted"]}
+  },
+  "additionalProperties": true
+}

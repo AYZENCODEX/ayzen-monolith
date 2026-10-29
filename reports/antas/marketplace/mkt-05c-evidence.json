@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-05c",
+  "status": "PASS_STATIC_AND_UNIT_ONLY",
+  "date": "2026-10-26",
+  "commitSha": "UNAVAILABLE",
+  "scope": "routes/marketplace-alerts.ts: price/keyword alerts and saved searches (6 routes, 4 of them write, 2 owner-gated by the PEP); MKT-05 so far: 16 of 44 routes (discovery 4, analytics 6, alerts 6)",
+  "done": [
+    "marketplace/engagement/{domain,infrastructure,application,security}: rules and the dynamic UPDATE builder in domain/alerts.ts (pure), 6 SQL statements in infrastructure/alerts-repo.ts plus the UPDATE text built in the domain, use cases in application/alerts.ts, the PEP resource builder in security/alert-resource.ts; *.wired.ts composition roots are the only files importing the pool",
+    "the 7 SQL statements (the 6 above plus the owner lookup of the PEP builder) equal the pre-move route text (moved-sql.pins.json, compared as a sorted list across the repo and domain files)",
+    "differential test: validation, INSERT parameters and the UPDATE statement text and parameters equal a verbatim copy of the original logic for 13^4 = 28,561 combinations of odd inputs each (undefined, null, empty string, 0, '0', objects, arrays, booleans)",
+    "status codes and response keys of all 6 routes compared with the ORIGINAL uploaded file by a script that does not use the inventory map: all SAME; ownership gating unchanged (owner-gated count still 26)",
+    "req.body is still destructured in the route BEFORE the try block, so a request without a JSON body fails exactly as before",
+    "11 unit tests (domain differential, application with a fake database, PEP resource builder: sentinel owner without a query for a non-numeric id)",
+    "baseline ratchet: SQL calls in route files 347 -> 340; the route file no longer writes marketplace_alerts or marketplace_saved_searches"
+  ],
+  "notVerified": [
+    "no handler executed, no database; TypeScript syntax and import resolution only; typecheck/build UNAVAILABLE",
+    "these routes have no DB test",
+    "the PEP wiring (requireOwnership with the moved resource builder) was not exercised: the DB suite stubs the PEP"
+  ],
+  "keptOnPurpose": [
+    "no input validation was added (max_price_azn: '0' is falsy only for the number 0 or empty string, as before)",
+    "errors stay 500 with the database message"
+  ],
+  "next": "remaining MKT-05 features: reviews (7), reports (5), coupons reads, favorites, settings, market-config, admin activity, listing GETs. Still waiting for the first real run of the DB suite; MKT-04 waits for it."
+}

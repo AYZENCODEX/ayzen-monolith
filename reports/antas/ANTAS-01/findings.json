@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "clean reinstall in CI",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "two-build artifact comparison",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

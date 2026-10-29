@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "defaultDeny": true,
+  "ownership": [
+    { "resource": "ayzen-identities", "owner": "identity", "authority": "central-AYZEN-provider" },
+    { "resource": "local-app-identities", "owner": "target-app", "authority": "app-local-account-service" },
+    { "resource": "connected-app-links", "owner": "target-app", "authority": "explicit-verified-link-service" },
+    { "resource": "app-profiles", "owner": "target-app", "authority": "app-profile-service" },
+    { "resource": "sessions", "owner": "target-app", "authority": "app-session-service" },
+    { "resource": "authorization", "owner": "target-app", "authority": "app-policy" },
+    { "resource": "identity-events", "owner": "identity", "authority": "event-contract-registry" }
+  ],
+  "crossAppAccess": "governed-api-or-event-contract-only",
+  "databaseAccess": "owner-mediated",
+  "separationMode": "logical-boundary-first-measured-database-separation"
+}

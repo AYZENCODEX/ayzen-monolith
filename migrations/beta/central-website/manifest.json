@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "app": "ayzen-web",
+  "displayName": "AYZEN central website",
+  "owner": "platform-web",
+  "source": {"workspace": "artifacts/ayzen", "routeFallback": "monolith"},
+  "target": {"workspace": "artifacts/ayzen", "routePrefix": "/"},
+  "database": {"mode": "isolated-capable", "databaseKey": "ayzen_web", "schema": "ayzen_web", "connectionEnv": "AYZEN_DB_AYZEN_WEB_URL", "crossAppAccess": "forbidden"},
+  "beta": {"isolationKey": "ayzen-web:beta", "stage": "inventory", "trafficPercent": 0},
+  "categories": {
+    "features": [
+      {"id": "features.central-shell", "description": "Central navigation and app/workspace shell", "owner": "platform-web", "dependsOn": []}
+    ],
+    "architecture": [
+      {"id": "architecture.central-routes", "description": "Route central website traffic through the gateway matrix", "owner": "platform-web", "dependsOn": ["features.central-shell"]}
+    ],
+    "security": [
+      {"id": "security.central-tenant-scope", "description": "Require authenticated organization or workspace scope", "owner": "identity", "dependsOn": ["architecture.central-routes"]}
+    ],
+    "infrastructure": [
+      {"id": "infrastructure.central-preview", "description": "Preview, health, and rollback route controls", "owner": "platform", "dependsOn": ["security.central-tenant-scope"]}
+    ]
+  }
+}

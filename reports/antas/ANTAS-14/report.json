@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": "ANTAS-14",
+  "name": "Performance / Capacity / Cost",
+  "owner": "reliability",
+  "priority": "P1",
+  "generatedAt": "2026-09-29T06:06:07.462Z",
+  "status": "PASS",
+  "required": 5,
+  "passed": 5,
+  "failed": 0,
+  "waived": 0,
+  "criticalFailures": 0,
+  "productionReady": false,
+  "externalGates": [
+    {
+      "gate": "staging load profile",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "measured cost model",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "findings": [],
+  "note": "PASS means repository evidence and static controls are present; it does not certify runtime or production behavior."
+}

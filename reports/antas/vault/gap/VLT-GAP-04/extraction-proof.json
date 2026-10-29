@@ -1,0 +1,1813 @@
+{
+  "phase": "VLT-GAP-04",
+  "sub_phase": "VLT-GAP-04-B",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "2adc008e1d9a6356eebe84c1ebcfaea5c89a26ffd359356093dc5547236349a7",
+  "validator_version": "1.0.0",
+  "validator_sha256": "977ee9a585ac4785123ab2929c3c0149237abb5010bec813c55d32217388ea44",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/game-entries.ts": "61a3dfbad6464bee905dc4546a3191a369a05f31e82cad29d208b3b1925b15d9",
+    "artifacts/api-server/src/routes/marketplace-game.ts": "411dd71b0f220b7c3eb018ea4fe4122060f6b71a9438d749bc7014e717a3ca50",
+    "artifacts/api-server/src/vault/domain/game.ts": "5aa689436c3e989e2ac5955b7fff3aa112beea9259858e90856b61907877fe27",
+    "artifacts/api-server/src/vault/security/game-ownership.ts": "d5c8460686d908f73bb16516ff7a7bd98ff242bca5a03d8ea1201b547add6f0d",
+    "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts": "f4af7a14277e04b8bb93bda69f9b4d0c851c6667c8f4a776e27544531cb2add0",
+    "artifacts/api-server/src/vault/application/game/entries.ts": "018a001799a4591d08905b284e9181b05022c7dd3035881d616e350c74a10561",
+    "artifacts/api-server/src/vault/application/game/marketplace.ts": "6760d8357fb0acd4502438c00def3e7da5ccd99323fe2dd356f21f0716106a8e",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-04-B.mjs",
+    "in-process differential suite (frozen baseline routes vs new source)",
+    "in-process differential typecheck"
+  ],
+  "exit_codes": {
+    "differential_suite": 1,
+    "security_suite": 1,
+    "unit_parity": 0,
+    "mutation_suite": 0,
+    "typecheck_differential": 0
+  },
+  "symbols_moved": [
+    "artifacts/api-server/src/routes/game-entries.ts#safe → artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts#safe",
+    "artifacts/api-server/src/routes/game-entries.ts#safeTags → artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts#safeTags",
+    "artifacts/api-server/src/routes/game-entries.ts#gameEntryResource → artifacts/api-server/src/vault/security/game-ownership.ts#gameEntryResource",
+    "artifacts/api-server/src/routes/game-entries.ts#requireGameEntryOwnership → artifacts/api-server/src/vault/security/game-ownership.ts#requireGameEntryOwnership",
+    "artifacts/api-server/src/routes/marketplace-game.ts#gameListingOwnerOrAdminEngine → artifacts/api-server/src/vault/security/game-ownership.ts#gameListingOwnerOrAdminEngine",
+    "artifacts/api-server/src/routes/marketplace-game.ts#ensureWallet → artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts#ensureGameWallet",
+    "artifacts/api-server/src/routes/marketplace-game.ts#parseListing → artifacts/api-server/src/vault/application/game/marketplace.ts#parseListing"
+  ],
+  "handlers_extracted": [
+    {
+      "method": "GET",
+      "path": "/game-entries",
+      "old_handler_lines": 13,
+      "new_handler_lines": 4,
+      "old_inline_refs": 7,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/entries.ts#listGameEntries"
+    },
+    {
+      "method": "POST",
+      "path": "/game-entries",
+      "old_handler_lines": 31,
+      "new_handler_lines": 4,
+      "old_inline_refs": 20,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/entries.ts#createGameEntry"
+    },
+    {
+      "method": "GET",
+      "path": "/game-entries/:id",
+      "old_handler_lines": 15,
+      "new_handler_lines": 4,
+      "old_inline_refs": 5,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/entries.ts#getGameEntry"
+    },
+    {
+      "method": "PUT",
+      "path": "/game-entries/:id",
+      "old_handler_lines": 28,
+      "new_handler_lines": 4,
+      "old_inline_refs": 20,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/entries.ts#editGameEntry"
+    },
+    {
+      "method": "DELETE",
+      "path": "/game-entries/:id",
+      "old_handler_lines": 11,
+      "new_handler_lines": 4,
+      "old_inline_refs": 3,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/entries.ts#removeGameEntry"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/game/listings",
+      "old_handler_lines": 22,
+      "new_handler_lines": 4,
+      "old_inline_refs": 5,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/marketplace.ts#listGameMarketListings"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/game/listings",
+      "old_handler_lines": 28,
+      "new_handler_lines": 4,
+      "old_inline_refs": 3,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/marketplace.ts#createGameMarketListing"
+    },
+    {
+      "method": "POST",
+      "path": "/marketplace/game/buy",
+      "old_handler_lines": 65,
+      "new_handler_lines": 4,
+      "old_inline_refs": 9,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/marketplace.ts#buyGameMarketListing"
+    },
+    {
+      "method": "DELETE",
+      "path": "/marketplace/game/listings/:id",
+      "old_handler_lines": 20,
+      "new_handler_lines": 4,
+      "old_inline_refs": 5,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/marketplace.ts#cancelGameMarketListing"
+    },
+    {
+      "method": "GET",
+      "path": "/marketplace/game/stats",
+      "old_handler_lines": 17,
+      "new_handler_lines": 4,
+      "old_inline_refs": 5,
+      "new_inline_refs": 0,
+      "delegates_to": "artifacts/api-server/src/vault/application/game/marketplace.ts#getGameMarketStats"
+    }
+  ],
+  "consumers_migrated": [],
+  "old_business_symbols_remaining": {
+    "route_declares_business_symbols": [],
+    "route_handlers_with_inline_db_crypto_policy_refs": []
+  },
+  "duplicate_implementations": {
+    "sql": [
+      "SELECT * FROM game_entries WHERE id=$1 AND user_id=$2",
+      "UPDATE game_entries SET user_id=$1 WHERE id=$2 AND user_id=$3 RETURNING id"
+    ],
+    "functions": [],
+    "redeclared": []
+  },
+  "route_thinness": {
+    "before": {
+      "entries": {
+        "routes": 5,
+        "with_inline_refs": 5,
+        "handler_lines": 98
+      },
+      "market": {
+        "routes": 5,
+        "with_inline_refs": 5,
+        "handler_lines": 152
+      }
+    },
+    "after": {
+      "entries": {
+        "routes": 5,
+        "with_inline_refs": 0,
+        "handler_lines": 20
+      },
+      "market": {
+        "routes": 5,
+        "with_inline_refs": 0,
+        "handler_lines": 20
+      }
+    }
+  },
+  "sql": {
+    "old_statements": 32,
+    "new_statements": 33
+  },
+  "destination_functions": {
+    "vault/domain/game.ts": [
+      "GAME_SENSITIVE_FIELDS",
+      "GAME_ENTRY_OWNER_SENTINEL_NONE",
+      "GAME_MARKET_LISTING_OWNER_SENTINEL_NONE"
+    ],
+    "vault/security/game-ownership.ts": [
+      "gameEntryResource",
+      "requireGameEntryOwnership",
+      "denyGameEntryNotFound",
+      "denyGameEntryNotFoundOrForbidden",
+      "denyGameEntrySilentSuccess",
+      "gameListingOwnerOrAdminEngine",
+      "authorizeGameListingOwnerOrAdmin",
+      "canCancelGameListing"
+    ],
+    "vault/infrastructure/repositories/game-repository.ts": [
+      "safe",
+      "safeTags",
+      "selectGameEntryOwner",
+      "selectGameEntries",
+      "insertGameEntry",
+      "findGameEntryById",
+      "updateGameEntry",
+      "deleteGameEntry",
+      "selectGameListings",
+      "countActiveGameListings",
+      "insertGameListing",
+      "findActiveGameListingById",
+      "ensureGameWallet",
+      "completeGameListingPurchase",
+      "cancelGameListing",
+      "selectGameMarketplaceStats",
+      "selectGameEntryForListing",
+      "transferGameEntryOwnership"
+    ],
+    "vault/application/game/entries.ts": [
+      "dbError",
+      "d",
+      "listGameEntries",
+      "createGameEntry",
+      "getGameEntry",
+      "editGameEntry",
+      "removeGameEntry"
+    ],
+    "vault/application/game/marketplace.ts": [
+      "err500",
+      "parseListing",
+      "listGameMarketListings",
+      "createGameMarketListing",
+      "buyGameMarketListing",
+      "cancelGameMarketListing",
+      "getGameMarketStats"
+    ]
+  },
+  "consumer_census_for_04_C": {
+    "route_importers": [
+      "artifacts/api-server/src/routes/index.ts"
+    ],
+    "note": "Files that read/write game_entries or game_market_listings directly (mail-sync, vault-snapshot*, vault-shares, marketplace-vault, search, credit-meter, reencrypt-vault, domain-boundaries) are listed in 04-A table_consumers and are NOT rewired here."
+  },
+  "diff_audit": {
+    "changed": [
+      ".github/workflows/ci.yml",
+      "artifacts/api-server/.tsbuildinfo",
+      "artifacts/api-server/src/index.ts",
+      "artifacts/api-server/src/lib/dr-test-runner.ts",
+      "artifacts/api-server/src/lib/mail-attachment-content.ts",
+      "artifacts/api-server/src/lib/mail-send-queue.ts",
+      "artifacts/api-server/src/lib/mail-sync.ts",
+      "artifacts/api-server/src/lib/oidc-client-admin-audit.ts",
+      "artifacts/api-server/src/lib/oidc-client-admin-request.ts",
+      "artifacts/api-server/src/lib/oidc-logout-propagation.ts",
+      "artifacts/api-server/src/lib/ssrf-guard.ts",
+      "artifacts/api-server/src/lib/vault-pin-guard.ts",
+      "artifacts/api-server/src/lib/wallet-crypto.ts",
+      "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+      "artifacts/api-server/src/routes/email-accounts.ts",
+      "artifacts/api-server/src/routes/emergency-access.ts",
+      "artifacts/api-server/src/routes/game-entries.ts",
+      "artifacts/api-server/src/routes/marketplace-game.ts",
+      "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "artifacts/api-server/src/routes/organizations.ts",
+      "artifacts/api-server/src/routes/passkey.ts",
+      "artifacts/api-server/src/routes/resend-webhook.ts",
+      "artifacts/api-server/src/routes/teams.ts",
+      "artifacts/api-server/src/routes/two-factor.ts",
+      "artifacts/api-server/src/routes/value-history.ts",
+      "artifacts/api-server/src/routes/vault-attachments.ts",
+      "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "artifacts/api-server/src/routes/vault-migration.ts",
+      "artifacts/api-server/src/routes/vault-reauth.ts",
+      "artifacts/api-server/src/routes/vault-security.ts",
+      "artifacts/api-server/src/routes/vault-shares.ts",
+      "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "artifacts/api-server/src/routes/vault.ts",
+      "artifacts/api-server/src/routes/wallets.ts",
+      "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "artifacts/api-server/src/vault/application/entity/activity.ts",
+      "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "artifacts/api-server/src/vault/application/entity/create.ts",
+      "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "artifacts/api-server/src/vault/application/entity/links.ts",
+      "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "artifacts/api-server/src/vault/application/entity/update.ts",
+      "artifacts/api-server/src/vault/application/health.ts",
+      "artifacts/api-server/src/vault/application/index.ts",
+      "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "artifacts/api-server/src/vault/crypto/seed-phrase.ts",
+      "artifacts/api-server/src/vault/domain/game.ts",
+      "artifacts/api-server/src/vault/infrastructure/index.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts",
+      "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "artifacts/ayzen/src/lib/oidc-client.ts",
+      "ci/enforcement-pipeline.yml",
+      "package.json",
+      "scripts/antas/vault/build-certification.mjs",
+      "scripts/src/decrypt-env.ts",
+      "scripts/src/encrypt-env.ts",
+      "scripts/src/reencrypt-seed-phrases.ts",
+      "scripts/src/reencrypt-vault.ts",
+      "scripts/src/rewrap-encryption-keys.ts",
+      "services/vault/src/crypto/envelope.mjs"
+    ],
+    "added": [
+      ".gitignore",
+      "DELETE_THESE_FILES.txt",
+      "GAP-13-AB-NOTES.md",
+      "GAP-13-CD-NOTES.md",
+      "artifacts/api-server/_syncheck_node_modules_typescript/LICENSE.txt",
+      "artifacts/api-server/_syncheck_node_modules_typescript/README.md",
+      "artifacts/api-server/_syncheck_node_modules_typescript/SECURITY.md",
+      "artifacts/api-server/_syncheck_node_modules_typescript/ThirdPartyNoticeText.txt",
+      "artifacts/api-server/_syncheck_node_modules_typescript/bin/tsc",
+      "artifacts/api-server/_syncheck_node_modules_typescript/bin/tsserver",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/_tsc.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/_tsserver.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/_typingsInstaller.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/cs/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/de/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/es/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/fr/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/it/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/ja/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/ko/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.decorators.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.decorators.legacy.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.asynciterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.iterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.core.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.generator.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.iterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.proxy.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.reflect.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.symbol.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.symbol.wellknown.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.array.include.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.arraybuffer.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.date.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.object.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.sharedmemory.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.typedarrays.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.asyncgenerator.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.asynciterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.regexp.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.array.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.object.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.symbol.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.bigint.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.date.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.number.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.sharedmemory.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.symbol.wellknown.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.weakref.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.array.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.error.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.object.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.regexp.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.array.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.arraybuffer.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.object.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.regexp.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.sharedmemory.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.float16.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.iterator.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.regexp.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es5.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es6.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.array.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.date.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.decorators.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.disposable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.error.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.sharedmemory.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.temporal.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.typedarrays.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.scripthost.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.asynciterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.importscripts.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.iterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/pl/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/pt-br/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/ru/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tr/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tsc.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserver.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserverlibrary.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserverlibrary.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/typesMap.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/typescript.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/typescript.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/typingsInstaller.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/watchGuard.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/zh-cn/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/zh-tw/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/package.json",
+      "artifacts/api-server/src/vault/application/attachment/use-cases.ts",
+      "artifacts/api-server/src/vault/application/backup/cloud-connection.ts",
+      "artifacts/api-server/src/vault/application/backup/key.ts",
+      "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "artifacts/api-server/src/vault/application/backup/schedule.ts",
+      "artifacts/api-server/src/vault/application/entity/health-check.ts",
+      "artifacts/api-server/src/vault/application/game/entries.ts",
+      "artifacts/api-server/src/vault/application/game/listing.ts",
+      "artifacts/api-server/src/vault/application/game/marketplace.ts",
+      "artifacts/api-server/src/vault/application/health-cron.ts",
+      "artifacts/api-server/src/vault/application/health-scan.ts",
+      "artifacts/api-server/src/vault/application/migration/use-cases.ts",
+      "artifacts/api-server/src/vault/application/secret/reveal.ts",
+      "artifacts/api-server/src/vault/application/secret/wallet.ts",
+      "artifacts/api-server/src/vault/application/security/auth-policy.ts",
+      "artifacts/api-server/src/vault/application/security/password.ts",
+      "artifacts/api-server/src/vault/application/security/pin-setup-code.ts",
+      "artifacts/api-server/src/vault/application/security/pin.ts",
+      "artifacts/api-server/src/vault/application/security/reauth.ts",
+      "artifacts/api-server/src/vault/application/security/status.ts",
+      "artifacts/api-server/src/vault/application/security/two-fa.ts",
+      "artifacts/api-server/src/vault/application/security/verify.ts",
+      "artifacts/api-server/src/vault/application/share/field-permissions.ts",
+      "artifacts/api-server/src/vault/application/share/use-cases.ts",
+      "artifacts/api-server/src/vault/application/snapshot/blob.ts",
+      "artifacts/api-server/src/vault/application/snapshot/payload.ts",
+      "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "artifacts/api-server/src/vault/application/snapshot/store.ts",
+      "artifacts/api-server/src/vault/application/snapshot/use-cases.ts",
+      "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/audit.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts",
+      "artifacts/api-server/src/vault/infrastructure/db-handle.ts",
+      "artifacts/api-server/src/vault/infrastructure/jobs/cron-scheduler.ts",
+      "artifacts/api-server/src/vault/infrastructure/providers/lazy-provider-ports.ts",
+      "artifacts/api-server/src/vault/infrastructure/providers/provider-ports.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/backup-envelope-key-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-analytics-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-bulk-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-create-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-lifecycle-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-receipt-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-update-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/field-key-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-activity-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-admin-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-attachment-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-schedule-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-entity-link-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-health-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-migration-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-reauth-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-share-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-payload-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts",
+      "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts",
+      "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts",
+      "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts",
+      "artifacts/api-server/src/vault/security/attachment-ownership.ts",
+      "artifacts/api-server/src/vault/security/game-ownership.ts",
+      "artifacts/api-server/src/vault/security/lockout.ts",
+      "artifacts/api-server/src/vault/security/market-listing-ownership.ts",
+      "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "artifacts/api-server/src/vault/security/reauth-ownership.ts",
+      "artifacts/api-server/src/vault/security/reveal-token.ts",
+      "artifacts/api-server/src/vault/security/share-ownership.ts",
+      "artifacts/api-server/src/vault/security/snapshot-ownership.ts",
+      "artifacts/api-server/src/vault/shared/index.ts",
+      "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+      "attached_assets/ANTAS_VLT_GAP_FILLING_ROADMAP_STRICT_1791049759003.md",
+      "packages/vault-crypto/package.json",
+      "packages/vault-crypto/src/aes-gcm.d.mts",
+      "packages/vault-crypto/src/aes-gcm.mjs",
+      "packages/vault-crypto/src/aes-gcm.test.mjs"
+    ],
+    "removed": [
+      "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+      "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "artifacts/api-server/src/lib/vault-crypto.ts",
+      "artifacts/api-server/src/lib/vault-health-cron.ts",
+      "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "artifacts/api-server/src/lib/vault-health.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts",
+      "artifacts/api-server/src/lib/vault-trash-cron.ts",
+      "artifacts/api-server/src/lib/vault-trash-purge.ts",
+      "artifacts/ayzen/tsconfig.tsbuildinfo",
+      "lib/api-client-react/tsconfig.tsbuildinfo",
+      "lib/api-zod/tsconfig.tsbuildinfo",
+      "lib/db/tsconfig.tsbuildinfo",
+      "scripts/tsconfig.tsbuildinfo"
+    ],
+    "unexpected": [
+      ".github/workflows/ci.yml",
+      "artifacts/api-server/.tsbuildinfo",
+      "artifacts/api-server/src/index.ts",
+      "artifacts/api-server/src/lib/dr-test-runner.ts",
+      "artifacts/api-server/src/lib/mail-attachment-content.ts",
+      "artifacts/api-server/src/lib/mail-send-queue.ts",
+      "artifacts/api-server/src/lib/mail-sync.ts",
+      "artifacts/api-server/src/lib/oidc-client-admin-audit.ts",
+      "artifacts/api-server/src/lib/oidc-client-admin-request.ts",
+      "artifacts/api-server/src/lib/oidc-logout-propagation.ts",
+      "artifacts/api-server/src/lib/ssrf-guard.ts",
+      "artifacts/api-server/src/lib/vault-pin-guard.ts",
+      "artifacts/api-server/src/lib/wallet-crypto.ts",
+      "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+      "artifacts/api-server/src/routes/email-accounts.ts",
+      "artifacts/api-server/src/routes/emergency-access.ts",
+      "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "artifacts/api-server/src/routes/organizations.ts",
+      "artifacts/api-server/src/routes/passkey.ts",
+      "artifacts/api-server/src/routes/resend-webhook.ts",
+      "artifacts/api-server/src/routes/teams.ts",
+      "artifacts/api-server/src/routes/two-factor.ts",
+      "artifacts/api-server/src/routes/value-history.ts",
+      "artifacts/api-server/src/routes/vault-attachments.ts",
+      "artifacts/api-server/src/routes/vault-backup-cloud.ts",
+      "artifacts/api-server/src/routes/vault-backup-key.ts",
+      "artifacts/api-server/src/routes/vault-backup-schedule.ts",
+      "artifacts/api-server/src/routes/vault-migration.ts",
+      "artifacts/api-server/src/routes/vault-reauth.ts",
+      "artifacts/api-server/src/routes/vault-security.ts",
+      "artifacts/api-server/src/routes/vault-shares.ts",
+      "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "artifacts/api-server/src/routes/vault.ts",
+      "artifacts/api-server/src/routes/wallets.ts",
+      "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "artifacts/api-server/src/vault/application/entity/activity.ts",
+      "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "artifacts/api-server/src/vault/application/entity/create.ts",
+      "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "artifacts/api-server/src/vault/application/entity/links.ts",
+      "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "artifacts/api-server/src/vault/application/entity/update.ts",
+      "artifacts/api-server/src/vault/application/health.ts",
+      "artifacts/api-server/src/vault/application/index.ts",
+      "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "artifacts/api-server/src/vault/application/local-account/receipt.ts",
+      "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "artifacts/api-server/src/vault/crypto/seed-phrase.ts",
+      "artifacts/api-server/src/vault/infrastructure/index.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts",
+      "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "artifacts/ayzen/src/lib/oidc-client.ts",
+      "ci/enforcement-pipeline.yml",
+      "package.json",
+      "scripts/antas/vault/build-certification.mjs",
+      "scripts/src/decrypt-env.ts",
+      "scripts/src/encrypt-env.ts",
+      "scripts/src/reencrypt-seed-phrases.ts",
+      "scripts/src/reencrypt-vault.ts",
+      "scripts/src/rewrap-encryption-keys.ts",
+      "services/vault/src/crypto/envelope.mjs",
+      ".gitignore",
+      "DELETE_THESE_FILES.txt",
+      "GAP-13-AB-NOTES.md",
+      "GAP-13-CD-NOTES.md",
+      "artifacts/api-server/_syncheck_node_modules_typescript/LICENSE.txt",
+      "artifacts/api-server/_syncheck_node_modules_typescript/README.md",
+      "artifacts/api-server/_syncheck_node_modules_typescript/SECURITY.md",
+      "artifacts/api-server/_syncheck_node_modules_typescript/ThirdPartyNoticeText.txt",
+      "artifacts/api-server/_syncheck_node_modules_typescript/bin/tsc",
+      "artifacts/api-server/_syncheck_node_modules_typescript/bin/tsserver",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/_tsc.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/_tsserver.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/_typingsInstaller.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/cs/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/de/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/es/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/fr/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/it/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/ja/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/ko/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.decorators.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.decorators.legacy.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.asynciterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.iterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.core.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.generator.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.iterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.proxy.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.reflect.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.symbol.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.symbol.wellknown.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.array.include.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.arraybuffer.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.date.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.object.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.sharedmemory.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.typedarrays.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.asyncgenerator.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.asynciterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.regexp.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.array.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.object.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.symbol.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.bigint.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.date.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.number.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.sharedmemory.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.symbol.wellknown.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.weakref.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.array.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.error.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.object.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.regexp.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.array.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.arraybuffer.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.object.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.regexp.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.sharedmemory.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.string.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.float16.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.iterator.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.promise.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.regexp.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es5.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es6.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.array.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.collection.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.date.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.decorators.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.disposable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.error.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.full.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.intl.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.sharedmemory.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.temporal.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.typedarrays.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.scripthost.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.asynciterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.importscripts.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.iterable.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/pl/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/pt-br/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/ru/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tr/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tsc.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserver.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserverlibrary.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserverlibrary.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/typesMap.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/typescript.d.ts",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/typescript.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/typingsInstaller.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/watchGuard.js",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/zh-cn/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/lib/zh-tw/diagnosticMessages.generated.json",
+      "artifacts/api-server/_syncheck_node_modules_typescript/package.json",
+      "artifacts/api-server/src/vault/application/attachment/use-cases.ts",
+      "artifacts/api-server/src/vault/application/backup/cloud-connection.ts",
+      "artifacts/api-server/src/vault/application/backup/key.ts",
+      "artifacts/api-server/src/vault/application/backup/schedule-cron.ts",
+      "artifacts/api-server/src/vault/application/backup/schedule.ts",
+      "artifacts/api-server/src/vault/application/entity/health-check.ts",
+      "artifacts/api-server/src/vault/application/game/listing.ts",
+      "artifacts/api-server/src/vault/application/health-cron.ts",
+      "artifacts/api-server/src/vault/application/health-scan.ts",
+      "artifacts/api-server/src/vault/application/migration/use-cases.ts",
+      "artifacts/api-server/src/vault/application/secret/reveal.ts",
+      "artifacts/api-server/src/vault/application/secret/wallet.ts",
+      "artifacts/api-server/src/vault/application/security/auth-policy.ts",
+      "artifacts/api-server/src/vault/application/security/password.ts",
+      "artifacts/api-server/src/vault/application/security/pin-setup-code.ts",
+      "artifacts/api-server/src/vault/application/security/pin.ts",
+      "artifacts/api-server/src/vault/application/security/reauth.ts",
+      "artifacts/api-server/src/vault/application/security/status.ts",
+      "artifacts/api-server/src/vault/application/security/two-fa.ts",
+      "artifacts/api-server/src/vault/application/security/verify.ts",
+      "artifacts/api-server/src/vault/application/share/field-permissions.ts",
+      "artifacts/api-server/src/vault/application/share/use-cases.ts",
+      "artifacts/api-server/src/vault/application/snapshot/blob.ts",
+      "artifacts/api-server/src/vault/application/snapshot/payload.ts",
+      "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "artifacts/api-server/src/vault/application/snapshot/store.ts",
+      "artifacts/api-server/src/vault/application/snapshot/use-cases.ts",
+      "artifacts/api-server/src/vault/crypto/backup-envelope.ts",
+      "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/alerts.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/audit.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/cloud.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts",
+      "artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts",
+      "artifacts/api-server/src/vault/infrastructure/db-handle.ts",
+      "artifacts/api-server/src/vault/infrastructure/jobs/cron-scheduler.ts",
+      "artifacts/api-server/src/vault/infrastructure/providers/lazy-provider-ports.ts",
+      "artifacts/api-server/src/vault/infrastructure/providers/provider-ports.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/backup-envelope-key-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-analytics-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-bulk-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-create-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-lifecycle-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-receipt-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-update-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/field-key-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-activity-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-admin-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-attachment-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-schedule-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-entity-link-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-health-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-migration-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-reauth-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-share-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-payload-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-repository.ts",
+      "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts",
+      "artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts",
+      "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts",
+      "artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts",
+      "artifacts/api-server/src/vault/security/attachment-ownership.ts",
+      "artifacts/api-server/src/vault/security/lockout.ts",
+      "artifacts/api-server/src/vault/security/market-listing-ownership.ts",
+      "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "artifacts/api-server/src/vault/security/reauth-ownership.ts",
+      "artifacts/api-server/src/vault/security/reveal-token.ts",
+      "artifacts/api-server/src/vault/security/share-ownership.ts",
+      "artifacts/api-server/src/vault/security/snapshot-ownership.ts",
+      "artifacts/api-server/src/vault/shared/index.ts",
+      "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+      "attached_assets/ANTAS_VLT_GAP_FILLING_ROADMAP_STRICT_1791049759003.md",
+      "packages/vault-crypto/package.json",
+      "packages/vault-crypto/src/aes-gcm.d.mts",
+      "packages/vault-crypto/src/aes-gcm.mjs",
+      "packages/vault-crypto/src/aes-gcm.test.mjs",
+      "artifacts/api-server/src/lib/vault-backup-alerts.ts",
+      "artifacts/api-server/src/lib/vault-backup-audit.ts",
+      "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "artifacts/api-server/src/lib/vault-backup-delivery.ts",
+      "artifacts/api-server/src/lib/vault-backup-envelope.ts",
+      "artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts",
+      "artifacts/api-server/src/lib/vault-backup-schedule-cron.ts",
+      "artifacts/api-server/src/lib/vault-crypto.ts",
+      "artifacts/api-server/src/lib/vault-health-cron.ts",
+      "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "artifacts/api-server/src/lib/vault-health.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts",
+      "artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts",
+      "artifacts/api-server/src/lib/vault-trash-cron.ts",
+      "artifacts/api-server/src/lib/vault-trash-purge.ts",
+      "artifacts/ayzen/tsconfig.tsbuildinfo",
+      "lib/api-client-react/tsconfig.tsbuildinfo",
+      "lib/api-zod/tsconfig.tsbuildinfo",
+      "lib/db/tsconfig.tsbuildinfo",
+      "scripts/tsconfig.tsbuildinfo"
+    ],
+    "earlier_validators_edited": [],
+    "tree_manifest_sha256_matches_seal": true
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build is NOT executed)",
+    "before_total": 26,
+    "after_total": 25,
+    "syntactic_errors": [],
+    "new_diagnostics": [],
+    "before_by_class": {
+      "__external_unresolved": 5,
+      "2307: Cannot find module '…' or its corresponding type declarations.": 1,
+      "7006: Parameter '…' implicitly has an '…' type.": 20
+    },
+    "after_by_class": {
+      "__external_unresolved": 5,
+      "7006: Parameter '…' implicitly has an '…' type.": 20
+    }
+  },
+  "tests": {
+    "differential_cases": 59,
+    "differential_passed": 48,
+    "security_checks": 20,
+    "security_passed": 16,
+    "unit_parity": 3,
+    "unit_passed": 3,
+    "mutations_seeded": 22,
+    "mutations_detected": 22
+  },
+  "notes": [
+    "consumers_migrated is empty by design: 04-B extracts the two route files' logic and leaves them as thin adapters; direct game_entries/game_market_listings consumers elsewhere are 04-C.",
+    "Behavior is preserved exactly, including pre-existing quirks: persistence still builds SQL with sql.raw + quote-escaping (safe/safeTags) for game_entries rather than bound parameters; parseListing still JSON.parse()s photos/details; GET /marketplace/game/stats and GET /marketplace/game/listings remain unmetered. None of these is changed here.",
+    "Ownership owner lookup now goes through game-repository.selectGameEntryOwner (the original raw-SQL statement) instead of a second inline query, so the SQL exists exactly once.",
+    "The project's own test suites and full tsc/build cannot run in this environment (dependencies are not installed); the differential suite executes the frozen OLD routes and the NEW tree under identical stubbed dependencies and compares every DB call, crypto call, credit charge, PDP call, status code and body. Run the repo's build and tests in CI before certifying.",
+    "components/game-entries.tsx (and the other Game-named frontend files) are API clients only and are not part of this backend extraction."
+  ],
+  "status": "FAIL",
+  "checks": [
+    {
+      "name": "destination-exists:vault/domain/game.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/security/game-ownership.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/infrastructure/repositories/game-repository.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/game/entries.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination-exists:vault/application/game/marketplace.ts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "destination:repository-has-executable-implementation",
+      "passed": true,
+      "details": "18 functions"
+    },
+    {
+      "name": "destination:application-entries-has-executable-implementation",
+      "passed": true,
+      "details": "7 functions"
+    },
+    {
+      "name": "destination:application-marketplace-has-executable-implementation",
+      "passed": true,
+      "details": "7 functions"
+    },
+    {
+      "name": "destination:security-has-executable-implementation",
+      "passed": true,
+      "details": "7 functions"
+    },
+    {
+      "name": "destination:domain-not-the-only-destination (not constants-only extraction)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:safe→safe",
+      "passed": true,
+      "details": "{\"existed\":true,\"defined_new\":true,\"remaining\":false,\"verbatim\":true}"
+    },
+    {
+      "name": "moved:safeTags→safeTags",
+      "passed": true,
+      "details": "{\"existed\":true,\"defined_new\":true,\"remaining\":false,\"verbatim\":false}"
+    },
+    {
+      "name": "moved:gameEntryResource→gameEntryResource",
+      "passed": true,
+      "details": "{\"existed\":true,\"defined_new\":true,\"remaining\":false,\"verbatim\":false}"
+    },
+    {
+      "name": "moved:requireGameEntryOwnership→requireGameEntryOwnership",
+      "passed": true,
+      "details": "{\"existed\":true,\"defined_new\":true,\"remaining\":false,\"verbatim\":true}"
+    },
+    {
+      "name": "moved:gameListingOwnerOrAdminEngine→gameListingOwnerOrAdminEngine",
+      "passed": true,
+      "details": "{\"existed\":true,\"defined_new\":true,\"remaining\":false,\"verbatim\":true}"
+    },
+    {
+      "name": "moved:ensureWallet→ensureGameWallet",
+      "passed": true,
+      "details": "{\"existed\":true,\"defined_new\":true,\"remaining\":false,\"verbatim\":true}"
+    },
+    {
+      "name": "moved:parseListing→parseListing",
+      "passed": true,
+      "details": "{\"existed\":true,\"defined_new\":true,\"remaining\":false,\"verbatim\":true}"
+    },
+    {
+      "name": "moved:engine-registrations-identical",
+      "passed": true,
+      "details": "2 rules"
+    },
+    {
+      "name": "routes:table-unchanged:entries",
+      "passed": true,
+      "details": "5 routes"
+    },
+    {
+      "name": "routes:table-unchanged:market",
+      "passed": true,
+      "details": "5 routes"
+    },
+    {
+      "name": "handler-extracted:GET /game-entries",
+      "passed": true,
+      "details": "{\"refsB\":7,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "handler-extracted:POST /game-entries",
+      "passed": true,
+      "details": "{\"refsB\":20,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "handler-extracted:GET /game-entries/:id",
+      "passed": true,
+      "details": "{\"refsB\":5,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "handler-extracted:PUT /game-entries/:id",
+      "passed": true,
+      "details": "{\"refsB\":20,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "handler-extracted:DELETE /game-entries/:id",
+      "passed": true,
+      "details": "{\"refsB\":3,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "handler-extracted:GET /marketplace/game/listings",
+      "passed": true,
+      "details": "{\"refsB\":5,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "handler-extracted:POST /marketplace/game/listings",
+      "passed": true,
+      "details": "{\"refsB\":3,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "handler-extracted:POST /marketplace/game/buy",
+      "passed": true,
+      "details": "{\"refsB\":9,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "handler-extracted:DELETE /marketplace/game/listings/:id",
+      "passed": true,
+      "details": "{\"refsB\":5,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "handler-extracted:GET /marketplace/game/stats",
+      "passed": true,
+      "details": "{\"refsB\":5,\"refsA\":0,\"delegates\":true,\"defined\":true}"
+    },
+    {
+      "name": "route-file-is-adapter-only:entries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-has-no-persistence-crypto-policy-imports:entries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-old-file-did-own-logic-before:entries",
+      "passed": true,
+      "details": "69 refs in baseline"
+    },
+    {
+      "name": "route-file-is-adapter-only:market",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-has-no-persistence-crypto-policy-imports:market",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "route-old-file-did-own-logic-before:market",
+      "passed": true,
+      "details": "39 refs in baseline"
+    },
+    {
+      "name": "sql:distinct-statement-set-identical-old-vs-new",
+      "passed": false,
+      "details": "old=32 (28 distinct) new=33 (30 distinct)"
+    },
+    {
+      "name": "sql:no-sql-left-in-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "sql:persistence-only-in-repository",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "duplicates:no-sql-statement-implemented-twice",
+      "passed": false,
+      "details": "SELECT * FROM game_entries WHERE id=$1 AND user_id=$2 | UPDATE game_entries SET user_id=$1 WHERE id=$2 AND user_id=$3 RETURNING id"
+    },
+    {
+      "name": "duplicates:no-function-body-duplicated-across-destination",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:old-business-symbols-not-redeclared-in-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "usage:every-exported-destination-symbol-is-used",
+      "passed": false,
+      "details": "vault/infrastructure/repositories/game-repository.ts#selectGameEntryForListing, vault/infrastructure/repositories/game-repository.ts#transferGameEntryOwnership"
+    },
+    {
+      "name": "layering:domain-imports-nothing",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "layering:repository-only-db-and-drizzle",
+      "passed": true,
+      "details": "@workspace/db, drizzle-orm"
+    },
+    {
+      "name": "layering:application-does-not-touch-http-or-db-directly",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "layering:application-reaches-persistence-only-via-repository",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "layering:no-vault-module-imports-a-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "layering:security-uses-repository-not-inline-db",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:repository-scopes-every-game_entries-read-write-by-user_id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:wallet-debit-is-balance-guarded-and-listing-flip-is-status-guarded",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:purchase-transaction-rolls-back-on-each-failure-path",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:sensitive-fields-decrypted-and-encrypted-in-application",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "domain:constants-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumers:no-importer-depends-on-a-named-export-of-the-two-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumers:no-outside-file-uses-the-moved-ownership-symbols",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /game-entries list",
+      "passed": false,
+      "details": "statusCode: old=200 new=500; body: old=[{\"id\":1,\"account_password\":\"x\",\"__dec\":[\"account_password\",\"email_password\",\"email_2fa\",\"email_backup_code\"]}] new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.decryptRows) is not a function\"}; log: old=[[\"db.execute\",{\"raw\":\"SELECT * FROM game_entries WHERE user_id = 7 ORDER BY created_at DESC\"}],[\"await\",\"db.execute:SELECT * FROM GAME_ENTR new=[[\"db.execute\",{\"raw\":\"SELECT * FROM game_entries WHERE user_id = 7 ORDER BY created_at DESC\"}],[\"await\",\"db.execute:SELECT * FROM GAME_ENTR"
+    },
+    {
+      "name": "differential:GET /game-entries category with quote",
+      "passed": false,
+      "details": "statusCode: old=200 new=500; body: old=[] new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.decryptRows) is not a function\"}; log: old=[[\"db.execute\",{\"raw\":\"SELECT * FROM game_entries WHERE user_id = 7 AND category = 'O''Neil''; DROP TABLE game_entries;--' ORDER BY created_ new=[[\"db.execute\",{\"raw\":\"SELECT * FROM game_entries WHERE user_id = 7 AND category = 'O''Neil''; DROP TABLE game_entries;--' ORDER BY created_"
+    },
+    {
+      "name": "differential:GET /game-entries db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /game-entries create full",
+      "passed": false,
+      "details": "statusCode: old=201 new=500; body: old={\"id\":2,\"account_password\":\"enc(pw'1)\",\"__dec\":[\"account_password\",\"email_password\",\"email_2fa\",\"email_backup_code\"]} new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.encryptField) is not a function\"}; log: old=[[\"encryptField\",\"pw'1\"],[\"encryptField\",\"ep\"],[\"encryptField\",\"2fa\"],[\"encryptField\",\"bc\"],[\"db.execute\",{\"raw\":\"INSERT INTO game_entries ( new=[]"
+    },
+    {
+      "name": "differential:POST /game-entries create defaults",
+      "passed": false,
+      "details": "statusCode: old=201 new=500; body: old={\"id\":3,\"__dec\":[\"account_password\",\"email_password\",\"email_2fa\",\"email_backup_code\"]} new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.encryptField) is not a function\"}; log: old=[[\"encryptField\",null],[\"encryptField\",null],[\"encryptField\",null],[\"encryptField\",null],[\"db.execute\",{\"raw\":\"INSERT INTO game_entries (use new=[]"
+    },
+    {
+      "name": "differential:POST /game-entries empty category 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST /game-entries injection in fields",
+      "passed": false,
+      "details": "statusCode: old=201 new=500; body: old={\"id\":4,\"__dec\":[\"account_password\",\"email_password\",\"email_2fa\",\"email_backup_code\"]} new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.encryptField) is not a function\"}; log: old=[[\"encryptField\",null],[\"encryptField\",null],[\"encryptField\",null],[\"encryptField\",null],[\"db.execute\",{\"raw\":\"INSERT INTO game_entries (use new=[]"
+    },
+    {
+      "name": "differential:POST /game-entries db error",
+      "passed": false,
+      "details": "body: old={\"error\":\"DB error\",\"detail\":\"boom\"} new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.encryptField) is not a function\"}; log: old=[[\"encryptField\",\"pw'1\"],[\"encryptField\",\"ep\"],[\"encryptField\",\"2fa\"],[\"encryptField\",\"bc\"],[\"db.execute\",{\"raw\":\"INSERT INTO game_entries ( new=[]"
+    },
+    {
+      "name": "differential:POST /game-entries missing body throws",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /game-entries/:id found + charged",
+      "passed": false,
+      "details": "statusCode: old=200 new=500; body: old={\"id\":12,\"account_password\":\"x\",\"__dec\":[\"account_password\",\"email_password\",\"email_2fa\",\"email_backup_code\"],\"_credits\":{\"charged\":5,\"newBa new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.decryptRow) is not a function\"}; log: old=[[\"db.execute\",{\"raw\":\"SELECT * FROM game_entries WHERE id = 12 AND user_id = 7 LIMIT 1\"}],[\"await\",\"db.execute:SELECT * FROM GAME_ENTRIES\", new=[[\"db.execute\",{\"raw\":\"SELECT * FROM game_entries WHERE id = 12 AND user_id = 7 LIMIT 1\"}],[\"await\",\"db.execute:SELECT * FROM GAME_ENTRIES\","
+    },
+    {
+      "name": "differential:GET /game-entries/:id not found (no charge)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /game-entries/:id NaN 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /game-entries/:id db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PUT /game-entries/:id update",
+      "passed": false,
+      "details": "statusCode: old=200 new=500; body: old={\"id\":3,\"__dec\":[\"account_password\",\"email_password\",\"email_2fa\",\"email_backup_code\"]} new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.encryptField) is not a function\"}; log: old=[[\"encryptField\",\"pw'1\"],[\"encryptField\",\"ep\"],[\"encryptField\",\"2fa\"],[\"encryptField\",\"bc\"],[\"db.execute\",{\"raw\":\"UPDATE game_entries SET ca new=[]"
+    },
+    {
+      "name": "differential:PUT /game-entries/:id tags undefined keeps column",
+      "passed": false,
+      "details": "statusCode: old=200 new=500; body: old={\"id\":3,\"__dec\":[\"account_password\",\"email_password\",\"email_2fa\",\"email_backup_code\"]} new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.encryptField) is not a function\"}; log: old=[[\"encryptField\",\"[undefined]\"],[\"encryptField\",\"[undefined]\"],[\"encryptField\",\"[undefined]\"],[\"encryptField\",\"[undefined]\"],[\"db.execute\",{ new=[]"
+    },
+    {
+      "name": "differential:PUT /game-entries/:id no row 404",
+      "passed": false,
+      "details": "statusCode: old=404 new=500; body: old={\"error\":\"Not found or forbidden\"} new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.encryptField) is not a function\"}; log: old=[[\"encryptField\",\"pw'1\"],[\"encryptField\",\"ep\"],[\"encryptField\",\"2fa\"],[\"encryptField\",\"bc\"],[\"db.execute\",{\"raw\":\"UPDATE game_entries SET ca new=[]"
+    },
+    {
+      "name": "differential:PUT /game-entries/:id NaN 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PUT /game-entries/:id other user's row not updated",
+      "passed": false,
+      "details": "statusCode: old=404 new=500; body: old={\"error\":\"Not found or forbidden\"} new={\"error\":\"DB error\",\"detail\":\"(0 , field_encryption_1.encryptField) is not a function\"}; log: old=[[\"encryptField\",\"[undefined]\"],[\"encryptField\",\"[undefined]\"],[\"encryptField\",\"[undefined]\"],[\"encryptField\",\"[undefined]\"],[\"db.execute\",{ new=[]"
+    },
+    {
+      "name": "differential:DELETE /game-entries/:id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /game-entries/:id NaN 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /game-entries/:id db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET /game-entries/:id ownership builder owned",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PUT /game-entries/:id ownership builder owned",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE /game-entries/:id ownership builder owned",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:ownership builder missing row → sentinel",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:ownership builder non-numeric id → sentinel, no query",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET deny → 404 Not found",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:PUT deny → 404 Not found or forbidden",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE deny → silent success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET listings filtered",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET listings defaults",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET listings db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET listings bad JSON in row → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET listings filter injection stays parameterised",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST listings create",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST listings defaults",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST listings game_name missing",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST listings title blank",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST listings price invalid",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST listings photos not array",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST listings market disabled 403",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST listings db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST buy ok",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST buy listing_id missing",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST buy listing not found 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST buy own listing 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST buy insufficient pre-check 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST buy insufficient inside tx (concurrent) → rollback 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST buy listing already sold inside tx (concurrent) → rollback 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST buy tx step throws → rollback 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:POST buy full tx success records ledger",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE listing not found 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE listing owner/admin ok",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE listing array id ok",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE listing not owner/admin → 403, no cancel write",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:DELETE listing db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET stats",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET stats empty (null floor/vol)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:GET stats db error",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:all-four-sensitive-fields-encrypted-on-create",
+      "passed": false,
+      "details": ""
+    },
+    {
+      "name": "security:create-response-is-decrypted-with-sensitive-field-list",
+      "passed": false,
+      "details": ""
+    },
+    {
+      "name": "security:view-charges-credits-only-after-row-found",
+      "passed": false,
+      "details": ""
+    },
+    {
+      "name": "security:view-404-never-touches-ledger",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:update-sql-scoped-by-requesting-user",
+      "passed": false,
+      "details": ""
+    },
+    {
+      "name": "security:list-sql-scoped-by-user",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:category-quote-escaped",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:missing-row-resolves-to-no-owner-sentinel",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:non-numeric-id-does-no-db-lookup",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:owner-resolved-from-game_entries.user_id",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:delete-deny-is-quiet-no-op-not-404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:cannot-buy-own-listing-and-no-writes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:concurrent-insufficient-balance-rolls-back-and-releases",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:concurrent-double-sale-rolls-back-and-releases",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:tx-failure-rolls-back-and-releases-connection",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:successful-purchase-commits-once-with-fee-and-net",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:non-owner-cannot-cancel-listing",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:cancel-decision-routed-through-pdp-with-owner-or-admin-engine",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:disabled-market-blocks-listing-creation",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:listing-filters-are-bound-parameters-not-interpolated",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:safe() identical over 15 inputs",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:safeTags() identical over 9 inputs",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:parseListing() identical over 5 rows (incl. throwing)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation:findGameEntryById user scope removed",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:delete no longer user scoped",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:active-listing filter dropped",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:wallet balance guard dropped",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:insufficient/not-active reasons swapped",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:rollback dropped on double sale",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:listing order flipped",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:connection release dropped",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:create stops encrypting account password",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:view no longer charges credits",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:get 404 becomes 403",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:list ignores category",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:update tags default changed",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:delete reports failure",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:fee maths changed",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:self-buy check removed",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:double-sale status code changed",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:market kill switch ignored",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:cancel skips authorization",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:unknown owner defaults to user 1",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:moderators may cancel listings",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "mutation:sensitive field list shortened",
+      "passed": true,
+      "details": "detected by GET /game-entries list; GET /game-entries category with quote"
+    },
+    {
+      "name": "coverage:category:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:security",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:every-route-has-differential-case",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:every-route-has-success-and-failure-or-security-case",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:every-ownership-middleware-builder-and-deny-path-exercised",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-skipped-tests",
+      "passed": true,
+      "details": "59/59"
+    },
+    {
+      "name": "differential-cases-executed-interactions",
+      "passed": false,
+      "details": "37 cases recorded interactions"
+    },
+    {
+      "name": "mutation-suite-size",
+      "passed": true,
+      "details": "22 seeded regressions"
+    },
+    {
+      "name": "diff-audit:no-unrelated-changes",
+      "passed": false,
+      "details": ".github/workflows/ci.yml, artifacts/api-server/.tsbuildinfo, artifacts/api-server/src/index.ts, artifacts/api-server/src/lib/dr-test-runner.ts, artifacts/api-server/src/lib/mail-attachment-content.ts, artifacts/api-server/src/lib/mail-send-queue.ts, artifacts/api-server/src/lib/mail-sync.ts, artifacts/api-server/src/lib/oidc-client-admin-audit.ts, artifacts/api-server/src/lib/oidc-client-admin-request.ts, artifacts/api-server/src/lib/oidc-logout-propagation.ts, artifacts/api-server/src/lib/ssrf-guard.ts, artifacts/api-server/src/lib/vault-pin-guard.ts, artifacts/api-server/src/lib/wallet-crypto.ts, artifacts/api-server/src/routes/ayzen-mailbox.ts, artifacts/api-server/src/routes/email-accounts.ts, artifacts/api-server/src/routes/emergency-access.ts, artifacts/api-server/src/routes/marketplace-vault.ts, artifacts/api-server/src/routes/organizations.ts, artifacts/api-server/src/routes/passkey.ts, artifacts/api-server/src/routes/resend-webhook.ts, artifacts/api-server/src/routes/teams.ts, artifacts/api-server/src/routes/two-factor.ts, artifacts/api-server/src/routes/value-history.ts, artifacts/api-server/src/routes/vault-attachments.ts, artifacts/api-server/src/routes/vault-backup-cloud.ts, artifacts/api-server/src/routes/vault-backup-key.ts, artifacts/api-server/src/routes/vault-backup-schedule.ts, artifacts/api-server/src/routes/vault-migration.ts, artifacts/api-server/src/routes/vault-reauth.ts, artifacts/api-server/src/routes/vault-security.ts, artifacts/api-server/src/routes/vault-shares.ts, artifacts/api-server/src/routes/vault-snapshot.ts, artifacts/api-server/src/routes/vault.ts, artifacts/api-server/src/routes/wallets.ts, artifacts/api-server/src/vault/application/entity/activity-feed.ts, artifacts/api-server/src/vault/application/entity/activity.ts, artifacts/api-server/src/vault/application/entity/admin.ts, artifacts/api-server/src/vault/application/entity/analytics.ts, artifacts/api-server/src/vault/application/entity/bulk.ts, artifacts/api-server/src/vault/application/entity/create.ts, artifacts/api-server/src/vault/application/entity/lifecycle.ts, artifacts/api-server/src/vault/application/entity/links.ts, artifacts/api-server/src/vault/application/entity/receipt.ts, artifacts/api-server/src/vault/application/entity/update.ts, artifacts/api-server/src/vault/application/health.ts, artifacts/api-server/src/vault/application/index.ts, artifacts/api-server/src/vault/application/kyc/data-entities.ts, artifacts/api-server/src/vault/application/kyc/enrollment.ts, artifacts/api-server/src/vault/application/kyc/entries.ts, artifacts/api-server/src/vault/application/kyc/exchange.ts, artifacts/api-server/src/vault/application/local-account/accounts.ts, artifacts/api-server/src/vault/application/local-account/bridge.ts, artifacts/api-server/src/vault/application/local-account/receipt.ts, artifacts/api-server/src/vault/application/local-account/value.ts, artifacts/api-server/src/vault/crypto/field-encryption.ts, artifacts/api-server/src/vault/crypto/seed-phrase.ts, artifacts/api-server/src/vault/infrastructure/index.ts, artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts, artifacts/api-server/src/vault/security/entity-ownership.ts, artifacts/api-server/src/vault/security/kyc-ownership.ts, artifacts/api-server/src/vault/security/local-account-ownership.ts, artifacts/ayzen/src/lib/oidc-client.ts, ci/enforcement-pipeline.yml, package.json, scripts/antas/vault/build-certification.mjs, scripts/src/decrypt-env.ts, scripts/src/encrypt-env.ts, scripts/src/reencrypt-seed-phrases.ts, scripts/src/reencrypt-vault.ts, scripts/src/rewrap-encryption-keys.ts, services/vault/src/crypto/envelope.mjs, .gitignore, DELETE_THESE_FILES.txt, GAP-13-AB-NOTES.md, GAP-13-CD-NOTES.md, artifacts/api-server/_syncheck_node_modules_typescript/LICENSE.txt, artifacts/api-server/_syncheck_node_modules_typescript/README.md, artifacts/api-server/_syncheck_node_modules_typescript/SECURITY.md, artifacts/api-server/_syncheck_node_modules_typescript/ThirdPartyNoticeText.txt, artifacts/api-server/_syncheck_node_modules_typescript/bin/tsc, artifacts/api-server/_syncheck_node_modules_typescript/bin/tsserver, artifacts/api-server/_syncheck_node_modules_typescript/lib/_tsc.js, artifacts/api-server/_syncheck_node_modules_typescript/lib/_tsserver.js, artifacts/api-server/_syncheck_node_modules_typescript/lib/_typingsInstaller.js, artifacts/api-server/_syncheck_node_modules_typescript/lib/cs/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/de/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/es/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/fr/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/it/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/ja/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/ko/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.decorators.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.decorators.legacy.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.asynciterable.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.iterable.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.collection.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.core.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.generator.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.iterable.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.promise.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.proxy.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.reflect.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.symbol.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.symbol.wellknown.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.array.include.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.arraybuffer.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.date.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.object.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.sharedmemory.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.string.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.typedarrays.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.asyncgenerator.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.asynciterable.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.promise.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.regexp.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.array.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.object.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.string.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.symbol.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.bigint.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.date.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.number.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.promise.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.sharedmemory.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.string.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.symbol.wellknown.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.promise.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.string.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.weakref.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.array.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.error.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.object.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.regexp.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.string.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.array.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.collection.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.arraybuffer.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.collection.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.object.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.promise.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.regexp.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.sharedmemory.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.string.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.collection.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.float16.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.iterator.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.promise.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.regexp.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es5.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es6.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.array.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.collection.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.date.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.decorators.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.disposable.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.error.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.full.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.intl.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.sharedmemory.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.temporal.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.typedarrays.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.scripthost.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.asynciterable.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.importscripts.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.iterable.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/pl/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/pt-br/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/ru/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/tr/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/tsc.js, artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserver.js, artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserverlibrary.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserverlibrary.js, artifacts/api-server/_syncheck_node_modules_typescript/lib/typesMap.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/typescript.d.ts, artifacts/api-server/_syncheck_node_modules_typescript/lib/typescript.js, artifacts/api-server/_syncheck_node_modules_typescript/lib/typingsInstaller.js, artifacts/api-server/_syncheck_node_modules_typescript/lib/watchGuard.js, artifacts/api-server/_syncheck_node_modules_typescript/lib/zh-cn/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/lib/zh-tw/diagnosticMessages.generated.json, artifacts/api-server/_syncheck_node_modules_typescript/package.json, artifacts/api-server/src/vault/application/attachment/use-cases.ts, artifacts/api-server/src/vault/application/backup/cloud-connection.ts, artifacts/api-server/src/vault/application/backup/key.ts, artifacts/api-server/src/vault/application/backup/schedule-cron.ts, artifacts/api-server/src/vault/application/backup/schedule.ts, artifacts/api-server/src/vault/application/entity/health-check.ts, artifacts/api-server/src/vault/application/game/listing.ts, artifacts/api-server/src/vault/application/health-cron.ts, artifacts/api-server/src/vault/application/health-scan.ts, artifacts/api-server/src/vault/application/migration/use-cases.ts, artifacts/api-server/src/vault/application/secret/reveal.ts, artifacts/api-server/src/vault/application/secret/wallet.ts, artifacts/api-server/src/vault/application/security/auth-policy.ts, artifacts/api-server/src/vault/application/security/password.ts, artifacts/api-server/src/vault/application/security/pin-setup-code.ts, artifacts/api-server/src/vault/application/security/pin.ts, artifacts/api-server/src/vault/application/security/reauth.ts, artifacts/api-server/src/vault/application/security/status.ts, artifacts/api-server/src/vault/application/security/two-fa.ts, artifacts/api-server/src/vault/application/security/verify.ts, artifacts/api-server/src/vault/application/share/field-permissions.ts, artifacts/api-server/src/vault/application/share/use-cases.ts, artifacts/api-server/src/vault/application/snapshot/blob.ts, artifacts/api-server/src/vault/application/snapshot/payload.ts, artifacts/api-server/src/vault/application/snapshot/restore.ts, artifacts/api-server/src/vault/application/snapshot/store.ts, artifacts/api-server/src/vault/application/snapshot/use-cases.ts, artifacts/api-server/src/vault/crypto/backup-envelope.ts, artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts, artifacts/api-server/src/vault/infrastructure/backup/alerts.ts, artifacts/api-server/src/vault/infrastructure/backup/audit.ts, artifacts/api-server/src/vault/infrastructure/backup/cloud.ts, artifacts/api-server/src/vault/infrastructure/backup/delivery.ts, artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts, artifacts/api-server/src/vault/infrastructure/db-handle.ts, artifacts/api-server/src/vault/infrastructure/jobs/cron-scheduler.ts, artifacts/api-server/src/vault/infrastructure/providers/lazy-provider-ports.ts, artifacts/api-server/src/vault/infrastructure/providers/provider-ports.ts, artifacts/api-server/src/vault/infrastructure/repositories/backup-envelope-key-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/entity-analytics-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/entity-bulk-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/entity-create-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/entity-lifecycle-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/entity-receipt-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/entity-update-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/field-key-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts, artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-activity-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-admin-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-attachment-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-schedule-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-entity-link-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-health-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-migration-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-reauth-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-share-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-payload-repository.ts, artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-repository.ts, artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts, artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts, artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts, artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts, artifacts/api-server/src/vault/security/attachment-ownership.ts, artifacts/api-server/src/vault/security/lockout.ts, artifacts/api-server/src/vault/security/market-listing-ownership.ts, artifacts/api-server/src/vault/security/pin-guard.ts, artifacts/api-server/src/vault/security/reauth-ownership.ts, artifacts/api-server/src/vault/security/reveal-token.ts, artifacts/api-server/src/vault/security/share-ownership.ts, artifacts/api-server/src/vault/security/snapshot-ownership.ts, artifacts/api-server/src/vault/shared/index.ts, artifacts/api-server/src/vault/shared/marketplace/use-cases.ts, attached_assets/ANTAS_VLT_GAP_FILLING_ROADMAP_STRICT_1791049759003.md, packages/vault-crypto/package.json, packages/vault-crypto/src/aes-gcm.d.mts, packages/vault-crypto/src/aes-gcm.mjs, packages/vault-crypto/src/aes-gcm.test.mjs, artifacts/api-server/src/lib/vault-backup-alerts.ts, artifacts/api-server/src/lib/vault-backup-audit.ts, artifacts/api-server/src/lib/vault-backup-cloud.ts, artifacts/api-server/src/lib/vault-backup-delivery.ts, artifacts/api-server/src/lib/vault-backup-envelope.ts, artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts, artifacts/api-server/src/lib/vault-backup-schedule-cron.ts, artifacts/api-server/src/lib/vault-crypto.ts, artifacts/api-server/src/lib/vault-health-cron.ts, artifacts/api-server/src/lib/vault-health-scan.ts, artifacts/api-server/src/lib/vault-health.ts, artifacts/api-server/src/lib/vault-snapshot-extra.ts, artifacts/api-server/src/lib/vault-snapshot-restore.ts, artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts, artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts, artifacts/api-server/src/lib/vault-trash-cron.ts, artifacts/api-server/src/lib/vault-trash-purge.ts, artifacts/ayzen/tsconfig.tsbuildinfo, lib/api-client-react/tsconfig.tsbuildinfo, lib/api-zod/tsconfig.tsbuildinfo, lib/db/tsconfig.tsbuildinfo, scripts/tsconfig.tsbuildinfo"
+    },
+    {
+      "name": "diff-audit:no-earlier-validator-edited",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:baseline-seal-intact",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:every-declared-destination-file-was-added",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-syntax-errors",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-diagnostics-vs-baseline",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "generated_at": "2026-10-07T21:13:53.143Z",
+  "evidence_body_sha256": "bbfe57d9350c616255e0c4ce238750e713bd174063b0c8fd2ef001ef6a55ebf0"
+}

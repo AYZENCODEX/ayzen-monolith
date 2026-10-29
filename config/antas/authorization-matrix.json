@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "defaultDecision": "deny",
+  "requiredNegativeCases": [
+    "anonymous",
+    "wrong-user",
+    "wrong-tenant",
+    "wrong-capability",
+    "expired-capability",
+    "revoked-capability",
+    "wrong-resource-owner"
+  ],
+  "protectedDomains": ["identity", "authorization", "workspace", "finance", "vault", "mail", "notification", "workflow", "admin"],
+  "auditRequiredFor": ["allow", "deny", "step_up_required"],
+  "failureMode": "fail-closed"
+}

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "runtime": "services/platform-health",
+  "statusModel": ["healthy", "degraded", "unhealthy", "unknown"],
+  "requiredChecks": ["api-gateway", "event-fabric", "workflow-runtime", "scheduler", "notification", "policy", "identity", "coordination", "quota", "admin"],
+  "criticalDependenciesBlockReadiness": true,
+  "staleAfterMs": 90000,
+  "emits": ["service.health.changed", "platform.health.changed", "alert.created"]
+}

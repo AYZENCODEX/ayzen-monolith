@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-WP-7",
+  "title": "Fees, jobs and wallet bridge: six legacy lib files moved to finance/fees, finance/jobs, finance/integrations; F23 to F26",
+  "timestamp": "2026-10-20T00:00:00Z",
+  "status": "BLOCKED",
+  "statusReason": "Code moved, static and pure checks pass, but the WP-7 DB tests were written and NOT run: the package registry was unreachable in this session (403 from the egress proxy), so pnpm install, tsx, tsc and the DB suite could not run. Also no commit SHA, no Replit checkout run, no staging walk-through.",
+  "commit": {
+    "baseSha": "93ed60540127c1a4819cf957bfc4ba415199bf48",
+    "workingTree": "Uncommitted; cumulative with WP-2b to WP-6b; bound by content in fin-provenance-manifest.json."
+  },
+  "oldToNew": {
+    "lib/finance-late-fee-cron.ts": "finance/domain/late-fees.ts (formula), finance/fees/late-fees.ts (sweep), finance/jobs/late-fee.ts (cron)",
+    "lib/finance-reminder-cron.ts": "finance/jobs/reminder.ts",
+    "lib/finance-invoice-reminder-cron.ts": "finance/jobs/invoice-reminder.ts",
+    "lib/finance-digest-cron.ts": "finance/jobs/digest.ts",
+    "lib/finance-networth-cron.ts": "finance/jobs/networth.ts",
+    "lib/finance-wallet-bridge.ts": "finance/integrations/wallet-bridge.ts",
+    "ledger/journal.ts": "added postEntryJournalInTx, postLateFeeAccrualJournalInTx (postEntryJournal and postLateFeeAccrualJournal keep their behavior)"
+  },
+  "findings": {
+    "F23": "late-fee accrual: conditional, one transaction with its journal; unpostable journal rolls back; sub-cent overdue flip conditional",
+    "F24": "due-date reminder: claim first, release on failure, per-entry isolation, due-date-changed guard",
+    "F25": "overdue invoice nudge: claim first, restore when nothing delivered",
+    "F26": "wallet bridge: entry and journal in one transaction"
+  },
+  "behaviorChanges": [
+    "Two overlapping late-fee sweeps charge a period once; a settled entry is not charged; a failed journal means no accrual (retried next sweep) instead of an entry with no journal.",
+    "Reminder and invoice-nudge sweeps no longer double-send under overlap; a throwing entry no longer aborts the reminder sweep.",
+    "A wallet deposit or withdrawal whose journal cannot be posted is not recorded at all (before: recorded without a journal and never repaired).",
+    "Late fees are rounded to cents.",
+    "Awaiting-review invoices are not nudged.",
+    "New one-off repair for old wallet entries without a journal."
+  ],
+  "ran": [
+    {
+      "check": "domain/late-fees.test.ts (pure, strip-types plus resolver hook, TZ UTC, Asia/Dhaka, America/New_York)",
+      "result": "7/7 pass; accrual grid bit-identical to the original; roundLateFee cases"
+    },
+    {
+      "check": "finance/route-security.test.ts (static, same runner)",
+      "result": "55/55 pass (10 WP-7 gates incl. rounding, nudge statuses, wallet repair)"
+    },
+    {
+      "check": "mutation: float multiplication order changed in the daily_percent formula",
+      "result": "1 test failed, restored"
+    },
+    {
+      "check": "mutations of the static gates: calc-timestamp condition removed, late-fee journal failure ignored, wallet journal failure ignored, invoice-reminder restore removed, reminder due-date guard removed",
+      "result": "each failed the matching gate, restored"
+    },
+    {
+      "check": "node scripts/antas/finance/validate-boundaries.mjs",
+      "result": "PASS, 66 Finance sources, 0 findings"
+    },
+    {
+      "check": "validator mutations: route wired to legacy wallet-bridge path, function added to a shim, route import added to a job",
+      "result": "each produced the expected wp7-* finding, restored"
+    },
+    {
+      "check": "TypeScript syntax parse (ts.transpileModule) of every touched and new file",
+      "result": "0 syntax errors (not a type check)"
+    },
+    {
+      "check": "psql on local Postgres 16: date_trunc('milliseconds', ts) = iso::timestamp",
+      "result": "true"
+    }
+  ],
+  "notRun": [
+    "pnpm test:finance-db (wp7-use-cases.db.test.ts, about 35 tests, never executed; the other suites were not re-run after WP-7 either)",
+    "tsc -p artifacts/api-server --noEmit and pnpm typecheck / pnpm build",
+    "test:finance-static in full (only domain/late-fees.test.ts and route-security.test.ts were run, with a custom loader instead of tsx)",
+    "Replit checkout run, commit SHA, staging walk-through of a deposit, a late fee and a reminder"
+  ],
+  "next": "WP-8: delete the lib/finance-* shims (no importers remain), then WP-9 close-out. Run pnpm test:finance-db first.",
+  "ownerDecisionsApplied": [
+    "Invoices in payment_submitted / agreement_confirmed (and legacy creditor_verified) are not nudged while awaiting review",
+    "Wallet entries without a journal are repaired by repairWalletEntriesWithoutJournal (one-off script, not run at startup)",
+    "Late fees are rounded to whole cents; sub-cent fees keep accumulating"
+  ]
+}

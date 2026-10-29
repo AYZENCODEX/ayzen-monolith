@@ -1,0 +1,17 @@
+{
+  "name": "@ayzen/config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "types": "./src/index.d.mts",
+  "scripts": {
+    "test": "node --test"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.d.mts",
+      "import": "./src/index.mjs",
+      "default": "./src/index.mjs"
+    }
+  }
+}

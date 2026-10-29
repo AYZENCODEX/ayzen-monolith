@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-04",
+  "title": "Finance integrations and consumer migration",
+  "timestamp": "2026-10-14T03:55:52Z",
+  "status": "BLOCKED",
+  "statusReason": "Consumer ownership is mapped and the gateway/event/search contract tests pass, but the extracted service implements only a small account/transaction subset with different storage semantics. Route parity and provider-backed behavior are not proven, so no consumer was migrated or prefix cutover enabled.",
+  "commit": {
+    "sha": "a5df0e678ef4a11706c2b86c3b4e4df62ea3a49f",
+    "workingTreeAtStart": "Finance route and consumer sources are unchanged from the recorded base commit."
+  },
+  "objective": "Identify existing Finance providers and consumers, retain their contracts, and migrate only consumers for which behavior equivalence can be verified.",
+  "inspectedFiles": [
+    "reports/antas/finance/fin-00-a-migration-map.csv",
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/routes/finance-invoices.ts",
+    "artifacts/api-server/src/routes/payments.ts",
+    "artifacts/api-server/src/lib/finance-wallet-bridge.ts",
+    "services/finance/src/index.mjs",
+    "apps/api-gateway/src/routing.mjs",
+    "apps/worker/src/consumers.mjs",
+    "services/search/src/event-handlers.mjs",
+    "packages/endpoint-registry/src/index.mjs",
+    "packages/events/src/index.mjs"
+  ],
+  "filesChanged": [
+    "reports/antas/finance/fin-04-evidence.json"
+  ],
+  "consumerMap": [
+    {
+      "source": "Two Finance route modules",
+      "owner": "API-server monolith",
+      "surface": "109 route-handler declarations and the existing Finance/invoice request contracts",
+      "consumers": "39 Finance API caller files, endpoint registry, authentication/policy middleware",
+      "status": "RETAINED; no API path, method, auth, payload, or response migration."
+    },
+    {
+      "source": "services/finance",
+      "owner": "Extracted partial transport service",
+      "surface": "Accounts GET/POST and account-transaction GET/POST, plus internal audit read",
+      "consumers": "Gateway prefix forwarding; search reads a created transaction by id",
+      "status": "NOT A FULL API REPLACEMENT; its integer amountCents and service-state model differ from monolith Finance persistence."
+    },
+    {
+      "source": "finance.transaction.created event",
+      "owner": "Finance event contract",
+      "consumers": "Worker dispatch, notification, search, and workflow",
+      "status": "RETAINED; producer and event payload were not changed."
+    },
+    {
+      "source": "Wallet/deposit bridge",
+      "owner": "API-server Finance/Wallet integration",
+      "consumers": "Deposit watcher and wallet withdrawal route",
+      "status": "RETAINED; unique source identifiers remain the bridge's duplicate-event guard."
+    },
+    {
+      "source": "Payment-provider webhook",
+      "owner": "Separate payments route",
+      "consumers": "Payments/checkout; not the /api/finance contract",
+      "status": "EXPLICITLY OUT OF FIN-04 MIGRATION SCOPE."
+    }
+  ],
+  "migratedConsumers": [],
+  "commands": [
+    {
+      "command": "node --test apps/api-gateway/src/routing.test.mjs",
+      "exitCode": 0,
+      "result": "10/10 passed; includes monolith fallback and opt-in Finance prefix forwarding."
+    },
+    {
+      "command": "node --test apps/worker/src/consumers.test.mjs",
+      "exitCode": 0,
+      "result": "7/7 passed; event dispatch and failure accounting."
+    },
+    {
+      "command": "node --test services/search/src/event-handlers.test.mjs",
+      "exitCode": 0,
+      "result": "6/6 passed; includes Finance transaction lookup and retry behavior."
+    },
+    {
+      "command": "node --test packages/service-runtime/test/capability-gate.test.mjs",
+      "exitCode": 1,
+      "result": "11/12 passed; one existing shared service-runtime assertion expects 200 while the default fine-grained capability gate returns 403."
+    },
+    {
+      "command": "node --test --test-name-pattern='SERVICE_CAPABILITY_GATE=report logs the coarse denial but does not block the request' packages/service-runtime/test/capability-gate.test.mjs",
+      "exitCode": 1,
+      "result": "Failure reproduces in isolation; the surrounding capability gates are not cross-test interference."
+    }
+  ],
+  "testsAndInvariants": {
+    "gatewayPrefixFallback": "PASS",
+    "workerEventDispatch": "PASS",
+    "searchConsumerFetchAndRetry": "PASS",
+    "serviceRuntimeCapabilityGateSuite": "FAIL: 11/12 pass; isolated assertion failure recorded above. No service-runtime source or test was changed.",
+    "invoicePaymentProviderCallbacks": "NOT VERIFIED; no Finance-specific signature/retry/deduplication integration test.",
+    "financeRouteParity": "NOT VERIFIED; extracted service is not route-complete.",
+    "apiContracts": "UNCHANGED; no consumers were rewired."
+  },
+  "limitations": [
+    "No provider credentials or provider-backed non-production fixture were provided.",
+    "Gateway tests prove routing selection/fallback, not full route or data-model equivalence.",
+    "No route was moved to services/finance; FIN-03 also blocks money-path cutover pending database-backed invariants."
+  ],
+  "diffReview": "Evidence-only phase: API, event, worker, search, and payment-provider source code were not modified.",
+  "evidencePath": "reports/antas/finance/fin-04-evidence.json",
+  "nextSafeStep": "Build an endpoint-by-endpoint contract and ledger-semantics comparison for services/finance, and exercise eligible provider and event paths with controlled integration fixtures before migrating consumers.",
+  "followUps": [
+    {
+      "phase": "FIN-WP-0",
+      "item": "capability-gate.test.mjs report-mode failure",
+      "resolution": "Resolved as a separate test-only fix in packages/service-runtime/test/capability-gate.test.mjs; the failure was a stale test, not a service-runtime defect. See fin-wp0-evidence.json. FIN-04 status is unchanged (BLOCKED) because route parity is still open."
+    }
+  ]
+}

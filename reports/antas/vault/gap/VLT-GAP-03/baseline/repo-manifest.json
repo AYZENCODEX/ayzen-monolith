@@ -1,0 +1,104 @@
+{
+  "sub_phase": "VLT-GAP-03-A",
+  "purpose": "Frozen pre-extraction sources for OLD→NEW differential proof in 03-B/03-D.",
+  "sources": [
+    {
+      "file": "artifacts/api-server/src/routes/kyc.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__api-server__src__routes__kyc.ts",
+      "sha256": "05201d5c50191aa0682f2e7425902f9f07f04d65c4e8743d7f2cf1052b881a69",
+      "lines": 287
+    },
+    {
+      "file": "artifacts/api-server/src/routes/kyc-data-entities.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__api-server__src__routes__kyc-data-entities.ts",
+      "sha256": "42558bc1c65cbdf067505479afb184853b2c39f79af1857067372c72e5f0d2bd",
+      "lines": 185
+    },
+    {
+      "file": "artifacts/ayzen/src/components/kyc-entries.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__components__kyc-entries.tsx",
+      "sha256": "276f35167d2c65459cd8aff508c1e003c1ca7b27dcc8a57e32a48d98d5f86e6e",
+      "lines": 653
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-dashboard.tsx",
+      "sha256": "960eeaa8726ec6af5417d732225218fe2d3ff39a6ceed18091a55d35f1d2729c",
+      "lines": 351
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-detail.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-detail.tsx",
+      "sha256": "35de32b5d9e7e56bbb332b69c96c9863bc98362a48aae48ee195ad76a07f0f3c",
+      "lines": 193
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-list.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-list.tsx",
+      "sha256": "e371ca8a091e4bb1e3416cc1b69018583d5ecc11fbee4506c033aa9549e33fee",
+      "lines": 206
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-overview.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-overview.tsx",
+      "sha256": "25297809f132960f4df49d79aeb68ccd0ff430df4471c17f5f44a46db7b79552",
+      "lines": 6
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-unused.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-unused.tsx",
+      "sha256": "ff95f0d8b43883d5559ec586fd8984a901de521544c94668a936c4ba87e4134b",
+      "lines": 6
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-data-used.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-data-used.tsx",
+      "sha256": "51dd9db1182486331c96ce82e3711e7155eee5b2e8f740c63ba1c7c0b7c717d8",
+      "lines": 6
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-detail.tsx",
+      "sha256": "8ae7b948d9b9acc569578d4cb72a1b5337a3fa48dc8efcdd6ce213a2b065db30",
+      "lines": 771
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault-kyc-enrolled.tsx",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__ayzen__src__pages__user__vault-kyc-enrolled.tsx",
+      "sha256": "52ec0de616bff76b0d747a4d16afd4d443d04f88626529efd7763524aaf8663e",
+      "lines": 227
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/kyc.ts",
+      "baseline_copy": "reports/antas/vault/gap/VLT-GAP-03/baseline/sources/artifacts__api-server__src__vault__domain__kyc.ts",
+      "sha256": "f52730677e7dde3339ec12ecb505997aa03e72e1e19c970d5ed627f2aedc27f8",
+      "lines": 19
+    }
+  ],
+  "consumer_files": [
+    {
+      "file": "artifacts/api-server/src/routes/exchange-api.ts",
+      "sha256": "443d1d6fac218e507a373a60521fe842d5189a07fe27bf546bde5bd140480f7a"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/index.ts",
+      "sha256": "d8db8b5357ab4a6216b5ac6d080fcbc9d41495ca553f1a306e140ab7d19b5619"
+    },
+    {
+      "file": "artifacts/api-server/src/vault/index.ts",
+      "sha256": "bed7b74b8872228dd785f91013d165c8c9ab91a406230c04eaba43f854699ba7"
+    },
+    {
+      "file": "artifacts/ayzen/src/lib/route-config.tsx",
+      "sha256": "312aeeda53543f5625938bde00903c9149b7777ca99cf57423e3933023c79ca4"
+    },
+    {
+      "file": "artifacts/ayzen/src/pages/user/vault.tsx",
+      "sha256": "7ce32ec61bc6b1784e8d2ee2e02651be6be3c3c98c3908fa2351f2cee80041f8"
+    },
+    {
+      "file": "scripts/src/test-route-ownership-regression.ts",
+      "sha256": "1fafb8cbdf0dba4ecb15f7aa393e56cd160818dac86ca621a1b821b6d35601cd"
+    }
+  ]
+}

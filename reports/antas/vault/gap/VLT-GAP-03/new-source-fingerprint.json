@@ -1,0 +1,455 @@
+{
+  "phase": "VLT-GAP-03",
+  "sub_phase": "VLT-GAP-03-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "386d676b6ff44cc0732a2b5a451a7979a27ad4a74c8d9445124224e444169270",
+  "validator_version": "1.0.0",
+  "validator_sha256": "b7ce83bf8f53cb06c268ea3092740f096d8aaeb19dae761c541e96b7ada7342a",
+  "description": "Fingerprints of the new owner modules and proof that the old routes actually call them",
+  "owner_files": [
+    {
+      "file": "artifacts/api-server/src/vault/domain/kyc.ts",
+      "sha256": "19ce1058dd84efa5e68076c51e0e5cf1a3d27789f797788cf9b7e1a146168c18",
+      "lines": 36,
+      "exports": [
+        "KYC_SENSITIVE_FIELDS",
+        "KYC_ENTRY_OWNER_SENTINEL_NONE",
+        "isKycStatus",
+        "KYC_ENTRY_BAN_STATUSES",
+        "isKycBanStatus",
+        "KYC_DATA_ENTITY_SENSITIVE_FIELDS",
+        "KYC_DATA_ENTITY_OWNER_SENTINEL_NONE"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 2,
+        "calls": 1
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/domain/kyc-values.ts",
+      "sha256": "476cad2f092fd3accd4e2c000bb5c02a17ad394b9937afe5a3c1a528e8fe4277",
+      "lines": 18,
+      "exports": [
+        "val",
+        "numVal",
+        "safe",
+        "safeDate",
+        "d"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 9,
+        "calls": 7
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "sha256": "8af586a462bec5104c8a57bb6cf6e06489aa8e636daf7a5b7f6b10a5ea28d1b4",
+      "lines": 72,
+      "exports": [
+        "kycEntryResource",
+        "kycEntryOwnerResource",
+        "requireKycEntryOwnership",
+        "kycDataEntityResource",
+        "requireKycDataEntityOwnership",
+        "denyKycNotFound",
+        "denyKycNotFoundOrForbidden",
+        "denyKycSilentSuccess"
+      ],
+      "executable_business": {
+        "db_refs": 6,
+        "sql_literals": 2,
+        "branches": 9,
+        "calls": 17
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "sha256": "3e021b6a5c2ea876fbcde996d467c847cdc7e16fbbb5ee91e8945b1bf0cad3c4",
+      "lines": 173,
+      "exports": [
+        "dbError",
+        "listKycEntries",
+        "createKycEntry",
+        "getKycEntry",
+        "editKycEntry",
+        "setKycEntryStatus",
+        "removeKycEntry",
+        "listKycEnrollments"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 29,
+        "calls": 79
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "sha256": "2c16402277b19dc90c79cbefdc9ece39ea3b6b05ad90e4ed41a9005d657a4901",
+      "lines": 105,
+      "exports": [
+        "listKycDataEntities",
+        "getKycDataEntityOverview",
+        "createKycDataEntity",
+        "getKycDataEntity",
+        "editKycDataEntity",
+        "removeKycDataEntity"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 21,
+        "calls": 33
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "sha256": "b8987a668f5d899fa607c9329b14f125aec579d731dc1071295a5bc4c484cc16",
+      "lines": 44,
+      "exports": [
+        "loadKycEntryForEnrollment",
+        "buildEnrollmentAccountData"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 18,
+        "calls": 3
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "sha256": "7855f1e9f16127ac3997e41033259358acaf4226aa71e58d87477b038fa05ecd",
+      "lines": 52,
+      "exports": [
+        "loadKycExchangeCredentials",
+        "setKycEntryExchangeKeys"
+      ],
+      "executable_business": {
+        "db_refs": 0,
+        "sql_literals": 0,
+        "branches": 12,
+        "calls": 12
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts",
+      "sha256": "5571d448c9a391dc03c28a3c3fec341182226f4f9b6aec4c6ef727f811cc47a1",
+      "lines": 170,
+      "exports": [
+        "fetchKycEntryWithData",
+        "selectKycEntries",
+        "insertKycEntry",
+        "selectKycEntryForUser",
+        "updateKycEntry",
+        "updateKycEntryStatus",
+        "deleteKycEntry",
+        "selectKycEnrollments"
+      ],
+      "executable_business": {
+        "db_refs": 30,
+        "sql_literals": 9,
+        "branches": 7,
+        "calls": 72
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts",
+      "sha256": "ed84865e38eeff6e81da6042e58ef69700a8cf62ca291fe701311cde66120fdf",
+      "lines": 102,
+      "exports": [
+        "selectKycDataEntities",
+        "selectKycDataEntityOverview",
+        "insertKycDataEntity",
+        "selectKycDataEntityForUser",
+        "updateKycDataEntity",
+        "findKycEntryLinkedToDataEntity",
+        "findVaultEntryLinkedToDataEntity",
+        "deleteKycDataEntity"
+      ],
+      "executable_business": {
+        "db_refs": 18,
+        "sql_literals": 10,
+        "branches": 2,
+        "calls": 30
+      }
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-consumer-repository.ts",
+      "sha256": "179b186e3ba92e15ad1f6f23ae099cf2da4c74d2942cd17af3da54e98335c112",
+      "lines": 39,
+      "exports": [
+        "selectKycEntryExchangeCredentials",
+        "updateKycEntryExchangeKeys",
+        "selectKycEntryForEnrollment"
+      ],
+      "executable_business": {
+        "db_refs": 8,
+        "sql_literals": 3,
+        "branches": 2,
+        "calls": 10
+      }
+    }
+  ],
+  "use_cases": [
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "symbol": "listKycEntries",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 127,
+      "branches": 4,
+      "calls": 3,
+      "routes": [
+        "GET /kyc-entries"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "symbol": "createKycEntry",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 501,
+      "branches": 4,
+      "calls": 43,
+      "routes": [
+        "POST /kyc-entries"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "symbol": "getKycEntry",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 163,
+      "branches": 5,
+      "calls": 6,
+      "routes": [
+        "GET /kyc-entries/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "symbol": "editKycEntry",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 372,
+      "branches": 5,
+      "calls": 15,
+      "routes": [
+        "PUT /kyc-entries/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "symbol": "setKycEntryStatus",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 169,
+      "branches": 5,
+      "calls": 6,
+      "routes": [
+        "PATCH /kyc-entries/:id/status"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "symbol": "removeKycEntry",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 92,
+      "branches": 3,
+      "calls": 4,
+      "routes": [
+        "DELETE /kyc-entries/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "symbol": "listKycEnrollments",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 55,
+      "branches": 2,
+      "calls": 2,
+      "routes": [
+        "GET /kyc-entries/enrollments"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "symbol": "listKycDataEntities",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 88,
+      "branches": 3,
+      "calls": 3,
+      "routes": [
+        "GET /kyc-data-entities"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "symbol": "getKycDataEntityOverview",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 72,
+      "branches": 3,
+      "calls": 2,
+      "routes": [
+        "GET /kyc-data-entities/overview"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "symbol": "createKycDataEntity",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 168,
+      "branches": 2,
+      "calls": 11,
+      "routes": [
+        "POST /kyc-data-entities"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "symbol": "getKycDataEntity",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 127,
+      "branches": 4,
+      "calls": 5,
+      "routes": [
+        "GET /kyc-data-entities/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "symbol": "editKycDataEntity",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 186,
+      "branches": 4,
+      "calls": 6,
+      "routes": [
+        "PUT /kyc-data-entities/:id"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "symbol": "removeKycDataEntity",
+      "exists": true,
+      "exported": true,
+      "executable": true,
+      "tokens": 156,
+      "branches": 5,
+      "calls": 6,
+      "routes": [
+        "DELETE /kyc-data-entities/:id"
+      ]
+    }
+  ],
+  "moved_symbols": [
+    {
+      "symbol": "val",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/domain/kyc-values.ts#val"
+    },
+    {
+      "symbol": "numVal",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/domain/kyc-values.ts#numVal"
+    },
+    {
+      "symbol": "DATA_ENTITY_JOIN",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts#DATA_ENTITY_JOIN"
+    },
+    {
+      "symbol": "DATA_ENTITY_SELECT",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts#DATA_ENTITY_SELECT"
+    },
+    {
+      "symbol": "fetchWithData",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts#fetchKycEntryWithData"
+    },
+    {
+      "symbol": "kycEntryResource",
+      "disposition": "MOVED_REFACTORED_WITH_EXECUTED_PROOF",
+      "new_owner": "artifacts/api-server/src/vault/security/kyc-ownership.ts#kycEntryResource"
+    },
+    {
+      "symbol": "requireKycEntryOwnership",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/security/kyc-ownership.ts#requireKycEntryOwnership"
+    },
+    {
+      "symbol": "DATA_ENTITY_SENSITIVE_FIELDS",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/domain/kyc.ts#KYC_DATA_ENTITY_SENSITIVE_FIELDS"
+    },
+    {
+      "symbol": "safe",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/domain/kyc-values.ts#safe"
+    },
+    {
+      "symbol": "safeDate",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/domain/kyc-values.ts#safeDate"
+    },
+    {
+      "symbol": "USED_BY_KYC",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_BY_KYC"
+    },
+    {
+      "symbol": "USED_BY_VAULT",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_BY_VAULT"
+    },
+    {
+      "symbol": "USED_EXPR",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-data-entity-repository.ts#USED_EXPR"
+    },
+    {
+      "symbol": "KYC_DATA_ENTITY_OWNER_SENTINEL_NONE",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/domain/kyc.ts#KYC_DATA_ENTITY_OWNER_SENTINEL_NONE"
+    },
+    {
+      "symbol": "kycDataEntityResource",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/security/kyc-ownership.ts#kycDataEntityResource"
+    },
+    {
+      "symbol": "requireKycDataEntityOwnership",
+      "disposition": "MOVED_VERBATIM",
+      "new_owner": "artifacts/api-server/src/vault/security/kyc-ownership.ts#requireKycDataEntityOwnership"
+    }
+  ],
+  "layering_notes": [
+    "artifacts/api-server/src/vault/security/kyc-ownership.ts: security layer resolves ownership through the database (6 refs) — permitted PEP resource resolver"
+  ]
+}

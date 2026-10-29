@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-01",
+  "check": "Finance dependency and ownership scan",
+  "generatedAt": "2026-10-28T01:09:45.128Z",
+  "status": "PASS",
+  "sourceRevision": {
+    "baseCommit": "UNAVAILABLE",
+    "worktreeState": "See git status; this report includes source hashes to bind its result to the working tree."
+  },
+  "scannedFinanceSourceCount": 56,
+  "scannedApiFinanceSourceCount": 55,
+  "scannedExtractedServiceSourceCount": 1,
+  "ciWiring": {
+    "workflow": ".github/workflows/ci.yml",
+    "command": "pnpm validate:finance-boundaries",
+    "present": true
+  },
+  "invoiceCalculationOwners": {
+    "computeLineItemsTotal": [
+      "artifacts/api-server/src/finance/domain/invoice-totals.ts"
+    ],
+    "computeInvoiceTotals": [
+      "artifacts/api-server/src/finance/domain/invoice-totals.ts"
+    ]
+  },
+  "invoiceFormatOwners": {
+    "formatInvoiceNumber": [
+      "artifacts/api-server/src/finance/domain/invoice-format.ts"
+    ],
+    "amountInWords": [
+      "artifacts/api-server/src/finance/domain/invoice-format.ts"
+    ]
+  },
+  "recurrenceDateOwners": {
+    "addMonthsClamped": [
+      "artifacts/api-server/src/finance/domain/recurrence-dates.ts"
+    ],
+    "advanceRecurringDate": [
+      "artifacts/api-server/src/finance/domain/recurrence-dates.ts"
+    ]
+  },
+  "recurrenceDateConsumerWiring": {
+    "artifacts/api-server/src/finance/domain/schedules.ts": {
+      "symbol": "addMonthsClamped",
+      "importsOwner": true
+    },
+    "artifacts/api-server/src/finance/jobs/recurring.ts": {
+      "symbol": "advanceRecurringDate",
+      "importsOwner": true
+    }
+  },
+  "approvedLegacyRouteEdges": [],
+  "observedRouteEdges": [],
+  "financeImportCycles": [],
+  "sourceSha256": {
+    ".github/workflows/ci.yml": "f42e8b71349a12688d1f891318a7844da45b2c36ea04dde9f600323ac1f57ac1",
+    "artifacts/api-server/package.json": "f7305a1d54d3a29993e24fb8dc8550b7d5542f2ba3e50c7811e123085d49667b",
+    "artifacts/api-server/src/finance/ai/finance-ai.ts": "abb8054364f2db995adde070ab748009fc90e73d09137ac8ef74023ea4dbba35",
+    "artifacts/api-server/src/finance/application/ai.ts": "c2e6e56a6cce249a8039bd6c600cd97a9ace15326246a813b6d353ed8eda2f57",
+    "artifacts/api-server/src/finance/application/assets.ts": "c7908faa136ad69c499f9b70379bf4b29712541462784d452503ae03019b560c",
+    "artifacts/api-server/src/finance/application/books-accounts.ts": "13fa248d33484bc302b5fb1d2f395f392e7bcac3c7e7e2e68318d5f57c9bbd2b",
+    "artifacts/api-server/src/finance/application/currencies.ts": "5a70b70ce7d6c2afedb66b11e0bb4aa4ca2e0b317781ddfe5556fb345bda21cc",
+    "artifacts/api-server/src/finance/application/entries.ts": "14ca5f90029418243fd59453a957f7660840d61db2a9c671ab200a20ce1862b1",
+    "artifacts/api-server/src/finance/application/goals-budgets.ts": "8a3ef9f9adb0fd9cc397b1d949621f0d37204b5f2087acaa0b12c6025b1299e8",
+    "artifacts/api-server/src/finance/application/invoice-branding.ts": "eff098895aa78e188c96e2f85e9b83bd599f4440dd8f5ce1a261f6b72b760646",
+    "artifacts/api-server/src/finance/application/invoices.ts": "e4e7f1538b4f5a21de68472cbb2999fba6a4392a4597ea8d97ac0f696693ef63",
+    "artifacts/api-server/src/finance/application/journal.ts": "20df77ac25c94f23a216a6177790dc65a3711b9cbdb47c6712b9e3ab08ad03a8",
+    "artifacts/api-server/src/finance/application/networth.ts": "2ce739c265ff880db7671788bb4158c60ff58b21c7651969e707f162384e3383",
+    "artifacts/api-server/src/finance/application/parties.ts": "1663c3ccde400d110fbbbac3f0e419db0c1eba95480582a376683b50b14e1480",
+    "artifacts/api-server/src/finance/application/payment-agreements.ts": "cd7b412f099030b01983fa76dd2c54058fd52279abdfd2ac9ec1a67e44b8b16a",
+    "artifacts/api-server/src/finance/application/payment-methods.ts": "988e3075230b6c9bca04b35ee4f45f11c2c541831faddfa2dd2fb32ce71a32d5",
+    "artifacts/api-server/src/finance/application/receipts.ts": "e99c6ca4acd28a1bc8cb558a45ced0cda1cc5c3e79dc2877f9e03ffc966fd124",
+    "artifacts/api-server/src/finance/application/recurring.ts": "82d94b6a3a6cab7f1fe2c13cb5610f8decea91f12b54fa3fc85abc1ab9933699",
+    "artifacts/api-server/src/finance/application/report-schedules.ts": "71f9e38d540cce48883ddfc27d0268365e3db7cd2b9451559c6720396f29e7f5",
+    "artifacts/api-server/src/finance/application/reports.ts": "3cd495ef00cf7af552e34ff51f52c1007d1be09b4c6c59ef1d5bd2589d76c80b",
+    "artifacts/api-server/src/finance/domain/invoice-format.test.ts": "396a7cab041a3cba3dbc78102edb3f0fa404849ca53a0d5b203e4f9175f06a0c",
+    "artifacts/api-server/src/finance/domain/invoice-format.ts": "99c021fe4d47e94b0fd8aa5307bd3f6940fa398e679bbef9925ed376b9b5136e",
+    "artifacts/api-server/src/finance/domain/invoice-totals.test.ts": "3aa31e8290aa37e67011540227a98195a1e29e5bc41b3f8dd26905c5f1e2b577",
+    "artifacts/api-server/src/finance/domain/invoice-totals.ts": "94c3a6a5d626b1a54259bb72fed0c2961c8b80f316868e9607f7589df0f8204b",
+    "artifacts/api-server/src/finance/domain/late-fees.test.ts": "798dc5d21181d7eade7bbe11eb8771f26fd85e8cca90dcc546b237c672fbeaa7",
+    "artifacts/api-server/src/finance/domain/late-fees.ts": "840c1687b60f0e6001cb22c56999acf9c2a50b0bd365d96285c0dfb4bc68db87",
+    "artifacts/api-server/src/finance/domain/recurrence-dates.test.ts": "f870599aaac1ae58bd166e4e6af8af84a89cf5a6c4671eb1820bf4992ce65583",
+    "artifacts/api-server/src/finance/domain/recurrence-dates.ts": "4a41fa2b04a3eee122f26a9561f25cc2e97f98001c72bfad89cf3bf97426acd4",
+    "artifacts/api-server/src/finance/domain/schedules.test.ts": "a35d3aa0c6ccf58a5547beba834fd3150a41cb5462930efcbbb1c047d5e0a7fd",
+    "artifacts/api-server/src/finance/domain/schedules.ts": "807f91be91c6dc3a3178e427c28ea43094aba7211e3ab5fbd94a9939b6cf70a4",
+    "artifacts/api-server/src/finance/fees/late-fees.ts": "bd927a3cf399eb35ff4c2bcdcfe7b93ff7d6c0ae776b688ad9b389cfa11f4f55",
+    "artifacts/api-server/src/finance/integrations/repair-wallet-journals.ts": "87a762a59ce6fca6b90e8cd86ad18c1b0e096d593be144e0146e16fe13357702",
+    "artifacts/api-server/src/finance/integrations/wallet-bridge.ts": "2783cb301c209b2756558b91b3f79a5dcfc121fd566723283edc2a741b722c30",
+    "artifacts/api-server/src/finance/invoices/events.ts": "86af3822d76c70646d3765aa6efc83c82a558c651a9d3e2cb7f5964a1e2c2b05",
+    "artifacts/api-server/src/finance/invoices/format.ts": "3e426e880fd7ca1ef8997427cfb3f818ca1f3515980192c70d69ad4b018ede3d",
+    "artifacts/api-server/src/finance/invoices/links.ts": "375395a5160128c3aa40373f89212e7a903e08298354a88233caf24146a81f45",
+    "artifacts/api-server/src/finance/invoices/pdf.ts": "7755a6d4ce72df6709a0b49206dd01b5e5f07ab4566b32fe6e455c776ae1f836",
+    "artifacts/api-server/src/finance/invoices/rule-invoice.ts": "621e02455d3c4b135acf9639e1a39e6a4d13c8585071a4e8e542181e255522fd",
+    "artifacts/api-server/src/finance/invoices/store.ts": "825caa3fa4793a3a2dd65b7645208f6bd88bb0a48898f1fc7232e8508fdc9f0a",
+    "artifacts/api-server/src/finance/jobs/digest.ts": "2d42d19ec8971d8374557c04fcf9a80502bdae6b4a2d44f7483976a205b9e201",
+    "artifacts/api-server/src/finance/jobs/due-rules.ts": "b9caffa39bf5e7819a8f5b9568d8b986bb92eac8d928ff0f58e9a01a11b4ed20",
+    "artifacts/api-server/src/finance/jobs/invoice-reminder.ts": "70ffd0e90890fba56ada6510c0cd682987db5ed44a3fc097954ad8fd02d2841d",
+    "artifacts/api-server/src/finance/jobs/late-fee.ts": "ac489549457346087dfd93a65e337f984ba63787fba5111fbda4807c970da753",
+    "artifacts/api-server/src/finance/jobs/networth.ts": "87b7542e510729d4cbd89911fdaf61663b7405719d01b6bc2350ddd7b6263d23",
+    "artifacts/api-server/src/finance/jobs/recurring.ts": "91d7d64f3e26e24b6a2a3fd62b28d7c090881a25aac7d0692682b238a3abd771",
+    "artifacts/api-server/src/finance/jobs/reminder.ts": "cb00fefa9fc15208b4046e849b14350b702ca3a3adeae63b83c763c90e74b619",
+    "artifacts/api-server/src/finance/jobs/report-schedule.ts": "9b3b62ded70496c5d6e492cc35ac9b4fa6dbb18e0e8b522b6eb21e37f14ce522",
+    "artifacts/api-server/src/finance/ledger/balances.ts": "4f9340435dc1aa7f6e1bdc04b22b150f4cfbbd5b2fb28fb256fbc21a29db8ae7",
+    "artifacts/api-server/src/finance/ledger/books.ts": "c4a6b930d8a587201a6e2a74831efabf1a7831aead7c3920be236f702b91446e",
+    "artifacts/api-server/src/finance/ledger/journal.ts": "71e4ae294e7cb0697631f296befafc931c7a92b9aa877d55d8836518975dc94a",
+    "artifacts/api-server/src/finance/ledger/repayments.ts": "bc3285f976edc45d0101a1910051036b2d0fe98ecda9b06476d4597ed22e2e13",
+    "artifacts/api-server/src/finance/ledger/system-accounts.ts": "327e0ef6f758475bedf759ce1e739dda38890c5a35ed610e35e2f65a5a63a42a",
+    "artifacts/api-server/src/finance/networth/networth.ts": "3da62fa6e8cd18fcb15ed0badd40cd9ee2885af8c33bf7d6d183398e43da51be",
+    "artifacts/api-server/src/finance/notifications/notify.ts": "651babd0531cac089d8f2599852fd68dd6cc76be563f70644311c3e2e2e60631",
+    "artifacts/api-server/src/finance/payment-methods/payment-methods.ts": "0880c8ad4ae33ac4540ce733f6b7e95b573ede1d0e999a7406740ab2b0b9b240",
+    "artifacts/api-server/src/finance/receipts/receipt-tokens.ts": "363c815deb1597808d142c74db8f149aa7f043f155e3afc4463c0793728620e3",
+    "artifacts/api-server/src/finance/schedules/amortization.ts": "f86da4822a437811f16a7796c9396c774c4f359aa5932edb80e48e45cc6707f9",
+    "artifacts/api-server/src/finance/schedules/depreciation.ts": "f7bbe52a7eee9f9c6e02db38c9be4cd1815ef0821a65d9a778a5a6cd24dee506",
+    "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs": "9ee979b0e97b5876aee262ac82835aac922f8b41596099d53c0bec00aa463539",
+    "artifacts/api-server/src/lib/receipt-theme.ts": "0de73ba09672b5d6f68c320cad337a29bf7b183e4d0e1821a6ba430e1dc5d5af",
+    "artifacts/api-server/src/routes/finance-invoices.ts": "1af0e1f0e9327b63c1bcbdce754de1c6af584c3a7aba1a6cc1339e2da7ef00db",
+    "artifacts/api-server/src/routes/finance.ts": "0fa04265c25a146f09337e8666d72984693cc40e2054424d65d3d1f16c60fc0a",
+    "docs/antas/finance/finance-boundaries.md": "72a45dd5a032af63a94a650e2293e0747a81bddade55028889c218e57f356e39",
+    "package.json": "ca62efffb2c6b89a2c2c3238a4adee5d13b9f42b406fdfa8c74b6cdb2f7cec19",
+    "scripts/antas/finance/validate-boundaries.mjs": "44784b25a0c63cdecb172d20c3eae17fdc3c7afb69c7eecde4f551b6232c28b4",
+    "services/finance/src/index.mjs": "189155b2e5bac9b65656e1e134245aa59d04a810c2e801a7851f1da6697cf13b"
+  },
+  "findings": []
+}

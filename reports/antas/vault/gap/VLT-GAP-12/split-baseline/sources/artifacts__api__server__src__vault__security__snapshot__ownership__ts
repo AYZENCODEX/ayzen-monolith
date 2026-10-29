@@ -1,0 +1,57 @@
+import { type Request, type Response } from "express";
+import { type ResourceRefBuilder } from "../../lib/policy/pep/types";
+import { db, vaultSnapshotsTable } from "@workspace/db";
+import { eq } from "drizzle-orm";
+import { pepDecisionObserver } from "../../middlewares/auth";
+import { requireOwnership } from "../../lib/policy/pep/middleware";
+
+/** Extracted verbatim from routes/vault-snapshot.ts (VLT-GAP-09); bodies unchanged. */
+ // 200 MB / user
+
+// Route Integration Roadmap — Season E, Phase E6: new resource builder.
+// `vault_snapshots` has one owner column (`user_id`) — same plain
+// single-owner shape as every other `*Resource` in this series. Every
+// route below already scoped its own query by `eq(vaultSnapshotsTable.id,
+// id), eq(vaultSnapshotsTable.userId, userId)` (or the trash-purge
+// variant with an extra `isNotNull(deletedAt)`), just never through PEP.
+//
+// The builder itself deliberately does NOT filter on `deletedAt` — it
+// only resolves "who owns this row" (Guide's Step 2: "exactly one DB
+// read... resolves one fact"), regardless of trashed state. The
+// trashed-vs-live distinction stays exactly where it already lived, in
+// each handler's own more specific query (download/PATCH/DELETE require
+// `deletedAt IS NULL`; restore/purge require `deletedAt IS NOT NULL`) —
+// same "PEP additive, handler's own logic untouched" posture this whole
+// series uses. A caller who owns a snapshot but hits the wrong trashed
+// state still gets exactly the same pre-existing 404 as before, just from
+// the handler's own query instead of the gate.
+//
+// Two of the five pre-existing handlers (download, PATCH, DELETE, restore,
+// purge) had their own `Number.isFinite(id)` check ahead of any DB call,
+// replying `400 { error: "Invalid snapshot id" }` for a non-numeric id —
+// a different body from the "not found" 404. The plain sentinel-and-onDeny
+// shape would collapse that into the same 404 as every other deny reason,
+// changing behavior for that one case. Same fix as Phase C11's
+// `requireAyzenMailboxMessageOwnershipStrictId`: a "strict id" wrapper
+// whose own `onDeny` re-checks `Number.isFinite` and reproduces the exact
+// prior split.
+export const VAULT_SNAPSHOT_OWNER_SENTINEL_NONE = -1;
+export const vaultSnapshotResource: ResourceRefBuilder = async (req) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) return { type: "vault_snapshot", id: req.params.id, ownerId: VAULT_SNAPSHOT_OWNER_SENTINEL_NONE };
+  const [row] = await db.select({ userId: vaultSnapshotsTable.userId })
+    .from(vaultSnapshotsTable)
+    .where(eq(vaultSnapshotsTable.id, id))
+    .limit(1);
+  return { type: "vault_snapshot", id, ownerId: row?.userId ?? VAULT_SNAPSHOT_OWNER_SENTINEL_NONE };
+};
+export function requireVaultSnapshotOwnershipStrictId(action: string, notFoundBody: { error: string }) {
+  return requireOwnership(action, vaultSnapshotResource, {
+    onDecision: pepDecisionObserver,
+    onDeny: (req: Request, res: Response) => {
+      const id = Number(req.params.id);
+      if (!Number.isFinite(id)) { res.status(400).json({ error: "Invalid snapshot id" }); return; }
+      res.status(404).json(notFoundBody);
+    },
+  });
+}

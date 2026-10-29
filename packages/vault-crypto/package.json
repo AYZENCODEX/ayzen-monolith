@@ -1,0 +1,12 @@
+{
+  "name": "@ayzen/vault-crypto",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./aes-gcm": {
+      "types": "./src/aes-gcm.d.mts",
+      "import": "./src/aes-gcm.mjs"
+    }
+  }
+}

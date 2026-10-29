@@ -1,0 +1,641 @@
+{
+  "generatedAt": "2026-09-29T06:06:06.484Z",
+  "apps": [
+    {
+      "directory": "apps/api-gateway",
+      "name": "@ayzen/api-gateway",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "apps/telegram-gateway",
+      "name": "@ayzen/telegram-gateway",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "apps/worker",
+      "name": "@ayzen/worker",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    }
+  ],
+  "artifacts": [
+    {
+      "directory": "artifacts/api-server",
+      "name": "@workspace/api-server",
+      "version": "0.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": true
+    },
+    {
+      "directory": "artifacts/astra-extension",
+      "name": "@workspace/astra-extension",
+      "version": "0.1.0",
+      "hasSourceEntrypoint": false,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "artifacts/ayzen",
+      "name": "@workspace/ayzen",
+      "version": "0.0.0",
+      "hasSourceEntrypoint": false,
+      "hasBuildScript": true
+    },
+    {
+      "directory": "artifacts/release",
+      "name": "release",
+      "version": null,
+      "hasSourceEntrypoint": false,
+      "hasBuildScript": false
+    }
+  ],
+  "packages": [
+    {
+      "directory": "packages/admin-data",
+      "name": "@ayzen/admin-data",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/admin-policy",
+      "name": "@ayzen/admin-policy",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/alerting",
+      "name": "@ayzen/alerting",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/api-contracts",
+      "name": "@ayzen/api-contracts",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/api-spec",
+      "name": "@ayzen/api-spec",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/app-api-security",
+      "name": "@ayzen/app-api-security",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/architecture",
+      "name": "@ayzen/architecture",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/audit",
+      "name": "@ayzen/audit",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/auth-client",
+      "name": "@ayzen/auth-client",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/authorization",
+      "name": "@ayzen/authorization",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/backbone",
+      "name": "@ayzen/backbone",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/backpressure",
+      "name": "@ayzen/backpressure",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/capabilities",
+      "name": "@ayzen/capabilities",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/component-registry",
+      "name": "@ayzen/component-registry",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/config",
+      "name": "@ayzen/config",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/connectivity",
+      "name": "@ayzen/connectivity",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/connectors",
+      "name": "@ayzen/connectors",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/contracts",
+      "name": "@ayzen/contracts",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/coordination",
+      "name": "@ayzen/coordination-primitives",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/correlation",
+      "name": "@ayzen/correlation",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/domain-boundaries",
+      "name": "@ayzen/domain-boundaries",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/endpoint-registry",
+      "name": "@ayzen/endpoint-registry",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/enforcement-core",
+      "name": "@ayzen/enforcement-core",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/errors",
+      "name": "@ayzen/errors",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/event-client",
+      "name": "@ayzen/event-client",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/events",
+      "name": "@ayzen/events",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/idempotency",
+      "name": "@ayzen/idempotency",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/identity",
+      "name": "@ayzen/identity",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/identity-context",
+      "name": "@ayzen/identity-context",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/leases",
+      "name": "@ayzen/leases",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/logger",
+      "name": "@ayzen/logger",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/migration",
+      "name": "@ayzen/migration",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/notification",
+      "name": "@ayzen/notification",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/outbox",
+      "name": "@ayzen/outbox",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/platform-governance",
+      "name": "@ayzen/platform-governance",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/policy-contract",
+      "name": "@ayzen/policy-contract",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/rate-limit",
+      "name": "@ayzen/rate-limit",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/reliability",
+      "name": "@ayzen/reliability",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/resilience",
+      "name": "@ayzen/resilience",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/secrets",
+      "name": "@ayzen/secrets",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/security",
+      "name": "@ayzen/security",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/service-auth",
+      "name": "@ayzen/service-auth",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/service-registry",
+      "name": "@ayzen/service-registry",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/service-runtime",
+      "name": "@ayzen/service-runtime",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/service-state",
+      "name": "@ayzen/service-state",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/telegram",
+      "name": "@ayzen/telegram",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/telemetry",
+      "name": "@ayzen/telemetry",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/tracing",
+      "name": "@ayzen/tracing",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/workflow",
+      "name": "@ayzen/workflow",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "packages/xuka",
+      "name": "@ayzen/xuka",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    }
+  ],
+  "services": [
+    {
+      "directory": "services/admin",
+      "name": "@ayzen/admin-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/admin-gateway",
+      "name": "@ayzen/admin-gateway",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/ai",
+      "name": "@ayzen/ai-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/app-access-gateway",
+      "name": "@ayzen/app-access-gateway",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/architecture-versioning",
+      "name": "@ayzen/architecture-versioning",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/artifact-registry",
+      "name": "@ayzen/artifact-registry",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/certification-registry",
+      "name": "@ayzen/certification-registry",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/circuit-registry",
+      "name": "@ayzen/circuit-registry",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": true
+    },
+    {
+      "directory": "services/config-control",
+      "name": "@ayzen/config-control",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/coordination",
+      "name": "@ayzen/coordination",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/cost-governance",
+      "name": "@ayzen/cost-governance",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/enforcement-fabric",
+      "name": "@ayzen/enforcement-fabric",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/event-operations",
+      "name": "@ayzen/event-operations",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/finance",
+      "name": "@ayzen/finance-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/gap-registry",
+      "name": "@ayzen/gap-registry",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/identity",
+      "name": "@ayzen/identity-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/incident-correlation",
+      "name": "@ayzen/incident-correlation",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/intelligence",
+      "name": "@ayzen/intelligence-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/mail",
+      "name": "@ayzen/mail-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/marketplace",
+      "name": "@ayzen/marketplace-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/migration-governance",
+      "name": "@ayzen/migration-governance",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/notification",
+      "name": "@ayzen/notification-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/platform-health",
+      "name": "@ayzen/platform-health",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/policy",
+      "name": "@ayzen/policy-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/policy-simulation",
+      "name": "@ayzen/policy-simulation",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/quota",
+      "name": "@ayzen/quota",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/release-governance",
+      "name": "@ayzen/release-governance",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/runtime-graph",
+      "name": "@ayzen/runtime-graph",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/scheduler",
+      "name": "@ayzen/scheduler",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/search",
+      "name": "@ayzen/search-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/service-discovery",
+      "name": "@ayzen/service-discovery",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/vault",
+      "name": "@ayzen/vault-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    },
+    {
+      "directory": "services/workflow",
+      "name": "@ayzen/workflow-service",
+      "version": "1.0.0",
+      "hasSourceEntrypoint": true,
+      "hasBuildScript": false
+    }
+  ]
+}

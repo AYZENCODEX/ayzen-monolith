@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-06",
+  "sub_phase": "VLT-GAP-06-B",
+  "validator_version": "1.0.0",
+  "commit_sha": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "be5cfd922cecb90d73f818a2b8ebdf283688a69f99d84f7c0f7fef1508ccbf09",
+  "source_hashes": {
+    "artifacts/api-server/src/lib/vault-pin-guard.ts": "d69c5a16f2d4e7a65dad41aea93b731afbd03c2964bdf573e360edd9a8ef22bd",
+    "artifacts/api-server/src/vault/security/pin-guard.ts": "6cf7a898200612e84feee0d2c82e47a31b075c7cc89b0dcbe0b1f27adf61437d",
+    "artifacts/api-server/src/routes/passkey.ts": "17632e09b3cef88a077f548054eca5173a7d8b5e0a3f16b0695cfb593aa8fc7a",
+    "artifacts/api-server/src/routes/vault-security.ts": "08248de670f095ce5d601a223e9c3328b30ebe1f51a0cf4ce5e66f58a05db296",
+    "docs/antas/vault/file-migration-map.md": "bbb3d2d9c018e114cc97ad58906d97f469f6e457e39d66c215952d94bd313bd8"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-06-B.mjs",
+    "pnpm --filter @workspace/api-server exec tsc --noEmit --skipLibCheck --target es2022 --module esnext --moduleResolution bundler --types node --strict --customConditions workspace src/vault/security/pin-guard.ts src/routes/passkey.ts src/routes/vault-security.ts"
+  ],
+  "exit_codes": {
+    "extraction-scope TypeScript check": 0
+  },
+  "symbols_moved": [
+    {
+      "symbol": "isVaultPinLockedOut",
+      "from": "artifacts/api-server/src/lib/vault-pin-guard.ts",
+      "to": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "before_body_sha256": "73fd2de8983e8bd02dda5277d22856cb3fe4891011ae4355f56f075555459d1b",
+      "after_body_sha256": "73fd2de8983e8bd02dda5277d22856cb3fe4891011ae4355f56f075555459d1b"
+    },
+    {
+      "symbol": "recordFailure",
+      "from": "artifacts/api-server/src/lib/vault-pin-guard.ts",
+      "to": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "before_body_sha256": "b4aa723d40ee667a5efc09fce38e116291772742a8d591e58208f659b3b48493",
+      "after_body_sha256": "b4aa723d40ee667a5efc09fce38e116291772742a8d591e58208f659b3b48493"
+    },
+    {
+      "symbol": "clearVaultPinFailures",
+      "from": "artifacts/api-server/src/lib/vault-pin-guard.ts",
+      "to": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "before_body_sha256": "49155c29b2f22c2fa7487d39b9b6b6d96287fee539b3feae3fc12215b03e0fd2",
+      "after_body_sha256": "49155c29b2f22c2fa7487d39b9b6b6d96287fee539b3feae3fc12215b03e0fd2"
+    },
+    {
+      "symbol": "hasVaultPin",
+      "from": "artifacts/api-server/src/lib/vault-pin-guard.ts",
+      "to": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "before_body_sha256": "1b87d5b1fda08ada16f0943f3f36879bccb66916cc5aede3bcf70fa8c7b63b14",
+      "after_body_sha256": "1b87d5b1fda08ada16f0943f3f36879bccb66916cc5aede3bcf70fa8c7b63b14"
+    },
+    {
+      "symbol": "requireVaultPin",
+      "from": "artifacts/api-server/src/lib/vault-pin-guard.ts",
+      "to": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "before_body_sha256": "9217d846a652b9f8a512dab2b81952819b69baf64db4d54c97f04f8e5cd2803e",
+      "after_body_sha256": "9217d846a652b9f8a512dab2b81952819b69baf64db4d54c97f04f8e5cd2803e"
+    }
+  ],
+  "consumers_migrated": [],
+  "old_business_symbols_remaining": [],
+  "compatibility_adapter": {
+    "file": "artifacts/api-server/src/lib/vault-pin-guard.ts",
+    "business_declarations": 0,
+    "forwards_to": "artifacts/api-server/src/vault/security/pin-guard.ts"
+  },
+  "duplicate_implementations": [],
+  "migration_map_entry": "| Security PIN guard | `artifacts/api-server/src/lib/vault-pin-guard.ts` | `artifacts/api-server/src/vault/security/pin-guard.ts` | EXTRACTED (VLT-GAP-06-B); compatibility exports retained until VLT-GAP-06-D |",
+  "status": "PASS"
+}

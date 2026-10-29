@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-02E",
+  "title": "Extract read-only Finance report use cases",
+  "timestamp": "2026-10-17T02:23:03+00:00",
+  "status": "PASS",
+  "statusReason": "The report query implementations now have one application owner, database characterization tests pass, and the existing route adapters retain their authentication and response formatting.",
+  "commit": "9d2265005539307911672cb7ba17f2047c1de5c4; working tree contains the phase changes and is not committed.",
+  "objective": "Move read-only dashboard, export, analytics, insights, and accounting-report queries out of the Finance route file without changing routes, auth, response shapes, or database schema.",
+  "oldToNewMapping": [
+    {
+      "from": "routes/finance.ts: summary, projections, exports, analytics, insights, and accounting/custom report handlers",
+      "to": "finance/application/reports.ts",
+      "symbols": [
+        "getFinanceSummary",
+        "getFinanceProjections",
+        "getFinanceExportRows",
+        "getFinanceAnalytics",
+        "getFinanceInsights",
+        "getCustomFinanceReport",
+        "getTrialBalanceReport",
+        "getBalanceSheetReport",
+        "getIncomeStatementReport",
+        "getCashFlowReport"
+      ]
+    }
+  ],
+  "migratedConsumers": [
+    {
+      "consumer": "artifacts/api-server/src/routes/finance.ts",
+      "status": "Delegates to the application owner. The existing route paths, requireAuth middleware, CSV/PDF formatting, and entry date formatting remain in the route adapter."
+    }
+  ],
+  "filesChangedOrAdded": [
+    "artifacts/api-server/src/finance/application/reports.ts",
+    "artifacts/api-server/src/finance/application/reports.db.test.ts",
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/lib/finance-accounting.db-runner.mjs",
+    "scripts/antas/finance/validate-boundaries.mjs",
+    "docs/antas/finance/finance-boundaries.md",
+    "docs/antas/finance/finance-target-tree-status.md",
+    "reports/antas/finance/fin-01-dependency-scan.json"
+  ],
+  "databaseTestIsolation": {
+    "target": "Replit development database, explicitly selected as replit-test",
+    "runner": "Creates a uniquely named isolated schema, applies allowlisted Finance table DDL, runs tests, and drops the schema.",
+    "publicSchemaFallback": false,
+    "schemaMigration": false,
+    "result": {
+      "tests": 10,
+      "passed": 10,
+      "failed": 0
+    }
+  },
+  "commands": [
+    {
+      "command": "pnpm --filter @workspace/api-server typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server test:finance-db",
+      "exitCode": 0,
+      "tests": 10,
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "command": "pnpm validate:finance-boundaries",
+      "exitCode": 0,
+      "financeSources": 26,
+      "findings": 0
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server exec node --test --import tsx src/finance/domain/*.test.ts",
+      "exitCode": 0,
+      "tests": 11,
+      "passed": 11,
+      "failed": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "invariants": [
+    {
+      "name": "Read-only query scoping and report output shapes",
+      "status": "Characterized against the isolated Replit test schema."
+    },
+    {
+      "name": "HTTP authorization and public route contract",
+      "status": "Route adapters retain requireAuth and existing formatting; unauthenticated summary request returned HTTP 401. Authenticated response bodies were not exercised."
+    }
+  ],
+  "runtimeVerification": {
+    "workflow": "Start application",
+    "status": "RUNNING",
+    "result": "API and frontend production builds completed; API server listened on port 5000. Public root page rendered. The Finance UI is behind authentication and was not visually verified."
+  },
+  "limitations": [
+    "PASS applies only to the read-only report extraction sub-phase, not completion of the Finance target tree.",
+    "HTTP-level authenticated report contract tests remain outstanding.",
+    "No schema migration, ledger behavior change, or Finance service cutover was performed.",
+    "Ledger, schedules, invoice lifecycle, and other application modules remain behind the FIN-03 money-safety gates."
+  ],
+  "diffReview": {
+    "result": "git diff --check passed.",
+    "singleOwnerAndRouteWiring": "The Finance boundary scan verifies one owner for report use cases and that routes/finance.ts imports that owner."
+  },
+  "evidencePath": "reports/antas/finance/fin-02e-evidence.json",
+  "nextSafeStep": "Add authenticated HTTP contract tests for report routes before treating route parity as proven."
+}

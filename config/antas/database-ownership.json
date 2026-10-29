@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "registry": "ANTAS database ownership",
+  "requiredMigrationMetadata": ["forward", "rollback", "compatibility", "lockImpact", "dataLossRisk", "backfill", "verification"],
+  "piiClassificationRequired": true,
+  "retentionPolicyRequired": true,
+  "backupClassRequired": true,
+  "sourceOfTruth": "packages/domain-boundaries/src/index.mjs"
+}

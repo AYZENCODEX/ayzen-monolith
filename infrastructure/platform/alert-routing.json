@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "channels": ["admin-telegram", "in-app", "email"],
+  "deduplication": {
+    "keyFields": ["eventType", "service", "resource", "environment"],
+    "cooldownSeconds": 300,
+    "groupWindowSeconds": 60
+  },
+  "severity": {
+    "critical": {"channels": ["admin-telegram", "in-app", "email"], "ackRequired": true, "escalateAfterSeconds": 900},
+    "high": {"channels": ["admin-telegram", "in-app"], "ackRequired": true, "escalateAfterSeconds": 1800},
+    "medium": {"channels": ["in-app"], "ackRequired": false, "escalateAfterSeconds": 0},
+    "low": {"channels": ["in-app"], "ackRequired": false, "escalateAfterSeconds": 0}
+  },
+  "maintenanceSuppresses": ["deployment.started", "service.health.changed"]
+}

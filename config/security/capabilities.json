@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "defaultDeny": true,
+  "source": "packages/authorization",
+  "requiresServerDecision": true,
+  "featureGraph": "config/circuit/platform-circuit.json"
+}

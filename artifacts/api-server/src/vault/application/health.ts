@@ -1,0 +1,233 @@
+/**
+ * Vault health rules.
+ *
+ * This is the application-owned implementation. The former lib/vault-health.ts
+ * path is retained only as a compatibility adapter for older imports.
+ */
+import { formatVaultEntry as formatRow } from "./entity";
+
+export type HealthSeverity = "flag" | "warn" | "alert";
+
+export interface HealthRuleHit {
+  id: string;
+  severity: HealthSeverity;
+  message: string;
+}
+
+export interface VaultHealthInput {
+  score: number;
+  lastLoginAt: string | Date | null;
+  hasTwitter2fa: boolean | null | undefined;
+  hasDiscord2fa: boolean | null | undefined;
+  hasTelegram2fa: boolean | null | undefined;
+  hasEmail2fa: boolean | null | undefined;
+  hasAccountPassword: boolean | null | undefined;
+  email: string | null | undefined;
+  status: string | null | undefined;
+  hasRecoveryEmail?: boolean | null | undefined;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export function computeAutoScore(input: VaultHealthInput): number {
+  let score = 5;
+  if (input.lastLoginAt) {
+    const days = (Date.now() - new Date(input.lastLoginAt).getTime()) / DAY_MS;
+    if (days <= 7) score += 2;
+    else if (days <= 30) score += 1;
+    else if (days <= 90) score -= 1;
+    else score -= 3;
+  } else {
+    score -= 1;
+  }
+
+  const twofaSignals = [
+    input.hasTwitter2fa,
+    input.hasDiscord2fa,
+    input.hasTelegram2fa,
+    input.hasEmail2fa,
+  ].filter((v) => v !== null && v !== undefined);
+  if (twofaSignals.length > 0) {
+    const covered = twofaSignals.filter(Boolean).length;
+    const ratio = covered / twofaSignals.length;
+    score += ratio >= 1 ? 2 : ratio >= 0.5 ? 1 : -1;
+  }
+  if (input.hasAccountPassword) score += 1;
+  else score -= 1;
+  if (input.email && input.email.trim().length > 0) score += 1;
+  if (input.status === "banned") score = Math.min(score, 1);
+  else if (input.status === "suspended") score = Math.min(score, 3);
+  else if (input.status === "warning") score = Math.min(score, 5);
+  return Math.max(0, Math.min(10, Math.round(score)));
+}
+
+export function evalHealthRules(input: VaultHealthInput): HealthRuleHit[] {
+  const hits: HealthRuleHit[] = [];
+  if (input.score < 3) {
+    hits.push({ id: "low_score", severity: "alert", message: `Health score critically low (${input.score}/10)` });
+  }
+  if (input.lastLoginAt) {
+    const days = (Date.now() - new Date(input.lastLoginAt).getTime()) / DAY_MS;
+    if (days >= 30) hits.push({ id: "inactive_30d", severity: "warn", message: `No login for ${Math.floor(days)} days` });
+  }
+  const twofaSignals = [
+    ["twitter", input.hasTwitter2fa],
+    ["discord", input.hasDiscord2fa],
+    ["telegram", input.hasTelegram2fa],
+    ["email", input.hasEmail2fa],
+  ] as const;
+  const missing2fa = twofaSignals.filter(([, present]) => present === false).map(([name]) => name);
+  if (missing2fa.length > 0) {
+    hits.push({ id: "missing_2fa", severity: "flag", message: `2FA missing on: ${missing2fa.join(", ")}` });
+  }
+  if (input.status === "banned" || input.status === "suspended") {
+    hits.push({ id: "status_" + input.status, severity: "alert", message: `Entity status is "${input.status}"` });
+  }
+  return hits;
+}
+
+export function evalBackgroundHealthRules(input: VaultHealthInput): HealthRuleHit[] {
+  const hits: HealthRuleHit[] = [];
+  if (input.score < 3) {
+    hits.push({ id: "low_score", severity: "alert", message: `Health score critically low (${input.score}/10)` });
+  }
+  if (input.lastLoginAt) {
+    const days = (Date.now() - new Date(input.lastLoginAt).getTime()) / DAY_MS;
+    if (days >= 14) hits.push({ id: "stale_login_14d", severity: "warn", message: `No login for ${Math.floor(days)} days` });
+  } else {
+    hits.push({ id: "never_logged_in", severity: "warn", message: "No login recorded for this entity yet" });
+  }
+  const twofaSignals = [
+    ["twitter", input.hasTwitter2fa],
+    ["discord", input.hasDiscord2fa],
+    ["telegram", input.hasTelegram2fa],
+    ["email", input.hasEmail2fa],
+  ] as const;
+  const missing2fa = twofaSignals.filter(([, present]) => present === false).map(([name]) => name);
+  if (missing2fa.length > 0) {
+    hits.push({ id: "missing_2fa", severity: "flag", message: `2FA missing on: ${missing2fa.join(", ")}` });
+  }
+  if (input.email && !input.hasRecoveryEmail) {
+    hits.push({ id: "dead_recovery_email", severity: "warn", message: "No recovery email on file for this entity" });
+  }
+  if (input.status === "banned" || input.status === "suspended") {
+    hits.push({ id: "status_" + input.status, severity: "alert", message: `Entity status is "${input.status}"` });
+  }
+  return hits;
+}
+
+export function severityEmoji(s: HealthSeverity): string {
+  return s === "alert" ? "🚨" : s === "warn" ? "⚠️" : "🏳️";
+}
+
+export interface KycHealthInput {
+  hasEmail2fa: boolean;
+  hasAccountTwofa: boolean;
+  hasEmailBackup: boolean;
+  hasAccountBackup: boolean;
+  hasRecoveryEmail: boolean;
+  lastLoginAt: string | Date | null;
+  status: string | null | undefined;
+}
+
+export function evalKycBackgroundHealthRules(input: KycHealthInput): HealthRuleHit[] {
+  const hits: HealthRuleHit[] = [];
+  if (!input.hasEmail2fa && !input.hasAccountTwofa) {
+    hits.push({ id: "missing_2fa", severity: "flag", message: "No 2FA (email or account) configured" });
+  }
+  if (!input.hasEmailBackup && !input.hasAccountBackup) {
+    hits.push({ id: "missing_backup_codes", severity: "flag", message: "No backup codes stored" });
+  }
+  if (!input.hasRecoveryEmail) {
+    hits.push({ id: "dead_recovery_email", severity: "warn", message: "No recovery email on file" });
+  }
+  if (input.lastLoginAt) {
+    const days = (Date.now() - new Date(input.lastLoginAt).getTime()) / DAY_MS;
+    if (days >= 14) hits.push({ id: "stale_login_14d", severity: "warn", message: `No login for ${Math.floor(days)} days` });
+  } else {
+    hits.push({ id: "never_logged_in", severity: "warn", message: "No login recorded yet" });
+  }
+  if (input.status === "banned" || input.status === "suspended") {
+    hits.push({ id: "status_" + input.status, severity: "alert", message: `KYC entity status is "${input.status}"` });
+  }
+  return hits;
+}
+
+export interface WalletHealthInput {
+  hasSeedPhrase: boolean;
+  lastSyncedAt: string | Date | null;
+}
+
+export function evalWalletBackgroundHealthRules(input: WalletHealthInput): HealthRuleHit[] {
+  const hits: HealthRuleHit[] = [];
+  if (!input.hasSeedPhrase) hits.push({ id: "no_seed_backup", severity: "flag", message: "No seed phrase backed up for this wallet" });
+  if (input.lastSyncedAt) {
+    const days = (Date.now() - new Date(input.lastSyncedAt).getTime()) / DAY_MS;
+    if (days >= 14) hits.push({ id: "stale_sync_14d", severity: "warn", message: `Not synced for ${Math.floor(days)} days` });
+  } else {
+    hits.push({ id: "never_synced", severity: "warn", message: "Balance has never been synced" });
+  }
+  return hits;
+}
+
+export interface LocalAccountHealthInput {
+  hasTwofa: boolean;
+  hasBackupCodes: boolean;
+  hasRecoveryEmail: boolean;
+  lastLoginAt: string | Date | null;
+  status: string | null | undefined;
+}
+
+export function evalLocalAccountBackgroundHealthRules(input: LocalAccountHealthInput): HealthRuleHit[] {
+  const hits: HealthRuleHit[] = [];
+  if (!input.hasTwofa) hits.push({ id: "missing_2fa", severity: "flag", message: "No 2FA configured" });
+  if (!input.hasBackupCodes) hits.push({ id: "missing_backup_codes", severity: "flag", message: "No backup codes stored" });
+  if (!input.hasRecoveryEmail) hits.push({ id: "dead_recovery_email", severity: "warn", message: "No recovery email on file" });
+  if (input.lastLoginAt) {
+    const days = (Date.now() - new Date(input.lastLoginAt).getTime()) / DAY_MS;
+    if (days >= 14) hits.push({ id: "stale_login_14d", severity: "warn", message: `No login for ${Math.floor(days)} days` });
+  }
+  if (input.status === "banned" || input.status === "suspended") {
+    hits.push({ id: "status_" + input.status, severity: "alert", message: `Account status is "${input.status}"` });
+  }
+  return hits;
+}
+
+export interface DataEntityHealthInput {
+  hasNidNumber: boolean;
+  hasName: boolean;
+  hasBirthDate: boolean;
+  hasPhoto1: boolean;
+  hasPhoto2: boolean;
+  used: boolean;
+  createdAt: string | Date | null;
+}
+
+export function evalDataEntityBackgroundHealthRules(input: DataEntityHealthInput): HealthRuleHit[] {
+  const hits: HealthRuleHit[] = [];
+  if (!input.hasNidNumber) hits.push({ id: "missing_nid", severity: "flag", message: "No NID/ID number on file" });
+  if (!input.hasName) hits.push({ id: "missing_name", severity: "flag", message: "No name on file" });
+  if (!input.hasBirthDate) hits.push({ id: "missing_birth_date", severity: "flag", message: "No birth date on file" });
+  if (!input.hasPhoto1 && !input.hasPhoto2) hits.push({ id: "missing_photos", severity: "warn", message: "No ID document photos attached" });
+  if (!input.used && input.createdAt) {
+    const days = (Date.now() - new Date(input.createdAt).getTime()) / DAY_MS;
+    if (days >= 30) hits.push({ id: "unused_stale_30d", severity: "warn", message: `Not linked to any entity for ${Math.floor(days)} days` });
+  }
+  return hits;
+}
+
+// Moved unchanged from routes/vault.ts (VLT-GAP-11): formatted entity -> health rule input.
+export function toHealthInput(formatted: ReturnType<typeof formatRow>): VaultHealthInput {
+  return {
+    score: Number((formatted as any).score ?? 5),
+    lastLoginAt: (formatted as any).lastLoginAt ?? null,
+    hasTwitter2fa: (formatted as any).twitterUsername ? !!(formatted as any).twitter2fa : undefined,
+    hasDiscord2fa: (formatted as any).discordUsername ? !!(formatted as any).discord2fa : undefined,
+    hasTelegram2fa: (formatted as any).telegramUsername ? !!(formatted as any).telegram2fa : undefined,
+    hasEmail2fa: (formatted as any).email ? !!(formatted as any).email2fa : undefined,
+    hasAccountPassword: !!(formatted as any).accountPassword,
+    email: (formatted as any).email ?? null,
+    status: (formatted as any).status ?? "active",
+    hasRecoveryEmail: !!(formatted as any).emailRecovery,
+  };
+}

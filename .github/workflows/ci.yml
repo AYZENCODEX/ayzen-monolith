@@ -1,0 +1,102 @@
+name: AYZEN CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  affected:
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.affected.outputs.services }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: affected
+        run: |
+          echo 'services=["workspace"]' >> "$GITHUB_OUTPUT"
+
+  validation:
+    needs: affected
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ${{ fromJSON(needs.affected.outputs.services) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/validate-phase-1-15.mjs
+      - run: node scripts/validate-phase-16-25.mjs
+      - run: node scripts/validate-platform-phases.mjs
+      - run: node scripts/validate-maturity-phases.mjs
+      - run: pnpm validate:product-readiness-1-40
+      # FIN-05: enforce Finance's single-owner pure domain and import boundaries.
+      - run: pnpm validate:finance-boundaries
+      # R-11: Finance static suite (domain, route security, ledger ownership, AI parsing, async-error guards).
+      - run: pnpm --filter @workspace/api-server test:finance-static
+      # PRJ-01: Projects boundaries, frozen route surface and the Vault/Finance cross-module contract. Blocking.
+      - run: pnpm validate:projects-boundaries:self-test
+      - run: pnpm validate:projects-boundaries
+      # MKT-00: frozen Marketplace + Polymarket route surface (143 routes)
+      - run: pnpm validate:marketplace-routes
+      # MKT-02: boundary gate (baseline ratchet, route reviews, layering once marketplace/ exists)
+      - run: pnpm validate:marketplace-boundaries:self-test
+      - run: pnpm validate:marketplace-boundaries
+      # MKT-01a: static characterization pins (fee constants, write and lock order, debit guards, response shapes)
+      - run: pnpm test:marketplace-static
+      # MKT-03: kernel unit tests (money helpers bit-for-bit, fee policy, tx wrapper, adapters)
+      - run: pnpm --filter @workspace/api-server test:marketplace-kernel
+      # PRJ-02/03: pure-domain tests for the extracted Projects slices.
+      - run: pnpm --filter @workspace/api-server test:projects-static
+      # VLT-GAP-13: Vault routes must stay thin adapters. Blocking — no continue-on-error, no path filter.
+      - run: pnpm validate:vault-routes
+      - run: pnpm validate:vault-routes:self-test
+      - run: pnpm validate:vault-routes:differential
+      - run: pnpm validate:vault-routes:ci-wiring
+      - run: pnpm validate:vault-routes:gate
+      # VLT-GAP-14: Vault layer/dependency rules. Blocking — no continue-on-error, no path filter.
+      - run: pnpm validate:vault-architecture
+      - run: pnpm validate:vault-architecture:self-test
+      - run: pnpm validate:vault-architecture:ci-wiring
+      - run: pnpm validate:vault-architecture:gate
+      # VLT-GAP-16: no duplicate/legacy Vault implementations. Blocking — no continue-on-error, no path filter.
+      - run: pnpm validate:vault-duplicates
+      - run: pnpm validate:vault-duplicates:self-test
+      - run: pnpm validate:vault-duplicates:ci-wiring
+      - run: pnpm validate:vault-duplicates:gate
+      # VLT-GAP-17: migration map must match the tree. Blocking — no continue-on-error, no path filter.
+      - run: pnpm validate:vault-map
+      - run: pnpm validate:vault-map:self-test
+      # VLT-GAP-18: bypass flags rejected, evidence tamper-evident + regenerable. Blocking — no continue-on-error, no path filter.
+      # VLT-GAP-19: runtime/chaos/recovery — crash+error injected at every I/O point of the real Vault code. Blocking.
+      - run: pnpm validate:vault-chaos
+      # VLT-GAP-20: performance / query regression vs the frozen pre-extraction code and the committed 20-A capture. Blocking.
+      - run: pnpm validate:vault-perf
+      - run: pnpm validate:vault-perf:ci-wiring
+      - run: pnpm validate:vault-perf:gate
+      - run: pnpm validate:vault-tamper
+
+  build:
+    needs: validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build

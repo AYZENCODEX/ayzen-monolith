@@ -1,0 +1,75 @@
+{
+  "src_root": "artifacts/api-server/src",
+  "min_statements": 1,
+  "min_normalized_chars": 60,
+  "scope_file_regex": "^(vault/|lib/vault-|routes/(vault|kyc|local-accounts|game-entries|marketplace-game|marketplace-vault))",
+  "legacy_file_regex": "^lib/vault-",
+  "allowed_shims": [
+    {
+      "file": "lib/vault-pin-guard.ts",
+      "consumers": [],
+      "reason": "zero-consumer compatibility shim that VLT-GAP-06-D requires to stay a re-export-only file; GAP-14/15 configs also name it",
+      "requires": [
+        {
+          "file": "scripts/antas/vault/gap/validate-vlt-gap-06-D.mjs",
+          "contains": "zero-consumer re-export shim"
+        },
+        {
+          "file": "artifacts/api-server/src/lib/vault-pin-guard.ts",
+          "contains": "vault/security/pin-guard"
+        }
+      ]
+    }
+  ],
+  "crypto_owners": [],
+  "crypto_exempt": [],
+  "crypto_import_only_ok": false,
+  "inline_crypto_regex": "^(createCipheriv|createDecipheriv|createCipher|createDecipher|hkdfSync|hkdf)$",
+  "security_owner_regex": "^vault/security/",
+  "security_policy_regex": "^(bcrypt\\w*|argon2\\w*|scrypt\\w*|timingSafeEqual|createHmac|lockedUntil|failedAttempts|failed_attempts|MAX_ATTEMPTS|hashPassword|verifyPassword)$",
+  "approved_security_import_regex": "/lib/password$",
+  "security_primitive_allow": [
+    {
+      "file": "vault/application/snapshot/blob.ts",
+      "identifier": "scryptSync",
+      "max_uses": 2,
+      "reason": "snapshot file-format KDF (AYZENBAK1/2): password + random per-file salt, v1/v2 cost params fixed by the exported-file format; not shared with any other scrypt use",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/application/snapshot/blob.ts",
+          "contains": "SCRYPT_V2_COST"
+        }
+      ]
+    },
+    {
+      "file": "vault/crypto/seed-phrase.ts",
+      "identifier": "scryptSync",
+      "max_uses": 1,
+      "reason": "seed-phrase key derivation from VAULT_SEED_ENCRYPTION_KEY with the fixed legacy salt that already-stored seed phrases depend on",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/crypto/seed-phrase.ts",
+          "contains": "ayzen_seed_salt"
+        }
+      ]
+    },
+    {
+      "file": "vault/infrastructure/backup/delivery.ts",
+      "identifier": "createHmac",
+      "max_uses": 1,
+      "reason": "outbound webhook signature (X-Ayzen-Signature); the only signer in the Vault tree",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/infrastructure/backup/delivery.ts",
+          "contains": "X-Ayzen-Signature"
+        }
+      ]
+    }
+  ],
+  "route_scope_exclusions": [
+    {
+      "file_regex": "^marketplace(-(?!game|vault)[\\w-]+)?\\.ts$",
+      "reason": "marketplace commerce routes (marketplace.ts, cart, coupons, offers, wallet, \u2026) are not Vault behaviour; Vault-owned marketplace routes are marketplace-game and marketplace-vault. Known and out of scope: marketplace.ts GET /marketplace/vault-items is a read-only listing query on vault_entries/local_accounts that exists nowhere else, and routes/search.ts, sync.ts, projects.ts, two-factor.ts and services/sync.ts also read vault_entries directly (cross-domain read models, not copies of extracted Vault code)"
+    }
+  ]
+}

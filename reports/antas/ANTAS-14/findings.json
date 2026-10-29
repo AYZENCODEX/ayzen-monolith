@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "staging load profile",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "measured cost model",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

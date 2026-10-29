@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fabricId": "ayzen-event-fabric",
+  "physicalRuntime": "packages/event-client",
+  "namespaceFormat": "app.<app>.<eventType>",
+  "defaultDelivery": "at-least-once",
+  "consumerGroups": "owned-by-consumer-service",
+  "schemaRegistry": "packages/events",
+  "security": "config/eventbus/security.json",
+  "operations": "infrastructure/platform/event-operations.json",
+  "isolation": { "crossAppReads": "policy-required", "directDatabaseAccess": false, "unregisteredEvents": "reject" },
+  "requiredContractFields": ["producer", "consumers", "schemaVersion", "idempotencyKey", "securityScope", "failurePolicy", "audit"]
+}

@@ -1,0 +1,373 @@
+{
+  "phase": "VLT-GAP-01",
+  "sub_phase": "VLT-GAP-01-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "15cc70d7cfef801f9993710ffe3618c0e59df1b52fb75a452e8f900ccae1b3d4",
+  "validator_version": "1.0.0",
+  "validator_sha256": "ba971874205c4cb61e04cc39c4e2e7a27388dc08828cf38d147624e85acb3406",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/vault.ts": "d8c4b257cd4c9abec0cc56aabc7abe3481b1678c8af48261955704c76d7fdcec",
+    "artifacts/api-server/src/routes/vault-entity-links.ts": "60208e6af6ffb2e8f12a7d906ef8bd623db896724040218f52e574f65fe157b7",
+    "artifacts/api-server/src/routes/vault-snapshot.ts": "62d41bf7504052ddcada8a8e00f96d2e11f3be77262fa559976521713eedcb4c",
+    "artifacts/api-server/src/routes/vault-shares.ts": "0e48c9fe8fea7ef89002e96ad50fcb1e854cf9d487434e9a627b57c114f8f212",
+    "artifacts/api-server/src/vault/application/entity/activity-feed.ts": "a4bf78776781b0e552e61121be1b9e94963dff76eadd86b2de664ab0aa98ce12",
+    "artifacts/api-server/src/vault/application/entity/activity.ts": "bc6d73f180041ef79aaa67f8d33b255d0e993e0dfff98c84b0b13b115fb33de2",
+    "artifacts/api-server/src/vault/application/entity/admin.ts": "7c2b8519c9e22d492f6d4905daaac4f49d7172afbabd46fb7e1ab9f36f5d4869",
+    "artifacts/api-server/src/vault/application/entity/analytics.ts": "47f9c349d5a32ffa239ec6e47e9f6a6fadabf8c3b18d9e379ed04592fb621a4d",
+    "artifacts/api-server/src/vault/application/entity/bulk.ts": "882345a36355611eec126ef2144a8dd669ac358534984d4ccba0d23236b0bd7d",
+    "artifacts/api-server/src/vault/application/entity/create.ts": "a275844ac1ed1ccd80294a0b430d5a87ab360da4265ed52384edf11075b0611e",
+    "artifacts/api-server/src/vault/application/entity/lifecycle.ts": "c3ffea10dfbe6961bdd5970141b692a4415ff009cc33c5e14da95d324bce0978",
+    "artifacts/api-server/src/vault/application/entity/links.ts": "4b2c75abf91865eb58a011269028dfbb5e9228487347cfbcfa84ef1d8b1a466e",
+    "artifacts/api-server/src/vault/application/entity/receipt.ts": "a5297f18cce294ca416c16a14071189dcca002524a5c00351764c84f6212829e",
+    "artifacts/api-server/src/vault/application/entity/representation.ts": "3c6d1da46f30aeb69d06ac6f4936bb7c4a638f4c711b06d309a95b1b8356eca4",
+    "artifacts/api-server/src/vault/application/entity/update.ts": "d6d2955504ca60d8e8144dfe438022d138e1115f2c2a75f304c2268acbad731a",
+    "artifacts/api-server/src/vault/application/health.ts": "9e06b62dd28eb96b8b5c069d74995620640123366e17c050e70ee4fba098fd09",
+    "artifacts/api-server/src/vault/application/index.ts": "7986287971fcea962d74e5d504aa6b34d869b73fd69ec77ca4b657970cc4d8b5",
+    "artifacts/api-server/src/vault/crypto/field-encryption.ts": "ef6ae643860ec4d4e8339b1467869798fb4a97baf9496cc430c0065d73a14057",
+    "artifacts/api-server/src/vault/crypto/seed-phrase.ts": "482f1aa3a199d0838da138671268322c51bb350d9721f19c50fb730e7dea621b",
+    "artifacts/api-server/src/vault/domain/entity/calculations.ts": "e75603cafc8fbf9699af5740eac90ac14250012300dd98e30c22a1abf1260bbd",
+    "artifacts/api-server/src/vault/domain/entity/fields.ts": "2b3b4e7885317297d5a42755755fd85ebb014dcb0b139fc1efe8ffc961d280f5",
+    "artifacts/api-server/src/vault/domain/entity-links.ts": "736f6e6345218c9a287bf0633be2421a485d37eb65ebc2e0fe40bfdf5c5d0316",
+    "artifacts/api-server/src/vault/domain/game.ts": "30d9c413af407177b9d39817eb87d2c68badac68cb9f8efe8068e99a57a5eb82",
+    "artifacts/api-server/src/vault/domain/kyc.ts": "f52730677e7dde3339ec12ecb505997aa03e72e1e19c970d5ed627f2aedc27f8",
+    "artifacts/api-server/src/vault/domain/local-account.ts": "7ecd2b66e23880a841fa50162fc32985e479096866db9a170c3a011ab9e82bbf",
+    "artifacts/api-server/src/vault/domain/secret-fields.ts": "0326f6a472fe8b88193439eb4aa731dc75d2e793cb3fa0f85d65efdfc6e51b02",
+    "artifacts/api-server/src/vault/domain/serial.ts": "4b88c6eb14c777d65a4e68578b4a18f0aa574a962a4ae679d162bb4412eaf19c",
+    "artifacts/api-server/src/vault/infrastructure/index.ts": "3fbad9590313272e2f12f1c889f250e33967b0f57e49c14da278b9d2628f5fad",
+    "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts": "1bac9901cc4f37e9dd50bcca3126fd5397605374a4c4176b1e50b178d26f0a8b",
+    "artifacts/api-server/src/vault/security/entity-ownership.ts": "7da2e892e29c3a5db08d510a4bb7da19d7af33088850b738278d005e3abf8328",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/validate-vlt-gap-01-C.mjs": "765a3d1259a8dd043bdc0405289024dc0313dfc86d8ff1dbc4f8908a95345b9d"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-01-C.mjs"
+  ],
+  "exit_codes": {
+    "01-C": 0,
+    "retirement_gate": 0,
+    "differential": 0,
+    "self_tests": 0,
+    "typecheck_degraded": 0
+  },
+  "symbols_moved": [
+    "vault.ts#requireVaultEntryOwnership",
+    "vault.ts#logVaultActivity",
+    "vault.ts#SAFE_COLS",
+    "vault.ts#selectVault",
+    "vault.ts#selectVaultOne",
+    "vault.ts#selectAllVaultEntries",
+    "vault.ts#selectVaultTrash",
+    "vault.ts#selectVaultTrashOne",
+    "vault.ts#hardDeleteVaultEntry",
+    "vault.ts#NEW_VAULT_FIELDS",
+    "vault.ts#BASE_VAULT_FIELDS",
+    "vault.ts#DATE_FIELDS",
+    "vault.ts#SINGLE_FIELD_EDITABLE",
+    "vault.ts#fieldLabel",
+    "vault.ts#ENTITY_GAS_CHAINS",
+    "vault.ts#addressesFor",
+    "vault.ts#vaultBulkOwnershipEngine",
+    "vault.ts#vaultBulkOwnershipEngine.registerRule",
+    "vault.ts#auditVaultBulkOwnership",
+    "vault.ts#BULK_ALLOWED_STATUSES",
+    "vault.ts#generateVaultReceiptToken",
+    "vault.ts#vaultReceiptUrl",
+    "vault.ts#findVaultEntryByReceiptToken",
+    "vault.ts#fmtPublicVaultReceipt",
+    "vault-entity-links.ts#vaultEntryResource",
+    "vault-entity-links.ts#vaultEntityLinkResource",
+    "vault-entity-links.ts#requireVaultEntryOwnership",
+    "vault-entity-links.ts#requireVaultEntityLinkOwnership",
+    "vault-entity-links.ts#ownsEntity"
+  ],
+  "handlers_extracted_total": 35,
+  "consumers_migrated": [],
+  "old_business_symbols_remaining": [],
+  "duplicate_implementations": [],
+  "disposition_summary": {
+    "ADAPTER_ROUTER": 4,
+    "MOVED_VERBATIM": 28,
+    "DEFERRED_GAP-02": 2,
+    "DEFERRED_GAP-11": 4,
+    "RETIRED_DEAD_DUPLICATE": 1,
+    "ADAPTER_THIN": 35,
+    "DEFERRED_GAP-05": 4,
+    "MOVED_RENAMED": 1,
+    "DEFERRED_GAP-09": 35,
+    "DEFERRED_GAP-10": 34
+  },
+  "deferred_later_gap_code_remaining": {
+    "GAP-02": {
+      "symbols": 2,
+      "db_chains": 2,
+      "tokens": 260
+    },
+    "GAP-11": {
+      "symbols": 4,
+      "db_chains": 2,
+      "tokens": 1141
+    },
+    "GAP-05": {
+      "symbols": 4,
+      "db_chains": 3,
+      "tokens": 1368
+    },
+    "GAP-09": {
+      "symbols": 35,
+      "db_chains": 20,
+      "tokens": 6229
+    },
+    "GAP-10": {
+      "symbols": 34,
+      "db_chains": 22,
+      "tokens": 6030
+    }
+  },
+  "deferred_note": "Old-file code still owned by GAP-02/05/11 (vault.ts) and GAP-09/10 (snapshot/shares) is NOT GAP-01 logic. It is untouched by this phase and is retired by its own gap. The old files are therefore not yet fully retired; GAP-01's share of them is.",
+  "summary": {
+    "old_files": 4,
+    "gap01_routes_thin": 35,
+    "gap01_routes_total": 35,
+    "gap01_symbols_authoritative_in_old": 0,
+    "parity_checks": 35,
+    "differential_cases": 105,
+    "differential_passed": 105,
+    "self_tests": 19,
+    "self_tests_passed": 19
+  },
+  "companion_evidence_sha256": {
+    "old-source-fingerprint.json": "b1ae1a48efffc0cae1456fd340301864957c5e89d2fa642de96ebb75456c8043",
+    "new-source-fingerprint.json": "94a7e13bb2c6898ef6a2ae61e21cf085504b7cf27786677f49dc2173b29d8d02",
+    "route-thinness.json": "ce45aeef6f1aba7e2802dc30be9bd1d7fa5e3ce60c759e5f81fa4b25f7b70787",
+    "duplicate-implementation.json": "5dc62ae52ea3fb7130b344d2549d66d0bfda1b07963c5cc6e7ee3251d1a1c477",
+    "behavior-regression.json": "0f8f88fc0760c1a181736ab343ae8009bff2c6c580db92bb1b750e58b392d7c8",
+    "security-regression.json": "b1e4a099b548f69cb492c2ccb7d768f5f00ee0d04b2dac55585245aca2e05b1e"
+  },
+  "checks": [
+    {
+      "name": "prerequisite:01-C-executed-and-passed (executes 01-B and 01-A)",
+      "passed": true,
+      "details": "VLT-GAP-01-C PASS — edges=13 rewired=4 deferred=7 bypass=0 contract=13 selftests=6/6 (37519ms)\n"
+    },
+    {
+      "name": "retirement:every-baseline-symbol-has-a-proven-disposition",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:no-GAP-01-symbol-remains-authoritative-in-old-files",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:all-GAP-01-routes-are-thin-adapters",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:thin-route-census-is-non-trivial",
+      "passed": true,
+      "details": "35 GAP-01 routes inspected; expected 35 from the pre-extraction inventory; missing=[] unexpected=[]"
+    },
+    {
+      "name": "retirement:vault-entity-links-fully-retired-to-adapter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:deferred-later-gap-code-untouched",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:snapshot-and-share-sources-byte-identical-to-baseline",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:old-file-exports-are-compat-only",
+      "passed": true,
+      "details": "vault.ts:toHealthInput/default vault-entity-links.ts:default vault-snapshot.ts:verifyStoredChecksum/buildVaultSnapshotPayload/storeSnapshotRow/default vault-shares.ts:ENTITY_TABLES/VALID_TYPES/isValidType/default"
+    },
+    {
+      "name": "parity:every-extracted-handler-preserves-db-sql-tables-literals-branches-awaits",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "parity:coverage-all-extracted-routes-checked",
+      "passed": true,
+      "details": "35 parity checks"
+    },
+    {
+      "name": "duplicates:no-copy-of-extracted-implementation-outside-vault",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-baseline-GAP-01-body-survives-in-old-files",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-two-owner-modules-implement-the-same-function",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "imports:no-hidden-import-keeps-old-code-authoritative",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "layering:extracted-application-code-does-not-reach-the-API-layer",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "behavior:differential-old-baseline-vs-current-all-identical",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "behavior:every-case-executed-the-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "behavior:cases-cover-success-failure-and-security",
+      "passed": true,
+      "details": "105 cases"
+    },
+    {
+      "name": "behavior:all-extracted-routes-exercised-by-a-case",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:ownership-actions-and-deny-bodies-identical-old-vs-new",
+      "passed": true,
+      "details": "14 ownership-gated routes exercised"
+    },
+    {
+      "name": "security:foreign-and-missing-owner-paths-executed",
+      "passed": true,
+      "details": "19 security cases"
+    },
+    {
+      "name": "typecheck:no-syntax-errors-in-changed-or-new-files",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-real-class-diagnostics-vs-baseline",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "diff-audit:no-unrelated-changes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-query-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:decision-tree-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-gap01-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-d",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:deferred-gap-symbol-tampering-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-e",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ownership-action-change-is-detected-by-differential",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-owner-scope-is-detected-by-differential",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-owner-scope-is-detected-by-static-parity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-g",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-status-code-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:hidden-import-of-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dynamic-import-of-old-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-copy-outside-vault-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-routes-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-audit-call-is-detected-by-static-parity",
+      "passed": true,
+      "details": ""
+    }
+  ],
+  "status": "PASS",
+  "evidence_body_sha256": "1840cb1ca476316346df3eafaba67666de3af05eccc47104f3b03df089569ad2",
+  "generated_at": "2026-09-30T03:19:51.298Z"
+}

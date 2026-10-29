@@ -1,0 +1,20 @@
+{
+  "name": "@ayzen/telegram",
+  "version": "1.0.0",
+  "private": true,
+  "types": "./src/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.mjs"
+    }
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@ayzen/capabilities": "workspace:*",
+    "@ayzen/policy-contract": "workspace:*"
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-12",
+  "sub_phase": "08-extract",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "a0746f5dd63efd7153f9244f75c96577ddd0a8934edaa270df22994b3d567725",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts": "4f4254f938dd0baf90247d8150059b17de439e1ad99a07f919e1e2715395f2f0",
+    "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts": "39a6e75cef816e213e415f25b1c6a00c648ba5fb181d882cad89dc21689e0fe6",
+    "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts": "9f1a4892d61cef9e75c02df053669cfa6206a2542c16f94ddcda92a9267cf06a",
+    "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts": "23f53a634b09f3a3ae1124bdb76b633b282d08d478065a7894f76c039401bd7f",
+    "artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts": "7f1613962f97a7087a79e4411fd5ef3ff219898a29a8c681963f127b252b0d82",
+    "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts": "f3eb8228abec8724947f01b2168a76c8de94d261b7e4937cde7630c1dc78f28f"
+  },
+  "proof": [
+    {
+      "from": "artifacts/api-server/src/vault/application/snapshot/sections.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts",
+      "symbols_preserved": 45,
+      "identical_modulo_imports": true
+    },
+    {
+      "symbol": "RestoreTableKey",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "RawTablePlan",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "norm",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "vaultKey",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "walletKey",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "rawRowKey",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "dataEntityKey",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "emailAccountKey",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "MESSAGE_INSERT_COLS",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "DATA_ENTITY_INSERT_COLS",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "EMAIL_ACCOUNT_INSERT_COLS",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "DbHandle",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "existingVaultKeys",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "insertVaultRow",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "existingWalletKeys",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "insertWalletRow",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "existingRawKeys",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "insertRawRow",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "existingTemplateKeys",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "insertTemplateRow",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "existingMessageKeys",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "insertMessageRow",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "existingDataEntityKeys",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "insertDataEntityRow",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "existingEmailAccountKeys",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "insertEmailAccountRow",
+      "from": "artifacts/api-server/src/vault/application/snapshot/restore.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "findVaultEntryByReceiptToken",
+      "from": "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "hasVaultPin",
+      "from": "artifacts/api-server/src/vault/security/pin-guard.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts",
+      "body_identical": true
+    },
+    {
+      "symbol": "selectKycEntryOwnerRow",
+      "from": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts",
+      "body_identical": true
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-05g",
+  "status": "PASS_STATIC_AND_UNIT_ONLY",
+  "date": "2026-10-28",
+  "commitSha": "UNAVAILABLE",
+  "scope": "the last 9 MKT-05 read routes of routes/marketplace.ts: GET /marketplace/listings, /marketplace/listings/:id, /marketplace/my-listings, /admin/marketplace/listings, /marketplace/search, /marketplace/listings/:id/history and the three favorites routes. With this, MKT-05 is complete in code: 42 routes moved out of their route files, and the 2 routes of marketplace-market-config.ts already held no SQL",
+  "done": [
+    "marketplace/catalog: the dynamic list, count and search SQL builders in domain/listing-queries.ts (pure), the fixed read statements in infrastructure/listings-repo.ts, use cases in application/listings.ts; marketplace/engagement: favorites repository and use cases; *.wired.ts composition roots are the only files importing the pool",
+    "all 38 route declaration lines of marketplace.ts are byte-identical to the original",
+    "the 20 SQL-bearing literals of the 9 routes (now including the dynamic AND/ILIKE pieces: the sqlish pin filter was widened and the 05f and 05g pins were re-captured from the ORIGINAL upload) equal the pre-move text; the moved routes contain no SQL",
+    "differential tests against verbatim copies of the original logic (every literal of the reference copies was checked to occur in the original file): list and count for 12^3 = 1,728 type x limit x offset combinations, search for 5^5 x 3 = 9,375 combinations of q, type, condition, min and max price, limit and offset",
+    "10 further unit tests (application with a fake database: list before count, 404 before the pricing query, adminList without a parameter array; favorites: 404, 'Already favorited', remove never checks)",
+    "response shapes of all 38 routes of marketplace.ts compared with the ORIGINAL upload by a script that does not use the inventory map: 37 identical; the 38th (GET /marketplace/listings/:id) differs only in the label of the spread source in the tool output (...r.rows[0] became ...r.listing), its keys are unchanged",
+    "validator: classOverrides entry for DELETE /marketplace/listings/:id/favorite (its statement is still bound to the session user id)",
+    "marketplace.ts: 1,082 (original) -> 948 lines; pool.query calls 59 -> 42, client.query 27 unchanged; 24 of 38 routes still hold SQL or logic: 8 listing writes and pricing/promotion (MKT-06) and 16 order routes (MKT-07)",
+    "baseline ratchet: SQL calls in route files 312 -> 300"
+  ],
+  "notVerified": [
+    "no handler executed, no database; TypeScript syntax and import resolution only; typecheck/build UNAVAILABLE",
+    "the public search and listing endpoints were not run against PostgreSQL (ILIKE, FILTER and expiry conditions untested)"
+  ],
+  "keptOnPurpose": [
+    "q is wrapped in % and passed to ILIKE without escaping % and _ (user wildcards still work)",
+    "min_price and max_price: a falsy value (empty string) disables the filter, the string '0' does not; limit and offset are not validated",
+    "errors stay 500 with the database message"
+  ],
+  "next": "MKT-06 (8 listing write, pricing, promotion and vault-items routes in marketplace.ts) and MKT-07 (16 order routes). Both touch money or ownership; MKT-07 contains MKT-ISSUE-7 and MKT-ISSUE-8. Still waiting for the first real run of the DB suite."
+}

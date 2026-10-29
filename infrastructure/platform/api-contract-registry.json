@@ -1,0 +1,8 @@
+{
+  "version": "v1",
+  "source": "@ayzen/endpoint-registry",
+  "responseEnvelope": { "success": "data", "error": "error/code/message/requestId", "pagination": "items/page/pageSize/total/nextCursor" },
+  "requiredRequestContext": ["x-request-id", "x-trace-id", "x-correlation-id"],
+  "requiredWriteControls": ["authorization", "idempotency-key", "audit-event"],
+  "endpointRegistryModule": "packages/endpoint-registry/src/index.mjs"
+}

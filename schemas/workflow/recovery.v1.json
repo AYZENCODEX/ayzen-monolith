@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ayzen.workflow.recovery.v1",
+  "type": "object",
+  "required": ["timeoutMs", "retry", "checkpoint", "compensation", "resume", "failureOwner"],
+  "properties": {
+    "timeoutMs": {"type": "integer", "minimum": 1},
+    "retry": {"type": "object", "required": ["maxAttempts", "backoff"]},
+    "checkpoint": {"type": "boolean"},
+    "compensation": {"type": "array"},
+    "resume": {"type": "boolean"},
+    "failureOwner": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true
+}

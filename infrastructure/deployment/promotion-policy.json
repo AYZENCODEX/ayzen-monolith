@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "immutableArtifact": {
+    "required": true,
+    "identifiers": ["gitCommit", "releaseId", "imageDigest"],
+    "tagPolicy": ["sha-<commit>", "release-<releaseId>"]
+  },
+  "requiredGates": [
+    "affected-build",
+    "syntax",
+    "architecture-boundaries",
+    "api-contracts",
+    "database-migrations",
+    "event-contracts",
+    "workflow-definitions",
+    "telegram-registry",
+    "eventbus-backbone",
+    "workflow-backbone",
+    "policy-packs",
+    "database-ownership",
+    "backup-restore",
+    "slo-and-alerts",
+    "dependency-scan",
+    "secret-scan",
+    "sast",
+    "container-scan",
+    "staging-smoke",
+    "health-check"
+  ],
+  "promotionOrder": ["build", "scan", "stage", "smoke", "approval", "production"],
+  "rollback": {
+    "triggerOn": ["health-failure", "error-budget-breach", "migration-failure"],
+    "databaseRule": "forward-fix-by-default",
+    "routeRule": "restore-gateway-fallback-before-data-restore",
+    "auditRequired": true
+  }
+}

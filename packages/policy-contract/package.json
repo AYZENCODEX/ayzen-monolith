@@ -1,0 +1,16 @@
+{
+  "name": "@ayzen/policy-contract",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "dependencies": {
+    "@ayzen/authorization": "workspace:*",
+    "@ayzen/platform-governance": "workspace:*"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  }
+}

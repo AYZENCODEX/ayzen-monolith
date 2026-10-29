@@ -1,0 +1,137 @@
+import crypto from "crypto";
+import { insertVaultSnapshotsForStoreSnapshotRow, selectVaultSnapshotsForPruneOldSnapshots, updateVaultSnapshotsForPruneOldSnapshots } from "../../infrastructure/repositories/vault-snapshot-repository";
+
+/** Extracted verbatim from routes/vault-snapshot.ts (VLT-GAP-09); bodies unchanged. */
+ // N=131072
+// How many stored backups to keep per user — oldest beyond this are pruned
+// automatically whenever a new one is created, so the store can't grow
+// unbounded for someone who exports frequently.
+export const MAX_STORED_SNAPSHOTS = 20;
+// Per-user total stored-backup size cap — the "storage unit" for Sylo backups.
+// MAX_STORED_SNAPSHOTS alone bounds the *count*, but blobs vary wildly in
+// size (attachments included or not, mailbox/finance/wallet-hub volume for
+// power users), so 20 large snapshots could still balloon Supabase storage
+// unchecked. This bounds the *bytes*: pruneOldSnapshots() below prunes
+// oldest-first past this quota, on top of (not instead of) the count prune.
+// Overridable per deployment since Supabase storage budgets differ.
+export const DEFAULT_STORAGE_QUOTA_BYTES = 200 * 1024 * 1024;
+export const MAX_TOTAL_SNAPSHOT_BYTES = Number(process.env.VAULT_SNAPSHOT_STORAGE_QUOTA_BYTES) || DEFAULT_STORAGE_QUOTA_BYTES;
+/**
+ * Recomputes a stored row's blob checksum and throws if it doesn't match
+ * what was recorded at write time (storeSnapshotRow()) — the actual
+ * integrity check the `checksum` column exists for, but which nothing
+ * previously called. Rows written before the checksum column existed have
+ * checksum = null and are treated as unverifiable rather than corrupted.
+ */
+export function verifyStoredChecksum(row: { blob: string; checksum: string | null }): void {
+  if (!row.checksum) return;
+  const actual = crypto.createHash("sha256").update(row.blob, "utf8").digest("hex");
+  if (actual !== row.checksum) {
+    throw new Error("Stored backup failed its integrity check (checksum mismatch) — the blob appears to be corrupted.");
+  }
+}
+// Keeps only the MAX_STORED_SNAPSHOTS most recent stored backups for a user
+// AND caps their combined size at MAX_TOTAL_SNAPSHOT_BYTES, trashing older
+// rows first (by createdAt) until both limits are satisfied. Called after
+// every new export (manual or scheduled — both flow through
+// storeSnapshotRow()). Always keeps at least the single most recent
+// snapshot, even if that one snapshot alone exceeds the byte quota — a user
+// should never be left with zero backups because one export was large.
+//
+// Vault Backup hardening — Snapshot Delete Protection: this used to hard-
+// DELETE the pruned rows outright. It now soft-deletes them (same as
+// DELETE /vault/snapshots/:id below) so a snapshot pruned only because a
+// user exported frequently stays recoverable for
+// VAULT_SNAPSHOT_TRASH_RETENTION_DAYS instead of vanishing instantly — and
+// only rows already in the trash count toward "oldest" here, since a
+// soft-deleted row is no longer part of the active MAX_STORED_SNAPSHOTS/
+// quota count.
+export async function pruneOldSnapshots(userId: number): Promise<void> {
+  const rows = await selectVaultSnapshotsForPruneOldSnapshots(userId);
+
+  const keep = new Set<number>();
+  let runningBytes = 0;
+  for (const row of rows) {
+    const withinCount = keep.size < MAX_STORED_SNAPSHOTS;
+    const withinQuota = runningBytes + row.sizeBytes <= MAX_TOTAL_SNAPSHOT_BYTES || keep.size === 0;
+    if (!withinCount || !withinQuota) {
+      // Rows are ordered newest -> oldest, so once either limit is hit,
+      // every remaining row is older still and must not be kept — otherwise
+      // a smaller, older row could slip in under the remaining quota and
+      // create a "hole" (an older backup surviving while a newer one is
+      // deleted). Stop here instead of continuing to scan.
+      break;
+    }
+    keep.add(row.id);
+    runningBytes += row.sizeBytes;
+  }
+
+  const toTrash = rows.map(r => r.id).filter(id => !keep.has(id));
+  for (const id of toTrash) {
+    await updateVaultSnapshotsForPruneOldSnapshots(id, userId);
+  }
+}
+export interface StoreSnapshotRowInput {
+  userId: number;
+  label: string | null;
+  blob: string;
+  includeAttachments: boolean;
+  entriesCount: number;
+  walletsCount: number;
+  // Feature 15d — best-effort counts for the wider backup surface. Optional
+  // and defaulted to 0 so existing callers (and the DB column defaults, if
+  // migration 058 hasn't been applied yet on some install) don't break.
+  mailboxCount?: number;
+  projectsCount?: number;
+  tasksCount?: number;
+  financeCount?: number;
+  walletHubCount?: number;
+  activityCount?: number;
+  // Feature 15h — best-effort count for the entity-coverage surface
+  // (KYC Data Entities, category receipts, value history, shares, links).
+  entityCoverageCount?: number;
+  // Feature 15j — best-effort count for the Emergency Access surface
+  // (dead-man-switch contacts nominated + grants owned/received).
+  emergencyAccessCount?: number;
+  // Feature 15m — best-effort count for the Account & Platform Extras
+  // surface (notifications, referrals, subscription, support, API keys,
+  // passkeys, Polymarket trades).
+  accountExtrasCount?: number;
+  // Feature 15n — best-effort counts for Team (owned teams, memberships,
+  // join requests, favorites, messages/announcements/missions this user
+  // created, both team activity logs) and Earning (this user's own
+  // pay-per-click earn links).
+  teamCount?: number;
+  earningCount?: number;
+  // Feature 15t — best-effort count for the Backup System self-coverage
+  // surface (schedule config, cloud-connection labels, delivery/audit
+  // history, Vault security posture summary, authored project templates).
+  backupSystemCount?: number;
+  // Feature 15u — best-effort count for connected external mail accounts
+  // (IMAP/SMTP, personal + any team mailbox this user configured).
+  emailAccountsCount?: number;
+  // Feature 15w — best-effort count for the Mailbox Deliverability &
+  // Reputation surface (sender Block/Allow list, flagged/blocked outbound
+  // recipients, this account's own sending-health status).
+  mailboxReputationCount?: number;
+  // Feature 15x — best-effort count for the External Mail Sync Cache
+  // surface (synced header/body cache for connected external IMAP/SMTP
+  // mailboxes).
+  externalMailCount?: number;
+  source: "manual" | "scheduled";
+  encryptionMode: "password" | "envelope";
+  encryptionVersion?: number | null;
+}
+/**
+ * Persists an already-encrypted snapshot blob as a vault_snapshots row
+ * (computing its checksum and pruning older rows past MAX_STORED_SNAPSHOTS),
+ * used by both the manual export route below and every scheduled run in
+ * vault/application/backup/schedule-cron.ts — so "Stored Backups" always shows a
+ * single unified list regardless of which path produced each one.
+ */
+export async function storeSnapshotRow(input: StoreSnapshotRowInput): Promise<{ id: number }> {
+  const checksum = crypto.createHash("sha256").update(input.blob, "utf8").digest("hex");
+  const [stored] = await insertVaultSnapshotsForStoreSnapshotRow(input, checksum);
+  await pruneOldSnapshots(input.userId);
+  return { id: stored!.id };
+}

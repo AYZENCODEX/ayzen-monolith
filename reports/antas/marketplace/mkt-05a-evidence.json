@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-05a",
+  "status": "PASS_STATIC_AND_UNIT_ONLY",
+  "date": "2026-10-25",
+  "commitSha": "UNAVAILABLE",
+  "scope": "first slice of MKT-05: routes/marketplace-discovery.ts (4 public GET routes of the 44 planned for MKT-05)",
+  "done": [
+    "routes/marketplace-discovery.ts is a thin adapter over marketplace/catalog/application/discovery.wired.ts; its 5 SQL statements live in marketplace/catalog/infrastructure/discovery-repo.ts",
+    "SQL text equals what the route file contained before the move (moved-sql.pins.json, captured before editing; normalized whitespace)",
+    "status codes and response keys equal what the routes answered before the move (pins.readOnlyRoutes, captured from the original code, re-checked after the move)",
+    "5 unit tests with a fake database: statement text, parameter order, 404 without the second query, NaN id passed through, errors not swallowed",
+    "route paths, methods, access class and registration order unchanged (frozen route check PASS, 143 routes)",
+    "baseline ratchet: SQL calls in route files 358 -> 353 (marketplace-discovery.ts 5 -> 0); wallet-table writers 9 -> 8 is a correction, the test fixtures in src/marketplace/characterization had been counted as application code",
+    "new convention: *.wired.ts files are the only ones that import the database pool (composition roots); everything else is unit-testable without DATABASE env"
+  ],
+  "notVerified": [
+    "no handler executed (no Postgres, express, tsx in the sandbox); TypeScript syntax and import resolution checked only",
+    "these 4 routes have no DB test yet; behavior preservation rests on SQL equality, parameter order, response shape pins and the unit tests",
+    "typecheck/build UNAVAILABLE"
+  ],
+  "keptOnPurpose": [
+    "Number(req.params.id) and Number(limit) are not validated (a non-numeric value still reaches the database and answers 500 with the error message)",
+    "error handling stays in the route adapter: catch -> 500 {error: e.message}"
+  ],
+  "next": "remaining MKT-05 routes (analytics 6, alerts 6, reviews 7, reports 5, favorites, settings, market-config 2, admin activity, listing GETs) one feature at a time; each with SQL pin, response-shape pin and fake-db unit tests. Still waiting for the first real run of the DB suite."
+}

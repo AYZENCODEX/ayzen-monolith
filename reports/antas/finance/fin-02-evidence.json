@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "phase": "FIN-02",
+  "title": "Invoice-total domain extraction",
+  "timestamp": "2026-10-14T03:53:08.671Z",
+  "status": "PASS",
+  "commit": {
+    "sha": "a5df0e678ef4a11706c2b86c3b4e4df62ea3a49f",
+    "workingTreeAtStart": "Source tree at the recorded base commit; implementation changes are listed below and source hashes are in the FIN-01 dependency scan."
+  },
+  "objective": "Make the existing pure invoice total module the sole implementation owner while preserving the established API-server import path and calculations.",
+  "inspectedFiles": [
+    "artifacts/api-server/src/finance/domain/invoice-totals.ts",
+    "artifacts/api-server/src/finance/domain/invoice-totals.test.ts",
+    "artifacts/api-server/src/lib/finance-invoice.ts",
+    "artifacts/api-server/src/routes/finance-invoices.ts"
+  ],
+  "filesChanged": [
+    "artifacts/api-server/src/lib/finance-invoice.ts",
+    "reports/antas/finance/fin-01-dependency-scan.json",
+    "reports/antas/finance/fin-02-evidence.json"
+  ],
+  "oldToNewMapping": [
+    {
+      "symbols": [
+        "computeLineItemsTotal",
+        "computeInvoiceTotals",
+        "InvoiceLineItemInput",
+        "InvoiceTaxDiscountInput",
+        "InvoiceTotals"
+      ],
+      "oldOwner": "Duplicate implementation and types in artifacts/api-server/src/lib/finance-invoice.ts",
+      "newOwner": "artifacts/api-server/src/finance/domain/invoice-totals.ts",
+      "compatibilityAdapter": "artifacts/api-server/src/lib/finance-invoice.ts re-exports the original names and types",
+      "consumers": "routes/finance-invoices.ts keeps its existing import; database/persistence helpers keep using the compatibility module"
+    }
+  ],
+  "migratedConsumers": [],
+  "commands": [
+    {
+      "command": "pnpm --filter @workspace/api-server exec node --test --import tsx src/finance/domain/invoice-totals.test.ts",
+      "exitCode": 0,
+      "result": "4/4 characterization tests passed before and after rewiring."
+    },
+    { "command": "pnpm --filter @workspace/api-server typecheck", "exitCode": 0 },
+    { "command": "pnpm validate:finance-boundaries", "exitCode": 0 },
+    { "command": "git diff --check", "exitCode": 0 }
+  ],
+  "testsAndInvariants": {
+    "quantityAndAggregateRounding": "PASS",
+    "legacyHalfCentRounding": "PASS",
+    "percentageDiscountBeforeTax": "PASS",
+    "discountAndTaxBounds": "PASS",
+    "publicRouteAndTypeImportPaths": "UNCHANGED via compatibility re-exports",
+    "invoiceAmountDenormalizationAndPersistence": "UNCHANGED"
+  },
+  "diffReview": "Removed only duplicate calculation/type declarations from finance-invoice.ts; the canonical implementation in finance/domain/invoice-totals.ts is unchanged. No route, schema, migration, or business rule was changed.",
+  "evidencePath": "reports/antas/finance/fin-01-dependency-scan.json",
+  "limitations": [
+    "This small extraction does not establish database rollback, retry, concurrency, or provider-backed correctness; see FIN-03 and FIN-04 evidence."
+  ],
+  "nextSafeStep": "FIN-03: characterize the existing money-critical paths and report any invariants that cannot be proven without a database fixture."
+}

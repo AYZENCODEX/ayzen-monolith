@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "phase": "MKT-02",
+  "status": "PASS",
+  "commitSha": "UNAVAILABLE",
+  "routesScanned": 143,
+  "findings": 0,
+  "actualBaselineSummary": {
+    "sqlCalls": 300,
+    "routeAccessClasses": {
+      "admin": 20,
+      "authenticated": 61,
+      "in-handler-owner-sql": 8,
+      "inline-auth-verified": 5,
+      "needs-review": 6,
+      "owner-gated": 26,
+      "public-read": 16,
+      "public-write": 1
+    },
+    "walletTableWriters": [
+      "routes/marketplace-azn.ts",
+      "routes/marketplace-nft.ts",
+      "routes/marketplace-spot.ts",
+      "routes/marketplace-usdt.ts",
+      "routes/marketplace-wallet.ts",
+      "services/admin-wallet.ts",
+      "vault/infrastructure/repositories/game-repository.ts",
+      "vault/infrastructure/repositories/vault-market-repository.ts"
+    ],
+    "externalConsumers": 7,
+    "needsHumanReview": 7
+  },
+  "note": "PASS means the tree equals the recorded baseline and the frozen route surface; it does not mean the violations are fixed. They are recorded violations with an owner and a phase."
+}

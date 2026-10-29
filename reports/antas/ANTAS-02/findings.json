@@ -1,0 +1,9 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "independent architecture review",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

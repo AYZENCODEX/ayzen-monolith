@@ -1,0 +1,53 @@
+{
+  "_doc": "Differences between the frozen pre-extraction contract and current code that were reviewed and shown to be equivalent. Each needs a reason AND `requires` substrings that must exist in the named current file — the validator rejects an explanation whose evidence is gone.",
+  "explained": [
+    {
+      "group": "game-marketplace",
+      "kind": "error_messages",
+      "value": "Asset ownership conflict — seller may no longer own this entry",
+      "reason": "Pre-extraction route had three literal 409 messages; extraction (GAP-13-E) builds the identical string from the template `...own this ${done.asset}` where the repository returns asset \"entry\". Same status and body text.",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+          "contains": "Asset ownership conflict — seller may no longer own this ${done.asset}"
+        },
+        {
+          "file": "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts",
+          "contains": "reason: \"ownership-conflict\", asset: \"entry\""
+        }
+      ]
+    },
+    {
+      "group": "game-marketplace",
+      "kind": "error_messages",
+      "value": "Asset ownership conflict — seller may no longer own this local account",
+      "reason": "Pre-extraction route had three literal 409 messages; extraction (GAP-13-E) builds the identical string from the template `...own this ${done.asset}` where the repository returns asset \"local account\". Same status and body text.",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+          "contains": "Asset ownership conflict — seller may no longer own this ${done.asset}"
+        },
+        {
+          "file": "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts",
+          "contains": "reason: \"ownership-conflict\", asset: \"local account\""
+        }
+      ]
+    },
+    {
+      "group": "game-marketplace",
+      "kind": "error_messages",
+      "value": "Asset ownership conflict — seller may no longer own this KYC entry",
+      "reason": "Pre-extraction route had three literal 409 messages; extraction (GAP-13-E) builds the identical string from the template `...own this ${done.asset}` where the repository returns asset \"KYC entry\". Same status and body text.",
+      "requires": [
+        {
+          "file": "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+          "contains": "Asset ownership conflict — seller may no longer own this ${done.asset}"
+        },
+        {
+          "file": "artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts",
+          "contains": "reason: \"ownership-conflict\", asset: \"KYC entry\""
+        }
+      ]
+    }
+  ]
+}

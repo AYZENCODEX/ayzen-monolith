@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "default": "quarantine",
+  "unknownEdge": "reject",
+  "unhealthyTarget": "quarantine",
+  "unapprovedPolicy": "reject",
+  "auditEveryDecision": true,
+  "alertOnCritical": true,
+  "recovery": { "automatic": false, "operatorApprovalRequired": true, "reversible": true },
+  "exemptions": []
+}

@@ -1,0 +1,99 @@
+import { db, usersTable, vaultSecurityTable } from "@workspace/db";
+import { eq } from "drizzle-orm";
+import { hashPassword, verifyPassword } from "../../../lib/password";
+import { verifyOtp } from "../../../lib/otp-store";
+import { isLockedOut, recordFailure, clearFailures, type PinKind } from "../../security/lockout";
+import { getRow, upsertPinHash } from "../../infrastructure/repositories/vault-security-repository";
+import { vaultPinOtpKey } from "./pin-setup-code";
+
+export interface VaultSecurityResult { status: number; body: unknown }
+const PIN_REGEX = /^\d{4}$/;
+
+// Unused in the original route (dead code, kept verbatim across the move —
+// see routes/vault-security.ts's old `hashColumn` function).
+function hashColumn(kind: PinKind) {
+  return kind === "vault" ? vaultSecurityTable.vaultPinHash : vaultSecurityTable.entityPinHash;
+}
+
+/**
+ * PUT /vault/security/pin — set or change a PIN. Moved unchanged from
+ * routes/vault-security.ts (VLT-GAP-06-B).
+ *
+ * kind="entity": currentPin is required only when that PIN is already set
+ *   (proves the caller knows the existing PIN before overwriting it).
+ * kind="vault": deliberately heavier — the Vault Security PIN, the most
+ *   powerful credential in Vault. Setting/changing it always requires BOTH
+ *   the account login password AND a fresh email code from
+ *   sendVaultPinSetupCode(), whether or not a PIN was already set.
+ */
+export async function setPin(
+  userId: number,
+  kind: unknown,
+  pin: unknown,
+  currentPin: unknown,
+  accountPassword: unknown,
+  emailCode: unknown,
+): Promise<VaultSecurityResult> {
+  if (kind !== "vault" && kind !== "entity") {
+    return { status: 400, body: { error: "Invalid kind", solution: "kind must be \"vault\" or \"entity\"." } };
+  }
+  if (typeof pin !== "string" || !PIN_REGEX.test(pin)) {
+    return { status: 400, body: { error: "Invalid PIN", solution: "PIN must be exactly 4 digits." } };
+  }
+
+  const existing = await getRow(userId);
+
+  if (kind === "vault") {
+    const lockedMs = isLockedOut(userId, "vault-pin-setup");
+    if (lockedMs > 0) {
+      return { status: 429, body: { error: "Too many attempts", code: "VAULT_PIN_SETUP_LOCKED", solution: `Wait ${Math.ceil(lockedMs / 1000)}s before trying again.`, retryAfterMs: lockedMs } };
+    }
+    if (typeof accountPassword !== "string" || !accountPassword) {
+      return { status: 400, body: { error: "Account password required", code: "ACCOUNT_PASSWORD_REQUIRED" } };
+    }
+    if (typeof emailCode !== "string" || !emailCode.trim()) {
+      return { status: 400, body: { error: "Email code required", code: "EMAIL_CODE_REQUIRED", solution: "Request a code via POST /vault/security/pin/request-code first." } };
+    }
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId)).limit(1);
+    if (!user) return { status: 401, body: { error: "Unauthorized" } };
+    const passwordOk = await verifyPassword(accountPassword, user.passwordHash);
+    if (!passwordOk) {
+      recordFailure(userId, "vault-pin-setup");
+      return { status: 403, body: { error: "Incorrect account password", code: "WRONG_ACCOUNT_PASSWORD" } };
+    }
+    const codeOk = await verifyOtp(vaultPinOtpKey(userId), emailCode);
+    if (!codeOk) {
+      recordFailure(userId, "vault-pin-setup");
+      return { status: 403, body: { error: "Invalid or expired email code", code: "WRONG_EMAIL_CODE" } };
+    }
+    clearFailures(userId, "vault-pin-setup");
+  } else {
+    const existingHash = existing?.entityPinHash;
+    if (existingHash) {
+      // Same brute-force lockout as POST /vault/security/verify (kind=
+      // "entity") — this currentPin check is just as much a 4-digit guessing
+      // surface and must share the limiter, or an attacker with a valid
+      // session could brute-force the entity PIN here with no rate limit at
+      // all by repeatedly calling this endpoint instead of /verify.
+      const lockedMs = isLockedOut(userId, "entity");
+      if (lockedMs > 0) {
+        return { status: 429, body: { error: "Too many attempts", code: "PIN_LOCKED", solution: `Wait ${Math.ceil(lockedMs / 1000)}s before trying again.`, retryAfterMs: lockedMs } };
+      }
+      if (typeof currentPin !== "string" || !PIN_REGEX.test(currentPin)) {
+        return { status: 400, body: { error: "Current PIN required", solution: "Provide currentPin to change an existing PIN." } };
+      }
+      const matches = await verifyPassword(currentPin, existingHash);
+      if (!matches) {
+        recordFailure(userId, "entity");
+        return { status: 403, body: { error: "Incorrect current PIN", code: "WRONG_CURRENT_PIN" } };
+      }
+    }
+  }
+
+  const newHash = await hashPassword(pin);
+  const column: "vaultPinHash" | "entityPinHash" = kind === "vault" ? "vaultPinHash" : "entityPinHash";
+  await upsertPinHash(userId, column, newHash, !!existing);
+
+  clearFailures(userId, kind as PinKind);
+  return { status: 200, body: { ok: true, kind } };
+}

@@ -1,0 +1,889 @@
+{
+  "phase": "VLT-GAP-04",
+  "sub_phase": "VLT-GAP-04-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "123e12536a8b8cce0869075e26f4e01643e16a095e9f30cf686713268403722f",
+  "validator_version": "1.0.0",
+  "validator_sha256": "46f2283906076ae8603a1dba5db1fadd024e45b27431d89eea8396850e221b3d",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/game-entries.ts": "61a3dfbad6464bee905dc4546a3191a369a05f31e82cad29d208b3b1925b15d9",
+    "artifacts/api-server/src/routes/marketplace-game.ts": "411dd71b0f220b7c3eb018ea4fe4122060f6b71a9438d749bc7014e717a3ca50",
+    "artifacts/ayzen/src/components/game-entries.tsx": "b02dc911f54197ee0766bb1bc2cc54f7a29a3579f693c48f2e7cd85db929d20b",
+    "artifacts/api-server/src/vault/domain/game.ts": "5aa689436c3e989e2ac5955b7fff3aa112beea9259858e90856b61907877fe27",
+    "artifacts/api-server/src/vault/security/game-ownership.ts": "d5c8460686d908f73bb16516ff7a7bd98ff242bca5a03d8ea1201b547add6f0d",
+    "artifacts/api-server/src/vault/application/game/entries.ts": "018a001799a4591d08905b284e9181b05022c7dd3035881d616e350c74a10561",
+    "artifacts/api-server/src/vault/application/game/marketplace.ts": "6760d8357fb0acd4502438c00def3e7da5ccd99323fe2dd356f21f0716106a8e",
+    "artifacts/api-server/src/vault/application/game/listing.ts": "55acc03cadf57475609df9dd276e793d33fbfd8ac57209e1b3aa550410a148a2",
+    "artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts": "f4af7a14277e04b8bb93bda69f9b4d0c851c6667c8f4a776e27544531cb2add0",
+    "artifacts/api-server/src/routes/index.ts": "d8db8b5357ab4a6216b5ac6d080fcbc9d41495ca553f1a306e140ab7d19b5619",
+    "artifacts/api-server/src/routes/marketplace-vault.ts": "ee7c98a9c61b1c8ab711a1de81ed4a5290a1638b11d89e20ef7aa8e4106bd49f",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/freeze-vlt-gap-04-D-baseline.mjs": "a63ce4d97a2aae55044310030c89da25c8601694821d9480b627cbf0c91bcea1",
+    "reports/antas/vault/gap/VLT-GAP-04/baseline-04d/SEAL.json": "94026e85e1f87fd488571132f7b22a45624bc9f7ee9e539f8fc07d0ac113719b",
+    "reports/antas/vault/gap/VLT-GAP-04/baseline-04d/tree-manifest.json": "6bfec6b525ef8e92f60b2cbc13a15138a9f352eb55407f4b29850218d16a5d53",
+    "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__api-server__src__routes__game-entries.ts": "8503b842bcab4d907147488d12288d533fe38a0aa402a4514a63aabe27d8fc58",
+    "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__api-server__src__routes__marketplace-game.ts": "414f1877b0a876725353697a9d95675092ef57c5cec29e42c7f2a198a00ea0f6",
+    "reports/antas/vault/gap/VLT-GAP-04/baseline/sources/artifacts__ayzen__src__components__game-entries.tsx": "b02dc911f54197ee0766bb1bc2cc54f7a29a3579f693c48f2e7cd85db929d20b",
+    "artifacts/ayzen/src/pages/user/marketplace-game.tsx": "898c488fd3b5397dee2ec986ccfe2ef30207ed7e4a0e7971183804ee29acbe2c",
+    "artifacts/ayzen/src/config/vault-game.ts": "6716f1128dd3278a7df87ef0e0ec40d58d804b1186977fc876f7b0dfecd74092",
+    "artifacts/ayzen/src/config/fields/game-create.ts": "40c0ec0161f66ae915b234c5db86519d88f94760416c334b7727f7c14d8a08c9"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-04-C.mjs --verify (in place)",
+    "node scripts/antas/vault/gap/validate-vlt-gap-04-C.mjs (full run, temp copy reconstructed to the 04-C-certified state)",
+    "node scripts/antas/vault/gap/validate-vlt-gap-04-B.mjs (temp copy reconstructed to the 04-B-certified state)",
+    "in-process AST retirement gate / duplicate scan / layering / frontend classification",
+    "in-process mutation self-tests",
+    "child-process bypass attempts against this validator"
+  ],
+  "exit_codes": {
+    "04-C(verify,in-place)": 1,
+    "04-C(temp,reconstructed)": 1,
+    "04-B(temp,reconstructed)": 1,
+    "retirement_gate": 0,
+    "mutation_self_tests": 0,
+    "bypass_attempts": 0,
+    "typecheck_degraded": 0
+  },
+  "baseline": {
+    "mode": "write-once seal (verified, never written by this validator)",
+    "seal_file": "reports/antas/vault/gap/VLT-GAP-04/baseline-04d/SEAL.json",
+    "sealed_at": "2026-10-01T04:27:11.430Z",
+    "certified_by": {
+      "sub_phase": "VLT-GAP-04-C",
+      "source_tree_sha256": "57a4ee37aa5313bf58dbf41a6d91573024a4c2282a0487939af11285ad63eb04",
+      "commit_sha": null,
+      "validator_sha256": "7410fd61aac5a1bc059b63d7bdaf6b4318276aaffaefa9ee3b3e5f28222fb532"
+    }
+  },
+  "symbols_moved": [
+    "artifacts/api-server/src/routes/game-entries.ts#gameEntryResource -> artifacts/api-server/src/vault/security/game-ownership.ts#gameEntryResource",
+    "artifacts/api-server/src/routes/game-entries.ts#requireGameEntryOwnership -> artifacts/api-server/src/vault/security/game-ownership.ts#requireGameEntryOwnership",
+    "artifacts/api-server/src/routes/game-entries.ts#safe -> artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts#safe",
+    "artifacts/api-server/src/routes/game-entries.ts#safeTags -> artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts#safeTags",
+    "artifacts/api-server/src/routes/marketplace-game.ts#gameListingOwnerOrAdminEngine -> artifacts/api-server/src/vault/security/game-ownership.ts#gameListingOwnerOrAdminEngine",
+    "artifacts/api-server/src/routes/marketplace-game.ts#stmt@17 -> artifacts/api-server/src/vault/security/game-ownership.ts#registerRule",
+    "artifacts/api-server/src/routes/marketplace-game.ts#stmt@18 -> artifacts/api-server/src/vault/security/game-ownership.ts#registerRule",
+    "artifacts/api-server/src/routes/marketplace-game.ts#ensureWallet -> artifacts/api-server/src/vault/infrastructure/repositories/game-repository.ts#ensureGameWallet",
+    "artifacts/api-server/src/routes/marketplace-game.ts#parseListing -> artifacts/api-server/src/vault/application/game/marketplace.ts#parseListing"
+  ],
+  "consumers_migrated": [
+    "routes/marketplace-vault.ts"
+  ],
+  "old_business_symbols_remaining": [],
+  "duplicate_implementations": [
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "symbol": "dbError",
+      "duplicates": "artifacts/api-server/src/vault/application/game/entries.ts#dbError",
+      "tokens": 31
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "dbError",
+      "duplicates": "artifacts/api-server/src/vault/application/game/entries.ts#dbError",
+      "tokens": 31
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "symbol": "d",
+      "duplicates": "artifacts/api-server/src/vault/application/game/entries.ts#d",
+      "tokens": 23
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts",
+      "symbol": "safe",
+      "duplicates": "baseline#safe",
+      "tokens": 35
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "symbol": "denyKycNotFound",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFound",
+      "tokens": 30
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "symbol": "denyKycNotFoundOrForbidden",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFoundOrForbidden",
+      "tokens": 30
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+      "symbol": "denyKycSilentSuccess",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntrySilentSuccess",
+      "tokens": 25
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "symbol": "denyNotFoundOrForbidden",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFoundOrForbidden",
+      "tokens": 30
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "symbol": "denyNotFound",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFound",
+      "tokens": 30
+    },
+    {
+      "file": "artifacts/api-server/src/vault/security/local-account-ownership.ts",
+      "symbol": "denySilentSuccess",
+      "duplicates": "artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntrySilentSuccess",
+      "tokens": 25
+    },
+    {
+      "file": "artifacts/api-server/src/vault/shared/marketplace/use-cases.ts",
+      "symbol": "err500",
+      "duplicates": "artifacts/api-server/src/vault/application/game/marketplace.ts#err500",
+      "tokens": 27
+    }
+  ],
+  "disposition_summary": {
+    "ADAPTER_WIRING": 4,
+    "MOVED_REFACTORED_WITH_EXECUTED_PROOF": 2,
+    "MOVED_VERBATIM": 7,
+    "ADAPTER_THIN": 10
+  },
+  "findings_fixed_by_this_gate": [
+    {
+      "finding": "routes/marketplace-game.ts DELETE /marketplace/game/listings/:id still compared `ownership.decision.effect === \"ALLOW\"` inside the route callback (duplicated authorization logic, rejected by 04-D task 8)",
+      "fix": "moved into vault/security/game-ownership.ts#canCancelGameListing; the route callback is now a single expression-bodied call",
+      "files": [
+        "artifacts/api-server/src/routes/marketplace-game.ts",
+        "artifacts/api-server/src/vault/security/game-ownership.ts"
+      ]
+    }
+  ],
+  "module_status": null,
+  "frontend": {
+    "files": [
+      {
+        "file": "artifacts/ayzen/src/components/game-entries.tsx",
+        "disposition": "UI_ADAPTER"
+      }
+    ],
+    "related_ui_unchanged": [
+      {
+        "file": "artifacts/ayzen/src/pages/user/marketplace-game.tsx",
+        "unchanged_since_04C_seal": true
+      },
+      {
+        "file": "artifacts/ayzen/src/config/vault-game.ts",
+        "unchanged_since_04C_seal": true
+      },
+      {
+        "file": "artifacts/ayzen/src/config/fields/game-create.ts",
+        "unchanged_since_04C_seal": true
+      }
+    ]
+  },
+  "deferred_consumers_from_04C": [
+    {
+      "file": "artifacts/api-server/src/lib/schema-migrations.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/search.ts",
+      "deferred_to": "VLT-GAP-12"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "deferred_to": "VLT-GAP-10"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "deferred_to": "VLT-GAP-09"
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "deferred_to": "VLT-GAP-09"
+    },
+    {
+      "file": "scripts/src/reencrypt-vault.ts",
+      "deferred_to": "VLT-GAP-07"
+    }
+  ],
+  "carry_over_from_04C": [
+    {
+      "file": "artifacts/api-server/src/routes/marketplace-vault.ts",
+      "what": "entity/local/KYC listing-ownership lookups and ownership transfers, plus vault_market_listings persistence",
+      "note": "03-C pointed the KYC part at VLT-GAP-04; GAP-04 covers Game only. Needs an owning gap (Vault marketplace boundary) so it is not lost."
+    }
+  ],
+  "summary": {
+    "old_route_thin_handlers": 10,
+    "old_route_total_handlers": 10,
+    "route_db_refs_before": 27,
+    "route_db_refs_after": 0,
+    "route_branches_before": 76,
+    "route_branches_after": 0,
+    "old_route_lines_before": 355,
+    "old_route_lines_after": 102,
+    "delegate_targets_verified": 11,
+    "symbols_moved": 9,
+    "differential_cases_04B": 59,
+    "differential_cases_04C": 36,
+    "mutation_self_tests": 83,
+    "mutation_self_tests_passed": 83,
+    "bypass_attempts_rejected": 7
+  },
+  "limitations": [
+    "Full tsc/build was NOT executed: project dependencies are not installed in the upload; a differential typecheck against the sealed baseline routes is used and recorded as degraded.",
+    "No git repository is present in the upload; evidence is bound to a source-tree hash instead of a commit SHA (commit_sha is null).",
+    "Behavioral equivalence runs against stubbed DB/provider/event layers, not a live database.",
+    "04-B and 04-C cannot run unchanged on the current tree (04-C added listing.ts and edited two files; 04-D edited two more); 04-C is executed on a temp copy reconstructed to its certified bytes, 04-B on a temp copy with 04-C's changes undone, each from sealed copies, and must PASS there with zero failing checks.",
+    "04-B is executed with the two 04-D-edited files kept at their CURRENT bytes (everything 04-C touched is restored), so its 59-case differential and 20 security checks run against the post-04-D cancel route and security module and must all pass.",
+    "Carry-over from 04-C remains open: the entity/local/KYC branches of routes/marketplace-vault.ts and vault_market_listings persistence have no owning gap yet.",
+    "Deferred table consumers (GAP-07/09/10/12) still access game tables directly; they are explicit, verified deferrals, not retirements."
+  ],
+  "companion_evidence_sha256": {
+    "old-source-fingerprint.json": "312fa4121fbb81f063f4cb231622419ee3d17d0cdf8a1cb53c9473b5ff4a0dc9",
+    "new-source-fingerprint.json": "94992064c64eae0784f8e3ce4bc89d97900aa07293391cbf159c1e6bc6a7983c",
+    "route-thinness.json": "314c2463d016e151d0fb726af159d9dd853039517f576cefe403071be603ff00",
+    "duplicate-implementation.json": "13b97c8f67c22da56021e49c00b5cf7208bce277c37aa19cd562ae37fb7d9b11",
+    "behavior-regression.json": "a525bb485c66119bb285786c827841de0b743814345495c702c381e3af184070",
+    "security-regression.json": "b2c3125b566bddca3b6cefce89aea9391e7f53d94174945171db7ab8e645cec0"
+  },
+  "checks": [
+    {
+      "name": "prerequisite:04-C-evidence-verifies-in-place",
+      "passed": false,
+      "details": "VLT-GAP-04-C FAIL — evidence rejected: recorded status FAIL\n"
+    },
+    {
+      "name": "prerequisite:04-C-re-executed-and-passed (consumer rewire, differential vs sealed 04-B route, mutation tests)",
+      "passed": false,
+      "details": "-snapshot-trash-purge.ts, artifacts/api-server/src/lib/vault-trash-cron.ts, artifacts/api-server/src/lib/vault-trash-purge.ts, artifacts/ayzen/tsconfig.tsbuildinfo, lib/api-client-react/tsconfig.tsbuildinfo, lib/api-zod/tsconfig.tsbuildinfo, lib/db/tsconfig.tsbuildinfo, scripts/tsconfig.tsbuildinfo\n"
+    },
+    {
+      "name": "prerequisite:04-C-census-has-no-unclassified-table-access",
+      "passed": false,
+      "details": ""
+    },
+    {
+      "name": "prerequisite:04-C-deferrals-all-name-a-later-gap",
+      "passed": true,
+      "details": "VLT-GAP-12,VLT-GAP-12,VLT-GAP-12,VLT-GAP-10,VLT-GAP-09,VLT-GAP-09,VLT-GAP-07"
+    },
+    {
+      "name": "prerequisite:04-B-executed-on-the-04-B-certified-tree-and-every-check-passes",
+      "passed": false,
+      "details": "diff-audit:no-unrelated-changes"
+    },
+    {
+      "name": "prerequisite:04-B-differential-59-cases-all-identical (frozen OLD routes vs extracted tree, no skips)",
+      "passed": true,
+      "details": "{\"differential_cases\":59,\"differential_passed\":59,\"security_checks\":20,\"security_passed\":20,\"unit_parity\":3,\"unit_passed\":3,\"mutations_seeded\":22,\"mutations_detected\":22}"
+    },
+    {
+      "name": "prerequisite:04-B-security-unit-and-mutation-suites-complete",
+      "passed": true,
+      "details": "{\"differential_cases\":59,\"differential_passed\":59,\"security_checks\":20,\"security_passed\":20,\"unit_parity\":3,\"unit_passed\":3,\"mutations_seeded\":22,\"mutations_detected\":22}"
+    },
+    {
+      "name": "seal:tree-manifest-hash-matches-seal",
+      "passed": true,
+      "details": "tree-manifest.json edited after sealing"
+    },
+    {
+      "name": "seal:certified-by-04C-and-bound-to-fresh-04C-run",
+      "passed": false,
+      "details": "seal=57a4ee37aa53 fresh-04C=a1a53a443bff"
+    },
+    {
+      "name": "seal:frozen-04C-certified-copies-intact-and-equal-to-manifest",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:earlier-validators-and-harness-byte-identical-since-freeze",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:no-unexpected-new-validator-scripts",
+      "passed": false,
+      "details": "scripts/antas/vault/gap/differential-vlt-gap-06-D.mjs, scripts/antas/vault/gap/differential-vlt-gap-08.mjs, scripts/antas/vault/gap/differential-vlt-gap-09.mjs, scripts/antas/vault/gap/differential-vlt-gap-11.mjs, scripts/antas/vault/gap/differential-vlt-gap-12.mjs, scripts/antas/vault/gap/differential-vlt-gap-13-E.mjs, scripts/antas/vault/gap/extract-infra-write.mjs, scripts/antas/vault/gap/extract-infra.mjs, scripts/antas/vault/gap/freeze-vlt-gap-05-B-baseline.mjs, scripts/antas/vault/gap/freeze-vlt-gap-05-C-baseline.mjs, scripts/antas/vault/gap/freeze-vlt-gap-05-D-baseline.mjs, scripts/antas/vault/gap/gap-configs/08.mjs, scripts/antas/vault/gap/gap-configs/09.mjs, scripts/antas/vault/gap/gap-configs/10.mjs, scripts/antas/vault/gap/gap-configs/11.mjs, scripts/antas/vault/gap/gap-configs/12.mjs, scripts/antas/vault/gap/infra-census.mjs, scripts/antas/vault/gap/split-proof.mjs, scripts/antas/vault/gap/validate-gap.mjs, scripts/antas/vault/gap/validate-vlt-gap-05-A.mjs, scripts/antas/vault/gap/validate-vlt-gap-05-B.mjs, scripts/antas/vault/gap/validate-vlt-gap-05-C.mjs, scripts/antas/vault/gap/validate-vlt-gap-05-D.mjs, scripts/antas/vault/gap/validate-vlt-gap-06-A.mjs, scripts/antas/vault/gap/validate-vlt-gap-06-B.mjs, scripts/antas/vault/gap/validate-vlt-gap-06-C.mjs, scripts/antas/vault/gap/validate-vlt-gap-06-D.mjs, scripts/antas/vault/gap/validate-vlt-gap-07-A.mjs, scripts/antas/vault/gap/validate-vlt-gap-07-B.mjs, scripts/antas/vault/gap/validate-vlt-gap-07-C.mjs, scripts/antas/vault/gap/validate-vlt-gap-07-D.mjs, scripts/antas/vault/gap/validate-vlt-gap-08.mjs, scripts/antas/vault/gap/validate-vlt-gap-09.mjs, scripts/antas/vault/gap/validate-vlt-gap-10.mjs, scripts/antas/vault/gap/validate-vlt-gap-11.mjs, scripts/antas/vault/gap/validate-vlt-gap-12.mjs, scripts/antas/vault/gap/validate-vlt-gap-13-C.mjs, scripts/antas/vault/gap/validate-vlt-gap-13-D.mjs, scripts/antas/vault/gap/validate-vlt-gap-13.mjs"
+    },
+    {
+      "name": "diff-audit:only-the-two-declared-residue-files-changed-since-the-04C-seal",
+      "passed": false,
+      "details": "{\"unexpected\":[\".github/workflows/ci.yml\",\"artifacts/api-server/.tsbuildinfo\",\"artifacts/api-server/src/index.ts\",\"artifacts/api-server/src/lib/dr-test-runner.ts\",\"artifacts/api-server/src/lib/mail-attachment-content.ts\",\"artifacts/api-server/src/lib/mail-send-queue.ts\",\"artifacts/api-server/src/lib/mail-sync.ts\",\"artifacts/api-server/src/lib/oidc-client-admin-audit.ts\",\"artifacts/api-server/src/lib/oidc-client-admin-request.ts\",\"artifacts/api-server/src/lib/oidc-logout-propagation.ts\",\"artifacts/api-server/src/lib/ssrf-guard.ts\",\"artifacts/api-server/src/lib/vault-pin-guard.ts\",\"artifacts/api-server/src/lib/wallet-crypto.ts\",\"artifacts/api-server/src/routes/ayzen-mailbox.ts\",\"artifacts/api-server/src/routes/email-accounts.ts\",\"artifacts/api-server/src/routes/emergency-access.ts\",\"artifacts/api-server/src/routes/marketplace-vault.ts\",\"artifacts/api-server/src/routes/organizations.ts\",\"artifacts/api-server/src/routes/passkey.ts\",\"artifacts/api-server/src/routes/resend-webhook.ts\",\"artifacts/api-server/src/routes/teams.ts\",\"artifacts/api-server/src/routes/two-factor.ts\",\"artifacts/api-server/src/routes/value-history.ts\",\"artifacts/api-server/src/routes/vault-attachments.ts\",\"artifacts/api-server/src/routes/vault-backup-cloud.ts\",\"artifacts/api-server/src/routes/vault-backup-key.ts\",\"artifacts/api-server/src/routes/vault-backup-schedule.ts\",\"artifacts/api-server/src/routes/vault-migration.ts\",\"artifacts/api-server/src/routes/vault-reauth.ts\",\"artifacts/api-server/src/routes/vault-security.ts\",\"artifacts/api-server/src/routes/vault-shares.ts\",\"artifacts/api-server/src/routes/vault-snapshot.ts\",\"artifacts/api-server/src/routes/vault.ts\",\"artifacts/api-server/src/routes/wallets.ts\",\"artifacts/api-server/src/vault/application/entity/activity-feed.ts\",\"artifacts/api-server/src/vault/application/entity/activity.ts\",\"artifacts/api-server/src/vault/application/entity/admin.ts\",\"artifacts/api-server/src/vault/application/entity/analytics.ts\",\"artifacts/api-server/src/vault/application/entity/bulk.ts\",\"artifacts/api-server/src/vault/application/entity/create.ts\",\"artifacts/api-server/src/vault/application/entity/lifecycle.ts\",\"artifacts/api-server/src/vault/application/entity/links.ts\",\"artifacts/api-server/src/vault/application/entity/receipt.ts\",\"artifacts/api-server/src/vault/application/entity/update.ts\",\"artifacts/api-server/src/vault/application/game/entries.ts\",\"artifacts/api-server/src/vault/application/health.ts\",\"artifacts/api-server/src/vault/application/index.ts\",\"artifacts/api-server/src/vault/application/kyc/data-entities.ts\",\"artifacts/api-server/src/vault/application/kyc/enrollment.ts\",\"artifacts/api-server/src/vault/application/kyc/entries.ts\",\"artifacts/api-server/src/vault/application/kyc/exchange.ts\",\"artifacts/api-server/src/vault/application/local-account/accounts.ts\",\"artifacts/api-server/src/vault/application/local-account/bridge.ts\",\"artifacts/api-server/src/vault/application/local-account/receipt.ts\",\"artifacts/api-server/src/vault/application/local-account/value.ts\",\"artifacts/api-server/src/vault/crypto/field-encryption.ts\",\"artifacts/api-server/src/vault/crypto/seed-phrase.ts\",\"artifacts/api-server/src/vault/infrastructure/index.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts\",\"artifacts/api-server/src/vault/security/entity-ownership.ts\",\"artifacts/api-server/src/vault/security/kyc-ownership.ts\",\"artifacts/api-server/src/vault/security/local-account-ownership.ts\",\"artifacts/ayzen/src/lib/oidc-client.ts\",\"ci/enforcement-pipeline.yml\",\"package.json\",\"scripts/antas/vault/build-certification.mjs\",\"scripts/src/decrypt-env.ts\",\"scripts/src/encrypt-env.ts\",\"scripts/src/reencrypt-seed-phrases.ts\",\"scripts/src/reencrypt-vault.ts\",\"scripts/src/rewrap-encryption-keys.ts\",\"services/vault/src/crypto/envelope.mjs\",\".gitignore\",\"DELETE_THESE_FILES.txt\",\"GAP-13-AB-NOTES.md\",\"GAP-13-CD-NOTES.md\",\"artifacts/api-server/_syncheck_node_modules_typescript/LICENSE.txt\",\"artifacts/api-server/_syncheck_node_modules_typescript/README.md\",\"artifacts/api-server/_syncheck_node_modules_typescript/SECURITY.md\",\"artifacts/api-server/_syncheck_node_modules_typescript/ThirdPartyNoticeText.txt\",\"artifacts/api-server/_syncheck_node_modules_typescript/bin/tsc\",\"artifacts/api-server/_syncheck_node_modules_typescript/bin/tsserver\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/_tsc.js\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/_tsserver.js\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/_typingsInstaller.js\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/cs/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/de/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/es/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/fr/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/it/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/ja/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/ko/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.decorators.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.decorators.legacy.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.asynciterable.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.dom.iterable.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.collection.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.core.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.generator.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.iterable.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.promise.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.proxy.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.reflect.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.symbol.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2015.symbol.wellknown.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.array.include.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2016.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.arraybuffer.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.date.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.object.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.sharedmemory.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.string.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2017.typedarrays.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.asyncgenerator.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.asynciterable.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.promise.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2018.regexp.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.array.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.object.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.string.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2019.symbol.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.bigint.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.date.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.number.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.promise.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.sharedmemory.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.string.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2020.symbol.wellknown.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.promise.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.string.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2021.weakref.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.array.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.error.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.object.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.regexp.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2022.string.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.array.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.collection.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2023.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.arraybuffer.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.collection.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.object.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.promise.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.regexp.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.sharedmemory.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2024.string.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.collection.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.float16.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.iterator.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.promise.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es2025.regexp.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es5.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.es6.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.array.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.collection.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.date.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.decorators.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.disposable.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.error.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.full.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.intl.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.sharedmemory.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.temporal.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.esnext.typedarrays.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.scripthost.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.asynciterable.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.importscripts.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/lib.webworker.iterable.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/pl/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/pt-br/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/ru/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/tr/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/tsc.js\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserver.js\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserverlibrary.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/tsserverlibrary.js\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/typesMap.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/typescript.d.ts\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/typescript.js\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/typingsInstaller.js\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/watchGuard.js\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/zh-cn/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/lib/zh-tw/diagnosticMessages.generated.json\",\"artifacts/api-server/_syncheck_node_modules_typescript/package.json\",\"artifacts/api-server/src/vault/application/attachment/use-cases.ts\",\"artifacts/api-server/src/vault/application/backup/cloud-connection.ts\",\"artifacts/api-server/src/vault/application/backup/key.ts\",\"artifacts/api-server/src/vault/application/backup/schedule-cron.ts\",\"artifacts/api-server/src/vault/application/backup/schedule.ts\",\"artifacts/api-server/src/vault/application/entity/health-check.ts\",\"artifacts/api-server/src/vault/application/health-cron.ts\",\"artifacts/api-server/src/vault/application/health-scan.ts\",\"artifacts/api-server/src/vault/application/migration/use-cases.ts\",\"artifacts/api-server/src/vault/application/secret/reveal.ts\",\"artifacts/api-server/src/vault/application/secret/wallet.ts\",\"artifacts/api-server/src/vault/application/security/auth-policy.ts\",\"artifacts/api-server/src/vault/application/security/password.ts\",\"artifacts/api-server/src/vault/application/security/pin-setup-code.ts\",\"artifacts/api-server/src/vault/application/security/pin.ts\",\"artifacts/api-server/src/vault/application/security/reauth.ts\",\"artifacts/api-server/src/vault/application/security/status.ts\",\"artifacts/api-server/src/vault/application/security/two-fa.ts\",\"artifacts/api-server/src/vault/application/security/verify.ts\",\"artifacts/api-server/src/vault/application/share/field-permissions.ts\",\"artifacts/api-server/src/vault/application/share/use-cases.ts\",\"artifacts/api-server/src/vault/application/snapshot/blob.ts\",\"artifacts/api-server/src/vault/application/snapshot/payload.ts\",\"artifacts/api-server/src/vault/application/snapshot/restore.ts\",\"artifacts/api-server/src/vault/application/snapshot/store.ts\",\"artifacts/api-server/src/vault/application/snapshot/use-cases.ts\",\"artifacts/api-server/src/vault/crypto/backup-envelope.ts\",\"artifacts/api-server/src/vault/domain/snapshot-restore-keys.ts\",\"artifacts/api-server/src/vault/infrastructure/backup/alerts.ts\",\"artifacts/api-server/src/vault/infrastructure/backup/audit.ts\",\"artifacts/api-server/src/vault/infrastructure/backup/cloud.ts\",\"artifacts/api-server/src/vault/infrastructure/backup/delivery.ts\",\"artifacts/api-server/src/vault/infrastructure/backup/key-rotation-cron.ts\",\"artifacts/api-server/src/vault/infrastructure/db-handle.ts\",\"artifacts/api-server/src/vault/infrastructure/jobs/cron-scheduler.ts\",\"artifacts/api-server/src/vault/infrastructure/providers/lazy-provider-ports.ts\",\"artifacts/api-server/src/vault/infrastructure/providers/provider-ports.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/backup-envelope-key-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/entity-analytics-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/entity-bulk-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/entity-create-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/entity-lifecycle-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/entity-receipt-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/entity-update-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/field-key-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/snapshot-restore-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-activity-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-admin-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-attachment-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-backup-schedule-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-entity-link-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-health-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-market-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-migration-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-reauth-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-security-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-share-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-payload-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/vault-snapshot-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/trash/entry-trash-cron.ts\",\"artifacts/api-server/src/vault/infrastructure/trash/entry-trash-purge.ts\",\"artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-cron.ts\",\"artifacts/api-server/src/vault/infrastructure/trash/snapshot-trash-purge.ts\",\"artifacts/api-server/src/vault/security/attachment-ownership.ts\",\"artifacts/api-server/src/vault/security/lockout.ts\",\"artifacts/api-server/src/vault/security/market-listing-ownership.ts\",\"artifacts/api-server/src/vault/security/pin-guard.ts\",\"artifacts/api-server/src/vault/security/reauth-ownership.ts\",\"artifacts/api-server/src/vault/security/reveal-token.ts\",\"artifacts/api-server/src/vault/security/share-ownership.ts\",\"artifacts/api-server/src/vault/security/snapshot-ownership.ts\",\"artifacts/api-server/src/vault/shared/index.ts\",\"artifacts/api-server/src/vault/shared/marketplace/use-cases.ts\",\"attached_assets/ANTAS_VLT_GAP_FILLING_ROADMAP_STRICT_1791049759003.md\",\"packages/vault-crypto/package.json\",\"packages/vault-crypto/src/aes-gcm.d.mts\",\"packages/vault-crypto/src/aes-gcm.mjs\",\"packages/vault-crypto/src/aes-gcm.test.mjs\",\"artifacts/api-server/src/lib/vault-backup-alerts.ts\",\"artifacts/api-server/src/lib/vault-backup-audit.ts\",\"artifacts/api-server/src/lib/vault-backup-cloud.ts\",\"artifacts/api-server/src/lib/vault-backup-delivery.ts\",\"artifacts/api-server/src/lib/vault-backup-envelope.ts\",\"artifacts/api-server/src/lib/vault-backup-key-rotation-cron.ts\",\"artifacts/api-server/src/lib/vault-backup-schedule-cron.ts\",\"artifacts/api-server/src/lib/vault-crypto.ts\",\"artifacts/api-server/src/lib/vault-health-cron.ts\",\"artifacts/api-server/src/lib/vault-health-scan.ts\",\"artifacts/api-server/src/lib/vault-health.ts\",\"artifacts/api-server/src/lib/vault-snapshot-extra.ts\",\"artifacts/api-server/src/lib/vault-snapshot-restore.ts\",\"artifacts/api-server/src/lib/vault-snapshot-trash-cron.ts\",\"artifacts/api-server/src/lib/vault-snapshot-trash-purge.ts\",\"artifacts/api-server/src/lib/vault-trash-cron.ts\",\"artifacts/api-server/src/lib/vault-trash-purge.ts\",\"artifacts/ayzen/tsconfig.tsbuildinfo\",\"lib/api-client-react/tsconfig.tsbuildinfo\",\"lib/api-zod/tsconfig.tsbuildinfo\",\"lib/db/tsconfig.tsbuildinfo\",\"scripts/tsconfig.tsbuildinfo\"],\"changed\":[\".github/workflows/ci.yml\",\"artifacts/api-server/.tsbuildinfo\",\"artifacts/api-server/src/index.ts\",\"artifacts/api-server/src/lib/dr-test-runner.ts\",\"artifacts/api-server/src/lib/mail-attachment-content.ts\",\"artifacts/api-server/src/lib/mail-send-queue.ts\",\"artifacts/api-server/src/lib/mail-sync.ts\",\"artifacts/api-server/src/lib/oidc-client-admin-audit.ts\",\"artifacts/api-server/src/lib/oidc-client-admin-request.ts\",\"artifacts/api-server/src/lib/oidc-logout-propagation.ts\",\"artifacts/api-server/src/lib/ssrf-guard.ts\",\"artifacts/api-server/src/lib/vault-pin-guard.ts\",\"artifacts/api-server/src/lib/wallet-crypto.ts\",\"artifacts/api-server/src/routes/ayzen-mailbox.ts\",\"artifacts/api-server/src/routes/email-accounts.ts\",\"artifacts/api-server/src/routes/emergency-access.ts\",\"artifacts/api-server/src/routes/marketplace-game.ts\",\"artifacts/api-server/src/routes/marketplace-vault.ts\",\"artifacts/api-server/src/routes/organizations.ts\",\"artifacts/api-server/src/routes/passkey.ts\",\"artifacts/api-server/src/routes/resend-webhook.ts\",\"artifacts/api-server/src/routes/teams.ts\",\"artifacts/api-server/src/routes/two-factor.ts\",\"artifacts/api-server/src/routes/value-history.ts\",\"artifacts/api-server/src/routes/vault-attachments.ts\",\"artifacts/api-server/src/routes/vault-backup-cloud.ts\",\"artifacts/api-server/src/routes/vault-backup-key.ts\",\"artifacts/api-server/src/routes/vault-backup-schedule.ts\",\"artifacts/api-server/src/routes/vault-migration.ts\",\"artifacts/api-server/src/routes/vault-reauth.ts\",\"artifacts/api-server/src/routes/vault-security.ts\",\"artifacts/api-server/src/routes/vault-shares.ts\",\"artifacts/api-server/src/routes/vault-snapshot.ts\",\"artifacts/api-server/src/routes/vault.ts\",\"artifacts/api-server/src/routes/wallets.ts\",\"artifacts/api-server/src/vault/application/entity/activity-feed.ts\",\"artifacts/api-server/src/vault/application/entity/activity.ts\",\"artifacts/api-server/src/vault/application/entity/admin.ts\",\"artifacts/api-server/src/vault/application/entity/analytics.ts\",\"artifacts/api-server/src/vault/application/entity/bulk.ts\",\"artifacts/api-server/src/vault/application/entity/create.ts\",\"artifacts/api-server/src/vault/application/entity/lifecycle.ts\",\"artifacts/api-server/src/vault/application/entity/links.ts\",\"artifacts/api-server/src/vault/application/entity/receipt.ts\",\"artifacts/api-server/src/vault/application/entity/update.ts\",\"artifacts/api-server/src/vault/application/game/entries.ts\",\"artifacts/api-server/src/vault/application/health.ts\",\"artifacts/api-server/src/vault/application/index.ts\",\"artifacts/api-server/src/vault/application/kyc/data-entities.ts\",\"artifacts/api-server/src/vault/application/kyc/enrollment.ts\",\"artifacts/api-server/src/vault/application/kyc/entries.ts\",\"artifacts/api-server/src/vault/application/kyc/exchange.ts\",\"artifacts/api-server/src/vault/application/local-account/accounts.ts\",\"artifacts/api-server/src/vault/application/local-account/bridge.ts\",\"artifacts/api-server/src/vault/application/local-account/receipt.ts\",\"artifacts/api-server/src/vault/application/local-account/value.ts\",\"artifacts/api-server/src/vault/crypto/field-encryption.ts\",\"artifacts/api-server/src/vault/crypto/seed-phrase.ts\",\"artifacts/api-server/src/vault/infrastructure/index.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts\",\"artifacts/api-server/src/vault/infrastructure/repositories/local-account-repository.ts\",\"artifacts/api-server/src/vault/security/entity-ownership.ts\",\"artifacts/api-server/src/vault/security/game-ownership.ts\",\"artifacts/api-server/src/vault/security/kyc-ownership.ts\",\"artifacts/api-server/src/vault/security/local-account-ownership.ts\",\"artifacts/ayzen/src/lib/oidc-client.ts\",\"ci/enforcement-pipeline.yml\",\"package.json\",\"scripts/antas/vault/build-certification.mjs\",\"scripts/src/decrypt-env.ts\",\"scripts/src/encrypt-env.ts\",\"scripts/src/reencrypt-seed-phrases.ts\",\"scripts/src/reencrypt-vault.ts\",\"scripts/src/rewrap-encryption-keys.ts\",\"services/vault/src/crypto/envelope.mjs\"]}"
+    },
+    {
+      "name": "census:every-04A-pre-extraction-symbol-is-in-the-independent-scan (2 routes + UI component)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census:scan-found-no-baseline-symbol-outside-the-04A-inventory",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:every-baseline-symbol-has-a-proven-disposition",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:no-business-symbol-remains-authoritative-in-old-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:all-10-route-handlers-are-thin-adapters",
+      "passed": true,
+      "details": "10/10 thin"
+    },
+    {
+      "name": "retirement:route-census-equals-baseline (no route added or dropped)",
+      "passed": true,
+      "details": "10 vs 10"
+    },
+    {
+      "name": "retirement:route-table-order-and-middleware-chains-identical-to-baseline",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:old-routes-have-zero-db-sql-crypto-branches (measured)",
+      "passed": true,
+      "details": "[{\"baseline_lines\":151,\"current_lines\":54,\"baseline_db_refs\":15,\"current_db_refs\":0,\"baseline_sql_literals\":7,\"current_sql_literals\":0,\"baseline_branches\":33,\"current_branches\":0,\"baseline_crypto_calls\":15,\"current_crypto_calls\":0,\"baseline_tokens\":1473,\"current_tokens\":395},{\"baseline_lines\":204,\"current_lines\":48,\"baseline_db_refs\":12,\"current_db_refs\":0,\"baseline_sql_literals\":13,\"current_sql_literals\":0,\"baseline_branches\":43,\"current_branches\":0,\"baseline_crypto_calls\":0,\"current_crypto_calls\":0,\"baseline_tokens\":1791,\"current_tokens\":335}]"
+    },
+    {
+      "name": "retirement:old-routes-only-import-adapter-dependencies",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "compat:reexports-removed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "security:ownership-and-cancel-decision-gates-are-imported-from-vault-security (no local or legacy copy)",
+      "passed": true,
+      "details": "[[{\"gate\":\"requireGameEntryOwnership\",\"imported_from\":\"../vault/security/game-ownership\",\"exported_by_owner\":true},{\"gate\":\"denyGameEntryNotFound\",\"imported_from\":\"../vault/security/game-ownership\",\"exported_by_owner\":true},{\"gate\":\"denyGameEntryNotFoundOrForbidden\",\"imported_from\":\"../vault/security/game-ownership\",\"exported_by_owner\":true},{\"gate\":\"denyGameEntrySilentSuccess\",\"imported_from\":\"../vault/security/game-ownership\",\"exported_by_owner\":true}],[{\"gate\":\"canCancelGameListing\",\"imported_from\":\"../vault/security/game-ownership\",\"exported_by_owner\":true}]]"
+    },
+    {
+      "name": "security:no-authorization-decision-comparison-remains-in-any-route (effect/ALLOW/role)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:every-delegate-target-is-an-exported-executable-function-in-the-right-vault-layer",
+      "passed": true,
+      "details": "11 delegate targets"
+    },
+    {
+      "name": "retirement:every-moved-symbol-has-a-proven-disposition-from-the-reconstructed-04B-run",
+      "passed": true,
+      "details": "9/9 moved (incl. 2 rule registrations)"
+    },
+    {
+      "name": "retirement:04B-move-claims-equal-the-declared-move-table",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "imports:no-hidden-import-keeps-old-code-authoritative",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "duplicates:no-copy-of-extracted-implementation-added-outside-owner",
+      "passed": false,
+      "details": "[{\"file\":\"artifacts/api-server/src/vault/application/kyc/entries.ts\",\"symbol\":\"dbError\",\"duplicates\":\"artifacts/api-server/src/vault/application/game/entries.ts#dbError\",\"tokens\":31},{\"file\":\"artifacts/api-server/src/vault/application/local-account/accounts.ts\",\"symbol\":\"dbError\",\"duplicates\":\"artifacts/api-server/src/vault/application/game/entries.ts#dbError\",\"tokens\":31},{\"file\":\"artifacts/api-server/src/vault/application/local-account/accounts.ts\",\"symbol\":\"d\",\"duplicates\":\"artifacts/api-server/src/vault/application/game/entries.ts#d\",\"tokens\":23},{\"file\":\"artifacts/api-server/src/vault/infrastructure/repositories/share-entity-types.ts\",\"symbol\":\"safe\",\"duplicates\":\"baseline#safe\",\"tokens\":35},{\"file\":\"artifacts/api-server/src/vault/security/kyc-ownership.ts\",\"symbol\":\"denyKycNotFound\",\"duplicates\":\"artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFound\",\"tokens\":30},{\"file\":\"artifacts/api-server/src/vault/security/kyc-ownership.ts\",\"symbol\":\"denyKycNotFoundOrForbidden\",\"duplicates\":\"artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFoundOrForbidden\",\"tokens\":30},{\"file\":\"artifacts/api-server/src/vault/security/kyc-ownership.ts\",\"symbol\":\"denyKycSilentSuccess\",\"duplicates\":\"artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntrySilentSuccess\",\"tokens\":25},{\"file\":\"artifacts/api-server/src/vault/security/local-account-ownership.ts\",\"symbol\":\"denyNotFoundOrForbidden\",\"duplicates\":\"artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFoundOrForbidden\",\"tokens\":30},{\"file\":\"artifacts/api-server/src/vault/security/local-account-ownership.ts\",\"symbol\":\"denyNotFound\",\"duplicates\":\"artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntryNotFound\",\"tokens\":30},{\"file\":\"artifacts/api-server/src/vault/security/local-account-ownership.ts\",\"symbol\":\"denySilentSuccess\",\"duplicates\":\"artifacts/api-server/src/vault/security/game-ownership.ts#denyGameEntrySilentSuccess\",\"tokens\":25},{\"file\":\"artifacts/api-server/src/vault/shared/marketplace/use-cases.ts\",\"symbol\":\"err500\",\"duplicates\":\"artifacts/api-server/src/vault/application/game/marketplace.ts#err500\",\"tokens\":27}]"
+    },
+    {
+      "name": "duplicates:no-moved-sql-added-outside-repositories",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:every-pre-existing-sql-overlap-is-a-named-04C-deferral",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-baseline-implementation-survives-in-old-routes",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:no-two-owner-modules-implement-the-same-function",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:fingerprint-corpus-is-non-trivial",
+      "passed": true,
+      "details": "16 baseline / 41 owner fingerprints"
+    },
+    {
+      "name": "layering:owner-modules-do-not-reach-the-API-layer-or-bypass-repositories",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "frontend:component-classified-unchanged-and-free-of-db-sql-crypto-and-raw-provider-calls",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "frontend:every-game-api-call-resolves-to-a-registered-route",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "frontend:no-client-side-game-derivation-exists-to-defer (nothing computes server-authoritative values)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-syntax-errors-in-route-or-owner-files",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-real-class-diagnostics-vs-baseline-routes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-query-in-entries-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:pool-query-in-market-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:crypto-call-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-a4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:fee-calculation-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ternary-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:if-branch-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-b3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:try-catch-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-c1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:altered-response-mapping-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-c2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:non-canonical-response-mapping-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-policy-engine-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-e1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-import-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-e2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:market-config-import-in-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-ownership-middleware-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-deny-behavior-on-delete-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unresolvable-deny-handler-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-credit-middleware-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-f5",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:changed-ownership-action-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-g",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:route-reorder-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:compat-reexport-restored-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-listGameEntries-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-buyGameMarketListing-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-use-case-cancelGameMarketListing-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-i4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:scaffold-only-security-decision-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:hidden-import-of-moved-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:compat-import-of-ownership-gate-from-old-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dynamic-import-of-old-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-copy-outside-vault-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:renamed-repository-copy-outside-vault-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-l",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:moved-sql-pasted-outside-repository-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-routes-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:application-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:express-runtime-import-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:req-res-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:sql-in-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:domain-importing-db-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:infrastructure-importing-application-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:security-importing-db-directly-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:sql-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:provider-call-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unknown-game-endpoint-in-component-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unclassified-ui-symbol-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:modified-ui-file-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:modified-related-ui-file-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:ownership-gate-from-wrong-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-o3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:cancel-decision-from-wrong-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-r1",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:decision-compare-in-cancel-callback-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-r2",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:inline-owner-check-in-cancel-callback-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-r3",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:block-bodied-callback-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-r4",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:always-allow-callback-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:tampered-seal-manifest-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:refactored-move-without-executed-proof-is-rejected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-s",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:altered-policy-registration-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:coverage-at-least-45-mutations-executed",
+      "passed": true,
+      "details": "83"
+    },
+    {
+      "name": "bypass:every-bypass-attempt-is-rejected-by-the-validator-itself",
+      "passed": true,
+      "details": "[]"
+    }
+  ],
+  "status": "FAIL",
+  "evidence_body_sha256": "cc7f783c38d3b8e042102976e42b27d010058f2d37c3ce72152750b3a8135d36",
+  "generated_at": "2026-10-07T21:13:48.223Z"
+}

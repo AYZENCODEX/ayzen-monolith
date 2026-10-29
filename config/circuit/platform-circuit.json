@@ -1,0 +1,1478 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": "generated-from-endpoint-registry-and-event-catalog",
+  "stages": [
+    "user-or-frontend-or-telegram-or-admin",
+    "per-app-api-gateway",
+    "app-api-layer",
+    "app-security-kernel",
+    "app-policy-rbac",
+    "feature",
+    "sub-feature",
+    "function",
+    "service",
+    "app-owned-data",
+    "outbox",
+    "event-gateway",
+    "eventbus",
+    "router-policy",
+    "consumer",
+    "durable-workflow",
+    "worker-service",
+    "next-api-or-event",
+    "audit",
+    "intelligence",
+    "admin-telegram"
+  ],
+  "orphanDetection": true,
+  "missingLinkStatus": "fail",
+  "generated": {
+    "endpoints": 30,
+    "events": 53,
+    "services": 11
+  },
+  "circuits": [
+    {
+      "feature": "identity.get.health",
+      "api": "api-gateway",
+      "service": "identity",
+      "data": "identity",
+      "route": "GET /health",
+      "auth": "public",
+      "policy": "identity:health",
+      "audit": "none",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "identity.post.api-auth-login",
+      "api": "api-gateway",
+      "service": "identity",
+      "data": "identity",
+      "route": "POST /api/auth/login",
+      "auth": "public",
+      "policy": "identity:authenticate",
+      "audit": "auth.login",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "finance.get.api-finance-accounts",
+      "api": "api-gateway",
+      "service": "finance",
+      "data": "finance",
+      "route": "GET /api/finance/accounts",
+      "auth": "user",
+      "policy": "finance:read",
+      "audit": "finance.accounts.read",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "finance.post.api-finance-accounts",
+      "api": "api-gateway",
+      "service": "finance",
+      "data": "finance",
+      "route": "POST /api/finance/accounts",
+      "auth": "user",
+      "policy": "finance:write",
+      "audit": "finance.account.created",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "finance.post.api-finance-accounts--accountId-transactions",
+      "api": "api-gateway",
+      "service": "finance",
+      "data": "finance",
+      "route": "POST /api/finance/accounts/:accountId/transactions",
+      "auth": "user",
+      "policy": "finance:write",
+      "audit": "finance.transaction.created",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "vault.get.api-vault-secrets",
+      "api": "api-gateway",
+      "service": "vault",
+      "data": "vault",
+      "route": "GET /api/vault/secrets",
+      "auth": "user",
+      "policy": "vault:read",
+      "audit": "vault.listed",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "vault.post.api-vault-secrets",
+      "api": "api-gateway",
+      "service": "vault",
+      "data": "vault",
+      "route": "POST /api/vault/secrets",
+      "auth": "user",
+      "policy": "vault:write",
+      "audit": "vault.secret.updated",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "vault.get.api-vault-secrets--secretId",
+      "api": "api-gateway",
+      "service": "vault",
+      "data": "vault",
+      "route": "GET /api/vault/secrets/:secretId",
+      "auth": "user",
+      "policy": "vault:read",
+      "audit": "vault.secret.accessed",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "mail.get.api-mail-messages",
+      "api": "api-gateway",
+      "service": "mail",
+      "data": "mail",
+      "route": "GET /api/mail/messages",
+      "auth": "user",
+      "policy": "mail:read",
+      "audit": "wisp.message.listed",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "mail.post.api-mail-messages",
+      "api": "api-gateway",
+      "service": "mail",
+      "data": "mail",
+      "route": "POST /api/mail/messages",
+      "auth": "user",
+      "policy": "mail:send",
+      "audit": "wisp.message.sent",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "workflow.get.api-workflows",
+      "api": "api-gateway",
+      "service": "workflow",
+      "data": "workflow",
+      "route": "GET /api/workflows",
+      "auth": "user",
+      "policy": "workflow:read",
+      "audit": "workflow.listed",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "workflow.post.api-workflows",
+      "api": "api-gateway",
+      "service": "workflow",
+      "data": "workflow",
+      "route": "POST /api/workflows",
+      "auth": "user",
+      "policy": "workflow:write",
+      "audit": "workflow.created",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "workflow.post.api-workflows--workflowId-executions",
+      "api": "api-gateway",
+      "service": "workflow",
+      "data": "workflow",
+      "route": "POST /api/workflows/:workflowId/executions",
+      "auth": "user",
+      "policy": "workflow:write",
+      "audit": "workflow.started",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "workflow.post.api-workflows-executions--executionId-cancel",
+      "api": "api-gateway",
+      "service": "workflow",
+      "data": "workflow",
+      "route": "POST /api/workflows/executions/:executionId/cancel",
+      "auth": "user",
+      "policy": "workflow:write",
+      "audit": "workflow.cancelled",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "marketplace.get.api-marketplace-listings",
+      "api": "api-gateway",
+      "service": "marketplace",
+      "data": "marketplace",
+      "route": "GET /api/marketplace/listings",
+      "auth": "user",
+      "policy": "verve:read",
+      "audit": "marketplace.listed",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "marketplace.post.api-marketplace-listings",
+      "api": "api-gateway",
+      "service": "marketplace",
+      "data": "marketplace",
+      "route": "POST /api/marketplace/listings",
+      "auth": "user",
+      "policy": "verve:write",
+      "audit": "marketplace.listing.created",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "search.get.api-search",
+      "api": "api-gateway",
+      "service": "search",
+      "data": "search",
+      "route": "GET /api/search",
+      "auth": "user",
+      "policy": "search:read",
+      "audit": "search.executed",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "intelligence.get.api-intelligence-signals",
+      "api": "api-gateway",
+      "service": "intelligence",
+      "data": "intelligence",
+      "route": "GET /api/intelligence/signals",
+      "auth": "admin",
+      "policy": "admin:read",
+      "audit": "intelligence.read",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.get.api-admin-data-resources",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "GET /api/admin/data/resources",
+      "auth": "admin",
+      "policy": "admin:read",
+      "audit": "admin.data.catalog.read",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.post.api-admin-data-query",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "POST /api/admin/data/query",
+      "auth": "admin",
+      "policy": "admin:data:read",
+      "audit": "admin.data.query",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.post.api-admin-data-mutate",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "POST /api/admin/data/mutate",
+      "auth": "admin",
+      "policy": "admin:data:write",
+      "audit": "admin.data.mutate",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.post.api-admin-break-glass",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "POST /api/admin/break-glass",
+      "auth": "admin",
+      "policy": "admin:break-glass",
+      "audit": "admin.break_glass.issued",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.post.api-admin-events",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "POST /api/admin/events",
+      "auth": "service",
+      "policy": "platform:internal",
+      "audit": "admin.event.accepted",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.get.api-admin-xuka-phases",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "GET /api/admin/xuka/phases",
+      "auth": "admin",
+      "policy": "admin:read",
+      "audit": "admin.xuka.phases.read",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.get.api-admin-xuka-phases--phase",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "GET /api/admin/xuka/phases/:phase",
+      "auth": "admin",
+      "policy": "admin:read",
+      "audit": "admin.xuka.phase.read",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.get.api-admin-xuka-registry",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "GET /api/admin/xuka/registry",
+      "auth": "admin",
+      "policy": "admin:read",
+      "audit": "admin.xuka.registry.read",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.post.api-admin-xuka-validate",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "POST /api/admin/xuka/validate",
+      "auth": "admin",
+      "policy": "admin:read",
+      "audit": "admin.xuka.validate",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.post.api-admin-xuka-preview",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "POST /api/admin/xuka/preview",
+      "auth": "admin",
+      "policy": "admin:read",
+      "audit": "admin.xuka.preview",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "admin.post.api-admin-xuka-inspect",
+      "api": "api-gateway",
+      "service": "admin",
+      "data": "admin",
+      "route": "POST /api/admin/xuka/inspect",
+      "auth": "admin",
+      "policy": "admin:read",
+      "audit": "admin.xuka.inspect",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "telegram-gateway.post.api-telegram-gateway--botKey-webhook",
+      "api": "api-gateway",
+      "service": "telegram-gateway",
+      "data": "telegram-gateway",
+      "route": "POST /api/telegram/gateway/:botKey/webhook",
+      "auth": "service",
+      "policy": "telegram:update",
+      "audit": "telegram.update.received",
+      "stages": [
+        "feature",
+        "per-service-api",
+        "service",
+        "app-owned-data",
+        "router-policy",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.organization.created",
+      "api": "event-gateway",
+      "service": "workspace",
+      "data": "workspace",
+      "event": "organization.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.organization.member.added",
+      "api": "event-gateway",
+      "service": "workspace",
+      "data": "workspace",
+      "event": "organization.member.added",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.workspace.created",
+      "api": "event-gateway",
+      "service": "workspace",
+      "data": "workspace",
+      "event": "workspace.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.workspace.member.added",
+      "api": "event-gateway",
+      "service": "workspace",
+      "data": "workspace",
+      "event": "workspace.member.added",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.user.created",
+      "api": "event-gateway",
+      "service": "identity",
+      "data": "identity",
+      "event": "user.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.user.updated",
+      "api": "event-gateway",
+      "service": "identity",
+      "data": "identity",
+      "event": "user.updated",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.session.created",
+      "api": "event-gateway",
+      "service": "identity",
+      "data": "identity",
+      "event": "session.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.session.revoked",
+      "api": "event-gateway",
+      "service": "identity",
+      "data": "identity",
+      "event": "session.revoked",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.authentication.failed",
+      "api": "event-gateway",
+      "service": "identity",
+      "data": "identity",
+      "event": "authentication.failed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.finance.transaction.updated",
+      "api": "event-gateway",
+      "service": "finance",
+      "data": "finance",
+      "event": "finance.transaction.updated",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.finance.transaction.created",
+      "api": "event-gateway",
+      "service": "finance",
+      "data": "finance",
+      "event": "finance.transaction.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.vault.secret.accessed",
+      "api": "event-gateway",
+      "service": "vault",
+      "data": "vault",
+      "event": "vault.secret.accessed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.vault.secret.updated",
+      "api": "event-gateway",
+      "service": "vault",
+      "data": "vault",
+      "event": "vault.secret.updated",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.workflow.completed",
+      "api": "event-gateway",
+      "service": "workflow",
+      "data": "workflow",
+      "event": "workflow.completed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.workflow.started",
+      "api": "event-gateway",
+      "service": "workflow",
+      "data": "workflow",
+      "event": "workflow.started",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.workflow.failed",
+      "api": "event-gateway",
+      "service": "workflow",
+      "data": "workflow",
+      "event": "workflow.failed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.workflow.cancelled",
+      "api": "event-gateway",
+      "service": "workflow",
+      "data": "workflow",
+      "event": "workflow.cancelled",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.wisp.message.received",
+      "api": "event-gateway",
+      "service": "mail",
+      "data": "mail",
+      "event": "wisp.message.received",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.wisp.message.sent",
+      "api": "event-gateway",
+      "service": "mail",
+      "data": "mail",
+      "event": "wisp.message.sent",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.mail.delivery.requested",
+      "api": "event-gateway",
+      "service": "mail",
+      "data": "mail",
+      "event": "mail.delivery.requested",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.mail.delivery.updated",
+      "api": "event-gateway",
+      "service": "mail",
+      "data": "mail",
+      "event": "mail.delivery.updated",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.notification.requested",
+      "api": "event-gateway",
+      "service": "notification",
+      "data": "notification",
+      "event": "notification.requested",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.notification.sent",
+      "api": "event-gateway",
+      "service": "notification",
+      "data": "notification",
+      "event": "notification.sent",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.notification.failed",
+      "api": "event-gateway",
+      "service": "notification",
+      "data": "notification",
+      "event": "notification.failed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.ai.task.completed",
+      "api": "event-gateway",
+      "service": "ai-agent",
+      "data": "ai-agent",
+      "event": "ai.task.completed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.ai.task.failed",
+      "api": "event-gateway",
+      "service": "ai-agent",
+      "data": "ai-agent",
+      "event": "ai.task.failed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.intelligence.observation.created",
+      "api": "event-gateway",
+      "service": "intelligence",
+      "data": "intelligence",
+      "event": "intelligence.observation.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.intelligence.signal.created",
+      "api": "event-gateway",
+      "service": "intelligence",
+      "data": "intelligence",
+      "event": "intelligence.signal.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.search.document.indexed",
+      "api": "event-gateway",
+      "service": "search",
+      "data": "search",
+      "event": "search.document.indexed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.marketplace.listing.created",
+      "api": "event-gateway",
+      "service": "marketplace",
+      "data": "marketplace",
+      "event": "marketplace.listing.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.marketplace.order.created",
+      "api": "event-gateway",
+      "service": "marketplace",
+      "data": "marketplace",
+      "event": "marketplace.order.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.analytics.event.recorded",
+      "api": "event-gateway",
+      "service": "platform",
+      "data": "platform",
+      "event": "analytics.event.recorded",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.identity.telegram.linked",
+      "api": "event-gateway",
+      "service": "identity",
+      "data": "identity",
+      "event": "identity.telegram.linked",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.authorization.decision.allowed",
+      "api": "event-gateway",
+      "service": "authorization",
+      "data": "authorization",
+      "event": "authorization.decision.allowed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.authorization.decision.denied",
+      "api": "event-gateway",
+      "service": "authorization",
+      "data": "authorization",
+      "event": "authorization.decision.denied",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.telegram.update.received",
+      "api": "event-gateway",
+      "service": "telegram-gateway",
+      "data": "telegram-gateway",
+      "event": "telegram.update.received",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.telegram.update.failed",
+      "api": "event-gateway",
+      "service": "telegram-gateway",
+      "data": "telegram-gateway",
+      "event": "telegram.update.failed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.technical_gap.detected",
+      "api": "event-gateway",
+      "service": "intelligence",
+      "data": "intelligence",
+      "event": "technical_gap.detected",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.technical_gap.updated",
+      "api": "event-gateway",
+      "service": "intelligence",
+      "data": "intelligence",
+      "event": "technical_gap.updated",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.deployment.started",
+      "api": "event-gateway",
+      "service": "platform",
+      "data": "platform",
+      "event": "deployment.started",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.deployment.succeeded",
+      "api": "event-gateway",
+      "service": "platform",
+      "data": "platform",
+      "event": "deployment.succeeded",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.deployment.failed",
+      "api": "event-gateway",
+      "service": "platform",
+      "data": "platform",
+      "event": "deployment.failed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.service.health.changed",
+      "api": "event-gateway",
+      "service": "platform",
+      "data": "platform",
+      "event": "service.health.changed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.event.consumer.lag",
+      "api": "event-gateway",
+      "service": "event-bus",
+      "data": "event-bus",
+      "event": "event.consumer.lag",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.workflow.stalled",
+      "api": "event-gateway",
+      "service": "workflow",
+      "data": "workflow",
+      "event": "workflow.stalled",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.audit.created",
+      "api": "event-gateway",
+      "service": "audit",
+      "data": "audit",
+      "event": "audit.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.alert.created",
+      "api": "event-gateway",
+      "service": "alerting",
+      "data": "alerting",
+      "event": "alert.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.incident.created",
+      "api": "event-gateway",
+      "service": "incident",
+      "data": "incident",
+      "event": "incident.created",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.incident.resolved",
+      "api": "event-gateway",
+      "service": "incident",
+      "data": "incident",
+      "event": "incident.resolved",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.user.error",
+      "api": "event-gateway",
+      "service": "intelligence",
+      "data": "intelligence",
+      "event": "user.error",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.telegram.auth.linked",
+      "api": "event-gateway",
+      "service": "identity",
+      "data": "identity",
+      "event": "telegram.auth.linked",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.telegram.auth.unlinked",
+      "api": "event-gateway",
+      "service": "identity",
+      "data": "identity",
+      "event": "telegram.auth.unlinked",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    },
+    {
+      "feature": "event.backup.restore.completed",
+      "api": "event-gateway",
+      "service": "backup",
+      "data": "backup",
+      "event": "backup.restore.completed",
+      "consumers": [
+        "worker"
+      ],
+      "stages": [
+        "feature",
+        "event-gateway",
+        "eventbus",
+        "consumer",
+        "audit"
+      ]
+    }
+  ],
+  "orphans": []
+}

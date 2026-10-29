@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "phase": "ANTAS-18",
+  "name": "Production Certification / Go-Live",
+  "owner": "platform",
+  "priority": "FINAL",
+  "generatedAt": "2026-09-29T06:06:07.463Z",
+  "status": "PASS",
+  "required": 5,
+  "passed": 5,
+  "failed": 0,
+  "waived": 0,
+  "criticalFailures": 0,
+  "productionReady": false,
+  "externalGates": [
+    {
+      "gate": "all P0 runtime gates",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "release owner sign-off",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "production canary and rollback",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "findings": [],
+  "note": "PASS means repository evidence and static controls are present; it does not certify runtime or production behavior."
+}

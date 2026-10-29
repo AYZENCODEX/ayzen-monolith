@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "window": "30d",
+  "services": {
+    "api-gateway": {"availability": 0.995, "p95LatencyMs": 500, "errorRate": 0.01},
+    "identity": {"availability": 0.995, "p95LatencyMs": 750, "errorRate": 0.01},
+    "finance": {"availability": 0.995, "p95LatencyMs": 750, "errorRate": 0.005},
+    "vault": {"availability": 0.995, "p95LatencyMs": 750, "errorRate": 0.005},
+    "workflow": {"availability": 0.99, "p95LatencyMs": 1000, "errorRate": 0.02},
+    "telegram-gateway": {"availability": 0.995, "p95LatencyMs": 1000, "errorRate": 0.01},
+    "intelligence": {"availability": 0.99, "p95LatencyMs": 1500, "errorRate": 0.02}
+  },
+  "backbone": {
+    "eventConsumerLagSeconds": 60,
+    "workflowStallSeconds": 300,
+    "deadLetters": 0
+  },
+  "breachAction": "create-technical-gap-and-route-alert"
+}

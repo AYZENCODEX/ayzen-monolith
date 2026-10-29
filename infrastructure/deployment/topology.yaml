@@ -1,0 +1,38 @@
+# AYZEN phase 16–25 deployment topology.
+# Services may share one host initially; each has an independent process,
+# health contract, route switch, and rollback target.
+version: 1
+public:
+  gateway:
+    package: "@ayzen/api-gateway"
+    port: 5000
+    route: gateway
+compatibility:
+  monolith:
+    package: "@workspace/api-server"
+    port: 8080
+    role: fallback
+workers:
+  event:
+    package: "@ayzen/worker"
+    port: 8110
+services:
+  identity: { package: "@ayzen/identity-service", port: 8100, routeEnv: IDENTITY_SERVICE_URL }
+  finance: { package: "@ayzen/finance-service", port: 8101, routeEnv: FINANCE_SERVICE_URL }
+  vault: { package: "@ayzen/vault-service", port: 8102, routeEnv: VAULT_SERVICE_URL }
+  mail: { package: "@ayzen/mail-service", port: 8103, routeEnv: WISP_SERVICE_URL }
+  notification: { package: "@ayzen/notification-service", port: 8104, routeEnv: NOTIFICATION_SERVICE_URL }
+  workflow: { package: "@ayzen/workflow-service", port: 8105, routeEnv: WORKFLOW_SERVICE_URL }
+  ai: { package: "@ayzen/ai-service", port: 8106, routeEnv: AI_SERVICE_URL }
+  marketplace: { package: "@ayzen/marketplace-service", port: 8107, routeEnv: MARKETPLACE_SERVICE_URL }
+  search: { package: "@ayzen/search-service", port: 8108, routeEnv: SEARCH_SERVICE_URL }
+  intelligence: { package: "@ayzen/intelligence-service", port: 8109, routeEnv: INTELLIGENCE_SERVICE_URL }
+  admin: { package: "@ayzen/admin-service", port: 8111, routeEnv: ADMIN_SERVICE_URL }
+shared:
+  postgres: { role: "shared cluster; logical ownership first" }
+  redis: { role: "queue/cache; no domain ownership" }
+deploymentStages:
+  - one-host-multiple-processes
+  - independently-containerized
+  - independently-scaled-where-measured
+  - kubernetes-only-when-justified

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "defaultDeny": true,
+  "authenticationDoesNotGrantAppAccess": true,
+  "linking": {
+    "requiresVerifiedAyzenIdentity": true,
+    "requiresActiveLocalIdentity": true,
+    "requiresExplicitConfirmation": true,
+    "emailMatchIsInsufficient": true
+  },
+  "apps": ["ayzenx", "warde", "verve", "ryft", "sylo", "skarn", "zynth", "wisp", "admin"],
+  "policyEngine": "packages/authorization/src/index.mjs",
+  "stepUpForSensitiveActions": true
+}

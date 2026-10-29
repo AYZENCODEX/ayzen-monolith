@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-06",
+  "sub_phase": "VLT-GAP-06-C",
+  "validator_version": "1.0.0",
+  "commit_sha": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "d44978e63cfd6d21e5fb5509f15f7299b0001bb9ee111577291970664cd0be03",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/security/pin-guard.ts": "6cf7a898200612e84feee0d2c82e47a31b075c7cc89b0dcbe0b1f27adf61437d",
+    "artifacts/api-server/src/lib/vault-pin-guard.ts": "d69c5a16f2d4e7a65dad41aea93b731afbd03c2964bdf573e360edd9a8ef22bd",
+    "artifacts/api-server/src/routes/passkey.ts": "6be7f9d0c1b863d800e30aab16125d5734be26ed22410106f52cff54eb10082e",
+    "artifacts/api-server/src/routes/vault-security.ts": "b4dd9a6196b5e558a73aa86fbdd33e0e1897925795038ab02d9ac2e68fca166f"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-06-C.mjs",
+    "targeted TypeScript check for PIN guard and its direct route consumers"
+  ],
+  "exit_codes": {
+    "rewired-source TypeScript check": 0
+  },
+  "consumers_migrated": [
+    {
+      "file": "artifacts/api-server/src/routes/passkey.ts",
+      "import": "../vault/security/pin-guard",
+      "target": "artifacts/api-server/src/vault/security/pin-guard.ts"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-security.ts",
+      "import": "../vault/security/pin-guard",
+      "target": "artifacts/api-server/src/vault/security/pin-guard.ts"
+    }
+  ],
+  "legacy_consumers_remaining": [],
+  "new_owner_consumers": [
+    "artifacts/api-server/src/routes/passkey.ts",
+    "artifacts/api-server/src/routes/vault-security.ts"
+  ],
+  "pin_guard_body_hashes_preserved": [
+    {
+      "symbol": "isVaultPinLockedOut",
+      "source_sha256": "73fd2de8983e8bd02dda5277d22856cb3fe4891011ae4355f56f075555459d1b",
+      "destination_sha256": "73fd2de8983e8bd02dda5277d22856cb3fe4891011ae4355f56f075555459d1b"
+    },
+    {
+      "symbol": "recordFailure",
+      "source_sha256": "b4aa723d40ee667a5efc09fce38e116291772742a8d591e58208f659b3b48493",
+      "destination_sha256": "b4aa723d40ee667a5efc09fce38e116291772742a8d591e58208f659b3b48493"
+    },
+    {
+      "symbol": "clearVaultPinFailures",
+      "source_sha256": "49155c29b2f22c2fa7487d39b9b6b6d96287fee539b3feae3fc12215b03e0fd2",
+      "destination_sha256": "49155c29b2f22c2fa7487d39b9b6b6d96287fee539b3feae3fc12215b03e0fd2"
+    },
+    {
+      "symbol": "hasVaultPin",
+      "source_sha256": "1b87d5b1fda08ada16f0943f3f36879bccb66916cc5aede3bcf70fa8c7b63b14",
+      "destination_sha256": "1b87d5b1fda08ada16f0943f3f36879bccb66916cc5aede3bcf70fa8c7b63b14"
+    },
+    {
+      "symbol": "requireVaultPin",
+      "source_sha256": "9217d846a652b9f8a512dab2b81952819b69baf64db4d54c97f04f8e5cd2803e",
+      "destination_sha256": "9217d846a652b9f8a512dab2b81952819b69baf64db4d54c97f04f8e5cd2803e"
+    }
+  ],
+  "status": "PASS"
+}

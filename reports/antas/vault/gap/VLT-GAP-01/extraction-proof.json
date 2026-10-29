@@ -1,0 +1,3267 @@
+{
+  "phase": "VLT-GAP-01",
+  "sub_phase": "VLT-GAP-01-B",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "fb6d0413ecb28d492887ca0a742e3a8ce4365285de39e131b40c837aa2c8b77f",
+  "validator_version": "1.0.0",
+  "validator_sha256": "bf0a6a746e0680dbabf5aff4bb4217a68304cd7ee70e3e757831afff0d6c8153",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/vault.ts": "d8c4b257cd4c9abec0cc56aabc7abe3481b1678c8af48261955704c76d7fdcec",
+    "artifacts/api-server/src/routes/vault-entity-links.ts": "60208e6af6ffb2e8f12a7d906ef8bd623db896724040218f52e574f65fe157b7",
+    "artifacts/api-server/src/vault/security/entity-ownership.ts": "7da2e892e29c3a5db08d510a4bb7da19d7af33088850b738278d005e3abf8328",
+    "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts": "1bac9901cc4f37e9dd50bcca3126fd5397605374a4c4176b1e50b178d26f0a8b",
+    "artifacts/api-server/src/vault/application/entity/activity.ts": "bc6d73f180041ef79aaa67f8d33b255d0e993e0dfff98c84b0b13b115fb33de2",
+    "artifacts/api-server/src/vault/domain/entity/fields.ts": "2b3b4e7885317297d5a42755755fd85ebb014dcb0b139fc1efe8ffc961d280f5",
+    "artifacts/api-server/src/vault/domain/entity/calculations.ts": "e75603cafc8fbf9699af5740eac90ac14250012300dd98e30c22a1abf1260bbd",
+    "artifacts/api-server/src/vault/application/entity/links.ts": "4b2c75abf91865eb58a011269028dfbb5e9228487347cfbcfa84ef1d8b1a466e",
+    "artifacts/api-server/src/vault/application/entity/lifecycle.ts": "c3ffea10dfbe6961bdd5970141b692a4415ff009cc33c5e14da95d324bce0978",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b"
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-01-A.mjs",
+    "in-process differential suite (old baseline vs new source)"
+  ],
+  "exit_codes": {
+    "01-A-census": 0,
+    "differential_suite": 0,
+    "unit_parity": 0,
+    "typecheck_differential": 0
+  },
+  "symbols_moved": [
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#requireVaultEntryOwnership",
+      "to": "artifacts/api-server/src/vault/security/entity-ownership.ts#requireVaultEntryOwnership",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership-resource-builders",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/routes/entities.ts",
+        "artifacts/api-server/src/routes/value-history.ts",
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault-entity-links.ts#vaultEntryResource",
+      "to": "artifacts/api-server/src/vault/security/entity-ownership.ts#vaultEntryResource",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership-resource-builders",
+      "identical_implementation": true,
+      "consumers": [],
+      "in_file_references": 2
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault-entity-links.ts#vaultEntityLinkResource",
+      "to": "artifacts/api-server/src/vault/security/entity-ownership.ts#vaultEntityLinkResource",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership-resource-builders",
+      "identical_implementation": true,
+      "consumers": [],
+      "in_file_references": 1
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault-entity-links.ts#requireVaultEntityLinkOwnership",
+      "to": "artifacts/api-server/src/vault/security/entity-ownership.ts#requireVaultEntityLinkOwnership",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership-resource-builders",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/routes/vault-entity-links.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault-entity-links.ts#requireVaultEntryOwnership",
+      "to": "artifacts/api-server/src/vault/security/entity-ownership.ts#requireVaultEntryOwnershipOr404",
+      "mode": "renamed",
+      "layer": "security",
+      "behavior_domain": "ownership-resource-builders",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/routes/vault-entity-links.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#vaultBulkOwnershipEngine",
+      "to": "artifacts/api-server/src/vault/security/entity-ownership.ts#vaultBulkOwnershipEngine",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership-resource-builders",
+      "identical_implementation": true,
+      "consumers": [],
+      "in_file_references": 2
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#auditVaultBulkOwnership",
+      "to": "artifacts/api-server/src/vault/security/entity-ownership.ts#auditVaultBulkOwnership",
+      "mode": "verbatim",
+      "layer": "security",
+      "behavior_domain": "ownership-resource-builders",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/routes/vault.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#SAFE_COLS",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#SAFE_COLS",
+      "mode": "verbatim",
+      "layer": "infrastructure",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [],
+      "in_file_references": 5
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#selectVault",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectVault",
+      "mode": "verbatim",
+      "layer": "infrastructure",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/routes/vault.ts",
+        "artifacts/api-server/src/vault/application/entity/admin.ts",
+        "artifacts/api-server/src/vault/application/entity/analytics.ts",
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#selectVaultOne",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectVaultOne",
+      "mode": "verbatim",
+      "layer": "infrastructure",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/routes/vault.ts",
+        "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+        "artifacts/api-server/src/vault/application/entity/analytics.ts",
+        "artifacts/api-server/src/vault/application/entity/bulk.ts",
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#selectAllVaultEntries",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectAllVaultEntries",
+      "mode": "verbatim",
+      "layer": "infrastructure",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/lib/vault-health-scan.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#selectVaultTrash",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectVaultTrash",
+      "mode": "verbatim",
+      "layer": "infrastructure",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#selectVaultTrashOne",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#selectVaultTrashOne",
+      "mode": "verbatim",
+      "layer": "infrastructure",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#hardDeleteVaultEntry",
+      "to": "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts#hardDeleteVaultEntry",
+      "mode": "verbatim",
+      "layer": "infrastructure",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#logVaultActivity",
+      "to": "artifacts/api-server/src/vault/application/entity/activity.ts#logVaultActivity",
+      "mode": "verbatim",
+      "layer": "application",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/routes/vault.ts",
+        "artifacts/api-server/src/vault/application/entity/bulk.ts",
+        "artifacts/api-server/src/vault/application/entity/create.ts",
+        "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+        "artifacts/api-server/src/vault/application/entity/update.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#NEW_VAULT_FIELDS",
+      "to": "artifacts/api-server/src/vault/domain/entity/fields.ts#NEW_VAULT_FIELDS",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/update.ts"
+      ],
+      "in_file_references": 1
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#BASE_VAULT_FIELDS",
+      "to": "artifacts/api-server/src/vault/domain/entity/fields.ts#BASE_VAULT_FIELDS",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/update.ts"
+      ],
+      "in_file_references": 1
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#DATE_FIELDS",
+      "to": "artifacts/api-server/src/vault/domain/entity/fields.ts#DATE_FIELDS",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/update.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#SINGLE_FIELD_EDITABLE",
+      "to": "artifacts/api-server/src/vault/domain/entity/fields.ts#SINGLE_FIELD_EDITABLE",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/update.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#fieldLabel",
+      "to": "artifacts/api-server/src/vault/domain/entity/fields.ts#fieldLabel",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/update.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#BULK_ALLOWED_STATUSES",
+      "to": "artifacts/api-server/src/vault/domain/entity/fields.ts#BULK_ALLOWED_STATUSES",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "entity-crud",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/bulk.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#ENTITY_GAS_CHAINS",
+      "to": "artifacts/api-server/src/vault/domain/entity/calculations.ts#ENTITY_GAS_CHAINS",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "entity-calculations",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/analytics.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault.ts#addressesFor",
+      "to": "artifacts/api-server/src/vault/domain/entity/calculations.ts#addressesFor",
+      "mode": "verbatim",
+      "layer": "domain",
+      "behavior_domain": "entity-calculations",
+      "identical_implementation": true,
+      "consumers": [
+        "artifacts/api-server/src/vault/application/entity/analytics.ts"
+      ],
+      "in_file_references": 0
+    },
+    {
+      "from": "artifacts/api-server/src/routes/vault-entity-links.ts#ownsEntity",
+      "to": "artifacts/api-server/src/vault/application/entity/links.ts#ownsEntity",
+      "mode": "verbatim",
+      "layer": "application",
+      "behavior_domain": "entity-links",
+      "identical_implementation": true,
+      "consumers": [],
+      "in_file_references": 3
+    }
+  ],
+  "handlers_extracted": [
+    {
+      "route": "GET /vault/:id/links",
+      "route_file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/links.ts#listEntityLinks",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [
+          "db.from",
+          "db.select",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntityLinksTable",
+          "vaultEntriesTable"
+        ],
+        "statuses": [
+          400,
+          404,
+          500
+        ],
+        "error_literals": [
+          "Failed to fetch linked entities",
+          "Invalid entity id",
+          "Vault entry not found"
+        ],
+        "branches": 9
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "listEntityLinks",
+          "requireVaultEntryOwnershipOr404"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [
+          "db.from",
+          "db.select",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntityLinksTable",
+          "vaultEntriesTable"
+        ],
+        "statuses": [],
+        "error_literals": [
+          "Failed to fetch linked entities",
+          "Invalid entity id",
+          "Vault entry not found"
+        ],
+        "branches": 9
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "POST /vault-entity-links",
+      "route_file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/links.ts#createEntityLink",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [
+          "db.from",
+          "db.insert",
+          "db.returning",
+          "db.select",
+          "db.values",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntityLinksTable"
+        ],
+        "statuses": [
+          201,
+          400,
+          404,
+          409,
+          500
+        ],
+        "error_literals": [
+          "An entity can't be linked to itself",
+          "Failed to create link",
+          "This relationship is already linked",
+          "`relationType must be one of: ${RELATION_TYPES.join(\", \")}`",
+          "entityId and linkedEntityId are required",
+          "entityId not found or not owned by you",
+          "linkedEntityId not found or not owned by you"
+        ],
+        "branches": 8
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "createEntityLink"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [
+          "db.from",
+          "db.insert",
+          "db.returning",
+          "db.select",
+          "db.values",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntityLinksTable"
+        ],
+        "statuses": [],
+        "error_literals": [
+          "An entity can't be linked to itself",
+          "Failed to create link",
+          "This relationship is already linked",
+          "`relationType must be one of: ${RELATION_TYPES.join(\", \")}`",
+          "entityId and linkedEntityId are required",
+          "entityId not found or not owned by you",
+          "linkedEntityId not found or not owned by you"
+        ],
+        "branches": 8
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "PATCH /vault-entity-links/:id",
+      "route_file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/links.ts#updateEntityLink",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [
+          "db.returning",
+          "db.set",
+          "db.update",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntityLinksTable"
+        ],
+        "statuses": [
+          400,
+          404,
+          500
+        ],
+        "error_literals": [
+          "Failed to update link",
+          "Invalid link id",
+          "Link not found",
+          "`relationType must be one of: ${RELATION_TYPES.join(\", \")}`"
+        ],
+        "branches": 7
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "requireVaultEntityLinkOwnership",
+          "updateEntityLink"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [
+          "db.returning",
+          "db.set",
+          "db.update",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntityLinksTable"
+        ],
+        "statuses": [],
+        "error_literals": [
+          "Failed to update link",
+          "Invalid link id",
+          "Link not found",
+          "`relationType must be one of: ${RELATION_TYPES.join(\", \")}`"
+        ],
+        "branches": 7
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "DELETE /vault-entity-links/:id",
+      "route_file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/links.ts#deleteEntityLink",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [
+          "db.delete",
+          "db.returning",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntityLinksTable"
+        ],
+        "statuses": [
+          400,
+          404,
+          500
+        ],
+        "error_literals": [
+          "Failed to delete link",
+          "Invalid link id",
+          "Link not found"
+        ],
+        "branches": 3
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "deleteEntityLink",
+          "requireVaultEntityLinkOwnership"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [
+          "db.delete",
+          "db.returning",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntityLinksTable"
+        ],
+        "statuses": [],
+        "error_literals": [
+          "Failed to delete link",
+          "Invalid link id",
+          "Link not found"
+        ],
+        "branches": 3
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "GET /vault/links/all",
+      "route_file": "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/links.ts#listAllEntityLinks",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [
+          "db.execute"
+        ],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [
+          500
+        ],
+        "error_literals": [
+          "Failed to fetch links"
+        ],
+        "branches": 1
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "listAllEntityLinks"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [
+          "db.execute"
+        ],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [
+          "Failed to fetch links"
+        ],
+        "branches": 1
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "GET /vault",
+      "route_file": "artifacts/api-server/src/routes/vault.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#listEntities",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [],
+        "branches": 0
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "listEntities"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [],
+        "branches": 0
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "GET /vault/tags",
+      "route_file": "artifacts/api-server/src/routes/vault.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#listEntityTags",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [
+          500
+        ],
+        "error_literals": [
+          "Failed to fetch tags"
+        ],
+        "branches": 7
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "listEntityTags"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [
+          "Failed to fetch tags"
+        ],
+        "branches": 7
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "GET /vault/trash",
+      "route_file": "artifacts/api-server/src/routes/vault.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#listTrashedEntities",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [],
+        "branches": 2
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "listTrashedEntities"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [],
+        "branches": 2
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "GET /vault/:id",
+      "route_file": "artifacts/api-server/src/routes/vault.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#getEntity",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [
+          404
+        ],
+        "error_literals": [
+          "Vault entry not found"
+        ],
+        "branches": 3
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "getEntity",
+          "requireCreditBalance",
+          "requireVaultEntryOwnership"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [
+          "Vault entry not found"
+        ],
+        "branches": 3
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "DELETE /vault/trash",
+      "route_file": "artifacts/api-server/src/routes/vault.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#emptyTrash",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [
+          "Trash emptied"
+        ],
+        "branches": 1
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "emptyTrash"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [
+          "Trash emptied"
+        ],
+        "branches": 1
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "DELETE /vault/:id",
+      "route_file": "artifacts/api-server/src/routes/vault.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#trashEntity",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [
+          "db.set",
+          "db.update",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntriesTable"
+        ],
+        "statuses": [
+          404
+        ],
+        "error_literals": [
+          "Vault entry moved to trash",
+          "Vault entry not found"
+        ],
+        "branches": 2
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "requireVaultEntryOwnership",
+          "trashEntity"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [
+          "db.set",
+          "db.update",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntriesTable"
+        ],
+        "statuses": [],
+        "error_literals": [
+          "Vault entry moved to trash",
+          "Vault entry not found"
+        ],
+        "branches": 2
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "POST /vault/:id/restore",
+      "route_file": "artifacts/api-server/src/routes/vault.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#restoreEntity",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [
+          "db.set",
+          "db.update",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntriesTable"
+        ],
+        "statuses": [
+          404
+        ],
+        "error_literals": [
+          "Trashed vault entry not found",
+          "Vault entry restored"
+        ],
+        "branches": 2
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "requireVaultEntryOwnership",
+          "restoreEntity"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [
+          "db.set",
+          "db.update",
+          "db.where"
+        ],
+        "sql_templates": 0,
+        "tables": [
+          "vaultEntriesTable"
+        ],
+        "statuses": [],
+        "error_literals": [
+          "Trashed vault entry not found",
+          "Vault entry restored"
+        ],
+        "branches": 2
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    },
+    {
+      "route": "DELETE /vault/trash/:id",
+      "route_file": "artifacts/api-server/src/routes/vault.ts",
+      "usecase": "artifacts/api-server/src/vault/application/entity/lifecycle.ts#purgeTrashedEntity",
+      "route_present_before": true,
+      "route_present_after": true,
+      "usecase_declared": true,
+      "old_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [
+          404
+        ],
+        "error_literals": [
+          "Trashed vault entry not found",
+          "Vault entry permanently deleted"
+        ],
+        "branches": 2
+      },
+      "new_handler": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "branches": 0,
+        "calls": [
+          "purgeTrashedEntity",
+          "requireVaultEntryOwnership"
+        ]
+      },
+      "usecase_body": {
+        "db_ops": [],
+        "sql_templates": 0,
+        "tables": [],
+        "statuses": [],
+        "error_literals": [
+          "Trashed vault entry not found",
+          "Vault entry permanently deleted"
+        ],
+        "branches": 2
+      },
+      "db_ops_preserved": true,
+      "tables_preserved": true,
+      "error_literals_preserved": true,
+      "statuses_preserved": true,
+      "route_is_thin": true,
+      "route_calls_usecase": true
+    }
+  ],
+  "consumers_migrated": [],
+  "old_business_symbols_remaining": {
+    "gap01_routes_with_business_behavior_in_vault_ts": [
+      "GET /vault/:id",
+      "GET /vault/receipt/:token/pdf"
+    ],
+    "gap01_non_route_symbols_in_old_files": [
+      "vault.ts#lifecycleDeps",
+      "vault.ts#updateDeps",
+      "vault.ts#BRIDGE_PLATFORMS"
+    ]
+  },
+  "duplicate_implementations": [],
+  "duplicates_outside_scope_for_01C": [],
+  "route_thinness": {
+    "vault.ts": {
+      "before": {
+        "routes": 36,
+        "with_business_behavior": 35,
+        "touching_db": 22,
+        "branches": 343
+      },
+      "after": {
+        "routes": 36,
+        "with_business_behavior": 8,
+        "touching_db": 3,
+        "branches": 45
+      }
+    },
+    "vault-entity-links.ts": {
+      "before": {
+        "routes": 5,
+        "with_business_behavior": 5,
+        "touching_db": 5,
+        "branches": 34
+      },
+      "after": {
+        "routes": 5,
+        "with_business_behavior": 0,
+        "touching_db": 0,
+        "branches": 0
+      }
+    }
+  },
+  "diff_audit": {
+    "changed": [
+      "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "artifacts/api-server/src/routes/entities.ts",
+      "artifacts/api-server/src/routes/value-history.ts",
+      "artifacts/api-server/src/routes/vault-entity-links.ts",
+      "artifacts/api-server/src/routes/vault.ts",
+      "scripts/src/test-route-ownership-regression.ts"
+    ],
+    "added": [
+      "artifacts/api-server/src/vault/application/entity/activity-feed.ts",
+      "artifacts/api-server/src/vault/application/entity/activity.ts",
+      "artifacts/api-server/src/vault/application/entity/admin.ts",
+      "artifacts/api-server/src/vault/application/entity/analytics.ts",
+      "artifacts/api-server/src/vault/application/entity/bulk.ts",
+      "artifacts/api-server/src/vault/application/entity/create.ts",
+      "artifacts/api-server/src/vault/application/entity/lifecycle.ts",
+      "artifacts/api-server/src/vault/application/entity/links.ts",
+      "artifacts/api-server/src/vault/application/entity/receipt.ts",
+      "artifacts/api-server/src/vault/application/entity/update.ts",
+      "artifacts/api-server/src/vault/domain/entity/calculations.ts",
+      "artifacts/api-server/src/vault/domain/entity/fields.ts",
+      "artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts",
+      "artifacts/api-server/src/vault/security/entity-ownership.ts",
+      "scripts/antas/vault/gap/gap-common.mjs",
+      "scripts/antas/vault/gap/harness.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-01-A.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-01-B.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-01-C.mjs",
+      "scripts/antas/vault/gap/validate-vlt-gap-01-D.mjs"
+    ],
+    "removed": [],
+    "unexpected": []
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build is NOT executed)",
+    "before_total": 128,
+    "after_total": 113,
+    "syntactic_errors": [],
+    "new_diagnostics": [],
+    "real_class_new": [],
+    "before": {
+      "__external_unresolved": 7,
+      "7006: Parameter '…' implicitly has an '…' type.": 93,
+      "2339: Property '…' does not exist on type '…'.": 5,
+      "2345: Argument of type '…' is not assignable to parameter of type '…'.   Index signature for typ": 1,
+      "2591: Cannot find name '…'. Do you need to install type definitions for node? Try `npm i --save-": 2,
+      "2584: Cannot find name '…'. Do you need to change your target library? Try changing the '…' comp": 4,
+      "7031: Binding element '…' implicitly has an '…' type.": 11,
+      "2345: Argument of type '…' is not assignable to parameter of type '…'.   Type '…' is not assigna": 2,
+      "2538: Type '…' cannot be used as an index type.": 3
+    },
+    "after": {
+      "__external_unresolved": 16,
+      "2584: Cannot find name '…'. Do you need to change your target library? Try changing the '…' comp": 3,
+      "7006: Parameter '…' implicitly has an '…' type.": 88,
+      "2339: Property '…' does not exist on type '…'.": 5,
+      "2345: Argument of type '…' is not assignable to parameter of type '…'.   Index signature for typ": 1
+    }
+  },
+  "tests": {
+    "differential_cases": 47,
+    "differential_passed": 47,
+    "unit_parity": 41,
+    "unit_passed": 41,
+    "mutation_tests": 5,
+    "mutation_detected": 5,
+    "results": [
+      {
+        "name": "links.GET success both directions + deleted counterpart",
+        "category": "success",
+        "passed": true,
+        "calls_old": 12,
+        "calls_new": 12
+      },
+      {
+        "name": "links.GET array param",
+        "category": "success",
+        "passed": true,
+        "calls_old": 8,
+        "calls_new": 8
+      },
+      {
+        "name": "links.GET invalid id → 400",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 0,
+        "calls_new": 0
+      },
+      {
+        "name": "links.GET not owned → 404",
+        "category": "security",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "links.GET db failure → 500",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 8,
+        "calls_new": 8
+      },
+      {
+        "name": "links.POST success (+note trim)",
+        "category": "success",
+        "passed": true,
+        "calls_old": 16,
+        "calls_new": 16
+      },
+      {
+        "name": "links.POST blank note → null",
+        "category": "success",
+        "passed": true,
+        "calls_old": 16,
+        "calls_new": 16
+      },
+      {
+        "name": "links.POST missing ids → 400",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 0,
+        "calls_new": 0
+      },
+      {
+        "name": "links.POST self link → 400",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 0,
+        "calls_new": 0
+      },
+      {
+        "name": "links.POST bad relationType → 400",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 0,
+        "calls_new": 0
+      },
+      {
+        "name": "links.POST entity not owned → 404",
+        "category": "security",
+        "passed": true,
+        "calls_old": 8,
+        "calls_new": 8
+      },
+      {
+        "name": "links.POST linked entity not owned → 404",
+        "category": "security",
+        "passed": true,
+        "calls_old": 8,
+        "calls_new": 8
+      },
+      {
+        "name": "links.POST duplicate → 409",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 12,
+        "calls_new": 12
+      },
+      {
+        "name": "links.POST inverse duplicate → 409",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 12,
+        "calls_new": 12
+      },
+      {
+        "name": "links.POST insert failure → 500",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 16,
+        "calls_new": 16
+      },
+      {
+        "name": "links.PATCH success",
+        "category": "success",
+        "passed": true,
+        "calls_old": 5,
+        "calls_new": 5
+      },
+      {
+        "name": "links.PATCH note only (empty → null)",
+        "category": "success",
+        "passed": true,
+        "calls_old": 5,
+        "calls_new": 5
+      },
+      {
+        "name": "links.PATCH invalid id → 400",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 0,
+        "calls_new": 0
+      },
+      {
+        "name": "links.PATCH bad relationType → 400",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 0,
+        "calls_new": 0
+      },
+      {
+        "name": "links.PATCH not found → 404",
+        "category": "security",
+        "passed": true,
+        "calls_old": 5,
+        "calls_new": 5
+      },
+      {
+        "name": "links.PATCH db failure → 500",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 5,
+        "calls_new": 5
+      },
+      {
+        "name": "links.DELETE success",
+        "category": "success",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "links.DELETE not found → 404",
+        "category": "security",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "links.DELETE invalid id → 400",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 0,
+        "calls_new": 0
+      },
+      {
+        "name": "links.DELETE db failure → 500",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "links.GET all success",
+        "category": "success",
+        "passed": true,
+        "calls_old": 2,
+        "calls_new": 2
+      },
+      {
+        "name": "links.GET all failure → 500",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 2,
+        "calls_new": 2
+      },
+      {
+        "name": "vault.GET list",
+        "category": "success",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "vault.GET list falls back to raw SQL on drizzle failure",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 6,
+        "calls_new": 6
+      },
+      {
+        "name": "vault.GET tags success (dedupe/trim/sort/malformed)",
+        "category": "success",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "vault.GET tags failure → 500",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 6,
+        "calls_new": 6
+      },
+      {
+        "name": "vault.GET trash (purgeAt)",
+        "category": "success",
+        "passed": true,
+        "calls_old": 5,
+        "calls_new": 5
+      },
+      {
+        "name": "vault.GET :id success charges credits + logs view",
+        "category": "success",
+        "passed": true,
+        "calls_old": 10,
+        "calls_new": 10
+      },
+      {
+        "name": "vault.GET :id array param",
+        "category": "success",
+        "passed": true,
+        "calls_old": 10,
+        "calls_new": 10
+      },
+      {
+        "name": "vault.GET :id not found → 404 (no charge)",
+        "category": "security",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "vault.GET :id activity-log insert failure is swallowed",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 11,
+        "calls_new": 11
+      },
+      {
+        "name": "vault.GET :id team mirror activity",
+        "category": "success",
+        "passed": true,
+        "calls_old": 11,
+        "calls_new": 11
+      },
+      {
+        "name": "vault.DELETE :id trashes",
+        "category": "success",
+        "passed": true,
+        "calls_old": 15,
+        "calls_new": 15
+      },
+      {
+        "name": "vault.DELETE :id not found → 404",
+        "category": "security",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "vault.DELETE :id update failure propagates",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 8,
+        "calls_new": 8
+      },
+      {
+        "name": "vault.POST restore success",
+        "category": "success",
+        "passed": true,
+        "calls_old": 14,
+        "calls_new": 14
+      },
+      {
+        "name": "vault.POST restore not trashed → 404",
+        "category": "security",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "vault.DELETE trash/:id purge success",
+        "category": "success",
+        "passed": true,
+        "calls_old": 11,
+        "calls_new": 11
+      },
+      {
+        "name": "vault.DELETE trash/:id not trashed → 404",
+        "category": "security",
+        "passed": true,
+        "calls_old": 4,
+        "calls_new": 4
+      },
+      {
+        "name": "vault.DELETE trash empties all",
+        "category": "success",
+        "passed": true,
+        "calls_old": 18,
+        "calls_new": 18
+      },
+      {
+        "name": "vault.DELETE trash empty set",
+        "category": "success",
+        "passed": true,
+        "calls_old": 6,
+        "calls_new": 6
+      },
+      {
+        "name": "vault.DELETE trash purge failure mid-way propagates",
+        "category": "failure",
+        "passed": true,
+        "calls_old": 14,
+        "calls_new": 14
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "moved:requireVaultEntryOwnership→requireVaultEntryOwnership:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/security/entity-ownership.ts"
+    },
+    {
+      "name": "moved:requireVaultEntryOwnership→requireVaultEntryOwnership:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:requireVaultEntryOwnership→requireVaultEntryOwnership:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares requireVaultEntryOwnership"
+    },
+    {
+      "name": "moved:requireVaultEntryOwnership→requireVaultEntryOwnership:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:vaultEntryResource→vaultEntryResource:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts / artifacts/api-server/src/vault/security/entity-ownership.ts"
+    },
+    {
+      "name": "moved:vaultEntryResource→vaultEntryResource:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:vaultEntryResource→vaultEntryResource:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts still declares vaultEntryResource"
+    },
+    {
+      "name": "moved:vaultEntryResource→vaultEntryResource:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:vaultEntityLinkResource→vaultEntityLinkResource:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts / artifacts/api-server/src/vault/security/entity-ownership.ts"
+    },
+    {
+      "name": "moved:vaultEntityLinkResource→vaultEntityLinkResource:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:vaultEntityLinkResource→vaultEntityLinkResource:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts still declares vaultEntityLinkResource"
+    },
+    {
+      "name": "moved:vaultEntityLinkResource→vaultEntityLinkResource:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:requireVaultEntityLinkOwnership→requireVaultEntityLinkOwnership:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts / artifacts/api-server/src/vault/security/entity-ownership.ts"
+    },
+    {
+      "name": "moved:requireVaultEntityLinkOwnership→requireVaultEntityLinkOwnership:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:requireVaultEntityLinkOwnership→requireVaultEntityLinkOwnership:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts still declares requireVaultEntityLinkOwnership"
+    },
+    {
+      "name": "moved:requireVaultEntityLinkOwnership→requireVaultEntityLinkOwnership:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:requireVaultEntryOwnership→requireVaultEntryOwnershipOr404:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts / artifacts/api-server/src/vault/security/entity-ownership.ts"
+    },
+    {
+      "name": "moved:requireVaultEntryOwnership→requireVaultEntryOwnershipOr404:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:requireVaultEntryOwnership→requireVaultEntryOwnershipOr404:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts still declares requireVaultEntryOwnership"
+    },
+    {
+      "name": "moved:requireVaultEntryOwnership→requireVaultEntryOwnershipOr404:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:vaultBulkOwnershipEngine→vaultBulkOwnershipEngine:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/security/entity-ownership.ts"
+    },
+    {
+      "name": "moved:vaultBulkOwnershipEngine→vaultBulkOwnershipEngine:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:vaultBulkOwnershipEngine→vaultBulkOwnershipEngine:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares vaultBulkOwnershipEngine"
+    },
+    {
+      "name": "moved:vaultBulkOwnershipEngine→vaultBulkOwnershipEngine:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:auditVaultBulkOwnership→auditVaultBulkOwnership:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/security/entity-ownership.ts"
+    },
+    {
+      "name": "moved:auditVaultBulkOwnership→auditVaultBulkOwnership:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:auditVaultBulkOwnership→auditVaultBulkOwnership:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares auditVaultBulkOwnership"
+    },
+    {
+      "name": "moved:auditVaultBulkOwnership→auditVaultBulkOwnership:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:SAFE_COLS→SAFE_COLS:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts"
+    },
+    {
+      "name": "moved:SAFE_COLS→SAFE_COLS:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:SAFE_COLS→SAFE_COLS:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares SAFE_COLS"
+    },
+    {
+      "name": "moved:SAFE_COLS→SAFE_COLS:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:selectVault→selectVault:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts"
+    },
+    {
+      "name": "moved:selectVault→selectVault:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:selectVault→selectVault:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares selectVault"
+    },
+    {
+      "name": "moved:selectVault→selectVault:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:selectVaultOne→selectVaultOne:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts"
+    },
+    {
+      "name": "moved:selectVaultOne→selectVaultOne:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:selectVaultOne→selectVaultOne:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares selectVaultOne"
+    },
+    {
+      "name": "moved:selectVaultOne→selectVaultOne:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:selectAllVaultEntries→selectAllVaultEntries:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts"
+    },
+    {
+      "name": "moved:selectAllVaultEntries→selectAllVaultEntries:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:selectAllVaultEntries→selectAllVaultEntries:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares selectAllVaultEntries"
+    },
+    {
+      "name": "moved:selectAllVaultEntries→selectAllVaultEntries:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:selectVaultTrash→selectVaultTrash:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts"
+    },
+    {
+      "name": "moved:selectVaultTrash→selectVaultTrash:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:selectVaultTrash→selectVaultTrash:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares selectVaultTrash"
+    },
+    {
+      "name": "moved:selectVaultTrash→selectVaultTrash:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:selectVaultTrashOne→selectVaultTrashOne:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts"
+    },
+    {
+      "name": "moved:selectVaultTrashOne→selectVaultTrashOne:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:selectVaultTrashOne→selectVaultTrashOne:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares selectVaultTrashOne"
+    },
+    {
+      "name": "moved:selectVaultTrashOne→selectVaultTrashOne:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:hardDeleteVaultEntry→hardDeleteVaultEntry:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/infrastructure/repositories/entity-repository.ts"
+    },
+    {
+      "name": "moved:hardDeleteVaultEntry→hardDeleteVaultEntry:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:hardDeleteVaultEntry→hardDeleteVaultEntry:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares hardDeleteVaultEntry"
+    },
+    {
+      "name": "moved:hardDeleteVaultEntry→hardDeleteVaultEntry:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:logVaultActivity→logVaultActivity:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/application/entity/activity.ts"
+    },
+    {
+      "name": "moved:logVaultActivity→logVaultActivity:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:logVaultActivity→logVaultActivity:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares logVaultActivity"
+    },
+    {
+      "name": "moved:logVaultActivity→logVaultActivity:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:NEW_VAULT_FIELDS→NEW_VAULT_FIELDS:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/domain/entity/fields.ts"
+    },
+    {
+      "name": "moved:NEW_VAULT_FIELDS→NEW_VAULT_FIELDS:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:NEW_VAULT_FIELDS→NEW_VAULT_FIELDS:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares NEW_VAULT_FIELDS"
+    },
+    {
+      "name": "moved:NEW_VAULT_FIELDS→NEW_VAULT_FIELDS:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:BASE_VAULT_FIELDS→BASE_VAULT_FIELDS:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/domain/entity/fields.ts"
+    },
+    {
+      "name": "moved:BASE_VAULT_FIELDS→BASE_VAULT_FIELDS:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:BASE_VAULT_FIELDS→BASE_VAULT_FIELDS:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares BASE_VAULT_FIELDS"
+    },
+    {
+      "name": "moved:BASE_VAULT_FIELDS→BASE_VAULT_FIELDS:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:DATE_FIELDS→DATE_FIELDS:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/domain/entity/fields.ts"
+    },
+    {
+      "name": "moved:DATE_FIELDS→DATE_FIELDS:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:DATE_FIELDS→DATE_FIELDS:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares DATE_FIELDS"
+    },
+    {
+      "name": "moved:DATE_FIELDS→DATE_FIELDS:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:SINGLE_FIELD_EDITABLE→SINGLE_FIELD_EDITABLE:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/domain/entity/fields.ts"
+    },
+    {
+      "name": "moved:SINGLE_FIELD_EDITABLE→SINGLE_FIELD_EDITABLE:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:SINGLE_FIELD_EDITABLE→SINGLE_FIELD_EDITABLE:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares SINGLE_FIELD_EDITABLE"
+    },
+    {
+      "name": "moved:SINGLE_FIELD_EDITABLE→SINGLE_FIELD_EDITABLE:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:fieldLabel→fieldLabel:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/domain/entity/fields.ts"
+    },
+    {
+      "name": "moved:fieldLabel→fieldLabel:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:fieldLabel→fieldLabel:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares fieldLabel"
+    },
+    {
+      "name": "moved:fieldLabel→fieldLabel:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:BULK_ALLOWED_STATUSES→BULK_ALLOWED_STATUSES:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/domain/entity/fields.ts"
+    },
+    {
+      "name": "moved:BULK_ALLOWED_STATUSES→BULK_ALLOWED_STATUSES:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:BULK_ALLOWED_STATUSES→BULK_ALLOWED_STATUSES:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares BULK_ALLOWED_STATUSES"
+    },
+    {
+      "name": "moved:BULK_ALLOWED_STATUSES→BULK_ALLOWED_STATUSES:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:ENTITY_GAS_CHAINS→ENTITY_GAS_CHAINS:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/domain/entity/calculations.ts"
+    },
+    {
+      "name": "moved:ENTITY_GAS_CHAINS→ENTITY_GAS_CHAINS:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:ENTITY_GAS_CHAINS→ENTITY_GAS_CHAINS:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares ENTITY_GAS_CHAINS"
+    },
+    {
+      "name": "moved:ENTITY_GAS_CHAINS→ENTITY_GAS_CHAINS:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:addressesFor→addressesFor:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts / artifacts/api-server/src/vault/domain/entity/calculations.ts"
+    },
+    {
+      "name": "moved:addressesFor→addressesFor:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:addressesFor→addressesFor:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault.ts still declares addressesFor"
+    },
+    {
+      "name": "moved:addressesFor→addressesFor:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "moved:ownsEntity→ownsEntity:declared-both",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts / artifacts/api-server/src/vault/application/entity/links.ts"
+    },
+    {
+      "name": "moved:ownsEntity→ownsEntity:identical-implementation",
+      "passed": true,
+      "details": "token-identical (modulo `export`) to pre-extraction baseline"
+    },
+    {
+      "name": "moved:ownsEntity→ownsEntity:old-declaration-removed",
+      "passed": true,
+      "details": "artifacts/api-server/src/routes/vault-entity-links.ts still declares ownsEntity"
+    },
+    {
+      "name": "moved:ownsEntity→ownsEntity:not-a-stub",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id/links:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id/links:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id/links:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id/links:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id/links:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id/links:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"listEntityLinks\",\"requireVaultEntryOwnershipOr404\"]}"
+    },
+    {
+      "name": "handler:GET /vault/:id/links:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault-entity-links:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault-entity-links:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault-entity-links:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault-entity-links:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault-entity-links:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault-entity-links:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"createEntityLink\"]}"
+    },
+    {
+      "name": "handler:POST /vault-entity-links:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:PATCH /vault-entity-links/:id:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:PATCH /vault-entity-links/:id:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:PATCH /vault-entity-links/:id:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:PATCH /vault-entity-links/:id:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:PATCH /vault-entity-links/:id:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:PATCH /vault-entity-links/:id:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"requireVaultEntityLinkOwnership\",\"updateEntityLink\"]}"
+    },
+    {
+      "name": "handler:PATCH /vault-entity-links/:id:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault-entity-links/:id:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault-entity-links/:id:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault-entity-links/:id:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault-entity-links/:id:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault-entity-links/:id:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault-entity-links/:id:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"deleteEntityLink\",\"requireVaultEntityLinkOwnership\"]}"
+    },
+    {
+      "name": "handler:DELETE /vault-entity-links/:id:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/links/all:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/links/all:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/links/all:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/links/all:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/links/all:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/links/all:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"listAllEntityLinks\"]}"
+    },
+    {
+      "name": "handler:GET /vault/links/all:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"listEntities\"]}"
+    },
+    {
+      "name": "handler:GET /vault:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/tags:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/tags:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/tags:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/tags:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/tags:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/tags:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"listEntityTags\"]}"
+    },
+    {
+      "name": "handler:GET /vault/tags:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/trash:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/trash:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/trash:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/trash:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/trash:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/trash:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"listTrashedEntities\"]}"
+    },
+    {
+      "name": "handler:GET /vault/trash:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:GET /vault/:id:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"getEntity\",\"requireCreditBalance\",\"requireVaultEntryOwnership\"]}"
+    },
+    {
+      "name": "handler:GET /vault/:id:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"emptyTrash\"]}"
+    },
+    {
+      "name": "handler:DELETE /vault/trash:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/:id:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/:id:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/:id:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/:id:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/:id:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/:id:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"requireVaultEntryOwnership\",\"trashEntity\"]}"
+    },
+    {
+      "name": "handler:DELETE /vault/:id:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault/:id/restore:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault/:id/restore:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault/:id/restore:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault/:id/restore:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault/:id/restore:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:POST /vault/:id/restore:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"requireVaultEntryOwnership\",\"restoreEntity\"]}"
+    },
+    {
+      "name": "handler:POST /vault/:id/restore:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash/:id:present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash/:id:db-ops-preserved-in-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash/:id:tables-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash/:id:error-messages-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash/:id:status-codes-preserved",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "handler:DELETE /vault/trash/:id:route-has-no-db-sql-or-decision-tree",
+      "passed": true,
+      "details": "{\"db_ops\":[],\"sql_templates\":0,\"tables\":[],\"branches\":0,\"calls\":[\"purgeTrashedEntity\",\"requireVaultEntryOwnership\"]}"
+    },
+    {
+      "name": "handler:DELETE /vault/trash/:id:route-delegates-to-usecase",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "used:requireVaultEntryOwnership@entity-ownership.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:requireVaultEntryOwnership",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:vaultEntryResource@entity-ownership.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:vaultEntryResource",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:vaultEntityLinkResource@entity-ownership.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:vaultEntityLinkResource",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:requireVaultEntityLinkOwnership@entity-ownership.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:requireVaultEntityLinkOwnership",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:requireVaultEntryOwnershipOr404@entity-ownership.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:requireVaultEntryOwnershipOr404",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:vaultBulkOwnershipEngine@entity-ownership.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:vaultBulkOwnershipEngine",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:auditVaultBulkOwnership@entity-ownership.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:auditVaultBulkOwnership",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:SAFE_COLS@entity-repository.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:SAFE_COLS",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:selectVault@entity-repository.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:selectVault",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:selectVaultOne@entity-repository.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:selectVaultOne",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:selectAllVaultEntries@entity-repository.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:selectAllVaultEntries",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:selectVaultTrash@entity-repository.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:selectVaultTrash",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:selectVaultTrashOne@entity-repository.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:selectVaultTrashOne",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:hardDeleteVaultEntry@entity-repository.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:hardDeleteVaultEntry",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:logVaultActivity@activity.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:logVaultActivity",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:NEW_VAULT_FIELDS@fields.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:NEW_VAULT_FIELDS",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:BASE_VAULT_FIELDS@fields.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:BASE_VAULT_FIELDS",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:DATE_FIELDS@fields.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:DATE_FIELDS",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:SINGLE_FIELD_EDITABLE@fields.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:SINGLE_FIELD_EDITABLE",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:fieldLabel@fields.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:fieldLabel",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:BULK_ALLOWED_STATUSES@fields.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:BULK_ALLOWED_STATUSES",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:ENTITY_GAS_CHAINS@calculations.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:ENTITY_GAS_CHAINS",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:addressesFor@calculations.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:addressesFor",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:ownsEntity@links.ts",
+      "passed": true,
+      "details": "moved symbol is referenced by no consumer (copied-but-unused)"
+    },
+    {
+      "name": "exported-or-internally-used:ownsEntity",
+      "passed": true,
+      "details": "symbol neither exported nor used in its own file"
+    },
+    {
+      "name": "used:listEntityLinks←vault-entity-links.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:createEntityLink←vault-entity-links.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:updateEntityLink←vault-entity-links.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:deleteEntityLink←vault-entity-links.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:listAllEntityLinks←vault-entity-links.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:listEntities←vault.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:listEntityTags←vault.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:listTrashedEntities←vault.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:getEntity←vault.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:emptyTrash←vault.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:trashEntity←vault.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:restoreEntity←vault.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "used:purgeTrashedEntity←vault.ts",
+      "passed": true,
+      "details": "route does not import its use-case"
+    },
+    {
+      "name": "forbidden-imports:none",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "import-link-check:changed-files",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "duplicate-implementations:0-in-scope",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "differential:links.GET success both directions + deleted counterpart",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.GET array param",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.GET invalid id → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.GET not owned → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.GET db failure → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST success (+note trim)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST blank note → null",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST missing ids → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST self link → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST bad relationType → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST entity not owned → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST linked entity not owned → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST duplicate → 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST inverse duplicate → 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.POST insert failure → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.PATCH success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.PATCH note only (empty → null)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.PATCH invalid id → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.PATCH bad relationType → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.PATCH not found → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.PATCH db failure → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.DELETE success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.DELETE not found → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.DELETE invalid id → 400",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.DELETE db failure → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.GET all success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:links.GET all failure → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET list",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET list falls back to raw SQL on drizzle failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET tags success (dedupe/trim/sort/malformed)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET tags failure → 500",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET trash (purgeAt)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET :id success charges credits + logs view",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET :id array param",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET :id not found → 404 (no charge)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET :id activity-log insert failure is swallowed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.GET :id team mirror activity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.DELETE :id trashes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.DELETE :id not found → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.DELETE :id update failure propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.POST restore success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.POST restore not trashed → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.DELETE trash/:id purge success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.DELETE trash/:id not trashed → 404",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.DELETE trash empties all",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.DELETE trash empty set",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "differential:vault.DELETE trash purge failure mid-way propagates",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:fields constants and fieldLabel",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:calculations addressesFor/ENTITY_GAS_CHAINS",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:SAFE_COLS text",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVault [primary ok]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVault [fallback]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVault [both fail]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVault [empty]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultOne [primary ok]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultOne [fallback]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultOne [both fail]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultOne [empty]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectAllVaultEntries [primary ok]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectAllVaultEntries [fallback]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectAllVaultEntries [both fail]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectAllVaultEntries [empty]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultTrash [primary ok]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultTrash [fallback]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultTrash [both fail]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultTrash [empty]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultTrashOne [primary ok]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultTrashOne [fallback]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultTrashOne [both fail]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:selectVaultTrashOne [empty]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:hardDeleteVaultEntry [sync ok]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:hardDeleteVaultEntry [sync rejects]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:logVaultActivity [ok/no team]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:logVaultActivity [insert fails]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:logVaultActivity [team mirrored]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:logVaultActivity [team lookup fails]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:auditVaultBulkOwnership [ids=0, rows=0]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:auditVaultBulkOwnership [ids=0, rows=2]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:auditVaultBulkOwnership [ids=2, rows=0]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:auditVaultBulkOwnership [ids=2, rows=2]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:vaultEntryResource [case 0]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:vaultEntryResource [case 1]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:vaultEntryResource [case 2]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:vaultEntryResource [case 3]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:vaultEntityLinkResource [case 0]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:vaultEntityLinkResource [case 1]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:vaultEntityLinkResource [case 2]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "unit:vaultEntityLinkResource [case 3]",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "load:route table (method, path, middleware count) identical",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "load:module-init side effects identical (policy rule registration)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:PATCH link drops owner filter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:POST duplicate no longer 409",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:trash no longer delists marketplace",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:GET :id charges before ownership lookup semantic",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "mutation-detected:repository loses deleted_at filter in fallback",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:success",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:failure",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:category:security",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "coverage:every-extracted-handler-has-differential-case",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "census-01-A-exit-code-0",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "no-skipped-tests",
+      "passed": true,
+      "details": "47/47"
+    },
+    {
+      "name": "diff-audit:no-unrelated-changes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-syntax-errors",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "typecheck:no-new-diagnostics-vs-baseline",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "extracted-links-file-has-zero-business-routes",
+      "passed": true,
+      "details": "{\"routes\":5,\"with_business_behavior\":0,\"touching_db\":0,\"branches\":0}"
+    },
+    {
+      "name": "vault-ts-db-touching-routes-reduced",
+      "passed": true,
+      "details": "{\"before\":{\"routes\":36,\"with_business_behavior\":35,\"touching_db\":22,\"branches\":343},\"after\":{\"routes\":36,\"with_business_behavior\":8,\"touching_db\":3,\"branches\":45}}"
+    }
+  ],
+  "status": "PASS",
+  "evidence_body_sha256": "6ec06d8ab3cb7fbe8f152d4804be9d8986c6070fe69bb7c37ea36535e4ecee79",
+  "generated_at": "2026-09-30T03:20:41.891Z"
+}

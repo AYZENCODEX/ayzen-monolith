@@ -1,0 +1,784 @@
+{
+  "phase": "VLT-GAP-02",
+  "sub_phase": "VLT-GAP-02-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "75275a30a699f7482fc7f1c024e2dd2a84c11b9c34cbc6e1c5e7e4ba61066ee3",
+  "validator_version": "1.0.0",
+  "validator_sha256": "a51059099be8c41fd9ef6f681b2598b189a1ec78efc516ed77c2d5161f9d8ce2",
+  "description": "Pre-extraction (sealed) vs current fingerprint and disposition of every symbol in the old local-account sources",
+  "route": {
+    "file": "artifacts/api-server/src/routes/local-accounts.ts",
+    "metrics": {
+      "baseline_lines": 797,
+      "current_lines": 174,
+      "baseline_tokens": 7410,
+      "current_tokens": 1660,
+      "baseline_db_refs": 62,
+      "current_db_refs": 0,
+      "baseline_sql_literals": 28,
+      "current_sql_literals": 0
+    },
+    "sha256": {
+      "baseline": "476a564b98a0ee8416f4415db1a857fed54080eadee4c28f0916e58a309ef7a7",
+      "current": "31cc99b5beaa534b284f9a4b1ead209bbd3a34e890425d2aa8c8f0a57548c963"
+    },
+    "symbols": [
+      {
+        "symbol": "router",
+        "kind": "const",
+        "lines": [
+          14,
+          14
+        ],
+        "baseline_fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49",
+        "disposition": "ADAPTER_WIRING"
+      },
+      {
+        "symbol": "generateReceiptToken",
+        "kind": "function",
+        "lines": [
+          19,
+          21
+        ],
+        "baseline_fingerprint": "bee808d7abc1d6abf223dd92a0bb1643c6d6e01afe292c5117fffb8db6dfc8a3",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "receiptUrl",
+        "kind": "function",
+        "lines": [
+          22,
+          24
+        ],
+        "baseline_fingerprint": "d3660742ff383f4dcd24a00133f30b2723c139c15aa377ba597c722a6bd535a2",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "safe",
+        "kind": "const",
+        "lines": [
+          27,
+          27
+        ],
+        "baseline_fingerprint": "3cd19a39b1d0a535d575e2b8f5c801e4027daa260cbf0ebc98d3bc5146535884",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "safeNum",
+        "kind": "const",
+        "lines": [
+          28,
+          28
+        ],
+        "baseline_fingerprint": "d4d76d06cb1147085563501cbfb4aefa11e6a68567c59bb160d8dac432336a57",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "safeDate",
+        "kind": "const",
+        "lines": [
+          29,
+          29
+        ],
+        "baseline_fingerprint": "a10a155a68e1aa254f8b831e6630896b28c377888c4113957742d8bdf8b2be9b",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "safeScore",
+        "kind": "const",
+        "lines": [
+          31,
+          34
+        ],
+        "baseline_fingerprint": "878223a5cd8a949da030f627ccbc05707403f4b692cef04dd1333f5414578c9d",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "GET /local-accounts",
+        "kind": "route",
+        "lines": [
+          38,
+          53
+        ],
+        "baseline_fingerprint": "dcaa5c27e84bce5a404905e6eaa6225b9295a9ba6d5778eae4f253fc108240b7",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "POST /local-accounts",
+        "kind": "route",
+        "lines": [
+          56,
+          88
+        ],
+        "baseline_fingerprint": "1afa2d6ba2919dd696a2750706f933fa6c0deaa79f81586fab44cedaaa56a4ff",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "LOCAL_ACCOUNT_OWNER_SENTINEL_NONE",
+        "kind": "const",
+        "lines": [
+          124,
+          124
+        ],
+        "baseline_fingerprint": "fc2f37427ca774d7f11c04386bea67ecc3e9c91cd49f804ebbd34e995532e23b",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "localAccountResource",
+        "kind": "const",
+        "lines": [
+          126,
+          131
+        ],
+        "baseline_fingerprint": "452b89b0b446f0b385bf4ff353759bb80d6e3eba678486197eef7bd8eacf3080",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "requireLocalAccountOwnership",
+        "kind": "function",
+        "lines": [
+          139,
+          141
+        ],
+        "baseline_fingerprint": "ae0c9c14379fa489a568d766e9ede6e7b7990e2f1d7fcabd46ece8b1068737a8",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "denyNotFoundOrForbidden",
+        "kind": "const",
+        "lines": [
+          143,
+          143
+        ],
+        "baseline_fingerprint": "a770439d6eb5240e578837624f8f7895509aad500f8fa71af9ceae035920cb53",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "denyNotFound",
+        "kind": "const",
+        "lines": [
+          144,
+          144
+        ],
+        "baseline_fingerprint": "e09258d98309abf14ebc8bec2d2b47c30ee2cf15f70d826877edcb226675be79",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "denyAccountNotFound",
+        "kind": "const",
+        "lines": [
+          145,
+          145
+        ],
+        "baseline_fingerprint": "61452e9ab8ccb189d004b1b5b4f8ea38bb15d640f41a607eac2eab5de025eaa3",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "denySilentSuccess",
+        "kind": "const",
+        "lines": [
+          146,
+          146
+        ],
+        "baseline_fingerprint": "ac534af680bb701f9e7778f028a1f0fbae296d12be756c0f6e706abe26165dd0",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "denyEmptyPoints",
+        "kind": "const",
+        "lines": [
+          147,
+          147
+        ],
+        "baseline_fingerprint": "5bec29b3041810eba2327c0a775a04d23b6f3afaebe32d67d401f13c329ca85a",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "LOCAL_ACCOUNT_CATEGORY_OWNER_SENTINEL_NONE",
+        "kind": "const",
+        "lines": [
+          154,
+          154
+        ],
+        "baseline_fingerprint": "83b78460175c21eca674b2b68fc97450021cf1267b2d8c16f9f7f66dfae0a54a",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "localAccountCategoryResource",
+        "kind": "const",
+        "lines": [
+          155,
+          160
+        ],
+        "baseline_fingerprint": "a833188a8af2284ba4529b4b2512c33d83b970e2ffffb21b031761e34fe419ec",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "requireLocalAccountCategoryOwnership",
+        "kind": "function",
+        "lines": [
+          161,
+          163
+        ],
+        "baseline_fingerprint": "84e5736a12b833504b93d3f82f4c0b8e33942425b7355faa5e47755529fbfe1e",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "LOCAL_ACCOUNT_POINT_OWNER_SENTINEL_NONE",
+        "kind": "const",
+        "lines": [
+          165,
+          165
+        ],
+        "baseline_fingerprint": "3b3e22869c69fb2207fe41521b748d2ad73a6819afdeecf4c56e75a8fc41897e",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "localAccountPointResource",
+        "kind": "const",
+        "lines": [
+          166,
+          171
+        ],
+        "baseline_fingerprint": "cdceb20493441de380973fd31b9f7eea1fdd2db1ea21dcf8865704fccfd185a8",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "requireLocalAccountPointOwnership",
+        "kind": "function",
+        "lines": [
+          172,
+          174
+        ],
+        "baseline_fingerprint": "3532d87a9e7502ec717a702a3f497ca364da5be970cdabb64694556c958946d3",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "PUT /local-accounts/:id",
+        "kind": "route",
+        "lines": [
+          177,
+          214
+        ],
+        "baseline_fingerprint": "acc22795eb11629597328714f38998a665478e54bdba0679429b4d1b8fab4df6",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "PATCH /local-accounts/:id/status",
+        "kind": "route",
+        "lines": [
+          217,
+          238
+        ],
+        "baseline_fingerprint": "ca142da478335238e1c89a145ae837f865f6b7c2c7a1dc62c02128c68fa0b09e",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "DELETE /local-accounts/:id",
+        "kind": "route",
+        "lines": [
+          241,
+          254
+        ],
+        "baseline_fingerprint": "f4c61106f38c26636299e1c5b293576fa9a263e10a3f686372ff7c41c19a33d9",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "PATCH /local-accounts/:id/link-vault",
+        "kind": "route",
+        "lines": [
+          257,
+          273
+        ],
+        "baseline_fingerprint": "44e8f0c2ec50ba917a59dd372f5ffa31a0cb0d342a52614bd613fe31366e88bd",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "PATCH /local-accounts/:id/unlink-vault",
+        "kind": "route",
+        "lines": [
+          276,
+          290
+        ],
+        "baseline_fingerprint": "974838ffd411b7ba93652ee92ef948e2b99021b65bfbeadfd8a307ba69c35960",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "GET /local-accounts/categories",
+        "kind": "route",
+        "lines": [
+          293,
+          303
+        ],
+        "baseline_fingerprint": "2017362f11aba6ad8c36378216d4b323f128e74b07678ce6edd23f2d7be54ff1",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "POST /local-accounts/categories",
+        "kind": "route",
+        "lines": [
+          306,
+          318
+        ],
+        "baseline_fingerprint": "a1d804a45ebdd53187f09ae77318437481f3eca541714773a2578734bc75b69b",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "DELETE /local-accounts/categories/:id",
+        "kind": "route",
+        "lines": [
+          321,
+          331
+        ],
+        "baseline_fingerprint": "dd1f75c33749720b774fbec14e96b70d8792ea6e6e576011961f16a98e657ea5",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "GET /local-accounts/:id",
+        "kind": "route",
+        "lines": [
+          336,
+          352
+        ],
+        "baseline_fingerprint": "c7f24ac2c0eb9ea6c37962403df8ea97e9595a3285240aeaf4d3b7cc87bf1ca0",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "GET /local-accounts/:id/points",
+        "kind": "route",
+        "lines": [
+          355,
+          369
+        ],
+        "baseline_fingerprint": "f137f4cd763de682aff3f98caf1680e3d769a5ddf61bf4f38f44765b7744c2a9",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "POST /local-accounts/:id/points",
+        "kind": "route",
+        "lines": [
+          380,
+          394
+        ],
+        "baseline_fingerprint": "c09c6d2ccd9b64b97eaa9507048b3fc3365e3e5bc2b081dcd89b62507b5c6037",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "DELETE /local-accounts/points/:pointId",
+        "kind": "route",
+        "lines": [
+          397,
+          407
+        ],
+        "baseline_fingerprint": "0e5b27d15f2a0a1fe78772fe9e4cbe70a09508afb114f318f7f19ef97cd2bccf",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "calcAgeLabel",
+        "kind": "function",
+        "lines": [
+          418,
+          427
+        ],
+        "baseline_fingerprint": "b1903bee9d4c0f189ccf6093608253f8bb245a906f5e83bace5e9fc46688bde3",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "calcRoiPct",
+        "kind": "function",
+        "lines": [
+          429,
+          432
+        ],
+        "baseline_fingerprint": "c7cddae9874a19ec64d603787df17a1ea90dddd72bf289ba08c94465369c27f7",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "fmtPublicLocalReceipt",
+        "kind": "function",
+        "lines": [
+          434,
+          455
+        ],
+        "baseline_fingerprint": "2aeed8287318269dc5b067f6d7db13e05d737c43040b6ce667c2048b3f5dd6d2",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "POST /local-accounts/:id/receipt",
+        "kind": "route",
+        "lines": [
+          458,
+          485
+        ],
+        "baseline_fingerprint": "f0052f0ac16732daa6a4fd53d9ea9bd4d934b290a4808304fb8b5224e110e373",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "DELETE /local-accounts/:id/receipt",
+        "kind": "route",
+        "lines": [
+          488,
+          501
+        ],
+        "baseline_fingerprint": "fe181637f814b3f6ce58812bd094e2eb06c55db4b7674dee7665401c4b92468f",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "findLocalAccountByReceiptToken",
+        "kind": "function",
+        "lines": [
+          503,
+          510
+        ],
+        "baseline_fingerprint": "180dcdc8c1fce65aba6f795d6d10ceae9c0faf54de25000f5c62913430f807bd",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "GET /local-accounts/receipt/:token",
+        "kind": "route",
+        "lines": [
+          513,
+          523
+        ],
+        "baseline_fingerprint": "ccddc535abdf097c432d57a778f2db60ecb6e17573385bfb1ca057049eb72636",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "GET /local-accounts/receipt/:token/pdf",
+        "kind": "route",
+        "lines": [
+          526,
+          560
+        ],
+        "baseline_fingerprint": "c21229fcd44ff52a653c265bacd996b0403c3f9808ed48ce8812059edf4ac727",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "generateCategoryReceiptToken",
+        "kind": "function",
+        "lines": [
+          570,
+          572
+        ],
+        "baseline_fingerprint": "68c82b74fdcd4c057a724c55c4829017a35be8f7c03e4a751d5ee3244f230496",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "categoryReceiptUrl",
+        "kind": "function",
+        "lines": [
+          573,
+          575
+        ],
+        "baseline_fingerprint": "ca9dc57fd276ddc99cc51cfbbee43f60202295d87a99457f6e9eb715d67667b8",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "ageInDays",
+        "kind": "function",
+        "lines": [
+          577,
+          582
+        ],
+        "baseline_fingerprint": "8c04af76d008f257c60e92eaade6516970235cddaa0bf9b253e5091b5e856acb",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "fmtAvgAgeLabel",
+        "kind": "function",
+        "lines": [
+          584,
+          590
+        ],
+        "baseline_fingerprint": "c055e00dd775f4afd04497777e57482344679b2ca5916e36de92af6343665279",
+        "disposition": "MOVED_VERBATIM"
+      },
+      {
+        "symbol": "computeCategoryAggregate",
+        "kind": "function",
+        "lines": [
+          592,
+          625
+        ],
+        "baseline_fingerprint": "0fef99689de7ee7821d0a9ec90812fcfcff11f91d5ca7ea1176f9cffdad226f3",
+        "disposition": "MOVED_REFACTORED_WITH_UNIT_PROOF"
+      },
+      {
+        "symbol": "POST /local-accounts/category-receipt/:category",
+        "kind": "route",
+        "lines": [
+          628,
+          654
+        ],
+        "baseline_fingerprint": "8bf1ec0c7fe86e20ede47fdb05a515d9e66059246c788f534351c98369b55a2c",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "DELETE /local-accounts/category-receipt/:category",
+        "kind": "route",
+        "lines": [
+          657,
+          670
+        ],
+        "baseline_fingerprint": "11a88bb86388f3821296812965df6bed769d15a2208a5ff3c93e680cfdc4cc66",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "findCategoryReceiptByToken",
+        "kind": "function",
+        "lines": [
+          672,
+          682
+        ],
+        "baseline_fingerprint": "d89805eb76d16f2c5bef47fc5e7b7d63a9a0509cdb064e1e4c941f7fae8d71d1",
+        "disposition": "MOVED_REFACTORED_WITH_UNIT_PROOF"
+      },
+      {
+        "symbol": "fmtPublicCategoryReceipt",
+        "kind": "function",
+        "lines": [
+          684,
+          699
+        ],
+        "baseline_fingerprint": "f9ead5fbe55fece08c37928448517ec8efcaab10b4cadbdbd6c866b2fd42802a",
+        "disposition": "MOVED_REFACTORED_WITH_UNIT_PROOF"
+      },
+      {
+        "symbol": "GET /local-accounts/category-receipt/:token",
+        "kind": "route",
+        "lines": [
+          702,
+          712
+        ],
+        "baseline_fingerprint": "01e8e94383a23ccb5d0da3ab01c3237f0cd125982a5f8a1231d415a01152d402",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "GET /local-accounts/category-receipt/:token/pdf",
+        "kind": "route",
+        "lines": [
+          715,
+          749
+        ],
+        "baseline_fingerprint": "382c567c71ab94ec587c6d4447d7daae10741cf8ca47e1ec5f6462625d1a1078",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "POST /local-accounts/category-receipt/:category/email",
+        "kind": "route",
+        "lines": [
+          752,
+          794
+        ],
+        "baseline_fingerprint": "5750d402ff83af8b7a8097f55e03eeacf4a19ddbf9ebc3c8abfe07de3caf2c50",
+        "disposition": "ADAPTER_THIN"
+      },
+      {
+        "symbol": "default",
+        "kind": "export-default",
+        "lines": [
+          796,
+          796
+        ],
+        "baseline_fingerprint": "445e7382cb36dfcc33fab57c8c6071c671a4062cb9629c93be8236ab7ad22ef1",
+        "disposition": "ADAPTER_WIRING"
+      }
+    ],
+    "disposition_summary": {
+      "ADAPTER_WIRING": 2,
+      "MOVED_VERBATIM": 28,
+      "ADAPTER_THIN": 23,
+      "MOVED_REFACTORED_WITH_UNIT_PROOF": 3
+    }
+  },
+  "frontend": [
+    {
+      "file": "artifacts/ayzen/src/components/local-accounts.tsx",
+      "kind": "ui-component",
+      "disposition": "UI_ADAPTER_WITH_DEFERRED_DISPLAY_CALC",
+      "sha256": "dcec1d3b042320bf02b0ce034f48c2f208d6ffaee15bd9cb2e8907c4825e6fac",
+      "baseline_sha256": "dcec1d3b042320bf02b0ce034f48c2f208d6ffaee15bd9cb2e8907c4825e6fac",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 1441,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "symbols": [
+        {
+          "symbol": "LocalAccount",
+          "lines": [
+            33,
+            64
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "Category",
+          "lines": [
+            66,
+            72
+          ],
+          "disposition": "TYPE_CONTRACT_SHAPE"
+        },
+        {
+          "symbol": "calcAge",
+          "lines": [
+            80,
+            90
+          ],
+          "disposition": "DISPLAY_CALC_DEFERRED_GAP-16",
+          "fingerprint": "e830746775f907bd6df38019fec65cf044db3319d7b020b8fd7d3904913ae7a6",
+          "branches": 4
+        },
+        {
+          "symbol": "calcROI",
+          "lines": [
+            92,
+            95
+          ],
+          "disposition": "DISPLAY_CALC_DEFERRED_GAP-16",
+          "fingerprint": "7f78d561bb3990fc771f9532fcccf1ab10150b5f2924f8493dc13ec378cf64fe",
+          "branches": 2
+        },
+        {
+          "symbol": "SecretField",
+          "lines": [
+            98,
+            123
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 5,
+          "db_refs": 0
+        },
+        {
+          "symbol": "AccountViewDialog",
+          "lines": [
+            126,
+            261
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 23,
+          "db_refs": 0
+        },
+        {
+          "symbol": "AccountCard",
+          "lines": [
+            264,
+            431
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 0,
+          "branches": 26,
+          "db_refs": 0
+        },
+        {
+          "symbol": "EMPTY",
+          "lines": [
+            434,
+            442
+          ],
+          "disposition": "FORM_DEFAULTS_DATA"
+        },
+        {
+          "symbol": "toFormState",
+          "lines": [
+            444,
+            466
+          ],
+          "disposition": "COMPAT_MAPPING_API_TO_FORM"
+        },
+        {
+          "symbol": "AccountFormDialog",
+          "lines": [
+            469,
+            956
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 5,
+          "branches": 89,
+          "db_refs": 0
+        },
+        {
+          "symbol": "AddCategoryDialog",
+          "lines": [
+            959,
+            1008
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 1,
+          "branches": 6,
+          "db_refs": 0
+        },
+        {
+          "symbol": "LocalAccounts",
+          "lines": [
+            1011,
+            1440
+          ],
+          "disposition": "UI_ADAPTER",
+          "api_calls": 5,
+          "branches": 73,
+          "db_refs": 0
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/config/fields/local-account-create.ts",
+      "kind": "declarative-config",
+      "disposition": "DECLARATIVE_CONFIG",
+      "sha256": "1ff35082271661214838526b54c2068b1f45cd21cb752b223564b154ca811e5a",
+      "baseline_sha256": "1ff35082271661214838526b54c2068b1f45cd21cb752b223564b154ca811e5a",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 82,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "symbols": [
+        {
+          "symbol": "LOCAL_ACCOUNT_FIELDS",
+          "disposition": "DECLARATIVE_DATA",
+          "lines": [
+            18,
+            81
+          ]
+        }
+      ]
+    },
+    {
+      "file": "artifacts/ayzen/src/config/fields/local-account-buy.ts",
+      "kind": "declarative-config",
+      "disposition": "DECLARATIVE_CONFIG",
+      "sha256": "5a1b8637ac2ba872ee1e858fb036c9d207460a73c581563aee8d7ef0216773cb",
+      "baseline_sha256": "5a1b8637ac2ba872ee1e858fb036c9d207460a73c581563aee8d7ef0216773cb",
+      "unchanged_since_pre_extraction_baseline": true,
+      "metrics": {
+        "lines": 42,
+        "db_refs": 0,
+        "sql_literals": 0,
+        "crypto_calls": 0
+      },
+      "symbols": [
+        {
+          "symbol": "LOCAL_ACCOUNT_BUY_FIELDS",
+          "disposition": "DECLARATIVE_DATA",
+          "lines": [
+            15,
+            41
+          ]
+        }
+      ]
+    }
+  ],
+  "census_consistency_with_02A": {
+    "records": 56,
+    "missing_from_scan": [],
+    "extra_in_scan": []
+  }
+}

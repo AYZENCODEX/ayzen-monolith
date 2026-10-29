@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "phase": "VLT-GAP-11",
+  "sub_phase": "08-rewire",
+  "commit_sha": "e76a9d47c2210884d57afcec43a6afac231451f4",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "c854f934d887e50a50fd5ac45b1c974845a87dbf79ed1c833ad90f3401d2b674",
+  "source_hashes": {
+    "artifacts/api-server/src/vault/application/health-scan.ts": "bdfde94584616b3d4f833ad36e0b8ce38770bdd1031b4344b3d96fced166f112",
+    "artifacts/api-server/src/vault/application/health-cron.ts": "1ce1f32b3e24770a05afde7e0c8aa8a21fa73ba2a01ca867bb0ef942f0ecae35",
+    "artifacts/api-server/src/vault/application/health.ts": "55d0a5260a7a93426b73a17f30f3f9e92c4d66379c1e027f282bcdf0f7755d3b"
+  },
+  "graph": [
+    {
+      "old": "artifacts/api-server/src/lib/vault-health-scan.ts",
+      "new": "artifacts/api-server/src/vault/application/health-scan.ts",
+      "consumers": [
+        "artifacts/api-server/src/vault/application/health-cron.ts",
+        "artifacts/api-server/src/vault/infrastructure/index.ts"
+      ]
+    },
+    {
+      "old": "artifacts/api-server/src/lib/vault-health-cron.ts",
+      "new": "artifacts/api-server/src/vault/application/health-cron.ts",
+      "consumers": [
+        "artifacts/api-server/src/index.ts"
+      ]
+    }
+  ],
+  "old_path_importers_remaining": [],
+  "status": "PASS"
+}

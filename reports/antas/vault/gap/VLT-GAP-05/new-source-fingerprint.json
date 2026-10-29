@@ -1,0 +1,1126 @@
+{
+  "phase": "VLT-GAP-05",
+  "sub_phase": "VLT-GAP-05-D",
+  "commit_sha": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "24632c57068a52091de19e44d6e60f5987ca10e846739f920d68908e43c7399c",
+  "validator_version": "1.0.0",
+  "validator_sha256": "dd4837fd94acabb481411b49bfbe09403108fff0368208e37f997e9d91f20406",
+  "description": "Current owner of every GAP-05 behavior and the state of each old source",
+  "old_sources_now": [
+    {
+      "file": "artifacts/api-server/src/routes/vault.ts",
+      "role": "route adapter",
+      "sha256": "e9dcd905a02ebe4ce99235bc923d0b20a155733ee1efd70413abf65737fbb4d1",
+      "lines": 517,
+      "symbols": [
+        {
+          "name": "router",
+          "lines": [
+            36,
+            36
+          ],
+          "tokens": 8,
+          "fingerprint": "eb7f86aa76827e5fcde25c916258f57989831510be0aabc83bef58a940701e49"
+        },
+        {
+          "name": "lifecycleDeps",
+          "lines": [
+            40,
+            40
+          ],
+          "tokens": 9,
+          "fingerprint": "9a35126f0de951bc8c65f7109294f61d811fbb3162729b8f6ea167fcf517c467"
+        },
+        {
+          "name": "updateDeps",
+          "lines": [
+            44,
+            44
+          ],
+          "tokens": 15,
+          "fingerprint": "cd50f60e1ec7d5cc8527c3526336f6a198f2c8bd919cd58764b0e9f9e72aa183"
+        },
+        {
+          "name": "secretDeps",
+          "lines": [
+            47,
+            47
+          ],
+          "tokens": 11,
+          "fingerprint": "4410d8b9616bba16676f6ec07285f4028e7f891ba94c343cc0580cae0f5882db"
+        },
+        {
+          "name": "toHealthInput",
+          "lines": [
+            80,
+            93
+          ],
+          "tokens": 183,
+          "fingerprint": "5af75d1d4d46f8704ebaf9e885745e4d5f386ba1b425e59f5da91ad191c5b088"
+        },
+        {
+          "name": "runHealthCheck",
+          "lines": [
+            95,
+            154
+          ],
+          "tokens": 517,
+          "fingerprint": "e769bf1ef09891dd461399bbc1267c0d08dfa56bf9366034aeb2d76b6b85e738"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            160,
+            163
+          ],
+          "tokens": 54,
+          "fingerprint": "259157f99945a56c6f41440365fe359f741121fad1fb807a1a15cb78725fc747"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            171,
+            174
+          ],
+          "tokens": 54,
+          "fingerprint": "325bccaf06e3d7a940637eba1e9f9bee54f02aa438af1fa8a301b4f3c9c23bf2"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            180,
+            183
+          ],
+          "tokens": 90,
+          "fingerprint": "40b3cd01a8e0b863623e2442bb129f1688051b779c1ab4c45b0e874eb09ba380"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            186,
+            189
+          ],
+          "tokens": 66,
+          "fingerprint": "9cefc6c1ecce5b06cffc9a451d06bf98173323e16f84c0a1055baa9937a3095a"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            192,
+            195
+          ],
+          "tokens": 54,
+          "fingerprint": "d3fd9a3fe0d95aa0b07df5a7a7e4f38782a85048eb78473bca5a4576208eed6a"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            212,
+            215
+          ],
+          "tokens": 79,
+          "fingerprint": "dd08fb06754eedd969ed331173d42cd9057ed6ab5ae8ce8dbd50a02edc883e39"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            225,
+            228
+          ],
+          "tokens": 79,
+          "fingerprint": "2844c3bf7e1e8a497ba585faa258f796e65f1ef8b8035838793e7c30bca3b31c"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            231,
+            266
+          ],
+          "tokens": 310,
+          "fingerprint": "9a0759ab42a586e8b75893fc77585ca0c0662ea55ce09c03a735e317959cf30f"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            271,
+            280
+          ],
+          "tokens": 131,
+          "fingerprint": "e7df8725a7cce9f4b4f95a65e2d75d463ce583eb047a2d96df2531cd5b5e3132"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            284,
+            287
+          ],
+          "tokens": 54,
+          "fingerprint": "12d925cfd875ca0c37656d974505793ae6fccdf04ab3d2b007ba95a2683c333f"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            290,
+            293
+          ],
+          "tokens": 54,
+          "fingerprint": "d35f5dd38757f2da563619725c2ef3c8784e5296a5201a4f55ecd82b2c37d415"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            306,
+            309
+          ],
+          "tokens": 58,
+          "fingerprint": "02b263a798d7bed9cab23256fa9f7bcbef673a6ac107173b93901637b84beaa2"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            316,
+            319
+          ],
+          "tokens": 54,
+          "fingerprint": "f530a7745028a24e7ef5b001311fff53f42b6986cd5b9f8ba5f0c7ee9a864c01"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            325,
+            328
+          ],
+          "tokens": 95,
+          "fingerprint": "b7681492cc45c5580c8cc798ec5d6522d860bdfc9d9688df98ebf355e6f9d4b1"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            344,
+            347
+          ],
+          "tokens": 110,
+          "fingerprint": "1e8ce77488ce83e421bbad73ee3bcb7c631744653cacdb88aff087be4c453906"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            352,
+            355
+          ],
+          "tokens": 94,
+          "fingerprint": "a4895c5e88a0b454ba74fec92aaa1aec4d94e99288bca2c764c210af188913c9"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            365,
+            368
+          ],
+          "tokens": 51,
+          "fingerprint": "8e5198931cbbe15fbf944279938c7431a6ddcc6d0e5b8129dc000ce4c8d0cf2f"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            375,
+            378
+          ],
+          "tokens": 90,
+          "fingerprint": "43fd8a4fad68c8bf67437b72d16077bd2c99efab6aa2be94d48ebd2461938e16"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            381,
+            384
+          ],
+          "tokens": 96,
+          "fingerprint": "09a7ea91eb70f7935345e15b542ec5f0392faf9ac5bacc004a1eb5f58693f103"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            392,
+            395
+          ],
+          "tokens": 96,
+          "fingerprint": "2252681ec848718d9f65d081511c197d5ba1762b603ab732e3bebd57af73158d"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            400,
+            403
+          ],
+          "tokens": 94,
+          "fingerprint": "9ba3b8c4e16891ff52857dfc2a3399b005b0e990f896dfa09364b63ac9cf0080"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            409,
+            412
+          ],
+          "tokens": 56,
+          "fingerprint": "bcbcb203aea1615e87262b4afe08c313ea03e542917c4b353d11e5f8a0901a93"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            418,
+            421
+          ],
+          "tokens": 92,
+          "fingerprint": "e2176d24544107d7d3b702f10275996bbb48cacee1288d95f415f4e09d2d8a04"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            427,
+            430
+          ],
+          "tokens": 92,
+          "fingerprint": "d31fe44c6d4e11542793e64927297fe59f3f5d9de04621bd7423f7f3cbdf9cae"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            436,
+            439
+          ],
+          "tokens": 92,
+          "fingerprint": "fd7e0e7483dc8c23e291e8c8f87855eab6975c68f64761fef217bacad844878c"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            442,
+            445
+          ],
+          "tokens": 49,
+          "fingerprint": "d108d0e4f233c82339672adc80c513ee07ad87afb77811b97263cbf037b05f23"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            448,
+            451
+          ],
+          "tokens": 49,
+          "fingerprint": "24e007948b5afd5c3d2498be0c1a74b94c94dfba5511180e1f9ba0a3956e0181"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            454,
+            457
+          ],
+          "tokens": 49,
+          "fingerprint": "6cc26020d7bfb2191ecb891406ac8186bcd291807ab4213e454fc139d04c6b4b"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            460,
+            463
+          ],
+          "tokens": 49,
+          "fingerprint": "decd0e8019d56199dfcb64d72989ab598e9a5878cf41d546c59b6d9b60a0e43d"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            466,
+            469
+          ],
+          "tokens": 53,
+          "fingerprint": "78ef2018d656448eebf40381503055a75b6133b24d921ffac158b5b61ca54410"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            472,
+            475
+          ],
+          "tokens": 90,
+          "fingerprint": "91d03fcb6bed0acd2f3be1ae1b92cc31ee40b357ec074be56fda9c92d66f35e7"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            478,
+            481
+          ],
+          "tokens": 51,
+          "fingerprint": "78aecabc4c94809292d344e5dd41f37ddcf33e9c84f709d6609d5b63ba929947"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            492,
+            495
+          ],
+          "tokens": 90,
+          "fingerprint": "bd55ee7f53e706071601a34b4777491ec89cac79c92c73a1a1be4cda43c410bf"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            498,
+            501
+          ],
+          "tokens": 90,
+          "fingerprint": "1bfd8b7ac643a593b9cb7e130960abb5026f926df3b894822e409e5d39d662e5"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            504,
+            507
+          ],
+          "tokens": 62,
+          "fingerprint": "97907289f99a478b3d0cb65f8f293716dd2fa54fc98ee5070ce56f0ae645158e"
+        },
+        {
+          "name": "ExpressionStatement",
+          "lines": [
+            510,
+            514
+          ],
+          "tokens": 85,
+          "fingerprint": "7a4d0b7635b8463bd008a1cb6bda34593f51ffc1e100db21791ece7099086bbf"
+        },
+        {
+          "name": "ExportAssignment",
+          "lines": [
+            516,
+            516
+          ],
+          "tokens": 4,
+          "fingerprint": "0524a29d7ea8c25ed363f8e5a55040d5ad8e578cd50f92a1931e11ecad6eb279"
+        }
+      ]
+    },
+    {
+      "file": "services/vault/src/index.mjs",
+      "role": "composition root",
+      "sha256": "ec653c3b40526c2f781fb4a327154e707645ecb2ae74b7acfd69790ba22fc705",
+      "statements": [
+        {
+          "kind": "import",
+          "spec": "@ayzen/service-runtime"
+        },
+        {
+          "kind": "import",
+          "spec": "./crypto/envelope.mjs"
+        },
+        {
+          "kind": "import",
+          "spec": "./security/access.mjs"
+        },
+        {
+          "kind": "import",
+          "spec": "./infrastructure/dependencies.mjs"
+        },
+        {
+          "kind": "import",
+          "spec": "./api/http-handler.mjs"
+        },
+        {
+          "kind": "import",
+          "spec": "./api/contracts.mjs"
+        },
+        {
+          "kind": "wiring-const",
+          "name": "allowMemoryState"
+        },
+        {
+          "kind": "wiring-const",
+          "name": "dependencies"
+        },
+        {
+          "kind": "wiring-const",
+          "name": "vaultCrypto"
+        },
+        {
+          "kind": "wiring-const",
+          "name": "vaultAccess"
+        },
+        {
+          "kind": "wiring-const",
+          "name": "handle"
+        },
+        {
+          "kind": "bootstrap"
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-crypto.ts",
+      "role": "RETIRED (file deleted)",
+      "exists": false
+    }
+  ],
+  "owners": [
+    {
+      "file": "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "sha256": "151a7ada6e1442fd973f5ae24e68e146de3c93bc4574955acfc4201c5a352262",
+      "symbols": [
+        {
+          "name": "NAMESPACE",
+          "lines": [
+            12,
+            12
+          ],
+          "tokens": 5,
+          "fingerprint": "2be7fd76d34a6821c01a64f1ada5996d45cced27efca065d69878a8af258f415"
+        },
+        {
+          "name": "PREFIX",
+          "lines": [
+            13,
+            13
+          ],
+          "tokens": 5,
+          "fingerprint": "2f136e8fbcf56bfeeecfdd536d43a0394d677b60a83fbdf56de37934351145cd"
+        },
+        {
+          "name": "LEGACY_KEY_RAW",
+          "lines": [
+            14,
+            14
+          ],
+          "tokens": 10,
+          "fingerprint": "7e1ccb63b1de78d4f809bd01b83f8ea03badfe9635afd69db9a953527aa1c1b6"
+        },
+        {
+          "name": "IfStatement",
+          "lines": [
+            15,
+            20
+          ],
+          "tokens": 22,
+          "fingerprint": "5c1c5b452f02d4b80cab35ee0afd3292957522eec3818513263056f2ee7a1ece"
+        },
+        {
+          "name": "LEGACY_KEY",
+          "lines": [
+            21,
+            21
+          ],
+          "tokens": 24,
+          "fingerprint": "a3a75975c0047eb222bcc74284a9c80a3e8d1fd79f025ac2e11ca035614992c4"
+        },
+        {
+          "name": "KEK_RAW",
+          "lines": [
+            22,
+            22
+          ],
+          "tokens": 12,
+          "fingerprint": "e846b409dc041028e6429954599042deac9246f7ae90da7f453bc746b49c22c0"
+        },
+        {
+          "name": "KEK_HKDF_SALT",
+          "lines": [
+            23,
+            23
+          ],
+          "tokens": 12,
+          "fingerprint": "61a11172f31b1e1f66504ad701686b408cdad364acc6a3e59a89ead0db14a47d"
+        },
+        {
+          "name": "KEK_HKDF_INFO",
+          "lines": [
+            24,
+            24
+          ],
+          "tokens": 12,
+          "fingerprint": "92e9acd061055c1d9a075c8cd2ce9c20bf3b892da1ddcb215ee9fdd13eef3d3f"
+        },
+        {
+          "name": "deriveKekStrong",
+          "lines": [
+            26,
+            28
+          ],
+          "tokens": 39,
+          "fingerprint": "1771aa05d5c712ca3ad17a34211237f0d3da3423e6a73717c6d20c4488fdddc9"
+        },
+        {
+          "name": "deriveKekLegacy",
+          "lines": [
+            29,
+            31
+          ],
+          "tokens": 33,
+          "fingerprint": "b472c4525db876578af126256c13d86bfead0bf657d0eb39ffc39392cd268286"
+        },
+        {
+          "name": "KEK",
+          "lines": [
+            32,
+            32
+          ],
+          "tokens": 8,
+          "fingerprint": "ba07f3797d61f9228c5f3e19671ff532a0f6adfb443a5ecd8a0e3858aca263b7"
+        },
+        {
+          "name": "KEK_LEGACY",
+          "lines": [
+            33,
+            33
+          ],
+          "tokens": 8,
+          "fingerprint": "da355a9bb00b31fd3a648be2b80c7d414b7cc589ad3d7f8e07511c484b03d57e"
+        },
+        {
+          "name": "aesEncrypt",
+          "lines": [
+            35,
+            40
+          ],
+          "tokens": 94,
+          "fingerprint": "cee551194cac36ef23df260d7c53e6a14ccdc030985378a3c2a07670ce12c29d"
+        },
+        {
+          "name": "aesDecrypt",
+          "lines": [
+            42,
+            48
+          ],
+          "tokens": 118,
+          "fingerprint": "78b69edf9061689899adc0d39178d798dc9fa6ae3294a192677162401c594296"
+        },
+        {
+          "name": "wrapDek",
+          "lines": [
+            50,
+            52
+          ],
+          "tokens": 24,
+          "fingerprint": "8244eecf6bd1840d7cb3d06853aa639888f6b1dfdd7d23c8885cb48ac0123cbb"
+        },
+        {
+          "name": "unwrapDek",
+          "lines": [
+            53,
+            59
+          ],
+          "tokens": 47,
+          "fingerprint": "f697bf303c0088cea044d78bfc718b3c481066aee8eb237765f0d8249d0d820e"
+        },
+        {
+          "name": "dekCache",
+          "lines": [
+            61,
+            61
+          ],
+          "tokens": 14,
+          "fingerprint": "cf64c1247c7a18a1ab5da80a82e0026cf50d0305a48fbd907aff0f0a1f62994b"
+        },
+        {
+          "name": "activeVersion",
+          "lines": [
+            62,
+            62
+          ],
+          "tokens": 9,
+          "fingerprint": "1d2b3c707c61b0d690970dadbbaedf4273fd16b134cd4afb975635f47ee3c8da"
+        },
+        {
+          "name": "ready",
+          "lines": [
+            63,
+            63
+          ],
+          "tokens": 5,
+          "fingerprint": "0585110c86c1e995c26ceb909bca7cc024b99c503f3dacc3032b1675857fdd38"
+        },
+        {
+          "name": "bootstrapFirstKey",
+          "lines": [
+            65,
+            72
+          ],
+          "tokens": 39,
+          "fingerprint": "c01ee3593a57b67494c93539a999f00c7783fbc2128971776af09dc5a3a2506f"
+        },
+        {
+          "name": "loadKeyManager",
+          "lines": [
+            74,
+            91
+          ],
+          "tokens": 145,
+          "fingerprint": "dfc307d15d7c7ecc519dbb48135f599b53e0b4aaff09aef285dd7ef13b6afbd2"
+        },
+        {
+          "name": "rotateKey",
+          "lines": [
+            93,
+            103
+          ],
+          "tokens": 79,
+          "fingerprint": "0109bcb07e0bb2fbaab6819c170b6772e8bda3454483248e753ea9db7c7fa3c0"
+        },
+        {
+          "name": "getActiveVersion",
+          "lines": [
+            105,
+            107
+          ],
+          "tokens": 15,
+          "fingerprint": "496d968f8cf18e4f86ad02bbec6ad361fc265512ef76ef17ef7c11481db9a5de"
+        },
+        {
+          "name": "encryptField",
+          "lines": [
+            109,
+            113
+          ],
+          "tokens": 93,
+          "fingerprint": "d988dea1db57a05cc6f26615a1dac1b4f849c64e6a91d61c91aa326223334449"
+        },
+        {
+          "name": "decryptField",
+          "lines": [
+            115,
+            130
+          ],
+          "tokens": 143,
+          "fingerprint": "8b9525d2679c559af61e686704504fc5a771662c21f3a2a6b7a3d5b136a3cb2f"
+        },
+        {
+          "name": "decryptRow",
+          "lines": [
+            132,
+            136
+          ],
+          "tokens": 65,
+          "fingerprint": "c0113cdb1982203b1752c70683b172f5eb5cc64d342442f7353ba82ccd90be2a"
+        },
+        {
+          "name": "decryptRows",
+          "lines": [
+            138,
+            140
+          ],
+          "tokens": 53,
+          "fingerprint": "07ff544b943157aefd4faaa15535268d6a9a7fc85f76df8a4eb6046693f37d74"
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/secret/reveal.ts",
+      "sha256": "43d84760eb483738266e79eb6c8ce142fcb343fec6a21c91fd8117784375c642",
+      "symbols": [
+        {
+          "name": "InterfaceDeclaration",
+          "lines": [
+            16,
+            16
+          ],
+          "tokens": 12,
+          "fingerprint": "74455b15f33029cf9474b6060c83bfc446c3d1ba0c664bb3dbc44c44a43639b2"
+        },
+        {
+          "name": "InterfaceDeclaration",
+          "lines": [
+            17,
+            20
+          ],
+          "tokens": 36,
+          "fingerprint": "26ac5dcb2160faa7ef044108a51317c20af9014adaab643ed333b926fbbed74f"
+        },
+        {
+          "name": "revealSeedPhrase",
+          "lines": [
+            22,
+            78
+          ],
+          "tokens": 320,
+          "fingerprint": "fc393112faed6d4cd9dbe79e59e60f443f99a1a729aa660be95409760d6bc722"
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/secret/wallet.ts",
+      "sha256": "0063c89c80719e40f237167cd60598e9d34a6b57a451855b2d7de4446400f00c",
+      "symbols": [
+        {
+          "name": "setDriveWallet",
+          "lines": [
+            17,
+            35
+          ],
+          "tokens": 274,
+          "fingerprint": "1b5947c955984d13028fa9ad698a5ae5462c7adae292f8c31518a7bdfe2a8756"
+        },
+        {
+          "name": "validateSecretKey",
+          "lines": [
+            41,
+            48
+          ],
+          "tokens": 87,
+          "fingerprint": "383ec3017a0a0b9e4c8acb95a7cd4a3dc5d9c4ac635f810ee63bec1d3286d97e"
+        },
+        {
+          "name": "refreshWalletWorth",
+          "lines": [
+            54,
+            89
+          ],
+          "tokens": 341,
+          "fingerprint": "2a0af37a11072ef0b589a3bfcfe138d613ebc7443be9928f41c7b978c4e97128"
+        }
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts",
+      "sha256": "2f145e0a17fc0e8ddd10f396eaef5ad7d1526d73026cc8d5bc1570a8473803ab",
+      "symbols": [
+        {
+          "name": "selectOrgSeedRevealBlock",
+          "lines": [
+            11,
+            18
+          ],
+          "tokens": 27,
+          "fingerprint": "9c013da1e66008daf5fe0c1b464f118be33ac83da6bd77079bb2cb833de738b1"
+        },
+        {
+          "name": "InterfaceDeclaration",
+          "lines": [
+            20,
+            20
+          ],
+          "tokens": 16,
+          "fingerprint": "1acc5637edc3499c84dda92717ec34dba0c00363d9ab7d98c8f2551233e8bed2"
+        },
+        {
+          "name": "updateVaultDriveWallet",
+          "lines": [
+            22,
+            34
+          ],
+          "tokens": 124,
+          "fingerprint": "10f3f37e9a136e3b87202bc5798ddd235635009db9668cac6338fca81f4eb48c"
+        },
+        {
+          "name": "updateVaultWalletWorth",
+          "lines": [
+            36,
+            46
+          ],
+          "tokens": 98,
+          "fingerprint": "701f354888f4f2b8a8dc3bac9ddb6a34078bf74ac5282781814ede0509ed4442"
+        }
+      ]
+    }
+  ],
+  "consumers_of_owner": [
+    {
+      "file": "artifacts/api-server/src/index.ts",
+      "owner_import_kinds": [
+        "dynamic-import"
+      ],
+      "names": [
+        "getActiveVersion",
+        "loadKeyManager"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-attachment-content.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-send-queue.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/lib/mail-sync.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-backup-cloud.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-extra.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/lib/vault-snapshot-restore.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/ayzen-mailbox.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/email-accounts.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/emergency-access.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/organizations.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptRow"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/resend-webhook.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/teams.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/two-factor.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/value-history.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-attachments.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-migration.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-shares.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptRow"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/routes/vault-snapshot.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/game/entries.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptRow",
+        "decryptRows",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/data-entities.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptRow",
+        "decryptRows",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptRow"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/entries.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptRow",
+        "decryptRows",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/kyc/exchange.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptField",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/accounts.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptRow",
+        "decryptRows",
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/bridge.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "encryptField"
+      ]
+    },
+    {
+      "file": "artifacts/api-server/src/vault/application/local-account/value.ts",
+      "owner_import_kinds": [
+        "import"
+      ],
+      "names": [
+        "decryptRow"
+      ]
+    }
+  ],
+  "retired_adapter_symbols": [
+    {
+      "symbol": "decryptField",
+      "old": "artifacts/api-server/src/lib/vault-crypto.ts#decryptField (re-export)",
+      "owner": "artifacts/api-server/src/vault/crypto/field-encryption.ts#decryptField"
+    },
+    {
+      "symbol": "decryptRow",
+      "old": "artifacts/api-server/src/lib/vault-crypto.ts#decryptRow (re-export)",
+      "owner": "artifacts/api-server/src/vault/crypto/field-encryption.ts#decryptRow"
+    },
+    {
+      "symbol": "decryptRows",
+      "old": "artifacts/api-server/src/lib/vault-crypto.ts#decryptRows (re-export)",
+      "owner": "artifacts/api-server/src/vault/crypto/field-encryption.ts#decryptRows"
+    },
+    {
+      "symbol": "encryptField",
+      "old": "artifacts/api-server/src/lib/vault-crypto.ts#encryptField (re-export)",
+      "owner": "artifacts/api-server/src/vault/crypto/field-encryption.ts#encryptField"
+    },
+    {
+      "symbol": "getActiveVersion",
+      "old": "artifacts/api-server/src/lib/vault-crypto.ts#getActiveVersion (re-export)",
+      "owner": "artifacts/api-server/src/vault/crypto/field-encryption.ts#getActiveVersion"
+    },
+    {
+      "symbol": "loadKeyManager",
+      "old": "artifacts/api-server/src/lib/vault-crypto.ts#loadKeyManager (re-export)",
+      "owner": "artifacts/api-server/src/vault/crypto/field-encryption.ts#loadKeyManager"
+    },
+    {
+      "symbol": "rotateKey",
+      "old": "artifacts/api-server/src/lib/vault-crypto.ts#rotateKey (re-export)",
+      "owner": "artifacts/api-server/src/vault/crypto/field-encryption.ts#rotateKey"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "phase": "VLT-GAP-03",
+  "sub_phase": "VLT-GAP-03-D",
+  "commit_sha": null,
+  "commit_binding": "source-tree-hash (no git repository available)",
+  "source_tree_sha256": "386d676b6ff44cc0732a2b5a451a7979a27ad4a74c8d9445124224e444169270",
+  "validator_version": "1.0.0",
+  "validator_sha256": "b7ce83bf8f53cb06c268ea3092740f096d8aaeb19dae761c541e96b7ada7342a",
+  "description": "Frozen OLD routes vs extracted tree executed side by side (03-B differential on the reconstructed 03-B-certified tree) plus the 03-C consumer differential (re-executed on a temp copy of the current tree)",
+  "stubbed": "no network and no real database; deterministic stand-ins are identical for OLD and NEW",
+  "differential_03B": {
+    "differential_cases": 64,
+    "differential_passed": 64,
+    "security_checks": 29,
+    "security_passed": 29,
+    "unit_parity": 4,
+    "unit_passed": 4,
+    "mutations_seeded": 18,
+    "mutations_detected": 18
+  },
+  "exceptions_in_03B_run": {
+    "diff-audit:no-unrelated-changes": "diff-audit of the three files 03-C added (expected)"
+  },
+  "consumer_differential_03C": {
+    "differential_cases": 59,
+    "differential_passed": 59,
+    "security_checks": 7,
+    "security_passed": 7,
+    "mutation_tests": 22,
+    "mutation_detected": 22
+  },
+  "typecheck": {
+    "mode": "degraded-differential (project dependencies are not installed in the upload; full tsc/build was NOT executed)",
+    "before_total": 32,
+    "after_total": 37,
+    "syntactic_errors": [],
+    "new_diagnostics": [],
+    "real_class_new": []
+  }
+}

@@ -1,0 +1,676 @@
+{
+  "phase": "VLT-GAP-05",
+  "sub_phase": "VLT-GAP-05-D",
+  "commit_sha": "4e05fd2e9a4a09cd0b98973e111afba0dc3056f7",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "24632c57068a52091de19e44d6e60f5987ca10e846739f920d68908e43c7399c",
+  "validator_version": "1.0.0",
+  "validator_sha256": "dd4837fd94acabb481411b49bfbe09403108fff0368208e37f997e9d91f20406",
+  "source_hashes": {
+    "artifacts/api-server/src/routes/vault.ts": "e9dcd905a02ebe4ce99235bc923d0b20a155733ee1efd70413abf65737fbb4d1",
+    "services/vault/src/index.mjs": "ec653c3b40526c2f781fb4a327154e707645ecb2ae74b7acfd69790ba22fc705",
+    "artifacts/api-server/src/vault/crypto/field-encryption.ts": "151a7ada6e1442fd973f5ae24e68e146de3c93bc4574955acfc4201c5a352262",
+    "artifacts/api-server/src/vault/application/secret/reveal.ts": "43d84760eb483738266e79eb6c8ce142fcb343fec6a21c91fd8117784375c642",
+    "artifacts/api-server/src/vault/application/secret/wallet.ts": "0063c89c80719e40f237167cd60598e9d34a6b57a451855b2d7de4446400f00c",
+    "artifacts/api-server/src/vault/infrastructure/repositories/secret-repository.ts": "2f145e0a17fc0e8ddd10f396eaef5ad7d1526d73026cc8d5bc1570a8473803ab",
+    "artifacts/api-server/src/index.ts": "74529ec577756830447caf6fe4fd70cf1932e7134249ec54fa800507bb5f8491",
+    "artifacts/api-server/src/lib/mail-attachment-content.ts": "e697a303b5db0cb55ba795252d8f9c1d2afd7818cb681c3523837dc3964782f1",
+    "artifacts/api-server/src/lib/mail-send-queue.ts": "3219d427de8bb53a56877ef192af2919d3afb85165f6eb31af59939fb4d8405f",
+    "artifacts/api-server/src/lib/mail-sync.ts": "74338950b7e9bddef70b86aa190da758965504198b1fd45314c3000d29f20b5a",
+    "artifacts/api-server/src/lib/vault-backup-cloud.ts": "dbfe8c9092e9969b89b992995217597aa1e89138db91b5acd032be2eaac5e239",
+    "artifacts/api-server/src/lib/vault-snapshot-extra.ts": "a653f7e3aaab3005eda1b4eb1de83a063dfc94752c62cf272d3f0ed18d3be737",
+    "artifacts/api-server/src/lib/vault-snapshot-restore.ts": "817d33707c22e1ef93167ad1f843f1d45bf601f6ae6fca8877efde1c34d2d7e0",
+    "artifacts/api-server/src/routes/ayzen-mailbox.ts": "6e9db9c278666458b28185ee902cdbf4f4c1a954e748376ec5686637035d6f96",
+    "artifacts/api-server/src/routes/email-accounts.ts": "ea794c905f818918e5b614978d772b55b2972be42ed64556d65fbb4e09b68327",
+    "artifacts/api-server/src/routes/emergency-access.ts": "e585f7df7be03bdb657d710aff9274b44cfed5c02814ae18333fd882e64ee114",
+    "artifacts/api-server/src/routes/organizations.ts": "82171aae0a6bf65e9b3cd9502f52c777c3867af8611d7a43aa4cf4c3a8d6b3a1",
+    "artifacts/api-server/src/routes/resend-webhook.ts": "494c52fab12a7cbe197ce580d617e0fccc48a97c70405af4be136a82b7243992",
+    "artifacts/api-server/src/routes/teams.ts": "3206f51ebfe5c38834bd1d8b0f8d4dbeae591ec437d4012d970cfc9736543034",
+    "artifacts/api-server/src/routes/two-factor.ts": "0c1ad1037eba13fb57bc068fa6de5ccb10c72337d2bc555b2b027b07473f479b",
+    "artifacts/api-server/src/routes/value-history.ts": "0899fc00226a547574a0c05c0c2ce6facc0c6ea826bd476c25a8f89c1e4faca0",
+    "artifacts/api-server/src/routes/vault-attachments.ts": "2f700c2dfbb078972cd25c84c557fab1b16b02327afc53e1102b2a134d128cea",
+    "artifacts/api-server/src/routes/vault-migration.ts": "0695e1de47e3dd102c44bef5650c9e108bbb24d62be768791dc4f780acb21922",
+    "artifacts/api-server/src/routes/vault-shares.ts": "9b33fa8f0d1276debe9e58d8204a9f1b0504f5f9f24506798b651b8adf151758",
+    "artifacts/api-server/src/routes/vault-snapshot.ts": "b076525cfcd4ec6512d2eba2b345606220aee49ff9f644a7f29e026e9edb38b2",
+    "artifacts/api-server/src/vault/application/game/entries.ts": "018a001799a4591d08905b284e9181b05022c7dd3035881d616e350c74a10561",
+    "artifacts/api-server/src/vault/application/kyc/data-entities.ts": "e60392ea287860fcc8335c79ededdcc09686dd3e8bec8e54e42b7e6113613cb9",
+    "artifacts/api-server/src/vault/application/kyc/enrollment.ts": "40d35a9902fa857a53fa765c0fb17dd8004d56c0054f7b00b479d7d42b42e1e8",
+    "artifacts/api-server/src/vault/application/kyc/entries.ts": "8498aecb688c66e1dd619a88e0797ee599f4570ef03c0ecc5861802792eacc02",
+    "artifacts/api-server/src/vault/application/kyc/exchange.ts": "432226a75663b50562d5ce4a4c3771e185db9833179c7fb5ccd6cd1a29f7d7f7",
+    "artifacts/api-server/src/vault/application/local-account/accounts.ts": "d5cf1e627c46b96b5d213000ad55af0ef5875bcc4eb51b793dac30c0d22d5201",
+    "artifacts/api-server/src/vault/application/local-account/bridge.ts": "d2db4530fab07c7182f018821e2a9bbedbe19cb20a8b1f4fd737942b61361a38",
+    "artifacts/api-server/src/vault/application/local-account/value.ts": "94d13e707401e21d391697df34cabfcc38392acafd7a06b53bac362fd4cfe097",
+    "docs/antas/vault/file-migration-map.md": "cc07c0e86abddab197baa64ace07caebfa3eb66cef1891f6f7d86bf62d257a87",
+    "docs/antas/vault/architecture.md": "f0cf160c6c95087ace2cf41584c0a08ab9db6164fadd5ddd52247a13a1abb35b",
+    "docs/antas/vault/db-touch-inventory.md": "24cc6b6fb117a23b7e2b2e7b42399ad0c7642d66c049238fca947a8727ce1c29",
+    "scripts/antas/vault/build-certification.mjs": "9b0dc4adeedf0432ffb06967d707aaee22c5d8047e7b2ede0b71c2aef77b44db",
+    "scripts/antas/vault/gap/harness.mjs": "364dc62b790f7808fca281c9d311e3fee770a547d07277b5dcb3e3398540e98e",
+    "scripts/antas/vault/gap/gap-common.mjs": "18e99a5030e21ca78d84b00605a45a9d20c2e6dce10e493165a35a2060bdfa3b",
+    "scripts/antas/vault/gap/freeze-vlt-gap-05-D-baseline.mjs": "dc6f3b4a5d4ae6714f450e1d01969f374e5e560964d1b88e386da3c551bdc117",
+    "reports/antas/vault/gap/VLT-GAP-05/baseline-05d/SEAL.json": "576567f9f83d3e0071eb26a9eddc4aed7340400d784824c8e80d20a271d91f5a",
+    "reports/antas/vault/gap/VLT-GAP-05/baseline-05d/tree-manifest.json": "ecffce9cb8f50573b88b25c928b4c22f6b6675154cb429de131d3889a47c891c",
+    "artifacts/api-server/src/lib/vault-crypto.ts": "ABSENT"
+  },
+  "baseline": {
+    "mode": "write-once seal (verified, never written by this validator)",
+    "seal_file": "reports/antas/vault/gap/VLT-GAP-05/baseline-05d/SEAL.json",
+    "sealed_at": "2026-10-03T05:55:07.032Z",
+    "tree_manifest_sha256": "ecffce9cb8f50573b88b25c928b4c22f6b6675154cb429de131d3889a47c891c",
+    "certified_by": {
+      "sub_phase": "VLT-GAP-05-C",
+      "source_tree_sha256": "f88ec414fa2f82892d4c5b15016a583d980ce2a1eb5241fdbc2f672a29f1ff8b",
+      "commit_sha": null,
+      "validator_sha256": "32ee87533eb7c19aaeecd588243ff396a752d35b1c67dca4cd4005a50c7dacd3"
+    }
+  },
+  "commands": [
+    "node scripts/antas/vault/gap/validate-vlt-gap-05-D.mjs",
+    "node scripts/antas/vault/gap/validate-vlt-gap-05-C.mjs (full run on a temp copy reconstructed to the 05-C-certified state; runs 05-B differential inside)",
+    "in-process AST retirement/thinness/duplicate/security gate, executed crypto cases, mutation self-tests, differential typecheck, child-process bypass attempts"
+  ],
+  "exit_codes": {
+    "prerequisite_05C_reconstructed": 0,
+    "executed_owner_cases": 0,
+    "mutation_self_tests": 0,
+    "bypass_attempts": 0,
+    "typecheck_degraded": 0
+  },
+  "symbols_moved": [],
+  "retired": [
+    {
+      "file": "artifacts/api-server/src/lib/vault-crypto.ts",
+      "kind": "pure re-export compatibility adapter",
+      "importers_remaining": 0,
+      "replaced_by": "artifacts/api-server/src/vault/crypto/field-encryption.ts"
+    }
+  ],
+  "consumers_migrated": [],
+  "old_business_symbols_remaining": [
+    "artifacts/api-server/src/routes/vault.ts#toHealthInput (deferred to VLT-GAP-11)",
+    "artifacts/api-server/src/routes/vault.ts#runHealthCheck (deferred to VLT-GAP-11)"
+  ],
+  "duplicate_implementations": [],
+  "deferred_carry_overs": [
+    {
+      "item": "GET /vault/health-report + runHealthCheck/toHealthInput in routes/vault.ts",
+      "deferred_to": "VLT-GAP-11"
+    },
+    {
+      "item": "POST /vault/health-check + runHealthCheck/toHealthInput in routes/vault.ts",
+      "deferred_to": "VLT-GAP-11"
+    },
+    {
+      "item": "single-use reveal-token store (routes/vault-security.ts) injected as a port",
+      "deferred_to": "VLT-GAP-06"
+    },
+    {
+      "item": "key-rotation scripts keep their own copies of the envelope code (scripts/src/reencrypt-*.ts, rewrap-encryption-keys.ts); they are standalone operator tools",
+      "deferred_to": "VLT-GAP-07",
+      "copies_detected": [
+        {
+          "file": "artifacts/api-server/src/lib/wallet-crypto.ts",
+          "line": 102,
+          "function": "bootstrapFirstKey",
+          "copy_of": "bootstrapFirstKey",
+          "deferred_to": "VLT-GAP-07"
+        },
+        {
+          "file": "scripts/src/rewrap-encryption-keys.ts",
+          "line": 145,
+          "function": "vaultAesDecrypt",
+          "copy_of": "aesDecrypt",
+          "deferred_to": "VLT-GAP-07"
+        }
+      ]
+    },
+    {
+      "item": "organization_extension_policies.disable_seed_reveal writer in routes/organizations.ts",
+      "deferred_to": "recorded carry-over (no GAP-05 owner)"
+    },
+    {
+      "item": "snapshot/restore and schema DDL for secret columns",
+      "deferred_to": "VLT-GAP-09 / VLT-GAP-12"
+    }
+  ],
+  "evidence_files": [
+    "old-source-fingerprint.json",
+    "new-source-fingerprint.json",
+    "route-thinness.json",
+    "duplicate-implementation.json",
+    "behavior-regression.json",
+    "security-regression.json"
+  ],
+  "evidence_file_sha256": {
+    "old-source-fingerprint.json": "4084a9f430355df320e2c28322226ec0eb94f0a541032d70b8a00396b698acae",
+    "new-source-fingerprint.json": "b72cbb3d4c72601df08f19d0e3ebc9f0f21a44c846a2d40f438b393002e416b7",
+    "route-thinness.json": "b1cb2ed05671b55d760483b1ce9b36579374861ee14d9791af76278069927995",
+    "duplicate-implementation.json": "ebccf24a2a6a65dc6e42da47f10a220f2dcff2c99bd5efb515a16040ff5094d1",
+    "behavior-regression.json": "68f4445fb617a9be8288b2695a1e1eba10eda8de0bf8fceb62619c96318b21f4",
+    "security-regression.json": "92b1329e7a9ebb407361404f7a09215f0a1a1c1b8e732ec3862fabda7b54f5b3"
+  },
+  "diff_audit": {
+    "changed": [
+      "artifacts/api-server/src/vault/crypto/field-encryption.ts",
+      "scripts/antas/vault/build-certification.mjs"
+    ],
+    "added": [
+      ".gitignore"
+    ],
+    "removed": [
+      "artifacts/api-server/src/lib/vault-crypto.ts"
+    ],
+    "doc_changed": [
+      "docs/antas/vault/file-migration-map.md",
+      "docs/antas/vault/db-touch-inventory.md",
+      "docs/antas/vault/architecture.md"
+    ],
+    "unexpected": [],
+    "files_compared": 2217
+  },
+  "typecheck": {
+    "mode": "degraded (project dependencies are not installed in the upload; full tsc/build was NOT executed)",
+    "files": 31,
+    "diagnostics_total": 704,
+    "syntactic_errors": [],
+    "unresolved_relative_modules": []
+  },
+  "tests": {
+    "executed_owner_cases": 16,
+    "executed_owner_cases_passed": 16,
+    "mutation_self_tests": 53,
+    "mutation_self_tests_passed": 53,
+    "bypass_attempts_rejected": 7,
+    "prerequisite_05C": {
+      "mutation_self_tests": 33,
+      "mutation_self_tests_passed": 33,
+      "bypass_attempts_rejected": 7,
+      "prerequisite_05B": {
+        "differential_cases": 51,
+        "differential_passed": 51,
+        "security_checks": 19,
+        "security_passed": 19,
+        "mutations_seeded": 34,
+        "mutations_detected": 34
+      }
+    }
+  },
+  "notes": [
+    "05-D retires lib/vault-crypto.ts: after 05-C it was a pure `export { … } from owner` file with zero importers. It is deleted; the migration map, its generator and the architecture/inventory docs now say RETIRED → vault/crypto/field-encryption.ts.",
+    "routes/vault.ts is byte-identical to the 05-C-certified file. Every one of its 36 handlers was re-parsed: 33 are exact 'await useCase(); res.status().json()' delegations, 1 is a response mapping, 2 are the GAP-11 health handlers. The only DB access left in the file is the GAP-11 health runner, which is verified free of every secret identifier and column.",
+    "services/vault/src/index.mjs is byte-identical and is a pure composition root (imports, wiring consts, createServiceServer(...).start()); the service's compat shims are pure re-exports of the owned modules. The service and API crypto envelopes remain separate and non-interoperable (05-A finding) — a design decision, not changed here.",
+    "The crypto owner is code-identical (token stream) to the 05-C-sealed owner — only its header comment changed — and was executed for legacy, versioned, rotation, tamper and passthrough behavior.",
+    "Earlier validators' source-bound evidence for files that GAP-05-C rewired, and 05-C's own in-place --verify, legitimately no longer verify after the adapter is deleted (05-C's evidence binds the deleted file's hash). 05-D therefore re-runs 05-C on a reconstructed copy instead of verifying it in place.",
+    "Full tsc/build and the repo's own test suites cannot run here (dependencies are not installed); the typecheck is degraded and the behavior proofs are the harness-executed cases above. Run the repo build and test suites in CI before certifying.",
+    "Comment-only mentions of lib/vault-crypto.ts in historical change logs, SQL migration comments and script/schema doc comments were left untouched; they are listed in duplicate-implementation.json."
+  ],
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "seal:manifest-hash-matches-seal",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:certified-by-05C-and-sub-phase-is-05D",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:frozen-files-intact-and-equal-to-manifest",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:earlier-validators-and-harness-byte-identical-since-freeze",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:no-unexpected-new-validator-scripts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "seal:05-C-baseline-seal-still-intact",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "prerequisite:05-C-passes-on-a-copy-reconstructed-to-the-05-C-certified-state (re-runs 05-B differential through it)",
+      "passed": true,
+      "details": "05-C PASS on reconstructed tree (27 consumers, 05-B differential 51/51, 33/33 mutations)"
+    },
+    {
+      "name": "retirement:lib/vault-crypto.ts-no-longer-exists",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "retirement:no-import-reexport-dynamic-import-or-require-of-the-retired-adapter-anywhere-in-the-repo",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "retirement:no-string-or-identifier-reference-to-the-retired-path-in-code (mock/resolve/require-by-string)",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "retirement:no-build-config-or-manifest-references-the-retired-path (json/yaml/toml)",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "retirement:migration-map-and-generated-docs-agree-with-the-actual-tree",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "owner:exists-and-exports-all-seven-public-functions",
+      "passed": true,
+      "details": "decryptField,decryptRow,decryptRows,encryptField,getActiveVersion,loadKeyManager,rotateKey"
+    },
+    {
+      "name": "owner:imports-only-crypto-@workspace/db-drizzle-orm (lowest layer) and reaches no consumer (no cycle)",
+      "passed": true,
+      "details": "{\"imports\":[\"crypto\",\"@workspace/db\",\"drizzle-orm\"],\"cycle\":[]}"
+    },
+    {
+      "name": "owner:header-no-longer-claims-a-live-compatibility-adapter",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "consumers:all-27-sealed-consumers-still-import-the-owner-and-only-existing-names",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "routes/vault.ts:old-route-is-an-adapter (no DB, crypto, provider or credit logic; secret handlers are exact delegations)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "services/vault/src/index.mjs:pure-composition-root-and-compat-shims-are-pure-re-exports",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "duplicates:no-second-implementation-of-the-crypto-owner (names or token-identical bodies)",
+      "passed": true,
+      "details": "{\"names\":[],\"bodies\":[],\"owner_functions\":10}"
+    },
+    {
+      "name": "duplicates:secret-use-cases-declared-only-in-vault/application/secret",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "duplicates:every-deferred-copy-manages-a-different-key-chain-namespace-than-the-vault-owner",
+      "passed": true,
+      "details": "[{\"file\":\"artifacts/api-server/src/lib/wallet-crypto.ts\",\"namespace\":\"wallet\"},{\"file\":\"scripts/src/rewrap-encryption-keys.ts\",\"namespace\":null}]"
+    },
+    {
+      "name": "duplicates:no-copy-of-the-four-old-secret-route-handler-bodies-anywhere",
+      "passed": true,
+      "details": "{\"copies\":[],\"fingerprinted\":4}"
+    },
+    {
+      "name": "crypto:owner-code-token-identical-to-the-05-C-sealed-owner (only comments may differ)",
+      "passed": true,
+      "details": "1152 vs 1152 tokens"
+    },
+    {
+      "name": "crypto:aes-256-gcm-hkdf-sha256-and-12-byte-iv-parameters-intact",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "crypto:fail-closed-boot-without-a-32-char-key",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "crypto:key-table-sql-is-parameterised (no string concatenation into SQL)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "step-up:reveal-use-case-checks-pin-state-and-consumes-the-single-use-token-before-decrypting",
+      "passed": true,
+      "details": "{\"posPin\":2306,\"posConsume\":2431,\"posDecrypt\":3087}"
+    },
+    {
+      "name": "credits:charge-happens-only-after-a-successful-decrypt",
+      "passed": true,
+      "details": "{\"posDecrypt\":3087,\"posCharge\":3465}"
+    },
+    {
+      "name": "org-policy:reveal-use-case-consults-the-organization-seed-reveal-policy-before-decrypting",
+      "passed": true,
+      "details": "{\"posPolicy\":2025,\"posDecrypt\":3087}"
+    },
+    {
+      "name": "audit:seed-reveal-is-audited-via-logVaultActivity(seed_revealed)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "tenant-scope:every-secret-repository-write-filters-by-owner-user-id",
+      "passed": true,
+      "details": "2 where() clauses"
+    },
+    {
+      "name": "tenant-scope:org-membership-lookup-is-parameterised-and-scoped-to-the-user",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "logging:no-plaintext-secret-key-material-passed-to-console-or-logger",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "access:secret-route-middleware-chains-are-the-sealed-chains (auth, ownership PDP, credit meter)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "access:drive-wallet-remains-write-once-and-tenant-scoped",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "behavior:owner-executed-legacy-versioned-rotation-tamper-and-passthrough-cases-all-pass (real node:crypto, in-memory key table)",
+      "passed": true,
+      "details": "[]"
+    },
+    {
+      "name": "diff-audit:only-the-adapter-deletion-owner-comment-and-the-four-doc/generator-lines-changed",
+      "passed": true,
+      "details": "{\"changed\":[\"artifacts/api-server/src/vault/crypto/field-encryption.ts\",\"scripts/antas/vault/build-certification.mjs\"],\"added\":[\".gitignore\"],\"removed\":[\"artifacts/api-server/src/lib/vault-crypto.ts\"],\"doc_changed\":[\"docs/antas/vault/file-migration-map.md\",\"docs/antas/vault/db-touch-inventory.md\",\"docs/antas/vault/architecture.md\"],\"unexpected\":[],\"files_compared\":2217}"
+    },
+    {
+      "name": "typecheck:no-syntax-errors-and-no-unresolved-relative-module-in-consumers-owner-or-secret-use-cases",
+      "passed": true,
+      "details": "{\"syntactic\":[],\"unresolved\":[]}"
+    },
+    {
+      "name": "selftest:baseline-gate-is-green-before-mutating",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:restoring-the-adapter-file-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:new-static-importer-of-the-retired-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:new-reexport-of-the-retired-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:new-dynamic-import-of-the-retired-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:new-require-of-the-retired-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mock-by-string-of-the-retired-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:config-reference-to-the-retired-path-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:negative-control-comment-only-mention-passes",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:migration-map-saying-compatibility-preserved-for-a-deleted-file-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:generator-regressing-to-the-live-row-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:architecture-doc-presenting-the-adapter-as-live-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-consumer",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:consumer-pointed-at-a-different-module-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:deleted-owner-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-owner-export",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:owner-missing-a-public-name-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:owner-importing-a-consumer-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-owner-header",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:owner-header-claiming-a-live-adapter-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-cipher",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:cipher-change-in-the-owner-is-detected-by-token-identity",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-route-delegation",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:secret-route-no-longer-delegating-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-route-db",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:db-query-added-to-a-route-handler-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-route-crypto",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:crypto-call-and-decision-branch-added-to-a-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-route-mw",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:removed-credit-middleware-on-the-reveal-route-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-route-import",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:route-importing-the-crypto-owner-directly-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:new-business-function-in-the-old-route-file-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-svc",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:business-function-in-the-service-composition-root-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-svc-flow",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:control-flow-in-the-service-composition-root-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:service-shim-with-logic-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:token-identical-copy-of-an-owner-function-elsewhere-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-owner-function-name-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:redeclared-secret-use-case-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:pasted-copy-of-an-old-secret-handler-body-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unlisted-file-change-is-detected-by-diff-audit",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:unlisted-new-file-is-detected-by-diff-audit",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:deleting-another-file-is-detected-by-diff-audit",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:negative-control-unchanged-reveal-use-case-passes-security-checks",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-log",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:logging-secret-material-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-tenant",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:dropped-tenant-predicate-is-detected",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:mutation-anchor-exec",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:behavior-regression-in-the-owner-is-detected-by-the-executed-tests (versioned encrypt using the legacy key)",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "selftest:negative-control-real-owner-passes-every-executed-case",
+      "passed": true,
+      "details": "16 cases"
+    },
+    {
+      "name": "selftest:coverage-at-least-40-mutations-executed",
+      "passed": true,
+      "details": "53"
+    },
+    {
+      "name": "bypass:every-bypass-attempt-is-rejected-by-the-validator-itself",
+      "passed": true,
+      "details": "[]"
+    }
+  ],
+  "generated_at": "2026-10-03T06:28:56.284Z",
+  "evidence_body_sha256": "cd9f0aae174dab25a677947771c54721f3b1a11aea88be387f548c393df5a44d"
+}

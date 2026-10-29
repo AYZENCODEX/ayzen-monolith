@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "phase": "PRJ-01",
+  "title": "Projects module boundaries and cross-module contract",
+  "timestamp": "2026-10-20T07:57:03.111Z",
+  "status": "PASS",
+  "statusScope": "PRJ-01 gate only: no duplicate owner in the boundary map, no new unexplained import cycle, no public API change. These are static properties and were verified statically. This does not certify typecheck, build, DB tests or runtime route parity, none of which ran (see notRun).",
+  "commit": {
+    "sha": "UNAVAILABLE",
+    "reason": "The uploaded snapshot (AYZEN-projects-PRJ00-codebase.zip) contains no .git directory."
+  },
+  "workingTreeAtStart": "Unzipped snapshot, unmodified. Directory name inside the zip: AYZEN4X1-finance-fin02czip. No PRJ-00 artifacts (projects-inventory.md, projects-migration-map.json, baseline evidence) were present in it.",
+  "objective": "Lock the Projects boundary list against real code, document the Vault and Finance coupling as an explicit contract, and make the boundaries enforceable, without moving code or changing public behavior.",
+  "inspectedFiles": [
+    "artifacts/api-server/src/routes/projects.ts",
+    "artifacts/api-server/src/routes/project-dates.ts",
+    "artifacts/api-server/src/routes/project-templates.ts",
+    "artifacts/api-server/src/routes/index.ts",
+    "artifacts/api-server/src/vault/application/kyc/enrollment.ts",
+    "artifacts/api-server/src/vault/security/kyc-ownership.ts",
+    "artifacts/api-server/src/vault/security/entity-ownership.ts",
+    "artifacts/api-server/src/finance/application/reports.ts",
+    "artifacts/api-server/src/routes/finance.ts",
+    "artifacts/api-server/src/routes/teams.ts",
+    "artifacts/api-server/src/routes/ai-actions.ts",
+    "artifacts/api-server/src/routes/bulk.ts",
+    "artifacts/api-server/src/routes/entities.ts",
+    "artifacts/api-server/src/services/sync.ts",
+    "artifacts/api-server/src/lib/airdrop-reminder-cron.ts",
+    "artifacts/api-server/src/lib/activity-log.ts",
+    "artifacts/api-server/src/vault/infrastructure/repositories/kyc-repository.ts",
+    "artifacts/api-server/src/vault/infrastructure/repositories/snapshot-sections-repository.ts",
+    "lib/db/src/schema/projects.ts",
+    "lib/db/src/schema/project-templates.ts",
+    "reports/antas/finance/fin-01-evidence.json",
+    "docs/antas/finance/finance-boundaries.md",
+    "scripts/antas/finance/validate-boundaries.mjs",
+    "Projects-Module-Audit-Roadmap-PRJ00-05.docx"
+  ],
+  "filesChanged": [
+    "scripts/antas/projects/boundaries.manifest.json (new)",
+    "scripts/antas/projects/validate-boundaries.mjs (new)",
+    "docs/antas/projects/projects-boundaries.md (new)",
+    "docs/antas/projects/projects-cross-module-contract.md (new)",
+    "reports/antas/projects/prj-01-dependency-scan.json (new, generated)",
+    "reports/antas/projects/prj-01-route-owner-map.csv (new, generated)",
+    "reports/antas/projects/prj-01-evidence.json (new)",
+    "package.json (two scripts added: validate:projects-boundaries, validate:projects-boundaries:self-test)",
+    ".github/workflows/ci.yml (two steps added after validate:finance-boundaries)"
+  ],
+  "sourceIntegrity": {
+    "note": "No file under artifacts/, lib/ or packages/ was modified. A recursive diff against a fresh unzip of the upload shows only the files listed above.",
+    "sha256": {
+      "routes/projects.ts": "fd28954bc2780e4fdd0fc065f79ba26b835fbfd4c2eec43419438f91ee4ea097",
+      "routes/project-dates.ts": "016c733de39e555f27cc56cb4aac829b8536cc187d38e4028dddaa657e171cad",
+      "routes/project-templates.ts": "0ee81804fbc3aeaf0c9d2c0bb4e144dbcbcad57b40508c83f393c8cf545d2c4b",
+      "routes/index.ts": "d8db8b5357ab4a6216b5ac6d080fcbc9d41495ca553f1a306e140ab7d19b5619"
+    }
+  },
+  "oldToNewMapping": [
+    {
+      "targetOwner": "application/entity-overview.ts",
+      "routeCount": 2,
+      "routes": [
+        "GET /projects/entity/:vaultEntryId/overview",
+        "GET /projects/entity-leaderboard"
+      ]
+    },
+    {
+      "targetOwner": "application/enrollment-overview.ts",
+      "routeCount": 7,
+      "routes": [
+        "GET /projects/enrolled",
+        "GET /projects/:id/enrolled-entities",
+        "GET /projects/mine/enrolled",
+        "GET /projects/mine/enrolled-entities",
+        "GET /projects/mine/overview",
+        "GET /projects/mine/entities-overview",
+        "GET /projects/:id/enrollments/overview"
+      ]
+    },
+    {
+      "targetOwner": "application/projects.ts",
+      "routeCount": 5,
+      "routes": [
+        "GET /projects",
+        "POST /projects",
+        "GET /projects/:id",
+        "PATCH /projects/:id",
+        "DELETE /projects/:id"
+      ]
+    },
+    {
+      "targetOwner": "application/enrollment.ts",
+      "routeCount": 7,
+      "routes": [
+        "POST /projects/:id/join",
+        "POST /projects/:id/enroll",
+        "PATCH /projects/:id/enrollments/:enrollmentId/status",
+        "GET /admin/projects/:id/entity-enrollments",
+        "GET /projects/:id/enrollments",
+        "DELETE /projects/:id/enrollments/:enrollmentId",
+        "GET /projects/enrollments/:enrollmentId/activity"
+      ]
+    },
+    {
+      "targetOwner": "application/members.ts",
+      "routeCount": 3,
+      "routes": [
+        "GET /projects/:id/members",
+        "GET /projects/:id/stats",
+        "GET /projects/:id/entity-tasks"
+      ]
+    },
+    {
+      "targetOwner": "application/ratings.ts",
+      "routeCount": 5,
+      "routes": [
+        "GET /projects/:id/ratings",
+        "GET /projects/:id/ratings/me",
+        "POST /projects/:id/ratings",
+        "DELETE /projects/:id/ratings/me",
+        "DELETE /admin/projects/:id/ratings/:ratingId"
+      ]
+    },
+    {
+      "targetOwner": "application/roi-receipts.ts",
+      "routeCount": 5,
+      "routes": [
+        "GET /projects/:id/roi-summary",
+        "POST /projects/:id/pnl-receipt",
+        "DELETE /projects/:id/pnl-receipt",
+        "GET /projects/pnl-receipt/:token",
+        "GET /projects/pnl-receipt/:token/pdf"
+      ]
+    },
+    {
+      "targetOwner": "application/dates.ts",
+      "routeCount": 5,
+      "routes": [
+        "GET /project-dates",
+        "GET /projects/:id/dates",
+        "POST /projects/:id/dates",
+        "PATCH /project-dates/:id",
+        "DELETE /project-dates/:id"
+      ]
+    },
+    {
+      "targetOwner": "application/templates.ts",
+      "routeCount": 8,
+      "routes": [
+        "GET /project-templates",
+        "GET /project-templates/:id",
+        "POST /project-templates",
+        "PATCH /project-templates/:id",
+        "DELETE /project-templates/:id",
+        "POST /project-templates/:id/apply",
+        "POST /project-templates/:id/duplicate",
+        "POST /project-templates/from-project/:projectId"
+      ]
+    }
+  ],
+  "securityOwners": [
+    {
+      "symbols": [
+        "projectEnrollmentResource",
+        "requireProjectEnrollmentOwnership"
+      ],
+      "targetOwner": "security/enrollment-ownership.ts",
+      "phase": "PRJ-05",
+      "behavior": "frozen"
+    },
+    {
+      "symbols": [
+        "vaultEntryOwnerResource",
+        "requireProjectsVaultEntryOwnership",
+        "auditProjectsOwnership"
+      ],
+      "targetOwner": "security/entity-ownership.ts",
+      "phase": "PRJ-05",
+      "behavior": "frozen",
+      "note": "Not in the roadmap tree; added because the roadmap gave these PEP helpers no home."
+    },
+    {
+      "symbols": [
+        "generateProjectReceiptToken",
+        "projectReceiptUrl"
+      ],
+      "targetOwner": "security/receipt-token.ts",
+      "phase": "PRJ-04"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D1",
+      "topic": "Vault KYC enrollment functions",
+      "decision": "Formal allowed cross-module import, pinned to exactly VAULT-PUBLIC-1 (loadKycEntryForEnrollment, buildEnrollmentAccountData) and VAULT-PUBLIC-2 (kycEntryOwnerResource). No Vault code changes.",
+      "needsConfirmation": false,
+      "status": "CONFIRMED",
+      "confirmedBy": "project owner",
+      "confirmedOn": "2026-10-20",
+      "confirmationNote": "Projects imports from Vault directly; no Projects-side shim."
+    },
+    {
+      "id": "D2",
+      "topic": "Finance P&L dependency for PRJ-04",
+      "decision": "Do not swap in getProjectInvestments (not equivalent). Finance adds a per-project use case that first reproduces current computeProjectPnlSummary arithmetic with no currency conversion; any move to base-currency conversion is a separate, approved numeric change.",
+      "needsConfirmation": false,
+      "status": "CONFIRMED",
+      "confirmedBy": "project owner",
+      "confirmedOn": "2026-10-20",
+      "confirmationNote": "Confirmed as recommended."
+    }
+  ],
+  "auditCorrections": [
+    "getProjectInvestments is not equivalent to computeProjectPnlSummary (all projects vs one, base-currency conversion vs raw sum, interestOwed vs roiPct); the in-code 'lockstep' comment is stale.",
+    "roi-summary reads entity_project_roi joined to vault_entries and never the finance ledger.",
+    "Template apply/duplicate/from-project do not create or update projects; the planned write-back gate does not apply.",
+    "22 files outside the three route files touch Projects tables (6 writers); the audit listed none. Three enrollment write paths and two project-insert paths exist.",
+    "projects.ts reads vault_entries, tasks, task_submissions and users through raw SQL, which a typed-identifier scan misses.",
+    "Enrollment-overview SQL lives in lib/activity-log.ts; the delete cascade lives in services/sync.ts and covers 3 tables.",
+    "GET /projects/mine/enrolled-entities is shadowed by GET /projects/:id/enrolled-entities (reproduced on express@4.21.2); preserved, not fixed."
+  ],
+  "commands": [
+    {
+      "command": "node --check scripts/antas/projects/validate-boundaries.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs --self-test",
+      "exitCode": 0,
+      "result": "7 detector checks passed"
+    },
+    {
+      "command": "node scripts/antas/projects/validate-boundaries.mjs",
+      "exitCode": 0,
+      "result": "PASS: 47 routes, 0 findings"
+    },
+    {
+      "command": "negative tests on a scratch copy (T1-T7: unlisted Finance import, auth middleware dropped, new route, PEP gate removed, rogue writer, duplicate protected symbol, new foreign table in dates route)",
+      "exitCode": 0,
+      "result": "Each mutation produced FAIL with the expected finding; the restored copy produced PASS (T8)."
+    },
+    {
+      "command": "node reproduction of Express 4 route shadowing (express@4.21.2, two routes in registration order)",
+      "exitCode": 0,
+      "result": "GET /projects/mine/enrolled-entities handled by the :id route with id=mine"
+    },
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 1,
+      "result": "ERR_PNPM_LOCKFILE_CONFIG_MISMATCH: the 'overrides' configuration does not match the lockfile. Cause not investigated further; lockfile left untouched."
+    }
+  ],
+  "testsAndInvariants": {
+    "routeCount": "PASS: {\"projects\":34,\"project-dates\":5,\"project-templates\":8} = 47",
+    "everyRouteHasExactlyOneOwner": "PASS",
+    "frozenRouteSurfaceAndMountOrder": "PASS: sha256 45db187e6a03d129c3f3abb754ef51b1b882998d68613e97a0097200768ffd57",
+    "pepWiringPinned": "PASS: 7 actions",
+    "protectedSymbolsSingleOwner": "PASS: 13 symbols, one declaration each",
+    "crossModuleImportAllowlist": "PASS: 2 imports, all allowlisted with exact symbols",
+    "reverseEdgesVaultFinanceToProjects": "PASS: 0 edges",
+    "importCyclesIncludingProjects": "PASS: 0 cycles",
+    "foreignTableEdges": "PASS: 5 recorded, none new, none stale",
+    "externalConsumers": "PASS: 22 recorded (6 writers), none new, none stale",
+    "shadowedRoutes": "PASS: 1 recorded and preserved",
+    "publicContractChanges": "None"
+  },
+  "notRun": [
+    {
+      "check": "pnpm typecheck",
+      "status": "NOT_RUN",
+      "reason": "Blocked by the frozen-install failure above."
+    },
+    {
+      "check": "pnpm build",
+      "status": "NOT_RUN",
+      "reason": "Same."
+    },
+    {
+      "check": "DB-backed tests",
+      "status": "NOT_RUN",
+      "reason": "Same, and no Projects characterization tests exist yet."
+    },
+    {
+      "check": "runtime route parity against baseline",
+      "status": "NOT_RUN",
+      "reason": "PRJ-01 changes no code; route surface verified statically only."
+    },
+    {
+      "check": "database foreign keys / orphan rows after project delete",
+      "status": "NOT_CHECKED",
+      "reason": "SQL migrations were not inspected; the Drizzle schema file declares no references() or onDelete."
+    }
+  ],
+  "prj00BaselineStatus": "BLOCKED: the real typecheck/build/DB baseline the roadmap requires for PRJ-00 is still not bound. PRJ-01 did not create projects-inventory.md or projects-migration-map.json; prj-01-route-owner-map.csv covers the route-to-owner part.",
+  "diffReview": "Additions are documentation, a manifest, a read-only validator, generated reports, two package scripts and two CI steps. No Projects behavior changed. The CI steps are blocking and will fail on any later drift until the manifest is deliberately updated.",
+  "evidencePath": "reports/antas/projects/prj-01-dependency-scan.json",
+  "openItemsForRakib": [
+    "Decide what to do about the shadowed GET /projects/mine/enrolled-entities: the frontend calls it. Fixing it is a behavior change and is outside PRJ-01.",
+    "Resolve the lockfile/overrides mismatch so PRJ-00's baseline can run; Finance's own WP-8/WP-9 block still gates PRJ-04.",
+    "Scope for PRJ-03 and PRJ-05: the parallel writers (ai-actions, teams, bulk, entities, services/sync) are not in the roadmap and need an owner."
+  ],
+  "nextSafeStep": "PRJ-02: extract dates (application/dates.ts and a dates repository serving both routes/project-dates.ts and lib/airdrop-reminder-cron.ts), keeping routes/project-dates.ts as a pure adapter and keeping `pnpm validate:projects-boundaries` green."
+}

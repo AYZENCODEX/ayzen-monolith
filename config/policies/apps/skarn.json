@@ -1,0 +1,6 @@
+{
+  "app": "skarn",
+  "roles": { "member": ["workflow.read"], "owner": ["workflow.read", "workflow.execute", "workflow.manage"] },
+  "resources": ["workflow", "scheduler"],
+  "defaultDeny": true
+}

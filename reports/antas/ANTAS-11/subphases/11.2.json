@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-11.2",
+  "phase": "ANTAS-11",
+  "name": "Critical Path Coverage",
+  "generatedAt": "2026-09-29T06:06:06.718Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "tests/security/backbone-security.test.mjs",
+    "tests/restore/restore-evidence.test.mjs"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}

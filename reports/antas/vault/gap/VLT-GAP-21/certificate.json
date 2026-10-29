@@ -1,0 +1,18 @@
+{
+  "status": "FAIL",
+  "source_of_truth_verified": false,
+  "all_required_validators_executed": true,
+  "extraction_proof": true,
+  "route_thinness_proof": true,
+  "duplicate_business_implementations": 0,
+  "unexpected_legacy_consumers": 0,
+  "forbidden_imports": 0,
+  "behavior_regressions": 0,
+  "security_regressions": 0,
+  "crypto_compatibility_failures": 0,
+  "backup_restore_failures": 0,
+  "snapshot_restore_failures": 0,
+  "runtime_failures": 0,
+  "performance_regressions": 0,
+  "validator_bypass_test": "FAIL"
+}

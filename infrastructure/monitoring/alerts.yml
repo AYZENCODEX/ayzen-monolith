@@ -1,0 +1,51 @@
+groups:
+  - name: ayzen-platform
+    rules:
+      - alert: AyzenGatewayErrors
+        expr: rate(gateway_errors_total[5m]) > 0.05
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: AYZEN gateway errors are elevated
+          runbook: docs/operations/production-runbook.md
+      - alert: AyzenGatewayTimeouts
+        expr: rate(gateway_timeouts_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: AYZEN gateway upstream timeouts detected
+          runbook: docs/operations/production-runbook.md
+      - alert: AyzenServiceFailures
+        expr: service_responses_5xx_total > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: An AYZEN service is returning server errors
+          runbook: docs/operations/production-runbook.md
+      - alert: AyzenServiceReadinessFailed
+        expr: probe_success{job="ayzen-services"} == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: An AYZEN service is not ready
+          runbook: docs/operations/production-runbook.md
+      - alert: AyzenWorkerQueueGrowing
+        expr: service_queue_depth > 100
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: AYZEN worker queue depth is growing
+          runbook: docs/operations/production-runbook.md
+      - alert: AyzenEventDeadLetters
+        expr: service_dead_letters > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: AYZEN event dead letters require review
+          runbook: docs/operations/production-runbook.md

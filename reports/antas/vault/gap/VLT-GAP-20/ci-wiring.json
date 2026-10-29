@@ -1,0 +1,47 @@
+{
+  "gap": "VLT-GAP-20",
+  "sub_phase": "VLT-GAP-20-C",
+  "checked_at": "2026-10-12T17:33:36.528Z",
+  "validator_version": "20-C.1",
+  "commit_sha": "333a63e2ad27bd2d9758e1c3f3fd7788623331ab",
+  "commit_binding": "git-head",
+  "source_tree_sha256": "50de3e6cf8a34efd870b5f6a38277319dc544f3f899bf9913fe3b9a2f03e0652",
+  "package_scripts": {
+    "validate:vault-perf": "node scripts/antas/vault/gap/validate-vlt-gap-20-B.mjs",
+    "validate:vault-perf:ci-wiring": "node scripts/antas/vault/gap/validate-vlt-gap-20-C.mjs",
+    "validate:vault-perf:gate": "node scripts/antas/vault/gap/validate-vlt-gap-20-D.mjs"
+  },
+  "capture_script_not_in_ci": true,
+  "workflows": {
+    ".github/workflows/ci.yml": {
+      "validate:vault-perf": {
+        "line": 66,
+        "job": "validation"
+      },
+      "validate:vault-perf:ci-wiring": {
+        "line": 67,
+        "job": "validation"
+      },
+      "validate:vault-perf:gate": {
+        "line": 68,
+        "job": "validation"
+      }
+    },
+    "ci/enforcement-pipeline.yml": {
+      "validate:vault-perf": {
+        "line": 47,
+        "job": "blocking-gates"
+      },
+      "validate:vault-perf:ci-wiring": {
+        "line": 48,
+        "job": "blocking-gates"
+      },
+      "validate:vault-perf:gate": {
+        "line": 49,
+        "job": "blocking-gates"
+      }
+    }
+  },
+  "errors": [],
+  "status": "PASS"
+}

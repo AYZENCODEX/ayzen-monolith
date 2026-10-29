@@ -1,0 +1,201 @@
+import { db, vaultEntriesTable, vaultEntityLinksTable } from "@workspace/db";
+import { eq, and, or, inArray, sql } from "drizzle-orm";
+import {
+  INVERSE_RELATION,
+  RELATION_TYPES,
+  isRelationType,
+  labelFor,
+  type RelationType,
+} from "../../domain/entity-links";
+
+/**
+ * Vault Entity Relationship Linking — application owner.
+ *
+ * Extracted from routes/vault-entity-links.ts (VLT-GAP-01-B). The decision
+ * trees, SQL, status codes and response bodies are moved unchanged; each
+ * operation returns the {status, body} the route used to write to `res`.
+ */
+
+export interface LinkResult { status: number; body: unknown }
+
+export async function ownsEntity(id: number, userId: number): Promise<Record<string, unknown> | null> {
+  const rows = await db.select({
+    id: vaultEntriesTable.id,
+    projectName: vaultEntriesTable.projectName,
+    username: vaultEntriesTable.username,
+    category: vaultEntriesTable.category,
+    entitySerial: vaultEntriesTable.entitySerial,
+    status: vaultEntriesTable.status,
+  }).from(vaultEntriesTable).where(and(
+    eq(vaultEntriesTable.id, id),
+    eq(vaultEntriesTable.userId, userId),
+    sql`${vaultEntriesTable.deletedAt} IS NULL`,
+  ));
+  return (rows[0] as unknown as Record<string, unknown>) ?? null;
+}
+
+// GET /vault/:id/links — all links involving this entity, either direction
+export async function listEntityLinks(userId: number, idParam: string | string[]): Promise<LinkResult> {
+  const id = parseInt(Array.isArray(idParam) ? idParam[0] : idParam, 10);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid entity id" } };
+
+  const entity = await ownsEntity(id, userId);
+  if (!entity) return { status: 404, body: { error: "Vault entry not found" } };
+
+  try {
+    const links = await db.select().from(vaultEntityLinksTable).where(
+      and(
+        eq(vaultEntityLinksTable.userId, userId),
+        or(eq(vaultEntityLinksTable.entityId, id), eq(vaultEntityLinksTable.linkedEntityId, id))
+      )
+    );
+
+    const counterpartIds = Array.from(new Set(
+      links.map(l => (l.entityId === id ? l.linkedEntityId : l.entityId))
+    ));
+    const counterparts = counterpartIds.length
+      ? await db.select({
+          id: vaultEntriesTable.id,
+          projectName: vaultEntriesTable.projectName,
+          username: vaultEntriesTable.username,
+          category: vaultEntriesTable.category,
+          status: vaultEntriesTable.status,
+        }).from(vaultEntriesTable).where(and(eq(vaultEntriesTable.userId, userId), inArray(vaultEntriesTable.id, counterpartIds)))
+      : [];
+    const byId = new Map(counterparts.map(c => [c.id, c]));
+
+    return {
+      status: 200,
+      body: links.map(l => {
+        const isForward = l.entityId === id;
+        const counterpartId = isForward ? l.linkedEntityId : l.entityId;
+        const counterpart = byId.get(counterpartId);
+        return {
+          id: l.id,
+          relationType: isForward ? l.relationType : INVERSE_RELATION[l.relationType as RelationType] ?? l.relationType,
+          note: l.note,
+          createdAt: l.createdAt,
+          entity: { id, ...entity },
+          linkedEntity: counterpart
+            ? { id: counterpart.id, projectName: counterpart.projectName, username: counterpart.username, category: counterpart.category, status: counterpart.status, label: labelFor(counterpart) }
+            : { id: counterpartId, label: "Deleted entity" },
+        };
+      }),
+    };
+  } catch (err: any) {
+    return { status: 500, body: { error: "Failed to fetch linked entities", detail: err?.message } };
+  }
+}
+
+// POST /vault-entity-links — create a link between two owned entities
+// body: { entityId, linkedEntityId, relationType, note? }
+export async function createEntityLink(userId: number, reqBody: any): Promise<LinkResult> {
+  const entityId = parseInt(reqBody.entityId, 10);
+  const linkedEntityId = parseInt(reqBody.linkedEntityId, 10);
+  const { relationType, note } = reqBody;
+
+  if (isNaN(entityId) || isNaN(linkedEntityId)) return { status: 400, body: { error: "entityId and linkedEntityId are required" } };
+  if (entityId === linkedEntityId) return { status: 400, body: { error: "An entity can't be linked to itself" } };
+  if (!isRelationType(relationType)) return { status: 400, body: { error: `relationType must be one of: ${RELATION_TYPES.join(", ")}` } };
+
+  const [entity, linkedEntity] = await Promise.all([ownsEntity(entityId, userId), ownsEntity(linkedEntityId, userId)]);
+  if (!entity) return { status: 404, body: { error: "entityId not found or not owned by you" } };
+  if (!linkedEntity) return { status: 404, body: { error: "linkedEntityId not found or not owned by you" } };
+
+  try {
+    // Duplicate check across both directions, so "A alt_of B" and re-adding
+    // "B main_of A" (its inverse) don't create two rows for the same fact.
+    const existing = await db.select().from(vaultEntityLinksTable).where(
+      and(
+        eq(vaultEntityLinksTable.userId, userId),
+        or(
+          and(eq(vaultEntityLinksTable.entityId, entityId), eq(vaultEntityLinksTable.linkedEntityId, linkedEntityId)),
+          and(eq(vaultEntityLinksTable.entityId, linkedEntityId), eq(vaultEntityLinksTable.linkedEntityId, entityId))
+        )
+      )
+    );
+    if (existing.some(l => l.relationType === relationType || l.relationType === INVERSE_RELATION[relationType])) {
+      return { status: 409, body: { error: "This relationship is already linked" } };
+    }
+
+    const [row] = await db.insert(vaultEntityLinksTable).values({
+      userId, entityId, linkedEntityId, relationType, note: note ? String(note).trim() || null : null,
+    }).returning();
+
+    return {
+      status: 201,
+      body: {
+        id: row.id,
+        relationType: row.relationType,
+        note: row.note,
+        createdAt: row.createdAt,
+        entity: { id: entityId, ...entity },
+        linkedEntity: { id: linkedEntityId, ...linkedEntity, label: labelFor(linkedEntity) },
+      },
+    };
+  } catch (err: any) {
+    return { status: 500, body: { error: "Failed to create link", detail: err?.message } };
+  }
+}
+
+// PATCH /vault-entity-links/:id — edit relationType/note
+export async function updateEntityLink(userId: number, idParam: string, reqBody: any): Promise<LinkResult> {
+  const id = parseInt(idParam, 10);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid link id" } };
+  const { relationType, note } = reqBody;
+  if (relationType !== undefined && !isRelationType(relationType)) return { status: 400, body: { error: `relationType must be one of: ${RELATION_TYPES.join(", ")}` } };
+
+  const updates: Partial<typeof vaultEntityLinksTable.$inferInsert> = {};
+  if (relationType !== undefined) updates.relationType = relationType;
+  if (note !== undefined) updates.note = note ? String(note).trim() || null : null;
+
+  try {
+    const [row] = await db.update(vaultEntityLinksTable).set(updates)
+      .where(and(eq(vaultEntityLinksTable.id, id), eq(vaultEntityLinksTable.userId, userId)))
+      .returning();
+    if (!row) return { status: 404, body: { error: "Link not found" } };
+    return { status: 200, body: { id: row.id, relationType: row.relationType, note: row.note, createdAt: row.createdAt } };
+  } catch (err: any) {
+    return { status: 500, body: { error: "Failed to update link", detail: err?.message } };
+  }
+}
+
+// DELETE /vault-entity-links/:id — remove a link
+export async function deleteEntityLink(userId: number, idParam: string): Promise<LinkResult> {
+  const id = parseInt(idParam, 10);
+  if (isNaN(id)) return { status: 400, body: { error: "Invalid link id" } };
+  try {
+    const result = await db.delete(vaultEntityLinksTable)
+      .where(and(eq(vaultEntityLinksTable.id, id), eq(vaultEntityLinksTable.userId, userId)))
+      .returning({ id: vaultEntityLinksTable.id });
+    if (!result.length) return { status: 404, body: { error: "Link not found" } };
+    return { status: 200, body: { success: true } };
+  } catch (err: any) {
+    return { status: 500, body: { error: "Failed to delete link", detail: err?.message } };
+  }
+}
+
+// GET /vault/links/all — every link across all of the user's entities.
+// Enriched rows (entity names + categories on both sides), no N+1.
+export async function listAllEntityLinks(userId: number): Promise<LinkResult> {
+  try {
+    const result = await db.execute(
+      // Raw SQL — the Drizzle ORM join API requires declared FKs which this
+      // table intentionally omits (see schema comment). Aliases disambiguate
+      // the two vault_entries joins.
+      sql.raw(`
+        SELECT vel.id, vel.entity_id, vel.linked_entity_id, vel.relation_type, vel.note, vel.created_at,
+               e1.project_name   AS entity_name,       e1.category AS entity_category,       e1.entity_serial,
+               e2.project_name   AS linked_entity_name, e2.category AS linked_entity_category, e2.entity_serial AS linked_entity_serial
+        FROM vault_entity_links vel
+        JOIN vault_entries e1 ON e1.id = vel.entity_id
+        JOIN vault_entries e2 ON e2.id = vel.linked_entity_id
+        WHERE vel.user_id = ${userId}
+        ORDER BY vel.created_at DESC
+      `)
+    );
+    return { status: 200, body: result.rows };
+  } catch (err: any) {
+    return { status: 500, body: { error: "Failed to fetch links", detail: err?.message } };
+  }
+}

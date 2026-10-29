@@ -1,0 +1,13 @@
+{
+  "failures": [],
+  "externalGates": [
+    {
+      "gate": "mutation testing",
+      "status": "UNVERIFIED"
+    },
+    {
+      "gate": "chaos test execution",
+      "status": "UNVERIFIED"
+    }
+  ]
+}

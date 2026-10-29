@@ -1,0 +1,7 @@
+{
+  "roadmap": "shared-platform-1-25",
+  "status": "READY",
+  "method": "scripts/validate-shared-platform-1-30.mjs",
+  "scope": ["boundaries", "registry", "event-fabric", "workflow", "scheduler", "notification", "policy", "identity", "config", "coordination", "quota", "health", "admin", "circuit"],
+  "note": "Generated certification evidence is refreshed by the phase 1–30 validator."
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "subphase": "ANTAS-09.2",
+  "phase": "ANTAS-09",
+  "name": "Error Sanitization",
+  "generatedAt": "2026-09-29T06:06:06.718Z",
+  "repositoryStatus": "PASS",
+  "runtimeStatus": "UNVERIFIED",
+  "productionStatus": "UNVERIFIED",
+  "requiredEvidence": [
+    "config/antas/api-policy.json",
+    "docs/antas/api/route-contracts.md"
+  ],
+  "missingEvidence": [],
+  "productionReady": false,
+  "rule": "Repository evidence does not establish runtime, staging, provider, or production behavior."
+}
