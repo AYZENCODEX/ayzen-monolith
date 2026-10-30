@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { usePlugins } from "@/hooks/use-plugins";
 import { useNavConfig, type DevNavTreeLeaf, type NavType } from "@/hooks/use-dev-nav";
 import { ModuleSidebar } from "@/components/layout/module-sidebar";
+import { AppsMenu } from "@/components/layout/apps-menu";
 import { resolveDevNavIcon } from "@/lib/dev-nav-icons";
 import {
   LayoutDashboard, Users, FolderGit2, CheckSquare, Fuel, Wallet, LayoutTemplate,
@@ -42,7 +43,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { getCurrentSubdomainApp, type SubdomainApp } from "@/lib/subdomain-app";
+import { getCurrentSubdomainApp, type SubdomainApp , getModuleForPath, getAllModules, moduleUrl } from "@/lib/subdomain-app";
 
 interface AppSidebarProps { onNavigate?: () => void; }
 
@@ -1551,6 +1552,42 @@ function filterEntryByPrefixes(entry: NavEntry, prefixes: string[]): NavEntry | 
   }
   return entryMatchesPrefixes(entry, prefixes) ? entry : null;
 }
+/**
+ * Module Shell Split S3: the inverse of filterGroupsBySubdomain - drops
+ * module-owned entries from the CENTRAL sidebar at render time (no nav
+ * rows are deleted; Sidebar Builder still shows the full tree). An entry
+ * is module-owned when every leaf href inside it resolves to a module via
+ * getModuleForPath; partially-owned entries keep their central-only leaves.
+ */
+export function filterGroupsOutOfModules(groups: NavGroup[]): NavGroup[] {
+  const collectHrefs = (e: NavEntry, acc: string[]) => {
+    if ("href" in e && e.href) acc.push(e.href);
+    if ("children" in e && e.children) for (const c of e.children) collectHrefs(c, acc);
+  };
+  const ownsAll = (e: NavEntry): boolean => {
+    const hrefs: string[] = [];
+    collectHrefs(e, hrefs);
+    if (hrefs.length === 0) return false;
+    return hrefs.every((h) => getModuleForPath(h) !== null);
+  };
+  const filterEntry = (e: NavEntry): NavEntry | null => {
+    if (ownsAll(e)) return null;
+    if ("children" in e && e.children) {
+      const kids = e.children.map(filterEntry).filter((k): k is NavEntry => k !== null);
+      if (kids.length === 0 && e.children.length > 0) return null;
+      return { ...e, children: kids } as NavEntry;
+    }
+    return e;
+  };
+  return groups
+    .map((g) => {
+      if (g.href && getModuleForPath(g.href) !== null && g.items.every((i) => ownsAll(i))) return null;
+      const items = g.items.map(filterEntry).filter((i): i is NavEntry => i !== null);
+      if (items.length === 0) return null;
+      return { ...g, items };
+    })
+    .filter((g): g is NavGroup => g !== null);
+}
 export function filterGroupsBySubdomain(groups: NavGroup[], app: SubdomainApp | null): NavGroup[] {
   if (!app) return groups;
   return groups
@@ -1882,7 +1919,17 @@ function CentralSidebar({ onNavigate }: AppSidebarProps = {}) {
     ? STATIC_NAV[navType]
     : navTreeToGroups(navTree);
   const groups = navType === "dev" ? [DEV_NAV_PINNED, ...dynamicGroups] : dynamicGroups;
-  const scopedGroups = filterGroupsBySubdomain(groups, getCurrentSubdomainApp());
+  // Module Shell Split S3: on the central domain (no scoped app) and with
+  // VITE_CENTRAL_LAUNCHER on, module-owned groups are filtered OUT of the
+  // render (no rows deleted) and the AYZEN apps menu is pinned at the top.
+  // Flag default off so the old central sidebar stays reachable until S8.
+  const centralLauncher = String(import.meta.env.VITE_CENTRAL_LAUNCHER ?? "") === "on";
+  const scopedAppNow = getCurrentSubdomainApp();
+  const scopedGroups = scopedAppNow
+    ? filterGroupsBySubdomain(groups, scopedAppNow)
+    : centralLauncher
+      ? filterGroupsOutOfModules(groups)
+      : groups;
 
   const openSearch = () => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true }));
   const openShortcuts = () => document.dispatchEvent(new KeyboardEvent("keydown", { key: "?", bubbles: true }));
@@ -1912,19 +1959,18 @@ function CentralSidebar({ onNavigate }: AppSidebarProps = {}) {
       {/* Profile quick-access at top — click to expand settings/system links */}
       <ProfileQuickAccess user={user} logout={logout} navigate={navigate} onNavigate={onNavigate} />
 
+      {/* Module Shell Split S3: central AYZEN apps launcher (flag-gated) */}
+      {!scopedAppNow && centralLauncher && <AppsMenu />}
+
       {/* Nav groups */}
       <div className="flex-1 overflow-y-auto py-2 space-y-1">
         {scopedGroups.map(group => (
           <NavGroupComp key={group.label} group={group} location={location} search={search} isEnabled={isEnabled} onNavigate={onNavigate} />
         ))}
 
-        {/* Admin-only: dynamic project list sidebar section — not part of
-            Sylo's scope (it's project/airdrop-farming data, not vault),
-            so hide it on a scoped subdomain the same way scopedGroups
-            already hides the static Projects nav group. */}
-        {(isAdmin || isDev) && !getCurrentSubdomainApp() && (
-          <AdminProjectsSidebarSection onNavigate={onNavigate} location={location} />
-        )}
+        {/* Module Shell Split S3: AdminProjectsSidebarSection removed from
+            the central sidebar — it lives in Skarn's module sidebar since
+            Season 2 (project/airdrop-farming data belongs to Skarn). */}
 
       </div>
 
