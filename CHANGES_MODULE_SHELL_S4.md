@@ -38,3 +38,9 @@ Central sidebar visuals (CentralSidebar body unchanged), routes, auth, vault-sid
 ## Rollback
 Revert app-sidebar.tsx and app-layout.tsx; delete module-sidebar.tsx. Single commit.
 
+
+---
+
+## S4 shipped
+
+Collapsible sidebars (icon rail): new useSidebarCollapsed(scopeKey) hook (localStorage per scope, [ shortcut), 4rem desktop rail with tooltips and group-header-click expand, motion-reduce safe, mobile drawer unchanged. Files: artifacts/ayzen/src/hooks/use-sidebar-collapsed.ts, module-sidebar.tsx, app-sidebar.tsx. Typecheck 164 pre-existing errors, zero in touched files. Build passes. Rollback: remove hook usage.
