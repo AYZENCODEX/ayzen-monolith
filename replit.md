@@ -124,3 +124,6 @@ per-gate evidence under `reports/antas/vault/`, and
 `reports/antas/vault/FINAL-CERTIFICATION.json`. Repository/static compatibility
 gates can pass without claiming provider-backed staging or production behavior;
 those drills must be recorded separately when an environment is available.
+## Module Shell Split (Seasons 1-8, 2026-10-31)
+
+One SPA on all hosts. Module registry: artifacts/ayzen/src/lib/subdomain-app.ts (frontend) + artifacts/api-server/src/lib/shared-apps.ts (backend), parity-checked by scripts/src/check-module-registry.mjs (blocking in CI). Module hosts render ModuleSidebar (back link + module-only nav + collapsible rail); central renders the existing sidebar plus the AYZEN apps launcher (VITE_CENTRAL_LAUNCHER). Cross-module links use components/module-link.tsx. Central->module redirects behind VITE_SPLIT_REDIRECTS / VITE_SPLIT_REDIRECT_MODULES (kill switch kept). 8 modules: sylo (vault), skarn (projects), warde (teams), wisp (mailbox), ryft (wallet), fyra (finance), verve (marketplace), zynth (assistant). QA matrix: docs/module-shell-qa.md.

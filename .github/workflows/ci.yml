@@ -10,10 +10,8 @@ permissions:
 
 jobs:
   module-registry-parity:
-    # Module Shell Split, Season 1: frontend/backend module registry parity.
-    # Non-blocking warning first (roadmap rule), can be made blocking later.
+    # Module Shell Split, Season 8: registry drift BLOCKS CI now (was warning-only in S1).
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
