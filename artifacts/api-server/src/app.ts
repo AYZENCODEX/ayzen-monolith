@@ -299,6 +299,35 @@ const SPLIT_APP_HOME_BY_HOST = new Map<string, string>(
   SPLIT_APP_HOST_CONFIG.flatMap((c) => c.hosts.map((h) => [h, c.homePath] as const)),
 );
 
+// Module Shell Split - Season 6: optional server-side central -> module
+// 308 redirect for non-API requests on the central host when
+// SPLIT_REDIRECTS=1. Never for /api. Per-module rollout via
+// SPLIT_REDIRECT_MODULES (comma list). Public token pages and the OIDC
+// callback are exempt. getSharedAppForHost returns null on the central
+// host, so module hosts never loop back to central (module hosts fall
+// through to static serving below). /nft-marketplace lands on verve.
+const SPLIT_REDIRECTS = process.env.SPLIT_REDIRECTS === "1";
+const SPLIT_REDIRECT_MODULES = (process.env.SPLIT_REDIRECT_MODULES ?? "")
+  .split(",").map((m) => m.trim().toLowerCase()).filter(Boolean);
+const PUBLIC_TOKEN_PREFIXES = ["/login", "/register", "/forgot-password", "/status",
+  "/emergency-access", "/finance/receipt", "/finance/invoice", "/finance/payment-agreement",
+  "/receipt", "/oidc/callback"];
+if (SPLIT_REDIRECTS) {
+  const byId = new Map(SHARED_APP_DEFINITIONS.map((d) => [d.id, d] as const));
+  app.get("/{*splat}", (req, res, next) => {
+    if (req.path.startsWith("/api")) return next();
+    const pathOnly = req.path.split("?")[0];
+    if (PUBLIC_TOKEN_PREFIXES.some((p) => pathOnly === p || pathOnly.startsWith(p + "/"))) return next();
+    const isLegacyNft = pathOnly === "/nft-marketplace";
+    const appDef = isLegacyNft ? byId.get("verve") : SHARED_APP_DEFINITIONS.find((d) =>
+      d.routePrefixes.some((p) => pathOnly === p || pathOnly.startsWith(p + "/")));
+    if (!appDef) return next();
+    if (!isLegacyNft && SPLIT_REDIRECT_MODULES.length > 0 && !SPLIT_REDIRECT_MODULES.includes(appDef.id)) return next();
+    const host = getSharedAppHosts(appDef)[0];
+    return res.redirect(308, `https://${host}${req.originalUrl}`);
+  });
+}
+
 if (process.env.NODE_ENV === "production") {
   const distPath = path.resolve(__dirname, "../../ayzen/dist/public");
   app.use(express.static(distPath));

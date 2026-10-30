@@ -190,7 +190,7 @@ const SUBDOMAIN_APPS: Record<string, Omit<SubdomainApp, "id">> = {
 // page (emergency access, receipts). None of these go through the
 // ProtectedRoute scope guard anyway (see App.tsx), but isPathInSubdomainScope
 // is kept accurate for anything that calls it directly in the future.
-const ALWAYS_ALLOWED_PREFIXES = [
+export const ALWAYS_ALLOWED_PREFIXES = [
   "/login", "/register", "/forgot-password", "/status",
   "/emergency-access", "/finance/receipt", "/finance/invoice",
   "/finance/payment-agreement", "/receipt",

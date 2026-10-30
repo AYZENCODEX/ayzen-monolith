@@ -24,7 +24,7 @@ import { ScrollToTop } from "@/components/scroll-to-top";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { ADMIN_ROUTES, USER_ROUTES } from "@/lib/route-config";
 import type { RouteConfig } from "@/lib/route-config";
-import { getCurrentSubdomainApp, isPathInSubdomainScope } from "@/lib/subdomain-app";
+import { getCurrentSubdomainApp, isPathInSubdomainScope, getModuleForPath, moduleUrl, ALWAYS_ALLOWED_PREFIXES } from "@/lib/subdomain-app";
 // OIDC Roadmap — Season 3, Phase 5b-a/5b-b.
 import { startSyloOidcLogin } from "@/lib/sylo-oidc-login";
 // OIDC Roadmap — Season 3, Phase 5c-c: dual-run gate — reads the same
@@ -89,6 +89,38 @@ function ProtectedRoute({
   // calling it here doesn't affect hook-ordering rules either way.
   const subdomainApp = getCurrentSubdomainApp();
 
+  // Module Shell Split — Season 6: central -> module redirects (flagged).
+  // On the CENTRAL domain (no scoped subdomain app), a URL that belongs to
+  // a module (ayzen.tech/vault/... -> sylo.ayzen.tech/vault/...) full-
+  // navigates there when VITE_SPLIT_REDIRECTS=1 and the module is enabled
+  // in VITE_SPLIT_REDIRECT_MODULES (comma list, e.g. "sylo,skarn" — a
+  // module not in the list stays in place). Path, query and hash are
+  // preserved. Public/token pages (ALWAYS_ALLOWED_PREFIXES: receipts,
+  // invoices, payment agreements, emergency access, OIDC callback) and
+  // auth pages NEVER redirect. /nft-marketplace maps to verve. window.
+  // location.replace() drops the central URL from history so Back never
+  // bounces the user into a redirect loop.
+  const splitRedirects = String(import.meta.env.VITE_SPLIT_REDIRECTS ?? "") === "1";
+  const splitRedirectModules = String(import.meta.env.VITE_SPLIT_REDIRECT_MODULES ?? "")
+    .split(",").map((m) => m.trim().toLowerCase()).filter(Boolean);
+  const splitTarget = !subdomainApp && splitRedirects
+    ? getModuleForPath(location.startsWith("/") ? location : "/" + location)
+    : null;
+  const splitAllowed = !!splitTarget && (splitRedirectModules.length === 0 || splitRedirectModules.includes(splitTarget));
+  const splitIsPublic = ALWAYS_ALLOWED_PREFIXES.some((p) => {
+    const path = location.split("?")[0];
+    return path === p || path.startsWith(p + "/");
+  });
+  const [splitRedirecting, setSplitRedirecting] = useState(false);
+  useEffect(() => {
+    if (!splitAllowed || splitIsPublic) return;
+    // /nft-marketplace legacy path lands on verve's marketplace
+    const legacy = location.split("?")[0] === "/nft-marketplace";
+    const id = legacy ? "verve" : splitTarget!;
+    setSplitRedirecting(true);
+    window.location.replace(moduleUrl(id, location));
+  }, [splitAllowed, splitIsPublic, splitTarget, location]);
+
   // OIDC Roadmap — Season 3, Phase 5c-c (dual-run gate, additive to 5b-a
   // below): BEFORE starting the OIDC redirect, ask the rollout flag
   // whether Sylo (or whichever app is scoped) is actually cut over yet.
@@ -144,6 +176,13 @@ function ProtectedRoute({
     void startSyloOidcLogin();
   }, [shouldStartOidcLogin, location]);
 
+  // S6: full-screen loader while a central -> module redirect is in flight.
+  if (splitRedirecting)
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
+        INITIALIZING...
+      </div>
+    );
   if (isLoading)
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
