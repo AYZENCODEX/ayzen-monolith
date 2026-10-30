@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { customFetch } from "@workspace/api-client-react";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 interface CalendarDate {
   id: number;
@@ -51,7 +52,7 @@ function countdown(iso: string): { text: string; urgent: boolean; past: boolean 
 }
 
 export default function AirdropCalendar() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [filter, setFilter] = useState<"mine" | "all">("mine");
 
   const { data, isLoading } = useQuery({

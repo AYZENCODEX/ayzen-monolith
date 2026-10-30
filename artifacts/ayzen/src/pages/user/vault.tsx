@@ -41,6 +41,7 @@ import { ShareEntityDialog, type ShareTarget } from "@/components/vault/share-en
 import { validateWalletKey, type WalletKeyValidationResult } from "@/lib/vault-key-validation-api";
 import { ManageSharesDialog } from "@/components/vault/manage-shares-dialog";
 import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const MAIL_BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -413,7 +414,7 @@ function EntityManager() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { token } = useAuth();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   // Lets the checkpoint intro below finish its own progress-to-100%
   // animation instead of being yanked off screen the instant isLoading
   // flips false.

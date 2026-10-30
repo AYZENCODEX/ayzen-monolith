@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ImapSmtpForm, detectProviderFromEmail, type EmailAccount } from "@/components/mail/imap-smtp-form";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -62,7 +63,7 @@ function CredRow({ label, value }: { label: string; value: string }) {
 }
 
 function OverviewMailRow({ email, account, token }: { email: string; account: EmailAccount | null; token: string | null }) {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [loading, setLoading] = useState(false);
   const [codes, setCodes] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -149,7 +150,7 @@ function MailCard({
   token: string | null;
   onRefresh: () => void;
 }) {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [expanded, setExpanded] = useState(false);
   const [configOpen, setConfigOpen] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);

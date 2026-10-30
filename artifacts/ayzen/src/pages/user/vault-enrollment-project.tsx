@@ -15,6 +15,7 @@ import { customFetch } from "@workspace/api-client-react";
 import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/vault-sidebar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 interface EnrolledProject {
   id: number;
@@ -39,7 +40,7 @@ const STATUS_ICON: Record<string, React.ElementType> = {
 };
 
 export default function VaultEnrollmentProject() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [projects, setProjects] = useState<EnrolledProject[]>([]);
   const [loading, setLoading] = useState(true);
 

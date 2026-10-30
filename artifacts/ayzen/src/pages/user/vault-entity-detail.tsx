@@ -34,6 +34,7 @@ import { Fuel } from "lucide-react";
 import { updateVaultField, getVaultFieldHistory, type VaultFieldHistoryEntry } from "@/lib/vault-field-api";
 import { ReceiptLinkDialog } from "@/components/receipt-link-dialog";
 import { vaultEntityReceiptApi } from "@/lib/receipt-api";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 type EntryAny = any;
 
@@ -325,7 +326,7 @@ export default function VaultEntityDetail() {
 
 function VaultEntityDetailContent() {
   const params = useParams<{ id: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const search = useSearch();
   const { data, isLoading } = useListVaultEntries();
   const deleteMutation = useDeleteVaultEntry();

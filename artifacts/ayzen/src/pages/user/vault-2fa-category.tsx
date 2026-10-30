@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { useToast } from "@/hooks/use-toast";
 import { TOTPCard } from "@/components/vault/totp-card";
 import { VaultSectionPage, CategoryTabBar } from "@/components/layout/vault-sidebar";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 type Category = "overview" | "kyc" | "local" | "entity" | "game" | "other";
 
@@ -157,7 +158,7 @@ function OtherTwoFaList() {
 
 // ─── Category → entity list (kyc / local / entity / game) ─────────────────────
 function EntityTwoFaList({ category }: { category: Exclude<Category, "overview" | "other"> }) {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { data: vaultData, isLoading: vaultLoading } = useListVaultEntries();
   const [raw, setRaw] = useState<any[]>([]);
   const [loading, setLoading] = useState(category !== "entity");
@@ -213,7 +214,7 @@ function EntityTwoFaList({ category }: { category: Exclude<Category, "overview" 
 
 // ─── Overview (roll-up of entity / local / kyc / game) ────────────────────────
 function OverviewTwoFaList() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { data: vaultData, isLoading: vaultLoading } = useListVaultEntries();
   const [localRaw, setLocalRaw] = useState<any[]>([]);
   const [kycRaw, setKycRaw] = useState<any[]>([]);

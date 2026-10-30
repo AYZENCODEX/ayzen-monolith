@@ -4,6 +4,7 @@ import { useListVaultEntries, customFetch } from "@workspace/api-client-react";
 import { ArrowLeft, Shield, Smartphone, ShieldCheck, Gamepad2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TOTPCard } from "@/components/vault/totp-card";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 type Category = "kyc" | "local" | "entity" | "game";
 
@@ -18,7 +19,7 @@ interface TotpItem { id: string; label: string; issuer: string; secret: string; 
 
 export default function VaultTwoFaEntity() {
   const params = useParams<{ category: string; id: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const category = (params.category as Category) ?? "entity";
   const id = Number(params.id);
   const meta = CATEGORY_META[category] ?? CATEGORY_META.entity;

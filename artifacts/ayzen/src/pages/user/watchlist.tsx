@@ -9,6 +9,7 @@ import {
   Bookmark, BookmarkX, Loader2, FolderOpen, ExternalLink,
   CheckSquare, Zap, ChevronRight, Star,
 } from "lucide-react";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -37,7 +38,7 @@ const STATUS_COLORS: Record<string, string> = {
 export default function WatchlistPage() {
   const { token } = useAuth() as any;
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
+  const setLocation = useModuleAwareNavigate();
   const [items, setItems] = useState<WatchProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [removing, setRemoving] = useState<Set<number>>(new Set());

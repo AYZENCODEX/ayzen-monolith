@@ -14,6 +14,7 @@ import { useListVaultEntries, customFetch } from "@workspace/api-client-react";
 import { ArrowLeft, Shield, Smartphone, ShieldCheck, Gamepad2, Loader2, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { splitCodes } from "@/pages/user/vault-backup";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 type Category = "kyc" | "local" | "entity" | "game";
 
@@ -64,7 +65,7 @@ function CodeGroupCard({ group }: { group: CodeGroup }) {
 
 export default function VaultBackupEntity() {
   const params = useParams<{ category: string; id: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const category = (params.category as Category) ?? "entity";
   const id = Number(params.id);
   const meta = CATEGORY_META[category] ?? CATEGORY_META.entity;

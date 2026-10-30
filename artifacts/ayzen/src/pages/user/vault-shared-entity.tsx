@@ -24,10 +24,11 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import type { SharedEntry } from "./vault-shared";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 export default function VaultSharedEntity() {
   const { entityType, entityId } = useParams<{ entityType: string; entityId: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [allShares, setAllShares] = useState<SharedEntry[]>([]);
   const [shares, setShares] = useState<SharedEntry[]>([]);
   const [loading, setLoading] = useState(true);

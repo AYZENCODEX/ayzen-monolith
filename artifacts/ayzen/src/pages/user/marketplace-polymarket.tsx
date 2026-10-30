@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 
 import { POLYMARKET_STATUS_COLOR } from "@/config/marketplace";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -73,7 +74,7 @@ function parseTokenIds(m: GammaMarket): { yes: string | null; no: string | null 
 
 export default function MarketplacePolymarket() {
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
+  const setLocation = useModuleAwareNavigate();
   const rawSearch = useSearch();
   const tabParam = new URLSearchParams(rawSearch.startsWith("?") ? rawSearch.slice(1) : rawSearch).get("tab") as PolyTab | null;
   const activeTab: PolyTab = TABS.some(t => t.id === tabParam) ? (tabParam as PolyTab) : "overview";

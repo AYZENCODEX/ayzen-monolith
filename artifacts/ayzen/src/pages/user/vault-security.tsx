@@ -42,6 +42,7 @@ import { requestVaultPinSetupCode, setVaultPin, setAuthStepPolicy } from "@/lib/
 import { lockVault, lockEntityView, VAULT_UNLOCK_HOURS } from "@/lib/vault-lock";
 import { listPasskeys, registerPasskey, renamePasskey, deletePasskey, browserSupportsWebAuthn, type PasskeySummary } from "@/lib/passkey-api";
 import { ApiError } from "@workspace/api-client-react";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const MIN_VAULT_PASSWORD_LENGTH = 8;
 
@@ -67,7 +68,7 @@ export default function VaultSecurity() {
   const [vaultPinSetupOpen, setVaultPinSetupOpen] = useState(false);
   const { toast } = useToast();
   const { token, user } = useAuth() as any;
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const vaultPinPrompt = useVaultPinPrompt();
 
   const refresh = () => {

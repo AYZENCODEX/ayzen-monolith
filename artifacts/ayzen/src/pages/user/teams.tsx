@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { ImapSmtpForm, detectProviderFromEmail, type EmailAccount } from "@/components/mail/imap-smtp-form";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 type Team = { id: number; name: string; description?: string; owner_id: number; member_count: number; member_role: string; status: string; created_at: string };
 type Member = { id: number; user_id: number; team_id: number; role: string; status: string; username: string; email: string; joined_at: string; total_roi?: number; streak?: number };
@@ -1718,7 +1719,7 @@ export default function TeamsPage() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<TeamDetail | null>(null);
   const search = useSearch();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const VALID_TABS: Tab[] = ["dashboard", "members", "vault", "missions", "tasks", "leaderboard", "projects", "chat", "panel", "browse", "invite"];
   const urlTab = new URLSearchParams(search).get("tab") as Tab | null;
   const [tab, setTabState] = useState<Tab>(urlTab && VALID_TABS.includes(urlTab) ? urlTab : "dashboard");

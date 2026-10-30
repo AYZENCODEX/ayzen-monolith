@@ -24,6 +24,7 @@ import { SchemaForm } from "@/components/schema/SchemaForm";
 import { KYC_DATA_FIELDS } from "@/config/fields/kyc-data-create";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 export interface DataEntity {
   id: number;
@@ -91,7 +92,7 @@ function CreateDataEntityDialog({ open, onClose, onSaved }: { open: boolean; onC
 }
 
 export default function VaultKycDataList({ mode }: { mode: "overview" | "used" | "unused" }) {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [entities, setEntities] = useState<DataEntity[]>([]);
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);

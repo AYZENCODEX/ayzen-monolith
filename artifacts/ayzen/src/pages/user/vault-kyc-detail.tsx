@@ -18,6 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { KycEntry } from "@/components/kyc-entries";
 import { KycDialog } from "@/components/kyc-entries";
 import { TOTPCard } from "@/components/vault/totp-card";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 // Access dialog tabs — same 2FA/Mail/Backup split as vault-entity-access.tsx,
 // scoped to this KYC entity's own fields only. Mail is deliberately just the
@@ -133,7 +134,7 @@ function InfoRow({ label, value }: { label: string; value: string | null | undef
 
 export default function VaultKycDetail() {
   const params = useParams<{ id: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { toast } = useToast();
 
   const [entry, setEntry] = useState<KycEntry | null>(null);

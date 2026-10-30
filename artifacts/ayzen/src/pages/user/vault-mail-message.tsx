@@ -3,6 +3,7 @@ import { useParams, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Mail, Loader2, ChevronLeft, AlertCircle, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -15,7 +16,7 @@ function extractVerificationCodes(text: string): string[] {
 // ─── Full-page single email view ───────────────────────────────────────────────
 export default function VaultMailMessage() {
   const params = useParams<{ accountId: string; seqno: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { token } = useAuth();
 
   const [msg, setMsg] = useState<InboxBody | null>(null);

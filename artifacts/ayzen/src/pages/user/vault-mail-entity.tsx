@@ -12,6 +12,7 @@ import {
   buildEntityMailItems, buildLocalMailItems, buildKycMailItems, buildGameMailItems,
   type MailCategory, type MailItem,
 } from "@/lib/vault-mail-items";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -31,7 +32,7 @@ interface EmailAccountLite { id: number; emailAddress: string; imapHost: string 
 
 export default function VaultMailEntity() {
   const params = useParams<{ category: string; id: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const category = (params.category as MailCategory) ?? "entity";
   const id = Number(params.id);
   const meta = CATEGORY_META[category] ?? CATEGORY_META.entity;
@@ -80,7 +81,7 @@ function MailEntityName({ category, id, fallback }: { category: MailCategory; id
  * Mail tab (always called with category="entity").
  */
 export function VaultMailEntityBody({ category, id }: { category: MailCategory; id: number }) {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { token } = useAuth();
 
   const [tab, setTab] = useState<"overview" | "email">("overview");

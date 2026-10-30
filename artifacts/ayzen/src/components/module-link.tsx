@@ -51,14 +51,15 @@ export function ModuleLink({ href, className, children, onNavigate }: {
 export function useModuleNavigate() {
   const [, baseNavigate] = useLocation();
   const current = getCurrentSubdomainApp();
-  return useCallback((href: string) => {
+  return useCallback((href: string, opts?: { replace?: boolean }) => {
     const targetId = getModuleForPath(href);
     const crossOrigin = targetId !== null && targetId !== (current ? current.id : null);
     if (crossOrigin && targetId) {
-      window.location.assign(moduleUrl(targetId, href));
+      if (opts && opts.replace) window.location.replace(moduleUrl(targetId, href));
+      else window.location.assign(moduleUrl(targetId, href));
       return;
     }
-    baseNavigate(href);
+    baseNavigate(href, opts);
   }, [baseNavigate, current ? current.id : null]);
 }
 
@@ -67,4 +68,18 @@ export function isCrossModule(href: string): boolean {
   const current = getCurrentSubdomainApp();
   const targetId = getModuleForPath(href);
   return targetId !== null && targetId !== (current ? current.id : null);
+}
+/** Drop-in for const [, navigate] = useLocation() in pages: same wouter navigate for in-scope/central paths, full navigation across module origins. */
+export function useModuleAwareNavigate() {
+  const [, baseNavigate] = useLocation();
+  const current = getCurrentSubdomainApp();
+  return useCallback((href: string, opts?: { replace?: boolean }) => {
+    const targetId = getModuleForPath(href);
+    if (targetId !== null && targetId !== (current ? current.id : null)) {
+      if (opts && opts.replace) window.location.replace(moduleUrl(targetId, href));
+      else window.location.assign(moduleUrl(targetId, href));
+      return;
+    }
+    baseNavigate(href, opts);
+  }, [baseNavigate, current ? current.id : null]);
 }

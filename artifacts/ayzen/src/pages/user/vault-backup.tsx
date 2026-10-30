@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { VaultSectionPage, VaultSectionEmptyState, CategoryTabBar } from "@/components/layout/vault-sidebar";
 import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 // ─── Copy button + entity-scoped backup detail — kept exported for
 // vault-entity-access.tsx's "Backup" tab, which reuses this exact view
@@ -140,7 +141,7 @@ function computeRows(category: Exclude<Category, "overview">, vaultData: any[], 
 
 // ─── Category → account list (kyc / local / entity / game) ────────────────────
 function EntityBackupList({ category }: { category: Exclude<Category, "overview"> }) {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { data: vaultData, isLoading: vaultLoading } = useListVaultEntries();
   const [raw, setRaw] = useState<any[]>([]);
   const [loading, setLoading] = useState(category !== "entity");
@@ -196,7 +197,7 @@ function EntityBackupList({ category }: { category: Exclude<Category, "overview"
 
 // ─── Overview (roll-up of entity / local / kyc / game) ────────────────────────
 function OverviewBackupList() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { data: vaultData, isLoading: vaultLoading } = useListVaultEntries();
   const [localRaw, setLocalRaw] = useState<any[]>([]);
   const [kycRaw, setKycRaw] = useState<any[]>([]);

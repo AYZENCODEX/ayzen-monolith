@@ -27,6 +27,7 @@ import { EntityPinGate } from "@/components/vault/entity-pin-gate";
 import { HealthChecklistCard, HealthScoreBadge } from "@/components/vault/health-checklist";
 import { LOCAL_ACCOUNT_HEALTH_CHECKS } from "@/config/columns/entity-view";
 import { ImapSmtpForm, type EmailAccount } from "@/components/mail/imap-smtp-form";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const MAIL_BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -139,7 +140,7 @@ export default function VaultLocalDetail() {
 
 function VaultLocalDetailContent() {
   const params = useParams<{ id: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { toast } = useToast();
   const { token } = useAuth() as any;
 

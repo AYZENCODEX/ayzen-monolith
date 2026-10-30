@@ -35,6 +35,7 @@ import {
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { RichTextEditor, textToHtml, type RichTextEditorHandle } from "@/components/mail/rich-text-editor";
 import { LabelChip, LabelDot, ColorSwatch, AYZEN_LABEL_COLORS, type AyzenLabelColor, type MailLabel } from "@/components/mail/label-badge";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -2571,7 +2572,7 @@ function FilterChip({
 // ─── Main mailbox page ──────────────────────────────────────────────────────
 export default function Mailbox() {
   const params = useParams<{ id?: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { token } = useAuth();
   const { toast } = useToast();
 

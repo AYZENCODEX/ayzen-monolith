@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 type Status = "loading" | "loaded" | "error";
 
@@ -65,7 +66,7 @@ export default function FinanceInvoicePublic() {
   const { token } = useParams<{ token: string }>();
   const { token: authToken, user } = useAuth();
   const { toast } = useToast();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [status, setStatus] = useState<Status>("loading");
   const [errorMessage, setErrorMessage] = useState("");
   const [invoice, setInvoice] = useState<PublicInvoice | null>(null);

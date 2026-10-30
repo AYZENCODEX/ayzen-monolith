@@ -15,6 +15,7 @@ import { getSyloOidcRolloutFlag } from "@/lib/sylo-oidc-rollout-flag";
 import { startSyloOidcLogin } from "@/lib/sylo-oidc-login";
 
 import { getApiBase } from "@/lib/api-base";
+import { useModuleAwareNavigate } from "@/components/module-link";
 const BASE = getApiBase();
 
 
@@ -59,7 +60,7 @@ function makeCaptcha() {
 }
 
 export default function Login() {
-  const [, setLocation] = useLocation();
+  const setLocation = useModuleAwareNavigate();
   const { login: setAuthContext, accounts, switchAccount, removeAccount, user: authedUser } = useAuth() as any;
   const { toast } = useToast();
 

@@ -20,6 +20,7 @@ import { ShareEntityDialog, type ShareTarget } from "@/components/vault/share-en
 import { ManageSharesDialog } from "@/components/vault/manage-shares-dialog";
 import { ImapSmtpForm, type EmailAccount } from "@/components/mail/imap-smtp-form";
 import { DataEntityPicker } from "@/components/vault/data-entity-picker";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const MAIL_BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -441,7 +442,7 @@ function KycDialogInner({ open, editEntry, onClose, onSaved }: {
 
 // ─── Main list ───────────────────────────────────────────────────────────────
 export default function KycEntries() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [entries, setEntries] = useState<KycEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");

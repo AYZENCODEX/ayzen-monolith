@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -42,7 +43,7 @@ function formatDate(dateStr: string) {
 // ─── Full-page mailbox: lists messages for one configured account ─────────────
 export default function VaultMailInbox() {
   const params = useParams<{ accountId: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { token } = useAuth();
 
   const [account, setAccount] = useState<EmailAccount | null>(null);

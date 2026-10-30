@@ -32,6 +32,7 @@ import { useToast } from "@/hooks/use-toast";
 import { SchemaForm } from "@/components/schema/SchemaForm";
 import { ENTITY_FIELDS, ACCOUNT_SUBTABS } from "@/config/fields/entity-create";
 import { DataEntityPicker } from "@/components/vault/data-entity-picker";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -587,7 +588,7 @@ export function OthersEntitiesTab({ onSelect }: { onSelect?: (vaultEntryId: numb
 export default function ProjectEntitiesPage() {
   const authedFetch = useAuthedFetch();
   const search = useSearch();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [projects, setProjects] = useState<EnrolledProjectSummary[]>([]);
   const [loading, setLoading] = useState(true);
 

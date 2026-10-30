@@ -9,6 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { KYC_CATEGORIES, getKycCategoryMeta, KYC_CATEGORY_ICON } from "@/config/vault-kyc";
 import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 // Same shape as components/kyc-entries.tsx's KycEntry — kept narrow here to
 // only the fields the dashboard actually reads.
@@ -175,7 +176,7 @@ function OverviewTab({ entries, onSelectCategory }: { entries: KycEntryRow[]; on
 
 // ─── Category Tab ───────────────────────────────────────────────────────────
 function CategoryTab({ entries, selected, onSelectedChange }: { entries: KycEntryRow[]; selected: string; onSelectedChange: (cat: string) => void }) {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const cats = [...new Set(entries.map(e => e.category))].sort();
 
   useEffect(() => {

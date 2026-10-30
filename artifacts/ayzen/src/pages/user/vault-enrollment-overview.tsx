@@ -16,6 +16,7 @@ import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/va
 import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 type EntryAny = any;
 
@@ -28,7 +29,7 @@ interface LeaderboardRow {
 }
 
 export default function VaultEnrollmentOverview() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { data, isLoading } = useListVaultEntries();
   const entries: EntryAny[] = (data as EntryAny[] | undefined) ?? [];
   const [lb, setLb] = useState<LeaderboardRow[]>([]);

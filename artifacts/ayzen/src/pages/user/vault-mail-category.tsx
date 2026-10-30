@@ -7,6 +7,7 @@ import {
   groupByEntity, type MailCategory,
 } from "@/lib/vault-mail-items";
 import { VaultSectionPage } from "@/components/layout/vault-sidebar";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const CATEGORY_META: Record<MailCategory, { label: string; icon: React.ElementType; desc: string }> = {
   kyc:    { label: "KYC",    icon: ShieldCheck, desc: "Emails from KYC entities" },
@@ -17,7 +18,7 @@ const CATEGORY_META: Record<MailCategory, { label: string; icon: React.ElementTy
 
 export default function VaultMailCategory() {
   const params = useParams<{ category: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   // Guard against an unknown/stale category (e.g. a leftover "account" link)
   // silently falling through to the wrong endpoint/filter further down —
   // fall back to "entity" whenever the param isn't a real category.

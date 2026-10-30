@@ -38,6 +38,7 @@ import { EntityPinGate } from "@/components/vault/entity-pin-gate";
 import { TOTPCard } from "@/components/vault/totp-card";
 import { VaultMailEntityBody } from "@/pages/user/vault-mail-entity";
 import { EntityBackupDetail } from "@/pages/user/vault-backup";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 type EntryAny = any;
 type AccessTab = "2fa" | "mail" | "backup";
@@ -63,7 +64,7 @@ export default function VaultEntityAccess() {
 
 function VaultEntityAccessContent() {
   const params = useParams<{ id: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { data, isLoading } = useListVaultEntries();
   const [tab, setTab] = useState<AccessTab>("2fa");
 

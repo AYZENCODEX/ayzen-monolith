@@ -16,6 +16,7 @@ import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/va
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 interface EnrolledEntity {
   id: number;
@@ -57,7 +58,7 @@ function entitySub(e: EnrolledEntity): string {
 export default function VaultEnrollmentProjectDetail() {
   const params = useParams<{ id: string }>();
   const projectId = Number(params.id);
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
 
   const [project, setProject] = useState<ProjectInfo | null>(null);
   const [entities, setEntities] = useState<EnrolledEntity[]>([]);

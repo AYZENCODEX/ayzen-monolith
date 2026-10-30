@@ -12,6 +12,7 @@ import { customFetch } from "@workspace/api-client-react";
 import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/vault-sidebar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 interface AllLink {
   id: number;
@@ -52,7 +53,7 @@ function RelationPill({ relation_type }: { relation_type: string }) {
 }
 
 export default function VaultEnrollmentLinked() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [links, setLinks] = useState<AllLink[]>([]);
   const [loading, setLoading] = useState(true);
 

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 interface EmailStatus {
   ayzenEmail: string | null;
@@ -19,7 +20,7 @@ interface EmailStatus {
 
 export default function AyzenEmail() {
   const { toast } = useToast();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [status, setStatus] = useState<EmailStatus | null>(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [username, setUsername] = useState("");

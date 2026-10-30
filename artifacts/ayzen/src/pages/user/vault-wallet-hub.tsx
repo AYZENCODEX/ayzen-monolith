@@ -18,13 +18,14 @@ import { useParams, useLocation } from "wouter";
 import { Wallet } from "lucide-react";
 import { VaultSectionPage } from "@/components/layout/vault-sidebar";
 import VaultWalletSeed from "@/pages/user/vault-wallet-seed";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 type SubTab = "overview" | "wallet" | "settings";
 const VALID_TABS: SubTab[] = ["overview", "wallet", "settings"];
 
 export default function VaultWalletHub() {
   const params = useParams<{ subtab?: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
 
   const subtab: SubTab = VALID_TABS.includes(params.subtab as SubTab)
     ? (params.subtab as SubTab)

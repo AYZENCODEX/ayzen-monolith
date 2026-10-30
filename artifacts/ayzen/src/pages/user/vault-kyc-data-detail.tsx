@@ -18,10 +18,11 @@ import { KYC_DATA_FIELDS } from "@/config/fields/kyc-data-create";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import type { DataEntity } from "./vault-kyc-data-list";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 export default function VaultKycDataDetail() {
   const { id } = useParams<{ id: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { toast } = useToast();
   const [entity, setEntity] = useState<DataEntity | null>(null);
   const [loading, setLoading] = useState(true);

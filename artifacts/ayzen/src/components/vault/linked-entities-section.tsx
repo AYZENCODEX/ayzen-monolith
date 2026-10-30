@@ -25,6 +25,7 @@ import {
   listEntityLinks, createEntityLink, deleteEntityLink,
   RELATION_TYPES, RELATION_LABELS, type RelationType, type EntityLink,
 } from "@/lib/vault-entity-links-api";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const RELATION_COLOR: Record<RelationType, string> = {
   alt_of: "text-cyan-400 border-cyan-400/20 bg-cyan-400/5",
@@ -91,7 +92,7 @@ function LinkGraph({ centerLabel, links }: { centerLabel: string; links: EntityL
 
 export function LinkedEntitiesSection({ entityId }: { entityId: number }) {
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
+  const setLocation = useModuleAwareNavigate();
   const [links, setLinks] = useState<EntityLink[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);

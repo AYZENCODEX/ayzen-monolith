@@ -15,6 +15,7 @@ import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/va
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 export interface SharedEntry {
   id: number;
@@ -49,7 +50,7 @@ function groupByEntity(shares: SharedEntry[]): EntityGroup[] {
 }
 
 export default function VaultShared() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [shares, setShares] = useState<SharedEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();

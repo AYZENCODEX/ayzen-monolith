@@ -3,6 +3,7 @@ import { useParams, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { ArrowLeft, Mail, Loader2, User, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -12,7 +13,7 @@ interface StoredMessageDetail {
 
 export default function VaultMailMessage() {
   const params = useParams<{ category: string; id: string; msgId: string }>();
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { token } = useAuth();
   const [msg, setMsg] = useState<StoredMessageDetail | null>(null);
   const [loading, setLoading] = useState(true);

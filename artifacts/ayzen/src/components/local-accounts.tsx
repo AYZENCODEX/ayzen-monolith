@@ -28,6 +28,7 @@ import {
   getLocalAccountPlatformGradient,
 } from "@/config/vault-local";
 import { RankBadge } from "@/lib/entity-rank";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export interface LocalAccount {
@@ -131,7 +132,7 @@ function AccountViewDialog({
   onClose: () => void;
   onEdit: (a: LocalAccount) => void;
 }) {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   if (!account) return null;
   const roi = calcROI(account.account_worth, account.buy_price);
   const age = calcAge(account.account_create_date);
@@ -1009,7 +1010,7 @@ function AddCategoryDialog({ open, onClose, onAdded }: { open: boolean; onClose:
 
 // ─── Main LocalAccounts Component ─────────────────────────────────────────────
 export default function LocalAccounts() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const { toast } = useToast();
   const [categories, setCategories] = useState<Category[]>(LOCAL_ACCOUNT_DEFAULT_CATEGORIES);
   const [selectedCat, setSelectedCat] = useState<string>(LOCAL_ACCOUNT_DEFAULT_CATEGORIES[0].name);

@@ -19,6 +19,7 @@ import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/va
 import { getVaultActivity, type VaultActivityEntry } from "@/lib/vault-security-api";
 import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 const ACTION_META: Record<string, { label: string; icon: React.ElementType; color: string }> = {
   viewed:          { label: "Viewed",          icon: Eye,        color: "text-primary bg-primary/10 border-primary/20" },
@@ -93,7 +94,7 @@ function ActivityRow({ entry, onOpenEntity }: { entry: VaultActivityEntry; onOpe
 }
 
 export default function VaultActivity() {
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
   const [page, setPage] = useState(1);
   const limit = 30;
 

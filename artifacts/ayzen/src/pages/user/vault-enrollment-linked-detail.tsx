@@ -17,6 +17,7 @@ import { VaultSectionPage } from "@/components/layout/vault-sidebar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useModuleAwareNavigate } from "@/components/module-link";
 
 interface EntityLink {
   id: number;
@@ -153,7 +154,7 @@ function RelationshipCard({
 export default function VaultEnrollmentLinkedDetail() {
   const params = useParams<{ entityId: string }>();
   const entityId = Number(params.entityId);
-  const [, navigate] = useLocation();
+  const navigate = useModuleAwareNavigate();
 
   const [links, setLinks] = useState<EntityLink[]>([]);
   const [loading, setLoading] = useState(true);
