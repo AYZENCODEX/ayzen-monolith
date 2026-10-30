@@ -25,3 +25,9 @@ Typecheck: 164 errors, all pre-existing on base 91c1c9d; zero in touched files. 
 ## Rollback
 
 ModuleLink is drop-in; revert per file.
+
+---
+
+## S5 batch 2 (same season, second pass)
+
+Page-level links: 40 files under pages/user and components had const [, navigate]/setLocation = useLocation() swapped to useModuleAwareNavigate() (components/module-link.tsx) - same-module stays client-side (opts.replace supported), cross-module full-navigates to the module subdomain preserving query+hash. Raw path strings remain in source by design; routing is module-aware at runtime. Typecheck 164 pre-existing, build PASS. Commit b701984.
