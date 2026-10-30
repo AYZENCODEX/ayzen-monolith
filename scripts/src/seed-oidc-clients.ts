@@ -162,6 +162,9 @@ export const SEED_CLIENTS: SeedClient[] = [
   // way every other split app got one, so skarn.ayzen.tech gets the same
   // "Sign in with AYZEN" auto-cutover the rest already have.
   seedClient("skarn", "Skarn", { backchannelLogout: true }),
+  // Fyra (Module Shell Split, Season 1) - own module at fyra.ayzen.tech;
+  // same first-party PKCE client pattern as every other split app.
+  seedClient("fyra", "Fyra", { backchannelLogout: true }),
   seedClient("warde", "Warde", { backchannelLogout: true }),
   workspaceClient,
 ];

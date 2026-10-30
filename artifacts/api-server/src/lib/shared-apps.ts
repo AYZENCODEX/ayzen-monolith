@@ -7,7 +7,7 @@
  * the existing auth and Policy Engine middleware.
  */
 
-export type SharedAppId = "sylo" | "ryft" | "verve" | "skarn" | "warde" | "wisp" | "zynth";
+export type SharedAppId = "sylo" | "ryft" | "fyra" | "verve" | "skarn" | "warde" | "wisp" | "zynth";
 
 export type SharedAppDefinition = {
   id: SharedAppId;
@@ -19,8 +19,12 @@ export type SharedAppDefinition = {
 };
 
 export const SHARED_APP_DEFINITIONS: readonly SharedAppDefinition[] = [
+  // Module Shell Split S1: sylo owns /admin/team-vault outright (vault data);
+  // it was double-claimed by warde before this pass.
   { id: "sylo", label: "Sylo", homePath: "/vault", routePrefixes: ["/vault", "/admin/vault", "/admin/team-vault"], hostEnv: "SYLO_HOSTS", defaultHost: "sylo.ayzen.tech" },
-  { id: "ryft", label: "Ryft", homePath: "/wallet", routePrefixes: ["/wallet", "/wallets", "/finance", "/admin/tools/wallet"], hostEnv: "RYFT_HOSTS", defaultHost: "ryft.ayzen.tech" },
+  // Module Shell Split S1: /finance (including Investments) moved to Fyra.
+  { id: "ryft", label: "Ryft", homePath: "/wallet", routePrefixes: ["/wallet", "/wallets", "/admin/tools/wallet"], hostEnv: "RYFT_HOSTS", defaultHost: "ryft.ayzen.tech" },  { id: "fyra", label: "Fyra", homePath: "/finance", routePrefixes: ["/finance"], hostEnv: "FYRA_HOSTS", defaultHost: "fyra.ayzen.tech" },
+
   { id: "verve", label: "Verve", homePath: "/marketplace/hub", routePrefixes: ["/marketplace", "/admin/marketplace", "/admin/marketplace-categories", "/admin/marketplace-market-config"], hostEnv: "VERVE_HOSTS", defaultHost: "verve.ayzen.tech" },
   { id: "skarn", label: "Skarn", homePath: "/projects", routePrefixes: ["/projects", "/tasks", "/content", "/admin/projects", "/admin/project-templates", "/admin/operator-progress", "/admin/tasks"], hostEnv: "SKARN_HOSTS", defaultHost: "skarn.ayzen.tech" },
   { id: "warde", label: "Warde", homePath: "/teams", routePrefixes: ["/teams", "/team_leader", "/admin/teams", "/admin/team-vault"], hostEnv: "WARDE_HOSTS", defaultHost: "warde.ayzen.tech" },

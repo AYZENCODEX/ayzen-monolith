@@ -9,6 +9,18 @@ permissions:
   contents: read
 
 jobs:
+  module-registry-parity:
+    # Module Shell Split, Season 1: frontend/backend module registry parity.
+    # Non-blocking warning first (roadmap rule), can be made blocking later.
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/src/check-module-registry.mjs
+
   affected:
     runs-on: ubuntu-latest
     outputs:

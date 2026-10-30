@@ -28,6 +28,8 @@
  * below. Nothing else in this file changes.
  */
 
+import type { ComponentType } from "react";
+
 export interface SubdomainApp {
   id: string;
   label: string;
@@ -35,6 +37,14 @@ export interface SubdomainApp {
   homePath: string;
   /** Path prefixes considered "in scope" for this subdomain — checked with exact match or a "/" boundary, never a bare substring match. */
   routePrefixes: string[];
+  /** Module Shell Split S1: lucide icon component for the module shell (Season 2 renders it). */
+  icon?: ComponentType<{ className?: string }>;
+  /** One-line description shown in the central "AYZEN apps" menu (Season 3). */
+  description?: string;
+  /** Sort order across the module list (lower = earlier). Registry declaration order breaks ties. */
+  order?: number;
+  /** Season 1 shape marker — every registry entry is a module. */
+  kind: "module";
 }
 
 // Add one entry per app as it gets its own subdomain. Vault's routes already all
@@ -70,21 +80,32 @@ export interface SubdomainApp {
 const SUBDOMAIN_APPS: Record<string, Omit<SubdomainApp, "id">> = {
   sylo: {
     label: "Sylo",
+    kind: "module",
+    description: "Vault — credentials, entities and wallets.",
+    order: 1,
+    // Season 1 (Module Shell Split): sylo owns /admin/team-vault outright —
+    // it was double-claimed by warde; the page serves vault data, so the
+    // vault module keeps it (see CHANGES_MODULE_SHELL_S1.md).
     homePath: "/vault",
     routePrefixes: ["/vault", "/admin/vault", "/admin/team-vault"],
   },
   ryft: {
     label: "Ryft",
-    // Wallet + finance/ledger + Investments (master plan §2: Investment
-    // stays inside Ryft as a nav tab, not its own brand) — home is the
-    // wallet hub, the same landing pattern Sylo uses (/vault, not a
-    // sub-page). /credits and /subscription are deliberately excluded:
-    // those are Workspace-wide (AYZEN Credits pool, §5), not Ryft-scoped.
+    kind: "module",
+    description: "Ryft — wallet hub and wallet analysis.",
+    order: 2,
+    // Wallet only — Season 1 of the Module Shell Split (CHANGES_MODULE_SHELL_S1.md)
+    // superseded the old "Investment stays inside Ryft" decision: /finance and
+    // everything on it (including Investments) moved to Fyra, which owns them now.
+    // Ryft keeps /wallet, /wallets and the admin mirror /admin/tools/wallet.
     homePath: "/wallet",
-    routePrefixes: ["/wallet", "/wallets", "/finance", "/admin/tools/wallet"],
+    routePrefixes: ["/wallet", "/wallets", "/admin/tools/wallet"],
   },
   wisp: {
     label: "Wisp",
+    kind: "module",
+    description: "Wisp — AYZEN mailbox and email accounts.",
+    order: 4,
     // /mailbox is the native mail client UI (CHANGES_NATIVE_MAILBOX.md);
     // /ayzen-email is the account-setup/status page, kept in-scope since a
     // Wisp visitor still needs it before a mailbox exists.
@@ -93,6 +114,9 @@ const SUBDOMAIN_APPS: Record<string, Omit<SubdomainApp, "id">> = {
   },
   verve: {
     label: "Verve",
+    kind: "module",
+    description: "Verve — marketplace and P2P trading.",
+    order: 5,
     homePath: "/marketplace/hub",
     routePrefixes: [
       "/marketplace",
@@ -103,6 +127,9 @@ const SUBDOMAIN_APPS: Record<string, Omit<SubdomainApp, "id">> = {
   },
   skarn: {
     label: "Skarn",
+    kind: "module",
+    description: "Skarn — airdrop projects, tasks and operator progress.",
+    order: 6,
     homePath: "/projects",
     routePrefixes: [
       "/projects",
@@ -116,11 +143,32 @@ const SUBDOMAIN_APPS: Record<string, Omit<SubdomainApp, "id">> = {
   },
   zynth: {
     label: "Zynth",
+    kind: "module",
+    description: "Zynth — AI assistant.",
+    order: 7,
     homePath: "/assistant",
     routePrefixes: ["/assistant", "/admin/ai-agent"],
   },
+  fyra: {
+    label: "Fyra",
+    kind: "module",
+    description: "Fyra — finance: cash flow, loans, investments, assets.",
+    order: 3,
+    // Season 1 of the Module Shell Split: Fyra is its own module, fully
+    // separate from Ryft. Everything /finance (Receivables, Payables, Loans,
+    // Investments, Assets, Expenses, Reports — see route-config.tsx's
+    // "Finance module" block) is Fyra's, with no fyra-specific route left
+    // under ryft. Public token pages under /finance (receipt, invoice,
+    // payment-agreement) stay in ALWAYS_ALLOWED_PREFIXES above so they
+    // render on any host.
+    homePath: "/finance",
+    routePrefixes: ["/finance"],
+  },
   warde: {
     label: "Warde",
+    kind: "module",
+    description: "Warde — farming teams, chat and missions.",
+    order: 8,
     // The "Team" nav group (USER_NAV/MODERATOR_NAV/TEAM_LEADER_NAV — same
     // shape in all three, ADMIN_NAV's own "Team" group mirrors it) is
     // farming-team management: members, chat, browse/invite, task &
@@ -133,7 +181,7 @@ const SUBDOMAIN_APPS: Record<string, Omit<SubdomainApp, "id">> = {
     // (`/team_leader/custom/:slug`), the team-leader equivalent of
     // Skarn/admin's own custom-page routes.
     homePath: "/teams",
-    routePrefixes: ["/teams", "/team_leader", "/admin/teams", "/admin/team-vault"],
+    routePrefixes: ["/teams", "/team_leader", "/admin/teams"],
   },
 };
 
@@ -188,4 +236,78 @@ export function getCurrentSubdomainApp(): SubdomainApp | null {
 export function isPathInSubdomainScope(path: string, app: SubdomainApp): boolean {
   if (ALWAYS_ALLOWED_PREFIXES.some((p) => hasPrefix(path, p))) return true;
   return app.routePrefixes.some((p) => hasPrefix(path, p));
+}
+
+/*
+ * Module Shell Split, Season 1 helpers.
+ * URL builders and path-to-module resolution used by later seasons
+ * (module shell, central AYZEN apps menu, cross-module link fixes).
+ * Hosts come from the same configured-hosts logic getCurrentSubdomainApp
+ * uses, so VITE_<ID>_HOSTS stays the single source of truth.
+ */
+
+/** All registered modules, sorted by order (declaration order breaks ties). */
+export function getAllModules(): Array<SubdomainApp & { id: string }> {
+  return Object.entries(SUBDOMAIN_APPS)
+    .map(([id, app]) => ({ id, ...app }))
+    .sort((a, b) => ((a.order ?? 99) - (b.order ?? 99)));
+}
+
+function configuredHostsFor(id: string): string[] {
+  const envValue = import.meta.env[`VITE_${id.toUpperCase()}_HOSTS`] as string | undefined;
+  const fallback = `${id}.ayzen.tech`;
+  return (envValue ?? fallback)
+    .split(",")
+    .map((h) => h.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+/**
+ * Build a URL to a module host. path must start with "/" (or be empty).
+ * Preserves the dev/preview pattern (sylo.localhost, sylo-<replit-preview>
+ * hosts) by swapping the FIRST label of the CURRENT hostname instead of
+ * hard-coding production, so the same call works in all three modes:
+ * prod -> https://sylo.ayzen.tech/vault, dev -> http://sylo.localhost/vault,
+ * preview -> https://sylo-<preview>.replit.dev/vault.
+ */
+export function moduleUrl(id: string, path = ""): string {
+  const app = SUBDOMAIN_APPS[id];
+  if (!app) return path ? path : "/";
+  const host = window.location.hostname.toLowerCase();
+  const isProdHost = configuredHostsFor(id).includes(host);
+  const isMainHost = host === "ayzen.tech" || host === "www.ayzen.tech" || host.endsWith(".ayzen.tech");
+  if (isProdHost || isMainHost) {
+    return `https://${configuredHostsFor(id)[0]}${path}`;
+  }
+  // dev/preview: swap the first label on the current hostname
+  const swapped = [id, ...host.split(".").slice(1)].join(".");
+  return `${window.location.protocol}//${swapped}${path}`;
+}
+
+/** Build a URL on the main AYZEN host (ayzen.tech). */
+export function centralUrl(path = "/"): string {
+  const host = window.location.hostname.toLowerCase();
+  const isDev = host === "localhost" || host.endsWith(".localhost") || host.includes(".replit");
+  if (isDev) {
+    const stripped = window.location.host.replace(/^[^.]+[.]/, "");
+    return `${window.location.protocol}//${stripped}${path}`;
+  }
+  return `https://ayzen.tech${path}`;
+}
+
+/**
+ * Resolve which module owns path - longest matching prefix wins, so
+ * /finance/receipt/... matches fyra and not a shorter or other claim.
+ * Returns the module id or null on the main domain routes.
+ */
+export function getModuleForPath(path: string): string | null {
+  let best: { id: string; len: number } | null = null;
+  for (const [id, app] of Object.entries(SUBDOMAIN_APPS)) {
+    for (const prefix of app.routePrefixes) {
+      if (hasPrefix(path, prefix)) {
+        if (!best || prefix.length > best.len) best = { id, len: prefix.length };
+      }
+    }
+  }
+  return best ? best.id : null;
 }
