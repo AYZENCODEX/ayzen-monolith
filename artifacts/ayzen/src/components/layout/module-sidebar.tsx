@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { useSidebarCollapsed } from "@/hooks/use-sidebar-collapsed";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useLocation, useSearch } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -43,27 +46,53 @@ export function ModuleSidebar({ app, onNavigate }: { app: SubdomainApp; onNaviga
 
   const home = moduleUrl(app.id, app.homePath);
 
+  // Season 4: collapsible icon rail, desktop only. Per-module state via scopeKey.
+  const isMobile = useIsMobile();
+  const { collapsed, toggle } = useSidebarCollapsed(app.id);
+  const rail = collapsed && !isMobile;
+
   return (
-    <div className="flex h-full flex-col bg-sidebar border-r border-sidebar-border text-sidebar-foreground" style={{ width: "var(--sidebar-w, 16rem)" }}>
+    <div
+      className="flex h-full flex-col bg-sidebar border-r border-sidebar-border text-sidebar-foreground transition-[width] duration-200 motion-reduce:transition-none"
+      style={{ width: rail ? "4rem" : "var(--sidebar-w, 16rem)" }}
+    >
       {/* Module header: icon + label, and the pinned back link */}
-      <div className="p-4 border-b border-sidebar-border">
-        <div className="flex items-center gap-2 font-mono text-xl font-bold tracking-tighter text-primary">
-          {app.icon ? <app.icon className="w-5 h-5" /> : null}
-          <span className="flex-1">{app.label}</span>
+      <div className={'border-b border-sidebar-border' + (rail ? ' p-2' : ' p-4')}>
+        <div className={'flex items-center gap-2 font-mono text-xl font-bold tracking-tighter text-primary' + (rail ? ' justify-center' : '')}>
+          {app.icon ? <app.icon className="w-5 h-5 flex-shrink-0" /> : null}
+          {!rail && <span className="flex-1">{app.label}</span>}
+          <button
+            onClick={toggle}
+            title={rail ? 'Expand sidebar ([)' : 'Collapse sidebar ([)'}
+            className="p-1 rounded text-muted-foreground/40 hover:text-primary transition-colors flex-shrink-0"
+          >
+            {rail ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+          </button>
         </div>
         {/* Cross-origin -> plain anchor, full navigation, same shared session cookie */}
         <a
           href={centralUrl("/")}
-          className="mt-2 w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-mono text-muted-foreground hover:bg-primary/10 hover:text-primary border border-transparent hover:border-primary/40 transition-all"
+          title="Back to AYZEN"
+          className={'mt-2 flex items-center gap-2 rounded-lg text-[11px] font-mono text-muted-foreground hover:bg-primary/10 hover:text-primary border border-transparent hover:border-primary/40 transition-all' + (rail ? ' justify-center p-1.5' : ' w-full px-2.5 py-1.5')}
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          AYZEN
+          <ArrowLeft className="w-3.5 h-3.5 flex-shrink-0" />
+          {!rail && 'AYZEN'}
         </a>
       </div>
 
       <ProfileQuickAccess user={user} logout={logout} navigate={(to: string) => { window.location.href = moduleUrl(app.id, to); onNavigate?.(); }} onNavigate={onNavigate} />
 
-      <div className="flex-1 overflow-y-auto py-2 space-y-1">
+      <div
+        className="flex-1 overflow-y-auto py-2 space-y-1"
+        onClick={(e) => {
+          // Season 4: in rail mode, clicking a group header expands the sidebar
+          if (!rail) return;
+          const el = e.target as HTMLElement;
+          if (el.closest("a")) return;
+          const isHeader = el.closest("button");
+          if (isHeader) toggle();
+        }}
+      >
         {scopedGroups.map(group => (
           <NavGroupComp key={group.label} group={group} location={location} search={search} isEnabled={isEnabled} onNavigate={onNavigate} />
         ))}

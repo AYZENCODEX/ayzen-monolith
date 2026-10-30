@@ -4,6 +4,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { usePlugins } from "@/hooks/use-plugins";
 import { useNavConfig, type DevNavTreeLeaf, type NavType } from "@/hooks/use-dev-nav";
 import { ModuleSidebar } from "@/components/layout/module-sidebar";
+import { useSidebarCollapsed } from "@/hooks/use-sidebar-collapsed";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { AppsMenu } from "@/components/layout/apps-menu";
 import { resolveDevNavIcon } from "@/lib/dev-nav-icons";
 import {
@@ -40,7 +42,7 @@ import {
   Workflow,
   // Phase I8 — Mega Engine admin UI (Health/Metrics/Dead Letters/Retention)
   Gauge,
-} from "lucide-react";
+  PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { getCurrentSubdomainApp, type SubdomainApp , getModuleForPath, getAllModules, moduleUrl } from "@/lib/subdomain-app";
@@ -1900,6 +1902,10 @@ export function AppSidebar({ onNavigate }: AppSidebarProps = {}) {
 }
 
 function CentralSidebar({ onNavigate }: AppSidebarProps = {}) {
+  // Season 4: collapsible icon rail on desktop (state: localStorage "central").
+  const isMobile = useIsMobile();
+  const { collapsed, toggle } = useSidebarCollapsed("central");
+  const rail = collapsed && !isMobile;
   const [location, navigate] = useLocation();
   const search = useSearch();
   const { isAdmin, isDev, isModerator, isTeamLeader, logout, user } = useAuth();
@@ -1935,11 +1941,18 @@ function CentralSidebar({ onNavigate }: AppSidebarProps = {}) {
   const openShortcuts = () => document.dispatchEvent(new KeyboardEvent("keydown", { key: "?", bubbles: true }));
 
   return (
-    <div className="flex h-full flex-col bg-sidebar border-r border-sidebar-border text-sidebar-foreground" style={{ width: "var(--sidebar-w, 16rem)" }}>
+    <div className="flex h-full flex-col bg-sidebar border-r border-sidebar-border text-sidebar-foreground transition-[width] duration-200 motion-reduce:transition-none" style={{ width: rail ? "4rem" : "var(--sidebar-w, 16rem)" }}>
       {/* Logo bar */}
-      <div className="p-4 flex items-center gap-2 font-mono text-xl font-bold tracking-tighter text-primary border-b border-sidebar-border">
-        <Terminal className="w-5 h-5" />
-        <span className="flex-1">AYZEN</span>
+      <div className={'border-b border-sidebar-border flex items-center gap-2 font-mono text-xl font-bold tracking-tighter text-primary' + (rail ? ' p-2 justify-center' : ' p-4')}>
+        <Terminal className="w-5 h-5 flex-shrink-0" />
+        {!rail && <span className="flex-1">AYZEN</span>}
+        <button
+          onClick={toggle}
+          title={rail ? 'Expand sidebar ([)' : 'Collapse sidebar ([)'}
+          className="p-1 rounded text-muted-foreground/40 hover:text-primary transition-colors flex-shrink-0"
+        >
+          {rail ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+        </button>
         <div className="flex items-center gap-1">
           <button onClick={() => { navigate("/vault?tab=mail&view=overview"); onNavigate?.(); }} className="p-1 rounded text-muted-foreground/40 hover:text-primary transition-colors" title="AYZEN Mail">
             <AtSign className="w-3.5 h-3.5" />
@@ -1963,7 +1976,16 @@ function CentralSidebar({ onNavigate }: AppSidebarProps = {}) {
       {!scopedAppNow && centralLauncher && <AppsMenu />}
 
       {/* Nav groups */}
-      <div className="flex-1 overflow-y-auto py-2 space-y-1">
+      <div
+        className="flex-1 overflow-y-auto py-2 space-y-1"
+        onClick={(e) => {
+          // Season 4: in rail mode, clicking a group header expands the sidebar
+          if (!rail) return;
+          const el = e.target as HTMLElement;
+          if (el.closest("a")) return;
+          if (el.closest("button")) toggle();
+        }}
+      >
         {scopedGroups.map(group => (
           <NavGroupComp key={group.label} group={group} location={location} search={search} isEnabled={isEnabled} onNavigate={onNavigate} />
         ))}
