@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
+import { getCurrentSubdomainApp, getModuleForPath, moduleUrl, centralUrl } from "@/lib/subdomain-app";
 import { Search, FolderGit2, Users, CheckSquare, Shield, X, Loader2, ArrowRight, Smartphone, ShieldCheck, Gamepad2, Mail, Lock, Wallet, Receipt, Store } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isVaultUnlocked } from "@/lib/vault-lock";
@@ -83,7 +84,18 @@ export function GlobalSearch({ isAdmin }: { isAdmin?: boolean }) {
       .finally(() => setLoading(false));
   }, [debouncedQuery]);
 
-  const go = useCallback((href: string) => { navigate(href); setOpen(false); }, [navigate]);
+  // S5: module-aware go — cross-module targets get a full navigation to their subdomain.
+  const go = useCallback((href: string) => {
+    const cur = getCurrentSubdomainApp();
+    const targetId = getModuleForPath(href);
+    if (targetId !== null && targetId !== (cur ? cur.id : null)) {
+      window.location.assign(moduleUrl(targetId, href));
+      setOpen(false);
+      return;
+    }
+    navigate(href);
+    setOpen(false);
+  }, [navigate]);
 
   if (!open) {
     return (

@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { Home, FolderGit2, Store, Shield, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getCurrentSubdomainApp, getModuleForPath, moduleUrl, centralUrl } from "@/lib/subdomain-app";
 import { useAuth } from "@/hooks/use-auth";
 
 const DOCK_ITEMS = [
@@ -27,9 +28,41 @@ export function MobileDock() {
           const Icon = item.icon;
           const active = isActive(item.href);
           // If not logged in, redirect to landing (root)
-          const href = user ? item.href : "/";
+          // S5: each dock tab goes to its module on any host. Home is central.
+          const cur = getCurrentSubdomainApp();
+          const target = user ? item.href : "/";
+          const tabModule = getModuleForPath(target);
+          const cross = tabModule !== null && tabModule !== (cur ? cur.id : null);
+          const href = user
+            ? (cross && tabModule ? moduleUrl(tabModule, target) : (cur ? target : centralUrl(target)))
+            : centralUrl("/");
 
-          return (
+          return cross ? (
+            <a key={item.href} href={href}>
+              <button className="flex flex-col items-center gap-1 px-3 py-1.5 min-w-[56px] relative group">
+                {active && (
+                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-primary" />
+                )}
+                <div className={cn(
+                  "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200",
+                  active
+                    ? "bg-primary/15 border border-primary/30 shadow-[0_0_12px_rgba(34,211,238,0.15)]"
+                    : "bg-transparent group-hover:bg-sidebar-accent border border-transparent"
+                )}>
+                  <Icon className={cn(
+                    "w-5 h-5 transition-colors",
+                    active ? "text-primary" : "text-sidebar-foreground/50 group-hover:text-sidebar-foreground/80"
+                  )} />
+                </div>
+                <span className={cn(
+                  "text-[9px] font-mono font-bold tracking-wider transition-colors leading-none",
+                  active ? "text-primary" : "text-sidebar-foreground/40"
+                )}>
+                  {item.label}
+                </span>
+              </button>
+            </a>
+          ) : (
             <Link key={item.href} href={href}>
               <button className="flex flex-col items-center gap-1 px-3 py-1.5 min-w-[56px] relative group">
                 {active && (

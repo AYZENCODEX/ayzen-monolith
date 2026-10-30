@@ -45,7 +45,7 @@ import {
   PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { getCurrentSubdomainApp, type SubdomainApp , getModuleForPath, getAllModules, moduleUrl } from "@/lib/subdomain-app";
+import { getCurrentSubdomainApp, type SubdomainApp , getModuleForPath, getAllModules, moduleUrl, centralUrl } from "@/lib/subdomain-app";
 
 interface AppSidebarProps { onNavigate?: () => void; }
 
@@ -1954,9 +1954,10 @@ function CentralSidebar({ onNavigate }: AppSidebarProps = {}) {
           {rail ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
         </button>
         <div className="flex items-center gap-1">
-          <button onClick={() => { navigate("/vault?tab=mail&view=overview"); onNavigate?.(); }} className="p-1 rounded text-muted-foreground/40 hover:text-primary transition-colors" title="AYZEN Mail">
+          {/* S5: AYZEN Mail lives on wisp - cross-module on any other host */}
+          <a href={(() => { const cur = getCurrentSubdomainApp(); return (cur && cur.id !== "wisp") ? moduleUrl("wisp", "/mailbox") : (cur ? "/vault?tab=mail&view=overview" : centralUrl("/mailbox")); })()} onClick={onNavigate} className="p-1 rounded text-muted-foreground/40 hover:text-primary transition-colors" title="AYZEN Mail">
             <AtSign className="w-3.5 h-3.5" />
-          </button>
+          </a>
           <button onClick={openSearch} className="p-1 rounded text-muted-foreground/40 hover:text-primary transition-colors" title="Search (⌘K)">
             <Search className="w-3.5 h-3.5" />
           </button>

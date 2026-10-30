@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Search, FolderGit2, CheckSquare, Vault, Users, ShieldCheck, Gamepad2, Mail, UserCog, X, ArrowRight, Loader2, Receipt, Wallet, Store } from "lucide-react";
 import { useLocation } from "wouter";
+import { getCurrentSubdomainApp, getModuleForPath, moduleUrl } from "@/lib/subdomain-app";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +41,17 @@ export function CommandSearch() {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(0);
   const { token } = useAuth();
-  const [, navigate] = useLocation();
+  const [, wNavigate] = useLocation();
+  // S5: module-aware navigate — cross-module targets full-navigate to their subdomain.
+  const navigate = (href: string) => {
+    const cur = getCurrentSubdomainApp();
+    const targetId = getModuleForPath(href);
+    if (targetId !== null && targetId !== (cur ? cur.id : null)) {
+      window.location.assign(moduleUrl(targetId, href));
+      return;
+    }
+    wNavigate(href);
+  };
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 

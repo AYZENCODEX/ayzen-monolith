@@ -1,5 +1,5 @@
 import { ReactNode, useState, useEffect, useRef, useCallback } from "react";
-import { getCurrentSubdomainApp } from "@/lib/subdomain-app";
+import { getCurrentSubdomainApp, getModuleForPath, moduleUrl, centralUrl } from "@/lib/subdomain-app";
 import { AppSidebar } from "./app-sidebar";
 import { MobileDock } from "./mobile-dock";
 import { Menu, Mail, X, RefreshCw, Inbox, ExternalLink } from "lucide-react";
@@ -164,11 +164,11 @@ function MailDropdown({ token, isAdmin }: { token: string; isAdmin: boolean }) {
           </div>
 
           <div className="px-4 py-2.5 border-t border-card-border">
-            <Link href="/vault?tab=mail&view=overview" onClick={() => setOpen(false)}>
+            <a href={(getModuleForPath("/vault") && getModuleForPath("/vault") !== (getCurrentSubdomainApp()?.id ?? null)) ? moduleUrl("wisp", "/mailbox") : (getCurrentSubdomainApp() ? "/vault?tab=mail&view=overview" : centralUrl("/vault?tab=mail&view=overview"))} onClick={() => setOpen(false)}>
               <button className="w-full flex items-center justify-center gap-1.5 font-mono text-[10px] text-primary hover:text-primary/80 transition-colors py-1">
                 <ExternalLink className="w-3 h-3" /> Open Full Mailbox
               </button>
-            </Link>
+            </a>
           </div>
         </div>
       )}
