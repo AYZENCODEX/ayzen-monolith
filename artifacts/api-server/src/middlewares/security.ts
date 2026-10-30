@@ -81,8 +81,16 @@ const corsOptions: CorsOptions = {
 
     if (allowedOrigins) {
       if (allowedOrigins.includes(origin)) return callback(null, true);
+      // Module Shell Split S7: every module subdomain (sylo, skarn, fyra,
+      // ...) is first-party. Accept any https://<id>.ayzen.tech origin in
+      // addition to the exact allow-list — still no wildcard, credentials
+      // remain scoped to our own registrable domain.
+      if (/^https:\/\/[a-z0-9-]+\.ayzen\.tech$/.test(origin)) return callback(null, true);
+      if (/^http:\/\/[a-z0-9-]+\.localhost$/.test(origin)) return callback(null, true);
       return callback(new Error(`Origin ${origin} is not allowed by CORS policy`));
     }
+    // No allow-list: in production still accept our own module subdomains.
+    if (isProd && /^https:\/\/[a-z0-9-]+\.ayzen\.tech$/.test(origin)) return callback(null, true);
 
     // No allow-list configured: permissive only outside production so local
     // dev / preview environments keep working without extra setup.
