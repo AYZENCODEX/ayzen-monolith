@@ -3,6 +3,7 @@ import { Link, useLocation, useSearch } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { usePlugins } from "@/hooks/use-plugins";
 import { useNavConfig, type DevNavTreeLeaf, type NavType } from "@/hooks/use-dev-nav";
+import { ModuleSidebar } from "@/components/layout/module-sidebar";
 import { resolveDevNavIcon } from "@/lib/dev-nav-icons";
 import {
   LayoutDashboard, Users, FolderGit2, CheckSquare, Fuel, Wallet, LayoutTemplate,
@@ -60,7 +61,7 @@ type NavEntry = NavLeaf | NavSection;
 // section (see vault-hub.tsx / marketplace-hub.tsx) instead of only
 // expanding the group in place. Groups without one keep the old
 // expand-only behavior.
-interface NavGroup { label: string; icon: React.ElementType; items: NavEntry[]; href?: string; }
+export interface NavGroup { label: string; icon: React.ElementType; items: NavEntry[]; href?: string; }
 
 function isSection(entry: NavEntry): entry is NavSection {
   return (entry as NavSection).children !== undefined;
@@ -1225,7 +1226,7 @@ interface Message { role: "user" | "assistant"; content: string; }
 import { getApiBase } from "@/lib/api-base";
 const BASE = getApiBase();
 
-function SidebarAiPanel() {
+export function SidebarAiPanel() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -1354,7 +1355,7 @@ function SidebarAiPanel() {
 // Dynamic project list for admin Protocols sidebar —
 // shows project names as clickable items that navigate to /admin/projects/:id
 // and also show per-project operator count.
-function AdminProjectsSidebarSection({ onNavigate, location }: {
+export function AdminProjectsSidebarSection({ onNavigate, location }: {
   onNavigate?: () => void;
   location: string;
 }) {
@@ -1550,7 +1551,7 @@ function filterEntryByPrefixes(entry: NavEntry, prefixes: string[]): NavEntry | 
   }
   return entryMatchesPrefixes(entry, prefixes) ? entry : null;
 }
-function filterGroupsBySubdomain(groups: NavGroup[], app: SubdomainApp | null): NavGroup[] {
+export function filterGroupsBySubdomain(groups: NavGroup[], app: SubdomainApp | null): NavGroup[] {
   if (!app) return groups;
   return groups
     .map(g => {
@@ -1566,7 +1567,7 @@ function filterGroupsBySubdomain(groups: NavGroup[], app: SubdomainApp | null): 
 
 // Level 2+: a section that expands to reveal its own sub-items — children can
 // be plain links (NavLeaf) or further nested sections, recursing indefinitely.
-function NavSectionComp({ section, location, search, onNavigate }: {
+export function NavSectionComp({ section, location, search, onNavigate }: {
   section: NavSection;
   location: string;
   search: string;
@@ -1634,7 +1635,7 @@ function NavSectionComp({ section, location, search, onNavigate }: {
 }
 
 // Level 1: a category — mix of direct links and expandable (possibly nested) sections.
-function NavGroupComp({ group, location, search, isEnabled, onNavigate }: {
+export function NavGroupComp({ group, location, search, isEnabled, onNavigate }: {
   group: NavGroup;
   location: string;
   search: string;
@@ -1741,7 +1742,7 @@ function useThemeToggle() {
   return { isDark, toggle };
 }
 
-function ProfileQuickAccess({ user, logout, navigate, onNavigate }: {
+export function ProfileQuickAccess({ user, logout, navigate, onNavigate }: {
   user: any; logout: () => void; navigate: (href: string) => void; onNavigate?: () => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -1833,7 +1834,35 @@ function ProfileQuickAccess({ user, logout, navigate, onNavigate }: {
   );
 }
 
+/** Module Shell Split S2: shared role-nav logic so AppSidebar (central) and ModuleSidebar (module subdomains) use the exact same DB-driven merge. */
+export function useRoleNavGroups(): { navType: NavType; groups: NavGroup[] } {
+  const { isAdmin, isDev, isModerator, isTeamLeader } = useAuth();
+  const navType: NavType = isAdmin ? "admin" : isDev ? "dev" : isModerator ? "moderator" : isTeamLeader ? "team_leader" : "user";
+  const { tree: navTree, isLoading: navLoading } = useNavConfig(navType);
+  const STATIC_NAV: Record<NavType, NavGroup[]> = {
+    admin: ADMIN_NAV, dev: DEV_NAV, moderator: MODERATOR_NAV,
+    team_leader: TEAM_LEADER_NAV, user: USER_NAV,
+  };
+  const dynamicGroups = navLoading || navTree.length === 0
+    ? STATIC_NAV[navType]
+    : navTreeToGroups(navTree);
+  const groups = navType === "dev" ? [DEV_NAV_PINNED, ...dynamicGroups] : dynamicGroups;
+  return { navType, groups };
+}
+
 export function AppSidebar({ onNavigate }: AppSidebarProps = {}) {
+  // Module Shell Split S2: on a module subdomain render the dedicated
+  // module sidebar (back link + module-only nav). Central domain keeps the
+  // existing sidebar unchanged until Season 3. Pure switch (no hooks here)
+  // so each branch owns its own hook calls.
+  const scopedApp = getCurrentSubdomainApp();
+  if (scopedApp) {
+    return <ModuleSidebar app={scopedApp} onNavigate={onNavigate} />;
+  }
+  return <CentralSidebar onNavigate={onNavigate} />;
+}
+
+function CentralSidebar({ onNavigate }: AppSidebarProps = {}) {
   const [location, navigate] = useLocation();
   const search = useSearch();
   const { isAdmin, isDev, isModerator, isTeamLeader, logout, user } = useAuth();

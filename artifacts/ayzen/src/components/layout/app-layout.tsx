@@ -1,4 +1,5 @@
 import { ReactNode, useState, useEffect, useRef, useCallback } from "react";
+import { getCurrentSubdomainApp } from "@/lib/subdomain-app";
 import { AppSidebar } from "./app-sidebar";
 import { MobileDock } from "./mobile-dock";
 import { Menu, Mail, X, RefreshCw, Inbox, ExternalLink } from "lucide-react";
@@ -209,7 +210,13 @@ export function AppLayout({ children }: AppLayoutProps) {
             <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="text-primary hover:bg-primary/10">
               <Menu className="w-5 h-5" />
             </Button>
-            <span className="font-mono font-bold tracking-tighter text-primary text-lg flex-1">AYZEN</span>
+            {/* Module Shell Split S2: on a module subdomain the mobile top bar shows the module label (still links home centrally). */}
+            <span className="font-mono font-bold tracking-tighter text-primary text-lg flex-1">
+              {(() => {
+                const app = getCurrentSubdomainApp();
+                return app ? app.label : "AYZEN";
+              })()}
+            </span>
             <GlobalSearch isAdmin={isAdmin} />
             <MailDropdown token={token ?? ""} isAdmin={isAdmin} />
             <NotificationBell />
