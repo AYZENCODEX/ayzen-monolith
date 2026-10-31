@@ -51,8 +51,8 @@ export default function UserReferrals() {
 
   useEffect(() => {
     Promise.all([
-      fetch(`${getApiBase()}/api/referrals/me", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-      fetch(`${getApiBase()}/api/referrals/list", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${getApiBase()}/api/referrals/me`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${getApiBase()}/api/referrals/list`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
     ]).then(([meData, listData]) => {
       setMe(meData);
       setList(Array.isArray(listData) ? listData : []);
@@ -62,7 +62,7 @@ export default function UserReferrals() {
   const handleApply = async () => {
     if (!applyCode.trim()) return;
     setApplyStatus("loading");
-    const res = await fetch(`${getApiBase()}/api/referrals/apply", {
+    const res = await fetch(`${getApiBase()}/api/referrals/apply`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ code: applyCode.trim().toUpperCase() }),

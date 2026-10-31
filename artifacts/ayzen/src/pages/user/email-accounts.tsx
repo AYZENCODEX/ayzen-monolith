@@ -89,7 +89,7 @@ export default function EmailAccountsPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${getApiBase()}/api/email-accounts", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${getApiBase()}/api/email-accounts`, { headers: { Authorization: `Bearer ${token}` } });
       setAccounts(await res.json());
     } catch { toast({ title: "Failed to load accounts", variant: "destructive" }); }
     finally { setLoading(false); }

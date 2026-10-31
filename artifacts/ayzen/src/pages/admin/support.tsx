@@ -63,8 +63,8 @@ export default function AdminSupport() {
     setLoading(true);
     try {
       const [tRes, sRes] = await Promise.all([
-        fetch(`${getApiBase()}/api/support/tickets", { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`${getApiBase()}/api/support/stats", { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`${getApiBase()}/api/support/tickets`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`${getApiBase()}/api/support/stats`, { headers: { Authorization: `Bearer ${token}` } }),
       ]);
       setTickets(await tRes.json());
       setStats(await sRes.json());

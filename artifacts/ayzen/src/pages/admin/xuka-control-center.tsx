@@ -29,7 +29,7 @@ export default function XukaControlCenter() {
     setState("loading");
     try {
       const token = localStorage.getItem("ayzen_token") ?? "";
-      const response = await fetch(`${getApiBase()}/api/admin/xuka/registry", { headers: { Authorization: `Bearer ${token}` } });
+      const response = await fetch(`${getApiBase()}/api/admin/xuka/registry`, { headers: { Authorization: `Bearer ${token}` } });
       if (response.status === 401 || response.status === 403) {
         setState("permission-denied");
         return;

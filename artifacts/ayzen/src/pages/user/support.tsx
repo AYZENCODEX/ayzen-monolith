@@ -65,7 +65,7 @@ export default function SupportPage() {
   const loadTickets = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${getApiBase()}/api/support/tickets", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${getApiBase()}/api/support/tickets`, { headers: { Authorization: `Bearer ${token}` } });
       setTickets(await res.json());
     } catch { toast({ title: "Failed to load tickets", variant: "destructive" }); }
     finally { setLoading(false); }
@@ -94,7 +94,7 @@ export default function SupportPage() {
     }
     setCreating(true);
     try {
-      const res = await fetch(`${getApiBase()}/api/support/tickets", { method: "POST", headers, body: JSON.stringify(newForm) });
+      const res = await fetch(`${getApiBase()}/api/support/tickets`, { method: "POST", headers, body: JSON.stringify(newForm) });
       if (!res.ok) throw new Error();
       toast({ title: "Ticket created!", description: "Our team will reply soon." });
       setNewForm({ title: "", category: "general", priority: "medium", message: "" });

@@ -35,8 +35,8 @@ export default function AdminReferrals() {
   const load = useCallback(async () => {
     setLoading(true);
     const [refRes, ldRes] = await Promise.all([
-      fetch(`${getApiBase()}/api/admin/referrals", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-      fetch(`${getApiBase()}/api/admin/referrals/leaderboard", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${getApiBase()}/api/admin/referrals`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${getApiBase()}/api/admin/referrals/leaderboard`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
     ]);
     setReferrals(Array.isArray(refRes.referrals) ? refRes.referrals : []);
     setStats(refRes.stats ?? null);
