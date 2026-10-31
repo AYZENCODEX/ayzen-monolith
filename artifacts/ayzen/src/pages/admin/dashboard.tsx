@@ -1,4 +1,5 @@
 import { useGetPlatformStats, useGetPlatformActivity } from "@workspace/api-client-react";
+import { getApiBase } from "@/lib/api-base";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Users, Activity, Target, Zap, TrendingUp, UserPlus, Clock, DollarSign, Share2, MessageSquare, ChevronRight, ClipboardList, Check, X } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, AreaChart, Area } from "recharts";
@@ -28,10 +29,10 @@ export default function AdminDashboard() {
   const token = localStorage.getItem("ayzen_token") ?? "";
 
   useEffect(() => {
-    fetch("/api/users?limit=5&page=1", { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${getApiBase()}/api/users?limit=5&page=1`, { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json())
       .then(d => setRecentUsers(Array.isArray(d.users) ? d.users.slice(0, 5) : []));
-    fetch("/api/tasks/submissions?status=pending", { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${getApiBase()}/api/tasks/submissions?status=pending`, { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.ok ? r.json() : [])
       .then(d => setPendingSubs(Array.isArray(d) ? d.slice(0, 5) : []));
   }, []);

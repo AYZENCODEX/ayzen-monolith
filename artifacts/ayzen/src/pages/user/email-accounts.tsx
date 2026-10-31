@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { getApiBase } from "@/lib/api-base";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -88,7 +89,7 @@ export default function EmailAccountsPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/email-accounts", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${getApiBase()}/api/email-accounts", { headers: { Authorization: `Bearer ${token}` } });
       setAccounts(await res.json());
     } catch { toast({ title: "Failed to load accounts", variant: "destructive" }); }
     finally { setLoading(false); }
@@ -99,7 +100,7 @@ export default function EmailAccountsPage() {
   const openCreate = () => { setForm({ ...BLANK }); setEditId(null); setShowForm(true); };
 
   const openEdit = async (id: number) => {
-    const res = await fetch(`/api/email-accounts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await fetch(`${getApiBase()}/api/email-accounts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
     const data = await res.json();
     setForm({ ...BLANK, ...data });
     setEditId(id);
@@ -131,13 +132,13 @@ export default function EmailAccountsPage() {
 
   const remove = async (id: number, label: string) => {
     if (!confirm(`Delete "${label}"?`)) return;
-    await fetch(`/api/email-accounts/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+    await fetch(`${getApiBase()}/api/email-accounts/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
     toast({ title: "Account removed" });
     setAccounts(a => a.filter(x => x.id !== id));
   };
 
   const setDefault = async (id: number) => {
-    await fetch(`/api/email-accounts/${id}`, { method: "PUT", headers, body: JSON.stringify({ isDefault: true }) });
+    await fetch(`${getApiBase()}/api/email-accounts/${id}`, { method: "PUT", headers, body: JSON.stringify({ isDefault: true }) });
     await load();
   };
 
@@ -154,7 +155,7 @@ export default function EmailAccountsPage() {
   const testConnection = async (acc: EmailAccount) => {
     setTesting(acc.id);
     try {
-      const res = await fetch(`/api/email-accounts/${acc.id}/test`, { method: "POST", headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${getApiBase()}/api/email-accounts/${acc.id}/test`, { method: "POST", headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (res.ok) toast({ title: "✓ Connection OK", description: `SMTP verified for ${acc.emailAddress}` });
       else toast({ variant: "destructive", title: "Connection failed", description: data.error });
@@ -169,7 +170,7 @@ export default function EmailAccountsPage() {
     setInboxError(null);
     setInboxLoading(true);
     try {
-      const res = await fetch(`/api/email-accounts/${acc.id}/inbox?limit=20`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${getApiBase()}/api/email-accounts/${acc.id}/inbox?limit=20`, { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (res.ok) setInboxMsgs(data.messages ?? []);
       else setInboxError(data.error ?? "Failed to load inbox");
@@ -182,7 +183,7 @@ export default function EmailAccountsPage() {
     if (!composeAcc || !composeTo || !composeSubject || !composeBody) return;
     setSending(true);
     try {
-      const res = await fetch(`/api/email-accounts/${composeAcc.id}/send`, {
+      const res = await fetch(`${getApiBase()}/api/email-accounts/${composeAcc.id}/send`, {
         method: "POST", headers,
         body: JSON.stringify({ to: composeTo, subject: composeSubject, body: composeBody }),
       });

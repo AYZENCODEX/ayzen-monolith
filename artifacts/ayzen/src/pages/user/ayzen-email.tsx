@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getApiBase } from "@/lib/api-base";
 import { useLocation } from "wouter";
 import { Mail, CheckCircle, AlertCircle, Loader2, Copy, Check, ExternalLink, Inbox, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,7 +35,7 @@ export default function AyzenEmail() {
   const token = () => localStorage.getItem("ayzen_token") ?? "";
 
   const refreshStatus = () => {
-    fetch("/api/ayzen-email/status", { headers: { Authorization: `Bearer ${token()}` } })
+    fetch(`${getApiBase()}/api/ayzen-email/status", { headers: { Authorization: `Bearer ${token()}` } })
       .then((r) => r.json())
       .then(setStatus)
       .catch(() => setStatus(null))
@@ -48,7 +49,7 @@ export default function AyzenEmail() {
   const claimNativeMailbox = async () => {
     setClaimingNative(true);
     try {
-      const res = await fetch("/api/ayzen-email/claim-native", {
+      const res = await fetch(`${getApiBase()}/api/ayzen-email/claim-native", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
         body: JSON.stringify({ forwardTo: status?.forwardTo || undefined }),
@@ -71,7 +72,7 @@ export default function AyzenEmail() {
     setChecking(true);
     setAvailability(null);
     try {
-      const res = await fetch(`/api/ayzen-email/check/${encodeURIComponent(username.trim())}`, {
+      const res = await fetch(`${getApiBase()}/api/ayzen-email/check/${encodeURIComponent(username.trim())}`, {
         headers: { Authorization: `Bearer ${token()}` },
       });
       const data = await res.json();
@@ -86,7 +87,7 @@ export default function AyzenEmail() {
     if (!username.trim() || !forwardTo.trim() || !availability?.available) return;
     setClaiming(true);
     try {
-      const res = await fetch("/api/ayzen-email/claim", {
+      const res = await fetch(`${getApiBase()}/api/ayzen-email/claim", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token()}` },
         body: JSON.stringify({ username: username.trim(), forwardTo: forwardTo.trim() }),

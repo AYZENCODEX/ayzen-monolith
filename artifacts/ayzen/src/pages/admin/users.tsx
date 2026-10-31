@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { getApiBase } from "@/lib/api-base";
 import { useListUsers } from "@workspace/api-client-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
@@ -35,7 +36,7 @@ export default function AdminUsers() {
 
   const patch = useCallback(async (id: number, updates: Record<string, string>) => {
     setBusy(b => ({ ...b, [id]: true }));
-    const res = await fetch(`/api/users/${id}`, {
+    const res = await fetch(`${getApiBase()}/api/users/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(updates),
@@ -50,7 +51,7 @@ export default function AdminUsers() {
   const deleteUser = useCallback(async (id: number) => {
     if (!confirm("Permanently delete this user?")) return;
     setBusy(b => ({ ...b, [id]: true }));
-    await fetch(`/api/users/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+    await fetch(`${getApiBase()}/api/users/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
     refetch();
     setBusy(b => ({ ...b, [id]: false }));
   }, [token, refetch]);

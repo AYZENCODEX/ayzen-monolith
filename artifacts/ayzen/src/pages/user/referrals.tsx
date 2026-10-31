@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getApiBase } from "@/lib/api-base";
 import { Copy, Check, Users, DollarSign, Clock, Share2, Gift, Link2, ChevronRight, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -50,8 +51,8 @@ export default function UserReferrals() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/referrals/me", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-      fetch("/api/referrals/list", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${getApiBase()}/api/referrals/me", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${getApiBase()}/api/referrals/list", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
     ]).then(([meData, listData]) => {
       setMe(meData);
       setList(Array.isArray(listData) ? listData : []);
@@ -61,7 +62,7 @@ export default function UserReferrals() {
   const handleApply = async () => {
     if (!applyCode.trim()) return;
     setApplyStatus("loading");
-    const res = await fetch("/api/referrals/apply", {
+    const res = await fetch(`${getApiBase()}/api/referrals/apply", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ code: applyCode.trim().toUpperCase() }),

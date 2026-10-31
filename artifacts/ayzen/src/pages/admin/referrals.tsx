@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { getApiBase } from "@/lib/api-base";
 import { Share2, Users, DollarSign, CheckCircle, Trophy, Filter, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -34,8 +35,8 @@ export default function AdminReferrals() {
   const load = useCallback(async () => {
     setLoading(true);
     const [refRes, ldRes] = await Promise.all([
-      fetch("/api/admin/referrals", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
-      fetch("/api/admin/referrals/leaderboard", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${getApiBase()}/api/admin/referrals", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+      fetch(`${getApiBase()}/api/admin/referrals/leaderboard", { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
     ]);
     setReferrals(Array.isArray(refRes.referrals) ? refRes.referrals : []);
     setStats(refRes.stats ?? null);
@@ -47,7 +48,7 @@ export default function AdminReferrals() {
 
   const markPaid = async (id: number) => {
     setPayingId(id);
-    await fetch(`/api/admin/referrals/${id}/reward`, { method: "PATCH", headers: { Authorization: `Bearer ${token}` } });
+    await fetch(`${getApiBase()}/api/admin/referrals/${id}/reward`, { method: "PATCH", headers: { Authorization: `Bearer ${token}` } });
     setReferrals(r => r.map(x => x.id === id ? { ...x, rewardPaid: true, paidAt: new Date().toISOString() } : x));
     if (stats) setStats({ ...stats, paidReferrals: stats.paidReferrals + 1 });
     setPayingId(null);

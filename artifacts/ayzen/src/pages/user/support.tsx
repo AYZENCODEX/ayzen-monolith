@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { getApiBase } from "@/lib/api-base";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -64,7 +65,7 @@ export default function SupportPage() {
   const loadTickets = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/support/tickets", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${getApiBase()}/api/support/tickets", { headers: { Authorization: `Bearer ${token}` } });
       setTickets(await res.json());
     } catch { toast({ title: "Failed to load tickets", variant: "destructive" }); }
     finally { setLoading(false); }
@@ -80,7 +81,7 @@ export default function SupportPage() {
     setThreadLoading(true);
     setView("thread");
     try {
-      const res = await fetch(`/api/support/tickets/${ticket.id}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${getApiBase()}/api/support/tickets/${ticket.id}`, { headers: { Authorization: `Bearer ${token}` } });
       setActiveTicket(await res.json());
     } catch { toast({ title: "Failed to load thread", variant: "destructive" }); }
     finally { setThreadLoading(false); }
@@ -93,7 +94,7 @@ export default function SupportPage() {
     }
     setCreating(true);
     try {
-      const res = await fetch("/api/support/tickets", { method: "POST", headers, body: JSON.stringify(newForm) });
+      const res = await fetch(`${getApiBase()}/api/support/tickets", { method: "POST", headers, body: JSON.stringify(newForm) });
       if (!res.ok) throw new Error();
       toast({ title: "Ticket created!", description: "Our team will reply soon." });
       setNewForm({ title: "", category: "general", priority: "medium", message: "" });
@@ -107,7 +108,7 @@ export default function SupportPage() {
     if (!reply.trim() || !activeTicket) return;
     setSending(true);
     try {
-      const res = await fetch(`/api/support/tickets/${activeTicket.id}/messages`, {
+      const res = await fetch(`${getApiBase()}/api/support/tickets/${activeTicket.id}/messages`, {
         method: "POST", headers, body: JSON.stringify({ content: reply }),
       });
       const msg = await res.json();

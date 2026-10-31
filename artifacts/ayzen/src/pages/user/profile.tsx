@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { getApiBase } from "@/lib/api-base";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -102,7 +103,7 @@ export default function ProfilePage() {
   const fetchProfile = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/profile", {
+      const res = await fetch(`${getApiBase()}/api/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to load profile");
@@ -131,7 +132,7 @@ export default function ProfilePage() {
   useEffect(() => { fetchProfile(); }, [fetchProfile]);
 
   useEffect(() => {
-    fetch("/api/telegram/status")
+    fetch(`${getApiBase()}/api/telegram/status")
       .then(r => r.json())
       .then(d => { if (d.online && d.username) setTgBotUsername(d.username); })
       .catch(() => {});
@@ -169,7 +170,7 @@ export default function ProfilePage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await fetch("/api/profile", {
+      const res = await fetch(`${getApiBase()}/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(form),
@@ -206,7 +207,7 @@ export default function ProfilePage() {
   const handleKycSubmit = async () => {
     setKycSubmitting(true);
     try {
-      const res = await fetch("/api/profile/kyc/submit", {
+      const res = await fetch(`${getApiBase()}/api/profile/kyc/submit", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -232,7 +233,7 @@ export default function ProfilePage() {
     if (!tgCode.trim()) return;
     setTgConnecting(true);
     try {
-      const res = await fetch("/api/telegram/connect/verify", {
+      const res = await fetch(`${getApiBase()}/api/telegram/connect/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ code: tgCode.trim() }),

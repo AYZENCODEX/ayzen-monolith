@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { getApiBase } from "@/lib/api-base";
 import type { KeyboardEvent } from "react";
 import { Link } from "wouter";
 import { useListProjects } from "@workspace/api-client-react";
@@ -169,7 +170,7 @@ export default function AdminProjects() {
   const { toast } = useToast();
 
   const authHeaders = () => ({ Authorization: `Bearer ${localStorage.getItem("ayzen_token") ?? ""}` });
-  const apiBase = () => (import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "") + "/api";
+  const apiBase = () => getApiBase() + "/api";
 
   // Lazy-loaded once, the first time the create dialog is opened — a plain
   // authed fetch (same pattern as handleCreate below) rather than

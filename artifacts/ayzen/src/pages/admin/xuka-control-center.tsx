@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { getApiBase } from "@/lib/api-base";
 import { AlertTriangle, CheckCircle2, ChevronRight, CircleDot, Loader2, RefreshCw, ShieldCheck, XCircle } from "lucide-react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +29,7 @@ export default function XukaControlCenter() {
     setState("loading");
     try {
       const token = localStorage.getItem("ayzen_token") ?? "";
-      const response = await fetch("/api/admin/xuka/registry", { headers: { Authorization: `Bearer ${token}` } });
+      const response = await fetch(`${getApiBase()}/api/admin/xuka/registry", { headers: { Authorization: `Bearer ${token}` } });
       if (response.status === 401 || response.status === 403) {
         setState("permission-denied");
         return;

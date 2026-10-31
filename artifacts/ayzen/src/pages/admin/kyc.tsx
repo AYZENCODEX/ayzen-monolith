@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { getApiBase } from "@/lib/api-base";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -57,7 +58,7 @@ export default function AdminKycPage() {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const r = await fetch(`/api/admin/kyc?status=${tab}`, { headers: { Authorization: `Bearer ${token}` } });
+      const r = await fetch(`${getApiBase()}/api/admin/kyc?status=${tab}`, { headers: { Authorization: `Bearer ${token}` } });
       if (r.ok) setUsers(await r.json());
     } catch { /* noop */ }
     setLoading(false);
@@ -68,7 +69,7 @@ export default function AdminKycPage() {
   const handleApprove = async (id: number) => {
     setProcessing(id);
     try {
-      const r = await fetch(`/api/admin/kyc/${id}/approve`, { method: "POST", headers });
+      const r = await fetch(`${getApiBase()}/api/admin/kyc/${id}/approve`, { method: "POST", headers });
       if (r.ok) {
         toast({ title: "✅ KYC approved — user notified" });
         await fetchUsers();
@@ -83,7 +84,7 @@ export default function AdminKycPage() {
   const handleReject = async (id: number) => {
     setProcessing(id);
     try {
-      const r = await fetch(`/api/admin/kyc/${id}/reject`, {
+      const r = await fetch(`${getApiBase()}/api/admin/kyc/${id}/reject`, {
         method: "POST", headers, body: JSON.stringify({ reason: reasons[id] ?? "Not specified" }),
       });
       if (r.ok) {
