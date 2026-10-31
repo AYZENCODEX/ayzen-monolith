@@ -852,7 +852,12 @@ export default function UserProjectDetail() {
         body: JSON.stringify({ vaultEntryId }),
       });
       const data = await res.json();
-      if (!res.ok) { toast({ variant: "destructive", title: data.error || "Enrollment failed" }); return; }
+      if (!res.ok) {
+        if (data.code === "OUT_OF_CREDITS") {
+          toast({ variant: "destructive", title: "Not enough credits", description: `Enrolling costs ${data.cost} credits, your balance is ${data.balance}. Top up from Credits.` });
+        } else { toast({ variant: "destructive", title: data.error || "Enrollment failed" }); }
+        return;
+      }
       toast({ title: "Entity enrolled!" });
       await loadEnrollments();
     } catch { toast({ variant: "destructive", title: "Network error" }); }

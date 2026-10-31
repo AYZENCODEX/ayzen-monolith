@@ -1,5 +1,5 @@
 import { Router, type Request } from "express";
-import { db, usersTable, pool } from "@workspace/db";
+import { db, usersTable, pool, creditsTable, creditTransactionsTable } from "@workspace/db";
 import { eq, sql } from "drizzle-orm";
 import * as crypto from "crypto";
 import { referralsTable } from "@workspace/db";
@@ -305,6 +305,19 @@ router.post("/auth/register", authLimiter, async (req, res): Promise<void> => {
       rewardPaid: false,
     });
   }
+
+  // Welcome credits — every new user starts with 25 credits so metered
+  // actions (project enroll costs 2, task submit) work out of the box
+  // instead of failing with a 402 OUT_OF_CREDITS on first use. Same
+  // credits/credit_transactions tables the purchase flow uses.
+  try {
+    await db.insert(creditsTable).values({ userId: user.id, balance: 25 });
+    await db.insert(creditTransactionsTable).values({
+      userId: user.id, type: "purchase", method: "welcome_bonus",
+      credits: 25, status: "completed", referenceId: "signup-welcome",
+      notes: "Welcome bonus — 25 credits on signup",
+    });
+  } catch (creditErr) { console.error("welcome credit grant failed:", creditErr); }
 
   // Auto-create built-in ETH wallet for every new user
   db.execute(sql`INSERT INTO wallets (user_id, label, address, chain, chain_id, is_primary, balance, balance_usd, created_at, updated_at)
