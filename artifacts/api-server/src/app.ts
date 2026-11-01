@@ -63,9 +63,10 @@ const app: Express = express();
 // TEMP: sentry wiring test route — remove after verification
 app.get(["/api/__sentry_test", "/debug-sentry"], async (req, res) => {
   const err = new Error("My first Sentry error!");
-  Sentry.captureException(err);
-  await Sentry.flush(5000);
-  res.status(500).json({ sent: true });
+  const eventId = Sentry.captureException(err);
+  const flushed = await Sentry.flush(8000);
+  const client = Sentry.getClient();
+  res.status(500).json({ sent: flushed, eventId: eventId ?? null, hasClient: !!client, dsnTail: (client?.getDsn?.()?.path ?? "none") });
 });
 
 
