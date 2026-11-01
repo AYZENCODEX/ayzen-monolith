@@ -1,5 +1,8 @@
+import { initSentry } from "./lib/sentry";
 import "./lib/express-async-errors"; // FIN F12: must run before any router is built
 import "./lib/process-guards"; // FIN F12: log unhandled rejections instead of dying silently
+initSentry();
+
 import app from "./app";
 import "./vault/infrastructure/crypto-key-stores"; // registers the encryption_keys stores behind the Vault crypto key-store ports (VLT-GAP-14-B)
 import { logger } from "./lib/logger";

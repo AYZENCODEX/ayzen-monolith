@@ -24,6 +24,8 @@
     "@ayzen/capabilities": "workspace:*",
     "@ayzen/telegram": "workspace:*",
     "@polymarket/clob-client": "^4.16.0",
+    "@sentry/node": "^11.10.0",
+    "@sentry/profiling-node": "^11.10.0",
     "@simplewebauthn/server": "^13.1.1",
     "@swc/helpers": "^0.5.17",
     "@workspace/api-zod": "workspace:*",
@@ -50,9 +52,9 @@
     "pg": "^8.22.0",
     "pino": "^9.14.0",
     "pino-http": "^10.5.0",
-    "zod": "catalog:",
     "qrcode": "^1.5.4",
-    "resend": "^6.14.0"
+    "resend": "^6.14.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
