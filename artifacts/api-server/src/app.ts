@@ -61,7 +61,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app: Express = express();
 
 // TEMP: sentry wiring test route — remove after verification
-app.get("/api/__sentry_test", (req, res) => {
+app.get(["/api/__sentry_test", "/debug-sentry"], (req, res) => {
   Sentry.logger?.info?.("User triggered test error", { action: "test_error_endpoint" });
   throw new Error("My first Sentry error!");
 });
