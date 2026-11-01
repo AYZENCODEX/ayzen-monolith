@@ -331,9 +331,8 @@ if (SPLIT_REDIRECTS) {
 
 // TEMP: sentry wiring test route — remove after verification
 app.get("/api/__sentry_test", (req, res) => {
-  
-  Sentry.captureException(new Error("AYZEN sentry test error — safe to ignore"));
-  res.json({ ok: true, sent: true });
+  Sentry.logger?.info?.("User triggered test error", { action: "test_error_endpoint" });
+  throw new Error("My first Sentry error!");
 });
 
 if (process.env.NODE_ENV === "production") {

@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/node";
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
 
-const DSN = process.env.SENTRY_DSN || "https://1d50962385dacf581a3383068879aad3@o4512354569814016.ingest.us.sentry.io/4512354604220416";
+const DSN = process.env.SENTRY_DSN || "https://4d5a03812af5632e86c4fd6f25b316a4@o4512354569814016.ingest.us.sentry.io/4512354743746560";
 
 export function initSentry() {
   Sentry.init({
