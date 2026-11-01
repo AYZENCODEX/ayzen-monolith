@@ -61,9 +61,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app: Express = express();
 
 // TEMP: sentry wiring test route — remove after verification
-app.get(["/api/__sentry_test", "/debug-sentry"], (req, res) => {
-  Sentry.logger?.info?.("User triggered test error", { action: "test_error_endpoint" });
-  throw new Error("My first Sentry error!");
+app.get(["/api/__sentry_test", "/debug-sentry"], async (req, res) => {
+  const err = new Error("My first Sentry error!");
+  Sentry.captureException(err);
+  await Sentry.flush(5000);
+  res.status(500).json({ sent: true });
 });
 
 
@@ -348,5 +350,8 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(distPath, "index.html"));
   });
 }
+
+// Sentry express error handler must be added AFTER all routes/controllers
+app.use(Sentry.expressErrorHandler());
 
 export default app;
