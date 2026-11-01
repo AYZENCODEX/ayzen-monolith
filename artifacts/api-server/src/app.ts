@@ -60,6 +60,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app: Express = express();
 
+// TEMP: sentry wiring test route — remove after verification
+app.get("/api/__sentry_test", (req, res) => {
+  Sentry.logger?.info?.("User triggered test error", { action: "test_error_endpoint" });
+  throw new Error("My first Sentry error!");
+});
+
+
 // Behind Render/Replit's reverse proxy — needed so req.ip and the rate
 // limiter see the real client IP (X-Forwarded-For) instead of the proxy's.
 app.set("trust proxy", 1);
@@ -328,12 +335,6 @@ if (SPLIT_REDIRECTS) {
     return res.redirect(308, `https://${host}${req.originalUrl}`);
   });
 }
-
-// TEMP: sentry wiring test route — remove after verification
-app.get("/api/__sentry_test", (req, res) => {
-  Sentry.logger?.info?.("User triggered test error", { action: "test_error_endpoint" });
-  throw new Error("My first Sentry error!");
-});
 
 if (process.env.NODE_ENV === "production") {
   const distPath = path.resolve(__dirname, "../../ayzen/dist/public");
