@@ -1,5 +1,4 @@
 import "./lib/express-async-errors"; // FIN F12: idempotent; keeps tests that import app directly safe
-import * as Sentry from "@sentry/node"; // TEMP: sentry test
 import express, { type Express } from "express";
 import pinoHttp from "pino-http";
 import cookieParser from "cookie-parser";
@@ -59,15 +58,6 @@ import { SHARED_APP_DEFINITIONS, getSharedAppHosts } from "./lib/shared-apps";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app: Express = express();
-
-// TEMP: sentry wiring test route — remove after verification
-app.get(["/api/__sentry_test", "/debug-sentry"], async (req, res) => {
-  const err = new Error("My first Sentry error!");
-  const eventId = Sentry.captureException(err);
-  const flushed = await Sentry.flush(8000);
-  const client = Sentry.getClient();
-  res.status(500).json({ sent: flushed, eventId: eventId ?? null, hasClient: !!client, dsnTail: (client?.getDsn?.()?.path ?? "none") });
-});
 
 
 // Behind Render/Replit's reverse proxy — needed so req.ip and the rate
