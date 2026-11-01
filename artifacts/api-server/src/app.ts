@@ -1,4 +1,5 @@
 import "./lib/express-async-errors"; // FIN F12: idempotent; keeps tests that import app directly safe
+import * as Sentry from "@sentry/node"; // sentry express error handler (init happens in index.ts)
 import express, { type Express } from "express";
 import pinoHttp from "pino-http";
 import cookieParser from "cookie-parser";
