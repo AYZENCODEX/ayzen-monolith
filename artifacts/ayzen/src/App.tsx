@@ -10,6 +10,12 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { setAuthTokenGetter, setBaseUrl } from "@workspace/api-client-react";
+import { getApiBase } from "@/lib/api-base";
+
+// Configure generated API requests before route components mount and run queries.
+setBaseUrl(getApiBase());
+setAuthTokenGetter(() => localStorage.getItem("ayzen_token") ?? sessionStorage.getItem("ayzen_token"));
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/hooks/use-auth";

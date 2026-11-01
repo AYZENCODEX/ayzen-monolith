@@ -11,13 +11,14 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { getApiBase } from "@/lib/api-base";
 
 // This is the same rich, tabbed "New Task" experience used on the Task
 // sidebar page (admin/tasks.tsx). It's shared here so any place that lets
 // someone create a task — the Task sidebar itself, or a specific
 // Protocol/project's Tasks tab — uses one consistent create/edit UI.
 
-const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
+const BASE = getApiBase();
 
 export interface TFDProject { id: number; name: string; xpName?: string | null; xpPrice?: number; }
 

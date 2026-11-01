@@ -18,8 +18,9 @@ import { cn } from "@/lib/utils";
 import { TaskFormDialog, type TFDProject as Project, type TFDTaskRow as TaskRow } from "@/components/task-form-dialog";
 import { ReceiptLinkDialog } from "@/components/receipt-link-dialog";
 import { taskReceiptApi } from "@/lib/receipt-api";
+import { getApiBase } from "@/lib/api-base";
 
-const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
+const BASE = getApiBase();
 
 interface Submission {
   id: number; taskId: number; taskName: string | null; userId: number;

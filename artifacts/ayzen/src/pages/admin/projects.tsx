@@ -169,8 +169,7 @@ export default function AdminProjects() {
   const { data, isLoading, refetch } = useListProjects({ search, page: 1, limit: 50 });
   const { toast } = useToast();
 
-  const authHeaders = () => ({ Authorization: `Bearer ${localStorage.getItem("ayzen_token") ?? ""}` });
-  const apiBase = () => getApiBase() + "/api";
+  const apiBase = getApiBase;
 
   // Lazy-loaded once, the first time the create dialog is opened — a plain
   // authed fetch (same pattern as handleCreate below) rather than
@@ -264,8 +263,7 @@ export default function AdminProjects() {
   const handleCreate = () => {
     if (!form.name.trim()) { toast({ variant: "destructive", title: "Name required" }); return; }
     const token = localStorage.getItem("ayzen_token") ?? "";
-    const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
-    fetch(`${BASE}/api/projects`, {
+    fetch(`${getApiBase()}/api/projects`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({

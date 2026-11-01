@@ -30,7 +30,7 @@ export default function AdminUsers() {
   const roleFilter = filter === "admin" ? "admin" : undefined;
   const statusFilter = filter === "suspended" ? "suspended" : filter === "active" ? "active" : undefined;
 
-  const { data, isLoading, refetch } = useListUsers({ search, page: 1, limit: 100, ...(roleFilter ? { role: roleFilter } : {}), ...(statusFilter ? { status: statusFilter } : {}) });
+  const { data, isLoading, error, refetch } = useListUsers({ search, page: 1, limit: 100, ...(roleFilter ? { role: roleFilter } : {}), ...(statusFilter ? { status: statusFilter } : {}) });
 
   const users: UserRow[] = (data?.users ?? []).map(u => ({ ...u, ...localOverrides[u.id] }));
 
@@ -119,6 +119,12 @@ export default function AdminUsers() {
                   ))}
                 </TableRow>
               ))
+            ) : error ? (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center py-12 font-mono text-destructive">
+                  Failed to load users. {error instanceof Error ? error.message : "Check your admin access and API connection, then refresh."}
+                </TableCell>
+              </TableRow>
             ) : users.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="text-center py-12 font-mono text-muted-foreground">
