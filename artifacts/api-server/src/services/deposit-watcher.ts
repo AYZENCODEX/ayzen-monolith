@@ -105,12 +105,12 @@ export const VAULT_CHAINS: ChainConfig[] = [
     nativeSymbol: "ETH", confirmationsRequired: 20, blockRangePerPoll: 100,
     tokens: erc20sFor("ARB"),
   },
+];
 
 for (const c of VAULT_CHAINS) {
   const override = envRpc(c.chain);
   if (override) c.rpcUrl = override;
 }
-];
 
 const POLL_INTERVAL_MS = 12_000;
 const ERC20_TRANSFER_TOPIC = ethers.id("Transfer(address,address,uint256)");
