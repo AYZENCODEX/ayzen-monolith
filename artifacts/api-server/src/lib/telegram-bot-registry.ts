@@ -13,13 +13,13 @@ export interface TelegramBotDescriptor {
 
 export const TELEGRAM_BOT_REGISTRY: readonly TelegramBotDescriptor[] = [
   { key: "ayzenx", displayName: "AYZENX", responsibility: "Personal workspace", service: "workspace", tokenEnvVar: "TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_WEBHOOK_SECRET" },
-  { key: "warde", displayName: "WARDE", responsibility: "Organization / business workspace", service: "workspace", tokenEnvVar: "TELEGRAM_WARDE_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_WARDE_WEBHOOK_SECRET" },
-  { key: "verve", displayName: "VERVE", responsibility: "Communication / productivity", service: "mail", tokenEnvVar: "TELEGRAM_VERVE_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_VERVE_WEBHOOK_SECRET" },
-  { key: "ryft", displayName: "RYFT", responsibility: "Finance", service: "finance", tokenEnvVar: "TELEGRAM_RYFT_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_RYFT_WEBHOOK_SECRET" },
-  { key: "sylo", displayName: "SYLO", responsibility: "Secure storage / vault", service: "vault", tokenEnvVar: "TELEGRAM_SYLO_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_SYLO_WEBHOOK_SECRET" },
-  { key: "skarn", displayName: "SKARN", responsibility: "Automation / workflow", service: "workflow", tokenEnvVar: "TELEGRAM_SKARN_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_SKARN_WEBHOOK_SECRET" },
-  { key: "zynth", displayName: "ZYNTH", responsibility: "AI / intelligence / agent", service: "ai-agent", tokenEnvVar: "TELEGRAM_ZYNTH_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_ZYNTH_WEBHOOK_SECRET" },
-  { key: "wisp", displayName: "WISP", responsibility: "Mailbox / email", service: "mail", tokenEnvVar: "TELEGRAM_WISP_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_WISP_WEBHOOK_SECRET" },
+  { key: "warde", displayName: "WARDE", responsibility: "Organization / business workspace", service: "workspace", tokenEnvVar: "WARDE_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_WARDE_WEBHOOK_SECRET" },
+  { key: "verve", displayName: "VERVE", responsibility: "Communication / productivity", service: "mail", tokenEnvVar: "VERVE_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_VERVE_WEBHOOK_SECRET" },
+  { key: "ryft", displayName: "RYFT", responsibility: "Finance", service: "finance", tokenEnvVar: "RYFT_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_RYFT_WEBHOOK_SECRET" },
+  { key: "sylo", displayName: "SYLO", responsibility: "Secure storage / vault", service: "vault", tokenEnvVar: "SYLO_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_SYLO_WEBHOOK_SECRET" },
+  { key: "skarn", displayName: "SKARN", responsibility: "Automation / workflow", service: "workflow", tokenEnvVar: "SKARN_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_SKARN_WEBHOOK_SECRET" },
+  { key: "zynth", displayName: "ZYNTH", responsibility: "AI / intelligence / agent", service: "ai-agent", tokenEnvVar: "ZYNTH_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_ZYNTH_WEBHOOK_SECRET" },
+  { key: "wisp", displayName: "WISP", responsibility: "Mailbox / email", service: "mail", tokenEnvVar: "WISP_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_WISP_WEBHOOK_SECRET" },
   { key: "admin", displayName: "AYZEN Admin", responsibility: "Privileged control plane", service: "admin", tokenEnvVar: "TELEGRAM_ADMIN_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_ADMIN_WEBHOOK_SECRET" },
 ];
 

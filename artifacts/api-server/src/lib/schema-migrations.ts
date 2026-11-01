@@ -2721,14 +2721,15 @@ export const MIGRATIONS = [
   `INSERT INTO telegram_bots (bot_key, display_name, responsibility, token_env_var)
    VALUES
      ('ayzenx', 'AYZENX', 'Personal workspace', 'TELEGRAM_BOT_TOKEN'),
-     ('warde', 'WARDE', 'Organization / business workspace', 'TELEGRAM_WARDE_BOT_TOKEN'),
-     ('verve', 'VERVE', 'Communication / productivity', 'TELEGRAM_VERVE_BOT_TOKEN'),
-     ('ryft', 'RYFT', 'Finance', 'TELEGRAM_RYFT_BOT_TOKEN'),
-     ('sylo', 'SYLO', 'Secure storage / vault', 'TELEGRAM_SYLO_BOT_TOKEN'),
-     ('skarn', 'SKARN', 'Automation / workflow', 'TELEGRAM_SKARN_BOT_TOKEN'),
-     ('zynth', 'ZYNTH', 'AI / intelligence / agent', 'TELEGRAM_ZYNTH_BOT_TOKEN'),
+     ('warde', 'WARDE', 'Organization / business workspace', 'WARDE_TELEGRAM_BOT_TOKEN'),
+     ('verve', 'VERVE', 'Communication / productivity', 'VERVE_TELEGRAM_BOT_TOKEN'),
+     ('ryft', 'RYFT', 'Finance', 'RYFT_TELEGRAM_BOT_TOKEN'),
+     ('sylo', 'SYLO', 'Secure storage / vault', 'SYLO_TELEGRAM_BOT_TOKEN'),
+     ('skarn', 'SKARN', 'Automation / workflow', 'SKARN_TELEGRAM_BOT_TOKEN'),
+     ('zynth', 'ZYNTH', 'AI / intelligence / agent', 'ZYNTH_TELEGRAM_BOT_TOKEN'),
+     ('wisp', 'WISP', 'Mailbox / email', 'WISP_TELEGRAM_BOT_TOKEN'),
      ('new-bot', 'New Telegram Bot', 'Reserved extensible bot slot', 'TELEGRAM_NEW_BOT_TOKEN')
-   ON CONFLICT (bot_key) DO NOTHING`,
+   ON CONFLICT (bot_key) DO UPDATE SET token_env_var = EXCLUDED.token_env_var`,
   `CREATE TABLE IF NOT EXISTS idempotency_keys (
     id SERIAL PRIMARY KEY,
     scope TEXT NOT NULL,
