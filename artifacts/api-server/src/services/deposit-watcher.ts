@@ -67,6 +67,12 @@ function erc20sFor(chain: string): { symbol: string; contract: string; decimals:
 
 // Public RPC endpoints — same defaults as routes/wallets.ts RPC_URLS. Swap
 // for a paid/private RPC (Alchemy/Infura/etc.) in production for reliability.
+// Each chain's rpcUrl can be overridden with RPC_URL_<CHAIN> (e.g. RPC_URL_PLASMA).
+const envRpc = (chain: string): string | undefined => {
+  const v = process.env[`RPC_URL_${chain}`];
+  return v && v.trim() ? v.trim() : undefined;
+};
+
 export const VAULT_CHAINS: ChainConfig[] = [
   {
     chain: "ETH", rpcUrl: "https://eth.llamarpc.com", chainId: 1,
@@ -99,6 +105,11 @@ export const VAULT_CHAINS: ChainConfig[] = [
     nativeSymbol: "ETH", confirmationsRequired: 20, blockRangePerPoll: 100,
     tokens: erc20sFor("ARB"),
   },
+
+for (const c of VAULT_CHAINS) {
+  const override = envRpc(c.chain);
+  if (override) c.rpcUrl = override;
+}
 ];
 
 const POLL_INTERVAL_MS = 12_000;
