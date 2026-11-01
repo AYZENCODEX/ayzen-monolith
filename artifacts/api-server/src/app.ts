@@ -1,4 +1,5 @@
 import "./lib/express-async-errors"; // FIN F12: idempotent; keeps tests that import app directly safe
+import * as Sentry from "@sentry/node"; // TEMP: sentry test
 import express, { type Express } from "express";
 import pinoHttp from "pino-http";
 import cookieParser from "cookie-parser";
@@ -330,7 +331,7 @@ if (SPLIT_REDIRECTS) {
 
 // TEMP: sentry wiring test route — remove after verification
 app.get("/api/__sentry_test", (req, res) => {
-  const Sentry = require("@sentry/node");
+  
   Sentry.captureException(new Error("AYZEN sentry test error — safe to ignore"));
   res.json({ ok: true, sent: true });
 });
