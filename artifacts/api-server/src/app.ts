@@ -328,6 +328,13 @@ if (SPLIT_REDIRECTS) {
   });
 }
 
+// TEMP: sentry wiring test route — remove after verification
+app.get("/api/__sentry_test", (req, res) => {
+  const Sentry = require("@sentry/node");
+  Sentry.captureException(new Error("AYZEN sentry test error — safe to ignore"));
+  res.json({ ok: true, sent: true });
+});
+
 if (process.env.NODE_ENV === "production") {
   const distPath = path.resolve(__dirname, "../../ayzen/dist/public");
   app.use(express.static(distPath));
