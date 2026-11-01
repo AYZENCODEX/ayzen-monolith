@@ -55,6 +55,7 @@ import { runWithTraceContext, traceContextFromHeaders } from "./lib/trace-contex
 import { gatewayContextMiddleware } from "./lib/gateway-context";
 import { sioraRequestTelemetry } from "./lib/siora/request-middleware";
 import { SHARED_APP_DEFINITIONS, getSharedAppHosts } from "./lib/shared-apps";
+import { isApiHost } from "./lib/api-hosts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -270,6 +271,18 @@ app.use("/api", globalLimiter, apiKeyScopeGate, router);
 
 app.use("/api/{*splat}", notFoundHandler);
 app.use(globalErrorHandler as any);
+
+// ── API host (api.ayzen.tech) ────────────────────────────────────────────────
+// Phase 2. Real routes have had their chance. Do not serve the SPA or redirect
+// module paths on the API host.
+app.use((req, res, next) => {
+  if (!isApiHost(req.hostname)) return next();
+  if (req.path === "/" || req.path === "") {
+    res.json({ service: "ayzen-api", status: "ok", base: "/api" });
+    return;
+  }
+  res.status(404).json({ error: "Route not found", code: "NOT_FOUND" });
+});
 
 // ── Serve built frontend in production ───────────────────────────────────────
 // AYZEN Workspace subdomain scoping (master plan §7 Phase 2 — Sylo split;

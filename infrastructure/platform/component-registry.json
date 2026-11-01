@@ -4235,7 +4235,7 @@
         "originalId": "ayzen-public"
       },
       "metadata": {
-        "domain": "ayzen.app",
+        "domain": "ayzen.tech",
         "target": "api-gateway",
         "entryPoint": "frontend"
       }
@@ -4252,7 +4252,7 @@
         "originalId": "ayzen-staging"
       },
       "metadata": {
-        "domain": "staging.ayzen.app",
+        "domain": "staging.ayzen.tech",
         "target": "api-gateway",
         "entryPoint": "frontend"
       }
@@ -4269,7 +4269,7 @@
         "originalId": "ayzen-admin"
       },
       "metadata": {
-        "domain": "admin.ayzen.app",
+        "domain": "admin.ayzen.tech",
         "target": "admin",
         "entryPoint": "admin"
       }
@@ -4286,7 +4286,7 @@
         "originalId": "ayzen-api"
       },
       "metadata": {
-        "domain": "api.ayzen.app",
+        "domain": "api.ayzen.tech",
         "target": "api-gateway",
         "entryPoint": "api"
       }
