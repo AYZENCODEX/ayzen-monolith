@@ -18,6 +18,6 @@
     { "name": "marketplace", "owner": "VERVE", "data": ["marketplace_listings", "marketplace_orders", "marketplace_reviews"], "api": ["list-listings", "create-listing", "place-order"], "events": ["marketplace.listing.created", "marketplace.order.created"] },
     { "name": "intelligence", "owner": "Intelligence", "data": ["intelligence_observations", "intelligence_signals", "technical_gaps"], "api": ["list-signals", "read-observation"], "events": ["intelligence.observation.created", "technical_gap.detected"] },
     { "name": "admin", "owner": "Admin", "data": ["admin_configuration", "admin_alerts", "admin_gaps", "admin_deployments"], "api": ["read-control-plane", "query-data", "mutate-data", "issue-break-glass"], "events": ["audit.created", "alert.created", "incident.created"] },
-    { "name": "telegram", "owner": "Telegram Platform", "data": ["telegram_bots", "telegram_update_receipts", "telegram_sessions"], "api": ["receive-update", "resolve-command", "render-menu"], "events": ["telegram.update.received", "telegram.auth.linked"] }
+    { "name": "telegram", "owner": "Telegram Platform", "data": ["telegram_bots", "telegram_update_receipts", "telegram_sessions", "telegram_bot_links", "telegram_link_codes"], "api": ["receive-update", "resolve-command", "render-menu"], "events": ["telegram.update.received", "telegram.auth.linked"] }
   ]
 }

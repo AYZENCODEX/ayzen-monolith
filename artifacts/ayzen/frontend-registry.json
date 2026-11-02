@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "registryId": "frontend-registry",
-  "generatedAt": "2026-09-27",
+  "generatedAt": "2026-11-02",
   "generatedBy": "tools/ui-circuit-validator/build.mjs",
   "schema": "schemas/ui-circuit/frontend-route-entry.v1.json",
   "sourceRegistries": [
@@ -12,11 +12,11 @@
     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
   ],
   "completeness": {
-    "totalRoutes": 183,
-    "resolvedToPage": 183,
-    "totalPageFiles": 188,
+    "totalRoutes": 191,
+    "resolvedToPage": 191,
+    "totalPageFiles": 189,
     "deadPages": 11,
-    "routesWithNoApiCalls": 118,
+    "routesWithNoApiCalls": 126,
     "routesWithOrphanCalls": 0,
     "routesOk": 65
   },
@@ -140,6 +140,54 @@
       "code": "MOCK_OR_STATIC_PAGE",
       "path": "/team_leader/custom/:slug",
       "pageFile": "pages/team-leader/custom-page.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/settings",
+      "pageFile": "pages/user/module-settings.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/wallet/settings",
+      "pageFile": "pages/user/module-settings.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/finance/settings",
+      "pageFile": "pages/user/module-settings.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/marketplace/settings",
+      "pageFile": "pages/user/module-settings.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/projects/settings",
+      "pageFile": "pages/user/module-settings.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/teams/settings",
+      "pageFile": "pages/user/module-settings.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/mailbox/settings",
+      "pageFile": "pages/user/module-settings.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/assistant/settings",
+      "pageFile": "pages/user/module-settings.tsx"
     },
     {
       "severity": "warning",
@@ -3155,6 +3203,110 @@
           }
         ],
         "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/settings",
+      "component": "ModuleSettings",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/module-settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/wallet/settings",
+      "component": "ModuleSettings",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/module-settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/finance/settings",
+      "component": "ModuleSettings",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/module-settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/marketplace/settings",
+      "component": "ModuleSettings",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/module-settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/projects/settings",
+      "component": "ModuleSettings",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/module-settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/teams/settings",
+      "component": "ModuleSettings",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/module-settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/mailbox/settings",
+      "component": "ModuleSettings",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/module-settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/assistant/settings",
+      "component": "ModuleSettings",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/user/module-settings.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
       }
     },
     {

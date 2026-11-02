@@ -3,9 +3,10 @@ import { db, usersTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { broadcastToAll, verifyTelegramCode, getBot, handleWebhookUpdate, getTelegramTransportMode } from "../lib/telegram";
 import { claimTelegramUpdate, listFailedTelegramUpdates, markTelegramUpdate, normalizeTelegramUpdate } from "../lib/telegram-gateway";
-import { getTelegramBotDescriptor, getTelegramBotStatus } from "../lib/telegram-bot-registry";
-import { TELEGRAM_ADAPTERS } from "../lib/telegram-adapters";
-import { normalizeTelegramMessage } from "@ayzen/telegram";
+import { getTelegramBotDescriptor } from "../lib/telegram-bot-registry";
+import { collectTelegramBotStatus } from "../lib/telegram-launcher";
+import { gatewayDispatcher } from "../lib/telegram-gateway-runtime";
+import { verifyWebhookSecret } from "@ayzen/telegram";
 import crypto from "node:crypto";
 import { requireAuth, requireAdmin, getRequestUser } from "../middlewares/auth";
 
@@ -95,16 +96,20 @@ router.get("/telegram/status", async (_req, res): Promise<void> => {
   }
 });
 
-// Shared registry view. It intentionally exposes only configuration status,
-// never tokens, webhook secrets, or provider credentials.
-router.get("/telegram/bots", requireAdmin, (_req, res): void => {
-  res.json(
-    getTelegramBotStatus().map(({ tokenEnvVar, webhookSecretEnvVar, ...bot }) => ({
-      ...bot,
-      tokenConfigured: Boolean(process.env[tokenEnvVar]),
-      webhookSecretConfigured: Boolean(process.env[webhookSecretEnvVar]),
-    })),
-  );
+// Shared registry view + live runtime status per bot. It intentionally exposes
+// only configuration status, never tokens, webhook secrets, or credentials.
+// `?refresh=true` re-checks every configured bot against Telegram (getMe +
+// getWebhookInfo: webhook URL, pending update count, last Telegram-side error).
+router.get("/telegram/bots", requireAdmin, async (req, res): Promise<void> => {
+  const refresh = req.query.refresh === "true" || req.query.refresh === "1";
+  const bots = await collectTelegramBotStatus({
+    refresh,
+    ayzenx: {
+      transport: getTelegramTransportMode(),
+      getUsername: async () => (await getBot()?.getMe())?.username ?? null,
+    },
+  });
+  res.json(bots);
 });
 
 // Admin only: failure rows are operational data about every bot's users.
@@ -113,8 +118,9 @@ router.get("/telegram/gateway/failures", requireAdmin, async (_req, res): Promis
 });
 
 // Extensible shared gateway ingress. AYZENX keeps using the legacy handler;
-// every other registered bot is dispatched through the typed domain adapter
-// registry and receives a visible result or a typed failure.
+// every other registered bot goes through the shared dispatcher (dedupe ->
+// link commands -> typed domain adapter -> visible reply in the chat), the same
+// path the polling launcher uses (lib/telegram-launcher.ts).
 router.post("/telegram/gateway/:botKey/webhook", async (req, res): Promise<void> => {
   const envelope = normalizeTelegramUpdate(req.params.botKey, req.body);
   if (!envelope) {
@@ -124,17 +130,16 @@ router.post("/telegram/gateway/:botKey/webhook", async (req, res): Promise<void>
 
   const descriptor = getTelegramBotDescriptor(envelope.botKey);
   const descriptorSecret = descriptor ? process.env[descriptor.webhookSecretEnvVar] : undefined;
-  if (!descriptorSecret || req.header("x-telegram-bot-api-secret-token") !== descriptorSecret) {
+  if (!verifyWebhookSecret(descriptorSecret, req.header("x-telegram-bot-api-secret-token"))) {
     res.sendStatus(401);
     return;
   }
 
-  if (!(await claimTelegramUpdate(envelope))) {
-    res.sendStatus(200);
-    return;
-  }
-
   if (envelope.botKey === "ayzenx") {
+    if (!(await claimTelegramUpdate(envelope))) {
+      res.sendStatus(200);
+      return;
+    }
     await markTelegramUpdate(envelope, "processing");
     try {
       handleWebhookUpdate(req.body, req.header("x-telegram-bot-api-secret-token"));
@@ -148,35 +153,12 @@ router.post("/telegram/gateway/:botKey/webhook", async (req, res): Promise<void>
     return;
   }
 
-  const adapter = TELEGRAM_ADAPTERS[envelope.botKey];
-  if (!adapter) {
-    await markTelegramUpdate(envelope, "failed", "No domain adapter registered");
-    res.status(503).json({ accepted: false, status: "not_available", code: "TELEGRAM_DOMAIN_ADAPTER_NOT_AVAILABLE", botKey: envelope.botKey });
-    return;
-  }
-  await markTelegramUpdate(envelope, "processing");
-  try {
-    const message = normalizeTelegramMessage(envelope);
-    const text = message?.text ?? "";
-    const [command, ...args] = text.trim().split(/\s+/);
-    const result = await adapter.handle({
-      envelope,
-      message,
-      command: String(command ?? "").toLowerCase(),
-      args,
-      botKey: envelope.botKey,
-      requestId: req.header("x-request-id") ?? crypto.randomUUID(),
-      getFailures: async () => listFailedTelegramUpdates(),
-    });
-    // Persist only a code, never the response body: it can carry upstream data
-    // (account details, secrets in error echoes) and this table is readable by /gaps.
-    if (result.status >= 400) await markTelegramUpdate(envelope, "failed", String(result.body.code ?? `HTTP_${result.status}`).slice(0, 120));
-    else await markTelegramUpdate(envelope, "completed");
-    res.status(result.status).json(result.body);
-  } catch (error) {
-    await markTelegramUpdate(envelope, "failed", (error instanceof Error ? error.message : String(error)).slice(0, 200));
-    res.status(502).json({ accepted: false, code: "TELEGRAM_DOMAIN_DISPATCH_FAILED", botKey: envelope.botKey });
-  }
+  const result = await gatewayDispatcher.dispatch({
+    botKey: envelope.botKey,
+    payload: req.body,
+    requestId: req.header("x-request-id") ?? crypto.randomUUID(),
+  });
+  res.status(result.status).json(result.body);
 });
 
 // POST /telegram/webhook — Telegram calls this directly when the bot is

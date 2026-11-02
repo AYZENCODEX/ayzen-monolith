@@ -154,7 +154,7 @@ export const COMMAND_TREE_DEFINITIONS = deepFreeze([
   c("verve", "/listing", "marketplace.create-listing"),
   c("verve", "/search", "search.search"),
   c("verve", "/activity", "workspace.activity"),
-  // RYFT — finance.
+  // RYFT — wallet (legacy finance commands retained for now).
   c("ryft", "/start", "identity.authenticate"),
   c("ryft", "/help", "identity.authenticate"),
   c("ryft", "/accounts", "finance.list-accounts"),
@@ -162,6 +162,15 @@ export const COMMAND_TREE_DEFINITIONS = deepFreeze([
   c("ryft", "/transactions", "finance.list-accounts"),
   c("ryft", "/transaction", "finance.post-transaction"),
   c("ryft", "/activity", "workspace.activity"),
+  // FYRA — finance. RYFT keeps its legacy finance commands until wallet
+  // capabilities exist (see docs/changes/CHANGES_TELEGRAM_PHASE_3_4.md).
+  c("fyra", "/start", "identity.authenticate"),
+  c("fyra", "/help", "identity.authenticate"),
+  c("fyra", "/accounts", "finance.list-accounts"),
+  c("fyra", "/balance", "finance.get-balance"),
+  c("fyra", "/transactions", "finance.list-accounts"),
+  c("fyra", "/transaction", "finance.post-transaction"),
+  c("fyra", "/activity", "workspace.activity"),
   // SYLO — secure vault. /vault is the parent; /secret and /reveal are deprecated flat aliases.
   c("sylo", "/start", "identity.authenticate"),
   c("sylo", "/help", "identity.authenticate"),

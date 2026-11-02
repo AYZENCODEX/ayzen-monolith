@@ -23,3 +23,19 @@ export function resolveCommandTreePath(input: string, options: { botKey: string 
   deprecated?: boolean;
   replacement?: string;
 } | null;
+
+export interface BotRegistryEntry {
+  displayName: string;
+  workspaceType: "PERSONAL" | "ORGANIZATION" | "ADMIN";
+  responsibility: string;
+  service: string;
+  tokenEnv: string;
+  secretEnv: string;
+  role: string;
+  privileged?: boolean;
+  ownerIdentity?: string;
+}
+export const BOT_REGISTRY: Readonly<Record<string, BotRegistryEntry>>;
+export function getBotDescriptor(botKey: string): BotRegistryEntry | undefined;
+
+export function verifyWebhookSecret(expected: unknown, actual: unknown): boolean;

@@ -9,7 +9,7 @@ import { DOMAIN_SERVICES, type DomainService } from "./architecture/domains";
  */
 const OWNED_TABLES: Readonly<Record<DomainService, readonly string[]>> = {
   "api-gateway": ["service_registry", "service_table_ownership"],
-  "telegram-gateway": ["telegram_bots", "telegram_update_receipts"],
+  "telegram-gateway": ["telegram_bots", "telegram_update_receipts", "telegram_bot_links", "telegram_link_codes"],
   identity: ["users", "user_sessions", "passkeys", "otp_codes", "jwt_signing_keys", "oidc_clients"],
   authorization: ["roles", "permissions", "role_permissions", "user_roles", "authorization_audit_log"],
   workspace: ["workspaces", "workspace_members", "organizations", "organization_members"],

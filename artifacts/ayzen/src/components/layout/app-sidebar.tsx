@@ -64,7 +64,7 @@ type NavEntry = NavLeaf | NavSection;
 // section (see vault-hub.tsx / marketplace-hub.tsx) instead of only
 // expanding the group in place. Groups without one keep the old
 // expand-only behavior.
-export interface NavGroup { label: string; icon: React.ElementType; items: NavEntry[]; href?: string; }
+export interface NavGroup { label: string; icon: React.ElementType; items: NavEntry[]; href?: string; pluginSlug?: string; }
 
 function isSection(entry: NavEntry): entry is NavSection {
   return (entry as NavSection).children !== undefined;
@@ -1694,6 +1694,8 @@ export function NavGroupComp({ group, location, search, isEnabled, onNavigate }:
   }, [hasActive]);
 
   if (visibleItems.length === 0) return null;
+  // A section promoted to a group (module-nav) keeps its plugin gate.
+  if (group.pluginSlug && !isEnabled(group.pluginSlug)) return null;
 
   return (
     <div>

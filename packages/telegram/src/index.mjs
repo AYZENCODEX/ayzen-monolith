@@ -3,18 +3,26 @@ import { getCapability, listTelegramCommands, resolveTelegramCommand } from "@ay
 
 export { resolveCommandTreePath, renderCommandTreeHelp, renderSubcommandHelp } from "./command-parser.mjs";
 
+// Single source of truth for every Telegram bot. The API server's typed
+// registry (artifacts/api-server/src/lib/telegram-bot-registry.ts) is derived
+// from this object, so keys, token env names and webhook secret env names can
+// not drift between the two. Module ids follow artifacts/api-server/src/lib/shared-apps.ts.
 export const BOT_REGISTRY = Object.freeze({
-  ayzenx: { displayName: "AYZENX", workspaceType: "PERSONAL", secretEnv: "TELEGRAM_WEBHOOK_SECRET", role: "general" },
-  warde: { displayName: "WARDE", workspaceType: "ORGANIZATION", secretEnv: "TELEGRAM_WARDE_WEBHOOK_SECRET", role: "organization" },
-  verve: { displayName: "VERVE", workspaceType: "PERSONAL", secretEnv: "TELEGRAM_VERVE_WEBHOOK_SECRET", role: "marketplace" },
-  ryft: { displayName: "RYFT", workspaceType: "PERSONAL", secretEnv: "TELEGRAM_RYFT_WEBHOOK_SECRET", role: "finance" },
-  sylo: { displayName: "SYLO", workspaceType: "PERSONAL", secretEnv: "TELEGRAM_SYLO_WEBHOOK_SECRET", role: "vault" },
-  skarn: { displayName: "SKARN", workspaceType: "PERSONAL", secretEnv: "TELEGRAM_SKARN_WEBHOOK_SECRET", role: "workflow" },
-  zynth: { displayName: "ZYNTH", workspaceType: "PERSONAL", secretEnv: "TELEGRAM_ZYNTH_WEBHOOK_SECRET", role: "ai" },
-  wisp: { displayName: "WISP", workspaceType: "PERSONAL", secretEnv: "TELEGRAM_WISP_WEBHOOK_SECRET", role: "mail" },
+  ayzenx: { displayName: "AYZENX", workspaceType: "PERSONAL", responsibility: "Personal workspace", service: "workspace", tokenEnv: "TELEGRAM_BOT_TOKEN", secretEnv: "TELEGRAM_WEBHOOK_SECRET", role: "general" },
+  warde: { displayName: "WARDE", workspaceType: "ORGANIZATION", responsibility: "Teams / organization workspace", service: "workspace", tokenEnv: "WARDE_TELEGRAM_BOT_TOKEN", secretEnv: "TELEGRAM_WARDE_WEBHOOK_SECRET", role: "organization" },
+  verve: { displayName: "VERVE", workspaceType: "PERSONAL", responsibility: "Marketplace", service: "marketplace", tokenEnv: "VERVE_TELEGRAM_BOT_TOKEN", secretEnv: "TELEGRAM_VERVE_WEBHOOK_SECRET", role: "marketplace" },
+  ryft: { displayName: "RYFT", workspaceType: "PERSONAL", responsibility: "Wallet", service: "finance", tokenEnv: "RYFT_TELEGRAM_BOT_TOKEN", secretEnv: "TELEGRAM_RYFT_WEBHOOK_SECRET", role: "wallet" },
+  fyra: { displayName: "FYRA", workspaceType: "PERSONAL", responsibility: "Finance", service: "finance", tokenEnv: "FYRA_TELEGRAM_BOT_TOKEN", secretEnv: "TELEGRAM_FYRA_WEBHOOK_SECRET", role: "finance" },
+  sylo: { displayName: "SYLO", workspaceType: "PERSONAL", responsibility: "Secure storage / vault", service: "vault", tokenEnv: "SYLO_TELEGRAM_BOT_TOKEN", secretEnv: "TELEGRAM_SYLO_WEBHOOK_SECRET", role: "vault" },
+  skarn: { displayName: "SKARN", workspaceType: "PERSONAL", responsibility: "Projects / tasks / workflow", service: "workflow", tokenEnv: "SKARN_TELEGRAM_BOT_TOKEN", secretEnv: "TELEGRAM_SKARN_WEBHOOK_SECRET", role: "workflow" },
+  zynth: { displayName: "ZYNTH", workspaceType: "PERSONAL", responsibility: "AI / intelligence / agent", service: "ai-agent", tokenEnv: "ZYNTH_TELEGRAM_BOT_TOKEN", secretEnv: "TELEGRAM_ZYNTH_WEBHOOK_SECRET", role: "ai" },
+  wisp: { displayName: "WISP", workspaceType: "PERSONAL", responsibility: "Mailbox / email", service: "mail", tokenEnv: "WISP_TELEGRAM_BOT_TOKEN", secretEnv: "TELEGRAM_WISP_WEBHOOK_SECRET", role: "mail" },
   admin: {
     displayName: "AYZEN Admin",
     workspaceType: "ADMIN",
+    responsibility: "Privileged control plane",
+    service: "admin",
+    tokenEnv: "TELEGRAM_ADMIN_BOT_TOKEN",
     secretEnv: "TELEGRAM_ADMIN_WEBHOOK_SECRET",
     role: "control-plane",
     privileged: true,
@@ -76,7 +84,7 @@ export function normalizeTelegramMessage(envelope) {
 }
 
 const APP_NAMES = Object.freeze({
-  ayzenx: "AYZENX", warde: "WARDE", verve: "VERVE", ryft: "RYFT",
+  ayzenx: "AYZENX", warde: "WARDE", verve: "VERVE", ryft: "RYFT", fyra: "FYRA",
   sylo: "SYLO", skarn: "SKARN", zynth: "ZYNTH", wisp: "WISP", admin: "Admin",
 });
 const SENSITIVE_COMMANDS = new Set(["/connect", "/invite", "/listing", "/transaction", "/secret", "/reveal", "/run", "/cancel", "/ask", "/mutate", "/breakglass", "/incident", "/ack", "/resolve", "/deploy"]);

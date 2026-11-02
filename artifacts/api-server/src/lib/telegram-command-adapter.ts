@@ -23,14 +23,17 @@ export interface TelegramLinkedIdentity {
   role: string;
 }
 
+/** `{ inactive: true }` = the chat is linked but the user switched this bot off. */
+export type TelegramIdentityResolution = TelegramLinkedIdentity | { inactive: true } | null;
+
 export interface DomainCommandAdapterOptions {
   botKey: string;
   apiBaseUrl?: string;
   fetchImpl?: typeof fetch;
   /** Telegram user id of the only person allowed to use the admin bot. Unset = admin bot denies everyone. */
   adminOwnerId?: string;
-  /** Maps a Telegram user to a linked AYZEN account (or null when not linked / suspended). */
-  resolveIdentity?: (input: { telegramUserId: number; chatId?: number }) => Promise<TelegramLinkedIdentity | null>;
+  /** Maps a Telegram user to a linked AYZEN account (null when not linked / suspended, `{ inactive: true }` when switched off). */
+  resolveIdentity?: (input: { telegramUserId: number; chatId?: number }) => Promise<TelegramIdentityResolution>;
   /**
    * Mints a short-lived bearer token for the linked account. Async since
    * AK4 Phase 1c: the real implementation (telegram-adapters/index.ts)
@@ -130,6 +133,7 @@ export function createDomainCommandAdapter({
       }
       const identity = await resolveIdentity({ telegramUserId: message.telegramUserId, chatId: message.chatId });
       if (!identity) return deny(403, "TELEGRAM_ACCOUNT_NOT_LINKED");
+      if ("inactive" in identity) return deny(403, "TELEGRAM_BOT_INACTIVE");
       if (botKey === "admin" && identity.role !== "admin") return deny(403, "ADMIN_ROLE_REQUIRED");
 
       if (context.command === "/gaps" || context.command === "/alerts") {

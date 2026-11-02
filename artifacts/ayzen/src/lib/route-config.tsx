@@ -151,6 +151,7 @@ const EmailAccounts     = lazy(() => import("@/pages/user/email-accounts"));
 const UserSupport       = lazy(() => import("@/pages/user/support"));
 const UserReferrals     = lazy(() => import("@/pages/user/referrals"));
 const UserSettings      = lazy(() => import("@/pages/user/settings"));
+const ModuleSettings    = lazy(() => import("@/pages/user/module-settings"));
 const UserSecurity      = lazy(() => import("@/pages/user/security"));
 const UserWallets       = lazy(() => import("@/pages/user/wallets"));
 const FinanceDashboard      = lazy(() => import("@/pages/user/finance/dashboard"));
@@ -269,6 +270,16 @@ export const USER_ROUTES: RouteConfig[] = [
   { path: "/settings",           component: UserSettings },
   { path: "/developer",          component: UserDeveloper },
   { path: "/security",           component: UserSecurity },
+  // Per-module Settings (Phase 5). Listed before every /<module>/:param route so
+  // "/projects/settings" and "/mailbox/settings" are not captured as an :id.
+  { path: "/vault/settings",       component: ModuleSettings },
+  { path: "/wallet/settings",      component: ModuleSettings },
+  { path: "/finance/settings",     component: ModuleSettings },
+  { path: "/marketplace/settings", component: ModuleSettings },
+  { path: "/projects/settings",    component: ModuleSettings },
+  { path: "/teams/settings",       component: ModuleSettings },
+  { path: "/mailbox/settings",     component: ModuleSettings },
+  { path: "/assistant/settings",   component: ModuleSettings },
   // Tasks & Projects
   { path: "/projects",           component: UserProjects },
   // Airdrop calendar — every project's snapshot/TGE/deadline dates together,

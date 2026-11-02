@@ -1,6 +1,7 @@
+import { BOT_REGISTRY } from "@ayzen/telegram";
 import type { DomainService } from "./architecture/domains";
 
-export type TelegramBotKey = "ayzenx" | "warde" | "verve" | "ryft" | "sylo" | "skarn" | "zynth" | "wisp" | "admin";
+export type TelegramBotKey = "ayzenx" | "warde" | "verve" | "ryft" | "fyra" | "sylo" | "skarn" | "zynth" | "wisp" | "admin";
 
 export interface TelegramBotDescriptor {
   key: TelegramBotKey;
@@ -11,17 +12,19 @@ export interface TelegramBotDescriptor {
   webhookSecretEnvVar: string;
 }
 
-export const TELEGRAM_BOT_REGISTRY: readonly TelegramBotDescriptor[] = [
-  { key: "ayzenx", displayName: "AYZENX", responsibility: "Personal workspace", service: "workspace", tokenEnvVar: "TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_WEBHOOK_SECRET" },
-  { key: "warde", displayName: "WARDE", responsibility: "Organization / business workspace", service: "workspace", tokenEnvVar: "WARDE_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_WARDE_WEBHOOK_SECRET" },
-  { key: "verve", displayName: "VERVE", responsibility: "Communication / productivity", service: "mail", tokenEnvVar: "VERVE_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_VERVE_WEBHOOK_SECRET" },
-  { key: "ryft", displayName: "RYFT", responsibility: "Finance", service: "finance", tokenEnvVar: "RYFT_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_RYFT_WEBHOOK_SECRET" },
-  { key: "sylo", displayName: "SYLO", responsibility: "Secure storage / vault", service: "vault", tokenEnvVar: "SYLO_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_SYLO_WEBHOOK_SECRET" },
-  { key: "skarn", displayName: "SKARN", responsibility: "Automation / workflow", service: "workflow", tokenEnvVar: "SKARN_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_SKARN_WEBHOOK_SECRET" },
-  { key: "zynth", displayName: "ZYNTH", responsibility: "AI / intelligence / agent", service: "ai-agent", tokenEnvVar: "ZYNTH_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_ZYNTH_WEBHOOK_SECRET" },
-  { key: "wisp", displayName: "WISP", responsibility: "Mailbox / email", service: "mail", tokenEnvVar: "WISP_TELEGRAM_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_WISP_WEBHOOK_SECRET" },
-  { key: "admin", displayName: "AYZEN Admin", responsibility: "Privileged control plane", service: "admin", tokenEnvVar: "TELEGRAM_ADMIN_BOT_TOKEN", webhookSecretEnvVar: "TELEGRAM_ADMIN_WEBHOOK_SECRET" },
-];
+/**
+ * Derived from `BOT_REGISTRY` in packages/telegram — the single source of truth
+ * for bot keys, token env names and webhook-secret env names. Do not add bots
+ * here; add them there (and a drift test guards the key list below).
+ */
+export const TELEGRAM_BOT_REGISTRY: readonly TelegramBotDescriptor[] = Object.entries(BOT_REGISTRY).map(([key, bot]) => ({
+  key: key as TelegramBotKey,
+  displayName: bot.displayName,
+  responsibility: bot.responsibility,
+  service: bot.service as DomainService | "admin",
+  tokenEnvVar: bot.tokenEnv,
+  webhookSecretEnvVar: bot.secretEnv,
+}));
 
 export function getTelegramBotDescriptor(key: string): TelegramBotDescriptor | undefined {
   return TELEGRAM_BOT_REGISTRY.find((bot) => bot.key === key);

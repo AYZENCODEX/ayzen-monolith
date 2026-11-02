@@ -28,7 +28,8 @@ export const telegramUpdateReceiptsTable = pgTable(
     updateId: integer("update_id").notNull(),
     receivedAt: timestamp("received_at").notNull().defaultNow(),
     processedAt: timestamp("processed_at"),
-    status: text("status").notNull().default("received"), // received | processed | failed
+    status: text("status").notNull().default("received"), // received | processing | completed | failed
+    error: text("error"),
   },
   (table) => [
     uniqueIndex("telegram_update_receipts_bot_update_idx").on(table.botKey, table.updateId),

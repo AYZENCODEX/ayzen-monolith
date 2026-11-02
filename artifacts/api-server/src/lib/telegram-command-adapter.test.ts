@@ -171,3 +171,21 @@ test("another bot's subcommands are not reachable", async () => {
   assert.equal((await send("/data write foo")).body.code, "TELEGRAM_COMMAND_NOT_REGISTERED");
   assert.equal(calls.length, 0);
 });
+
+test("a linked chat whose bot is switched off is denied with TELEGRAM_BOT_INACTIVE and never reaches the API", async () => {
+  const calls: string[] = [];
+  const adapter = createDomainCommandAdapter({
+    botKey: "fyra",
+    apiBaseUrl: "http://gateway.test:5000",
+    fetchImpl: (async (url: string) => { calls.push(url); return new Response("{}"); }) as unknown as typeof fetch,
+    resolveIdentity: async () => ({ inactive: true }),
+    issueToken: async () => "t",
+  });
+  const result = await adapter.handle({
+    envelope: {} as TelegramAdapterContext["envelope"],
+    message: { botKey: "fyra", updateId: 1, telegramUserId: USER, chatId: USER, text: "/accounts" } as TelegramAdapterContext["message"],
+    command: "/accounts", args: [], botKey: "fyra", requestId: "r",
+  });
+  assert.equal(result.body.code, "TELEGRAM_BOT_INACTIVE");
+  assert.equal(calls.length, 0);
+});

@@ -2700,6 +2700,8 @@ export const MIGRATIONS = [
     UNIQUE(bot_key, update_id)
   )`,
   "CREATE INDEX IF NOT EXISTS telegram_update_receipts_received_at_idx ON telegram_update_receipts(received_at)",
+  // telegram-gateway.ts markTelegramUpdate() writes `error`, but the table was created without it.
+  "ALTER TABLE telegram_update_receipts ADD COLUMN IF NOT EXISTS error TEXT",
   `CREATE TABLE IF NOT EXISTS service_registry (
     id SERIAL PRIMARY KEY,
     service_key TEXT NOT NULL UNIQUE,
@@ -2721,15 +2723,17 @@ export const MIGRATIONS = [
   `INSERT INTO telegram_bots (bot_key, display_name, responsibility, token_env_var)
    VALUES
      ('ayzenx', 'AYZENX', 'Personal workspace', 'TELEGRAM_BOT_TOKEN'),
-     ('warde', 'WARDE', 'Organization / business workspace', 'WARDE_TELEGRAM_BOT_TOKEN'),
-     ('verve', 'VERVE', 'Communication / productivity', 'VERVE_TELEGRAM_BOT_TOKEN'),
-     ('ryft', 'RYFT', 'Finance', 'RYFT_TELEGRAM_BOT_TOKEN'),
+     ('warde', 'WARDE', 'Teams / organization workspace', 'WARDE_TELEGRAM_BOT_TOKEN'),
+     ('verve', 'VERVE', 'Marketplace', 'VERVE_TELEGRAM_BOT_TOKEN'),
+     ('ryft', 'RYFT', 'Wallet', 'RYFT_TELEGRAM_BOT_TOKEN'),
+     ('fyra', 'FYRA', 'Finance', 'FYRA_TELEGRAM_BOT_TOKEN'),
      ('sylo', 'SYLO', 'Secure storage / vault', 'SYLO_TELEGRAM_BOT_TOKEN'),
-     ('skarn', 'SKARN', 'Automation / workflow', 'SKARN_TELEGRAM_BOT_TOKEN'),
+     ('skarn', 'SKARN', 'Projects / tasks / workflow', 'SKARN_TELEGRAM_BOT_TOKEN'),
      ('zynth', 'ZYNTH', 'AI / intelligence / agent', 'ZYNTH_TELEGRAM_BOT_TOKEN'),
      ('wisp', 'WISP', 'Mailbox / email', 'WISP_TELEGRAM_BOT_TOKEN'),
+     ('admin', 'AYZEN Admin', 'Privileged control plane', 'TELEGRAM_ADMIN_BOT_TOKEN'),
      ('new-bot', 'New Telegram Bot', 'Reserved extensible bot slot', 'TELEGRAM_NEW_BOT_TOKEN')
-   ON CONFLICT (bot_key) DO UPDATE SET token_env_var = EXCLUDED.token_env_var`,
+   ON CONFLICT (bot_key) DO UPDATE SET token_env_var = EXCLUDED.token_env_var, display_name = EXCLUDED.display_name, responsibility = EXCLUDED.responsibility`,
   `CREATE TABLE IF NOT EXISTS idempotency_keys (
     id SERIAL PRIMARY KEY,
     scope TEXT NOT NULL,
@@ -2771,6 +2775,7 @@ export const MIGRATIONS = [
    VALUES
      ('workspace', 'workspaces'), ('workspace', 'workspace_members'),
      ('telegram-gateway', 'telegram_bots'), ('telegram-gateway', 'telegram_update_receipts'),
+     ('telegram-gateway', 'telegram_bot_links'), ('telegram-gateway', 'telegram_link_codes'),
      ('event-bus', 'event_outbox'), ('event-bus', 'event_processed'),
      ('event-bus', 'event_processing'), ('event-bus', 'event_dead_letter'),
      ('api-gateway', 'service_registry'), ('api-gateway', 'service_table_ownership'),
@@ -3004,4 +3009,39 @@ BEGIN
   END LOOP;
 END
 $f11_finance_payment_agreements$`,
+  // 124_telegram_bot_links.sql — per-bot Telegram binding (Phase 4)
+  `CREATE TABLE IF NOT EXISTS telegram_bot_links (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    bot_key TEXT NOT NULL,
+    chat_id TEXT NOT NULL,
+    telegram_user_id TEXT NOT NULL,
+    username TEXT,
+    verified_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    last_activity_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+  )`,
+  "CREATE UNIQUE INDEX IF NOT EXISTS telegram_bot_links_user_bot_idx ON telegram_bot_links(user_id, bot_key)",
+  "CREATE UNIQUE INDEX IF NOT EXISTS telegram_bot_links_bot_chat_idx ON telegram_bot_links(bot_key, chat_id)",
+  "CREATE INDEX IF NOT EXISTS telegram_bot_links_user_id_idx ON telegram_bot_links(user_id)",
+  `CREATE TABLE IF NOT EXISTS telegram_link_codes (
+    id SERIAL PRIMARY KEY,
+    bot_key TEXT NOT NULL,
+    code_hash TEXT NOT NULL,
+    direction TEXT NOT NULL,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    chat_id TEXT,
+    telegram_user_id TEXT,
+    username TEXT,
+    expires_at TIMESTAMP NOT NULL,
+    consumed_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+  )`,
+  "CREATE UNIQUE INDEX IF NOT EXISTS telegram_link_codes_bot_hash_idx ON telegram_link_codes(bot_key, code_hash)",
+  "CREATE INDEX IF NOT EXISTS telegram_link_codes_expires_idx ON telegram_link_codes(expires_at)",
+  `INSERT INTO service_table_ownership (service_key, table_name)
+   VALUES ('telegram-gateway', 'telegram_bot_links'), ('telegram-gateway', 'telegram_link_codes')
+   ON CONFLICT (service_key, table_name) DO NOTHING`,
 ];

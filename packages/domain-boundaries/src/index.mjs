@@ -115,7 +115,7 @@ const definitions = [
     name: "telegram",
     owner: "Telegram Platform",
     publicOperations: ["receive-update", "resolve-command", "render-menu"],
-    ownedResources: ["telegram_bots", "telegram_update_receipts", "telegram_sessions", "telegram_identity_links"],
+    ownedResources: ["telegram_bots", "telegram_update_receipts", "telegram_sessions", "telegram_identity_links", "telegram_bot_links", "telegram_link_codes"],
     consumedEvents: ["identity.telegram.linked"],
     emittedEvents: ["telegram.update.received", "telegram.update.failed", "telegram.auth.linked", "telegram.auth.unlinked"],
   }),
@@ -178,7 +178,7 @@ export const DATABASE_OWNERSHIP = Object.freeze({
   "event-bus": ["event_outbox", "event_processed", "event_processing", "event_dead_letter"],
   marketplace: ["marketplace_listings", "marketplace_orders", "marketplace_reviews"],
   admin: ["admin_configuration", "admin_alerts", "admin_gaps", "admin_deployments", "admin_data_access"],
-  telegram: ["telegram_bots", "telegram_update_receipts", "telegram_sessions", "telegram_identity_links"],
+  telegram: ["telegram_bots", "telegram_update_receipts", "telegram_sessions", "telegram_identity_links", "telegram_bot_links", "telegram_link_codes"],
 });
 
 export function getDomainContract(name) {

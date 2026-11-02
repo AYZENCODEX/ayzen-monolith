@@ -24,6 +24,10 @@ const EXPECTED_HELP = {
     "ryft commands:",
     "/start", "/help", "/accounts", "/balance", "/transactions", "/transaction", "/activity",
   ].join("\n"),
+  fyra: [
+    "fyra commands:",
+    "/start", "/help", "/accounts", "/balance", "/transactions", "/transaction", "/activity",
+  ].join("\n"),
   sylo: [
     "sylo commands:",
     "/start", "/help", "/vault — list, create, reveal", "/activity",

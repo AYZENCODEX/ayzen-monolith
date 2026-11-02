@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen, Settings } from "lucide-react";
 import { useSidebarCollapsed } from "@/hooks/use-sidebar-collapsed";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useLocation, useSearch } from "wouter";
+import { Link, useLocation, useSearch } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { usePlugins } from "@/hooks/use-plugins";
@@ -16,6 +16,8 @@ import {
   filterGroupsBySubdomain,
 } from "./app-sidebar";
 import { centralUrl, moduleUrl, type SubdomainApp } from "@/lib/subdomain-app";
+import { moduleSettingsPath } from "@/lib/module-settings";
+import { applyModuleNav } from "./module-nav";
 
 /**
  * components/layout/module-sidebar.tsx
@@ -42,9 +44,11 @@ export function ModuleSidebar({ app, onNavigate }: { app: SubdomainApp; onNaviga
   const { isAdmin, isDev, logout, user } = useAuth();
   const { isEnabled } = usePlugins();
   const { groups: allGroups } = useRoleNavGroups();
-  const scopedGroups = filterGroupsBySubdomain(allGroups, app);
+  // Role filtering + DB-driven nav first, then the module's own top-level sections (module-nav/<id>.ts).
+  const scopedGroups = applyModuleNav(app.id, filterGroupsBySubdomain(allGroups, app));
 
   const home = moduleUrl(app.id, app.homePath);
+  const settingsPath = moduleSettingsPath(app.id);
 
   // Season 4: collapsible icon rail, desktop only. Per-module state via scopeKey.
   const isMobile = useIsMobile();
@@ -101,6 +105,21 @@ export function ModuleSidebar({ app, onNavigate }: { app: SubdomainApp; onNaviga
           <AdminProjectsSidebarSection onNavigate={onNavigate} location={location} />
         )}
       </div>
+
+      {settingsPath && (
+        <div className="border-t border-sidebar-border p-2">
+          <Link
+            href={settingsPath}
+            onClick={() => onNavigate?.()}
+            title="Settings"
+            data-testid="module-settings-link"
+            className={'flex items-center gap-2 rounded-lg text-xs font-mono transition-all ' + (rail ? 'justify-center p-2 ' : 'px-3 py-2 ') + (location === settingsPath ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-primary/10 hover:text-primary')}
+          >
+            <Settings className="w-4 h-4 flex-shrink-0" />
+            {!rail && 'Settings'}
+          </Link>
+        </div>
+      )}
 
       {app.id === "zynth" && <SidebarAiPanel />}
     </div>

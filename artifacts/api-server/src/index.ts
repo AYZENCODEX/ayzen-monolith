@@ -8,6 +8,8 @@ import "./vault/infrastructure/crypto-key-stores"; // registers the encryption_k
 import { logger } from "./lib/logger";
 import { logBus } from "./lib/log-bus";
 import { initTelegramBot, stopTelegramBot } from "./lib/telegram";
+import { startTelegramLauncher, stopTelegramLauncher } from "./lib/telegram-launcher";
+import { gatewayDispatcher } from "./lib/telegram-gateway-runtime";
 import { startUptimeBot } from "./services/uptime-bot";
 import { startVaultHealthCron } from "./vault/application/health-cron";
 import { startVaultTrashCron } from "./vault/infrastructure/trash/entry-trash-cron";
@@ -150,6 +152,10 @@ const server = app.listen(port, () => {
   logger.info({ port }, "Server listening");
   logBus.system(`🚀 AYZEN API Server started on port ${port}`);
   initTelegramBot();
+  // Module bots (every registered bot except AYZENX that has a token): getMe +
+  // setWebhook, or per-bot polling fallback. One bot failing never blocks the rest.
+  startTelegramLauncher({ handleUpdate: async (botKey, update) => { await gatewayDispatcher.dispatch({ botKey, payload: update }); } })
+    .catch((err) => logger.error({ err }, "Telegram launcher failed"));
   startUptimeBot(port);
   startVaultHealthCron();
   startVaultTrashCron();
@@ -179,7 +185,7 @@ const server = app.listen(port, () => {
     shuttingDown = true;
     stopMegaEngine()
       .catch((shutdownErr) => logger.warn({ err: shutdownErr }, "Mega Engine shutdown failed"))
-      .finally(() => stopTelegramBot())
+      .finally(() => { stopTelegramLauncher(); return stopTelegramBot(); })
       .finally(() => server.close(() => process.exit(0)));
   };
   process.once("SIGTERM", shutdown);

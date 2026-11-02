@@ -12,7 +12,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test:mega-engine": "node --test --import tsx src/lib/mega-engine/*.test.ts",
     "test:new-engines": "node --test --import tsx src/lib/new-engines/*.test.ts",
-    "test:telegram": "node --test --import tsx src/lib/telegram-command-adapter.test.ts src/lib/telegram-bot-registry.test.ts",
+    "test:telegram": "node --test --import tsx src/lib/telegram-command-adapter.test.ts src/lib/telegram-bot-registry.test.ts src/lib/telegram-bot-links.test.ts src/lib/telegram-launcher.test.ts src/lib/telegram-gateway-dispatch.test.ts src/lib/module-settings-paths.test.ts src/lib/module-nav.test.ts",
     "test:projects-static": "node --test --import tsx src/projects/domain/*.test.ts src/projects/infrastructure/sql/*.test.ts src/projects/security/*.test.ts",
     "test:marketplace-db": "DATABASE_URL_TARGET=replit-test node --import tsx src/marketplace/characterization/marketplace-db-runner.mjs",
     "test:marketplace-kernel": "node --test --import tsx src/marketplace/kernel/domain/*.test.ts src/marketplace/kernel/infrastructure/*.test.ts src/marketplace/catalog/application/*.test.ts src/marketplace/analytics/application/*.test.ts src/marketplace/engagement/domain/*.test.ts src/marketplace/engagement/application/*.test.ts src/marketplace/engagement/security/*.test.ts src/marketplace/admin/domain/*.test.ts src/marketplace/admin/application/*.test.ts src/marketplace/analytics/domain/*.test.ts src/marketplace/catalog/domain/*.test.ts",
