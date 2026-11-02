@@ -41,7 +41,7 @@ test("jwks_uri stays correctly joined even when issuer had a trailing slash", ()
 });
 
 test("issuer and jwks_uri always share the same origin, for any issuer input", () => {
-  for (const issuer of ["https://ayzen.tech", "http://localhost:8080", "https://staging.ayzen.replit.app/"]) {
+  for (const issuer of ["https://ayzen.tech", "http://localhost:8080", "https://staging.ayzen.tech/"]) {
     const meta = buildOidcDiscoveryMetadata(issuer);
     assert.ok(meta.jwks_uri.startsWith(meta.issuer + "/"));
   }
@@ -101,7 +101,7 @@ test("introspection_endpoint and revocation_endpoint stay correctly joined even 
 });
 
 test("issuer, introspection_endpoint, and revocation_endpoint always share the same origin, for any issuer input", () => {
-  for (const issuer of ["https://ayzen.tech", "http://localhost:8080", "https://staging.ayzen.replit.app/"]) {
+  for (const issuer of ["https://ayzen.tech", "http://localhost:8080", "https://staging.ayzen.tech/"]) {
     const meta = buildOidcDiscoveryMetadata(issuer);
     assert.ok(meta.introspection_endpoint.startsWith(meta.issuer + "/"));
     assert.ok(meta.revocation_endpoint.startsWith(meta.issuer + "/"));
@@ -147,13 +147,13 @@ test("falls back to APP_URL when AYZEN_OIDC_ISSUER is unset", () => {
   }
 });
 
-test("falls back to the hardcoded default when neither env var is set", () => {
+test("falls back to the canonical app URL when neither env var is set", () => {
   const prevIssuer = process.env.AYZEN_OIDC_ISSUER;
   const prevAppUrl = process.env.APP_URL;
   delete process.env.AYZEN_OIDC_ISSUER;
   delete process.env.APP_URL;
   try {
-    assert.equal(resolveIssuer(), "https://ayzen.replit.app");
+    assert.equal(resolveIssuer(), "https://ayzen.tech");
   } finally {
     if (prevIssuer === undefined) delete process.env.AYZEN_OIDC_ISSUER;
     else process.env.AYZEN_OIDC_ISSUER = prevIssuer;

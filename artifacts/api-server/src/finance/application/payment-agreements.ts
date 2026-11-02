@@ -21,6 +21,7 @@ import { sendPaymentAgreementReadyEmail, sendPaymentDisputedEmail } from "../../
 import { sendToUser } from "../../lib/telegram";
 import { createNotification } from "../../lib/create-notification";
 import { streamFantasticReceiptPdf } from "../../lib/receipt-theme";
+import { getAppUrl } from "../../lib/app-url";
 
 // Payment-agreement use cases: the public agreement page, the payer's passkey confirmation (options and verify),
 // the evidence PDF, and the creditor's verify and dispute. Moved from routes/finance-invoices.ts (FIN-WP-6b).
@@ -44,7 +45,6 @@ import { streamFantasticReceiptPdf } from "../../lib/receipt-theme";
 type AgreementRow = typeof financePaymentAgreementsTable.$inferSelect;
 type InvoiceRow = typeof financeInvoicesTable.$inferSelect;
 
-const appUrl = () => process.env.APP_URL ?? "https://ayzen.replit.app";
 
 // ─── Lookups used by the route before its PDP checks ─────────────────────────
 
@@ -196,7 +196,7 @@ export async function confirmAgreementWithPasskey(
     createNotification(invoice.userId, "finance_payment_confirmed", "Payment confirmed with passkey",
       `${payerName} signed a Payment Agreement for ${money(invoice.currency, updated.amount)}. Review and verify to mark it repaid.`,
       { invoiceId: invoice.id, agreementId: agreement.id }).catch(() => {});
-    const reviewUrl = `${appUrl()}/finance/invoices`;
+    const reviewUrl = `${getAppUrl()}/finance/invoices`;
     if (creditor?.email) {
       sendPaymentAgreementReadyEmail(creditor.email, {
         creditorName: creditor.username ?? "there", debtorName: payerName, title: `Invoice #${invoice.id}`,

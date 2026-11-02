@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { getAppUrl } from "../../lib/app-url";
 
 /**
  * VLT-GAP-16-B: public-receipt token + link builder shared by the Vault entity receipt and the two local-account
@@ -13,5 +14,5 @@ export function generateVaultReceiptToken(): string {
 }
 
 export function vaultReceiptLink(kind: VaultReceiptKind, receiptToken: string): string {
-  return `${process.env.APP_URL ?? "https://ayzen.replit.app"}/receipt/${kind}/${receiptToken}`;
+  return `${getAppUrl()}/receipt/${kind}/${receiptToken}`;
 }

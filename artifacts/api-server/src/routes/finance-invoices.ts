@@ -41,6 +41,7 @@ import {
   financeInvoicesTable,
 } from "@workspace/db";
 import { eq } from "drizzle-orm";
+import { getAppUrl } from "../lib/app-url";
 import { requireAuth, getRequestUser, pepDecisionObserver } from "../middlewares/auth";
 import { requireOwnership, requirePublicAudit } from "../lib/policy/pep/middleware";
 import { authorize } from "../lib/policy/pep";
@@ -478,7 +479,7 @@ router.post("/finance/payment-agreements/public/:token/passkey/verify", requireA
   }
   res.json({
     verified: true,
-    evidencePdfUrl: `${process.env.APP_URL ?? "https://ayzen.replit.app"}/api/finance/payment-agreements/public/${token}/evidence-pdf`,
+    evidencePdfUrl: `${getAppUrl()}/api/finance/payment-agreements/public/${token}/evidence-pdf`,
   });
 });
 

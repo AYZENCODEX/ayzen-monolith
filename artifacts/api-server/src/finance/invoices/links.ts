@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import QRCode from "qrcode";
+import { getAppUrl } from "../../lib/app-url";
 
 // Invoice and payment-agreement tokens, the public URLs they live at, and the scan-to-pay QR for the
 // invoice link. Moved unchanged from lib/finance-invoice.ts (FIN-WP-6a).
@@ -12,16 +13,12 @@ export function generateAgreementToken(): string {
   return crypto.randomBytes(20).toString("base64url");
 }
 
-function appUrl(): string {
-  return process.env.APP_URL ?? "https://ayzen.replit.app";
-}
-
 export function financeInvoiceUrl(token: string): string {
-  return `${appUrl()}/finance/invoice/${token}`;
+  return `${getAppUrl()}/finance/invoice/${token}`;
 }
 
 export function financePaymentAgreementUrl(token: string): string {
-  return `${appUrl()}/finance/payment-agreement/${token}`;
+  return `${getAppUrl()}/finance/payment-agreement/${token}`;
 }
 
 /** Renders a scan-to-pay QR for the public invoice link itself (distinct from the per-payment-method QR in generatePaymentQrDataUrl). Never throws. */

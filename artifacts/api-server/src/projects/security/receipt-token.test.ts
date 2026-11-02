@@ -11,11 +11,11 @@ test("tokens are 20 random bytes, base64url, and not repeated", () => {
   assert.notEqual(a, b);
 });
 
-test("receipt URL uses APP_URL with the documented fallback", () => {
+test("receipt URL uses APP_URL with the canonical fallback", () => {
   const saved = process.env.APP_URL;
   try {
     delete process.env.APP_URL;
-    assert.equal(projectReceiptUrl("abc"), "https://ayzen.replit.app/receipt/project/abc");
+    assert.equal(projectReceiptUrl("abc"), "https://ayzen.tech/receipt/project/abc");
     process.env.APP_URL = "https://example.test";
     assert.equal(projectReceiptUrl("abc"), "https://example.test/receipt/project/abc");
   } finally {

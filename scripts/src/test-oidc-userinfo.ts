@@ -87,7 +87,7 @@ test("a token forged under a DIFFERENT RSA key is rejected — never accepted ju
   const forgedToken = jwt.sign({ sub: "1", scope: "openid", aud: "sylo" }, forged.privateKey, {
     algorithm: "RS256",
     keyid: kid, // claims OUR active kid, but is signed with a different key entirely
-    issuer: "https://ayzen.replit.app",
+    issuer: "https://ayzen.tech",
     expiresIn: 3600,
   });
   const result = verifyOidcAccessToken(forgedToken);
@@ -104,7 +104,7 @@ test("a token with an unknown kid is rejected as 'unknown_kid', never falls back
   const forgedToken = jwt.sign({ sub: "1", scope: "openid", aud: "sylo" }, forged.privateKey, {
     algorithm: "RS256",
     keyid: "some-kid-that-does-not-exist",
-    issuer: "https://ayzen.replit.app",
+    issuer: "https://ayzen.tech",
     expiresIn: 3600,
   });
   const result = verifyOidcAccessToken(forgedToken);
@@ -131,7 +131,7 @@ test("an expired token is rejected as 'expired', distinguished from a bad signat
   const expiredToken = jwt.sign({ sub: "1", scope: "openid", aud: "sylo" }, privateKey, {
     algorithm: "RS256",
     keyid: kid,
-    issuer: "https://ayzen.replit.app",
+    issuer: "https://ayzen.tech",
     expiresIn: -60, // already expired the moment it's minted
   });
   const result = verifyOidcAccessToken(expiredToken);

@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import { db, financeLedgerEntriesTable } from "@workspace/db";
+import { getAppUrl } from "../../lib/app-url";
 
 /** Random, unguessable, url-safe token — possession is the only "auth" for GET /finance/receipt/:token(/pdf). */
 export function generateReceiptToken(): string {
@@ -8,7 +9,7 @@ export function generateReceiptToken(): string {
 }
 
 export function financeReceiptUrl(receiptToken: string): string {
-  return `${process.env.APP_URL ?? "https://ayzen.replit.app"}/finance/receipt/${receiptToken}`;
+  return `${getAppUrl()}/finance/receipt/${receiptToken}`;
 }
 
 /** Idempotently ensure a ledger entry has a public receipt/invoice token, minting one if missing. Returns null if the entry doesn't exist or minting failed after retries. */

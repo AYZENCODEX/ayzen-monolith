@@ -6,6 +6,7 @@ import {
 } from "../../infrastructure/backup/cloud";
 import { logger } from "../../../lib/logger";
 import { logBackupAudit } from "../../infrastructure/backup/audit";
+import { getAppUrl } from "../../../lib/app-url";
 
 export interface VaultBackupResult { status: number; body: unknown }
 
@@ -23,7 +24,7 @@ function isCloudProvider(v: string): v is CloudProvider {
 
 // Where the callback sends the browser back to, regardless of outcome.
 function backToSnapshotPage(): string {
-  return `${process.env.APP_URL ?? "https://ayzen.replit.app"}/vault/snapshot`;
+  return `${getAppUrl()}/vault/snapshot`;
 }
 
 /** GET /vault/backup/cloud — connection status for every provider (never tokens). */

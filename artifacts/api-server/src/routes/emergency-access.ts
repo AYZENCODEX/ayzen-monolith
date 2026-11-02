@@ -35,6 +35,7 @@ import { generateInviteToken, generateEmergencyAccessToken, hashEmergencyAccessT
 import { decryptField } from "../vault/crypto/field-encryption";
 import { SENSITIVE_VAULT_FIELDS } from "../vault/domain/secret-fields";
 import { logActivity } from "../lib/activity";
+import { getAppUrl } from "../lib/app-url";
 
 const router = Router();
 
@@ -160,7 +161,7 @@ router.post("/emergency-access/contacts", requireAuth, sensitiveWriteLimiter, as
   }).returning();
 
   const [owner] = await db.select({ username: usersTable.username }).from(usersTable).where(eq(usersTable.id, userId)).limit(1);
-  const confirmUrl = `${process.env.APP_URL ?? "https://ayzen.replit.app"}/emergency-access/confirm/${inviteToken}`;
+  const confirmUrl = `${getAppUrl()}/emergency-access/confirm/${inviteToken}`;
   await sendEmail({
     to: row.contactEmail,
     subject: `${owner?.username ?? "An AYZEN user"} nominated you as an Emergency Access contact`,
@@ -265,7 +266,7 @@ router.post("/admin/emergency-access/grants/:id/approve", requireAdmin, sensitiv
     accessTokenExpiresAt: expiresAt,
   }).where(eq(emergencyAccessGrantsTable.id, id));
 
-  const viewUrl = `${process.env.APP_URL ?? "https://ayzen.replit.app"}/emergency-access/view/${plaintext}`;
+  const viewUrl = `${getAppUrl()}/emergency-access/view/${plaintext}`;
   await sendEmail({
     to: contact.contactEmail,
     subject: "Your AYZEN Emergency Access request has been approved",

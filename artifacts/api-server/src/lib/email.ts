@@ -1,4 +1,5 @@
 import { logger } from "./logger";
+import { getAppUrl } from "./app-url";
 
 const FROM_DEFAULT = "AYZEN <noreply@ayzen.tech>";
 
@@ -178,7 +179,7 @@ export async function sendSubscriptionApprovedEmail(to: string, username: string
     <p>🚀 Plan: <strong style="color:#00d4cc;">${planName}</strong> — now active on your account.</p>
     <p>All premium features are unlocked. Start maximizing your airdrop campaigns.</p>
     <div class="divider"></div>
-    <a href="https://ayzen.replit.app/subscription" class="btn">View My Plan</a>
+    <a href="${getAppUrl()}/subscription" class="btn">View My Plan</a>
   `);
   await sendEmail({ to, subject: `AYZEN — ${planName} Plan Activated ✓`, html });
 }
@@ -191,7 +192,7 @@ export async function sendSubscriptionRejectedEmail(to: string, username: string
     ${reasonStr}
     <p>Please double-check your transaction ID and contact support if you believe this is an error.</p>
     <div class="divider"></div>
-    <a href="https://ayzen.replit.app/subscription" class="btn">Try Again</a>
+    <a href="${getAppUrl()}/subscription" class="btn">Try Again</a>
   `);
   await sendEmail({ to, subject: `AYZEN — Payment Verification Failed`, html });
 }
@@ -230,7 +231,7 @@ export async function sendVaultHealthDigestEmail(
     <div class="divider"></div>
     ${rows}
     <div class="divider"></div>
-    <a href="https://ayzen.replit.app/vault" class="btn">Review Vault</a>
+    <a href="${getAppUrl()}/vault" class="btn">Review Vault</a>
   `);
   return sendEmail({ to, subject: `AYZEN — Vault Risk Digest (${entryCount} flagged)`, html });
 }
@@ -301,7 +302,7 @@ export async function sendFinanceDigestEmail(
     <div class="divider"></div>
     ${rows || "<p>No pending items — you're all caught up.</p>"}
     <div class="divider"></div>
-    <a href="https://ayzen.replit.app/finance/dashboard" class="btn">Open Finance</a>
+    <a href="${getAppUrl()}/finance/dashboard" class="btn">Open Finance</a>
   `);
   return sendEmail({ to, subject: `AYZEN — Finance Daily Digest`, html });
 }

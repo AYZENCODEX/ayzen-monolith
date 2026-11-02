@@ -7,6 +7,7 @@ import { broadcastToUser } from "./events";
 import { syncSubscriptionExpiry } from "../services/sync";
 import { creditAdminWalletIfNew } from "../services/admin-wallet";
 import { requireAuth, requireAdmin, getRequestUser } from "../middlewares/auth";
+import { getAppUrl } from "../lib/app-url";
 
 const router = Router();
 
@@ -85,9 +86,7 @@ router.post("/subscription/upgrade", requireAuth, async (req, res): Promise<void
     return;
   }
   try {
-    const baseUrl = process.env.REPLIT_DEV_DOMAIN
-      ? `https://${process.env.REPLIT_DEV_DOMAIN}`
-      : "https://ayzen.replit.app";
+    const baseUrl = getAppUrl();
     const resp = await fetch("https://api.coingate.com/v2/orders", {
       method: "POST",
       headers: {

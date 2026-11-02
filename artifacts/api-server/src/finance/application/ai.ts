@@ -3,6 +3,7 @@ import { db, financeLedgerEntriesTable, usersTable } from "@workspace/db";
 import { postEntryJournal } from "../ledger/journal";
 import { resolveBookId } from "../ledger/books";
 import { notifyEntryCreated } from "../notifications/notify";
+import { getAppUrl } from "../../lib/app-url";
 import {
   parseQuickEntryText,
   findDuplicateEntry,
@@ -62,8 +63,7 @@ export async function scanReceipt(userId: number, imageBase64: string, currency?
 }
 
 function smsWebhookUrl(token: string): string {
-  const base = process.env.APP_URL ?? "https://ayzen.replit.app";
-  return `${base}/api/finance/ai/sms-webhook/${token}`;
+  return `${getAppUrl()}/api/finance/ai/sms-webhook/${token}`;
 }
 
 /** Null when no token could be generated. */

@@ -11,6 +11,7 @@ import { requireAdmin, requireAuth, requireRoles, pepDecisionObserver } from "..
 import { requireCreditBalance, chargeCredits } from "../services/credit-meter";
 import { syncOnTaskDelete } from "../services/sync";
 import { streamFantasticReceiptPdf } from "../lib/receipt-theme";
+import { getAppUrl } from "../lib/app-url";
 import { PolicyEngine } from "../lib/policy/policy-engine";
 import { createResourceOwnershipRule, createRoleOverrideRule } from "../lib/policy/resource";
 import { authorize, requirePublicAudit } from "../lib/policy/pep";
@@ -43,7 +44,7 @@ function generateTaskReceiptToken(): string {
   return crypto.randomBytes(20).toString("base64url");
 }
 function taskReceiptUrl(receiptToken: string): string {
-  return `${process.env.APP_URL ?? "https://ayzen.replit.app"}/receipt/task/${receiptToken}`;
+  return `${getAppUrl()}/receipt/task/${receiptToken}`;
 }
 
 async function mintTaskReceiptToken(submissionId: number): Promise<string | null> {

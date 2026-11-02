@@ -82,6 +82,8 @@
  * a capability no caller of this document has any decision to make about.
  */
 
+import { getAppUrl } from "./app-url";
+
 /** The provider metadata document this file can currently produce — a strict subset of the full OIDC Discovery 1.0 shape, growing as later phases ship the endpoints it describes. */
 export interface OidcDiscoveryMetadata {
   issuer: string;
@@ -128,15 +130,12 @@ const ID_TOKEN_SIGNING_ALG_VALUES_SUPPORTED = ["RS256"] as const;
  * `AYZEN_OIDC_ISSUER` is a dedicated override for when the OIDC issuer
  * needs to differ from the general app origin (e.g. a distinct
  * `account.ayzen.tech` identity host vs. wherever the app itself is
- * reachable) — falls back to the same `APP_URL` env var / production
- * default already used elsewhere in this codebase (lib/finance-invoice.ts)
- * so Season 1 doesn't require a new env var to be set just to exercise
- * this locally. Trailing slashes are stripped so callers can safely do
+ * reachable). Trailing slashes are stripped so callers can safely do
  * `${issuer}/.well-known/...` without a doubled `//`.
  */
 export function resolveIssuer(): string {
   const explicit = process.env.AYZEN_OIDC_ISSUER?.trim();
-  const raw = explicit && explicit.length > 0 ? explicit : (process.env.APP_URL ?? "https://ayzen.replit.app");
+  const raw = explicit && explicit.length > 0 ? explicit : getAppUrl();
   return raw.replace(/\/+$/, "");
 }
 
