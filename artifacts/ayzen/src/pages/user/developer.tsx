@@ -113,7 +113,8 @@ export default function UserDeveloper() {
     toast({ title: "Copied to clipboard" });
   };
 
-  const mcpUrl = `${window.location.origin}${BASE}/api/mcp`;
+  // Production sets VITE_MCP_URL=https://api.ayzen.tech/mcp; elsewhere the /api/mcp path on this origin works too.
+  const mcpUrl = (import.meta.env.VITE_MCP_URL as string | undefined) || `${window.location.origin}${BASE}/api/mcp`;
 
   return (
     <div className="max-w-4xl mx-auto py-6 space-y-6">
@@ -178,8 +179,8 @@ export default function UserDeveloper() {
           </div>
           <p className="text-xs font-mono text-muted-foreground">
             AYZEN exposes an MCP (Model Context Protocol) endpoint, secured with your own API key above.
-            Add it as a remote MCP connector wherever your client supports one — it can read and update
-            your vault entries, list projects, and pull a dashboard summary directly in conversation.
+            Add it as a remote MCP connector wherever your client supports one — it can read your vault
+            (secrets stay redacted), projects, tasks, finance, mail, teams and wallets, and update vault entries.
           </p>
           <div className="space-y-1">
             <Label className="text-xs font-mono">MCP Server URL</Label>
@@ -193,8 +194,9 @@ export default function UserDeveloper() {
             <Input readOnly value="Bearer <your API key>" className="font-mono text-xs" />
           </div>
           <p className="text-[11px] font-mono text-muted-foreground/60">
-            Use a key from the API Keys tab — create one first if you haven't. Available tools: list/get/create/update
-            vault entries, list projects, dashboard summary.
+            Use a key from the API Keys tab — create one first if you haven't. Only API keys work here (not your
+            login session). A scoped key needs the "mcp" scope plus the module scope for each tool; write tools also
+            need "mcp-write", and revealing vault secrets needs "vault-secrets".
           </p>
         </div>
       )}

@@ -31,6 +31,7 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import { ADMIN_ROUTES, USER_ROUTES } from "@/lib/route-config";
 import type { RouteConfig } from "@/lib/route-config";
 import { getCurrentSubdomainApp, isPathInSubdomainScope, getModuleForPath, moduleUrl, ALWAYS_ALLOWED_PREFIXES } from "@/lib/subdomain-app";
+import { getRoleHostRedirect } from "@/lib/role-hosts";
 // OIDC Roadmap — Season 3, Phase 5b-a/5b-b.
 import { startSyloOidcLogin } from "@/lib/sylo-oidc-login";
 // OIDC Roadmap — Season 3, Phase 5c-c: dual-run gate — reads the same
@@ -127,6 +128,19 @@ function ProtectedRoute({
     window.location.replace(moduleUrl(id, location));
   }, [splitAllowed, splitIsPublic, splitTarget, location]);
 
+  // Phase 7 — role domains (flagged: VITE_ROLE_HOSTS=1, see lib/role-hosts.ts).
+  // A signed-in admin/moderator/team-leader on the central host moves to
+  // their own host, and a wrong-role session on a role host moves off it.
+  // The server independently denies the wrong-role API calls; this just
+  // avoids a dead-end screen. replace() keeps Back from looping.
+  const roleRedirectUrl = user ? getRoleHostRedirect(user.role, location) : null;
+  const [roleRedirecting, setRoleRedirecting] = useState(false);
+  useEffect(() => {
+    if (!roleRedirectUrl) return;
+    setRoleRedirecting(true);
+    window.location.replace(roleRedirectUrl);
+  }, [roleRedirectUrl]);
+
   // OIDC Roadmap — Season 3, Phase 5c-c (dual-run gate, additive to 5b-a
   // below): BEFORE starting the OIDC redirect, ask the rollout flag
   // whether Sylo (or whichever app is scoped) is actually cut over yet.
@@ -183,7 +197,7 @@ function ProtectedRoute({
   }, [shouldStartOidcLogin, location]);
 
   // S6: full-screen loader while a central -> module redirect is in flight.
-  if (splitRedirecting)
+  if (splitRedirecting || roleRedirecting)
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
         INITIALIZING...

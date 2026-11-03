@@ -93,3 +93,12 @@ test("the receipts table has the error column the gateway writes, and the link t
   assert.match(source, /CREATE UNIQUE INDEX IF NOT EXISTS telegram_bot_links_bot_chat_idx/);
   assert.match(source, /CREATE TABLE IF NOT EXISTS telegram_link_codes/);
 });
+
+test("the retired new-bot placeholder is no longer seeded and TELEGRAM_NEW_BOT_TOKEN is gone", () => {
+  const source = readFileSync(new URL("./schema-migrations.ts", import.meta.url), "utf8");
+  const seed = source.slice(source.indexOf("INSERT INTO telegram_bots"), source.indexOf("ON CONFLICT (bot_key)"));
+  assert.doesNotMatch(seed, /new-bot/);
+  assert.doesNotMatch(seed, /TELEGRAM_NEW_BOT_TOKEN/);
+  assert.match(source, /DELETE FROM telegram_bots WHERE bot_key = 'new-bot' AND NOT EXISTS/);
+  assert.equal(getTelegramBotDescriptor("new-bot"), undefined);
+});

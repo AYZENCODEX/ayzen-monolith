@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-29T06:07:09.762Z",
+  "generatedAt": "2026-11-03T12:15:34.631Z",
   "status": "READY",
   "completeness": {
-    "totalComponents": 195,
+    "totalComponents": 197,
     "totalSourceRegistries": 7,
     "representedSourceRegistries": 7,
     "ratio": 1,
     "byKind": {
       "app": 0,
-      "domain": 4,
+      "domain": 6,
       "feature": 87,
       "sub-feature": 0,
       "function": 0,

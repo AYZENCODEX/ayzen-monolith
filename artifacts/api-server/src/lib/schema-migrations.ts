@@ -2731,8 +2731,7 @@ export const MIGRATIONS = [
      ('skarn', 'SKARN', 'Projects / tasks / workflow', 'SKARN_TELEGRAM_BOT_TOKEN'),
      ('zynth', 'ZYNTH', 'AI / intelligence / agent', 'ZYNTH_TELEGRAM_BOT_TOKEN'),
      ('wisp', 'WISP', 'Mailbox / email', 'WISP_TELEGRAM_BOT_TOKEN'),
-     ('admin', 'AYZEN Admin', 'Privileged control plane', 'TELEGRAM_ADMIN_BOT_TOKEN'),
-     ('new-bot', 'New Telegram Bot', 'Reserved extensible bot slot', 'TELEGRAM_NEW_BOT_TOKEN')
+     ('admin', 'AYZEN Admin', 'Privileged control plane', 'TELEGRAM_ADMIN_BOT_TOKEN')
    ON CONFLICT (bot_key) DO UPDATE SET token_env_var = EXCLUDED.token_env_var, display_name = EXCLUDED.display_name, responsibility = EXCLUDED.responsibility`,
   `CREATE TABLE IF NOT EXISTS idempotency_keys (
     id SERIAL PRIMARY KEY,
@@ -3025,6 +3024,10 @@ $f11_finance_payment_agreements$`,
   )`,
   "CREATE UNIQUE INDEX IF NOT EXISTS telegram_bot_links_user_bot_idx ON telegram_bot_links(user_id, bot_key)",
   "CREATE UNIQUE INDEX IF NOT EXISTS telegram_bot_links_bot_chat_idx ON telegram_bot_links(bot_key, chat_id)",
+  // Phase 9: retire the never-configured 'new-bot' placeholder row (it was seeded with the
+  // unused TELEGRAM_NEW_BOT_TOKEN and is not in the bot registry). Guarded so a row that
+  // somehow has links is left alone; idempotent on every boot.
+  "DELETE FROM telegram_bots WHERE bot_key = 'new-bot' AND NOT EXISTS (SELECT 1 FROM telegram_bot_links WHERE bot_key = 'new-bot')",
   "CREATE INDEX IF NOT EXISTS telegram_bot_links_user_id_idx ON telegram_bot_links(user_id)",
   `CREATE TABLE IF NOT EXISTS telegram_link_codes (
     id SERIAL PRIMARY KEY,

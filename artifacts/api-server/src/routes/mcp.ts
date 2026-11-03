@@ -1,211 +1,139 @@
 /**
  * routes/mcp.ts
  * ─────────────────────────────────────────────────────────────────────────────
- * Drop this at: artifacts/api-server/src/routes/mcp.ts
+ * AYZEN's MCP (Model Context Protocol) server — Streamable HTTP transport,
+ * stateless. Phase 8 rewrite of the original minimal wrapper.
  *
- * A minimal MCP (Model Context Protocol) server, mounted at POST /mcp, that
- * lets a user connect an MCP-capable client (Claude, etc.) straight to their
- * own AYZEN account — read vault entries, create/update entries, list
- * projects, pull a dashboard summary — using the exact same AYZEN API key
- * they already generate from Settings → Developer → API Keys
- * (routes/api-keys.ts). No new auth system: `Authorization: Bearer
- * ayzn_live_xxx` on the MCP request is the same bearer requireAuth already
- * accepts everywhere else.
+ *   POST /mcp   JSON-RPC 2.0 request / notification / batch
+ *   GET  /mcp   405 (this server offers no server-initiated SSE stream)
+ *   DELETE /mcp 405 (no sessions to terminate)
  *
- * Deliberately implemented as a thin JSON-RPC wrapper that calls this same
- * server's own REST endpoints over loopback HTTP (forwarding the caller's
- * Authorization header) rather than re-implementing vault field encryption,
- * validation, health-rule recompute, etc. a second time. That keeps this
- * file in sync with routes/vault.ts automatically — if a field is added to
- * the REST API, this wrapper doesn't drift out of date.
+ * Reachable at (same router, mounted twice — see app.ts and routes/index.ts):
+ *   https://api.ayzen.tech/mcp   and   https://mcp.ayzen.tech/mcp    (API/MCP hosts)
+ *   https://<origin>/api/mcp                                          (legacy path, kept)
  *
- * Protocol notes: implements the JSON-RPC request/response shape of MCP's
- * Streamable HTTP transport (initialize, tools/list, tools/call) as a single
- * POST endpoint. No SSE/session-resumption — sufficient for a single-user
- * request/response client like Claude's remote-MCP connector.
+ * Stateless on purpose: no Mcp-Session-Id is issued, which the spec allows.
+ * The app runs on autoscaled instances, so in-memory sessions would 404 on the
+ * next request that lands elsewhere. Every request carries its own credentials.
+ *
+ * Auth: an AYZEN API key (`ayzn_live_…`, Settings → Developer → API Keys) in
+ * `Authorization: Bearer`. Browser sessions and cookies are refused so a web
+ * page can never drive this endpoint on a signed-in user's behalf. OAuth is not
+ * offered: AYZEN's OIDC provider has no dynamic client registration, so
+ * advertising it would send MCP clients into an authorization flow that cannot
+ * complete. Scoped keys need the `mcp` scope plus each tool's module scope
+ * (lib/api-scopes.ts); tool calls loop back through the normal REST stack, so
+ * the scope gate, ownership checks and credit metering all apply.
+ *
+ * Logic lives in src/mcp-server/*; this file is only HTTP wiring.
  */
-import { Router } from "express";
-import { requireAuth } from "../middlewares/auth";
+import { Router, type NextFunction, type Request, type Response } from "express";
+import { looksLikeApiKey } from "../lib/api-key-crypto";
+import { authenticateAccessToken } from "../lib/identity-service";
+import { logger } from "../lib/logger";
+import { isAllowedMcpOrigin } from "../mcp-server/origin";
+import { FixedWindowLimiter, mcpRateLimitPerMinute } from "../mcp-server/rate-limit";
+import { makeLoopbackCaller } from "../mcp-server/loopback";
+import { handleRpcMessage, isSupportedProtocolVersion, RPC_ERROR, type JsonRpcResponse } from "../mcp-server/protocol";
+import type { McpPrincipal } from "../mcp-server/tools";
 
 const router = Router();
+const limiter = new FixedWindowLimiter(mcpRateLimitPerMinute());
+const MAX_BATCH = 20;
 
-const INTERNAL_PORT = process.env["AYZEN_API_PORT"] ?? process.env["PORT"] ?? "8080";
-const INTERNAL_BASE = `http://localhost:${INTERNAL_PORT}/api`;
+const rpcError = (code: number, message: string): JsonRpcResponse => ({ jsonrpc: "2.0", id: null, error: { code, message } });
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Tool definitions (JSON-RPC "tools/list" shape)
-// ─────────────────────────────────────────────────────────────────────────────
-const TOOLS = [
-  {
-    name: "ayzen_list_vault_entries",
-    description: "List the user's vault entities (summary only — no passwords/secrets). Optionally filter by category.",
-    inputSchema: {
-      type: "object",
-      properties: { category: { type: "string", description: "Optional category filter, e.g. 'twitter', 'discord'" } },
-    },
-  },
-  {
-    name: "ayzen_get_vault_entry",
-    description: "Get full details of one vault entry by id, including decrypted credentials. Use only when the user explicitly wants a specific credential revealed.",
-    inputSchema: {
-      type: "object",
-      properties: { id: { type: "number", description: "Vault entry id" } },
-      required: ["id"],
-    },
-  },
-  {
-    name: "ayzen_create_vault_entry",
-    description: "Create a new vault entry. Core fields only — for the full field set (Twitter/Discord/Telegram sub-accounts, seed phrase, etc.) use the AYZEN web app.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        projectName: { type: "string" },
-        username: { type: "string" },
-        email: { type: "string" },
-        accountPassword: { type: "string" },
-        notes: { type: "string" },
-        tags: { type: "array", items: { type: "string" } },
-      },
-      required: ["projectName"],
-    },
-  },
-  {
-    name: "ayzen_update_vault_entry",
-    description: "Update fields on an existing vault entry by id. Only send the fields being changed.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        id: { type: "number" },
-        projectName: { type: "string" },
-        username: { type: "string" },
-        email: { type: "string" },
-        accountPassword: { type: "string" },
-        notes: { type: "string" },
-        tags: { type: "array", items: { type: "string" } },
-      },
-      required: ["id"],
-    },
-  },
-  {
-    name: "ayzen_list_projects",
-    description: "List the projects the user is enrolled in.",
-    inputSchema: { type: "object", properties: {} },
-  },
-  {
-    name: "ayzen_dashboard_summary",
-    description: "Get a quick summary: total vault entries, how many are currently flagged by the health scan, and the user's streak/ROI stats.",
-    inputSchema: { type: "object", properties: {} },
-  },
-] as const;
+/** Authenticated caller, handed from requireMcpApiKey() to the handler via res.locals. */
+interface McpLocals { principal: McpPrincipal; authHeader: string }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Internal REST call helper — forwards the caller's own Authorization header
-// ─────────────────────────────────────────────────────────────────────────────
-async function callApi(authHeader: string, method: string, path: string, body?: unknown) {
-  const r = await fetch(`${INTERNAL_BASE}${path}`, {
-    method,
-    headers: { "Content-Type": "application/json", Authorization: authHeader },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
-  const text = await r.text();
-  let data: unknown;
-  try { data = text ? JSON.parse(text) : null; } catch { data = text; }
-  if (!r.ok) throw new Error(typeof data === "object" && data && "error" in (data as any) ? (data as any).error : `API error ${r.status}`);
-  return data;
-}
+async function requireMcpApiKey(req: Request, res: Response, next: NextFunction): Promise<void> {
+  res.setHeader("Cache-Control", "no-store");
 
-function toolContent(data: unknown) {
-  return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
-}
-
-async function callTool(authHeader: string, name: string, args: Record<string, unknown>) {
-  switch (name) {
-    case "ayzen_list_vault_entries": {
-      const rows = (await callApi(authHeader, "GET", "/vault")) as any[];
-      const filtered = args.category ? rows.filter((r) => r.category === args.category) : rows;
-      const summary = filtered.map((r) => ({
-        id: r.id, projectName: r.projectName, category: r.category,
-        username: r.username, email: r.email, lastLoginAt: r.lastLoginAt,
-        flagged: Array.isArray(r.lastHealthFlags) ? r.lastHealthFlags.length > 0 : Boolean(r.lastHealthFlags),
-      }));
-      return toolContent(summary);
-    }
-    case "ayzen_get_vault_entry": {
-      if (!args.id) throw new Error("id is required");
-      return toolContent(await callApi(authHeader, "GET", `/vault/${args.id}`));
-    }
-    case "ayzen_create_vault_entry": {
-      if (!args.projectName) throw new Error("projectName is required");
-      return toolContent(await callApi(authHeader, "POST", "/vault", args));
-    }
-    case "ayzen_update_vault_entry": {
-      if (!args.id) throw new Error("id is required");
-      const { id, ...fields } = args;
-      return toolContent(await callApi(authHeader, "PATCH", `/vault/${id}`, fields));
-    }
-    case "ayzen_list_projects": {
-      return toolContent(await callApi(authHeader, "GET", "/projects"));
-    }
-    case "ayzen_dashboard_summary": {
-      const [entries, me] = await Promise.all([
-        callApi(authHeader, "GET", "/vault") as Promise<any[]>,
-        callApi(authHeader, "GET", "/auth/me") as Promise<any>,
-      ]);
-      const flagged = entries.filter((r) => (Array.isArray(r.lastHealthFlags) ? r.lastHealthFlags.length > 0 : Boolean(r.lastHealthFlags))).length;
-      return toolContent({
-        totalVaultEntries: entries.length,
-        flaggedEntries: flagged,
-        streak: me?.streak ?? 0,
-        totalRoi: me?.totalRoi ?? 0,
-        digestFrequency: me?.digestFrequency ?? "daily",
-      });
-    }
-    default:
-      throw new Error(`Unknown tool: ${name}`);
+  if (!isAllowedMcpOrigin(req.headers.origin)) {
+    res.status(403).json(rpcError(-32000, "Origin not allowed"));
+    return;
   }
+
+  const version = req.headers["mcp-protocol-version"];
+  if (typeof version === "string" && version && !isSupportedProtocolVersion(version)) {
+    res.status(400).json(rpcError(-32000, `Unsupported MCP-Protocol-Version: ${version}`));
+    return;
+  }
+
+  // API key from the Authorization header only — never the session cookie.
+  const authHeader = req.headers.authorization;
+  const token = typeof authHeader === "string" && /^Bearer\s+/i.test(authHeader) ? authHeader.replace(/^Bearer\s+/i, "").trim() : "";
+  if (!token || !looksLikeApiKey(token)) {
+    res.setHeader("WWW-Authenticate", 'Bearer realm="ayzen-mcp"');
+    res.status(401).json(rpcError(-32001, "Unauthorized: send an AYZEN API key as 'Authorization: Bearer ayzn_live_…'."));
+    return;
+  }
+  const user = await authenticateAccessToken(token);
+  if (!user || user.authType !== "apikey") {
+    res.setHeader("WWW-Authenticate", 'Bearer realm="ayzen-mcp", error="invalid_token"');
+    res.status(401).json(rpcError(-32001, "Unauthorized: invalid or revoked API key."));
+    return;
+  }
+
+  const principal: McpPrincipal = {
+    userId: user.userId,
+    keyType: user.keyType === "scoped" ? "scoped" : "full",
+    scopes: user.scopes ?? [],
+  };
+  // The REST scope gate enforces this on /api/mcp; checking here keeps /mcp (outside /api) equally strict.
+  if (principal.keyType === "scoped" && !principal.scopes.includes("mcp")) {
+    res.status(403).json(rpcError(-32002, 'This API key needs the "mcp" scope to use the MCP server.'));
+    return;
+  }
+
+  const rl = limiter.hit(`u:${principal.userId}`);
+  res.setHeader("RateLimit-Limit", String(rl.limit));
+  res.setHeader("RateLimit-Remaining", String(rl.remaining));
+  if (!rl.allowed) {
+    res.setHeader("Retry-After", String(rl.retryAfterSec));
+    res.status(429).json(rpcError(-32003, "Rate limit exceeded. Slow down and retry."));
+    return;
+  }
+
+  res.locals.mcp = { principal, authHeader: authHeader as string } satisfies McpLocals;
+  next();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// POST /mcp — single JSON-RPC endpoint (initialize / tools/list / tools/call)
-// ─────────────────────────────────────────────────────────────────────────────
-router.post("/mcp", requireAuth, async (req, res): Promise<void> => {
-  const authHeader = req.headers.authorization as string; // requireAuth already validated this
-  const { jsonrpc, id, method, params } = req.body ?? {};
+router.post("/mcp", (req, res, next) => { requireMcpApiKey(req, res, next).catch(next); }, async (req, res): Promise<void> => {
+  const { principal, authHeader } = res.locals.mcp as McpLocals;
+  const ctx = {
+    principal,
+    callApi: makeLoopbackCaller(authHeader, req.ip),
+    audit: (entry: { tool: string; ok: boolean; durationMs: number; reason?: string }) => {
+      // Metadata only — argument values can hold secrets and are never logged.
+      logger.info({ event: "mcp.tool_call", userId: principal.userId, keyType: principal.keyType, ...entry }, "mcp tool call");
+    },
+  };
 
-  const reply = (result: unknown) => res.json({ jsonrpc: "2.0", id: id ?? null, result });
-  const replyError = (code: number, message: string) => res.json({ jsonrpc: "2.0", id: id ?? null, error: { code, message } });
-
-  if (jsonrpc !== "2.0" || !method) { replyError(-32600, "Invalid JSON-RPC request"); return; }
-
-  try {
-    switch (method) {
-      case "initialize":
-        reply({
-          protocolVersion: "2024-11-05",
-          serverInfo: { name: "ayzen", version: "1.0.0" },
-          capabilities: { tools: {} },
-        });
-        return;
-      case "tools/list":
-        reply({ tools: TOOLS });
-        return;
-      case "tools/call": {
-        const name = params?.name as string;
-        const args = (params?.arguments ?? {}) as Record<string, unknown>;
-        if (!name) { replyError(-32602, "params.name is required"); return; }
-        try {
-          reply(await callTool(authHeader, name, args));
-        } catch (err: any) {
-          reply({ content: [{ type: "text", text: `Error: ${err?.message ?? err}` }], isError: true });
-        }
-        return;
-      }
-      default:
-        replyError(-32601, `Method not found: ${method}`);
+  const body: unknown = req.body;
+  if (Array.isArray(body)) {
+    if (body.length === 0 || body.length > MAX_BATCH) {
+      res.status(400).json(rpcError(RPC_ERROR.INVALID_REQUEST, `Batch must contain 1–${MAX_BATCH} messages`));
+      return;
     }
-  } catch (err: any) {
-    replyError(-32603, err?.message ?? "Internal error");
+    const out = (await Promise.all(body.map((m) => handleRpcMessage(m, ctx)))).filter((r): r is JsonRpcResponse => r !== null);
+    if (out.length === 0) { res.status(202).end(); return; }
+    res.json(out);
+    return;
   }
+
+  const response = await handleRpcMessage(body, ctx);
+  if (response === null) { res.status(202).end(); return; }
+  // A body that was not a JSON-RPC message at all is a transport-level 400.
+  if (response.error?.code === RPC_ERROR.INVALID_REQUEST && response.id === null) { res.status(400).json(response); return; }
+  res.json(response);
 });
+
+const notAllowed = (_req: Request, res: Response): void => {
+  res.setHeader("Allow", "POST, OPTIONS");
+  res.status(405).json(rpcError(-32000, "Method not allowed. Use POST with a JSON-RPC 2.0 body."));
+};
+router.get("/mcp", notAllowed);
+router.delete("/mcp", notAllowed);
 
 export default router;

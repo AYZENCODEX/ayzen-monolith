@@ -11,6 +11,8 @@
     { "id": "ayzen-public", "domain": "ayzen.tech", "environment": "production", "target": "api-gateway", "owner": "platform", "entryPoint": "frontend" },
     { "id": "ayzen-staging", "domain": "staging.ayzen.tech", "environment": "staging", "target": "api-gateway", "owner": "platform", "entryPoint": "frontend" },
     { "id": "ayzen-admin", "domain": "admin.ayzen.tech", "environment": "production", "target": "admin", "owner": "admin", "entryPoint": "admin" },
+    { "id": "ayzen-moderator", "domain": "mod.ayzen.tech", "environment": "production", "target": "api-gateway", "owner": "platform", "entryPoint": "frontend" },
+    { "id": "ayzen-team-leader", "domain": "team.ayzen.tech", "environment": "production", "target": "api-gateway", "owner": "platform", "entryPoint": "frontend" },
     { "id": "ayzen-api", "domain": "api.ayzen.tech", "environment": "production", "target": "api-gateway", "owner": "platform", "entryPoint": "api" }
   ]
 }

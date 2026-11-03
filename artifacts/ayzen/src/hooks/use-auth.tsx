@@ -207,7 +207,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAdmin: user?.role === "admin",
       isDev: user?.role === "dev",
       isModerator: user?.role === "moderator",
-      isTeamLeader: user?.role === "teamleader",
+      isTeamLeader: user?.role === "team_leader" || user?.role === "teamleader",
       isLoading,
       accounts,
       switchAccount,

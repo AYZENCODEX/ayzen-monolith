@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "registryId": "ayzen-component-registry",
-  "generatedAt": "2026-09-29T06:07:09.761Z",
+  "generatedAt": "2026-11-03T12:15:34.626Z",
   "generatedBy": "tools/component-registry/build.mjs",
   "schema": "schemas/platform/components/component.v1.json",
   "sourceRegistries": [
@@ -4272,6 +4272,40 @@
         "domain": "admin.ayzen.tech",
         "target": "admin",
         "entryPoint": "admin"
+      }
+    },
+    {
+      "id": "domain:ayzen-moderator",
+      "kind": "domain",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/domain-registry.json",
+        "originalId": "ayzen-moderator"
+      },
+      "metadata": {
+        "domain": "mod.ayzen.tech",
+        "target": "api-gateway",
+        "entryPoint": "frontend"
+      }
+    },
+    {
+      "id": "domain:ayzen-team-leader",
+      "kind": "domain",
+      "owner": "platform",
+      "app": "platform",
+      "environment": "production",
+      "lifecycle": "ACTIVE",
+      "source": {
+        "registry": "infrastructure/platform/domain-registry.json",
+        "originalId": "ayzen-team-leader"
+      },
+      "metadata": {
+        "domain": "team.ayzen.tech",
+        "target": "api-gateway",
+        "entryPoint": "frontend"
       }
     },
     {

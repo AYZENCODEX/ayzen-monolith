@@ -11,6 +11,7 @@ import { loginWithPasskey, browserSupportsWebAuthn } from "@/lib/passkey-api";
 // OIDC Roadmap — Season 3, Phase 5d-c: cutover-redirect effect (see below,
 // near oidcReturnTo).
 import { getCurrentSubdomainApp } from "@/lib/subdomain-app";
+import { getRoleHostRedirect } from "@/lib/role-hosts";
 import { getSyloOidcRolloutFlag } from "@/lib/sylo-oidc-rollout-flag";
 import { startSyloOidcLogin } from "@/lib/sylo-oidc-login";
 
@@ -156,6 +157,13 @@ export default function Login() {
   function redirectAfterLogin(role: string) {
     if (oidcReturnTo) {
       window.location.href = oidcReturnTo;
+      return;
+    }
+    // Phase 7: with role hosts on, an admin/moderator/team leader signing in
+    // on the wrong host lands on their own (full navigation: new origin).
+    const roleUrl = getRoleHostRedirect(role, role === "admin" ? "/admin/dashboard" : "/dashboard");
+    if (roleUrl) {
+      window.location.href = roleUrl;
       return;
     }
     if (role === "admin") setLocation("/admin/dashboard");

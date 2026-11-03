@@ -37,7 +37,7 @@
  *     cross-check is meant to surface later). Auth mode is inferred from
  *     the text of that specific route's own handler slice (requireAdmin/
  *     requireDev -> admin, requireAuth/requireRoles/getUserFromToken/
- *     getTokenFromReq/apiKeyScopeGate -> user, else public.
+ *     getTokenFromReq/apiKeyScopeGate/requireMcpApiKey -> user, else public.
  *
  * Usage:
  *   node tools/domain-routing/generate-endpoint-registry.mjs [--check]
@@ -162,7 +162,7 @@ function inferMonolithAuth(handlerSlice) {
   // assume a call.
   if (/\brequireAdmin\b|\brequireDev\b/.test(handlerSlice)) return "admin";
   if (/\brequireRoles\s*\(\s*["'](admin|dev)["']/.test(handlerSlice)) return "admin";
-  if (/\brequireAuth\b|\brequireSessionAuth\b|\brequireRoles\s*\(|\bgetUserFromToken\s*\(|\bgetTokenFromReq\s*\(|\bapiKeyScopeGate\b|\brequireRole\s*\(/.test(handlerSlice)) return "user";
+  if (/\brequireAuth\b|\brequireSessionAuth\b|\brequireRoles\s*\(|\bgetUserFromToken\s*\(|\bgetTokenFromReq\s*\(|\bapiKeyScopeGate\b|\brequireMcpApiKey\b|\brequireRole\s*\(/.test(handlerSlice)) return "user";
   // requirePublicAudit(...) is a deliberately-public, audited route (e.g.
   // a shareable receipt link) — it must NOT be classified as "user".
   return "public";

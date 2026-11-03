@@ -49,6 +49,17 @@ export const SCOPE_DEFINITIONS: ScopeDefinition[] = [
   { id: "tools", label: "Tools & CSV import/export", prefixes: ["/tools", "/csv"] },
   { id: "nft", label: "NFT subscriptions", prefixes: ["/nft-subscriptions"] },
   { id: "teams", label: "Teams", prefixes: ["/teams"] },
+  { id: "finance", label: "Finance (books, ledger entries, invoices)", prefixes: ["/finance"] },
+  // ── MCP-only scopes (Phase 8) ──────────────────────────────────────────────
+  // "mcp" lets a scoped key reach the MCP endpoint at all; every MCP tool then
+  // still needs the module scope for the REST area it wraps (vault, projects,
+  // finance, ...) because tool calls loop back through this same scope gate.
+  // The two scopes below have NO path prefixes on purpose: they never grant
+  // REST access, they only unlock capabilities inside the MCP tool layer
+  // (mcp/tool access checks), so adding them can't widen any REST route.
+  { id: "mcp", label: "Connect through the MCP server (each tool also needs its module scope)", prefixes: ["/mcp"] },
+  { id: "mcp-write", label: "MCP write tools (create/update). Also needs the module scope", prefixes: [] },
+  { id: "vault-secrets", label: "MCP: allow revealing decrypted vault secrets", prefixes: [] },
 ];
 
 export const ALL_SCOPE_IDS = SCOPE_DEFINITIONS.map((s) => s.id);

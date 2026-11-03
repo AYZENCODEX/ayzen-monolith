@@ -10,6 +10,8 @@
  *
  *   API_HOSTS  comma-separated hostnames treated as API hosts
  *              (default: api.ayzen.tech)
+ *   MCP_HOSTS  comma-separated hostnames that serve the MCP endpoint and are
+ *              treated as API hosts too (default: mcp.ayzen.tech)
  *
  * Also the single definition of "first-party origin" used by CORS.
  * Dependency-free so unit tests and scripts can import it directly.
@@ -26,10 +28,29 @@ export function getApiHosts(): string[] {
   return list.length > 0 ? list : [DEFAULT_API_HOST];
 }
 
+export const DEFAULT_MCP_HOST = "mcp.ayzen.tech";
+
+/** MCP_HOSTS: comma-separated hostnames that serve the MCP endpoint (default: mcp.ayzen.tech). */
+export function getMcpHosts(): string[] {
+  const raw = process.env.MCP_HOSTS?.trim();
+  const list = (raw ? raw : DEFAULT_MCP_HOST)
+    .split(",")
+    .map((h) => h.trim().toLowerCase())
+    .filter(Boolean);
+  return list.length > 0 ? list : [DEFAULT_MCP_HOST];
+}
+
+export function isMcpHost(hostname: string | undefined | null): boolean {
+  if (!hostname) return false;
+  const host = hostname.trim().toLowerCase().split(":")[0];
+  return getMcpHosts().includes(host);
+}
+
+/** API hosts and MCP hosts never serve the SPA: real routes only, JSON 404 otherwise. */
 export function isApiHost(hostname: string | undefined | null): boolean {
   if (!hostname) return false;
   const host = hostname.trim().toLowerCase().split(":")[0];
-  return getApiHosts().includes(host);
+  return getApiHosts().includes(host) || getMcpHosts().includes(host);
 }
 
 // https://ayzen.tech and https://<anything>.ayzen.tech (single label, no wildcard

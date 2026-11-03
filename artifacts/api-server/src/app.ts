@@ -1,6 +1,6 @@
 import "./lib/express-async-errors"; // FIN F12: idempotent; keeps tests that import app directly safe
 import * as Sentry from "@sentry/node"; // sentry express error handler (init happens in index.ts)
-import express, { type Express } from "express";
+import express, { type Express, type RequestHandler } from "express";
 import pinoHttp from "pino-http";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -49,6 +49,8 @@ import {
   JSON_BODY_LIMIT,
 } from "./middlewares/security";
 import { apiKeyScopeGate } from "./middlewares/api-key-scope";
+import { roleHostApiGate, roleHostPageGate } from "./middlewares/role-host";
+import mcpRouter from "./routes/mcp";
 import { db } from "@workspace/db";
 import { sql } from "drizzle-orm";
 import { runWithTraceContext, traceContextFromHeaders } from "./lib/trace-context";
@@ -267,7 +269,13 @@ app.use(oidcIntrospectRouter);
 // on `/.well-known/openid-configuration`), Phase 10e, is still not wired.
 app.use(oidcRevokeRouter);
 
-app.use("/api", globalLimiter, apiKeyScopeGate, router);
+// MCP server at the bare origin of the API/MCP hosts (https://api.ayzen.tech/mcp,
+// https://mcp.ayzen.tech/mcp). The same router also stays mounted at /api/mcp
+// (routes/index.ts). It does its own API-key auth, scope check and rate limit,
+// so it needs neither apiKeyScopeGate nor globalLimiter here. Phase 8.
+app.use((req, res, next) => (isApiHost(req.hostname) ? (mcpRouter as unknown as RequestHandler)(req, res, next) : next()));
+
+app.use("/api", globalLimiter, roleHostApiGate, apiKeyScopeGate, router);
 
 app.use("/api/{*splat}", notFoundHandler);
 app.use(globalErrorHandler as any);
@@ -283,6 +291,11 @@ app.use((req, res, next) => {
   }
   res.status(404).json({ error: "Route not found", code: "NOT_FOUND" });
 });
+
+// ── Role hosts (admin / mod / team leader) ──────────────────────────────────
+// Phase 7. No-op unless ROLE_HOSTS_ENABLED=1. See lib/role-hosts.ts for the
+// decision table; the API half of the same rule is mounted on /api above.
+app.use(roleHostPageGate);
 
 // ── Serve built frontend in production ───────────────────────────────────────
 // AYZEN Workspace subdomain scoping (master plan §7 Phase 2 — Sylo split;
