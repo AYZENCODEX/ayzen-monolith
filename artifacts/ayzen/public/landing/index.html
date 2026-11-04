@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base href="/landing/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>AYZEN</title>
+  <meta name="description" content="AYZEN is the Web3 workspace for airdrop teams and crypto builders." /><meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#050507" />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script type="module" crossorigin src="./assets/landing.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/landing.css">
+</head>
+<body>
+  <a class="skip" href="#tools">Skip to content</a>
+
+  <header class="nav-wrap" data-intro="nav">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="AYZEN home">
+        <svg class="brand-mark" viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+          <defs><linearGradient id="bm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5FE3D6"/><stop offset=".55" stop-color="#8F7CFF"/><stop offset="1" stop-color="#FF6FB5"/></linearGradient></defs><path d="M16 2.5 L28 9.2 V22.8 L16 29.5 L4 22.8 V9.2 Z" fill="none" stroke="url(#bm)" stroke-width="2"/><path d="M16 8.5 L22.4 24 H19.8 L16 14.6 L12.2 24 H9.6 Z" fill="url(#bm)"/></svg>
+        <span data-edit="brand.wordmark"></span>
+      </a>
+      <ul class="nav-links" id="navLinks"></ul>
+      <a class="pill solid nav-cta" data-edit="nav.cta" data-edit-href="links.primary"></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span></button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero" aria-label="AYZEN">
+      <div class="hero-poster" aria-hidden="true"></div>
+      <div class="hero-word" aria-hidden="true"><span data-edit="hero.word"></span></div>
+      <canvas class="stage" aria-hidden="true"></canvas>
+      <div class="hero-scrim" aria-hidden="true"></div>
+
+      <!-- designed layers: hairline frame, ticks, annotations, lens ring -->
+      <svg class="hero-frame" aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 100 100">
+        <line x1="33.33" y1="0" x2="33.33" y2="100" vector-effect="non-scaling-stroke" />
+        <line x1="66.66" y1="0" x2="66.66" y2="100" vector-effect="non-scaling-stroke" />
+        <line x1="0" y1="50" x2="100" y2="50" vector-effect="non-scaling-stroke" class="dash" />
+      </svg>
+      <div class="corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="hud hud-tr" aria-hidden="true">
+        <span data-edit="hero.hud.fig"></span>
+        <span>SEED <b id="hudSeed">0x0000</b></span>
+        <span>CORE <b id="hudWing">128.0</b> PX</span>
+      </div>
+      <div class="hud hud-br" aria-hidden="true">
+        <span>X <b id="hudX">+0.00</b></span>
+        <span>Y <b id="hudY">+0.00</b></span>
+        <span id="hudFps"></span>
+      </div>
+      <div class="lens-ring" id="lensRing" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" /><path d="M50 0v6M50 94v6M0 50h6M94 50h6" /></svg><span class="lens-label" data-edit="hero.hud.lens"></span></div>
+
+      <div class="container hero-copy">
+        <div class="hero-text">
+          <span class="chip eyebrow" data-intro="eyebrow"><i class="dot"></i><span data-edit="hero.eyebrow"></span><em class="chip-tag" data-edit="hero.eyebrowTag"></em></span>
+          <h1 data-hero-headline data-edit="hero.headline"></h1>
+          <p class="sub" data-intro="sub" data-edit="hero.sub"></p>
+          <div class="cta-row" data-intro="cta">
+            <a class="pill solid big" data-edit-href="links.primary"><span data-edit="hero.cta1"></span><span class="arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="pill ghost big" data-edit-href="links.secondary" data-edit="hero.cta2"></a>
+          </div>
+          <div class="proof" data-intro="proof">
+            <span class="proof-label" data-edit="hero.proofLabel"></span>
+            <ul class="proof-logos" id="proofLogos"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="chip-wrap" data-intro="proof">
+        <a class="prompt-chip" id="promptChip" href="#try" aria-label="Open this prompt in the Try box">
+          <span class="pc-head"><i class="dot"></i><span data-edit="hero.chipLabel"></span><span class="pc-seed" id="pcSeed">0x0000</span></span>
+          <span class="pc-text"><span id="pcText"></span><i class="caret"></i></span>
+          <span class="pc-foot"><span class="pc-tags"><em>3:4</em><em>halftone</em><em>4 variants</em></span><span class="pc-go"><span data-edit="hero.chipGo"></span> <kbd>&crarr;</kbd></span></span>
+        </a>
+      </div>
+
+    </section>
+
+    <!-- ============ TOOLS ============ -->
+    <section class="section" id="tools">
+      <div class="container">
+        <header class="sec-head">
+          <p class="eyebrow-mono" data-reveal data-edit="tools.eyebrow"></p>
+          <h2 data-reveal data-edit="tools.title"></h2>
+          <p class="lede" data-reveal data-reveal-delay=".08" data-edit="tools.sub"></p>
+        </header>
+        <ul class="cards" id="toolCards"></ul>
+      </div>
+    </section>
+
+    <!-- ============ TRANSFORM BAND ============ -->
+    <section class="band" id="transform" aria-labelledby="bandTitle">
+      <div class="band-media" aria-hidden="true">
+        <div class="band-poster"></div>
+        <canvas class="band-canvas"></canvas>
+        <div class="band-scrim"></div>
+        <div class="band-tags" id="bandTags"></div>
+        <div class="lens-ring band-lens" id="bandLens"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" /><path d="M50 0v6M50 94v6M0 50h6M94 50h6" /></svg><span class="lens-label" data-edit="transform.lens"></span></div>
+      </div>
+      <div class="container band-inner">
+        <div class="band-copy">
+          <p class="eyebrow-mono" data-reveal data-edit="transform.eyebrow"></p>
+          <h2 id="bandTitle" data-reveal data-edit="transform.title"></h2>
+          <p class="lede" data-reveal data-reveal-delay=".08" data-edit="transform.sub"></p>
+          <ol class="steps" id="steps"></ol>
+          <ul class="stats" id="stats"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRY A PROMPT ============ -->
+    <section class="section try" id="try">
+      <div class="container try-grid">
+        <div class="try-copy">
+          <p class="eyebrow-mono" data-reveal data-edit="try.eyebrow"></p>
+          <h2 data-reveal data-edit="try.title"></h2>
+          <p class="lede" data-reveal data-reveal-delay=".08" data-edit="try.sub"></p>
+          <form class="prompt-form" id="tryForm" novalidate data-reveal data-reveal-delay=".12">
+            <label class="sr" for="tryInput">Prompt</label>
+            <div class="prompt-box">
+              <span class="prompt-prefix" aria-hidden="true">/imagine</span>
+              <input id="tryInput" name="prompt" type="text" maxlength="120" autocomplete="off" spellcheck="false" />
+              <button class="pill solid" type="submit" id="tryBtn"><span data-edit="try.button"></span><span class="arrow" aria-hidden="true">&crarr;</span></button>
+            </div>
+            <p class="form-msg" id="tryMsg" role="status" aria-live="polite"></p>
+            <div class="suggest" id="trySuggest" aria-label="Suggested prompts"></div>
+          </form>
+        </div>
+        <div class="try-stage" data-reveal data-reveal-delay=".1">
+          <div class="frame">
+            <canvas id="tryCanvas" aria-label="Generated piece"></canvas>
+            <div class="frame-hud">
+              <span id="tryStatus">sample</span>
+              <span id="tryMeta">flow / aurora / 0x0000</span>
+            </div>
+            <div class="frame-bar" aria-hidden="true"><i id="tryBar"></i></div>
+          </div>
+          <div class="try-after" id="tryAfter">
+            <p class="try-note" data-edit="try.ctaNote"></p>
+            <div class="try-actions">
+              <a class="pill solid" data-edit-href="links.primary"><span data-edit="try.cta"></span><span class="arrow" aria-hidden="true">&rarr;</span></a>
+              <button class="pill ghost" type="button" id="tryDownload" data-edit="try.download"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section class="section" id="gallery">
+      <div class="container">
+        <header class="sec-head">
+          <p class="eyebrow-mono" data-reveal data-edit="gallery.eyebrow"></p>
+          <h2 data-reveal data-edit="gallery.title"></h2>
+          <p class="lede" data-reveal data-reveal-delay=".08" data-edit="gallery.sub"></p>
+        </header>
+        <ul class="gallery" id="galleryGrid"></ul>
+      </div>
+    </section>
+
+    <!-- ============ PRICING ============ -->
+    <section class="section" id="pricing">
+      <div class="container">
+        <header class="sec-head center">
+          <p class="eyebrow-mono" data-reveal data-edit="pricing.eyebrow"></p>
+          <h2 data-reveal data-edit="pricing.title"></h2>
+          <p class="lede" data-reveal data-reveal-delay=".08" data-edit="pricing.sub"></p>
+          <div class="toggle" data-reveal data-reveal-delay=".12" role="group" aria-label="Billing period">
+            <button type="button" id="billMonthly" aria-pressed="true"></button>
+            <button type="button" id="billYearly" aria-pressed="false"></button>
+            <i class="toggle-knob" aria-hidden="true"></i>
+          </div>
+        </header>
+        <ul class="plans" id="plans"></ul>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta" id="signup">
+      <canvas class="cta-bg" id="ctaBg" aria-hidden="true"></canvas>
+      <div class="cta-veil" aria-hidden="true"></div>
+      <div class="container cta-inner">
+        <p class="eyebrow-mono" data-reveal data-edit="cta.eyebrow"></p>
+        <h2 data-reveal data-edit="cta.title"></h2>
+        <p class="lede" data-reveal data-reveal-delay=".08" data-edit="cta.sub"></p>
+        <form class="cta-form" id="ctaForm" novalidate data-reveal data-reveal-delay=".12">
+          <label class="sr" for="ctaEmail" data-edit="cta.emailLabel"></label>
+          <div class="prompt-box">
+            <input id="ctaEmail" name="email" type="email" inputmode="email" autocomplete="email" />
+            <button class="pill solid" type="submit"><span data-edit="cta.button"></span><span class="arrow" aria-hidden="true">&rarr;</span></button>
+          </div>
+          <p class="form-msg" id="ctaMsg" role="status" aria-live="polite"></p>
+          <p class="cta-success" id="ctaOk" hidden></p>
+        </form>
+        <p class="fine" data-reveal data-reveal-delay=".16" data-edit="cta.note"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container foot-grid">
+      <div class="foot-brand">
+        <span class="foot-wm" data-edit="brand.wordmark"></span>
+        <p data-edit="footer.blurb"></p>
+      </div>
+      <div class="foot-cols" id="footCols"></div>
+    </div>
+    <div class="container foot-base">
+      <span id="footLegal"></span>
+      <span class="mono-s">Pieces on this page are generated in your browser.</span>
+    </div>
+  </footer>
+
+
+</body>
+</html>
