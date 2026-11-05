@@ -127,6 +127,39 @@ section{position:relative}
 .contents .row b{font-weight:500}
 .ok{color:var(--patina)}
 
+/* ---------- workflow ---------- */
+.flow{--p:0;position:relative}
+.rail{position:relative;height:2px;background:var(--line);margin:0 10% 0;}
+.rail-fill{position:absolute;inset:0 auto 0 0;width:calc(var(--p) * 100%);background:linear-gradient(90deg,var(--brass-lo),var(--brass-hi));transition:width .9s cubic-bezier(.65,0,.25,1)}
+.rail .dot{position:absolute;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:var(--ink);box-shadow:inset 0 0 0 2px var(--line);transition:box-shadow .4s,background .4s}
+.rail .dot.on{background:var(--brass-hi);box-shadow:0 0 0 4px rgba(227,194,128,.18)}
+.token{position:absolute;top:50%;left:calc(var(--p) * 100%);width:58px;height:36px;margin:-18px 0 0 -29px;border-radius:5px;display:grid;place-items:center;background:var(--bone);color:#1a1305;box-shadow:0 8px 22px -6px rgba(0,0,0,.7),inset 0 0 0 1px rgba(0,0,0,.25);transition:left .9s cubic-bezier(.65,0,.25,1),background .5s}
+.token svg{width:18px;height:18px}
+.flow:not([data-step="0"]) .token{background:linear-gradient(180deg,var(--brass-hi),var(--brass))}
+.stations{display:grid;grid-template-columns:repeat(5,1fr);margin:34px 0 0;padding:0;list-style:none;counter-reset:st}
+.st{all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;cursor:pointer;padding:0 clamp(8px,1.4vw,22px);text-align:center;opacity:.5;transition:opacity .4s}
+.st:focus-visible{outline:2px solid var(--brass-hi);outline-offset:4px}
+.st .n{display:block;font:500 .8125rem var(--mono);color:var(--bone-dim);margin-bottom:.5rem}
+.st h3{font-size:clamp(1.6rem,2.3vw,2.2rem);margin-bottom:.5rem;transition:color .4s}
+.st p{color:var(--bone-dim);font-size:1rem;line-height:1.45}
+.st.on{opacity:1}
+.st.on h3{color:var(--brass-hi)}
+.readout{margin-top:clamp(28px,4vw,52px);background:#0a0d0e;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.ro-bar{display:flex;justify-content:space-between;gap:1rem;padding:.75rem 1.2rem;border-bottom:1px solid var(--line);font:500 .8125rem var(--mono);color:var(--bone-dim)}
+.ro-state{color:var(--brass-hi)}
+.flow[data-step="1"] .ro-state{color:var(--patina)}
+.flow[data-step="3"] .ro-state{color:var(--patina)}
+.ro-body{margin:0;padding:1.3rem 1.2rem 1.4rem;min-height:7.6rem;font:400 .95rem/1.7 var(--mono);color:var(--bone);white-space:pre-wrap}
+.flow-ctl{display:flex;align-items:center;gap:1rem;margin-top:1rem;font:400 .8125rem var(--mono);color:var(--bone-dim)}
+.flow-ctl button{all:unset;cursor:pointer;color:var(--bone);text-decoration:underline;text-decoration-color:var(--brass-lo);text-underline-offset:.28em}
+.flow-ctl button:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px}
+@media (max-width:760px){
+  .rail,.token{display:none}
+  .stations{grid-template-columns:1fr;margin-top:0;gap:1.1rem}
+  .st{text-align:left;align-items:flex-start;padding:0 0 0 1rem;border-left:2px solid var(--line)}
+  .st.on{border-left-color:var(--brass-hi)}
+}
+
 /* ---------- entity graph ---------- */
 .graph-sec{background:linear-gradient(180deg,var(--ink),#0b0e0f 40%,var(--ink))}
 .graph-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr);gap:clamp(24px,5vw,72px);align-items:center}
@@ -231,6 +264,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-be
     </a>
     <nav class="nav" aria-label="Page">
       <a href="#inside">What's inside</a>
+      <a href="#flow">How it works</a>
       <a href="#graph">Entities</a>
       <a href="#unlock">Unlocking</a>
       <a href="#emergency">Emergency access</a>
@@ -363,6 +397,35 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-be
         </div>
         <button class="front" aria-expanded="false" aria-controls="c6"><span class="plate">Mail</span><span class="what">An inbox for each entity.</span><span class="handle"></span></button>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WORKFLOW ================= -->
+<section class="pad" id="flow" aria-labelledby="h-flow">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-flow">Follow one record through the Vault</h2>
+      <p class="lede">From the moment you add something to the moment someone you trust could ask for it. Pick a step, or let it play.</p>
+    </div>
+    <div class="flow" id="flowBox" data-step="0">
+      <div class="rail" aria-hidden="true">
+        <span class="rail-fill"></span>
+        <span class="dot on" style="left:0%"></span><span class="dot" style="left:25%"></span><span class="dot" style="left:50%"></span><span class="dot" style="left:75%"></span><span class="dot" style="left:100%"></span>
+        <span class="token"><svg viewBox="0 0 32 32"><circle cx="16" cy="12.8" r="4.4" fill="currentColor"/><path d="M13.5 15.8h5l1.6 10h-8.2z" fill="currentColor"/></svg></span>
+      </div>
+      <div class="stations" role="tablist" aria-label="Steps">
+        <button class="st on" role="tab" aria-selected="true"  type="button"><span class="n">Step 1</span><h3>Add</h3><p>Save a login, wallet, seed phrase or document.</p></button>
+        <button class="st" role="tab" aria-selected="false" type="button"><span class="n">Step 2</span><h3>Seal</h3><p>It's stored encrypted with AES-256-GCM.</p></button>
+        <button class="st" role="tab" aria-selected="false" type="button"><span class="n">Step 3</span><h3>Group</h3><p>It joins an entity, beside the wallets, mail and logins it belongs with.</p></button>
+        <button class="st" role="tab" aria-selected="false" type="button"><span class="n">Step 4</span><h3>Unlock</h3><p>Open the Vault with a passkey, or PIN and 2FA. Entities ask for their own PIN.</p></button>
+        <button class="st" role="tab" aria-selected="false" type="button"><span class="n">Step 5</span><h3>Hand over</h3><p>If you can't get in, a contact you named can request access. You can cancel it.</p></button>
+      </div>
+      <div class="readout" role="tabpanel" aria-live="polite">
+        <div class="ro-bar"><span class="ro-state" id="roState">Plain text, on your screen</span><span>Sample data</span></div>
+        <pre class="ro-body" id="roBody"></pre>
+      </div>
+      <div class="flow-ctl"><button type="button" id="flowPlay">Pause</button><span id="flowHint">Plays on a loop while you're looking at it.</span></div>
     </div>
   </div>
 </section>
@@ -558,6 +621,51 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-be
   const slip = $("#slip");
   $("#cancelBtn").addEventListener("click", () => { slip.dataset.state = "cancelled"; $("#replayBtn").focus(); });
   $("#replayBtn").addEventListener("click", () => { slip.dataset.state = "pending"; $("#cancelBtn").focus(); });
+
+  /* ---- workflow ---- */
+  (() => {
+    const box = $("#flowBox"); if (!box) return;
+    const sts = [...box.querySelectorAll(".st")], dots = [...box.querySelectorAll(".dot")];
+    const roState = $("#roState"), roBody = $("#roBody"), playBtn = $("#flowPlay"), hint = $("#flowHint");
+    const STEPS = [
+      ["Plain text, on your screen", "site       forum.example\nusername   nova07\npassword   (typed by you)"],
+      ["Sealed", "9f3a 71c2 e08b 4d15\nb7a9 06fe 2c84 d3e1\n3a90 c5d7 1e42 f68b"],
+      ["Grouped under Nova-07", "entity     Nova-07\nholds      login, wallet, document\nentity view needs its own PIN"],
+      ["Unlocked", "passkey    accepted\nvault      open\nentity     Nova-07 asks for its PIN"],
+      ["Emergency request pending", "contact    named by you\nrequest    pending\nyou        can cancel it"],
+    ];
+    const GL = "0123456789abcdef";
+    let step = 0, timer = 0, playing = !reduce, visible = false, raf = 0, shown = "";
+    const paint = (txt) => { roBody.textContent = txt; };
+    const scramble = (to) => {
+      cancelAnimationFrame(raf);
+      if (reduce) { paint(to); return; }
+      const t0 = performance.now(), dur = 650, n = to.length;
+      const tick = (t) => {
+        const k = Math.min(1, (t - t0) / dur); let out = "";
+        for (let i = 0; i < n; i++) { const c = to[i]; out += (c === " " || c === "\n" || i < k * n * 1.15) ? c : GL[(Math.random() * 16) | 0]; }
+        paint(out); if (k < 1) raf = requestAnimationFrame(tick); else paint(to);
+      };
+      raf = requestAnimationFrame(tick);
+    };
+    const go = (i, userAction) => {
+      step = (i + STEPS.length) % STEPS.length;
+      box.dataset.step = step; box.style.setProperty("--p", step / (STEPS.length - 1));
+      sts.forEach((b, j) => { b.classList.toggle("on", j === step); b.setAttribute("aria-selected", j === step); });
+      dots.forEach((d, j) => d.classList.toggle("on", j <= step));
+      roState.textContent = STEPS[step][0]; scramble(STEPS[step][1]);
+      if (userAction) setPlaying(false);
+    };
+    const schedule = () => { clearTimeout(timer); if (playing && visible) timer = setTimeout(() => { go(step + 1); schedule(); }, 3400); };
+    const setPlaying = (v) => { playing = v; playBtn.textContent = v ? "Pause" : "Play"; hint.textContent = v ? "Plays on a loop while you're looking at it." : "Paused. Pick any step."; schedule(); };
+    sts.forEach((b, i) => b.addEventListener("click", () => go(i, true)));
+    playBtn.addEventListener("click", () => setPlaying(!playing));
+    box.addEventListener("pointerenter", () => clearTimeout(timer));
+    box.addEventListener("pointerleave", schedule);
+    new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) schedule(); else clearTimeout(timer); }, { threshold: .35 }).observe(box);
+    if (reduce) setPlaying(false);
+    go(0);
+  })();
 
   /* ---- entity graph ---- */
   const cv = $("#graphCv"); if (!cv) return;
