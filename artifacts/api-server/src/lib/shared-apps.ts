@@ -7,7 +7,9 @@
  * the existing auth and Policy Engine middleware.
  */
 
-export type SharedAppId = "sylo" | "ryft" | "fyra" | "verve" | "skarn" | "warde" | "wisp" | "zynth";
+import { MODULES, type ModuleId } from "@ayzen/module-registry";
+
+export type SharedAppId = ModuleId;
 
 export type SharedAppDefinition = {
   id: SharedAppId;
@@ -18,19 +20,10 @@ export type SharedAppDefinition = {
   defaultHost: string;
 };
 
-export const SHARED_APP_DEFINITIONS: readonly SharedAppDefinition[] = [
-  // Module Shell Split S1: sylo owns /admin/team-vault outright (vault data);
-  // it was double-claimed by warde before this pass.
-  { id: "sylo", label: "Sylo", homePath: "/vault", routePrefixes: ["/vault", "/admin/vault", "/admin/team-vault"], hostEnv: "SYLO_HOSTS", defaultHost: "sylo.ayzen.tech" },
-  // Module Shell Split S1: /finance (including Investments) moved to Fyra.
-  { id: "ryft", label: "Ryft", homePath: "/wallet", routePrefixes: ["/wallet", "/wallets", "/admin/tools/wallet"], hostEnv: "RYFT_HOSTS", defaultHost: "ryft.ayzen.tech" },  { id: "fyra", label: "Fyra", homePath: "/finance", routePrefixes: ["/finance"], hostEnv: "FYRA_HOSTS", defaultHost: "fyra.ayzen.tech" },
-
-  { id: "verve", label: "Verve", homePath: "/marketplace/hub", routePrefixes: ["/marketplace", "/admin/marketplace", "/admin/marketplace-categories", "/admin/marketplace-market-config"], hostEnv: "VERVE_HOSTS", defaultHost: "verve.ayzen.tech" },
-  { id: "skarn", label: "Skarn", homePath: "/projects", routePrefixes: ["/projects", "/tasks", "/content", "/admin/projects", "/admin/project-templates", "/admin/operator-progress", "/admin/tasks"], hostEnv: "SKARN_HOSTS", defaultHost: "skarn.ayzen.tech" },
-  { id: "warde", label: "Warde", homePath: "/teams", routePrefixes: ["/teams", "/team_leader", "/admin/teams", "/admin/team-vault"], hostEnv: "WARDE_HOSTS", defaultHost: "warde.ayzen.tech" },
-  { id: "wisp", label: "Wisp", homePath: "/mailbox", routePrefixes: ["/mailbox", "/ayzen-email", "/email-accounts", "/admin/mail-sending-config"], hostEnv: "WISP_HOSTS", defaultHost: "wisp.ayzen.tech" },
-  { id: "zynth", label: "Zynth", homePath: "/assistant", routePrefixes: ["/assistant", "/admin/ai-agent"], hostEnv: "ZYNTH_HOSTS", defaultHost: "zynth.ayzen.tech" },
-];
+// W0-P3: derived from @ayzen/module-registry (single source of truth). Edit modules there.
+export const SHARED_APP_DEFINITIONS: readonly SharedAppDefinition[] = MODULES.map(
+  ({ id, label, homePath, routePrefixes, hostEnv, defaultHost }) => ({ id, label, homePath, routePrefixes, hostEnv, defaultHost }),
+);
 
 function configuredHosts(definition: SharedAppDefinition): string[] {
   return (process.env[definition.hostEnv] ?? definition.defaultHost)

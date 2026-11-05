@@ -1,6 +1,8 @@
 import pg from 'pg';
 import { readFileSync, readdirSync } from 'fs';
-const conn = "postgresql://postgres.ngpisavfwixwxmwsllak:12345678BA4GWUSJ7@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres";
+// Credentials removed (W0-P1): supply via env. The previous literal remains in git history and MUST be rotated.
+const conn = process.env.APP_DATABASE_URL || process.env.DATABASE_URL;
+if (!conn) { console.error("no DATABASE_URL"); process.exit(1); }
 const client = new pg.Client({ connectionString: conn, ssl: { rejectUnauthorized: false } });
 await client.connect();
 await client.query('CREATE TABLE IF NOT EXISTS _folk_migrations (filename TEXT PRIMARY KEY, applied_at TIMESTAMPTZ DEFAULT now())');

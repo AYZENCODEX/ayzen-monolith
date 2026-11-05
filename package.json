@@ -7,6 +7,8 @@
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
+    "hooks:install": "sh scripts/install-git-hooks.sh",
+    "validate:module-registry": "node scripts/src/check-module-registry.mjs && node scripts/src/check-module-registry.mjs --self-test && node --test packages/module-registry/test/registry.test.mjs",
     "validate:cloud-phases": "node scripts/validate-cloud-phases.mjs",
     "validate:cicd-phases": "node scripts/validate-cicd-phases.mjs",
     "validate:maturity": "node scripts/validate-maturity-phases.mjs",

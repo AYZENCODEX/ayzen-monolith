@@ -1,0 +1,14 @@
+#!/bin/sh
+# AYZEN pre-commit secret scan (W0-P1). Enable once per clone:  pnpm hooks:install
+# Scans only staged changes; CI (security.yml) scans full history and is the real gate.
+# Set AYZEN_REQUIRE_GITLEAKS=1 to make a missing gitleaks binary a hard failure.
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "pre-commit: gitleaks not found; skipping local secret scan (CI will still enforce)." >&2
+  echo "           install: https://github.com/gitleaks/gitleaks#installing" >&2
+  [ "${AYZEN_REQUIRE_GITLEAKS:-0}" = "1" ] && exit 1
+  exit 0
+fi
+
+ROOT="$(git rev-parse --show-toplevel)"
+exec gitleaks git --pre-commit --staged --redact --verbose --config "$ROOT/.gitleaks.toml"
