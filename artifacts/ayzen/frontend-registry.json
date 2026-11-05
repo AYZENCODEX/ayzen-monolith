@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "registryId": "frontend-registry",
-  "generatedAt": "2026-11-02",
+  "generatedAt": "2026-11-05",
   "generatedBy": "tools/ui-circuit-validator/build.mjs",
   "schema": "schemas/ui-circuit/frontend-route-entry.v1.json",
   "sourceRegistries": [
@@ -14,8 +14,8 @@
   "completeness": {
     "totalRoutes": 191,
     "resolvedToPage": 191,
-    "totalPageFiles": 189,
-    "deadPages": 11,
+    "totalPageFiles": 188,
+    "deadPages": 10,
     "routesWithNoApiCalls": 126,
     "routesWithOrphanCalls": 0,
     "routesOk": 65
@@ -781,11 +781,6 @@
       "severity": "warning",
       "code": "DEAD_PAGE",
       "pageFile": "pages/admin/theme-palette-builder.tsx"
-    },
-    {
-      "severity": "warning",
-      "code": "DEAD_PAGE",
-      "pageFile": "pages/landing.tsx"
     },
     {
       "severity": "warning",
@@ -6140,7 +6135,6 @@
   ],
   "deadPages": [
     "pages/admin/theme-palette-builder.tsx",
-    "pages/landing.tsx",
     "pages/not-found.tsx",
     "pages/user/marketplace-nft.tsx",
     "pages/user/nft-marketplace.tsx",
