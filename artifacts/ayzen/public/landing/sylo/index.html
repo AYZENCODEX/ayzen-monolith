@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Sylo, the vault inside AYZEN</title>
+<meta name="description" content="Sylo keeps your logins, project identities, wallets and seed phrases in one vault with its own passkey unlock and emergency access for people you trust." />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#0f1213" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%230f1213' stroke='%23c29a52' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='13' r='3.2' fill='%23c29a52'/%3E%3Cpath d='M14.6 15.5h2.8l1 7h-4.8z' fill='%23c29a52'/%3E%3C/svg%3E" />
+<link rel="preload" href="./fonts/big-shoulders-display-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="./fonts/newsreader-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<style>
+/* ---------- fonts (self-hosted, OFL; see ./fonts/LICENSE-*) ---------- */
+@font-face{font-family:"Big Shoulders Display";font-weight:600;font-style:normal;font-display:swap;src:url(./fonts/big-shoulders-display-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Big Shoulders Display";font-weight:800;font-style:normal;font-display:swap;src:url(./fonts/big-shoulders-display-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:"Newsreader";font-weight:400;font-style:normal;font-display:swap;src:url(./fonts/newsreader-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Newsreader";font-weight:500;font-style:normal;font-display:swap;src:url(./fonts/newsreader-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Newsreader";font-weight:400;font-style:italic;font-display:swap;src:url(./fonts/newsreader-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-weight:400;font-style:normal;font-display:swap;src:url(./fonts/ibm-plex-mono-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-weight:500;font-style:normal;font-display:swap;src:url(./fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2")}
+
+/* ---------- tokens ---------- */
+:root{
+  --ink:#0f1213;        /* graphite */
+  --slate:#181d1f;
+  --steel:#232a2d;
+  --line:#2f383c;
+  --bone:#e9e3d3;
+  --bone-dim:#aaa594;
+  --brass:#c29a52;
+  --brass-hi:#e3c280;
+  --brass-lo:#7d5f2c;
+  --patina:#74bba5;
+  --paper:#f3eee0;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --text:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter:clamp(16px,4vw,40px);
+  --maxw:1240px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font:400 1.1875rem/1.62 var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg,canvas{display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-60px;background:var(--brass);color:var(--ink);padding:10px 14px;font:600 1rem var(--display);z-index:100;transition:top .2s}
+.skip:focus{top:12px}
+
+h1,h2,h3{font-family:var(--display);font-weight:800;margin:0;letter-spacing:.002em;text-wrap:balance}
+h2{font-size:clamp(2.6rem,5.2vw,4.5rem);line-height:.96}
+h3{font-size:1.9rem;line-height:1}
+p{margin:0}
+.lede{font-size:clamp(1.15rem,1.5vw,1.35rem);color:var(--bone-dim);max-width:34rem}
+.mono{font-family:var(--mono);font-size:.8125rem;letter-spacing:.01em}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.5rem;font:800 1.35rem/1 var(--display);letter-spacing:.02em;text-decoration:none;border-radius:2px;cursor:pointer;border:0;transition:transform .18s,background .18s,box-shadow .18s}
+.btn-brass{background:linear-gradient(180deg,var(--brass-hi),var(--brass));color:#1a1305;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 0 0 1px var(--brass-lo),0 10px 28px -12px rgba(194,154,82,.55)}
+.btn-brass:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 0 0 1px var(--brass-lo),0 16px 34px -12px rgba(227,194,128,.6)}
+.btn-line{background:transparent;color:var(--bone);box-shadow:inset 0 0 0 1px var(--line)}
+.btn-line:hover{box-shadow:inset 0 0 0 1px var(--brass);color:var(--brass-hi)}
+.link{color:var(--bone);text-decoration:underline;text-decoration-color:var(--brass-lo);text-underline-offset:.28em;text-decoration-thickness:1px}
+.link:hover{text-decoration-color:var(--brass-hi)}
+
+/* ---------- header ---------- */
+.top{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .25s,border-color .25s,backdrop-filter .25s;border-bottom:1px solid transparent}
+.top.scrolled{background:rgba(15,18,19,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+.top-in{display:flex;align-items:center;gap:2rem;height:68px}
+.brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;font:800 1.9rem/1 var(--display);letter-spacing:.01em}
+.brand svg{width:30px;height:30px}
+.nav{display:flex;gap:1.75rem;margin-left:auto;margin-right:.5rem}
+.nav a{text-decoration:none;color:var(--bone-dim);font-size:1rem;transition:color .15s}
+.nav a:hover{color:var(--bone)}
+.top .btn{padding:.6rem 1.05rem;font-size:1.1rem}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:112px 0 72px;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;
+  background:radial-gradient(60% 70% at 78% 48%,rgba(194,154,82,.10),transparent 70%),radial-gradient(40% 50% at 8% 100%,rgba(116,187,165,.05),transparent 70%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .28 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.hero>.wrap{width:100%}
+.hero-copy{position:relative;z-index:3;max-width:620px}
+.hero h1{font-size:clamp(3.6rem,8.4vw,7.6rem);line-height:.9;margin-bottom:1.6rem}
+.hero .lede{margin-bottom:2.2rem}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.5rem}
+.facts{display:grid;gap:.45rem;margin-top:2.8rem;font-size:1rem;color:var(--bone-dim)}
+.facts span{display:flex;align-items:baseline;gap:.8rem}
+.facts span::before{content:"";flex:none;width:1.1rem;height:2px;background:var(--brass-lo);transform:translateY(-.3em)}
+
+.dial-wrap{position:absolute;z-index:1;right:-9vw;top:53%;width:min(76vh,50vw,800px);aspect-ratio:1;transform:translateY(-50%)}
+.dial-wrap svg{width:100%;height:100%;overflow:visible}
+.dial-sheen{position:absolute;inset:1.5%;border-radius:50%;pointer-events:none;mix-blend-mode:screen;
+  background:conic-gradient(from 210deg,transparent 0 8%,rgba(255,255,255,.09) 14%,transparent 24% 52%,rgba(227,194,128,.10) 60%,transparent 70%)}
+.dial-state{position:absolute;left:50%;top:-4.4%;transform:translateX(16px);font:500 .8125rem var(--mono);color:var(--patina);opacity:0;transition:opacity .5s}
+.dial-state.on{opacity:1}
+#led{transition:fill .4s,filter .4s}
+#led.on{fill:var(--patina);filter:drop-shadow(0 0 6px var(--patina))}
+#dial g{transform-box:view-box;transform-origin:0 0}
+
+/* ---------- sections ---------- */
+section{position:relative}
+.pad{padding:clamp(80px,11vw,150px) 0}
+.sec-head{display:grid;gap:1.1rem;margin-bottom:clamp(2.2rem,4vw,3.4rem);max-width:46rem}
+
+/* ---------- drawer wall ---------- */
+.wall{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;padding:14px;background:linear-gradient(180deg,#14191b,#101416);border:1px solid var(--line);border-radius:4px;box-shadow:inset 0 2px 30px rgba(0,0,0,.5)}
+.drawer{position:relative;height:196px;overflow:hidden;background:#0b0e0f;border-radius:3px;box-shadow:inset 0 0 0 1px #000}
+.d-a{grid-column:span 2}.d-b{grid-column:span 4}.d-c{grid-column:span 3}.d-d{grid-column:span 3}.d-e{grid-column:span 4}.d-f{grid-column:span 2}
+.front{all:unset;box-sizing:border-box;position:absolute;inset:0;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;padding:18px 20px 16px;
+  background:linear-gradient(180deg,#2d363a 0%,#222a2d 55%,#1c2325 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px #3a444a,0 8px 24px rgba(0,0,0,.45);
+  transition:transform .6s cubic-bezier(.2,.85,.2,1)}
+.front:focus-visible{outline:2px solid var(--brass-hi);outline-offset:-4px}
+.plate{align-self:flex-start;background:var(--bone);color:#16191a;font:600 1.6rem/1 var(--display);padding:.38rem .8rem .3rem;border-radius:2px;box-shadow:inset 0 0 0 1px #b8b29f,0 2px 0 rgba(0,0,0,.5)}
+.front .what{font-style:italic;color:var(--bone-dim);font-size:1.02rem;line-height:1.35;max-width:26ch}
+.handle{position:absolute;right:20px;bottom:18px;width:70px;height:9px;border-radius:5px;background:linear-gradient(180deg,var(--brass-hi),var(--brass-lo));box-shadow:0 2px 3px rgba(0,0,0,.6)}
+.drawer.open .front{transform:translateX(calc(100% - 46px))}
+.contents{position:absolute;inset:0;padding:18px 22px;display:flex;flex-direction:column;justify-content:center;gap:.35rem;visibility:hidden;transition:visibility 0s .6s}
+.drawer.open .contents{visibility:visible;transition-delay:0s}
+.contents .tag{font:500 .75rem var(--mono);color:var(--brass);margin-bottom:.25rem}
+.contents .row{font:400 .875rem/1.5 var(--mono);color:var(--bone);display:flex;gap:.9rem}
+.contents .row i{font-style:normal;color:var(--bone-dim);min-width:6.8rem}
+.contents .row b{font-weight:500}
+.ok{color:var(--patina)}
+
+/* ---------- entity graph ---------- */
+.graph-sec{background:linear-gradient(180deg,var(--ink),#0b0e0f 40%,var(--ink))}
+.graph-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr);gap:clamp(24px,5vw,72px);align-items:center}
+.graph-box{position:relative;border:1px solid var(--line);border-radius:4px;background:radial-gradient(70% 80% at 40% 50%,#13181a,#0c0f10);overflow:hidden}
+.graph-box canvas{width:100%;height:clamp(360px,46vw,560px);touch-action:pan-y}
+.legend{display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;padding:.8rem 1rem;border-top:1px solid var(--line);font:400 .8125rem var(--mono);color:var(--bone-dim)}
+.legend span{display:inline-flex;align-items:center;gap:.5rem}
+.legend svg{width:12px;height:12px}
+
+/* ---------- unlocking doors ---------- */
+.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2.4vw,32px);align-items:start;perspective:1400px}
+.door{position:relative;height:clamp(330px,34vw,400px);background:radial-gradient(60% 50% at 50% 55%,rgba(227,194,128,.28),rgba(194,154,82,.05) 60%,transparent 80%),#0a0d0e;border-radius:3px;box-shadow:inset 0 0 0 1px var(--line)}
+.door:nth-child(2){margin-top:clamp(20px,3.6vw,52px)}
+.door:nth-child(3){margin-top:clamp(40px,7.2vw,104px)}
+.leaf{position:absolute;inset:0;padding:22px 22px 20px;display:flex;flex-direction:column;background:linear-gradient(160deg,#2b3438,#1d2427 60%,#171c1e);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px #3a444a,0 18px 40px -18px rgba(0,0,0,.8);transform-origin:0% 50%;transition:transform .7s cubic-bezier(.2,.85,.2,1);border-radius:3px;outline:0}
+.door:hover .leaf,.door:focus-within .leaf,.leaf:focus-visible{transform:rotateY(-24deg)}
+.leaf:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px}
+.door .n{font:800 5.4rem/.8 var(--display);color:transparent;-webkit-text-stroke:1.5px var(--brass);margin-bottom:auto}
+.door h3{margin:1.2rem 0 .6rem;font-size:2.2rem}
+.door p{color:var(--bone-dim);font-size:1.04rem;line-height:1.5}
+.door .hinge{position:absolute;left:0;top:10%;bottom:10%;width:6px;background:repeating-linear-gradient(180deg,var(--brass) 0 28px,transparent 28px 60px);opacity:.55}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,48px);margin-top:clamp(44px,6vw,80px);padding-top:28px;border-top:1px solid var(--line)}
+.rules p{color:var(--bone-dim);max-width:30rem}
+.rules b{color:var(--bone);font-weight:500}
+
+/* ---------- emergency (paper) ---------- */
+.paper{background:var(--paper);color:#1c1a14;position:relative}
+.paper::before{content:"";position:absolute;left:0;right:0;top:-1px;height:14px;background:linear-gradient(135deg,var(--ink) 25%,transparent 25%) -14px 0/28px 14px,linear-gradient(225deg,var(--ink) 25%,transparent 25%) -14px 0/28px 14px;}
+.paper h2{color:#14120c}
+.paper .lede{color:#4d493c}
+.em-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:clamp(28px,6vw,96px);align-items:center}
+.em-points{margin:2rem 0 0;padding:0;list-style:none;display:grid;gap:1rem;max-width:32rem}
+.em-points li{padding-left:1.4rem;position:relative;color:#2d2a20}
+.em-points li::before{content:"";position:absolute;left:0;top:.62em;width:.7rem;height:2px;background:var(--brass-lo)}
+.slip{position:relative;background:#fffdf6;border:1px solid #d5cdb6;padding:28px 28px 24px;box-shadow:0 1px 0 #fff inset,0 24px 40px -22px rgba(40,30,10,.45);transform:rotate(-1.3deg);max-width:440px;margin-inline:auto}
+.slip .kicker{font:500 .8125rem var(--mono);color:#7d6b3f;margin-bottom:.9rem}
+.slip h3{font-size:2.3rem;color:#17150e;margin-bottom:.6rem}
+.slip p{color:#4d493c;font-size:1.08rem;line-height:1.5}
+.slip .sample{font:400 .75rem var(--mono);color:#8a8470;margin-top:1.1rem}
+.slip .btn{margin-top:1.4rem;background:#17150e;color:var(--paper);font-size:1.2rem;padding:.75rem 1.2rem}
+.slip .btn:hover{background:#2c281a}
+.slip .done,.slip[data-state="cancelled"] .pending{display:none}
+.slip[data-state="cancelled"] .done{display:block}
+.stamp{display:none;position:absolute;right:20px;top:20px;border:3px solid var(--patina);color:#2f7a63;font:800 1.6rem/1 var(--display);padding:.3rem .7rem;border-radius:3px;transform:rotate(9deg)}
+.slip[data-state="cancelled"] .stamp{display:block;animation:stamp .42s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes stamp{0%{transform:rotate(-4deg) scale(2.2);opacity:0}100%{transform:rotate(9deg) scale(1);opacity:1}}
+.slip .replay{all:unset;cursor:pointer;margin-top:1.1rem;font:500 .8125rem var(--mono);color:#6b6450;text-decoration:underline;text-underline-offset:.25em}
+.slip .replay:focus-visible{outline:2px solid #17150e;outline-offset:3px}
+
+/* ---------- careful parts ---------- */
+.careful{display:grid;grid-template-columns:repeat(2,1fr);column-gap:clamp(24px,6vw,96px)}
+.careful dl{margin:0}
+.careful .it{display:grid;grid-template-columns:11rem 1fr;gap:1.2rem;padding:1.15rem 0;border-top:1px solid var(--line)}
+.careful dt{font:800 1.7rem/1.05 var(--display)}
+.careful dd{margin:0;color:var(--bone-dim);font-size:1.05rem;line-height:1.5}
+
+/* ---------- closing ---------- */
+.close{background:linear-gradient(180deg,var(--ink),#14110a);border-top:1px solid var(--line)}
+.close-in{display:grid;grid-template-columns:minmax(0,1.3fr) auto;gap:2rem;align-items:center}
+.close h2{font-size:clamp(3.4rem,9vw,8rem);line-height:.88}
+.close .lede{margin-top:1.2rem}
+footer{padding:28px 0 40px;color:var(--bone-dim);font-size:1rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-between;border-top:1px solid var(--line);padding-top:24px}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .graph-grid,.em-grid,.close-in{grid-template-columns:1fr}
+  .doors{grid-template-columns:1fr;perspective:none}
+  .door,.door:nth-child(2),.door:nth-child(3){margin-top:0;height:auto;min-height:280px}
+  .door .n{font-size:4rem;margin-bottom:1.6rem}
+  .door:hover .leaf,.door:focus-within .leaf{transform:none}
+  .leaf{position:relative;min-height:280px}
+  .careful{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .nav{display:none}
+  .top .btn{margin-left:auto}
+  .hero{flex-direction:column;align-items:stretch;justify-content:flex-start;padding-top:104px;min-height:0;padding-bottom:0}
+  .dial-wrap{position:relative;right:auto;top:auto;transform:none;width:128vw;margin:2.4rem 0 -34vw -14vw}
+  .hero .wrap{display:block}
+  .facts{margin-top:2rem}
+  .wall{grid-template-columns:1fr 1fr}
+  .d-a,.d-b,.d-c,.d-d,.d-e,.d-f{grid-column:span 2}
+  .careful .it{grid-template-columns:1fr;gap:.3rem}
+  .slip{transform:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-delay:0s!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#inside">Skip to content</a>
+
+<header class="top" id="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#hero" aria-label="Sylo home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="#0f1213" stroke="#c29a52" stroke-width="2"/><circle cx="16" cy="12.8" r="3.3" fill="#c29a52"/><path d="M14.5 15.4h3l1.1 7.4h-5.2z" fill="#c29a52"/></svg>
+      Sylo
+    </a>
+    <nav class="nav" aria-label="Page">
+      <a href="#inside">What's inside</a>
+      <a href="#graph">Entities</a>
+      <a href="#unlock">Unlocking</a>
+      <a href="#emergency">Emergency access</a>
+    </nav>
+    <a class="btn btn-brass" href="/login">Open Sylo</a>
+  </div>
+</header>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero" aria-label="Sylo">
+  <div class="wrap">
+    <div class="hero-copy">
+      <h1>Every key you own, in one locked room.</h1>
+      <p class="lede">Sylo is the vault inside AYZEN. Keep your logins, project identities, wallets and seed phrases together, unlock them with a passkey, and let someone you trust in if you ever can't.</p>
+      <div class="cta-row">
+        <a class="btn btn-brass" href="/login">Open Sylo</a>
+        <a class="link" href="#inside">See what's inside</a>
+      </div>
+      <div class="facts" aria-label="Highlights">
+        <span>Passkey unlock</span>
+        <span>Encrypted at rest with AES-256-GCM</span>
+        <span>Emergency access for contacts you choose</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dial-wrap" id="dialWrap" aria-hidden="true">
+    <svg id="dial" viewBox="-300 -300 600 600" role="img">
+      <defs>
+        <radialGradient id="gDisc" cx="35%" cy="28%" r="85%"><stop offset="0" stop-color="#323c41"/><stop offset=".6" stop-color="#1b2124"/><stop offset="1" stop-color="#111517"/></radialGradient>
+        <linearGradient id="gBrass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3c280"/><stop offset=".55" stop-color="#b08a45"/><stop offset="1" stop-color="#6f5224"/></linearGradient>
+        <radialGradient id="gHub" cx="40%" cy="32%" r="80%"><stop offset="0" stop-color="#1d2326"/><stop offset="1" stop-color="#0a0d0e"/></radialGradient>
+      </defs>
+      <circle r="297" fill="#101415" stroke="#2f383c" stroke-width="2"/>
+      <g id="ringOuter"></g>
+      <g id="ringMid">
+        <circle r="226" fill="none" stroke="url(#gBrass)" stroke-opacity=".7" stroke-width="26" stroke-dasharray="1.7 4.3"/>
+        <circle r="240" fill="none" stroke="#3a444a" stroke-width="2"/>
+        <circle r="213" fill="none" stroke="#3a444a" stroke-width="2"/>
+      </g>
+      <g id="ringInner">
+        <circle r="200" fill="url(#gDisc)" stroke="#3a444a" stroke-width="2"/>
+        <g id="bolts"></g>
+        <circle r="150" fill="none" stroke="#2c3539" stroke-width="1.5"/>
+        <circle r="116" fill="none" stroke="#2c3539" stroke-width="1.5" stroke-dasharray="3 9"/>
+      </g>
+      <g id="hub">
+        <circle r="90" fill="url(#gHub)" stroke="url(#gBrass)" stroke-width="3"/>
+        <circle cx="0" cy="-14" r="19" fill="#c29a52"/>
+        <path d="M-8 -2h16l7 44h-30z" fill="#c29a52"/>
+        <circle cx="0" cy="-14" r="7" fill="#0a0d0e"/>
+      </g>
+      <g id="notch" style="transform:none">
+        <path d="M0 -258 L-11 -283 L11 -283 Z" fill="#e3c280"/>
+        <circle id="led" cx="0" cy="-297" r="5" fill="#3a3f41"/>
+      </g>
+    </svg>
+    <div class="dial-sheen"></div>
+    <div class="dial-state" id="dialState">Sealed</div>
+  </div>
+</section>
+
+<!-- ================= DRAWERS ================= -->
+<section class="pad" id="inside" aria-labelledby="h-inside">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-inside">A drawer for everything</h2>
+      <p class="lede">Open a drawer to see what a record looks like. These are samples, not real data.</p>
+    </div>
+
+    <div class="wall" id="wall">
+      <div class="drawer d-a">
+        <div class="contents" id="c1">
+          <div class="tag">Sample login</div>
+          <div class="row"><i>Site</i><b>forum.example</b></div>
+          <div class="row"><i>Username</i><b>nova07</b></div>
+          <div class="row"><i>Password</i><b>••••••••••••</b></div>
+          <div class="row"><i>2FA</i><b class="ok">on</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c1"><span class="plate">Logins</span><span class="what">Usernames, passwords and 2FA for every site.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-b">
+        <div class="contents" id="c2">
+          <div class="tag">Sample entity</div>
+          <div class="row"><i>Name</i><b>Nova-07</b></div>
+          <div class="row"><i>Holds</i><b>3 logins, 2 wallets, 1 mailbox, 2 documents</b></div>
+          <div class="row"><i>Entity view</i><b class="ok">asks for its own PIN</b></div>
+          <div class="row"><i>Backup codes</i><b>stored with the entity</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c2"><span class="plate">Entities</span><span class="what">One identity per account or project, with everything that belongs to it.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-c">
+        <div class="contents" id="c3">
+          <div class="tag">Sample wallets</div>
+          <div class="row"><i>Wallet 1</i><b>0x71C…9a3F</b></div>
+          <div class="row"><i>Wallet 2</i><b>0xB04…1d7E</b></div>
+          <div class="row"><i>Linked to</i><b>Nova-07</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c3"><span class="plate">Wallets</span><span class="what">Addresses, grouped under the entity that uses them.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-d">
+        <div class="contents" id="c4">
+          <div class="tag">Sample seed phrase</div>
+          <div class="row"><i>Words</i><b>••••  ••••  ••••  ••••  ••••  ••••</b></div>
+          <div class="row"><i>State</i><b class="ok">hidden</b></div>
+          <div class="row"><i>To read it</i><b>reveal it on purpose</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c4"><span class="plate">Seed phrases</span><span class="what">Hidden until you choose to reveal them.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-e">
+        <div class="contents" id="c5">
+          <div class="tag">Sample KYC set</div>
+          <div class="row"><i>Document</i><b>Passport scan</b></div>
+          <div class="row"><i>Used on</i><b>2 projects</b></div>
+          <div class="row"><i>Unused</i><b>Address proof</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c5"><span class="plate">KYC data</span><span class="what">Identity details, marked used or unused so you don't reuse the wrong one.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-f">
+        <div class="contents" id="c6">
+          <div class="tag">Sample mailbox</div>
+          <div class="row"><i>Address</i><b>nova07@mail.example</b></div>
+          <div class="row"><i>Inbox</i><b>per entity</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c6"><span class="plate">Mail</span><span class="what">An inbox for each entity.</span><span class="handle"></span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ENTITY GRAPH ================= -->
+<section class="pad graph-sec" id="graph" aria-labelledby="h-graph">
+  <div class="wrap graph-grid">
+    <div class="sec-head" style="margin:0">
+      <h2 id="h-graph">See who owns what</h2>
+      <p class="lede">Group the logins, wallets, mail and documents that belong to one identity. Hover a point to see what it is and which entity holds it.</p>
+      <p class="mono" style="color:var(--bone-dim)">Sample data. Your own graph is private to you.</p>
+    </div>
+    <div class="graph-box">
+      <canvas id="graphCv" role="img" aria-label="Animated sample graph: three entities, each surrounded by the logins, wallets, mailboxes and documents it holds."></canvas>
+      <div class="legend" aria-hidden="true">
+        <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="#c29a52"/></svg>Entity</span>
+        <span><svg viewBox="0 0 12 12"><path d="M6 1l5 5-5 5-5-5z" fill="#e9e3d3"/></svg>Login</span>
+        <span><svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" fill="#e9e3d3"/></svg>Wallet</span>
+        <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4" fill="none" stroke="#e9e3d3" stroke-width="1.6"/></svg>Mail</span>
+        <span><svg viewBox="0 0 12 12"><path d="M6 1.5l5 9H1z" fill="#e9e3d3"/></svg>Document</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= UNLOCKING ================= -->
+<section class="pad" id="unlock" aria-labelledby="h-unlock">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-unlock">Three doors, tried in order</h2>
+      <p class="lede">The Vault has its own lock. It never accepts your AYZEN account password or your login 2FA.</p>
+    </div>
+    <div class="doors">
+      <div class="door"><div class="leaf" tabindex="0"><span class="hinge"></span>
+        <span class="n">1</span><h3>Passkey</h3><p>If you've registered one, it's the first and fastest way in.</p></div></div>
+      <div class="door"><div class="leaf" tabindex="0"><span class="hinge"></span>
+        <span class="n">2</span><h3>Vault PIN and 2FA</h3><p>No passkey on hand? Use your Vault PIN or password plus the Vault's own authenticator code.</p></div></div>
+      <div class="door"><div class="leaf" tabindex="0"><span class="hinge"></span>
+        <span class="n">3</span><h3>Email code and PIN</h3><p>If the second door isn't available, a code sent to your email and your Vault PIN get you through.</p></div></div>
+    </div>
+    <div class="rules">
+      <p><b>Entity details have a separate PIN.</b> Even with the Vault open, viewing an entity asks for its Entity-view PIN.</p>
+      <p><b>Secrets are encrypted at rest.</b> Vault secrets use AES-256-GCM, so what's stored isn't readable as plain text.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EMERGENCY ================= -->
+<section class="pad paper" id="emergency" aria-labelledby="h-em">
+  <div class="wrap em-grid">
+    <div>
+      <div class="sec-head" style="margin:0">
+        <h2 id="h-em">If you can't get in, someone you trust can</h2>
+        <p class="lede">Name the contacts who may ask for access. Their request waits as pending, and you can cancel it.</p>
+      </div>
+      <ul class="em-points">
+        <li>You choose who the contacts are, and you can revoke any of them.</li>
+        <li>A pending request is not an open door. If you're fine, cancel it and nothing changes.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="slip" id="slip" data-state="pending">
+        <div class="stamp" aria-hidden="true">Cancelled</div>
+        <div class="kicker">Emergency access request (sample)</div>
+        <div class="pending">
+          <h3>A trusted contact asked to open your Vault</h3>
+          <p>The request is pending. You can cancel it while it is.</p>
+          <button class="btn" id="cancelBtn" type="button">Cancel request</button>
+        </div>
+        <div class="done" role="status">
+          <h3>Request cancelled</h3>
+          <p>Good to know you're okay. The pending request is gone.</p>
+          <button class="replay" id="replayBtn" type="button">Show the sample again</button>
+        </div>
+        <div class="sample">Try it. Nothing here is real.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CAREFUL PARTS ================= -->
+<section class="pad" id="careful" aria-labelledby="h-careful">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-careful">The careful parts</h2>
+      <p class="lede">What you'll want when something goes wrong, or when you move on.</p>
+    </div>
+    <div class="careful">
+      <dl>
+        <div class="it"><dt>Activity log</dt><dd>Everything you've done inside the Vault: what happened, when and where.</dd></div>
+        <div class="it"><dt>Trash</dt><dd>Deleted entities can be restored within 30 days, then they're purged automatically.</dd></div>
+        <div class="it"><dt>Backup codes</dt><dd>Kept per entity, next to the account they belong to.</dd></div>
+      </dl>
+      <dl>
+        <div class="it"><dt>Encrypted snapshot</dt><dd>Export the whole Vault as one encrypted file.</dd></div>
+        <div class="it"><dt>Import and export</dt><dd>Bring entries in from another tool, or send them out as CSV or JSON.</dd></div>
+        <div class="it"><dt>Compliance report</dt><dd>Export your account and Vault activity for any date range as CSV or PDF.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLOSE ================= -->
+<section class="pad close" aria-labelledby="h-close">
+  <div class="wrap close-in">
+    <div>
+      <h2 id="h-close">Open your vault</h2>
+      <p class="lede">Sign in and Sylo asks for its own lock before it shows you anything.</p>
+    </div>
+    <a class="btn btn-brass" style="font-size:1.8rem;padding:1.2rem 2.2rem" href="/login">Open Sylo</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Sylo is one of eight modules in AYZEN.</span>
+    <a class="link" href="/landing/">Back to AYZEN</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = (s, r = document) => r.querySelector(s);
+  const el = (n, a = {}, p) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+
+  /* ---- header state ---- */
+  const top = $("#top");
+  const onScrollHeader = () => top.classList.toggle("scrolled", scrollY > 8);
+  addEventListener("scroll", onScrollHeader, { passive: true }); onScrollHeader();
+
+  /* ---- dial: build ticks + numerals + bolts ---- */
+  const outer = $("#ringOuter");
+  el("circle", { r: 294, fill: "none", stroke: "#3a444a", "stroke-width": 2 }, outer);
+  el("circle", { r: 258, fill: "none", stroke: "#2c3539", "stroke-width": 1.5 }, outer);
+  for (let i = 0; i < 100; i++) {
+    const a = (i / 100) * Math.PI * 2, s = Math.sin(a), c = -Math.cos(a);
+    const len = i % 10 === 0 ? 24 : i % 5 === 0 ? 16 : 8;
+    el("line", { x1: s * 291, y1: c * 291, x2: s * (291 - len), y2: c * (291 - len), stroke: i % 10 === 0 ? "#e3c280" : "#7b857b", "stroke-width": i % 10 === 0 ? 2.4 : 1.4, "stroke-linecap": "round" }, outer);
+    if (i % 10 === 0) {
+      const t = el("text", { x: s * 258, y: c * 258, "text-anchor": "middle", "dominant-baseline": "middle", fill: "#aaa594", "font-size": 15, "font-family": "IBM Plex Mono, monospace" }, outer);
+      t.textContent = String(i).padStart(2, "0");
+    }
+  }
+  const bolts = $("#bolts");
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2 + Math.PI / 8, x = Math.sin(a) * 176, y = -Math.cos(a) * 176;
+    el("circle", { cx: x, cy: y, r: 7, fill: "#101517", stroke: "#4a555b", "stroke-width": 1.5 }, bolts);
+    el("line", { x1: x - 4, y1: y - 4, x2: x + 4, y2: y + 4, stroke: "#4a555b", "stroke-width": 1.5 }, bolts);
+  }
+
+  /* ---- dial: one load sequence, then scroll-driven rotation ---- */
+  const rings = { outer: $("#ringOuter"), mid: $("#ringMid"), inner: $("#ringInner") };
+  const state = $("#dialState"), led = $("#led"), wrap = $("#dialWrap");
+  const seal = () => { led.classList.add("on"); state.classList.add("on"); };
+  const ang = (k) => scrollY * k;
+  const applyScroll = () => {
+    rings.outer.style.transform = `rotate(${ang(-0.045)}deg)`;
+    rings.mid.style.transform = `rotate(${ang(0.07)}deg)`;
+    rings.inner.style.transform = `rotate(${ang(-0.025)}deg)`;
+  };
+  if (reduce) { seal(); }
+  else {
+    const ease = "cubic-bezier(.16,1,.3,1)";
+    const spin = (g, from, ms) => g.animate([{ transform: `rotate(${from}deg)` }, { transform: "rotate(0deg)" }], { duration: ms, easing: ease });
+    spin(rings.outer, -520, 2800); spin(rings.mid, 380, 2500);
+    const last = spin(rings.inner, -240, 2200);
+    last.finished.then(() => {
+      wrap.animate([{ transform: "translateY(-50%) translateY(0) scale(1)" }, { transform: "translateY(-50%) translateY(4px) scale(.994)" }, { transform: "translateY(-50%) translateY(0) scale(1)" }], { duration: 260, easing: "ease-out" });
+      seal();
+    }).catch(seal);
+    setTimeout(seal, 3600);
+  }
+  let ticking = false;
+  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { applyScroll(); ticking = false; }); } }, { passive: true });
+  applyScroll();
+
+  /* ---- drawers ---- */
+  const drawers = [...document.querySelectorAll(".drawer")];
+  drawers.forEach((d) => {
+    const b = $(".front", d);
+    b.addEventListener("click", () => {
+      const willOpen = !d.classList.contains("open");
+      drawers.forEach((o) => { o.classList.remove("open"); $(".front", o).setAttribute("aria-expanded", "false"); });
+      if (willOpen) { d.classList.add("open"); b.setAttribute("aria-expanded", "true"); }
+    });
+  });
+
+  /* ---- emergency demo ---- */
+  const slip = $("#slip");
+  $("#cancelBtn").addEventListener("click", () => { slip.dataset.state = "cancelled"; $("#replayBtn").focus(); });
+  $("#replayBtn").addEventListener("click", () => { slip.dataset.state = "pending"; $("#cancelBtn").focus(); });
+
+  /* ---- entity graph ---- */
+  const cv = $("#graphCv"); if (!cv) return;
+  const ctx = cv.getContext("2d");
+  const BONE = "#e9e3d3", BRASS = "#c29a52", BRASSHI = "#e3c280", INK = "#0f1213";
+  const hubs = [
+    { name: "Nova-07", fx: .43, fy: .52, r: 13, sats: [["login", "airdrop-07 login"], ["login", "forum login"], ["login", "exchange login"], ["wallet", "0x71C…9a3F"], ["wallet", "0xB04…1d7E"], ["mail", "nova07 mailbox"], ["doc", "Passport scan"], ["doc", "Address proof"]] },
+    { name: "Kite-02", fx: .83, fy: .24, r: 10, sats: [["login", "dex login"], ["wallet", "0x2aE…c410"], ["mail", "kite02 mailbox"], ["doc", "Selfie check"]] },
+    { name: "Orin-11", fx: .8, fy: .8, r: 10, sats: [["login", "quest login"], ["login", "social login"], ["wallet", "0x9fD…7b02"]] },
+  ];
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  hubs.forEach((h, hi) => h.sats.forEach((s, i) => {
+    s.kind = s[0]; s.label = s[1];
+    s.a0 = (i / h.sats.length) * Math.PI * 2 + rnd() * .5;
+    s.rad = 62 + rnd() * 62 + (i % 2) * 16;
+    s.spd = (rnd() < .5 ? -1 : 1) * (.00011 + rnd() * .00018);
+    s.hub = h; s.x = s.y = 0;
+  }));
+  let W = 0, H = 0, dpr = 1, hover = null, visible = false, raf = 0, T = 0;
+  const size = () => {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  const place = (t) => {
+    const k = Math.min(W, H) / 500;
+    hubs.forEach((h, i) => {
+      h.x = h.fx * W + Math.sin(t * .0004 + i * 2) * 6;
+      h.y = h.fy * H + Math.cos(t * .00035 + i) * 6;
+      h.k = k;
+      h.sats.forEach((s) => {
+        const a = s.a0 + t * s.spd;
+        s.x = h.x + Math.cos(a) * s.rad * k * 1.05;
+        s.y = h.y + Math.sin(a) * s.rad * k * .9;
+      });
+    });
+  };
+  const shape = (kind, x, y, r) => {
+    ctx.beginPath();
+    if (kind === "login") { ctx.moveTo(x, y - r); ctx.lineTo(x + r, y); ctx.lineTo(x, y + r); ctx.lineTo(x - r, y); ctx.closePath(); ctx.fill(); }
+    else if (kind === "wallet") { ctx.fillRect(x - r * .8, y - r * .8, r * 1.6, r * 1.6); }
+    else if (kind === "mail") { ctx.arc(x, y, r * .85, 0, Math.PI * 2); ctx.lineWidth = 1.6; ctx.stroke(); }
+    else { ctx.moveTo(x, y - r); ctx.lineTo(x + r, y + r * .8); ctx.lineTo(x - r, y + r * .8); ctx.closePath(); ctx.fill(); }
+  };
+  const draw = (t) => {
+    ctx.clearRect(0, 0, W, H); place(t);
+    // faint grid
+    ctx.strokeStyle = "rgba(233,227,211,.035)"; ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, H); ctx.stroke(); }
+    for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y + .5); ctx.lineTo(W, y + .5); ctx.stroke(); }
+    const active = hover ? (hover.hub || hover) : hubs[0];
+    // hub to hub
+    ctx.setLineDash([4, 6]); ctx.lineWidth = 1; ctx.strokeStyle = "rgba(227,194,128,.28)";
+    [[0, 1], [0, 2]].forEach(([a, b]) => { ctx.beginPath(); ctx.moveTo(hubs[a].x, hubs[a].y); ctx.lineTo(hubs[b].x, hubs[b].y); ctx.stroke(); });
+    ctx.setLineDash([]);
+    hubs.forEach((h) => {
+      const on = h === active, dim = on ? 1 : .35;
+      h.sats.forEach((s) => {
+        ctx.globalAlpha = dim;
+        ctx.strokeStyle = on ? "rgba(227,194,128,.55)" : "rgba(233,227,211,.2)"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(h.x, h.y); ctx.lineTo(s.x, s.y); ctx.stroke();
+        ctx.fillStyle = BONE; ctx.strokeStyle = BONE;
+        const r = s === hover ? 7.5 : 5.2;
+        shape(s.kind, s.x, s.y, r);
+      });
+      ctx.globalAlpha = 1;
+      const pulse = on ? 1 + Math.sin(t * .003) * .08 : 1;
+      ctx.beginPath(); ctx.arc(h.x, h.y, (h.r + 9) * h.k * pulse, 0, Math.PI * 2);
+      ctx.strokeStyle = on ? "rgba(227,194,128,.45)" : "rgba(194,154,82,.18)"; ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath(); ctx.arc(h.x, h.y, h.r * h.k, 0, Math.PI * 2);
+      ctx.fillStyle = on ? BRASSHI : BRASS; ctx.globalAlpha = on ? 1 : .6; ctx.fill(); ctx.globalAlpha = 1;
+    });
+    // labels
+    const label = (x, y, text, strong) => {
+      ctx.font = "500 12px 'IBM Plex Mono', monospace";
+      const w = ctx.measureText(text).width + 16, h = 24;
+      let lx = x + 14, ly = y - 34; if (lx + w > W - 6) lx = x - w - 14; if (ly < 6) ly = y + 12;
+      ctx.fillStyle = "rgba(15,18,19,.94)"; ctx.fillRect(lx, ly, w, h);
+      ctx.strokeStyle = strong ? BRASSHI : "#3a444a"; ctx.lineWidth = 1; ctx.strokeRect(lx + .5, ly + .5, w - 1, h - 1);
+      ctx.fillStyle = strong ? BRASSHI : BONE; ctx.textBaseline = "middle"; ctx.fillText(text, lx + 8, ly + h / 2 + .5);
+    };
+    hubs.forEach((h) => { if (!hover || hover.hub === h || hover === h) { if (h !== hover) label(h.x, h.y + 40, "Entity " + h.name, h === active); } });
+    if (hover) label(hover.x, hover.y, hover.label ? (hover.kind[0].toUpperCase() + hover.kind.slice(1)) + ": " + hover.label : "Entity " + hover.name, true);
+  };
+  const loop = (t) => { T = t; draw(t); if (visible && !reduce) raf = requestAnimationFrame(loop); };
+  const start = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); };
+  const pick = (mx, my) => {
+    let best = null, bd = 18;
+    hubs.forEach((h) => { const d = Math.hypot(h.x - mx, h.y - my) - h.r * h.k * .4; if (d < bd) { bd = d; best = h; } h.sats.forEach((s) => { const e = Math.hypot(s.x - mx, s.y - my); if (e < bd) { bd = e; best = s; } }); });
+    return best;
+  };
+  cv.addEventListener("pointermove", (e) => { const r = cv.getBoundingClientRect(); hover = pick(e.clientX - r.left, e.clientY - r.top); cv.style.cursor = hover ? "pointer" : "default"; if (reduce) draw(T); });
+  cv.addEventListener("pointerleave", () => { hover = null; if (reduce) draw(T); });
+  new ResizeObserver(() => { size(); draw(T); }).observe(cv);
+  new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) start(); else cancelAnimationFrame(raf); }, { threshold: .05 }).observe(cv);
+  size(); draw(0);
+})();
+</script>
+</body>
+</html>
