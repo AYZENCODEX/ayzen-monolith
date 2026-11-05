@@ -51,7 +51,6 @@ import Login          from "@/pages/login";
 import StatusPage     from "@/pages/status";
 import Register       from "@/pages/register";
 import ForgotPassword from "@/pages/forgot-password";
-import Landing        from "@/pages/landing";
 import NotFound       from "@/pages/not-found";
 import EmergencyAccessConfirm from "@/pages/emergency-access/confirm";
 import EmergencyAccessView    from "@/pages/emergency-access/view";
@@ -260,6 +259,16 @@ function ProtectedRoute({
 
 // ─── Router ───────────────────────────────────────────────────────────────────
 
+/**
+ * Full-page (non-SPA) redirect. The public home landing is a static page served from
+ * public/landing/ (see CHANGES_HOME_LANDING.md), so wouter's <Redirect> cannot be used.
+ * location.replace keeps "/" out of the back-button history.
+ */
+function ExternalRedirect({ to }: { to: string }) {
+  useEffect(() => { window.location.replace(to); }, [to]);
+  return null;
+}
+
 function Router() {
   const { user, isAdmin, isDev, isModerator, isTeamLeader } = useAuth();
   const subdomainApp = getCurrentSubdomainApp();
@@ -275,7 +284,7 @@ function Router() {
           : isModerator         ? <Redirect to="/dashboard" />
           : isTeamLeader        ? <Redirect to="/teams" />
                                 : <Redirect to="/home" />
-          : <Landing />}
+          : <ExternalRedirect to="/landing/" />}
       </Route>
 
       {/* Public */}
