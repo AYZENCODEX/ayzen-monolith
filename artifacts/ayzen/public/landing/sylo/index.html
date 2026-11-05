@@ -135,6 +135,16 @@ section{position:relative}
 .contents .row b{font-weight:500}
 .ok{color:var(--patina)}
 
+.drawer,.door,.st,.it,.slip{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.it{border-radius:3px;transition:background .25s}
+.it:hover{background:rgba(233,227,211,.035)}
+.it:focus-visible{outline:2px solid var(--brass-hi);outline-offset:2px}
+@keyframes glow{
+  0%{box-shadow:0 0 0 0 rgba(205,205,205,0),inset 0 0 0 0 rgba(205,205,205,0)}
+  18%{box-shadow:0 0 34px 3px rgba(205,205,205,.34),inset 0 0 38px 5px rgba(205,205,205,.2)}
+  100%{box-shadow:0 0 0 0 rgba(205,205,205,0),inset 0 0 0 0 rgba(205,205,205,0)}}
+.is-glow{animation:glow .85s ease-out}
+
 /* ---------- workflow ---------- */
 .flow{--p:0;position:relative}
 .rail{position:relative;height:2px;background:var(--line);margin:0 10% 0;}
@@ -178,12 +188,17 @@ section{position:relative}
 .legend svg{width:12px;height:12px}
 
 /* ---------- unlocking doors ---------- */
-.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2.4vw,32px);align-items:start;perspective:1400px}
+.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2.4vw,32px);align-items:start}
 .door{position:relative;height:clamp(330px,34vw,400px);background:radial-gradient(60% 50% at 50% 55%,rgba(227,194,128,.28),rgba(194,154,82,.05) 60%,transparent 80%),#0a0d0e;border-radius:3px;box-shadow:inset 0 0 0 1px var(--line)}
 .door:nth-child(2){margin-top:clamp(20px,3.6vw,52px)}
 .door:nth-child(3){margin-top:clamp(40px,7.2vw,104px)}
 .leaf{position:absolute;inset:0;padding:22px 22px 20px;display:flex;flex-direction:column;background:linear-gradient(160deg,#2b3438,#1d2427 60%,#171c1e);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px #3a444a,0 18px 40px -18px rgba(0,0,0,.8);transform-origin:0% 50%;transition:transform .7s cubic-bezier(.2,.85,.2,1);border-radius:3px;outline:0}
-.door:hover .leaf,.door:focus-within .leaf,.leaf:focus-visible{transform:rotateY(-24deg)}
+.leaf{animation:swing 8s ease-in-out infinite}
+.door:nth-child(2) .leaf{animation-delay:-2.7s}
+.door:nth-child(3) .leaf{animation-delay:-5.3s}
+.door:hover .leaf,.door:focus-within .leaf{animation-play-state:paused}
+.door.held .leaf{animation:none;transform:perspective(1200px) rotateY(-28deg)}
+@keyframes swing{0%,12%,100%{transform:perspective(1200px) rotateY(0)}38%,62%{transform:perspective(1200px) rotateY(-28deg)}88%{transform:perspective(1200px) rotateY(0)}}
 .leaf:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px}
 .door .n{font:800 5.4rem/.8 var(--display);color:transparent;-webkit-text-stroke:1.5px var(--brass);margin-bottom:auto}
 .door h3{margin:1.2rem 0 .6rem;font-size:2.2rem}
@@ -220,7 +235,7 @@ section{position:relative}
 /* ---------- careful parts ---------- */
 .careful{display:grid;grid-template-columns:repeat(2,1fr);column-gap:clamp(24px,6vw,96px)}
 .careful dl{margin:0}
-.careful .it{display:grid;grid-template-columns:11rem 1fr;gap:1.2rem;padding:1.15rem 0;border-top:1px solid var(--line)}
+.careful .it{display:grid;grid-template-columns:11rem 1fr;gap:1.2rem;padding:1.15rem .8rem;margin-inline:-.8rem;border-top:1px solid var(--line)}
 .careful dt{font:800 1.7rem/1.05 var(--display)}
 .careful dd{margin:0;color:var(--bone-dim);font-size:1.05rem;line-height:1.5}
 
@@ -229,16 +244,23 @@ section{position:relative}
 .close-in{display:grid;grid-template-columns:minmax(0,1.3fr) auto;gap:2rem;align-items:center}
 .close h2{font-size:clamp(3.4rem,9vw,8rem);line-height:.88}
 .close .lede{margin-top:1.2rem}
-footer{padding:28px 0 40px;color:var(--bone-dim);font-size:1rem}
-footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-between;border-top:1px solid var(--line);padding-top:24px}
+.foot{background:#0a0c0d;border-top:1px solid var(--line);color:var(--bone-dim);font-size:1rem}
+.talk{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);align-items:end;padding:clamp(64px,9vw,120px) 0 clamp(40px,5vw,64px)}
+.talk h2{font-size:clamp(4.4rem,12vw,10.5rem);line-height:.84;color:var(--bone)}
+.talk .lede{margin-bottom:1.6rem}
+.social{display:flex;flex-wrap:wrap;gap:.7rem;margin:0;padding:0;list-style:none}
+.sicon{display:grid;place-items:center;width:52px;height:52px;border-radius:3px;color:var(--bone);background:var(--slate);box-shadow:inset 0 0 0 1px var(--line);transition:color .2s,box-shadow .2s,transform .2s;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sicon svg{width:22px;height:22px;fill:currentColor}
+.sicon:hover{color:var(--brass-hi);box-shadow:inset 0 0 0 1px var(--brass);transform:translateY(-2px)}
+.social-note{min-height:1.5rem;margin-top:.9rem;font:400 .8125rem var(--mono);color:var(--bone-dim)}
+.foot-bar{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-between;border-top:1px solid var(--line);padding:22px 0 36px}
 
 /* ---------- responsive ---------- */
 @media (max-width:980px){
-  .graph-grid,.em-grid,.close-in{grid-template-columns:1fr}
-  .doors{grid-template-columns:1fr;perspective:none}
+  .graph-grid,.em-grid,.close-in,.talk{grid-template-columns:1fr}
+  .doors{grid-template-columns:1fr}
   .door,.door:nth-child(2),.door:nth-child(3){margin-top:0;height:auto;min-height:280px}
   .door .n{font-size:4rem;margin-bottom:1.6rem}
-  .door:hover .leaf,.door:focus-within .leaf{transform:none}
   .leaf{position:relative;min-height:280px}
   .careful{grid-template-columns:1fr}
   .rules{grid-template-columns:1fr}
@@ -257,7 +279,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-be
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .dial-3d{animation:none!important}
+  .dial-3d,.leaf{animation:none!important}
+  .is-glow{animation-duration:.6s!important}
   *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-delay:0s!important}
 }
 </style>
@@ -474,11 +497,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-be
       <p class="lede">The Vault has its own lock. It never accepts your AYZEN account password or your login 2FA.</p>
     </div>
     <div class="doors">
-      <div class="door"><div class="leaf" tabindex="0"><span class="hinge"></span>
+      <div class="door"><div class="leaf" tabindex="0" role="button" aria-pressed="false"><span class="hinge"></span>
         <span class="n">1</span><h3>Passkey</h3><p>If you've registered one, it's the first and fastest way in.</p></div></div>
-      <div class="door"><div class="leaf" tabindex="0"><span class="hinge"></span>
+      <div class="door"><div class="leaf" tabindex="0" role="button" aria-pressed="false"><span class="hinge"></span>
         <span class="n">2</span><h3>Vault PIN and 2FA</h3><p>No passkey on hand? Use your Vault PIN or password plus the Vault's own authenticator code.</p></div></div>
-      <div class="door"><div class="leaf" tabindex="0"><span class="hinge"></span>
+      <div class="door"><div class="leaf" tabindex="0" role="button" aria-pressed="false"><span class="hinge"></span>
         <span class="n">3</span><h3>Email code and PIN</h3><p>If the second door isn't available, a code sent to your email and your Vault PIN get you through.</p></div></div>
     </div>
     <div class="rules">
@@ -530,14 +553,14 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-be
     </div>
     <div class="careful">
       <dl>
-        <div class="it"><dt>Activity log</dt><dd>Everything you've done inside the Vault: what happened, when and where.</dd></div>
-        <div class="it"><dt>Trash</dt><dd>Deleted entities can be restored within 30 days, then they're purged automatically.</dd></div>
-        <div class="it"><dt>Backup codes</dt><dd>Kept per entity, next to the account they belong to.</dd></div>
+        <div class="it" tabindex="0"><dt>Activity log</dt><dd>Everything you've done inside the Vault: what happened, when and where.</dd></div>
+        <div class="it" tabindex="0"><dt>Trash</dt><dd>Deleted entities can be restored within 30 days, then they're purged automatically.</dd></div>
+        <div class="it" tabindex="0"><dt>Backup codes</dt><dd>Kept per entity, next to the account they belong to.</dd></div>
       </dl>
       <dl>
-        <div class="it"><dt>Encrypted snapshot</dt><dd>Export the whole Vault as one encrypted file.</dd></div>
-        <div class="it"><dt>Import and export</dt><dd>Bring entries in from another tool, or send them out as CSV or JSON.</dd></div>
-        <div class="it"><dt>Compliance report</dt><dd>Export your account and Vault activity for any date range as CSV or PDF.</dd></div>
+        <div class="it" tabindex="0"><dt>Encrypted snapshot</dt><dd>Export the whole Vault as one encrypted file.</dd></div>
+        <div class="it" tabindex="0"><dt>Import and export</dt><dd>Bring entries in from another tool, or send them out as CSV or JSON.</dd></div>
+        <div class="it" tabindex="0"><dt>Compliance report</dt><dd>Export your account and Vault activity for any date range as CSV or PDF.</dd></div>
       </dl>
     </div>
   </div>
@@ -555,10 +578,27 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-be
 </section>
 </main>
 
-<footer>
+<footer class="foot" id="talk">
   <div class="wrap">
-    <span>Sylo is one of eight modules in AYZEN.</span>
-    <a class="link" href="/landing/">Back to AYZEN</a>
+    <div class="talk">
+      <h2>Let's talk</h2>
+      <div>
+        <p class="lede">Questions about Sylo, something missing, or a bug to report? Find us wherever you are.</p>
+        <ul class="social" aria-label="Social links">
+        <li><a class="sicon" data-link="x" href="#" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a></li>
+        <li><a class="sicon" data-link="telegram" href="#" aria-label="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a></li>
+        <li><a class="sicon" data-link="discord" href="#" aria-label="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a></li>
+        <li><a class="sicon" data-link="github" href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+        <li><a class="sicon" data-link="linkedin" href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+        <li><a class="sicon" data-link="email" href="#" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5zm2.2.3L12 12.2l7.8-6.4zm15.8 2.3-7.4 6.1a1 1 0 0 1-1.2 0L4 8.1v10.4h16z"/></svg></a></li>
+        </ul>
+        <p class="social-note" id="socialNote" role="status"></p>
+      </div>
+    </div>
+    <div class="foot-bar">
+      <span>Sylo is one of eight modules in AYZEN.</span>
+      <a class="link" href="/landing/">Back to AYZEN</a>
+    </div>
   </div>
 </footer>
 
@@ -636,6 +676,30 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-be
   const slip = $("#slip");
   $("#cancelBtn").addEventListener("click", () => { slip.dataset.state = "cancelled"; $("#replayBtn").focus(); });
   $("#replayBtn").addEventListener("click", () => { slip.dataset.state = "pending"; $("#cancelBtn").focus(); });
+
+  /* ---- click glow on cards ---- */
+  const pulse = (n) => { n.classList.remove("is-glow"); void n.offsetWidth; n.classList.add("is-glow"); };
+  document.addEventListener("animationend", (e) => { if (e.animationName === "glow") e.target.classList.remove("is-glow"); });
+  document.addEventListener("click", (e) => { const c = e.target.closest(".drawer,.door,.st,.it,.slip,.sicon"); if (c) pulse(c); });
+  document.querySelectorAll(".it").forEach((n) => n.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pulse(n); } }));
+
+  /* ---- doors: click to hold one open, click again to let it swing again ---- */
+  document.querySelectorAll(".door").forEach((d) => {
+    const leaf = $(".leaf", d);
+    const toggle = () => { const on = d.classList.toggle("held"); leaf.setAttribute("aria-pressed", on); };
+    d.addEventListener("click", toggle);
+    leaf.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); pulse(d); } });
+  });
+
+  /* ---- social links (placeholders) ----
+     Put the real URL in SOCIAL_LINKS. Until a value is set the icon does nothing but say so. */
+  const SOCIAL_LINKS = { x: "", telegram: "", discord: "", github: "", linkedin: "", email: "" }; // email: "mailto:you@example.com"
+  const note = $("#socialNote"); let noteT = 0;
+  document.querySelectorAll("[data-link]").forEach((a) => {
+    const url = SOCIAL_LINKS[a.dataset.link];
+    if (url) { a.href = url; if (!url.startsWith("mailto:")) { a.target = "_blank"; a.rel = "noopener noreferrer"; } return; }
+    a.addEventListener("click", (e) => { e.preventDefault(); note.textContent = a.getAttribute("aria-label") + " link isn't set yet."; clearTimeout(noteT); noteT = setTimeout(() => (note.textContent = ""), 2800); });
+  });
 
   /* ---- workflow ---- */
   (() => {
