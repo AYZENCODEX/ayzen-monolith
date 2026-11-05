@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@ayzen/capabilities": "workspace:*",
+    "@ayzen/module-registry": "workspace:*",
     "@ayzen/telegram": "workspace:*",
     "@opentelemetry/api": "^1.10.0",
     "@polymarket/clob-client": "^4.16.0",

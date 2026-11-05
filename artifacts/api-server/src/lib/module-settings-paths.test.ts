@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { MODULES } from "@ayzen/module-registry";
 import { SHARED_APP_DEFINITIONS } from "./shared-apps";
 import { getTelegramBotDescriptor } from "./telegram-bot-registry";
 
@@ -23,12 +24,13 @@ test("settings paths sit inside the module's routePrefixes (backend shared-apps.
   }
 });
 
-test("settings paths sit inside the module's routePrefixes (frontend subdomain-app.ts)", () => {
-  const source = read("lib/subdomain-app.ts");
+test("settings paths sit inside the module's routePrefixes (frontend subdomain-app.ts, derived from @ayzen/module-registry)", () => {
+  // W0-P3: subdomain-app.ts no longer declares prefixes; it must derive from the shared registry.
+  assert.match(read("lib/subdomain-app.ts"), /from "@ayzen\/module-registry"/);
   for (const [id, path] of Object.entries(SETTINGS_PATHS)) {
-    const block = source.slice(source.indexOf(`\n  ${id}: {`), source.indexOf("routePrefixes", source.indexOf(`\n  ${id}: {`)) + 400);
-    const prefixes = [...block.slice(block.indexOf("routePrefixes")).matchAll(/"(\/[^"]*)"/g)].map((m) => m[1]);
-    assert.ok(prefixes.some((p) => hasPrefix(path, p)), `${id}: ${path} outside frontend routePrefixes`);
+    const mod = MODULES.find((m) => m.id === id);
+    assert.ok(mod, `${id} missing from @ayzen/module-registry`);
+    assert.ok(mod.routePrefixes.some((p) => hasPrefix(path, p)), `${id}: ${path} outside registry routePrefixes`);
   }
 });
 

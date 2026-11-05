@@ -2,14 +2,35 @@ name: AYZEN Security
 
 on:
   pull_request:
+  push:
+    branches: [main]
   schedule:
-    - cron: "17 3 * * 1"
+    - cron: "17 3 * * 1"   # weekly: dependency audit + boundaries
+    - cron: "43 2 * * *"   # nightly: gitleaks full-history scan
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
+  gitleaks:
+    # W0-P1: full-history secret scan, baseline-aware. Blocking on PRs, pushes to main and nightly.
+    # Runs the pinned upstream CLI image (not gitleaks-action) so --baseline-path works and no
+    # org license secret is required. Local equivalent: .githooks/pre-commit (pnpm hooks:install).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Gitleaks (full history)
+        run: |
+          docker run --rm -v "$PWD:/repo" -w /repo ghcr.io/gitleaks/gitleaks:v8.21.2 \
+            git --config .gitleaks.toml \
+                --baseline-path reports/gitleaks/baseline.json \
+                --redact --verbose --exit-code 1 .
+
   security:
+    if: github.event.schedule != '43 2 * * *'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

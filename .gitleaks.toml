@@ -1,0 +1,26 @@
+title = "AYZEN gitleaks config"
+
+# W0-P1 (AYZEN roadmap, Wave 0). Used by the pre-commit hook (.githooks/pre-commit)
+# and the CI job in .github/workflows/security.yml. Extends the upstream default
+# ruleset instead of replacing it.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Paths that legitimately contain secret-shaped strings"
+paths = [
+  # Generated audit/evidence output and the (redacted) gitleaks baseline itself.
+  '''^reports/''',
+  # Lockfile integrity hashes look like high-entropy tokens.
+  '''(^|/)pnpm-lock\.yaml$''',
+  # Test fixtures. Put intentionally fake credentials in a fixtures/ directory
+  # (or inline `gitleaks:allow`); ordinary source and test files stay scanned.
+  '''(^|/)fixtures?/''',
+  '''\.fixture\.[A-Za-z0-9]+$''',
+  # SOPS-encrypted material (see Wave 5 / W5 SOPS) and its policy file.
+  '''(^|/)infrastructure/secrets/.*\.enc\.ya?ml$''',
+  '''\.enc\.(ya?ml|json|env)$''',
+  '''(^|/)\.sops\.ya?ml$''',
+  # Placeholder-only example env file (values must stay empty or obviously fake).
+  '''(^|/)\.env\.example$''',
+]

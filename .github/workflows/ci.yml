@@ -17,7 +17,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      # W0-P3: single-source registry (packages/module-registry). Install-free on purpose.
       - run: node scripts/src/check-module-registry.mjs
+      - run: node scripts/src/check-module-registry.mjs --self-test
+      - run: node --test packages/module-registry/test/registry.test.mjs
 
   affected:
     runs-on: ubuntu-latest

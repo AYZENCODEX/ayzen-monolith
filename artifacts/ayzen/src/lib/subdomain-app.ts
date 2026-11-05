@@ -29,6 +29,7 @@
  */
 
 import type { ComponentType } from "react";
+import { MODULES } from "@ayzen/module-registry";
 
 export interface SubdomainApp {
   id: string;
@@ -47,143 +48,16 @@ export interface SubdomainApp {
   kind: "module";
 }
 
-// Add one entry per app as it gets its own subdomain. Vault's routes already all
-// live under /vault (user) and /admin/vault (admin) — see route-config.tsx
-// — so Sylo needed no route renaming to gain a scope here.
-//
-// Phase 3 (this pass): Ryft, Wisp, Verve added the same way — each app's
-// routes already lived under one or two existing prefixes in
-// route-config.tsx, so like Sylo, no page had to move or get renamed.
-//
-// Skarn added the same pass, once it was confirmed (not assumed) that it
-// already exists as a product surface under a different label: the
-// "Protocols" nav group in app-sidebar.tsx (USER_NAV/ADMIN_NAV — comment
-// there literally says "Protocols restructure") IS Skarn — airdrop
-// project tracking, per-project tasks, operator progress. Nothing to
-// build, just scope it: /projects (+ every ?rollup=/?type= filter variant
-// the Category sub-tree uses — hasPrefix's "?" boundary check covers
-// those for free), /tasks and /content (both live inside the Protocols
-// group itself, see app-sidebar.tsx), plus the admin mirror
-// (/admin/projects, /admin/project-templates, /admin/operator-progress,
-// /admin/tasks — same four entries as ADMIN_NAV's own "Protocols" group).
-// Deliberately NOT included, despite being airdrop-farming-adjacent:
-// /teams ("Team" nav group — farming teams, but organizationally its own
-// top-level group, not nested under Protocols), /leaderboard (lives in
-// the "Social" group), /earn (its own "Earn" group), /enroll/* (its own
-// "Enroll" group). Ask before folding any of those in — this pass only
-// claims what the user pointed at as "Protocols."
-//
-// Zynth — added once a real user-facing route existed to scope it to (see
-// CHANGES_ZYNTH_SUBDOMAIN_SPLIT.md). pages/user/assistant.tsx docks the
-// same <AiChat/> that was previously only reachable as a floating widget;
-// seed-oidc-clients.ts already had its OIDC client registered and waiting.
-const SUBDOMAIN_APPS: Record<string, Omit<SubdomainApp, "id">> = {
-  sylo: {
-    label: "Sylo",
-    kind: "module",
-    description: "Vault — credentials, entities and wallets.",
-    order: 1,
-    // Season 1 (Module Shell Split): sylo owns /admin/team-vault outright —
-    // it was double-claimed by warde; the page serves vault data, so the
-    // vault module keeps it (see CHANGES_MODULE_SHELL_S1.md).
-    homePath: "/vault",
-    routePrefixes: ["/vault", "/admin/vault", "/admin/team-vault"],
-  },
-  ryft: {
-    label: "Ryft",
-    kind: "module",
-    description: "Ryft — wallet hub and wallet analysis.",
-    order: 2,
-    // Wallet only — Season 1 of the Module Shell Split (CHANGES_MODULE_SHELL_S1.md)
-    // superseded the old "Investment stays inside Ryft" decision: /finance and
-    // everything on it (including Investments) moved to Fyra, which owns them now.
-    // Ryft keeps /wallet, /wallets and the admin mirror /admin/tools/wallet.
-    homePath: "/wallet",
-    routePrefixes: ["/wallet", "/wallets", "/admin/tools/wallet"],
-  },
-  wisp: {
-    label: "Wisp",
-    kind: "module",
-    description: "Wisp — AYZEN mailbox and email accounts.",
-    order: 4,
-    // /mailbox is the native mail client UI (CHANGES_NATIVE_MAILBOX.md);
-    // /ayzen-email is the account-setup/status page, kept in-scope since a
-    // Wisp visitor still needs it before a mailbox exists.
-    homePath: "/mailbox",
-    routePrefixes: ["/mailbox", "/ayzen-email", "/email-accounts", "/admin/mail-sending-config"],
-  },
-  verve: {
-    label: "Verve",
-    kind: "module",
-    description: "Verve — marketplace and P2P trading.",
-    order: 5,
-    homePath: "/marketplace/hub",
-    routePrefixes: [
-      "/marketplace",
-      "/admin/marketplace",
-      "/admin/marketplace-categories",
-      "/admin/marketplace-market-config",
-    ],
-  },
-  skarn: {
-    label: "Skarn",
-    kind: "module",
-    description: "Skarn — airdrop projects, tasks and operator progress.",
-    order: 6,
-    homePath: "/projects",
-    routePrefixes: [
-      "/projects",
-      "/tasks",
-      "/content",
-      "/admin/projects",
-      "/admin/project-templates",
-      "/admin/operator-progress",
-      "/admin/tasks",
-    ],
-  },
-  zynth: {
-    label: "Zynth",
-    kind: "module",
-    description: "Zynth — AI assistant.",
-    order: 7,
-    homePath: "/assistant",
-    routePrefixes: ["/assistant", "/admin/ai-agent"],
-  },
-  fyra: {
-    label: "Fyra",
-    kind: "module",
-    description: "Fyra — finance: cash flow, loans, investments, assets.",
-    order: 3,
-    // Season 1 of the Module Shell Split: Fyra is its own module, fully
-    // separate from Ryft. Everything /finance (Receivables, Payables, Loans,
-    // Investments, Assets, Expenses, Reports — see route-config.tsx's
-    // "Finance module" block) is Fyra's, with no fyra-specific route left
-    // under ryft. Public token pages under /finance (receipt, invoice,
-    // payment-agreement) stay in ALWAYS_ALLOWED_PREFIXES above so they
-    // render on any host.
-    homePath: "/finance",
-    routePrefixes: ["/finance"],
-  },
-  warde: {
-    label: "Warde",
-    kind: "module",
-    description: "Warde — farming teams, chat and missions.",
-    order: 8,
-    // The "Team" nav group (USER_NAV/MODERATOR_NAV/TEAM_LEADER_NAV — same
-    // shape in all three, ADMIN_NAV's own "Team" group mirrors it) is
-    // farming-team management: members, chat, browse/invite, task &
-    // mission progress, team leaderboard/projects rollup, team vault,
-    // team settings — every one of those is a `/teams?tab=...` variant of
-    // the single route, so one prefix covers all of it (same "?" boundary
-    // hasPrefix() already relies on for Ryft's finance filters and
-    // Skarn's project rollups). /team_leader is included too — the
-    // Sidebar Builder's team-leader-role custom-page route
-    // (`/team_leader/custom/:slug`), the team-leader equivalent of
-    // Skarn/admin's own custom-page routes.
-    homePath: "/teams",
-    routePrefixes: ["/teams", "/team_leader", "/admin/teams"],
-  },
-};
+// W0-P3: the module list (ids, labels, homePath, routePrefixes, order, descriptions) now lives in
+// @ayzen/module-registry, shared with the API server. Add or change a module THERE, not here.
+// The historical per-module scoping rationale is preserved in CHANGES_MODULE_SHELL_S1.md and the
+// comments in packages/module-registry/src/index.mjs.
+const SUBDOMAIN_APPS: Record<string, Omit<SubdomainApp, "id">> = Object.fromEntries(
+  MODULES.map(({ id, label, description, order, homePath, routePrefixes, kind }) => [
+    id,
+    { label, description, order, homePath, routePrefixes: [...routePrefixes], kind } satisfies Omit<SubdomainApp, "id">,
+  ]),
+);
 
 // Pages that make sense to reach from ANY subdomain regardless of scope —
 // auth, the public status page, and every public/unauthenticated token-link
