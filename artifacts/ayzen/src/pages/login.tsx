@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { AuthBackdrop, type BackdropNode } from "@/components/auth/auth-backdrop";
-import { Btn, CodeField, Divider, Field, Heading, Notice } from "@/components/auth/portal";
+import { Btn, Divider, Field, Heading, Notice } from "@/components/auth/portal";
+import { SignupFlow } from "@/components/auth/signup-flow";
 import { Terminal, ArrowRight, Mail, Eye, EyeOff, Check, RefreshCw, Fingerprint, X as XIcon, UserRound } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { SuccessAnimation } from "@/components/success-animation";
@@ -33,20 +34,6 @@ async function backendLogin(email: string, password: string): Promise<any | null
   }
 }
 
-async function backendRegister(username: string, email: string, password: string, emailOtp: string, refCode?: string): Promise<{ token: string; user: any; error?: string } | null> {
-  try {
-    const res = await fetch(`${BASE}/api/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, email, password, emailOtp, ...(refCode ? { refCode } : {}) }),
-    });
-    const data = await res.json();
-    if (!res.ok) return { token: "", user: null, error: data.error ?? "Registration failed" };
-    return data;
-  } catch {
-    return null;
-  }
-}
 
 // Module colours follow the Zynth palette. Module-level so the canvas effect
 // does not restart on every render.
@@ -61,16 +48,6 @@ const PORTAL_NODES: BackdropNode[] = [
   { key: "zynth", color: "#EAF2FF" },
 ];
 
-function makeCaptcha() {
-  const a = Math.floor(Math.random() * 9) + 1;
-  const b = Math.floor(Math.random() * 9) + 1;
-  const ops = [
-    { q: `${a} + ${b}`, ans: a + b },
-    { q: `${a + b} − ${b}`, ans: a },
-    { q: `${a} × ${b > 5 ? 2 : b}`, ans: a * (b > 5 ? 2 : b) },
-  ];
-  return ops[Math.floor(Math.random() * ops.length)];
-}
 
 export default function Login() {
   const setLocation = useModuleAwareNavigate();
@@ -182,23 +159,14 @@ export default function Login() {
     else setLocation("/dashboard");
   }
 
-  const [tab, setTab] = useState<"signin" | "signup" | "magic">("signin");
+  const [tab, setTab] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [refCode, setRefCode] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [magicSent, setMagicSent] = useState(false);
-  const [magicLoading, setMagicLoading] = useState(false);
-  const [magicCode, setMagicCode] = useState("");
-  const [magicVerifyLoading, setMagicVerifyLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
-  const [captcha, setCaptcha] = useState(makeCaptcha);
-  const [captchaInput, setCaptchaInput] = useState("");
-  const [captchaError, setCaptchaError] = useState(false);
 
   // Google-style "choose an account" screen — only relevant when this
   // browser already has other AYZEN accounts saved (see hooks/use-auth.tsx).
@@ -207,18 +175,9 @@ export default function Login() {
   const [showChooser, setShowChooser] = useState(true);
 
   // signup OTP flow
-  const [signupStep, setSignupStep] = useState<"form" | "otp">("form");
-  const [signupOtp, setSignupOtp] = useState("");
-  const [signupSendingOtp, setSignupSendingOtp] = useState(false);
-  const [signupCountdown, setSignupCountdown] = useState(0);
 
   // signin OTP flow (2-step: credentials → email OTP)
-  const [signinStep, setSigninStep] = useState<"form" | "otp" | "stepup">("form");
-  const [signinOtp, setSigninOtp] = useState("");
-  const [signinCountdown, setSigninCountdown] = useState(0);
-  const [tempSigninData, setTempSigninData] = useState<{ token: string; user: any } | null>(null);
-  const [signinOtpSending, setSigninOtpSending] = useState(false);
-  const [signinOtpLoading, setSigninOtpLoading] = useState(false);
+  const [signinStep, setSigninStep] = useState<"form" | "stepup">("form");
   const [keepSignedIn, setKeepSignedIn] = useState(false);
 
   // Anomalous-IP step-up chain (see lib/login-security.ts on the server):
@@ -230,103 +189,13 @@ export default function Login() {
   const [stepUpBackupCode, setStepUpBackupCode] = useState("");
   const [stepUpBusy, setStepUpBusy] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (signupCountdown <= 0) return;
-    const t = setTimeout(() => setSignupCountdown(c => c - 1), 1000);
-    return () => clearTimeout(t);
-  }, [signupCountdown]);
-
-  useEffect(() => {
-    if (signinCountdown <= 0) return;
-    const t = setTimeout(() => setSigninCountdown(c => c - 1), 1000);
-    return () => clearTimeout(t);
-  }, [signinCountdown]);
-
-  const handleSendSignupOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!username || !email || !password) {
-      toast({ variant: "destructive", title: "Fill all fields", description: "Username, email and password are required." });
-      return;
-    }
-    if (password.length < 6) {
-      toast({ variant: "destructive", title: "Password too short", description: "Minimum 6 characters." });
-      return;
-    }
-    if (parseInt(captchaInput) !== captcha.ans) {
-      setCaptchaError(true);
-      setCaptcha(makeCaptcha());
-      setCaptchaInput("");
-      toast({ variant: "destructive", title: "Captcha failed" });
-      return;
-    }
-    setCaptchaError(false);
-    setSignupSendingOtp(true);
-    try {
-      const res = await fetch(`${BASE}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        toast({ title: "Code sent!", description: `6-digit code sent to ${email}` });
-        setSignupStep("otp");
-        setSignupCountdown(60);
-      } else {
-        toast({ variant: "destructive", title: "Failed to send code", description: data.error ?? "Try again." });
-      }
-    } catch {
-      toast({ variant: "destructive", title: "Connection error" });
-    }
-    setSignupSendingOtp(false);
-  };
-
-  const handleResendSignupOtp = async () => {
-    if (signupCountdown > 0) return;
-    setSignupSendingOtp(true);
-    try {
-      const res = await fetch(`${BASE}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
-        toast({ title: "Code resent!" });
-        setSignupCountdown(60);
-      }
-    } catch {}
-    setSignupSendingOtp(false);
-  };
 
 
-  const handleMagicVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!magicCode.trim()) return;
-    setMagicVerifyLoading(true);
-    try {
-      const res = await fetch(`${BASE}/api/auth/magic-link/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code: magicCode.trim() }),
-      });
-      const data = await res.json();
-      if (res.ok && data.token) {
-        setAuthContext(data.user, data.token);
-        setSuccessMsg(`Access granted, ${data.user.username}!`);
-        setShowSuccess(true);
-        setTimeout(() => redirectAfterLogin(data.user.role), 1600);
-      } else {
-        toast({ variant: "destructive", title: data.error ?? "Invalid code" });
-      }
-    } catch {
-      toast({ variant: "destructive", title: "Connection error" });
-    }
-    setMagicVerifyLoading(false);
-  };
 
-  const DEMO_EMAILS = ["demoadmin@ayzen.io", "demo@ayzen.io"];
 
-  const [passkeyLoading, setPasskeyLoading] = useState(false);
+
+
+    const [passkeyLoading, setPasskeyLoading] = useState(false);
 
   const handlePasskeySignIn = async () => {
     setPasskeyLoading(true);
@@ -388,40 +257,18 @@ export default function Login() {
         if (data.requiresStepUp) {
           setStepUp({ challengeToken: data.challengeToken, requiredMethods: data.requiredMethods, completedMethods: data.completedMethods });
           setSigninStep("stepup");
-          toast({ title: "New sign-in location detected", description: "We've sent a confirmation code to your email — please clear every step below to continue." });
+          if (data.emailSendFailed) toast({ variant: "destructive", title: "Could not email the code", description: "Go back and sign in again to get a new one." });
+          else toast({ title: "Check your email", description: "We sent a code. Finish every step below to verify it's you." });
           setLoading(false);
           return;
         }
-        // Demo accounts: skip OTP entirely
-        if (DEMO_EMAILS.includes(email.toLowerCase().trim())) {
-          setAuthContext(data.user, data.token, keepSignedIn);
-          setSuccessMsg(`Welcome back, ${data.user.username}!`);
-          setShowSuccess(true);
-          setTimeout(() => redirectAfterLogin(data.user.role), 1600);
-          setLoading(false);
-          return;
-        }
-        // Step 1: credentials valid — send OTP
-        setTempSigninData(data);
-        setSigninOtpSending(true);
-        try {
-          const otpRes = await fetch(`${BASE}/api/auth/send-otp`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email }),
-          });
-          const otpData = await otpRes.json();
-          if (otpRes.ok) {
-            toast({ title: "Code sent!", description: `Verification code sent to ${email}` });
-            setSigninStep("otp");
-            setSigninCountdown(60);
-          } else {
-            toast({ variant: "destructive", title: "Failed to send code", description: otpData.error ?? "Try again." });
-          }
-        } catch {
-          toast({ variant: "destructive", title: "Connection error sending OTP" });
-        }
-        setSigninOtpSending(false);
+        // No step-up required (seeded demo accounts, or the server runs the
+        // "anomalous" policy and this device is recognised): the session is
+        // already issued.
+        setAuthContext(data.user, data.token, keepSignedIn);
+        setSuccessMsg(`Welcome back, ${data.user.username}!`);
+        setShowSuccess(true);
+        setTimeout(() => redirectAfterLogin(data.user.role), 1600);
       } else {
         toast({ variant: "destructive", title: "Access denied", description: "Invalid credentials. Check email and password." });
       }
@@ -431,47 +278,7 @@ export default function Login() {
     setLoading(false);
   };
 
-  const handleSigninOtpVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!signinOtp.trim() || signinOtp.length !== 6 || !tempSigninData) return;
-    setSigninOtpLoading(true);
-    try {
-      const res = await fetch(`${BASE}/api/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code: signinOtp.trim() }),
-      });
-      const result = await res.json();
-      if (res.ok && result.valid) {
-        setAuthContext(tempSigninData.user, tempSigninData.token, keepSignedIn);
-        setSuccessMsg(`Welcome back, ${tempSigninData.user.username}!`);
-        setShowSuccess(true);
-        setTimeout(() => {
-          redirectAfterLogin(tempSigninData.user.role);
-        }, 1600);
-      } else {
-        toast({ variant: "destructive", title: result.error ?? "Invalid code" });
-        setSigninOtp("");
-      }
-    } catch {
-      toast({ variant: "destructive", title: "Connection error" });
-    }
-    setSigninOtpLoading(false);
-  };
 
-  const handleResendSigninOtp = async () => {
-    if (signinCountdown > 0) return;
-    setSigninOtpSending(true);
-    try {
-      const res = await fetch(`${BASE}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) { toast({ title: "Code resent!" }); setSigninCountdown(60); }
-    } catch {}
-    setSigninOtpSending(false);
-  };
 
   // ─── Anomalous-IP step-up chain ───────────────────────────────────────────
   // Fires when POST /auth/login (or a fresh passkey login) comes back with
@@ -480,7 +287,7 @@ export default function Login() {
   // server for the full design note.
   const grantStepUpSession = (data: any) => {
     setAuthContext(data.user, data.token, keepSignedIn);
-    setSuccessMsg(`Welcome back, ${data.user.username}!`);
+    setSuccessMsg(`Verified. Welcome back, ${data.user.username}!`);
     setShowSuccess(true);
     setStepUp(null);
     setTimeout(() => {
@@ -552,57 +359,7 @@ export default function Login() {
     passkey: "Passkey",
   };
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!signupOtp.trim() || signupOtp.length !== 6) {
-      toast({ variant: "destructive", title: "Enter the 6-digit code" });
-      return;
-    }
-    setLoading(true);
-    try {
-      const data = await backendRegister(username, email, password, signupOtp.trim());
-      if (!data) {
-        toast({ variant: "destructive", title: "Registration failed", description: "Server error. Try again." });
-        setLoading(false);
-        return;
-      }
-      if (data.error) {
-        toast({ variant: "destructive", title: "Registration failed", description: data.error });
-        if (data.error.toLowerCase().includes("code")) setSignupOtp("");
-        setLoading(false);
-        return;
-      }
-      setAuthContext(data.user, data.token);
-      setSuccessMsg("Welcome to AYZEN, Operator!");
-      setShowSuccess(true);
-      setTimeout(() => setLocation("/dashboard"), 1800);
-    } catch {
-      toast({ variant: "destructive", title: "Registration failed", description: "Try again." });
-    }
-    setLoading(false);
-  };
 
-  const handleMagicLink = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) { toast({ variant: "destructive", title: "Enter your email" }); return; }
-    setMagicLoading(true);
-    try {
-      const res = await fetch(`${BASE}/api/auth/magic-link`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        toast({ variant: "destructive", title: data.error ?? "Failed to send magic link" });
-      } else {
-        setMagicSent(true);
-      }
-    } catch {
-      toast({ variant: "destructive", title: "Failed to send magic link" });
-    }
-    setMagicLoading(false);
-  };
 
   const handleDemoAdmin = async () => {
     setLoading(true);
@@ -688,16 +445,12 @@ export default function Login() {
     );
   }
 
-  const view =
-    tab === "magic" ? (magicSent ? "magic-code" : "magic")
-    : tab === "signin" ? (signinStep === "stepup" && stepUp ? "stepup" : signinStep === "otp" ? "signin-otp" : "signin")
-    : signupStep === "otp" ? "signup-otp" : "signup";
-  const showTabs = view === "signin" || view === "signup" || view === "magic";
-  const tabIndex = tab === "signin" ? 0 : tab === "signup" ? 1 : 2;
-  const TABS: Array<{ id: "signin" | "signup" | "magic"; label: string }> = [
+  const view = tab === "signin" ? (signinStep === "stepup" && stepUp ? "stepup" : "signin") : "signup";
+  const showTabs = view === "signin" || view === "signup";
+  const tabIndex = tab === "signin" ? 0 : 1;
+  const TABS: Array<{ id: "signin" | "signup"; label: string }> = [
     { id: "signin", label: "Sign in" },
-    { id: "signup", label: "Create account" },
-    { id: "magic", label: "Email code" },
+    { id: "signup", label: "Sign up" },
   ];
   const showPasskey = tab === "signin" && view === "signin" && browserSupportsWebAuthn();
   const showWorkspace = tab === "signin" && view === "signin" && !getCurrentSubdomainApp() && !oidcReturnTo;
@@ -706,7 +459,7 @@ export default function Login() {
     <div className="zp">
       <SuccessAnimation
         show={showSuccess}
-        message={tab === "signup" ? "Account Created!" : "Access Granted!"}
+        message={tab === "signup" ? "Account created!" : "Account verified!"}
         subMessage={successMsg}
         type={tab === "signup" ? "success" : "login"}
       />
@@ -761,38 +514,18 @@ export default function Login() {
                       type="button"
                       role="tab"
                       aria-selected={tab === t.id}
-                      onClick={() => { setTab(t.id); if (t.id === "magic") setMagicSent(false); }}
+                      onClick={() => setTab(t.id)}
                     >{t.label}</button>
                   ))}
                 </div>
               )}
 
               <div className="zp-view" key={view}>
-                {view === "magic" && (
-                  <form onSubmit={handleMagicLink} className="zp-form">
-                    <Heading title="Sign in with a code" sub="We email you a 6-digit code. No password needed." />
-                    <Field label="Email" type="email" name="email" autoComplete="email" placeholder="you@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                    <Btn type="submit" block busy={magicLoading} icon={<Mail />}>Send code</Btn>
-                  </form>
-                )}
-
-                {view === "magic-code" && (
-                  <div className="zp-form">
-                    <Heading title="Check your email" />
-                    <Notice icon={<Mail />} title="Code sent to">{email}</Notice>
-                    <form onSubmit={handleMagicVerify} className="zp-form">
-                      <CodeField label="6-digit code" value={magicCode} onChange={setMagicCode} autoFocus />
-                      <Btn type="submit" block busy={magicVerifyLoading} disabled={magicCode.length !== 6} icon={<ArrowRight />}>Verify and sign in</Btn>
-                    </form>
-                    <Btn variant="text" onClick={() => { setMagicSent(false); setMagicCode(""); setEmail(""); }}>Use a different email</Btn>
-                  </div>
-                )}
-
                 {view === "stepup" && stepUp && (
                   <div className="zp-form">
-                    <Heading title="Confirm it's you" />
-                    <Notice tone="warn" icon={<Fingerprint />} title="New sign-in location detected">
-                      Complete every check below to continue. This protects your account if someone else has your password.
+                    <Heading title="Verify it's you" sub="Your password was correct. Finish each check below to sign in." />
+                    <Notice icon={<Fingerprint />} title={`${stepUp.completedMethods.length} of ${stepUp.requiredMethods.length} verified`}>
+                      The email code is always required. Authenticator and passkey checks appear if you set them up.
                     </Notice>
                     <div className="zp-steps">
                       {stepUp.requiredMethods.map((method) => {
@@ -844,96 +577,41 @@ export default function Login() {
                   </div>
                 )}
 
-                {view === "signin-otp" && (
-                  <form onSubmit={handleSigninOtpVerify} className="zp-form">
-                    <Heading title="Check your email" />
-                    <Notice icon={<Mail />} title="Verification code sent to">{email}. It expires in 10 minutes.</Notice>
-                    <CodeField label="6-digit code" value={signinOtp} onChange={setSigninOtp} autoFocus />
-                    <Btn type="submit" block busy={signinOtpLoading} disabled={signinOtp.length !== 6} icon={<ArrowRight />}>Verify and sign in</Btn>
-                    <div className="zp-row">
-                      <button type="button" className="zp-link" onClick={() => { setSigninStep("form"); setSigninOtp(""); setTempSigninData(null); }}>← Back to sign in</button>
-                      <button type="button" className="zp-link" onClick={handleResendSigninOtp} disabled={signinCountdown > 0 || signinOtpSending}>
-                        {signinOtpSending ? "Sending…" : signinCountdown > 0 ? `Resend in ${signinCountdown}s` : "Resend code"}
-                      </button>
-                    </div>
-                  </form>
-                )}
-
-                {view === "signup-otp" && (
-                  <form onSubmit={handleSignUp} className="zp-form">
-                    <Heading title="Verify your email" />
-                    <Notice tone="ok" icon={<Check />} title="Verification code sent to">{email}</Notice>
-                    <CodeField label="6-digit code" value={signupOtp} onChange={setSignupOtp} autoFocus />
-                    <Btn type="submit" block busy={loading} disabled={signupOtp.length !== 6} icon={<ArrowRight />}>Create account</Btn>
-                    <div className="zp-row">
-                      <button type="button" className="zp-link" onClick={() => { setSignupStep("form"); setSignupOtp(""); }}>← Change details</button>
-                      <button type="button" className="zp-link" onClick={handleResendSignupOtp} disabled={signupCountdown > 0 || signupSendingOtp}>
-                        {signupSendingOtp ? "Sending…" : signupCountdown > 0 ? `Resend in ${signupCountdown}s` : "Resend code"}
-                      </button>
-                    </div>
-                  </form>
-                )}
-
-                {(view === "signin" || view === "signup") && (
-                  <form onSubmit={tab === "signin" ? handleSignIn : handleSendSignupOtp} className="zp-form">
-                    <Heading
-                      title={tab === "signin" ? "Welcome back" : "Create your account"}
-                      sub={tab === "signin" ? "Sign in to continue to AYZEN." : "We'll email a code to confirm your address."}
-                    />
-                    {tab === "signup" && (
-                      <Field
-                        label="Username" name="username" autoComplete="username" autoCapitalize="none" spellCheck={false}
-                        placeholder="your_handle" value={username} required
-                        onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))}
-                        hint="Lowercase letters, numbers and underscores."
-                      />
-                    )}
+                {view === "signin" && (
+                  <form onSubmit={handleSignIn} className="zp-form">
+                    <Heading title="Welcome back" sub="Enter your email and password. We'll verify it's you next." />
                     <Field
-                      label={tab === "signin" ? "Email or identifier" : "Email"} type="email" name="email"
-                      autoComplete={tab === "signin" ? "username" : "email"} placeholder="you@company.com"
+                      label="Email" type="email" name="email" autoComplete="username" placeholder="you@company.com"
                       value={email} onChange={(e) => setEmail(e.target.value)} required
                     />
                     <Field
-                      label="Password" name="password" type={showPass ? "text" : "password"}
-                      autoComplete={tab === "signin" ? "current-password" : "new-password"}
+                      label="Password" name="password" type={showPass ? "text" : "password"} autoComplete="current-password"
                       value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6}
-                      aside={tab === "signin" ? <Link href="/forgot-password" className="zp-link">Forgot password?</Link> : undefined}
+                      aside={<Link href="/forgot-password" className="zp-link">Forgot password?</Link>}
                       trailing={
                         <button type="button" className="zp-trail" onClick={() => setShowPass((p) => !p)} aria-label={showPass ? "Hide password" : "Show password"} aria-pressed={showPass}>
                           {showPass ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
                         </button>
                       }
                     />
-                    {tab === "signup" && (
-                      <>
-                        <Field
-                          label="Referral code (optional)" name="refCode" autoComplete="off" autoCapitalize="characters" spellCheck={false}
-                          placeholder="AYZNXXXXXX" value={refCode} onChange={(e) => setRefCode(e.target.value.toUpperCase())}
-                          hint={refCode ? "This code will be applied when you register." : undefined}
-                        />
-                        <Field
-                          label={`Security check: ${captcha.q} = ?`} type="number" inputMode="numeric" name="captcha" placeholder="Your answer"
-                          value={captchaInput} onChange={(e) => { setCaptchaInput(e.target.value); setCaptchaError(false); }}
-                          error={captchaError ? "That answer is wrong. Try the new question." : null}
-                          aside={
-                            <button type="button" className="zp-link" onClick={() => { setCaptcha(makeCaptcha()); setCaptchaInput(""); setCaptchaError(false); }}>
-                              <RefreshCw style={{ width: 12, height: 12, display: "inline", marginRight: 4, verticalAlign: "-1px" }} aria-hidden="true" />New question
-                            </button>
-                          }
-                          required
-                        />
-                      </>
-                    )}
-                    {tab === "signin" && (
-                      <button type="button" className="zp-check" role="checkbox" aria-checked={keepSignedIn} onClick={() => setKeepSignedIn((p) => !p)}>
-                        <b>{keepSignedIn && <Check aria-hidden="true" />}</b>
-                        Keep me signed in on this device
-                      </button>
-                    )}
-                    <Btn type="submit" block busy={loading || signupSendingOtp} disabled={isLoading} icon={tab === "signin" ? <ArrowRight /> : <Mail />}>
-                      {tab === "signin" ? "Sign in" : "Send verification code"}
-                    </Btn>
+                    <button type="button" className="zp-check" role="checkbox" aria-checked={keepSignedIn} onClick={() => setKeepSignedIn((p) => !p)}>
+                      <b>{keepSignedIn && <Check aria-hidden="true" />}</b>
+                      Keep me signed in on this device
+                    </button>
+                    <Btn type="submit" block busy={loading} disabled={isLoading} icon={<ArrowRight />}>Continue</Btn>
                   </form>
+                )}
+
+                {view === "signup" && (
+                  <SignupFlow
+                    onSwitchToSignIn={() => setTab("signin")}
+                    onComplete={(user, token) => {
+                      setAuthContext(user, token);
+                      setSuccessMsg(`Welcome to AYZEN, ${user.displayName || user.username}!`);
+                      setShowSuccess(true);
+                      setTimeout(() => setLocation("/dashboard"), 1800);
+                    }}
+                  />
                 )}
 
                 {(showPasskey || showWorkspace) && (
@@ -951,7 +629,7 @@ export default function Login() {
                 )}
               </div>
 
-              <details className="zp-dev">
+              <details className="zp-dev" hidden={view !== "signin"}>
                 <summary>Developer access</summary>
                 <div className="zp-dev-grid">
                   <Btn variant="ghost" onClick={handleDemoAdmin} disabled={isLoading}>Admin</Btn>
@@ -964,10 +642,9 @@ export default function Login() {
             </>
           )}
 
-          <p className="zp-foot">
-            {tab === "signin" ? <>New to AYZEN? <button type="button" onClick={() => setTab("signup")}>Request access</button></>
-              : tab === "signup" ? <>Already have access? <button type="button" onClick={() => setTab("signin")}>Sign in</button></>
-              : <>Prefer a password? <button type="button" onClick={() => setTab("signin")}>Sign in</button></>}
+          <p className="zp-foot" hidden={view === "stepup"}>
+            {tab === "signin" ? <>New to AYZEN? <button type="button" onClick={() => setTab("signup")}>Sign up</button></>
+              : <>Already have an account? <button type="button" onClick={() => setTab("signin")}>Sign in</button></>}
           </p>
         </div>
       </main>

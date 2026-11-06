@@ -197,3 +197,5 @@ export async function bumpChallengeAttempts(token: string): Promise<{ attempts: 
 export function stepUpOtpKey(challengeToken: string): string {
   return `stepup:${challengeToken}`;
 }
+
+export { DEMO_LOGIN_EMAILS, getStepUpPolicy, loginNeedsStepUp, type StepUpPolicy } from "./login-step-up-policy";

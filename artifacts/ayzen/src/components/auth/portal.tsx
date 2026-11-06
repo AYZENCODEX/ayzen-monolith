@@ -105,3 +105,19 @@ export function Heading({ title, sub }: { title: string; sub?: ReactNode }) {
     </header>
   );
 }
+
+/** Ordered steps of a multi-screen flow. Only used where the content really is a sequence. */
+export function Stepper({ steps, current }: { steps: string[]; current: number }) {
+  return (
+    <nav className="zp-stepper" aria-label="Sign-up progress">
+      <ol>
+        {steps.map((label, i) => (
+          <li key={label} className={i < current ? "is-done" : i === current ? "is-now" : ""} aria-current={i === current ? "step" : undefined}>
+            <span className="zp-sr">{label}</span>
+          </li>
+        ))}
+      </ol>
+      <p>Step {current + 1} of {steps.length}: {steps[current]}</p>
+    </nav>
+  );
+}

@@ -6,6 +6,8 @@ import { createNotification } from "./notifications";
 
 const router = Router();
 
+import { normalizeDisplayName } from "../lib/signup-validation";
+
 function sanitizeUser(user: typeof usersTable.$inferSelect) {
   const { passwordHash: _ph, twoFaSecret: _ts, ...safe } = user;
   return {
@@ -173,7 +175,7 @@ router.put("/profile", requireAuth, async (req, res): Promise<void> => {
 
   const {
     bio, twitterHandle, discordHandle, websiteUrl, telegramHandle, avatarUrl, username,
-    whatsappNumber, facebookUrl, location,
+    whatsappNumber, facebookUrl, location, displayName,
   } = req.body as Record<string, string>;
   const updates: Record<string, unknown> = {};
   if (bio !== undefined) updates.bio = bio.slice(0, 300);
@@ -186,6 +188,7 @@ router.put("/profile", requireAuth, async (req, res): Promise<void> => {
   if (whatsappNumber !== undefined) updates.whatsappNumber = whatsappNumber.trim().slice(0, 30);
   if (facebookUrl !== undefined) updates.facebookUrl = facebookUrl.trim().slice(0, 300);
   if (location !== undefined) updates.location = location.trim().slice(0, 100);
+  if (displayName !== undefined) updates.displayName = normalizeDisplayName(displayName);
 
   const [updated] = await db.update(usersTable).set(updates).where(eq(usersTable.id, userId)).returning();
   if (!updated) { res.status(404).json({ error: "Not found" }); return; }

@@ -10,9 +10,13 @@ import { hashPassword, verifyPassword, needsRehash } from "../lib/password";
 import { authLimiter, otpLimiter } from "../middlewares/security";
 import { totpVerify } from "../lib/totp";
 import { generateOtp, storeOtp, verifyOtp } from "../lib/otp-store";
+import { issueSignupProof, redeemSignupProof } from "../lib/signup-proof";
+import { validateUsername, normalizeDisplayName } from "../lib/signup-validation";
 import {
   getClientIp,
   isAnomalousIp,
+  loginNeedsStepUp,
+  getStepUpPolicy,
   recordLoginHistory,
   markLoginHistoryStatus,
   availableStepUpMethods,
@@ -256,23 +260,51 @@ router.post("/auth/send-otp", otpLimiter, async (req, res): Promise<void> => {
   res.json({ message: "Verification code sent to your email." });
 });
 
+// ─── POST /auth/signup/verify-email — confirm the code, return a one-time proof ─
+router.post("/auth/signup/verify-email", authLimiter, async (req, res): Promise<void> => {
+  const { email, code } = req.body ?? {};
+  if (!email || !code) { res.status(400).json({ error: "email and code are required" }); return; }
+  if (!(await verifyOtp(String(email), String(code)))) {
+    res.status(400).json({ error: "Invalid or expired code. Please request a new one." }); return;
+  }
+  res.json({ valid: true, emailProof: await issueSignupProof(String(email)) });
+});
+
+// ─── GET /auth/username-available/:username — public, rate limited ───────────
+router.get("/auth/username-available/:username", authLimiter, async (req, res): Promise<void> => {
+  const raw = Array.isArray(req.params.username) ? req.params.username[0] : req.params.username;
+  const username = String(raw ?? "");
+  const problem = validateUsername(username);
+  if (problem) { res.json({ available: false, reason: problem }); return; }
+  const [row] = await db.select({ id: usersTable.id }).from(usersTable).where(eq(usersTable.username, username)).limit(1);
+  res.json(row ? { available: false, reason: "That username is taken." } : { available: true });
+});
+
 // ─── POST /auth/register ─────────────────────────────────────────────────────
 router.post("/auth/register", authLimiter, async (req, res): Promise<void> => {
-  const { username, email, password, refCode, emailOtp } = req.body;
+  const { username, email, password, refCode, emailOtp, emailProof, displayName } = req.body;
   if (!username || !email || !password) {
     res.status(400).json({ error: "username, email, and password are required" }); return;
   }
+  const usernameProblem = validateUsername(username);
+  if (usernameProblem) { res.status(400).json({ error: usernameProblem }); return; }
 
-  // Verify OTP if provided (required for new registrations)
-  if (!emailOtp) {
-    res.status(400).json({ error: "Email verification code is required. Please request a code first." }); return;
+  // The email must be confirmed: either a fresh 6-digit code (legacy single
+  // form) or the proof issued by POST /auth/signup/verify-email.
+  if (!emailOtp && !emailProof) {
+    res.status(400).json({ error: "Email verification is required. Please request a code first." }); return;
   }
-  if (!(await verifyOtp(email, emailOtp))) {
-    res.status(400).json({ error: "Invalid or expired verification code. Please request a new one." }); return;
+  const emailConfirmed = emailProof
+    ? await redeemSignupProof(email, String(emailProof))
+    : await verifyOtp(email, String(emailOtp));
+  if (!emailConfirmed) {
+    res.status(400).json({ error: "Invalid or expired verification. Please request a new code." }); return;
   }
 
   const existing = await db.select().from(usersTable).where(eq(usersTable.email, email));
   if (existing.length > 0) { res.status(409).json({ error: "Email already registered" }); return; }
+  const nameTaken = await db.select({ id: usersTable.id }).from(usersTable).where(eq(usersTable.username, username));
+  if (nameTaken.length > 0) { res.status(409).json({ error: "Username already taken" }); return; }
 
   let referralCode = generateReferralCode();
   let codeExists = true;
@@ -291,6 +323,7 @@ router.post("/auth/register", authLimiter, async (req, res): Promise<void> => {
 
   const [user] = await db.insert(usersTable).values({
     username, email, passwordHash: await hashPassword(password),
+    displayName: normalizeDisplayName(displayName),
     role: "user", status: "active", emailVerified: true, twoFaEnabled: false,
     referralCode,
     ...(referredBy ? { referredBy } : {}),
@@ -384,8 +417,8 @@ function stepUpEmailHtml(code: string): string {
 </div></body></html>`;
 }
 
-async function beginStepUpChallenge(userId: number, email: string, ip: string, userAgent: string | null) {
-  const loginHistoryId = await recordLoginHistory({ userId, ip, userAgent, status: "pending_verification", anomalous: true });
+async function beginStepUpChallenge(userId: number, email: string, ip: string, userAgent: string | null, anomalous = true) {
+  const loginHistoryId = await recordLoginHistory({ userId, ip, userAgent, status: "pending_verification", anomalous });
   const requiredMethods = await availableStepUpMethods(userId);
   const challenge = await createLoginChallenge({ userId, ip, userAgent, requiredMethods, loginHistoryId });
 
@@ -446,11 +479,12 @@ router.post("/auth/login", authLimiter, async (req, res): Promise<void> => {
   }
 
   // ── Login pattern check: unrecognized IP → require full step-up chain ──────
-  if (await isAnomalousIp(user.id, ip)) {
-    const { challenge, emailSendFailed } = await beginStepUpChallenge(user.id, user.email, ip, userAgent);
+  const anomalousIp = await isAnomalousIp(user.id, ip);
+  if (loginNeedsStepUp({ policy: getStepUpPolicy(), email: user.email, anomalousIp })) {
+    const { challenge, emailSendFailed } = await beginStepUpChallenge(user.id, user.email, ip, userAgent, anomalousIp);
     res.status(200).json({
       requiresStepUp: true,
-      reason: "new_ip",
+      reason: anomalousIp ? "new_ip" : "policy",
       challengeToken: challenge.token,
       requiredMethods: challenge.requiredMethods,
       completedMethods: challenge.completedMethods,
