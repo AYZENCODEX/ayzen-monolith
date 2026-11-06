@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Terminal, ArrowRight, Loader2, Mail, User, Eye, EyeOff, Sparkles, Check, RefreshCw, KeyRound, Fingerprint, X as XIcon, UserRound } from "lucide-react";
+import { AuthBackdrop, type BackdropNode } from "@/components/auth/auth-backdrop";
+import { Btn, CodeField, Divider, Field, Heading, Notice } from "@/components/auth/portal";
+import { Terminal, ArrowRight, Mail, Eye, EyeOff, Check, RefreshCw, Fingerprint, X as XIcon, UserRound } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { SuccessAnimation } from "@/components/success-animation";
 import { loginWithPasskey, browserSupportsWebAuthn } from "@/lib/passkey-api";
@@ -48,6 +47,19 @@ async function backendRegister(username: string, email: string, password: string
     return null;
   }
 }
+
+// Module colours follow the Zynth palette. Module-level so the canvas effect
+// does not restart on every render.
+const PORTAL_NODES: BackdropNode[] = [
+  { key: "sylo", color: "#5FE3D6" },
+  { key: "skarn", color: "#8F7CFF" },
+  { key: "warde", color: "#7CC4FF" },
+  { key: "wisp", color: "#FF6FB5" },
+  { key: "ryft", color: "#FFB86B" },
+  { key: "fyra", color: "#9BE37C" },
+  { key: "verve", color: "#C58CFF" },
+  { key: "zynth", color: "#EAF2FF" },
+];
 
 function makeCaptcha() {
   const a = Math.floor(Math.random() * 9) + 1;
@@ -670,547 +682,295 @@ export default function Login() {
   // page's own credential form — see the effect above for why.
   if (cutoverRedirectState !== "done") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
-        INITIALIZING...
+      <div className="zp-boot" role="status" aria-label="Loading">
+        <i />
       </div>
     );
   }
 
+  const view =
+    tab === "magic" ? (magicSent ? "magic-code" : "magic")
+    : tab === "signin" ? (signinStep === "stepup" && stepUp ? "stepup" : signinStep === "otp" ? "signin-otp" : "signin")
+    : signupStep === "otp" ? "signup-otp" : "signup";
+  const showTabs = view === "signin" || view === "signup" || view === "magic";
+  const tabIndex = tab === "signin" ? 0 : tab === "signup" ? 1 : 2;
+  const TABS: Array<{ id: "signin" | "signup" | "magic"; label: string }> = [
+    { id: "signin", label: "Sign in" },
+    { id: "signup", label: "Create account" },
+    { id: "magic", label: "Email code" },
+  ];
+  const showPasskey = tab === "signin" && view === "signin" && browserSupportsWebAuthn();
+  const showWorkspace = tab === "signin" && view === "signin" && !getCurrentSubdomainApp() && !oidcReturnTo;
+
   return (
-    <div className="min-h-screen w-full bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="zp">
       <SuccessAnimation
         show={showSuccess}
         message={tab === "signup" ? "Account Created!" : "Access Granted!"}
         subMessage={successMsg}
         type={tab === "signup" ? "success" : "login"}
       />
-      <div className="absolute inset-0 z-0 opacity-[0.02]"
-        style={{ backgroundImage: "linear-gradient(to right, #808080 1px, transparent 1px), linear-gradient(to bottom, #808080 1px, transparent 1px)", backgroundSize: "40px 40px" }}
-      />
+      <AuthBackdrop nodes={PORTAL_NODES} className="zp-canvas" />
 
-      <div className="w-full max-w-md space-y-8 relative z-10">
-        <div className="text-center">
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 shadow-[0_0_20px_rgba(0,255,255,0.08)]">
-              <Terminal className="w-8 h-8 text-primary" />
-            </div>
-          </div>
-          <h1 className="text-4xl font-mono font-bold tracking-tighter text-foreground mb-2">AYZEN</h1>
-          <p className="text-muted-foreground font-mono text-xs uppercase tracking-[0.3em]">Airdrop Command Center</p>
+      <section className="zp-brand" aria-label="About AYZEN">
+        <div className="zp-logo"><span>AYZEN</span><small>command center</small></div>
+        <div className="zp-pitch">
+          <h1>One sign-in.<br /><em>Every module</em> opens.</h1>
+          <p>Vault, projects, teams, mail, wallet, finance and marketplace share one identity, so you sign in once and keep your place.</p>
+          <div className="zp-status">Passkeys, email codes and new-location checks</div>
         </div>
+      </section>
 
-        {accounts?.length > 0 && showChooser ? (
-          <div className="bg-card border border-card-border p-6 shadow-2xl relative">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-60" />
-            <p className="text-center text-xs font-mono text-muted-foreground uppercase tracking-widest mb-4">Choose an account</p>
-            <div className="space-y-1.5">
-              {accounts.map((acc: any) => (
-                <div
-                  key={acc.id}
-                  className="group flex items-center gap-3 px-3 py-2.5 rounded-lg border border-border/30 hover:border-primary/40 hover:bg-primary/5 transition-all"
-                >
-                  <button
-                    onClick={() => { switchAccount(acc.id); setLocation("/"); }}
-                    className="flex items-center gap-3 flex-1 min-w-0 text-left"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center font-bold text-xs uppercase text-primary flex-shrink-0">
-                      {acc.username?.[0] || "U"}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-mono text-sm text-foreground truncate">{acc.username}</div>
-                      <div className="font-mono text-[10px] text-muted-foreground truncate">{acc.email}</div>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => removeAccount(acc.id)}
-                    title="Remove from this browser"
-                    className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-opacity flex-shrink-0 p-1"
-                  >
-                    <XIcon className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
+      <main className="zp-stage">
+        <div className="zp-panel">
+          {accounts?.length > 0 && showChooser ? (
+            <div className="zp-view" key="chooser">
+              <Heading title="Choose an account" sub="Pick up where you left off on this device." />
+              <ul className="zp-accounts" style={{ listStyle: "none", padding: 0, margin: "0 0 14px" }}>
+                {accounts.map((acc: any) => (
+                  <li key={acc.id} className="zp-account">
+                    <button type="button" onClick={() => { switchAccount(acc.id); setLocation("/"); }}>
+                      <span className="zp-avatar" aria-hidden="true">{acc.username?.[0] || "U"}</span>
+                      <span style={{ minWidth: 0 }}>
+                        <strong>{acc.username}</strong>
+                        <small>{acc.email}</small>
+                      </span>
+                    </button>
+                    <button type="button" className="zp-x" onClick={() => removeAccount(acc.id)} aria-label={`Remove ${acc.username} from this browser`}>
+                      <XIcon aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <Btn variant="ghost" block icon={<UserRound />} onClick={() => setShowChooser(false)}>Use another account</Btn>
             </div>
-            <button
-              onClick={() => setShowChooser(false)}
-              className="w-full mt-4 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-xs font-mono text-primary border border-border/30 hover:border-primary/40 hover:bg-primary/5 transition-all"
-            >
-              <UserRound className="w-3.5 h-3.5" /> Use another account
-            </button>
-          </div>
-        ) : (
-        <div className="bg-card border border-card-border p-8 shadow-2xl relative">
-          {accounts?.length > 0 && (
-            <button
-              onClick={() => setShowChooser(true)}
-              className="absolute -top-3 right-3 text-[10px] font-mono text-muted-foreground hover:text-primary bg-card border border-border/40 rounded-full px-2.5 py-1 flex items-center gap-1"
-            >
-              <UserRound className="w-3 h-3" /> Switch account
-            </button>
-          )}
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-60" />
+          ) : (
+            <>
+              {accounts?.length > 0 && (
+                <Btn variant="ghost" className="zp-switch" icon={<UserRound />} style={{ height: 28, padding: "0 12px", fontSize: ".75rem", background: "#0c0c14" }} onClick={() => setShowChooser(true)}>
+                  Switch account
+                </Btn>
+              )}
 
-          <div className="flex mb-6 border border-border rounded overflow-hidden">
-            <button
-              onClick={() => setTab("signin")}
-              className={`flex-1 py-2 text-xs font-mono uppercase tracking-widest transition-colors ${tab === "signin" ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground"}`}
-            >Sign In</button>
-            <button
-              onClick={() => setTab("signup")}
-              className={`flex-1 py-2 text-xs font-mono uppercase tracking-widest transition-colors ${tab === "signup" ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground"}`}
-            >Sign Up</button>
-            <button
-              onClick={() => { setTab("magic"); setMagicSent(false); }}
-              className={`flex-1 py-2 text-xs font-mono uppercase tracking-widest transition-colors flex items-center justify-center gap-1 ${tab === "magic" ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground"}`}
-            ><Sparkles className="w-3 h-3" /> Magic</button>
-          </div>
+              {showTabs && (
+                <div className="zp-tabs" role="tablist" aria-label="Access method" style={{ ["--i" as any]: tabIndex }}>
+                  <i aria-hidden="true" />
+                  {TABS.map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={tab === t.id}
+                      onClick={() => { setTab(t.id); if (t.id === "magic") setMagicSent(false); }}
+                    >{t.label}</button>
+                  ))}
+                </div>
+              )}
 
-          {tab === "magic" ? (
-            <div className="space-y-4">
-              {magicSent ? (
-                <div className="space-y-4">
-                  <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-center">
-                    <div className="font-mono text-xs text-muted-foreground">Code sent to</div>
-                    <div className="font-mono text-sm text-foreground font-bold">{email}</div>
-                  </div>
-                  <form onSubmit={handleMagicVerify} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Enter 6-Digit Code</Label>
-                      <Input
-                        type="text"
-                        inputMode="numeric"
-                        placeholder="000000"
-                        maxLength={6}
-                        value={magicCode}
-                        onChange={e => setMagicCode(e.target.value.replace(/\D/g, ""))}
-                        className="bg-input border-border font-mono h-14 text-center text-2xl tracking-[0.5em] focus-visible:ring-primary/50"
-                        autoFocus required
-                      />
-                    </div>
-                    <Button type="submit" disabled={magicCode.length !== 6 || magicVerifyLoading} className="w-full h-11 font-mono font-bold uppercase tracking-widest">
-                      {magicVerifyLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span className="flex items-center gap-2">Verify & Enter <Sparkles className="w-4 h-4" /></span>}
-                    </Button>
+              <div className="zp-view" key={view}>
+                {view === "magic" && (
+                  <form onSubmit={handleMagicLink} className="zp-form">
+                    <Heading title="Sign in with a code" sub="We email you a 6-digit code. No password needed." />
+                    <Field label="Email" type="email" name="email" autoComplete="email" placeholder="you@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <Btn type="submit" block busy={magicLoading} icon={<Mail />}>Send code</Btn>
                   </form>
-                  <Button variant="ghost" size="sm" className="w-full font-mono text-xs text-muted-foreground" onClick={() => { setMagicSent(false); setMagicCode(""); setEmail(""); }}>
-                    ← Try different email
-                  </Button>
-                </div>
-              ) : (
-                <form onSubmit={handleMagicLink} className="space-y-4">
-                  <div className="text-center pb-2">
-                    <div className="flex justify-center mb-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-                        <Sparkles className="w-5 h-5 text-primary" />
-                      </div>
-                    </div>
-                    <div className="font-mono text-xs text-muted-foreground">
-                      Enter your email — we'll send you a 6-digit code. No password needed.
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input type="email" placeholder="operator@command.io" value={email} onChange={e => setEmail(e.target.value)}
-                        className="bg-input border-border font-mono h-11 pl-9 focus-visible:ring-primary/50 focus-visible:border-primary" required />
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full h-11 font-mono font-bold uppercase tracking-widest" disabled={magicLoading}>
-                    {magicLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span className="flex items-center gap-2">Send Code <Sparkles className="w-4 h-4" /></span>}
-                  </Button>
-                </form>
-              )}
-            </div>
-          ) : tab === "signin" && signinStep === "stepup" && stepUp ? (
-            <div className="space-y-4">
-              <div className="bg-red-500/5 border border-red-500/20 rounded-lg p-4 text-center">
-                <Fingerprint className="w-7 h-7 text-red-400 mx-auto mb-2" />
-                <p className="font-mono text-xs font-bold text-foreground">New sign-in location detected</p>
-                <p className="font-mono text-[10px] text-muted-foreground/60 mt-1">
-                  Clear every step below to continue — this protects your account if someone else has your password.
-                </p>
-              </div>
-
-              <div className="space-y-2.5">
-                {stepUp.requiredMethods.map((method) => {
-                  const done = stepUp.completedMethods.includes(method);
-                  const busy = stepUpBusy === method;
-                  return (
-                    <div key={method} className={`rounded-lg border px-3 py-2.5 transition-colors ${done ? "border-emerald-400/30 bg-emerald-400/5" : "border-border bg-card"}`}>
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-mono text-xs font-semibold flex items-center gap-1.5">
-                          {done && <Check className="w-3.5 h-3.5 text-emerald-400" />}
-                          {stepUpMethodLabel[method] ?? method}
-                        </span>
-                        {done && <span className="font-mono text-[9px] uppercase tracking-wider text-emerald-400">Verified</span>}
-                      </div>
-
-                      {!done && method === "email_otp" && (
-                        <div className="flex items-center gap-2 mt-2">
-                          <Input
-                            type="text" inputMode="numeric" placeholder="000000" maxLength={6}
-                            value={stepUpEmailCode}
-                            onChange={e => setStepUpEmailCode(e.target.value.replace(/\D/g, ""))}
-                            className="bg-input border-border font-mono h-9 text-center tracking-[0.3em]"
-                          />
-                          <Button type="button" size="sm" className="h-9 font-mono text-xs shrink-0"
-                            disabled={busy || stepUpEmailCode.length !== 6}
-                            onClick={() => submitStepUpMethod("email_otp", stepUpEmailCode)}>
-                            {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Verify"}
-                          </Button>
-                        </div>
-                      )}
-
-                      {!done && method === "totp" && (
-                        <div className="flex items-center gap-2 mt-2">
-                          <Input
-                            type="text" inputMode="numeric" placeholder="000000" maxLength={6}
-                            value={stepUpTotpCode}
-                            onChange={e => setStepUpTotpCode(e.target.value.replace(/\D/g, ""))}
-                            className="bg-input border-border font-mono h-9 text-center tracking-[0.3em]"
-                          />
-                          <Button type="button" size="sm" className="h-9 font-mono text-xs shrink-0"
-                            disabled={busy || stepUpTotpCode.length !== 6}
-                            onClick={() => submitStepUpMethod("totp", stepUpTotpCode)}>
-                            {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Verify"}
-                          </Button>
-                        </div>
-                      )}
-
-                      {!done && method === "backup_code" && (
-                        <div className="flex items-center gap-2 mt-2">
-                          <Input
-                            type="text" placeholder="XXXX-XXXX"
-                            value={stepUpBackupCode}
-                            onChange={e => setStepUpBackupCode(e.target.value.toUpperCase())}
-                            className="bg-input border-border font-mono h-9 text-center tracking-widest"
-                          />
-                          <Button type="button" size="sm" className="h-9 font-mono text-xs shrink-0"
-                            disabled={busy || !stepUpBackupCode.trim()}
-                            onClick={() => submitStepUpMethod("backup_code", stepUpBackupCode)}>
-                            {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Verify"}
-                          </Button>
-                        </div>
-                      )}
-
-                      {!done && method === "passkey" && (
-                        <Button type="button" size="sm" variant="outline" className="w-full h-9 font-mono text-xs mt-2 gap-1.5"
-                          disabled={busy} onClick={submitStepUpPasskey}>
-                          {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><Fingerprint className="w-3.5 h-3.5" /> Verify with passkey</>}
-                        </Button>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              <button type="button" onClick={() => { setStepUp(null); setSigninStep("form"); setStepUpEmailCode(""); setStepUpTotpCode(""); setStepUpBackupCode(""); }}
-                className="font-mono text-xs text-muted-foreground hover:text-foreground underline">
-                ← Back to login
-              </button>
-            </div>
-          ) : tab === "signin" && signinStep === "otp" ? (
-            <form onSubmit={handleSigninOtpVerify} className="space-y-4">
-              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-center">
-                <Mail className="w-7 h-7 text-primary mx-auto mb-2" />
-                <p className="font-mono text-xs text-muted-foreground">Verification code sent to</p>
-                <p className="font-mono text-sm text-foreground font-bold">{email}</p>
-                <p className="font-mono text-[10px] text-muted-foreground/60 mt-1">Check your inbox — code expires in 10 minutes</p>
-              </div>
-              <div className="space-y-2">
-                <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">6-Digit Code</Label>
-                <Input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="000000"
-                  maxLength={6}
-                  value={signinOtp}
-                  onChange={e => setSigninOtp(e.target.value.replace(/\D/g, ""))}
-                  className="bg-input border-border font-mono h-14 text-center text-2xl tracking-[0.5em] focus-visible:ring-primary/50 focus-visible:border-primary"
-                  autoFocus required
-                />
-              </div>
-              <Button type="submit" disabled={signinOtpLoading || signinOtp.length !== 6}
-                className="w-full h-11 font-mono font-bold uppercase tracking-widest bg-primary text-primary-foreground hover:bg-primary/90">
-                {signinOtpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span className="flex items-center gap-2">Verify & Enter <ArrowRight className="w-4 h-4" /></span>}
-              </Button>
-              <div className="flex items-center justify-between">
-                <button type="button" onClick={() => { setSigninStep("form"); setSigninOtp(""); setTempSigninData(null); }}
-                  className="font-mono text-xs text-muted-foreground hover:text-foreground underline">
-                  ← Back to login
-                </button>
-                <button type="button" onClick={handleResendSigninOtp} disabled={signinCountdown > 0 || signinOtpSending}
-                  className="font-mono text-xs text-primary disabled:opacity-40">
-                  {signinOtpSending ? "Sending…" : signinCountdown > 0 ? `Resend in ${signinCountdown}s` : "Resend Code"}
-                </button>
-              </div>
-            </form>
-          ) : tab === "signup" && signupStep === "otp" ? (
-            <form onSubmit={handleSignUp} className="space-y-4">
-              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-center">
-                <Check className="w-7 h-7 text-primary mx-auto mb-2" />
-                <p className="font-mono text-xs text-muted-foreground">Verification code sent to</p>
-                <p className="font-mono text-sm text-foreground font-bold">{email}</p>
-              </div>
-              <div className="space-y-2">
-                <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">6-Digit Code</Label>
-                <Input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="000000"
-                  maxLength={6}
-                  value={signupOtp}
-                  onChange={e => setSignupOtp(e.target.value.replace(/\D/g, ""))}
-                  className="bg-input border-border font-mono h-14 text-center text-2xl tracking-[0.5em] focus-visible:ring-primary/50 focus-visible:border-primary"
-                  autoFocus required
-                />
-              </div>
-              <Button type="submit" disabled={loading || signupOtp.length !== 6}
-                className="w-full h-11 font-mono font-bold uppercase tracking-widest bg-primary text-primary-foreground hover:bg-primary/90">
-                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span className="flex items-center gap-2">Create Account <ArrowRight className="w-4 h-4" /></span>}
-              </Button>
-              <div className="flex items-center justify-between">
-                <button type="button" onClick={() => { setSignupStep("form"); setSignupOtp(""); }}
-                  className="font-mono text-xs text-muted-foreground hover:text-foreground underline">
-                  ← Change details
-                </button>
-                <button type="button" onClick={handleResendSignupOtp} disabled={signupCountdown > 0 || signupSendingOtp}
-                  className="font-mono text-xs text-primary disabled:opacity-40">
-                  {signupSendingOtp ? "Sending…" : signupCountdown > 0 ? `Resend in ${signupCountdown}s` : "Resend Code"}
-                </button>
-              </div>
-            </form>
-          ) : (
-          <form onSubmit={tab === "signin" ? handleSignIn : handleSendSignupOtp} className="space-y-4">
-            {tab === "signup" && (
-              <div className="space-y-2">
-                <Label htmlFor="username" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Username</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="username"
-                    type="text"
-                    placeholder="operator_handle"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))}
-                    className="bg-input border-border font-mono h-11 pl-9 focus-visible:ring-primary/50 focus-visible:border-primary"
-                    required
-                  />
-                </div>
-              </div>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="email" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                {tab === "signin" ? "Email / Identifier" : "Email"}
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="operator@command.io"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-input border-border font-mono h-11 pl-9 focus-visible:ring-primary/50 focus-visible:border-primary"
-                  required
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Passphrase</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPass ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="bg-input border-border font-mono h-11 pr-10 focus-visible:ring-primary/50 focus-visible:border-primary"
-                  required
-                  minLength={6}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPass(p => !p)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            {tab === "signup" && (
-              <div className="space-y-2">
-                <Label htmlFor="refCode" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-                  Referral Code <span className="text-muted-foreground/40">(optional)</span>
-                </Label>
-                <Input
-                  id="refCode"
-                  type="text"
-                  placeholder="AYZNXXXXXX"
-                  value={refCode}
-                  onChange={e => setRefCode(e.target.value.toUpperCase())}
-                  className="bg-input border-border font-mono h-11 focus-visible:ring-primary/50 focus-visible:border-primary uppercase placeholder:normal-case placeholder:text-muted-foreground"
-                />
-                {refCode && <p className="text-[10px] font-mono text-primary">✓ Referral code will be applied on registration</p>}
-              </div>
-            )}
-            {tab === "signup" && (
-              <div className="space-y-2">
-                <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Security Check <span className="text-red-400">*</span>
-                </Label>
-                <div className="flex items-center gap-3">
-                  <div className="flex-shrink-0 bg-primary/5 border border-primary/20 rounded px-4 py-2 font-mono text-sm font-bold text-primary tracking-widest select-none">
-                    {captcha.q} = ?
-                  </div>
-                  <Input
-                    type="number"
-                    value={captchaInput}
-                    onChange={e => { setCaptchaInput(e.target.value); setCaptchaError(false); }}
-                    placeholder="Answer"
-                    className={`bg-input border-border font-mono h-11 focus-visible:ring-primary/50 focus-visible:border-primary ${captchaError ? "border-red-400/50" : ""}`}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => { setCaptcha(makeCaptcha()); setCaptchaInput(""); setCaptchaError(false); }}
-                    className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0"
-                    title="New question"
-                  >
-                    <RefreshCw className="w-4 h-4" />
-                  </button>
-                </div>
-                {captchaError && <p className="font-mono text-[10px] text-red-400">Wrong answer. Try the new question.</p>}
-              </div>
-            )}
-
-            {tab === "signin" && (
-              <div className="flex items-center gap-2.5 py-1">
-                <button
-                  type="button"
-                  onClick={() => setKeepSignedIn(p => !p)}
-                  className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors ${keepSignedIn ? "bg-primary border-primary" : "border-border bg-input"}`}
-                >
-                  {keepSignedIn && <Check className="w-2.5 h-2.5 text-primary-foreground" strokeWidth={3} />}
-                </button>
-                <label className="font-mono text-[10px] text-muted-foreground cursor-pointer select-none" onClick={() => setKeepSignedIn(p => !p)}>
-                  Keep me signed in
-                </label>
-              </div>
-            )}
-            <Button
-              type="submit"
-              className="w-full h-11 font-mono font-bold uppercase tracking-widest bg-primary text-primary-foreground hover:bg-primary/90"
-              disabled={isLoading || signupSendingOtp}
-            >
-              {loading || signupSendingOtp ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <span className="flex items-center gap-2">
-                  {tab === "signin" ? "Initialize" : <><Mail className="w-4 h-4" /> Send Code</>}
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              )}
-            </Button>
-            {tab === "signin" && (
-              <div className="text-right">
-                <Link href="/forgot-password" className="font-mono text-[10px] text-muted-foreground hover:text-primary flex items-center justify-end gap-1">
-                  <KeyRound className="w-3 h-3" /> Forgot password?
-                </Link>
-              </div>
-            )}
-          </form>
-          )}
-
-          {tab === "signin" && browserSupportsWebAuthn() && (
-            <div className="mt-4">
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-border" />
-                <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">or</span>
-                <div className="flex-1 h-px bg-border" />
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handlePasskeySignIn}
-                disabled={passkeyLoading || loading}
-                className="w-full h-11 mt-4 font-mono uppercase tracking-widest border-primary/30 hover:border-primary hover:text-primary"
-              >
-                {passkeyLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <Fingerprint className="w-4 h-4" /> Sign in with Passkey
-                  </span>
                 )}
-              </Button>
-            </div>
-          )}
 
-          {/* "Login with AYZEN" — only offered on the main domain itself
-             (never on a subdomain app, which already has its own
-             auto-cutover to this exact flow — see login.tsx's own
-             cutoverRedirectState effect above) and never mid-transaction
-             for some OTHER client's OIDC attempt (oidcReturnTo set means
-             this form IS the credential-entry step of one already). */}
-          {tab === "signin" && !getCurrentSubdomainApp() && !oidcReturnTo && (
-            <div className="mt-4">
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-border" />
-                <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">or</span>
-                <div className="flex-1 h-px bg-border" />
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleWorkspaceOidcSignIn}
-                disabled={workspaceOidcLoading || loading}
-                className="w-full h-11 mt-4 font-mono uppercase tracking-widest border-primary/30 hover:border-primary hover:text-primary"
-              >
-                {workspaceOidcLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <Terminal className="w-4 h-4" /> Login with AYZEN
-                  </span>
+                {view === "magic-code" && (
+                  <div className="zp-form">
+                    <Heading title="Check your email" />
+                    <Notice icon={<Mail />} title="Code sent to">{email}</Notice>
+                    <form onSubmit={handleMagicVerify} className="zp-form">
+                      <CodeField label="6-digit code" value={magicCode} onChange={setMagicCode} autoFocus />
+                      <Btn type="submit" block busy={magicVerifyLoading} disabled={magicCode.length !== 6} icon={<ArrowRight />}>Verify and sign in</Btn>
+                    </form>
+                    <Btn variant="text" onClick={() => { setMagicSent(false); setMagicCode(""); setEmail(""); }}>Use a different email</Btn>
+                  </div>
                 )}
-              </Button>
-            </div>
+
+                {view === "stepup" && stepUp && (
+                  <div className="zp-form">
+                    <Heading title="Confirm it's you" />
+                    <Notice tone="warn" icon={<Fingerprint />} title="New sign-in location detected">
+                      Complete every check below to continue. This protects your account if someone else has your password.
+                    </Notice>
+                    <div className="zp-steps">
+                      {stepUp.requiredMethods.map((method) => {
+                        const done = stepUp.completedMethods.includes(method);
+                        const busy = stepUpBusy === method;
+                        const code =
+                          method === "email_otp" ? { m: "email_otp" as const, value: stepUpEmailCode, set: setStepUpEmailCode, numeric: true }
+                          : method === "totp" ? { m: "totp" as const, value: stepUpTotpCode, set: setStepUpTotpCode, numeric: true }
+                          : method === "backup_code" ? { m: "backup_code" as const, value: stepUpBackupCode, set: setStepUpBackupCode, numeric: false }
+                          : null;
+                        const label = stepUpMethodLabel[method] ?? method;
+                        return (
+                          <div key={method} className={`zp-step${done ? " is-done" : ""}`}>
+                            <div className="zp-step-head">
+                              <span>{label}</span>
+                              {done && <em>Verified</em>}
+                            </div>
+                            {!done && code && (
+                              <div className="zp-step-body">
+                                <input
+                                  aria-label={label}
+                                  type="text"
+                                  inputMode={code.numeric ? "numeric" : "text"}
+                                  autoComplete="one-time-code"
+                                  placeholder={code.numeric ? "000000" : "XXXX-XXXX"}
+                                  maxLength={code.numeric ? 6 : undefined}
+                                  value={code.value}
+                                  onChange={(e) => code.set(code.numeric ? e.target.value.replace(/\D/g, "") : e.target.value.toUpperCase())}
+                                />
+                                <Btn
+                                  type="button"
+                                  variant="ghost"
+                                  busy={busy}
+                                  disabled={code.numeric ? code.value.length !== 6 : !code.value.trim()}
+                                  onClick={() => submitStepUpMethod(code.m, code.value)}
+                                >Verify</Btn>
+                              </div>
+                            )}
+                            {!done && method === "passkey" && (
+                              <div className="zp-step-body">
+                                <Btn type="button" variant="ghost" block busy={busy} icon={<Fingerprint />} onClick={submitStepUpPasskey}>Verify with passkey</Btn>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <Btn variant="text" onClick={() => { setStepUp(null); setSigninStep("form"); setStepUpEmailCode(""); setStepUpTotpCode(""); setStepUpBackupCode(""); }}>← Back to sign in</Btn>
+                  </div>
+                )}
+
+                {view === "signin-otp" && (
+                  <form onSubmit={handleSigninOtpVerify} className="zp-form">
+                    <Heading title="Check your email" />
+                    <Notice icon={<Mail />} title="Verification code sent to">{email}. It expires in 10 minutes.</Notice>
+                    <CodeField label="6-digit code" value={signinOtp} onChange={setSigninOtp} autoFocus />
+                    <Btn type="submit" block busy={signinOtpLoading} disabled={signinOtp.length !== 6} icon={<ArrowRight />}>Verify and sign in</Btn>
+                    <div className="zp-row">
+                      <button type="button" className="zp-link" onClick={() => { setSigninStep("form"); setSigninOtp(""); setTempSigninData(null); }}>← Back to sign in</button>
+                      <button type="button" className="zp-link" onClick={handleResendSigninOtp} disabled={signinCountdown > 0 || signinOtpSending}>
+                        {signinOtpSending ? "Sending…" : signinCountdown > 0 ? `Resend in ${signinCountdown}s` : "Resend code"}
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {view === "signup-otp" && (
+                  <form onSubmit={handleSignUp} className="zp-form">
+                    <Heading title="Verify your email" />
+                    <Notice tone="ok" icon={<Check />} title="Verification code sent to">{email}</Notice>
+                    <CodeField label="6-digit code" value={signupOtp} onChange={setSignupOtp} autoFocus />
+                    <Btn type="submit" block busy={loading} disabled={signupOtp.length !== 6} icon={<ArrowRight />}>Create account</Btn>
+                    <div className="zp-row">
+                      <button type="button" className="zp-link" onClick={() => { setSignupStep("form"); setSignupOtp(""); }}>← Change details</button>
+                      <button type="button" className="zp-link" onClick={handleResendSignupOtp} disabled={signupCountdown > 0 || signupSendingOtp}>
+                        {signupSendingOtp ? "Sending…" : signupCountdown > 0 ? `Resend in ${signupCountdown}s` : "Resend code"}
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {(view === "signin" || view === "signup") && (
+                  <form onSubmit={tab === "signin" ? handleSignIn : handleSendSignupOtp} className="zp-form">
+                    <Heading
+                      title={tab === "signin" ? "Welcome back" : "Create your account"}
+                      sub={tab === "signin" ? "Sign in to continue to AYZEN." : "We'll email a code to confirm your address."}
+                    />
+                    {tab === "signup" && (
+                      <Field
+                        label="Username" name="username" autoComplete="username" autoCapitalize="none" spellCheck={false}
+                        placeholder="your_handle" value={username} required
+                        onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))}
+                        hint="Lowercase letters, numbers and underscores."
+                      />
+                    )}
+                    <Field
+                      label={tab === "signin" ? "Email or identifier" : "Email"} type="email" name="email"
+                      autoComplete={tab === "signin" ? "username" : "email"} placeholder="you@company.com"
+                      value={email} onChange={(e) => setEmail(e.target.value)} required
+                    />
+                    <Field
+                      label="Password" name="password" type={showPass ? "text" : "password"}
+                      autoComplete={tab === "signin" ? "current-password" : "new-password"}
+                      value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6}
+                      aside={tab === "signin" ? <Link href="/forgot-password" className="zp-link">Forgot password?</Link> : undefined}
+                      trailing={
+                        <button type="button" className="zp-trail" onClick={() => setShowPass((p) => !p)} aria-label={showPass ? "Hide password" : "Show password"} aria-pressed={showPass}>
+                          {showPass ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
+                        </button>
+                      }
+                    />
+                    {tab === "signup" && (
+                      <>
+                        <Field
+                          label="Referral code (optional)" name="refCode" autoComplete="off" autoCapitalize="characters" spellCheck={false}
+                          placeholder="AYZNXXXXXX" value={refCode} onChange={(e) => setRefCode(e.target.value.toUpperCase())}
+                          hint={refCode ? "This code will be applied when you register." : undefined}
+                        />
+                        <Field
+                          label={`Security check: ${captcha.q} = ?`} type="number" inputMode="numeric" name="captcha" placeholder="Your answer"
+                          value={captchaInput} onChange={(e) => { setCaptchaInput(e.target.value); setCaptchaError(false); }}
+                          error={captchaError ? "That answer is wrong. Try the new question." : null}
+                          aside={
+                            <button type="button" className="zp-link" onClick={() => { setCaptcha(makeCaptcha()); setCaptchaInput(""); setCaptchaError(false); }}>
+                              <RefreshCw style={{ width: 12, height: 12, display: "inline", marginRight: 4, verticalAlign: "-1px" }} aria-hidden="true" />New question
+                            </button>
+                          }
+                          required
+                        />
+                      </>
+                    )}
+                    {tab === "signin" && (
+                      <button type="button" className="zp-check" role="checkbox" aria-checked={keepSignedIn} onClick={() => setKeepSignedIn((p) => !p)}>
+                        <b>{keepSignedIn && <Check aria-hidden="true" />}</b>
+                        Keep me signed in on this device
+                      </button>
+                    )}
+                    <Btn type="submit" block busy={loading || signupSendingOtp} disabled={isLoading} icon={tab === "signin" ? <ArrowRight /> : <Mail />}>
+                      {tab === "signin" ? "Sign in" : "Send verification code"}
+                    </Btn>
+                  </form>
+                )}
+
+                {(showPasskey || showWorkspace) && (
+                  <>
+                    <Divider>or continue with</Divider>
+                    <div className="zp-alt">
+                      {showPasskey && (
+                        <Btn type="button" variant="ghost" block busy={passkeyLoading} disabled={loading} icon={<Fingerprint />} onClick={handlePasskeySignIn}>Passkey</Btn>
+                      )}
+                      {showWorkspace && (
+                        <Btn type="button" variant="ghost" block busy={workspaceOidcLoading} disabled={loading} icon={<Terminal />} onClick={handleWorkspaceOidcSignIn}>AYZEN workspace</Btn>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <details className="zp-dev">
+                <summary>Developer access</summary>
+                <div className="zp-dev-grid">
+                  <Btn variant="ghost" onClick={handleDemoAdmin} disabled={isLoading}>Admin</Btn>
+                  <Btn variant="ghost" onClick={handleDemoDev} disabled={isLoading}>Developer</Btn>
+                  <Btn variant="ghost" onClick={handleDemoModerator} disabled={isLoading}>Moderator</Btn>
+                  <Btn variant="ghost" onClick={handleDemoTeamLeader} disabled={isLoading}>Team leader</Btn>
+                  <Btn variant="ghost" onClick={handleDemoUser} disabled={isLoading}>User</Btn>
+                </div>
+              </details>
+            </>
           )}
 
-          <div className="mt-6 border-t border-border pt-5">
-            <div className="text-[10px] font-mono text-center text-muted-foreground mb-3 uppercase tracking-widest">Demo Override</div>
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" className="font-mono text-xs h-9 border-border hover:border-primary/40 hover:text-primary" onClick={handleDemoAdmin} disabled={isLoading}>
-                {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : "Admin Init"}
-              </Button>
-              <Button variant="outline" className="font-mono text-xs h-9 border-border hover:border-yellow-500/40 hover:text-yellow-400" onClick={handleDemoDev} disabled={isLoading}>
-                {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : "Developer Init"}
-              </Button>
-              <Button variant="outline" className="font-mono text-xs h-9 border-border hover:border-orange-500/40 hover:text-orange-400" onClick={handleDemoModerator} disabled={isLoading}>
-                {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : "Moderator Init"}
-              </Button>
-              <Button variant="outline" className="font-mono text-xs h-9 border-border hover:border-emerald-500/40 hover:text-emerald-400" onClick={handleDemoTeamLeader} disabled={isLoading}>
-                {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : "Team Leader Init"}
-              </Button>
-            </div>
-            <Button variant="outline" className="w-full font-mono text-xs h-9 mt-2 border-border hover:border-sky-500/40 hover:text-sky-400" onClick={handleDemoUser} disabled={isLoading}>
-              {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : "User Init"}
-            </Button>
-          </div>
+          <p className="zp-foot">
+            {tab === "signin" ? <>New to AYZEN? <button type="button" onClick={() => setTab("signup")}>Request access</button></>
+              : tab === "signup" ? <>Already have access? <button type="button" onClick={() => setTab("signin")}>Sign in</button></>
+              : <>Prefer a password? <button type="button" onClick={() => setTab("signin")}>Sign in</button></>}
+          </p>
         </div>
-        )}
-
-        <div className="text-center text-sm text-muted-foreground font-mono">
-          {tab === "signin" ? (
-            <>Unregistered entity?{" "}<button onClick={() => setTab("signup")} className="text-primary hover:underline">Request access</button></>
-          ) : tab === "signup" ? (
-            <>Already have access?{" "}<button onClick={() => setTab("signin")} className="text-primary hover:underline">Sign in</button></>
-          ) : (
-            <>Prefer password?{" "}<button onClick={() => setTab("signin")} className="text-primary hover:underline">Sign in</button></>
-          )}
-        </div>
-      </div>
+      </main>
     </div>
   );
 }
