@@ -159,7 +159,9 @@ export default function Login() {
     else setLocation("/dashboard");
   }
 
-  const [tab, setTab] = useState<"signin" | "signup">("signin");
+  // Landing pages link here with ?tab=signup (and optionally &username=...).
+  const [tab, setTab] = useState<"signin" | "signup">(() =>
+    typeof window !== "undefined" && new URLSearchParams(window.location.search).get("tab") === "signup" ? "signup" : "signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);

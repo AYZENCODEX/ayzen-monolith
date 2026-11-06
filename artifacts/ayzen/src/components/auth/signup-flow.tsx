@@ -78,7 +78,7 @@ export function SignupFlow({ onComplete }: Props) {
   const [countdown, setCountdown] = useState(0);
   const [emailProof, setEmailProof] = useState("");
   // 4
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(() => (typeof window === "undefined" ? "" : cleanUsername(new URLSearchParams(window.location.search).get("username") ?? "")));
   const [displayName, setDisplayName] = useState("");
   const [mailUser, setMailUser] = useState("");
   const [mailTouched, setMailTouched] = useState(false);
