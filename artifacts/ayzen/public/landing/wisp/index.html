@@ -238,7 +238,8 @@ footer p{color:#b9c1d4}
     <div>
       <h1>Your name, then @ayzen.tech.</h1>
       <p class="lede">Wisp is the mailbox inside AYZEN. Claim an address, let rules file the routine mail, and send from the accounts you already have.</p>
-      <form class="claim" id="claimForm" action="/login" onsubmit="return true">
+      <form class="claim" id="claimForm" action="/login" method="get">
+        <input type="hidden" name="tab" value="signup">
         <label class="field"><input id="uname" name="username" type="text" inputmode="email" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="30" placeholder="yourname" aria-label="Pick a username"><span>@ayzen.tech</span></label>
         <button class="btn" type="submit">Claim it</button>
       </form>
