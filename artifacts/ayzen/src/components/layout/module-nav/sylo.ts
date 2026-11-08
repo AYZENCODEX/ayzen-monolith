@@ -1,6 +1,7 @@
 import { LayoutDashboard } from "lucide-react";
 import type { NavGroup } from "../app-sidebar";
 import type { ModuleNavConfig } from "./restructure";
+import { SYLO_HOME } from "../../../lib/sylo-routes";
 
 const leafHrefs = (entries: NavGroup["items"], acc: string[] = []): string[] => {
   for (const entry of entries) {
@@ -18,7 +19,7 @@ const leafHrefs = (entries: NavGroup["items"], acc: string[] = []): string[] => 
  */
 export const syloNav: ModuleNavConfig = {
   isWrapper: (group) => {
-    const named = group.label.trim().toLowerCase() === "vault" || group.href === "/vault/hub";
+    const named = group.label.trim().toLowerCase() === "vault" || group.href === "/vault/hub" || group.href === SYLO_HOME;
     if (!named) return false;
     const hrefs = leafHrefs(group.items);
     return hrefs.length > 0 && hrefs.every((h) => h === "/vault" || h.startsWith("/vault/") || h.startsWith("/vault?"));
@@ -26,6 +27,6 @@ export const syloNav: ModuleNavConfig = {
   order: ["Account", "Access", "Enroll", "Other"],
   rename: { Enrollment: "Enroll" },
   fallbackSection: "Other",
-  // The wrapper's header used to link to the vault hub; keep that reachable.
-  pinned: { label: "Hub", icon: LayoutDashboard, items: [{ href: "/vault/hub", label: "Vault Hub", icon: LayoutDashboard }] },
+  // The wrapper's header used to link to the Vault Hub; the Console is its replacement.
+  pinned: { label: "Home", icon: LayoutDashboard, items: [{ href: SYLO_HOME, label: "Console", icon: LayoutDashboard }] },
 };

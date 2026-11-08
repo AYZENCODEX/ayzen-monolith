@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useListVaultEntries, customFetch } from "@workspace/api-client-react";
 import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/vault-sidebar";
-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
+import { VaultLoading } from "@/components/vault/vault-loading";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useModuleAwareNavigate } from "@/components/module-link";
@@ -71,7 +71,7 @@ export default function VaultEnrollmentOverview() {
       icon={LayoutDashboard}
     >
       {loading ? (
-        <VaultLoadingIntro title="Loading enrollment overview" done={!loading} />
+        <VaultLoading title="Loading enrollment overview" done={!loading} />
       ) : (
         <div className="space-y-5">
           {/* Dashboard summary */}

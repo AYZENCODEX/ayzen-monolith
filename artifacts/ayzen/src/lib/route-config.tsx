@@ -94,8 +94,9 @@ const UserProjectDetail = lazy(() => import("@/pages/user/project-detail"));
 const UserProjectEntities = lazy(() => import("@/pages/user/project-entities"));
 const UserTasks         = lazy(() => import("@/pages/user/tasks"));
 const UserDeveloper     = lazy(() => import("@/pages/user/developer"));
-const UserVault         = lazy(() => import("@/pages/user/vault"));
-const VaultHub          = lazy(() => import("@/pages/user/vault-hub"));
+const SyloConsole       = lazy(() => import("@/pages/sylo/console"));
+const SyloAccount       = lazy(() => import("@/pages/sylo/account"));
+const VaultHubRedirect  = lazy(() => import("@/pages/sylo/redirects"));
 const VaultEntityDetail = lazy(() => import("@/pages/user/vault-entity-detail"));
 const VaultEntityAccess = lazy(() => import("@/pages/user/vault-entity-access"));
 const VaultLocalDetail  = lazy(() => import("@/pages/user/vault-local-detail"));
@@ -292,8 +293,13 @@ export const USER_ROUTES: RouteConfig[] = [
   { path: "/tasks",              component: UserTasks },
   // Gamification
   { path: "/leaderboard",        component: UserLeaderboard },
-  { path: "/vault",              component: UserVault },
-  { path: "/vault/hub",          component: VaultHub },
+  // Sylo home. Also forwards legacy /vault?tab=… links (see lib/sylo-routes.ts).
+  { path: "/vault",              component: SyloConsole },
+  // Retired Vault Hub card grid → Console.
+  { path: "/vault/hub",          component: VaultHubRedirect },
+  // Account sections: /vault/account/:section[/:view]
+  { path: "/vault/account/:section",       component: SyloAccount },
+  { path: "/vault/account/:section/:view", component: SyloAccount },
   // Wallet Hub — rename/expansion of the old flat "Wallet" access item into
   // its own sub-category with three addressable views (see
   // vault-wallet-hub.tsx). Bare "/vault/wallet-hub" falls back to Overview.

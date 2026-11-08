@@ -4,6 +4,7 @@ import { useLocation } from "wouter";
 import { getCurrentSubdomainApp, getModuleForPath, moduleUrl } from "@/lib/subdomain-app";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import { accountPath } from "@/lib/sylo-routes";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -81,10 +82,10 @@ export function CommandSearch() {
         out.push({ id: l.id, label: l.label || l.username || l.email || "Local Account", sub: l.category ?? "Local", type: "local", href: `/vault/local/${l.id}` }));
 
       (data.kyc ?? []).forEach(k =>
-        out.push({ id: k.id, label: k.name || k.username || "KYC Entity", sub: k.platform || k.category || "KYC", type: "kyc", href: `/vault?tab=kyc` }));
+        out.push({ id: k.id, label: k.name || k.username || "KYC Entity", sub: k.platform || k.category || "KYC", type: "kyc", href: accountPath("kyc", "management") }));
 
       (data.game ?? []).forEach(g =>
-        out.push({ id: g.id, label: g.username || g.email || "Game Account", sub: g.category ?? "Game", type: "game", href: `/vault?tab=game` }));
+        out.push({ id: g.id, label: g.username || g.email || "Game Account", sub: g.category ?? "Game", type: "game", href: accountPath("game", "management") }));
 
       (data.mail ?? []).forEach(m =>
         out.push({ id: m.id, label: m.subject || "(no subject)", sub: m.from_addr ?? "Mail", type: "mail", href: `/vault/mail-hub/${m.source_category}/${m.source_id}/mail/${m.id}` }));

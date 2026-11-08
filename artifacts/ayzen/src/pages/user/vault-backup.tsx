@@ -16,7 +16,7 @@ import {
   LayoutDashboard, ChevronRight, ArrowLeft, Copy, Check,
 } from "lucide-react";
 import { VaultSectionPage, VaultSectionEmptyState, CategoryTabBar } from "@/components/layout/vault-sidebar";
-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
+import { VaultLoading } from "@/components/vault/vault-loading";
 import { useModuleAwareNavigate } from "@/components/module-link";
 
 // ─── Copy button + entity-scoped backup detail — kept exported for
@@ -162,7 +162,7 @@ function EntityBackupList({ category }: { category: Exclude<Category, "overview"
   const isLoading = category === "entity" ? vaultLoading : loading;
   const Icon = CATEGORY_META[category].icon;
 
-  if (isLoading) return <VaultLoadingIntro title="Loading backup codes" done={!isLoading} className="py-8" />;
+  if (isLoading) return <VaultLoading title="Loading backup codes" done={!isLoading} className="py-8" />;
 
   if (rows.length === 0) {
     return (
@@ -226,7 +226,7 @@ function OverviewBackupList() {
   const isLoading = vaultLoading || loading;
   const totalCodes = rows.reduce((sum, r) => sum + r.count, 0);
 
-  if (isLoading) return <VaultLoadingIntro title="Loading backup codes" done={!isLoading} className="py-8" />;
+  if (isLoading) return <VaultLoading title="Loading backup codes" done={!isLoading} className="py-8" />;
 
   if (rows.length === 0) {
     return (

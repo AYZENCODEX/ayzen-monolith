@@ -35,6 +35,7 @@ import {
   DatabaseBackup, ArrowLeftRight, FileBarChart, HeartPulse,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { accountPath } from "@/lib/sylo-routes";
 
 interface FlatItem { href: string; label: string; icon: React.ElementType }
 interface ExpandableItem { label: string; icon: React.ElementType; children: readonly FlatItem[] }
@@ -46,10 +47,10 @@ function isExpandable(item: StepItem): item is ExpandableItem {
 
 // ── STEP 01 — ACCOUNT ─────────────────────────────────────────────────────────
 const ACCOUNT_ITEMS: readonly StepItem[] = [
-  { href: "/vault?tab=entity",  label: "Entity",  icon: Shield },
-  { href: "/vault?tab=local",   label: "Local",   icon: Smartphone },
-  { href: "/vault?tab=kyc",     label: "KYC",     icon: ShieldCheck },
-  { href: "/vault?tab=game",    label: "Game",    icon: Gamepad2 },
+  { href: accountPath("entity", "home"),      label: "Entity",  icon: Shield },
+  { href: accountPath("local", "home"),       label: "Local",   icon: Smartphone },
+  { href: accountPath("kyc", "home"),         label: "KYC",     icon: ShieldCheck },
+  { href: accountPath("game", "management"),  label: "Game",    icon: Gamepad2 },
 ] as const;
 
 // ── STEP 02 — ACCESS ──────────────────────────────────────────────────────────
@@ -118,6 +119,13 @@ function matchHref(href: string, fullLocation: string): boolean {
   if (href === "/vault/2fa/overview" || href === "/vault/backup/overview") {
     const base = href.replace("/overview", "");
     return fullLocation === base || fullLocation.startsWith(`${base}/`);
+  }
+  // Account sections: the "…/<section>/home" link stays highlighted on every
+  // view of that section (home, dashboard, analysis, management).
+  const accountHome = /^(\/vault\/account\/[a-z]+)\/home$/.exec(href);
+  if (accountHome) {
+    const base = accountHome[1];
+    return fullLocation === base || fullLocation.startsWith(`${base}/`) || fullLocation.startsWith(`${base}?`);
   }
   if (href.includes("?")) {
     const [hPath, hQuery] = href.split("?");

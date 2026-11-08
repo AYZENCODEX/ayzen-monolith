@@ -28,6 +28,7 @@ import { VaultUnlockGate } from "@/components/vault/vault-unlock-gate";
 import { useRealtime } from "@/hooks/use-realtime";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { FullScreenLoader, PageSkeleton } from "@/components/console";
 import { ADMIN_ROUTES, USER_ROUTES } from "@/lib/route-config";
 import type { RouteConfig } from "@/lib/route-config";
 import { getCurrentSubdomainApp, isPathInSubdomainScope, getModuleForPath, moduleUrl, ALWAYS_ALLOWED_PREFIXES } from "@/lib/subdomain-app";
@@ -67,16 +68,6 @@ import OidcCallback from "@/pages/oidc-callback";
 import OidcConsent from "@/pages/oidc-consent";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function PageLoader() {
-  return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="font-mono text-xs text-muted-foreground/50 animate-pulse tracking-widest uppercase">
-        Loading...
-      </div>
-    </div>
-  );
-}
 
 function ProtectedRoute({
   component: Component,
@@ -196,18 +187,8 @@ function ProtectedRoute({
   }, [shouldStartOidcLogin, location]);
 
   // S6: full-screen loader while a central -> module redirect is in flight.
-  if (splitRedirecting || roleRedirecting)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
-        INITIALIZING...
-      </div>
-    );
-  if (isLoading)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
-        INITIALIZING...
-      </div>
-    );
+  if (splitRedirecting || roleRedirecting) return <FullScreenLoader label="Redirecting" />;
+  if (isLoading) return <FullScreenLoader label="Loading" />;
   if (!user) {
     // 5c-c: only take the "OIDC redirect in flight" branch once the flag
     // check has resolved to `true` — `null` (still checking) renders the
@@ -221,11 +202,7 @@ function ProtectedRoute({
       // <Redirect>, since the destination here is an absolute,
       // cross-origin provider URL wouter has no notion of, not an SPA
       // route.
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
-          INITIALIZING...
-        </div>
-      );
+      return <FullScreenLoader label="Redirecting to sign in" />;
     }
     return <Redirect to="/login" />;
   }
@@ -243,9 +220,11 @@ function ProtectedRoute({
   }
 
   const page = (
-    <Suspense fallback={<PageLoader />}>
-      <Component {...rest} />
-    </Suspense>
+    <ErrorBoundary embedded resetKey={location}>
+      <Suspense fallback={<PageSkeleton />}>
+        <Component {...rest} />
+      </Suspense>
+    </ErrorBoundary>
   );
 
   return (

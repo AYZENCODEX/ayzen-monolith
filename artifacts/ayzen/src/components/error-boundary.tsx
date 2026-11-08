@@ -1,74 +1,76 @@
+/**
+ * components/error-boundary.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Render-error boundary used at two levels:
+ *
+ *   - Root (App.tsx): last resort, full-screen. A crash here means the shell
+ *     itself failed.
+ *   - Route (ProtectedRoute): wraps only the page, `embedded`, so the sidebar
+ *     and header survive a page crash. Pass `resetKey={location}` and the
+ *     boundary clears itself when the user navigates away — a crash on one
+ *     page never traps them on every other page.
+ *
+ * Each crash gets a short reference id that is logged with the stack, so a
+ * user can quote it to support and engineers can find the matching log line.
+ */
 import { Component, type ErrorInfo, type ReactNode } from "react";
-import { AlertTriangle, RotateCcw, Home } from "lucide-react";
+import { Home, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ErrorScreen } from "@/components/console/error-pages";
 
 interface Props {
   children: ReactNode;
+  /** When this value changes while in the error state, the boundary resets. */
+  resetKey?: string;
+  /** Render inside the app layout instead of taking the full viewport. */
+  embedded?: boolean;
 }
 
 interface State {
-  hasError: boolean;
   error: Error | null;
+  reference: string | null;
+}
+
+function newReference(): string {
+  return Math.random().toString(36).slice(2, 8).toUpperCase();
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, error: null };
+  state: State = { error: null, reference: null };
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    return { error, reference: newReference() };
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error("AYZEN render error:", error, info.componentStack);
+    console.error(`[AYZEN] render error ref=${this.state.reference}`, error, info.componentStack);
   }
 
-  handleReload = () => {
-    this.setState({ hasError: false, error: null });
-    window.location.reload();
-  };
+  componentDidUpdate(prev: Props) {
+    if (this.state.error && prev.resetKey !== this.props.resetKey) {
+      this.setState({ error: null, reference: null });
+    }
+  }
 
-  handleHome = () => {
-    this.setState({ hasError: false, error: null });
-    window.location.href = "/";
-  };
+  private retry = () => this.setState({ error: null, reference: null });
+  private goHome = () => { window.location.assign("/"); };
 
   render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-background text-foreground px-6">
-          <div className="max-w-md w-full text-center space-y-5">
-            <div className="mx-auto w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-              <AlertTriangle className="w-7 h-7 text-red-400" />
-            </div>
-            <div>
-              <h1 className="font-mono font-bold text-lg tracking-tight text-foreground">Something went wrong</h1>
-              <p className="font-mono text-xs text-muted-foreground mt-2">
-                AYZEN hit an unexpected error while rendering this page. Try reloading — your data is safe.
-              </p>
-              {this.state.error?.message && (
-                <p className="font-mono text-[10px] text-muted-foreground/50 mt-3 break-all bg-card border border-card-border rounded-lg px-3 py-2">
-                  {this.state.error.message}
-                </p>
-              )}
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <button
-                onClick={this.handleReload}
-                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-mono text-xs font-bold hover:opacity-90 transition-opacity"
-              >
-                <RotateCcw className="w-3.5 h-3.5" /> Reload
-              </button>
-              <button
-                onClick={this.handleHome}
-                className="flex items-center gap-2 px-4 py-2 border border-card-border rounded-lg font-mono text-xs hover:bg-muted/30 transition-colors"
-              >
-                <Home className="w-3.5 h-3.5" /> Go home
-              </button>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    return this.props.children;
+    if (!this.state.error) return this.props.children;
+    return (
+      <ErrorScreen
+        kind="unknown"
+        title="This page hit a problem"
+        description="An unexpected error stopped this page from loading. Your data is safe — nothing was changed. Try again, or go back home."
+        reference={this.state.reference ?? undefined}
+        embedded={this.props.embedded}
+        actions={
+          <>
+            <Button onClick={this.retry}><RefreshCw aria-hidden="true" /> Try again</Button>
+            <Button variant="outline" onClick={this.goHome}><Home aria-hidden="true" /> Go home</Button>
+          </>
+        }
+      />
+    );
   }
 }

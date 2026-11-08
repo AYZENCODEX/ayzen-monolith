@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { KYC_CATEGORIES, getKycCategoryMeta, KYC_CATEGORY_ICON } from "@/config/vault-kyc";
-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
+import { VaultLoading } from "@/components/vault/vault-loading";
 import { useModuleAwareNavigate } from "@/components/module-link";
 
 // Same shape as components/kyc-entries.tsx's KycEntry — kept narrow here to
@@ -340,7 +340,7 @@ export default function VaultKycDashboard() {
       </div>
 
       {loading ? (
-        <VaultLoadingIntro title="Loading KYC dashboard" done={!loading} />
+        <VaultLoading title="Loading KYC dashboard" done={!loading} />
       ) : tab === "overview" ? (
         <OverviewTab entries={entries} onSelectCategory={openCategory} />
       ) : (
