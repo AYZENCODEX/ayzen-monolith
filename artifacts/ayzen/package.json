@@ -78,11 +78,12 @@
   "dependencies": {
     "@simplewebauthn/browser": "^13.1.0",
     "@supabase/supabase-js": "^2.108.2",
+    "@vercel/speed-insights": "^2.1.0",
+    "@workspace/api-client-react": "workspace:*",
     "canvas-confetti": "^1.9.4",
     "firebase": "^12.15.0",
-    "qrcode.react": "^4.2.0",
-    "@workspace/api-client-react": "workspace:*",
-    "posthog-js": "^1.280.0"
+    "posthog-js": "^1.280.0",
+    "qrcode.react": "^4.2.0"
   },
   "packageManager": "pnpm@10.26.1"
 }

@@ -37,6 +37,7 @@ import { startSyloOidcLogin } from "@/lib/sylo-oidc-login";
 // OIDC Roadmap — Season 3, Phase 5c-c: dual-run gate — reads the same
 // rollout flag login.tsx's own cutover-redirect effect (5d-c) checks.
 import { getSyloOidcRolloutFlag } from "@/lib/sylo-oidc-rollout-flag";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 // ─── Overlay components (lazy — not on initial paint) ─────────────────────────
 
@@ -433,6 +434,7 @@ export default function App() {
           <Toaster />
         </TooltipProvider>
       </QueryClientProvider>
+      <SpeedInsights />
     </ErrorBoundary>
   );
 }
