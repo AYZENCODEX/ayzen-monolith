@@ -1,0 +1,3770 @@
+From d66ac95d0fc7e79e27d075b9a563a697f6226726 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 03:01:48 +0000
+Subject: [PATCH] feat(sylo): Console home, Account section pages, loader/error
+ kit
+
+- /vault is now the Sylo Console (widgets); Vault Hub removed, /vault/hub redirects
+- Account split into /vault/account/:section/:view (entity|local|kyc|game x
+  home|dashboard|analysis|management), lazy-loaded views
+- Legacy /vault?tab=... shim (lib/sylo-routes.ts) + sidebar/dock/search updated
+- Extract EntityManager from pages/user/vault.tsx to components/sylo; drop dead
+  helpers; support ?new=1
+- Add components/console kit: skeletons, loaders, error pages, QueryBoundary,
+  ConfirmDialog, PageHeader, StatTile, Widget, EmptyState
+- Replace fake-progress VaultLoadingIntro with VaultLoading; route-level
+  ErrorBoundary; real 404 page
+- Tests: sylo-routes (new), module-nav (updated); regenerate frontend-registry
+---
+ .../api-server/src/lib/module-nav.test.ts     |  20 +-
+ artifacts/ayzen/frontend-registry.json        | 107 +++----
+ artifacts/ayzen/src/App.tsx                   |  39 +--
+ .../ayzen/src/components/command-search.tsx   |   5 +-
+ .../src/components/console/confirm-dialog.tsx |  73 +++++
+ .../src/components/console/empty-state.tsx    |  26 ++
+ .../src/components/console/error-pages.tsx    | 271 ++++++++++++++++++
+ .../ayzen/src/components/console/index.ts     |   9 +
+ .../ayzen/src/components/console/loaders.tsx  |  55 ++++
+ .../src/components/console/page-header.tsx    |  56 ++++
+ .../src/components/console/query-boundary.tsx |  56 ++++
+ .../src/components/console/skeletons.tsx      | 140 +++++++++
+ .../src/components/console/stat-tile.tsx      |  75 +++++
+ .../ayzen/src/components/console/widget.tsx   |  52 ++++
+ .../ayzen/src/components/error-boundary.tsx   | 104 +++----
+ .../src/components/layout/app-sidebar.tsx     |  31 +-
+ .../src/components/layout/mobile-dock.tsx     |   2 +-
+ .../src/components/layout/module-nav/sylo.ts  |   7 +-
+ .../src/components/layout/vault-sidebar.tsx   |  16 +-
+ .../ayzen/src/components/sylo/charts.tsx      |  38 +++
+ .../sylo/entity-manager.tsx}                  | 264 ++---------------
+ .../src/components/sylo/section-tabs.tsx      |  42 +++
+ .../ayzen/src/components/sylo/sections.ts     |  57 ++++
+ .../sylo/views/section-analysis.tsx           | 153 ++++++++++
+ .../components/sylo/views/section-home.tsx    |  46 +++
+ .../ayzen/src/components/sylo/widgets.tsx     | 204 +++++++++++++
+ .../components/vault/vault-loading-intro.tsx  | 122 --------
+ .../src/components/vault/vault-loading.tsx    |  52 ++++
+ artifacts/ayzen/src/hooks/use-sylo-data.ts    | 168 +++++++++++
+ artifacts/ayzen/src/index.css                 |   5 +
+ artifacts/ayzen/src/lib/format-money.ts       |  18 ++
+ artifacts/ayzen/src/lib/route-config.tsx      |  14 +-
+ artifacts/ayzen/src/lib/sylo-routes.test.ts   |  44 +++
+ artifacts/ayzen/src/lib/sylo-routes.ts        |  61 ++++
+ artifacts/ayzen/src/pages/not-found.tsx       |  21 +-
+ artifacts/ayzen/src/pages/sylo/account.tsx    |  98 +++++++
+ artifacts/ayzen/src/pages/sylo/console.tsx    | 121 ++++++++
+ artifacts/ayzen/src/pages/sylo/redirects.tsx  |   8 +
+ .../ayzen/src/pages/user/vault-activity.tsx   |   4 +-
+ .../ayzen/src/pages/user/vault-backup.tsx     |   6 +-
+ .../ayzen/src/pages/user/vault-banned.tsx     |   3 +-
+ .../pages/user/vault-enrollment-overview.tsx  |   4 +-
+ .../src/pages/user/vault-entity-access.tsx    |   3 +-
+ .../src/pages/user/vault-entity-detail.tsx    |   9 +-
+ artifacts/ayzen/src/pages/user/vault-hub.tsx  | 149 ----------
+ .../src/pages/user/vault-kyc-dashboard.tsx    |   4 +-
+ .../ayzen/src/pages/user/vault-kyc-detail.tsx |   7 +-
+ .../src/pages/user/vault-local-dashboard.tsx  |   4 +-
+ .../src/pages/user/vault-local-detail.tsx     |   7 +-
+ 49 files changed, 2158 insertions(+), 722 deletions(-)
+ create mode 100644 artifacts/ayzen/src/components/console/confirm-dialog.tsx
+ create mode 100644 artifacts/ayzen/src/components/console/empty-state.tsx
+ create mode 100644 artifacts/ayzen/src/components/console/error-pages.tsx
+ create mode 100644 artifacts/ayzen/src/components/console/index.ts
+ create mode 100644 artifacts/ayzen/src/components/console/loaders.tsx
+ create mode 100644 artifacts/ayzen/src/components/console/page-header.tsx
+ create mode 100644 artifacts/ayzen/src/components/console/query-boundary.tsx
+ create mode 100644 artifacts/ayzen/src/components/console/skeletons.tsx
+ create mode 100644 artifacts/ayzen/src/components/console/stat-tile.tsx
+ create mode 100644 artifacts/ayzen/src/components/console/widget.tsx
+ create mode 100644 artifacts/ayzen/src/components/sylo/charts.tsx
+ rename artifacts/ayzen/src/{pages/user/vault.tsx => components/sylo/entity-manager.tsx} (89%)
+ create mode 100644 artifacts/ayzen/src/components/sylo/section-tabs.tsx
+ create mode 100644 artifacts/ayzen/src/components/sylo/sections.ts
+ create mode 100644 artifacts/ayzen/src/components/sylo/views/section-analysis.tsx
+ create mode 100644 artifacts/ayzen/src/components/sylo/views/section-home.tsx
+ create mode 100644 artifacts/ayzen/src/components/sylo/widgets.tsx
+ delete mode 100644 artifacts/ayzen/src/components/vault/vault-loading-intro.tsx
+ create mode 100644 artifacts/ayzen/src/components/vault/vault-loading.tsx
+ create mode 100644 artifacts/ayzen/src/hooks/use-sylo-data.ts
+ create mode 100644 artifacts/ayzen/src/lib/format-money.ts
+ create mode 100644 artifacts/ayzen/src/lib/sylo-routes.test.ts
+ create mode 100644 artifacts/ayzen/src/lib/sylo-routes.ts
+ create mode 100644 artifacts/ayzen/src/pages/sylo/account.tsx
+ create mode 100644 artifacts/ayzen/src/pages/sylo/console.tsx
+ create mode 100644 artifacts/ayzen/src/pages/sylo/redirects.tsx
+ delete mode 100644 artifacts/ayzen/src/pages/user/vault-hub.tsx
+
+diff --git a/artifacts/api-server/src/lib/module-nav.test.ts b/artifacts/api-server/src/lib/module-nav.test.ts
+index ed146c2..464fbf0 100644
+--- a/artifacts/api-server/src/lib/module-nav.test.ts
++++ b/artifacts/api-server/src/lib/module-nav.test.ts
+@@ -11,9 +11,9 @@ const section = (label: string, children: unknown[], extra: object = {}) => ({ l
+ 
+ // Same shape as the "Vault" group in USER_NAV / ADMIN_NAV (app-sidebar.tsx).
+ const vaultGroup = (withHref = true) => ({
+-  label: "Vault", icon: Icon, ...(withHref ? { href: "/vault/hub" } : {}),
++  label: "Vault", icon: Icon, ...(withHref ? { href: "/vault" } : {}),
+   items: [
+-    section("Account", [leaf("/vault?tab=entity", "Entity"), leaf("/vault?tab=local", "Local")]),
++    section("Account", [leaf("/vault/account/entity/home", "Entity"), leaf("/vault/account/local/home", "Local")]),
+     section("Access", [leaf("/vault/2fa/overview", "2FA"), leaf("/vault/backup/overview", "Backup Code")]),
+     section("Enrollment", [leaf("/vault/enrollment/overview", "Overview"), leaf("/vault/projects", "Enroll")]),
+     section("Other", [leaf("/vault/shared", "Shared"), leaf("/vault/trash", "Trash")]),
+@@ -24,43 +24,43 @@ const labels = (groups: Array<{ label: string }>) => groups.map((g) => g.label);
+ 
+ test("Sylo: the Vault wrapper is dissolved into Account / Access / Enroll / Other", () => {
+   const out = restructureModuleGroups(syloNav, [vaultGroup()]);
+-  assert.deepEqual(labels(out), ["Hub", "Account", "Access", "Enroll", "Other"]);
++  assert.deepEqual(labels(out), ["Home", "Account", "Access", "Enroll", "Other"]);
+   assert.ok(!labels(out).includes("Vault"));
+   assert.deepEqual(out[1].items.map((i: any) => i.label), ["Entity", "Local"]);
+   assert.deepEqual(out[3].items.map((i: any) => i.label), ["Overview", "Enroll"], "Enrollment renamed to Enroll, children kept");
+-  assert.equal((out[0].items[0] as any).href, "/vault/hub", "the wrapper's hub link stays reachable");
++  assert.equal((out[0].items[0] as any).href, "/vault", "the Console link stays reachable");
+ });
+ 
+ test("works on the DB-driven nav (no group href) too", () => {
+   const out = restructureModuleGroups(syloNav, [vaultGroup(false)]);
+-  assert.deepEqual(labels(out), ["Hub", "Account", "Access", "Enroll", "Other"]);
++  assert.deepEqual(labels(out), ["Home", "Account", "Access", "Enroll", "Other"]);
+ });
+ 
+ test("every leaf survives, none duplicated", () => {
+   const hrefs = (gs: any[]): string[] => gs.flatMap((g) => g.items.flatMap(function walk(e: any): string[] { return e.children ? e.children.flatMap(walk) : [e.href]; }));
+   const before = hrefs([vaultGroup()]);
+-  const after = hrefs(restructureModuleGroups(syloNav, [vaultGroup()])).filter((h) => h !== "/vault/hub");
++  const after = hrefs(restructureModuleGroups(syloNav, [vaultGroup()])).filter((h) => h !== "/vault");
+   assert.deepEqual(after.sort(), before.sort());
+ });
+ 
+ test("order is enforced even if the source order differs; unknown sections go last", () => {
+   const g: any = vaultGroup();
+   g.items = [g.items[3], section("Extras", [leaf("/vault/x", "X")]), g.items[2], g.items[1], g.items[0]];
+-  assert.deepEqual(labels(restructureModuleGroups(syloNav, [g])), ["Hub", "Account", "Access", "Enroll", "Other", "Extras"]);
++  assert.deepEqual(labels(restructureModuleGroups(syloNav, [g])), ["Home", "Account", "Access", "Enroll", "Other", "Extras"]);
+ });
+ 
+ test("admin and non-vault groups are untouched and keep their position", () => {
+   const admin: any = { label: "Team Vault", icon: Icon, items: [leaf("/admin/team-vault", "Team Vault")] };
+   const adminVault: any = { label: "Vault", icon: Icon, items: [leaf("/admin/vault", "Entities")] };
+   const out = restructureModuleGroups(syloNav, [adminVault, vaultGroup(), admin]);
+-  assert.deepEqual(labels(out), ["Vault", "Hub", "Account", "Access", "Enroll", "Other", "Team Vault"]);
++  assert.deepEqual(labels(out), ["Vault", "Home", "Account", "Access", "Enroll", "Other", "Team Vault"]);
+   assert.equal(out[0], adminVault, "an admin 'Vault' group is not mistaken for the user wrapper");
+ });
+ 
+ test("loose leaves under the wrapper land in Other; a plugin gate on a section is kept", () => {
+   const g: any = vaultGroup();
+   g.items.push(leaf("/vault/loose", "Loose"));
+-  g.items[0] = section("Account", [leaf("/vault?tab=entity", "Entity")], { pluginSlug: "vault" });
++  g.items[0] = section("Account", [leaf("/vault/account/entity/home", "Entity")], { pluginSlug: "vault" });
+   const out = restructureModuleGroups(syloNav, [g]);
+   assert.ok(out.find((x) => x.label === "Other")!.items.some((i: any) => i.href === "/vault/loose"));
+   assert.equal(out.find((x) => x.label === "Account")!.pluginSlug, "vault");
+@@ -79,7 +79,7 @@ test("modules without a config keep the inherited sidebar", () => {
+ 
+ test("the real central nav still has the Vault group shape this config expects", () => {
+   const source = readFileSync(new URL("../../../ayzen/src/components/layout/app-sidebar.tsx", import.meta.url), "utf8");
+-  const start = source.indexOf('label: "Vault", icon: Vault, href: "/vault/hub"');
++  const start = source.indexOf('label: "Vault", icon: Vault, href: SYLO_HOME');
+   assert.notEqual(start, -1);
+   const block = source.slice(start, start + 2600);
+   for (const section of ['label: "Account"', 'label: "Access"', 'label: "Enrollment"', 'label: "Other"']) assert.ok(block.includes(section), section);
+diff --git a/artifacts/ayzen/frontend-registry.json b/artifacts/ayzen/frontend-registry.json
+index 9f12277..fc3a206 100644
+--- a/artifacts/ayzen/frontend-registry.json
++++ b/artifacts/ayzen/frontend-registry.json
+@@ -1,7 +1,7 @@
+ {
+   "schemaVersion": 1,
+   "registryId": "frontend-registry",
+-  "generatedAt": "2026-11-05",
++  "generatedAt": "2026-11-08",
+   "generatedBy": "tools/ui-circuit-validator/build.mjs",
+   "schema": "schemas/ui-circuit/frontend-route-entry.v1.json",
+   "sourceRegistries": [
+@@ -12,13 +12,13 @@
+     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
+   ],
+   "completeness": {
+-    "totalRoutes": 191,
+-    "resolvedToPage": 191,
+-    "totalPageFiles": 188,
++    "totalRoutes": 193,
++    "resolvedToPage": 193,
++    "totalPageFiles": 189,
+     "deadPages": 10,
+-    "routesWithNoApiCalls": 126,
++    "routesWithNoApiCalls": 129,
+     "routesWithOrphanCalls": 0,
+-    "routesOk": 65
++    "routesOk": 64
+   },
+   "findings": [
+     {
+@@ -201,11 +201,29 @@
+       "path": "/calendar",
+       "pageFile": "pages/user/airdrop-calendar.tsx"
+     },
++    {
++      "severity": "warning",
++      "code": "MOCK_OR_STATIC_PAGE",
++      "path": "/vault",
++      "pageFile": "pages/sylo/console.tsx"
++    },
+     {
+       "severity": "warning",
+       "code": "MOCK_OR_STATIC_PAGE",
+       "path": "/vault/hub",
+-      "pageFile": "pages/user/vault-hub.tsx"
++      "pageFile": "pages/sylo/redirects.tsx"
++    },
++    {
++      "severity": "warning",
++      "code": "MOCK_OR_STATIC_PAGE",
++      "path": "/vault/account/:section",
++      "pageFile": "pages/sylo/account.tsx"
++    },
++    {
++      "severity": "warning",
++      "code": "MOCK_OR_STATIC_PAGE",
++      "path": "/vault/account/:section/:view",
++      "pageFile": "pages/sylo/account.tsx"
+     },
+     {
+       "severity": "warning",
+@@ -3505,61 +3523,50 @@
+     },
+     {
+       "path": "/vault",
+-      "component": "UserVault",
++      "component": "SyloConsole",
+       "adminOnly": false,
+       "allowedRoles": [],
+       "source": "USER_ROUTES",
+-      "pageFile": "pages/user/vault.tsx",
++      "pageFile": "pages/sylo/console.tsx",
+       "resolution": {
+         "status": "resolved",
+-        "apiCalls": [
+-          {
+-            "method": "GET",
+-            "path": "/api/email-accounts",
+-            "raw": "/api/email-accounts",
+-            "backend": {
+-              "method": "GET",
+-              "path": "/api/email-accounts"
+-            }
+-          },
+-          {
+-            "method": "PATCH",
+-            "path": "/api/vault/bulk-tag",
+-            "raw": "/api/vault/bulk-tag",
+-            "backend": {
+-              "method": "PATCH",
+-              "path": "/api/vault/:id"
+-            }
+-          },
+-          {
+-            "method": "PATCH",
+-            "path": "/api/vault/bulk-action",
+-            "raw": "/api/vault/bulk-action",
+-            "backend": {
+-              "method": "PATCH",
+-              "path": "/api/vault/:id"
+-            }
+-          },
+-          {
+-            "method": "PATCH",
+-            "path": "/api/vault/bulk-action",
+-            "raw": "/api/vault/bulk-action",
+-            "backend": {
+-              "method": "PATCH",
+-              "path": "/api/vault/:id"
+-            }
+-          }
+-        ],
+-        "classification": "OK"
++        "apiCalls": [],
++        "classification": "MOCK_OR_STATIC_PAGE"
+       }
+     },
+     {
+       "path": "/vault/hub",
+-      "component": "VaultHub",
++      "component": "VaultHubRedirect",
++      "adminOnly": false,
++      "allowedRoles": [],
++      "source": "USER_ROUTES",
++      "pageFile": "pages/sylo/redirects.tsx",
++      "resolution": {
++        "status": "resolved",
++        "apiCalls": [],
++        "classification": "MOCK_OR_STATIC_PAGE"
++      }
++    },
++    {
++      "path": "/vault/account/:section",
++      "component": "SyloAccount",
++      "adminOnly": false,
++      "allowedRoles": [],
++      "source": "USER_ROUTES",
++      "pageFile": "pages/sylo/account.tsx",
++      "resolution": {
++        "status": "resolved",
++        "apiCalls": [],
++        "classification": "MOCK_OR_STATIC_PAGE"
++      }
++    },
++    {
++      "path": "/vault/account/:section/:view",
++      "component": "SyloAccount",
+       "adminOnly": false,
+       "allowedRoles": [],
+       "source": "USER_ROUTES",
+-      "pageFile": "pages/user/vault-hub.tsx",
++      "pageFile": "pages/sylo/account.tsx",
+       "resolution": {
+         "status": "resolved",
+         "apiCalls": [],
+diff --git a/artifacts/ayzen/src/App.tsx b/artifacts/ayzen/src/App.tsx
+index 27ea1e2..c4ea3e8 100644
+--- a/artifacts/ayzen/src/App.tsx
++++ b/artifacts/ayzen/src/App.tsx
+@@ -28,6 +28,7 @@ import { VaultUnlockGate } from "@/components/vault/vault-unlock-gate";
+ import { useRealtime } from "@/hooks/use-realtime";
+ import { ScrollToTop } from "@/components/scroll-to-top";
+ import { ErrorBoundary } from "@/components/error-boundary";
++import { FullScreenLoader, PageSkeleton } from "@/components/console";
+ import { ADMIN_ROUTES, USER_ROUTES } from "@/lib/route-config";
+ import type { RouteConfig } from "@/lib/route-config";
+ import { getCurrentSubdomainApp, isPathInSubdomainScope, getModuleForPath, moduleUrl, ALWAYS_ALLOWED_PREFIXES } from "@/lib/subdomain-app";
+@@ -68,16 +69,6 @@ import OidcConsent from "@/pages/oidc-consent";
+ 
+ // ─── Helpers ──────────────────────────────────────────────────────────────────
+ 
+-function PageLoader() {
+-  return (
+-    <div className="min-h-[60vh] flex items-center justify-center">
+-      <div className="font-mono text-xs text-muted-foreground/50 animate-pulse tracking-widest uppercase">
+-        Loading...
+-      </div>
+-    </div>
+-  );
+-}
+-
+ function ProtectedRoute({
+   component: Component,
+   adminOnly = false,
+@@ -196,18 +187,8 @@ function ProtectedRoute({
+   }, [shouldStartOidcLogin, location]);
+ 
+   // S6: full-screen loader while a central -> module redirect is in flight.
+-  if (splitRedirecting || roleRedirecting)
+-    return (
+-      <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
+-        INITIALIZING...
+-      </div>
+-    );
+-  if (isLoading)
+-    return (
+-      <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
+-        INITIALIZING...
+-      </div>
+-    );
++  if (splitRedirecting || roleRedirecting) return <FullScreenLoader label="Redirecting" />;
++  if (isLoading) return <FullScreenLoader label="Loading" />;
+   if (!user) {
+     // 5c-c: only take the "OIDC redirect in flight" branch once the flag
+     // check has resolved to `true` — `null` (still checking) renders the
+@@ -221,11 +202,7 @@ function ProtectedRoute({
+       // <Redirect>, since the destination here is an absolute,
+       // cross-origin provider URL wouter has no notion of, not an SPA
+       // route.
+-      return (
+-        <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
+-          INITIALIZING...
+-        </div>
+-      );
++      return <FullScreenLoader label="Redirecting to sign in" />;
+     }
+     return <Redirect to="/login" />;
+   }
+@@ -243,9 +220,11 @@ function ProtectedRoute({
+   }
+ 
+   const page = (
+-    <Suspense fallback={<PageLoader />}>
+-      <Component {...rest} />
+-    </Suspense>
++    <ErrorBoundary embedded resetKey={location}>
++      <Suspense fallback={<PageSkeleton />}>
++        <Component {...rest} />
++      </Suspense>
++    </ErrorBoundary>
+   );
+ 
+   return (
+diff --git a/artifacts/ayzen/src/components/command-search.tsx b/artifacts/ayzen/src/components/command-search.tsx
+index 70a83c1..b1a7ab7 100644
+--- a/artifacts/ayzen/src/components/command-search.tsx
++++ b/artifacts/ayzen/src/components/command-search.tsx
+@@ -4,6 +4,7 @@ import { useLocation } from "wouter";
+ import { getCurrentSubdomainApp, getModuleForPath, moduleUrl } from "@/lib/subdomain-app";
+ import { useAuth } from "@/hooks/use-auth";
+ import { cn } from "@/lib/utils";
++import { accountPath } from "@/lib/sylo-routes";
+ 
+ const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
+ 
+@@ -81,10 +82,10 @@ export function CommandSearch() {
+         out.push({ id: l.id, label: l.label || l.username || l.email || "Local Account", sub: l.category ?? "Local", type: "local", href: `/vault/local/${l.id}` }));
+ 
+       (data.kyc ?? []).forEach(k =>
+-        out.push({ id: k.id, label: k.name || k.username || "KYC Entity", sub: k.platform || k.category || "KYC", type: "kyc", href: `/vault?tab=kyc` }));
++        out.push({ id: k.id, label: k.name || k.username || "KYC Entity", sub: k.platform || k.category || "KYC", type: "kyc", href: accountPath("kyc", "management") }));
+ 
+       (data.game ?? []).forEach(g =>
+-        out.push({ id: g.id, label: g.username || g.email || "Game Account", sub: g.category ?? "Game", type: "game", href: `/vault?tab=game` }));
++        out.push({ id: g.id, label: g.username || g.email || "Game Account", sub: g.category ?? "Game", type: "game", href: accountPath("game", "management") }));
+ 
+       (data.mail ?? []).forEach(m =>
+         out.push({ id: m.id, label: m.subject || "(no subject)", sub: m.from_addr ?? "Mail", type: "mail", href: `/vault/mail-hub/${m.source_category}/${m.source_id}/mail/${m.id}` }));
+diff --git a/artifacts/ayzen/src/components/console/confirm-dialog.tsx b/artifacts/ayzen/src/components/console/confirm-dialog.tsx
+new file mode 100644
+index 0000000..bade392
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/confirm-dialog.tsx
+@@ -0,0 +1,73 @@
++/**
++ * components/console/confirm-dialog.tsx
++ * ─────────────────────────────────────────────────────────────────────────────
++ * Promise-based confirmation, replacing window.confirm (unstyled, blocks the
++ * thread, impossible to test, and inconsistent with the rest of the UI).
++ *
++ *   const { confirm, dialog } = useConfirm();
++ *   …
++ *   if (!(await confirm({ title: "Delete entity?", tone: "danger", confirmLabel: "Delete" }))) return;
++ *   …
++ *   return <>{…}{dialog}</>;
++ *
++ * Built on the existing Radix AlertDialog, so focus trapping, Escape-to-cancel
++ * and aria-labelling come for free.
++ */
++import { useCallback, useRef, useState, type ReactNode } from "react";
++import {
++  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
++  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
++} from "@/components/ui/alert-dialog";
++import { buttonVariants } from "@/components/ui/button";
++import { cn } from "@/lib/utils";
++
++export interface ConfirmOptions {
++  title: string;
++  description?: ReactNode;
++  confirmLabel?: string;
++  cancelLabel?: string;
++  /** "danger" styles the confirm action as destructive. */
++  tone?: "default" | "danger";
++}
++
++export function useConfirm() {
++  const [options, setOptions] = useState<ConfirmOptions | null>(null);
++  const resolver = useRef<((value: boolean) => void) | null>(null);
++
++  const settle = useCallback((value: boolean) => {
++    resolver.current?.(value);
++    resolver.current = null;
++    setOptions(null);
++  }, []);
++
++  const confirm = useCallback((next: ConfirmOptions) => {
++    // A second call while one is open cancels the first rather than leaking its promise.
++    resolver.current?.(false);
++    return new Promise<boolean>((resolve) => {
++      resolver.current = resolve;
++      setOptions(next);
++    });
++  }, []);
++
++  const dialog = (
++    <AlertDialog open={options !== null} onOpenChange={(open) => { if (!open) settle(false); }}>
++      <AlertDialogContent className="font-ui">
++        <AlertDialogHeader>
++          <AlertDialogTitle>{options?.title}</AlertDialogTitle>
++          {options?.description && <AlertDialogDescription>{options.description}</AlertDialogDescription>}
++        </AlertDialogHeader>
++        <AlertDialogFooter>
++          <AlertDialogCancel onClick={() => settle(false)}>{options?.cancelLabel ?? "Cancel"}</AlertDialogCancel>
++          <AlertDialogAction
++            onClick={() => settle(true)}
++            className={cn(options?.tone === "danger" && buttonVariants({ variant: "destructive" }))}
++          >
++            {options?.confirmLabel ?? "Confirm"}
++          </AlertDialogAction>
++        </AlertDialogFooter>
++      </AlertDialogContent>
++    </AlertDialog>
++  );
++
++  return { confirm, dialog };
++}
+diff --git a/artifacts/ayzen/src/components/console/empty-state.tsx b/artifacts/ayzen/src/components/console/empty-state.tsx
+new file mode 100644
+index 0000000..75f8676
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/empty-state.tsx
+@@ -0,0 +1,26 @@
++/**
++ * components/console/empty-state.tsx
++ * "Nothing here yet" surface. Always explains what the thing is and offers the
++ * one action that would populate it — an empty table with no next step is a
++ * dead end.
++ */
++import type { ReactNode } from "react";
++import type { LucideIcon } from "lucide-react";
++import { cn } from "@/lib/utils";
++
++export function EmptyState({
++  icon: Icon, title, description, action, className,
++}: { icon: LucideIcon; title: string; description?: string; action?: ReactNode; className?: string }) {
++  return (
++    <div className={cn("flex flex-col items-center justify-center gap-3 px-6 py-10 text-center font-ui", className)}>
++      <span className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground ring-1 ring-border">
++        <Icon className="size-5" aria-hidden="true" />
++      </span>
++      <div className="space-y-1">
++        <p className="text-sm font-medium text-foreground">{title}</p>
++        {description && <p className="mx-auto max-w-xs text-xs leading-relaxed text-muted-foreground">{description}</p>}
++      </div>
++      {action}
++    </div>
++  );
++}
+diff --git a/artifacts/ayzen/src/components/console/error-pages.tsx b/artifacts/ayzen/src/components/console/error-pages.tsx
+new file mode 100644
+index 0000000..4c0e514
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/error-pages.tsx
+@@ -0,0 +1,271 @@
++/**
++ * components/console/error-pages.tsx
++ * ─────────────────────────────────────────────────────────────────────────────
++ * One place that decides how a failure is presented.
++ *
++ *   describeError(err)   classifies an unknown thrown value (ApiError status,
++ *                        fetch network failure, anything else) into a kind +
++ *                        user-safe copy + whether retrying can help.
++ *   ErrorScreen          full-page / in-layout surface (404, 403, 5xx, crash)
++ *   InlineError          compact surface for a single widget or table
++ *
++ * Security note: the API's 5xx bodies carry a `detail` field with the raw
++ * exception message. It is deliberately never rendered here — only the
++ * top-level `error` string is, and only for 4xx responses.
++ */
++import type { ReactNode } from "react";
++import { Link } from "wouter";
++import {
++  AlertTriangle, ArrowLeft, Compass, Home, LockKeyhole, RefreshCw, ServerCrash, WifiOff,
++  type LucideIcon,
++} from "lucide-react";
++import { ApiError } from "@workspace/api-client-react";
++import { Button } from "@/components/ui/button";
++import { getCurrentSubdomainApp } from "@/lib/subdomain-app";
++import { cn } from "@/lib/utils";
++
++/* ─── Classification ─────────────────────────────────────────────────────── */
++
++export type ErrorKind =
++  | "unauthorized" | "forbidden" | "not-found" | "rate-limited" | "server" | "network" | "unknown";
++
++export interface ErrorDescriptor {
++  kind: ErrorKind;
++  status?: number;
++  title: string;
++  description: string;
++  /** Whether a plain retry has a realistic chance of succeeding. */
++  retryable: boolean;
++}
++
++const COPY: Record<ErrorKind, Omit<ErrorDescriptor, "kind" | "status">> = {
++  unauthorized: {
++    title: "Your session has expired",
++    description: "Sign in again to continue. Nothing you had open has been lost.",
++    retryable: false,
++  },
++  forbidden: {
++    title: "You don’t have access to this",
++    description: "Your account doesn’t have permission to view this. If you think that’s a mistake, ask the owner to share it with you.",
++    retryable: false,
++  },
++  "not-found": {
++    title: "We couldn’t find that",
++    description: "It may have been moved, deleted, or the link may be incorrect.",
++    retryable: false,
++  },
++  "rate-limited": {
++    title: "Too many requests",
++    description: "You’re going a little fast. Wait a moment and try again.",
++    retryable: true,
++  },
++  server: {
++    title: "Something went wrong on our side",
++    description: "The request failed and we’ve not changed anything. Try again in a moment.",
++    retryable: true,
++  },
++  network: {
++    title: "Can’t reach the server",
++    description: "Check your connection and try again.",
++    retryable: true,
++  },
++  unknown: {
++    title: "Something went wrong",
++    description: "An unexpected error occurred. Try again, and contact support if it keeps happening.",
++    retryable: true,
++  },
++};
++
++function kindFromStatus(status: number): ErrorKind {
++  if (status === 401) return "unauthorized";
++  if (status === 403) return "forbidden";
++  if (status === 404) return "not-found";
++  if (status === 429) return "rate-limited";
++  if (status >= 500) return "server";
++  return "unknown";
++}
++
++/** Top-level `error` string from a 4xx body, if present. Never reads `detail`. */
++function safeClientMessage(error: ApiError): string | null {
++  if (error.status < 400 || error.status >= 500) return null;
++  const data = error.data;
++  if (data && typeof data === "object" && "error" in data) {
++    const msg = (data as { error?: unknown }).error;
++    if (typeof msg === "string" && msg.length > 0 && msg.length <= 200) return msg;
++  }
++  return null;
++}
++
++export function describeError(error: unknown): ErrorDescriptor {
++  if (error instanceof ApiError) {
++    const kind = kindFromStatus(error.status);
++    const base = COPY[kind];
++    // A specific 4xx message from the API (e.g. "Entity limit reached") beats generic copy.
++    const message = kind === "unknown" || kind === "rate-limited" ? safeClientMessage(error) : null;
++    return { kind, status: error.status, ...base, description: message ?? base.description };
++  }
++  // fetch() rejects with a TypeError when the network is down or the request is blocked.
++  if (error instanceof TypeError) return { kind: "network", ...COPY.network };
++  return { kind: "unknown", ...COPY.unknown };
++}
++
++/* ─── Full-page surface ──────────────────────────────────────────────────── */
++
++const KIND_ICON: Record<ErrorKind, LucideIcon> = {
++  unauthorized: LockKeyhole,
++  forbidden: LockKeyhole,
++  "not-found": Compass,
++  "rate-limited": AlertTriangle,
++  server: ServerCrash,
++  network: WifiOff,
++  unknown: AlertTriangle,
++};
++
++const KIND_TONE: Record<ErrorKind, string> = {
++  unauthorized: "bg-warning-muted text-warning ring-warning/25",
++  forbidden: "bg-warning-muted text-warning ring-warning/25",
++  "not-found": "bg-info-muted text-info ring-info/25",
++  "rate-limited": "bg-warning-muted text-warning ring-warning/25",
++  server: "bg-danger-muted text-danger ring-danger/25",
++  network: "bg-pending-muted text-pending ring-pending/25",
++  unknown: "bg-danger-muted text-danger ring-danger/25",
++};
++
++export interface ErrorScreenProps {
++  kind?: ErrorKind;
++  /** Small label above the title, e.g. "Error 404". */
++  eyebrow?: string;
++  title: string;
++  description: string;
++  actions?: ReactNode;
++  /** Support reference the user can quote. */
++  reference?: string;
++  /** Render inside the app layout (no full-viewport height). */
++  embedded?: boolean;
++}
++
++export function ErrorScreen({
++  kind = "unknown", eyebrow, title, description, actions, reference, embedded = false,
++}: ErrorScreenProps) {
++  const Icon = KIND_ICON[kind];
++  return (
++    <div
++      role="alert"
++      className={cn(
++        "flex w-full items-center justify-center bg-background px-6 font-ui text-foreground",
++        embedded ? "min-h-[60vh] py-12" : "min-h-screen",
++      )}
++    >
++      <div className="w-full max-w-md text-center">
++        <div className={cn("mx-auto flex size-12 items-center justify-center rounded-xl ring-1", KIND_TONE[kind])}>
++          <Icon className="size-6" aria-hidden="true" />
++        </div>
++        {eyebrow && (
++          <p className="mt-5 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{eyebrow}</p>
++        )}
++        <h1 className={cn("text-xl font-semibold tracking-tight", eyebrow ? "mt-1.5" : "mt-5")}>{title}</h1>
++        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
++        {actions && <div className="mt-6 flex flex-wrap items-center justify-center gap-2">{actions}</div>}
++        {reference && (
++          <p className="mt-6 text-xs text-muted-foreground/70">
++            Reference <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-foreground/80">{reference}</code>
++          </p>
++        )}
++      </div>
++    </div>
++  );
++}
++
++/** Where "Go home" should land: the module's own home inside a subdomain app, else the root. */
++function homeHref(): string {
++  return getCurrentSubdomainApp()?.homePath ?? "/";
++}
++
++function BackButton() {
++  return (
++    <Button variant="outline" onClick={() => window.history.back()}>
++      <ArrowLeft aria-hidden="true" /> Go back
++    </Button>
++  );
++}
++
++function HomeButton({ label = "Go home" }: { label?: string }) {
++  return (
++    <Button asChild>
++      <Link href={homeHref()}><Home aria-hidden="true" /> {label}</Link>
++    </Button>
++  );
++}
++
++export function NotFoundPage({ embedded = false }: { embedded?: boolean }) {
++  return (
++    <ErrorScreen
++      kind="not-found"
++      eyebrow="Error 404"
++      title="Page not found"
++      description="The page you’re looking for doesn’t exist or has moved. Check the address, or head back to where you were."
++      embedded={embedded}
++      actions={<><BackButton /><HomeButton /></>}
++    />
++  );
++}
++
++export function ForbiddenPage({ embedded = false }: { embedded?: boolean }) {
++  const d = COPY.forbidden;
++  return (
++    <ErrorScreen
++      kind="forbidden"
++      eyebrow="Error 403"
++      title={d.title}
++      description={d.description}
++      embedded={embedded}
++      actions={<><BackButton /><HomeButton /></>}
++    />
++  );
++}
++
++export function ServerErrorPage({ embedded = false, onRetry, reference }: { embedded?: boolean; onRetry?: () => void; reference?: string }) {
++  const d = COPY.server;
++  return (
++    <ErrorScreen
++      kind="server"
++      eyebrow="Error 500"
++      title={d.title}
++      description={d.description}
++      embedded={embedded}
++      reference={reference}
++      actions={
++        <>
++          {onRetry && <Button onClick={onRetry}><RefreshCw aria-hidden="true" /> Try again</Button>}
++          <Button variant="outline" asChild><Link href={homeHref()}><Home aria-hidden="true" /> Go home</Link></Button>
++        </>
++      }
++    />
++  );
++}
++
++/* ─── Inline surface (widgets, tables, panels) ───────────────────────────── */
++
++export function InlineError({
++  error, onRetry, retrying = false, className,
++}: { error: unknown; onRetry?: () => void; retrying?: boolean; className?: string }) {
++  const d = describeError(error);
++  const Icon = KIND_ICON[d.kind];
++  return (
++    <div role="alert" className={cn("flex flex-col items-center justify-center gap-3 px-6 py-8 text-center font-ui", className)}>
++      <div className={cn("flex size-9 items-center justify-center rounded-lg ring-1", KIND_TONE[d.kind])}>
++        <Icon className="size-4" aria-hidden="true" />
++      </div>
++      <div className="space-y-1">
++        <p className="text-sm font-medium text-foreground">{d.title}</p>
++        <p className="mx-auto max-w-xs text-xs leading-relaxed text-muted-foreground">{d.description}</p>
++      </div>
++      {onRetry && d.retryable && (
++        <Button size="sm" variant="outline" onClick={onRetry} disabled={retrying}>
++          <RefreshCw className={cn(retrying && "animate-spin motion-reduce:animate-none")} aria-hidden="true" />
++          {retrying ? "Retrying" : "Try again"}
++        </Button>
++      )}
++    </div>
++  );
++}
+diff --git a/artifacts/ayzen/src/components/console/index.ts b/artifacts/ayzen/src/components/console/index.ts
+new file mode 100644
+index 0000000..917e673
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/index.ts
+@@ -0,0 +1,9 @@
++export * from "./skeletons";
++export * from "./loaders";
++export * from "./error-pages";
++export * from "./query-boundary";
++export * from "./confirm-dialog";
++export * from "./page-header";
++export * from "./stat-tile";
++export * from "./widget";
++export * from "./empty-state";
+diff --git a/artifacts/ayzen/src/components/console/loaders.tsx b/artifacts/ayzen/src/components/console/loaders.tsx
+new file mode 100644
+index 0000000..7598205
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/loaders.tsx
+@@ -0,0 +1,55 @@
++/**
++ * components/console/loaders.tsx
++ * ─────────────────────────────────────────────────────────────────────────────
++ * Spinner-based loading affordances. Rule of thumb used across the console:
++ *   - Page / panel content  → skeletons (skeletons.tsx), never a spinner
++ *   - Pending user action   → LoadingButton / InlineLoader
++ *   - App boot / redirects  → FullScreenLoader
++ * Nothing here fakes progress: a spinner means "working", with no percentage.
++ */
++import * as React from "react";
++import { Spinner } from "@/components/ui/spinner";
++import { Button, type ButtonProps } from "@/components/ui/button";
++import { cn } from "@/lib/utils";
++
++export function FullScreenLoader({ label = "Loading" }: { label?: string }) {
++  return (
++    <div
++      role="status"
++      aria-live="polite"
++      className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background font-ui text-muted-foreground"
++    >
++      <Spinner className="size-6 text-primary motion-reduce:animate-none" aria-hidden="true" />
++      <span className="text-sm">{label}…</span>
++    </div>
++  );
++}
++
++export function InlineLoader({ label = "Loading", className }: { label?: string; className?: string }) {
++  return (
++    <div role="status" aria-live="polite" className={cn("flex items-center gap-2 font-ui text-sm text-muted-foreground", className)}>
++      <Spinner className="size-4 motion-reduce:animate-none" aria-hidden="true" />
++      <span>{label}…</span>
++    </div>
++  );
++}
++
++export interface LoadingButtonProps extends ButtonProps {
++  loading?: boolean;
++  /** Replaces the label while loading, e.g. "Saving". Defaults to the original children. */
++  loadingText?: string;
++}
++
++/**
++ * Button that blocks re-submission while pending and keeps its width stable
++ * (spinner takes the icon slot) so the layout does not jump.
++ */
++export const LoadingButton = React.forwardRef<HTMLButtonElement, LoadingButtonProps>(
++  ({ loading = false, loadingText, disabled, children, ...props }, ref) => (
++    <Button ref={ref} disabled={disabled || loading} aria-busy={loading || undefined} {...props}>
++      {loading && <Spinner className="motion-reduce:animate-none" aria-hidden="true" />}
++      {loading && loadingText ? loadingText : children}
++    </Button>
++  ),
++);
++LoadingButton.displayName = "LoadingButton";
+diff --git a/artifacts/ayzen/src/components/console/page-header.tsx b/artifacts/ayzen/src/components/console/page-header.tsx
+new file mode 100644
+index 0000000..aaa5954
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/page-header.tsx
+@@ -0,0 +1,56 @@
++/**
++ * components/console/page-header.tsx
++ * Consistent page title block: optional breadcrumb trail, eyebrow, title,
++ * description and a right-aligned action slot.
++ */
++import type { ReactNode } from "react";
++import { Link } from "wouter";
++import { ChevronRight } from "lucide-react";
++import { cn } from "@/lib/utils";
++
++export interface Crumb { label: string; href?: string }
++
++export function PageHeader({
++  eyebrow, title, description, actions, breadcrumbs, className,
++}: {
++  eyebrow?: string;
++  title: string;
++  description?: ReactNode;
++  actions?: ReactNode;
++  breadcrumbs?: readonly Crumb[];
++  className?: string;
++}) {
++  return (
++    <header className={cn("space-y-3 font-ui", className)}>
++      {breadcrumbs && breadcrumbs.length > 0 && (
++        <nav aria-label="Breadcrumb">
++          <ol className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
++            {breadcrumbs.map((crumb, i) => {
++              const last = i === breadcrumbs.length - 1;
++              return (
++                <li key={`${crumb.label}-${i}`} className="flex items-center gap-1">
++                  {crumb.href && !last ? (
++                    <Link href={crumb.href} className="rounded transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
++                      {crumb.label}
++                    </Link>
++                  ) : (
++                    <span aria-current={last ? "page" : undefined} className={cn(last && "text-foreground")}>{crumb.label}</span>
++                  )}
++                  {!last && <ChevronRight className="size-3 text-muted-foreground/50" aria-hidden="true" />}
++                </li>
++              );
++            })}
++          </ol>
++        </nav>
++      )}
++      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
++        <div className="min-w-0">
++          {eyebrow && <p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary/80">{eyebrow}</p>}
++          <h1 className="text-2xl font-semibold tracking-tight text-foreground">{title}</h1>
++          {description && <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">{description}</p>}
++        </div>
++        {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
++      </div>
++    </header>
++  );
++}
+diff --git a/artifacts/ayzen/src/components/console/query-boundary.tsx b/artifacts/ayzen/src/components/console/query-boundary.tsx
+new file mode 100644
+index 0000000..d41eddc
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/query-boundary.tsx
+@@ -0,0 +1,56 @@
++/**
++ * components/console/query-boundary.tsx
++ * ─────────────────────────────────────────────────────────────────────────────
++ * Renders the four states of an async read — loading, error, empty, data — so
++ * a screen can't forget one of them. The previous vault code swallowed errors
++ * (`.catch(() => {})`), which made a failed load look identical to "you have
++ * no data". Here a failure is always an error surface with a retry.
++ *
++ *   <QueryBoundary query={q} skeleton={<WidgetSkeleton />} isEmpty={(d) => !d.length} empty={…}>
++ *     {(data) => <Table rows={data} />}
++ *   </QueryBoundary>
++ *
++ * Works with any TanStack Query result (structural type, no coupling).
++ */
++import type { ReactNode } from "react";
++import { InlineError } from "./error-pages";
++
++export interface QueryLike<T> {
++  data: T | undefined;
++  isPending: boolean;
++  isError: boolean;
++  error: unknown;
++  isFetching: boolean;
++  refetch: () => unknown;
++}
++
++export interface QueryBoundaryProps<T> {
++  query: QueryLike<T>;
++  skeleton: ReactNode;
++  children: (data: T) => ReactNode;
++  isEmpty?: (data: T) => boolean;
++  empty?: ReactNode;
++  errorClassName?: string;
++}
++
++export function QueryBoundary<T>({
++  query, skeleton, children, isEmpty, empty, errorClassName,
++}: QueryBoundaryProps<T>) {
++  // First load only: background refetches keep showing the last good data.
++  if (query.isPending) return <>{skeleton}</>;
++
++  if (query.isError && query.data === undefined) {
++    return (
++      <InlineError
++        error={query.error}
++        retrying={query.isFetching}
++        onRetry={() => void query.refetch()}
++        className={errorClassName}
++      />
++    );
++  }
++
++  const data = query.data as T;
++  if (isEmpty?.(data)) return <>{empty ?? null}</>;
++  return <>{children(data)}</>;
++}
+diff --git a/artifacts/ayzen/src/components/console/skeletons.tsx b/artifacts/ayzen/src/components/console/skeletons.tsx
+new file mode 100644
+index 0000000..7c46464
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/skeletons.tsx
+@@ -0,0 +1,140 @@
++/**
++ * components/console/skeletons.tsx
++ * ─────────────────────────────────────────────────────────────────────────────
++ * Skeletons that mirror the real layout (same radii, paddings and row heights
++ * as StatTile / Widget / table rows) so content swapping in does not shift the
++ * page. Every composite is a labelled `role="status"` region for assistive
++ * tech, and respects `prefers-reduced-motion`.
++ */
++import { Skeleton } from "@/components/ui/skeleton";
++import { cn } from "@/lib/utils";
++
++/** A single neutral placeholder block. */
++export function Bone({ className, style }: { className?: string; style?: React.CSSProperties }) {
++  return <Skeleton aria-hidden="true" style={style} className={cn("bg-muted motion-reduce:animate-none", className)} />;
++}
++
++/**
++ * Announces itself once. Composites nested inside another skeleton pass
++ * `announce={false}` so a screen reader hears a single "Loading …", not one
++ * per child region.
++ */
++function Region({
++  label, announce = true, className, children,
++}: { label: string; announce?: boolean; className?: string; children: React.ReactNode }) {
++  if (!announce) return <div className={className}>{children}</div>;
++  return (
++    <div role="status" aria-busy="true" className={className}>
++      <span className="sr-only">{label}</span>
++      {children}
++    </div>
++  );
++}
++
++export function StatTileSkeleton() {
++  return (
++    <div className="rounded-xl border border-border bg-card p-4 shadow-elevation-1">
++      <div className="flex items-center justify-between">
++        <Bone className="h-3 w-20" />
++        <Bone className="h-7 w-7 rounded-md" />
++      </div>
++      <Bone className="mt-4 h-7 w-28" />
++      <Bone className="mt-3 h-3 w-24" />
++    </div>
++  );
++}
++
++export function StatGridSkeleton({ count = 4, announce = true }: { count?: number; announce?: boolean }) {
++  return (
++    <Region label="Loading figures" announce={announce} className="grid grid-cols-2 gap-3 lg:grid-cols-4">
++      {Array.from({ length: count }, (_, i) => (
++        <StatTileSkeleton key={i} />
++      ))}
++    </Region>
++  );
++}
++
++export function TableSkeleton({ rows = 6, cols = 4, announce = true }: { rows?: number; cols?: number; announce?: boolean }) {
++  return (
++    <Region label="Loading rows" announce={announce} className="divide-y divide-border/60">
++      {Array.from({ length: rows }, (_, r) => (
++        <div key={r} className="flex items-center gap-4 px-4 py-3">
++          <Bone className="h-8 w-8 shrink-0 rounded-md" />
++          {Array.from({ length: cols }, (_, c) => (
++            <Bone key={c} className={cn("h-3.5", c === 0 ? "w-40" : "w-20", c > 1 && "hidden sm:block")} />
++          ))}
++        </div>
++      ))}
++    </Region>
++  );
++}
++
++export function ChartSkeleton({ className, announce = true }: { className?: string; announce?: boolean }) {
++  return (
++    <Region label="Loading chart" announce={announce} className={cn("flex h-56 items-end gap-2 px-2", className)}>
++      {[40, 62, 48, 78, 55, 90, 66, 72, 50, 84].map((h, i) => (
++        <div key={i} aria-hidden="true" className="flex flex-1 items-end self-stretch">
++          <Bone className="w-full rounded-b-none rounded-t-md" style={{ height: `${h}%` }} />
++        </div>
++      ))}
++    </Region>
++  );
++}
++
++export function ListSkeleton({ rows = 5, announce = true }: { rows?: number; announce?: boolean }) {
++  return (
++    <Region label="Loading list" announce={announce} className="space-y-3">
++      {Array.from({ length: rows }, (_, i) => (
++        <div key={i} className="flex items-center gap-3">
++          <Bone className="h-8 w-8 shrink-0 rounded-full" />
++          <div className="flex-1 space-y-2">
++            <Bone className="h-3 w-3/5" />
++            <Bone className="h-3 w-2/5" />
++          </div>
++        </div>
++      ))}
++    </Region>
++  );
++}
++
++export function WidgetSkeleton({ className, rows = 4, announce = true }: { className?: string; rows?: number; announce?: boolean }) {
++  return (
++    <Region label="Loading panel" announce={announce} className={cn("rounded-xl border border-border bg-card shadow-elevation-1", className)}>
++      <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
++        <Bone className="h-4 w-32" />
++        <Bone className="h-6 w-16 rounded-md" />
++      </div>
++      <div className="p-4">
++        <ListSkeleton rows={rows} announce={false} />
++      </div>
++    </Region>
++  );
++}
++
++export function PageHeaderSkeleton({ announce = true }: { announce?: boolean }) {
++  return (
++    <Region label="Loading page" announce={announce} className="space-y-2">
++      <Bone className="h-3 w-24" />
++      <Bone className="h-7 w-64" />
++      <Bone className="h-4 w-96 max-w-full" />
++    </Region>
++  );
++}
++
++/**
++ * Route-level fallback (Suspense) — a page frame, not a spinner on a blank
++ * screen, so navigating between lazy routes keeps the layout stable.
++ */
++export function PageSkeleton({ stats = 4, widgets = 2 }: { stats?: number; widgets?: number }) {
++  return (
++    <Region label="Loading page" className="space-y-6">
++      <PageHeaderSkeleton announce={false} />
++      <StatGridSkeleton count={stats} announce={false} />
++      <div className="grid gap-4 lg:grid-cols-2">
++        {Array.from({ length: widgets }, (_, i) => (
++          <WidgetSkeleton key={i} announce={false} />
++        ))}
++      </div>
++    </Region>
++  );
++}
+diff --git a/artifacts/ayzen/src/components/console/stat-tile.tsx b/artifacts/ayzen/src/components/console/stat-tile.tsx
+new file mode 100644
+index 0000000..b563879
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/stat-tile.tsx
+@@ -0,0 +1,75 @@
++/**
++ * components/console/stat-tile.tsx
++ * KPI tile. Colour carries meaning only through the semantic status tokens
++ * (success / warning / danger / info) — never brand colours — so a red number
++ * always means "bad", regardless of the active theme accent.
++ */
++import type { ReactNode } from "react";
++import { Link } from "wouter";
++import type { LucideIcon } from "lucide-react";
++import { cn } from "@/lib/utils";
++import { StatTileSkeleton } from "./skeletons";
++
++export type Tone = "neutral" | "primary" | "success" | "warning" | "danger" | "info";
++
++export const TONE_CHIP: Record<Tone, string> = {
++  neutral: "bg-muted text-muted-foreground ring-border",
++  primary: "bg-primary/10 text-primary ring-primary/20",
++  success: "bg-success-muted text-success ring-success/25",
++  warning: "bg-warning-muted text-warning ring-warning/25",
++  danger: "bg-danger-muted text-danger ring-danger/25",
++  info: "bg-info-muted text-info ring-info/25",
++};
++
++const TONE_VALUE: Record<Tone, string> = {
++  neutral: "text-foreground",
++  primary: "text-foreground",
++  success: "text-success",
++  warning: "text-warning",
++  danger: "text-danger",
++  info: "text-info",
++};
++
++export interface StatTileProps {
++  label: string;
++  value: ReactNode;
++  icon?: LucideIcon;
++  tone?: Tone;
++  /** Secondary line, e.g. "of 24 total" or a delta. */
++  hint?: ReactNode;
++  /** Makes the whole tile a link. */
++  href?: string;
++  loading?: boolean;
++}
++
++export function StatTile({ label, value, icon: Icon, tone = "neutral", hint, href, loading }: StatTileProps) {
++  if (loading) return <StatTileSkeleton />;
++
++  const body = (
++    <>
++      <div className="flex items-start justify-between gap-2">
++        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
++        {Icon && (
++          <span className={cn("flex size-7 shrink-0 items-center justify-center rounded-md ring-1", TONE_CHIP[tone])}>
++            <Icon className="size-3.5" aria-hidden="true" />
++          </span>
++        )}
++      </div>
++      <p className={cn("mt-3 text-2xl font-semibold tabular-nums tracking-tight", TONE_VALUE[tone])}>{value}</p>
++      {hint && <p className="mt-1.5 text-xs text-muted-foreground">{hint}</p>}
++    </>
++  );
++
++  const base = "block rounded-xl border border-border bg-card p-4 font-ui shadow-elevation-1";
++  if (href) {
++    return (
++      <Link
++        href={href}
++        className={cn(base, "transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring")}
++      >
++        {body}
++      </Link>
++    );
++  }
++  return <div className={base}>{body}</div>;
++}
+diff --git a/artifacts/ayzen/src/components/console/widget.tsx b/artifacts/ayzen/src/components/console/widget.tsx
+new file mode 100644
+index 0000000..b9a7cca
+--- /dev/null
++++ b/artifacts/ayzen/src/components/console/widget.tsx
+@@ -0,0 +1,52 @@
++/**
++ * components/console/widget.tsx
++ * Titled panel used for every dashboard module. Owns its own header, optional
++ * footer link and padding so widgets line up on a grid without per-page CSS.
++ */
++import { useId, type ReactNode } from "react";
++import { Link } from "wouter";
++import { ArrowRight } from "lucide-react";
++import { cn } from "@/lib/utils";
++
++export function Widget({
++  title, description, action, footer, padded = true, className, children,
++}: {
++  title: string;
++  description?: string;
++  action?: ReactNode;
++  footer?: ReactNode;
++  /** Set false for edge-to-edge content such as tables. */
++  padded?: boolean;
++  className?: string;
++  children: ReactNode;
++}) {
++  const titleId = useId();
++  return (
++    <section
++      aria-labelledby={titleId}
++      className={cn("flex flex-col rounded-xl border border-border bg-card font-ui shadow-elevation-1", className)}
++    >
++      <header className="flex items-start justify-between gap-3 border-b border-border/60 px-4 py-3">
++        <div className="min-w-0">
++          <h2 id={titleId} className="text-sm font-semibold text-foreground">{title}</h2>
++          {description && <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>}
++        </div>
++        {action && <div className="shrink-0">{action}</div>}
++      </header>
++      <div className={cn("flex-1", padded && "p-4")}>{children}</div>
++      {footer && <footer className="border-t border-border/60 px-4 py-2.5">{footer}</footer>}
++    </section>
++  );
++}
++
++/** Standard "View all →" footer link. */
++export function WidgetLink({ href, children }: { href: string; children: ReactNode }) {
++  return (
++    <Link
++      href={href}
++      className="inline-flex items-center gap-1 rounded text-xs font-medium text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
++    >
++      {children} <ArrowRight className="size-3" aria-hidden="true" />
++    </Link>
++  );
++}
+diff --git a/artifacts/ayzen/src/components/error-boundary.tsx b/artifacts/ayzen/src/components/error-boundary.tsx
+index db06800..97e6042 100644
+--- a/artifacts/ayzen/src/components/error-boundary.tsx
++++ b/artifacts/ayzen/src/components/error-boundary.tsx
+@@ -1,74 +1,76 @@
++/**
++ * components/error-boundary.tsx
++ * ─────────────────────────────────────────────────────────────────────────────
++ * Render-error boundary used at two levels:
++ *
++ *   - Root (App.tsx): last resort, full-screen. A crash here means the shell
++ *     itself failed.
++ *   - Route (ProtectedRoute): wraps only the page, `embedded`, so the sidebar
++ *     and header survive a page crash. Pass `resetKey={location}` and the
++ *     boundary clears itself when the user navigates away — a crash on one
++ *     page never traps them on every other page.
++ *
++ * Each crash gets a short reference id that is logged with the stack, so a
++ * user can quote it to support and engineers can find the matching log line.
++ */
+ import { Component, type ErrorInfo, type ReactNode } from "react";
+-import { AlertTriangle, RotateCcw, Home } from "lucide-react";
++import { Home, RefreshCw } from "lucide-react";
++import { Button } from "@/components/ui/button";
++import { ErrorScreen } from "@/components/console/error-pages";
+ 
+ interface Props {
+   children: ReactNode;
++  /** When this value changes while in the error state, the boundary resets. */
++  resetKey?: string;
++  /** Render inside the app layout instead of taking the full viewport. */
++  embedded?: boolean;
+ }
+ 
+ interface State {
+-  hasError: boolean;
+   error: Error | null;
++  reference: string | null;
++}
++
++function newReference(): string {
++  return Math.random().toString(36).slice(2, 8).toUpperCase();
+ }
+ 
+ export class ErrorBoundary extends Component<Props, State> {
+-  state: State = { hasError: false, error: null };
++  state: State = { error: null, reference: null };
+ 
+   static getDerivedStateFromError(error: Error): State {
+-    return { hasError: true, error };
++    return { error, reference: newReference() };
+   }
+ 
+   componentDidCatch(error: Error, info: ErrorInfo) {
+-    console.error("AYZEN render error:", error, info.componentStack);
++    console.error(`[AYZEN] render error ref=${this.state.reference}`, error, info.componentStack);
+   }
+ 
+-  handleReload = () => {
+-    this.setState({ hasError: false, error: null });
+-    window.location.reload();
+-  };
++  componentDidUpdate(prev: Props) {
++    if (this.state.error && prev.resetKey !== this.props.resetKey) {
++      this.setState({ error: null, reference: null });
++    }
++  }
+ 
+-  handleHome = () => {
+-    this.setState({ hasError: false, error: null });
+-    window.location.href = "/";
+-  };
++  private retry = () => this.setState({ error: null, reference: null });
++  private goHome = () => { window.location.assign("/"); };
+ 
+   render() {
+-    if (this.state.hasError) {
+-      return (
+-        <div className="min-h-screen w-full flex items-center justify-center bg-background text-foreground px-6">
+-          <div className="max-w-md w-full text-center space-y-5">
+-            <div className="mx-auto w-14 h-14 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+-              <AlertTriangle className="w-7 h-7 text-red-400" />
+-            </div>
+-            <div>
+-              <h1 className="font-mono font-bold text-lg tracking-tight text-foreground">Something went wrong</h1>
+-              <p className="font-mono text-xs text-muted-foreground mt-2">
+-                AYZEN hit an unexpected error while rendering this page. Try reloading — your data is safe.
+-              </p>
+-              {this.state.error?.message && (
+-                <p className="font-mono text-[10px] text-muted-foreground/50 mt-3 break-all bg-card border border-card-border rounded-lg px-3 py-2">
+-                  {this.state.error.message}
+-                </p>
+-              )}
+-            </div>
+-            <div className="flex items-center justify-center gap-3">
+-              <button
+-                onClick={this.handleReload}
+-                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-mono text-xs font-bold hover:opacity-90 transition-opacity"
+-              >
+-                <RotateCcw className="w-3.5 h-3.5" /> Reload
+-              </button>
+-              <button
+-                onClick={this.handleHome}
+-                className="flex items-center gap-2 px-4 py-2 border border-card-border rounded-lg font-mono text-xs hover:bg-muted/30 transition-colors"
+-              >
+-                <Home className="w-3.5 h-3.5" /> Go home
+-              </button>
+-            </div>
+-          </div>
+-        </div>
+-      );
+-    }
+-
+-    return this.props.children;
++    if (!this.state.error) return this.props.children;
++    return (
++      <ErrorScreen
++        kind="unknown"
++        title="This page hit a problem"
++        description="An unexpected error stopped this page from loading. Your data is safe — nothing was changed. Try again, or go back home."
++        reference={this.state.reference ?? undefined}
++        embedded={this.props.embedded}
++        actions={
++          <>
++            <Button onClick={this.retry}><RefreshCw aria-hidden="true" /> Try again</Button>
++            <Button variant="outline" onClick={this.goHome}><Home aria-hidden="true" /> Go home</Button>
++          </>
++        }
++      />
++    );
+   }
+ }
+diff --git a/artifacts/ayzen/src/components/layout/app-sidebar.tsx b/artifacts/ayzen/src/components/layout/app-sidebar.tsx
+index 72dbfb6..fd8f5bd 100644
+--- a/artifacts/ayzen/src/components/layout/app-sidebar.tsx
++++ b/artifacts/ayzen/src/components/layout/app-sidebar.tsx
+@@ -391,13 +391,13 @@ const MODERATOR_NAV: NavGroup[] = [
+     ],
+   },
+   {
+-    label: "Vault", icon: Vault, href: "/vault/hub",
++    label: "Vault", icon: Vault, href: SYLO_HOME,
+     items: [
+       { label: "Account", icon: Shield, children: [
+-        { href: "/vault?tab=entity",          label: "Entity",       icon: Shield },
+-        { href: "/vault?tab=local",           label: "Local",        icon: Smartphone },
+-        { href: "/vault?tab=kyc",             label: "KYC",          icon: ShieldCheck },
+-        { href: "/vault?tab=game",            label: "Game",         icon: Gamepad2 },
++        { href: accountPath("entity", "home"),          label: "Entity",       icon: Shield },
++        { href: accountPath("local", "home"),           label: "Local",        icon: Smartphone },
++        { href: accountPath("kyc", "home"),             label: "KYC",          icon: ShieldCheck },
++        { href: accountPath("game", "management"),            label: "Game",         icon: Gamepad2 },
+       ]},
+       { label: "Access", icon: Key, children: [
+         { href: "/vault/2fa/overview",        label: "2FA",          icon: ShieldCheck },
+@@ -712,13 +712,13 @@ const TEAM_LEADER_NAV: NavGroup[] = [
+     ],
+   },
+   {
+-    label: "Vault", icon: Vault, href: "/vault/hub",
++    label: "Vault", icon: Vault, href: SYLO_HOME,
+     items: [
+       { label: "Account", icon: Shield, children: [
+-        { href: "/vault?tab=entity",          label: "Entity",       icon: Shield },
+-        { href: "/vault?tab=local",           label: "Local",        icon: Smartphone },
+-        { href: "/vault?tab=kyc",             label: "KYC",          icon: ShieldCheck },
+-        { href: "/vault?tab=game",            label: "Game",         icon: Gamepad2 },
++        { href: accountPath("entity", "home"),          label: "Entity",       icon: Shield },
++        { href: accountPath("local", "home"),           label: "Local",        icon: Smartphone },
++        { href: accountPath("kyc", "home"),             label: "KYC",          icon: ShieldCheck },
++        { href: accountPath("game", "management"),            label: "Game",         icon: Gamepad2 },
+       ]},
+       { label: "Access", icon: Key, children: [
+         { href: "/vault/2fa/overview",        label: "2FA",          icon: ShieldCheck },
+@@ -1098,13 +1098,13 @@ const USER_NAV: NavGroup[] = [
+     ],
+   },
+   {
+-    label: "Vault", icon: Vault, href: "/vault/hub",
++    label: "Vault", icon: Vault, href: SYLO_HOME,
+     items: [
+       { label: "Account", icon: Shield, children: [
+-        { href: "/vault?tab=entity",          label: "Entity",       icon: Shield },
+-        { href: "/vault?tab=local",           label: "Local",        icon: Smartphone },
+-        { href: "/vault?tab=kyc",             label: "KYC",          icon: ShieldCheck },
+-        { href: "/vault?tab=game",            label: "Game",         icon: Gamepad2 },
++        { href: accountPath("entity", "home"),          label: "Entity",       icon: Shield },
++        { href: accountPath("local", "home"),           label: "Local",        icon: Smartphone },
++        { href: accountPath("kyc", "home"),             label: "KYC",          icon: ShieldCheck },
++        { href: accountPath("game", "management"),            label: "Game",         icon: Gamepad2 },
+       ]},
+       { label: "Access", icon: Key, children: [
+         { href: "/vault/2fa/overview",        label: "2FA",          icon: ShieldCheck },
+@@ -1227,6 +1227,7 @@ const USER_NAV: NavGroup[] = [
+ interface Message { role: "user" | "assistant"; content: string; }
+ 
+ import { getApiBase } from "@/lib/api-base";
++import { accountPath, SYLO_HOME } from "@/lib/sylo-routes";
+ const BASE = getApiBase();
+ 
+ export function SidebarAiPanel() {
+diff --git a/artifacts/ayzen/src/components/layout/mobile-dock.tsx b/artifacts/ayzen/src/components/layout/mobile-dock.tsx
+index 1f44dbb..fab20aa 100644
+--- a/artifacts/ayzen/src/components/layout/mobile-dock.tsx
++++ b/artifacts/ayzen/src/components/layout/mobile-dock.tsx
+@@ -8,7 +8,7 @@ const DOCK_ITEMS = [
+   { href: "/home",        icon: Home,       label: "Home",    authRequired: "/home" },
+   { href: "/projects",    icon: FolderGit2, label: "Projects", authRequired: "/projects" },
+   { href: "/marketplace", icon: Store,      label: "Market",  authRequired: "/marketplace" },
+-  { href: "/vault?tab=entity", icon: Shield, label: "Vault",  authRequired: "/vault" },
++  { href: "/vault", icon: Shield, label: "Vault",  authRequired: "/vault" },
+   { href: "/teams",       icon: Users,      label: "Teams",   authRequired: "/teams" },
+ ] as const;
+ 
+diff --git a/artifacts/ayzen/src/components/layout/module-nav/sylo.ts b/artifacts/ayzen/src/components/layout/module-nav/sylo.ts
+index 20f56ea..c9cb334 100644
+--- a/artifacts/ayzen/src/components/layout/module-nav/sylo.ts
++++ b/artifacts/ayzen/src/components/layout/module-nav/sylo.ts
+@@ -1,6 +1,7 @@
+ import { LayoutDashboard } from "lucide-react";
+ import type { NavGroup } from "../app-sidebar";
+ import type { ModuleNavConfig } from "./restructure";
++import { SYLO_HOME } from "../../../lib/sylo-routes";
+ 
+ const leafHrefs = (entries: NavGroup["items"], acc: string[] = []): string[] => {
+   for (const entry of entries) {
+@@ -18,7 +19,7 @@ const leafHrefs = (entries: NavGroup["items"], acc: string[] = []): string[] =>
+  */
+ export const syloNav: ModuleNavConfig = {
+   isWrapper: (group) => {
+-    const named = group.label.trim().toLowerCase() === "vault" || group.href === "/vault/hub";
++    const named = group.label.trim().toLowerCase() === "vault" || group.href === "/vault/hub" || group.href === SYLO_HOME;
+     if (!named) return false;
+     const hrefs = leafHrefs(group.items);
+     return hrefs.length > 0 && hrefs.every((h) => h === "/vault" || h.startsWith("/vault/") || h.startsWith("/vault?"));
+@@ -26,6 +27,6 @@ export const syloNav: ModuleNavConfig = {
+   order: ["Account", "Access", "Enroll", "Other"],
+   rename: { Enrollment: "Enroll" },
+   fallbackSection: "Other",
+-  // The wrapper's header used to link to the vault hub; keep that reachable.
+-  pinned: { label: "Hub", icon: LayoutDashboard, items: [{ href: "/vault/hub", label: "Vault Hub", icon: LayoutDashboard }] },
++  // The wrapper's header used to link to the Vault Hub; the Console is its replacement.
++  pinned: { label: "Home", icon: LayoutDashboard, items: [{ href: SYLO_HOME, label: "Console", icon: LayoutDashboard }] },
+ };
+diff --git a/artifacts/ayzen/src/components/layout/vault-sidebar.tsx b/artifacts/ayzen/src/components/layout/vault-sidebar.tsx
+index a4cd125..934e402 100644
+--- a/artifacts/ayzen/src/components/layout/vault-sidebar.tsx
++++ b/artifacts/ayzen/src/components/layout/vault-sidebar.tsx
+@@ -35,6 +35,7 @@ import {
+   DatabaseBackup, ArrowLeftRight, FileBarChart, HeartPulse,
+ } from "lucide-react";
+ import { cn } from "@/lib/utils";
++import { accountPath } from "@/lib/sylo-routes";
+ 
+ interface FlatItem { href: string; label: string; icon: React.ElementType }
+ interface ExpandableItem { label: string; icon: React.ElementType; children: readonly FlatItem[] }
+@@ -46,10 +47,10 @@ function isExpandable(item: StepItem): item is ExpandableItem {
+ 
+ // ── STEP 01 — ACCOUNT ─────────────────────────────────────────────────────────
+ const ACCOUNT_ITEMS: readonly StepItem[] = [
+-  { href: "/vault?tab=entity",  label: "Entity",  icon: Shield },
+-  { href: "/vault?tab=local",   label: "Local",   icon: Smartphone },
+-  { href: "/vault?tab=kyc",     label: "KYC",     icon: ShieldCheck },
+-  { href: "/vault?tab=game",    label: "Game",    icon: Gamepad2 },
++  { href: accountPath("entity", "home"),      label: "Entity",  icon: Shield },
++  { href: accountPath("local", "home"),       label: "Local",   icon: Smartphone },
++  { href: accountPath("kyc", "home"),         label: "KYC",     icon: ShieldCheck },
++  { href: accountPath("game", "management"),  label: "Game",    icon: Gamepad2 },
+ ] as const;
+ 
+ // ── STEP 02 — ACCESS ──────────────────────────────────────────────────────────
+@@ -119,6 +120,13 @@ function matchHref(href: string, fullLocation: string): boolean {
+     const base = href.replace("/overview", "");
+     return fullLocation === base || fullLocation.startsWith(`${base}/`);
+   }
++  // Account sections: the "…/<section>/home" link stays highlighted on every
++  // view of that section (home, dashboard, analysis, management).
++  const accountHome = /^(\/vault\/account\/[a-z]+)\/home$/.exec(href);
++  if (accountHome) {
++    const base = accountHome[1];
++    return fullLocation === base || fullLocation.startsWith(`${base}/`) || fullLocation.startsWith(`${base}?`);
++  }
+   if (href.includes("?")) {
+     const [hPath, hQuery] = href.split("?");
+     const [lPath, lQuery] = fullLocation.split("?");
+diff --git a/artifacts/ayzen/src/components/sylo/charts.tsx b/artifacts/ayzen/src/components/sylo/charts.tsx
+new file mode 100644
+index 0000000..f63ea99
+--- /dev/null
++++ b/artifacts/ayzen/src/components/sylo/charts.tsx
+@@ -0,0 +1,38 @@
++/**
++ * components/sylo/charts.tsx
++ * Horizontal bar chart wrapper. Colours come from the theme's CSS variables so
++ * it follows light/dark and the active accent; recharts gets plain strings.
++ */
++import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
++
++export interface BarDatum { name: string; value: number }
++
++const AXIS = { fill: "var(--color-muted-foreground)", fontSize: 12 } as const;
++const ROW_PX = 34;
++
++export function HBarChart({
++  data, format, label,
++}: { data: readonly BarDatum[]; format: (n: number) => string; label: string }) {
++  const height = Math.max(120, data.length * ROW_PX + 32);
++  return (
++    <div role="img" aria-label={label} style={{ height }} className="w-full font-ui">
++      <ResponsiveContainer width="100%" height="100%">
++        <BarChart data={[...data]} layout="vertical" margin={{ top: 4, right: 16, bottom: 0, left: 0 }}>
++          <CartesianGrid horizontal={false} stroke="var(--color-border)" strokeDasharray="3 3" />
++          <XAxis type="number" tick={AXIS} tickFormatter={format} axisLine={false} tickLine={false} />
++          <YAxis type="category" dataKey="name" tick={AXIS} width={110} axisLine={false} tickLine={false} />
++          <Tooltip
++            cursor={{ fill: "var(--color-muted)", opacity: 0.5 }}
++            formatter={(v: number) => [format(v), ""]}
++            separator=""
++            contentStyle={{
++              background: "var(--color-card)", border: "1px solid var(--color-border)",
++              borderRadius: 8, fontSize: 12, color: "var(--color-foreground)",
++            }}
++          />
++          <Bar dataKey="value" fill="var(--color-primary)" radius={[0, 4, 4, 0]} barSize={18} />
++        </BarChart>
++      </ResponsiveContainer>
++    </div>
++  );
++}
+diff --git a/artifacts/ayzen/src/pages/user/vault.tsx b/artifacts/ayzen/src/components/sylo/entity-manager.tsx
+similarity index 89%
+rename from artifacts/ayzen/src/pages/user/vault.tsx
+rename to artifacts/ayzen/src/components/sylo/entity-manager.tsx
+index acce3cd..f1e5d44 100644
+--- a/artifacts/ayzen/src/pages/user/vault.tsx
++++ b/artifacts/ayzen/src/components/sylo/entity-manager.tsx
+@@ -1,4 +1,4 @@
+-import { useState, useRef, useEffect, lazy, Suspense } from "react";
++import { useState, useRef, useEffect } from "react";
+ import { useLocation, useSearch } from "wouter";
+ import { useListVaultEntries, useDeleteVaultEntry, customFetch } from "@workspace/api-client-react";
+ import { Button } from "@/components/ui/button";
+@@ -7,56 +7,35 @@ import { Label } from "@/components/ui/label";
+ import { Textarea } from "@/components/ui/textarea";
+ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+-import { Badge } from "@/components/ui/badge";
+ import { Checkbox } from "@/components/ui/checkbox";
+ import {
+-  Plus, KeyRound, Trash2, Eye, EyeOff,
+-  Copy, Check, Mail, Hash, Lock, Shield,
+-  Phone, AtSign, X, Smartphone,
+-  QrCode, Search, Download, Upload, Wallet, AlertTriangle, Star,
+-  Loader2, Edit2, MoreVertical, LayoutDashboard, List, Users, HardDrive,
+-  ShieldCheck, Tag, CheckSquare, Share2,
+-  TrendingUp, TrendingDown, Minus, FolderGit2, ShieldAlert, Ban, XCircle, CheckCircle2,
++  Plus, KeyRound, Trash2, Mail, Lock, Shield, X, Search, Download, Upload, Wallet,
++  AlertTriangle, Star, Loader2, Edit2, MoreVertical, Users, HardDrive, ShieldCheck, Tag,
++  CheckSquare, Share2, TrendingUp, TrendingDown, Minus, FolderGit2, ShieldAlert, Ban, XCircle,
++  CheckCircle2,
+ } from "lucide-react";
+ import { useToast } from "@/hooks/use-toast";
+ import { useAuth } from "@/hooks/use-auth";
+ import { useQueryClient, useMutation } from "@tanstack/react-query";
+ import { cn } from "@/lib/utils";
+-import { RankBadge, getEntityRank } from "@/lib/entity-rank";
++import { RankBadge } from "@/lib/entity-rank";
+ import { computeEntityPerformanceScore, type EntityLeaderboardRow } from "@/lib/performance-score";
+-import LocalAccounts from "@/components/local-accounts";
+ import { LocalEntityPicker } from "@/components/vault/local-entity-picker";
+-import { VaultSidebar } from "@/components/layout/vault-sidebar";
+ import { DataEntityPicker } from "@/components/vault/data-entity-picker";
+-import KycEntries from "@/components/kyc-entries";
+-import GameEntries from "@/components/game-entries";
+ import { QRCodeSVG } from "qrcode.react";
+ import { computeEntityWorth, computeEntityBuyValue, computeEntityProfit, computeEntityProfitPct, metricLabelFor } from "@/lib/entity-worth";
+ import { SchemaForm } from "@/components/schema/SchemaForm";
+ import { ENTITY_FIELDS, ACCOUNT_SUBTABS } from "@/config/fields/entity-create";
+-import { ValueEntryDialog, ValueEntryButton, FollowerEntryDialog, FollowerEntryButton } from "@/components/value-entry-dialog";
+-import { ValuePnlPanel } from "@/components/value-pnl-panel";
++import { ValueEntryDialog, FollowerEntryDialog } from "@/components/value-entry-dialog";
+ import { ImapSmtpForm, type EmailAccount } from "@/components/mail/imap-smtp-form";
+ import { ShareEntityDialog, type ShareTarget } from "@/components/vault/share-entity-dialog";
+ import { validateWalletKey, type WalletKeyValidationResult } from "@/lib/vault-key-validation-api";
+ import { ManageSharesDialog } from "@/components/vault/manage-shares-dialog";
+-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
++import { VaultLoading } from "@/components/vault/vault-loading";
+ import { useModuleAwareNavigate } from "@/components/module-link";
+ 
+ const MAIL_BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
+ 
+-const VaultLocalDashboard = lazy(() => import("@/pages/user/vault-local-dashboard"));
+-const VaultKycDashboard = lazy(() => import("@/pages/user/vault-kyc-dashboard"));
+-const VaultEntityDashboard = lazy(() => import("@/pages/user/vault-entity-dashboard"));
+-const VaultMail = lazy(() => import("@/pages/user/vault-mail"));
+-const VaultWalletSeed = lazy(() => import("@/pages/user/vault-wallet-seed"));
+-
+-
+-
+-function LoadingTab() {
+-  return <VaultLoadingIntro title="Loading dashboard" />;
+-}
+-
+ // ─── Phase 18 — buy-value vs worth badge ────────────────────────────────────
+ // Reuses the existing computeEntityBuyValue/computeEntityProfit(Pct) helpers
+ // (already powering the vault PnL dashboard) rather than a second comparison
+@@ -125,64 +104,6 @@ function EntityStatusFlags({ entry, leaderboardRow }: { entry: EntryAny; leaderb
+   );
+ }
+ 
+-function CopyBtn({ value }: { value: string }) {
+-  const [copied, setCopied] = useState(false);
+-  const copy = async () => {
+-    await navigator.clipboard.writeText(value);
+-    setCopied(true);
+-    setTimeout(() => setCopied(false), 2000);
+-  };
+-  return (
+-    <button onClick={copy} className={cn("p-1.5 rounded transition-all", copied ? "text-emerald-400" : "text-muted-foreground/40 hover:text-primary hover:bg-primary/10")}>
+-      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+-    </button>
+-  );
+-}
+-
+-function CredField({ label, value }: { label: string; value: string | null | undefined }) {
+-  const [shown, setShown] = useState(false);
+-  const [copied, setCopied] = useState(false);
+-  if (!value) return null;
+-  const copy = async () => {
+-    await navigator.clipboard.writeText(value);
+-    setCopied(true);
+-    setTimeout(() => setCopied(false), 2000);
+-  };
+-  return (
+-    <div className="flex items-center gap-2 group/row py-0.5">
+-      <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider w-14 flex-shrink-0">{label}</span>
+-      <span className={cn("flex-1 font-mono text-[11px] truncate", shown ? "text-foreground/90" : "text-muted-foreground/60")}>
+-        {shown ? value : "•".repeat(Math.min(value.length, 12))}
+-      </span>
+-      <div className="flex items-center gap-1 flex-shrink-0">
+-        <button onClick={() => setShown(s => !s)} className="text-muted-foreground/40 hover:text-primary transition-colors">
+-          {shown ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+-        </button>
+-        <button onClick={copy} className={cn("transition-colors", copied ? "text-emerald-400" : "text-muted-foreground/40 hover:text-primary")}>
+-          {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+-        </button>
+-      </div>
+-    </div>
+-  );
+-}
+-
+-function PlatformSection({ title, color, icon: Icon, fields }: {
+-  title: string; color: string; icon: React.ElementType;
+-  fields: { label: string; value: string | null | undefined }[];
+-}) {
+-  const hasAny = fields.some(f => f.value);
+-  if (!hasAny) return null;
+-  return (
+-    <div className="space-y-0.5 py-2 border-t border-border/30 first:border-0 first:pt-0">
+-      <div className="flex items-center gap-1.5 mb-1.5">
+-        <Icon className={cn("w-3 h-3", color)} />
+-        <span className={cn("text-[9px] font-mono uppercase tracking-widest font-bold", color)}>{title}</span>
+-      </div>
+-      {fields.map(f => <CredField key={f.label} label={f.label} value={f.value} />)}
+-    </div>
+-  );
+-}
+-
+ interface OtherAccount { id: string; platform: string; label: string; tags: string; username: string; password: string; email: string; emailPassword: string; twofa: string; notes: string; age: string; worth: string; buyValue: string; metric: string; lastLoginAt: string; buyDate: string; createDate: string; }
+ 
+ // Same 3-tab split as the Account tab's ACCOUNT_SUBTABS minus Wallet —
+@@ -394,7 +315,7 @@ function newIdempotencyKey(): string {
+ }
+ 
+ // ── Entity Manager (full CRUD) ─────────────────────────────────────────────────
+-function EntityManager() {
++export function EntityManager() {
+   const { data, isLoading } = useListVaultEntries();
+   // VLT-GAP-19: every create carries an Idempotency-Key so a request whose response was lost (dropped connection, server restart)
+   // can be retried without creating a second entity. The key is kept for as long as the same payload is being (re)submitted and
+@@ -523,6 +444,20 @@ function EntityManager() {
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [urlEditIdParam, isLoading, allEntries]);
+ 
++  // Open the Add dialog for ?new=1 (the Console's "New entity" action), then
++  // drop the param so a refresh or Back doesn't reopen it.
++  const [location, setLocation] = useLocation();
++  const wantsNew = new URLSearchParams(urlSearch).get("new") === "1";
++  useEffect(() => {
++    if (!wantsNew) return;
++    resetForm(); setEditId(null); setDialogKey(k => k + 1); setOpen(true);
++    const params = new URLSearchParams(urlSearch);
++    params.delete("new");
++    const rest = params.toString();
++    setLocation(rest ? `${location}?${rest}` : location, { replace: true });
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++  }, [wantsNew]);
++
+   // Per-entity project progress, for the badge/performance-score formula
+   // (see src/lib/performance-score.ts). Fetched once for the whole list
+   // rather than per-card, then looked up by vaultEntryId below.
+@@ -1105,7 +1040,7 @@ function EntityManager() {
+ 
+       {/* Entity grid */}
+       {isLoading || !entriesIntroFinished ? (
+-        <VaultLoadingIntro
++        <VaultLoading
+           title="Loading your vault entities"
+           done={!isLoading}
+           onFinished={() => setEntriesIntroFinished(true)}
+@@ -1845,154 +1780,3 @@ function EntityManager() {
+   );
+ }
+ 
+-// ── Entity Tab wrapper (Dashboard + List) ───────────────────────────────────────
+-function EntityTab() {
+-  const search = useSearch();
+-  const urlEditId = new URLSearchParams(search).get("editId");
+-  // Force list view when a specific editId is passed in the URL (from Edit button on detail page)
+-  const [view, setView] = useState<"dashboard" | "list">(urlEditId ? "list" : "dashboard");
+-  const effectiveView = urlEditId ? "list" : view;
+-  return (
+-    <div className="space-y-4">
+-      <div className="flex items-center gap-1 bg-muted/20 rounded-lg p-1 w-fit">
+-        <button
+-          onClick={() => setView("dashboard")}
+-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", effectiveView === "dashboard" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
+-        >
+-          <LayoutDashboard className="w-3 h-3" /> Dashboard
+-        </button>
+-        <button
+-          onClick={() => setView("list")}
+-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", effectiveView === "list" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
+-        >
+-          <List className="w-3 h-3" /> Manage
+-        </button>
+-      </div>
+-      {effectiveView === "dashboard" ? (
+-        <Suspense fallback={<LoadingTab />}>
+-          <VaultEntityDashboard />
+-        </Suspense>
+-      ) : (
+-        <EntityManager />
+-      )}
+-    </div>
+-  );
+-}
+-
+-// ── Local Tab wrapper (Dashboard + Account) ─────────────────────────────────────
+-function LocalTab() {
+-  const [view, setView] = useState<"dashboard" | "account">("dashboard");
+-  return (
+-    <div className="space-y-4">
+-      <div className="flex items-center gap-1 bg-muted/20 rounded-lg p-1 w-fit">
+-        <button
+-          onClick={() => setView("dashboard")}
+-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", view === "dashboard" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
+-        >
+-          <LayoutDashboard className="w-3 h-3" /> Dashboard
+-        </button>
+-        <button
+-          onClick={() => setView("account")}
+-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", view === "account" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
+-        >
+-          <Smartphone className="w-3 h-3" /> Account
+-        </button>
+-      </div>
+-      {view === "dashboard" ? (
+-        <Suspense fallback={<LoadingTab />}>
+-          <VaultLocalDashboard />
+-        </Suspense>
+-      ) : (
+-        <LocalAccounts />
+-      )}
+-    </div>
+-  );
+-}
+-
+-// ── KYC Tab wrapper (Dashboard + Manage) ────────────────────────────────────
+-// Same Dashboard/Manage split as LocalTab above: Dashboard gives an
+-// Overview (progress cards per category) + Category switch (view entities
+-// grouped by exchange/platform category), Manage is the existing KycEntries
+-// create/edit/list view.
+-function KycTab() {
+-  const [view, setView] = useState<"dashboard" | "manage">("dashboard");
+-  return (
+-    <div className="space-y-4">
+-      <div className="flex items-center gap-1 bg-muted/20 rounded-lg p-1 w-fit">
+-        <button
+-          onClick={() => setView("dashboard")}
+-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", view === "dashboard" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
+-        >
+-          <LayoutDashboard className="w-3 h-3" /> Dashboard
+-        </button>
+-        <button
+-          onClick={() => setView("manage")}
+-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", view === "manage" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
+-        >
+-          <List className="w-3 h-3" /> Manage
+-        </button>
+-      </div>
+-      {view === "dashboard" ? (
+-        <Suspense fallback={<LoadingTab />}>
+-          <VaultKycDashboard />
+-        </Suspense>
+-      ) : (
+-        <KycEntries />
+-      )}
+-    </div>
+-  );
+-}
+-
+-// ── Main Vault Page ────────────────────────────────────────────────────────────
+-type VaultTab = "entity" | "wallet" | "local" | "mail" | "kyc" | "game";
+-
+-const TAB_META: Record<VaultTab, { label: string; desc: string }> = {
+-  entity: { label: "Entity Vault",   desc: "Manage credentials and track entity health completeness" },
+-  wallet: { label: "Wallet & Seeds", desc: "Seed phrases encrypted per entity + real-time MetaMask connect" },
+-  local:  { label: "Local Accounts", desc: "Dashboard analytics and account management for local platforms" },
+-  mail:   { label: "Mail Hub",       desc: "All emails from entities and local accounts in one place" },
+-  kyc:    { label: "KYC",            desc: "KYC entities per exchange/platform — account, email, and seller/buyer info" },
+-  game:   { label: "Game",           desc: "Game accounts vault — account, email, rank/level/tags per platform" },
+-};
+-
+-export default function UserVault() {
+-  const search = useSearch();
+-  const tab = (new URLSearchParams(search).get("tab") as VaultTab) || "entity";
+-  const meta = TAB_META[tab] ?? TAB_META["entity"];
+-
+-  return (
+-    <div className="space-y-5 page-enter">
+-      <div className="flex items-start justify-between gap-4">
+-        <div>
+-          <h1 className="text-2xl font-bold font-mono tracking-tighter uppercase flex items-center gap-2.5">
+-            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+-              <KeyRound className="w-4 h-4 text-primary" />
+-            </div>
+-            {meta.label}
+-          </h1>
+-          <p className="text-muted-foreground font-mono text-xs mt-1 pl-0.5">{meta.desc}</p>
+-        </div>
+-      </div>
+-
+-      <div className="flex flex-col sm:flex-row gap-5 min-h-0">
+-        <VaultSidebar />
+-        <div className="flex-1 min-w-0">
+-          {tab === "entity" && <EntityTab />}
+-          {tab === "local"  && <LocalTab />}
+-          {tab === "kyc"    && <KycTab />}
+-          {tab === "game"   && <GameEntries />}
+-          {tab === "wallet" && (
+-            <Suspense fallback={<LoadingTab />}>
+-              <VaultWalletSeed />
+-            </Suspense>
+-          )}
+-          {tab === "mail" && (
+-            <Suspense fallback={<LoadingTab />}>
+-              <VaultMail />
+-            </Suspense>
+-          )}
+-        </div>
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/artifacts/ayzen/src/components/sylo/section-tabs.tsx b/artifacts/ayzen/src/components/sylo/section-tabs.tsx
+new file mode 100644
+index 0000000..c898eab
+--- /dev/null
++++ b/artifacts/ayzen/src/components/sylo/section-tabs.tsx
+@@ -0,0 +1,42 @@
++/**
++ * components/sylo/section-tabs.tsx
++ * Route-driven tabs (real links, so each view is bookmarkable and back/forward
++ * work). Not a state-driven <Tabs>: switching a view is a navigation.
++ */
++import { Link } from "wouter";
++import { accountPath, type AccountSection, type AccountView } from "@/lib/sylo-routes";
++import { SECTION_META, SECTION_VIEWS, VIEW_META } from "./sections";
++import { cn } from "@/lib/utils";
++
++export function SectionTabs({ section, active }: { section: AccountSection; active: AccountView }) {
++  const views = SECTION_VIEWS[section];
++  if (views.length < 2) return null;
++  return (
++    <nav aria-label={`${SECTION_META[section].label} sections`} className="border-b border-border font-ui">
++      <ul className="-mb-px flex gap-1 overflow-x-auto">
++        {views.map((view) => {
++          const { label, icon: Icon } = VIEW_META[view];
++          const isActive = view === active;
++          return (
++            <li key={view}>
++              <Link
++                href={accountPath(section, view)}
++                aria-current={isActive ? "page" : undefined}
++                className={cn(
++                  "flex items-center gap-2 whitespace-nowrap border-b-2 px-3.5 py-2.5 text-sm font-medium transition-colors",
++                  "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-inset",
++                  isActive
++                    ? "border-primary text-foreground"
++                    : "border-transparent text-muted-foreground hover:border-border hover:text-foreground",
++                )}
++              >
++                <Icon className="size-4" aria-hidden="true" />
++                {label}
++              </Link>
++            </li>
++          );
++        })}
++      </ul>
++    </nav>
++  );
++}
+diff --git a/artifacts/ayzen/src/components/sylo/sections.ts b/artifacts/ayzen/src/components/sylo/sections.ts
+new file mode 100644
+index 0000000..d8f1a9e
+--- /dev/null
++++ b/artifacts/ayzen/src/components/sylo/sections.ts
+@@ -0,0 +1,57 @@
++/**
++ * components/sylo/sections.ts
++ * Static metadata for the Account sections and their views. Pure data — no
++ * components — so routing, nav and pages share one definition.
++ */
++import {
++  BarChart3, Gamepad2, LayoutDashboard, LayoutGrid, Settings2, Shield, ShieldCheck, Smartphone,
++  type LucideIcon,
++} from "lucide-react";
++import type { AccountSection, AccountView } from "@/lib/sylo-routes";
++
++export interface SectionMeta { label: string; description: string; icon: LucideIcon }
++export interface ViewMeta { label: string; icon: LucideIcon }
++
++export const SECTION_META: Record<AccountSection, SectionMeta> = {
++  entity: {
++    label: "Entity",
++    description: "Projects and the social, wallet and email identities you operate under them.",
++    icon: Shield,
++  },
++  local: {
++    label: "Local accounts",
++    description: "Standalone accounts stored locally, outside any entity.",
++    icon: Smartphone,
++  },
++  kyc: {
++    label: "KYC",
++    description: "Verified-identity accounts, with payment and ownership status.",
++    icon: ShieldCheck,
++  },
++  game: {
++    label: "Game accounts",
++    description: "Game and platform accounts you track.",
++    icon: Gamepad2,
++  },
++};
++
++export const VIEW_META: Record<AccountView, ViewMeta> = {
++  home: { label: "Home", icon: LayoutGrid },
++  dashboard: { label: "Dashboard", icon: LayoutDashboard },
++  analysis: { label: "Analysis", icon: BarChart3 },
++  management: { label: "Management", icon: Settings2 },
++};
++
++/** Game accounts only have a management surface today; the rest get all four. */
++export const SECTION_VIEWS: Record<AccountSection, readonly AccountView[]> = {
++  entity: ["home", "dashboard", "analysis", "management"],
++  local: ["home", "dashboard", "analysis", "management"],
++  kyc: ["home", "dashboard", "analysis", "management"],
++  game: ["management"],
++};
++
++export const VIEW_BLURB: Record<Exclude<AccountView, "home">, string> = {
++  dashboard: "Live portfolio overview with category and activity breakdowns.",
++  analysis: "Distribution, returns and performance charts.",
++  management: "Create, edit, import and remove records.",
++};
+diff --git a/artifacts/ayzen/src/components/sylo/views/section-analysis.tsx b/artifacts/ayzen/src/components/sylo/views/section-analysis.tsx
+new file mode 100644
+index 0000000..76cb5b4
+--- /dev/null
++++ b/artifacts/ayzen/src/components/sylo/views/section-analysis.tsx
+@@ -0,0 +1,153 @@
++/**
++ * Analysis view: distribution and return charts per section. Entity uses the
++ * server-side analytics rollup; local/KYC derive the same shape from their
++ * (secret-free) summaries.
++ */
++import { BarChart3, TrendingDown, TrendingUp } from "lucide-react";
++import {
++  EmptyState, QueryBoundary, Widget, WidgetSkeleton,
++} from "@/components/console";
++import {
++  useKycSummary, useLocalSummary, useVaultAnalytics,
++  type AccountSummary, type Performer,
++} from "@/hooks/use-sylo-data";
++import { formatPct, formatSignedUsd, formatUsd, roiPct } from "@/lib/format-money";
++import type { AccountSection } from "@/lib/sylo-routes";
++import { cn } from "@/lib/utils";
++import { HBarChart } from "../charts";
++
++const usdAxis = (n: number) => formatUsd(n, { compact: true });
++
++function RoiCell({ worth, buy }: { worth: number; buy: number }) {
++  const roi = roiPct(worth, buy);
++  if (roi === null) return <span className="text-muted-foreground">—</span>;
++  return <span className={cn("font-medium tabular-nums", roi >= 0 ? "text-success" : "text-danger")}>{roi >= 0 ? "+" : ""}{formatPct(roi)}</span>;
++}
++
++function PerformerTable({ rows, kind }: { rows: Performer[]; kind: "best" | "worst" }) {
++  const Icon = kind === "best" ? TrendingUp : TrendingDown;
++  return (
++    <ul className="divide-y divide-border/60">
++      {rows.map((r) => (
++        <li key={r.id} className="flex items-center gap-3 px-4 py-2.5">
++          <Icon className={cn("size-4 shrink-0", kind === "best" ? "text-success" : "text-danger")} aria-hidden="true" />
++          <span className="min-w-0 flex-1">
++            <span className="block truncate text-sm font-medium text-foreground">{r.projectName}</span>
++            <span className="block truncate text-xs text-muted-foreground">{r.entitySerial ?? `#${r.id}`}</span>
++          </span>
++          <span className="text-right text-xs text-muted-foreground tabular-nums">
++            {formatUsd(r.currentValue)}
++            <span className="block"><RoiCell worth={r.currentValue} buy={r.currentBuyValue} /></span>
++          </span>
++        </li>
++      ))}
++    </ul>
++  );
++}
++
++function EntityAnalysis() {
++  const query = useVaultAnalytics();
++  return (
++    <QueryBoundary
++      query={query}
++      skeleton={<div className="grid gap-4 lg:grid-cols-2">{[0, 1, 2, 3].map((i) => <WidgetSkeleton key={i} announce={i === 0} rows={4} />)}</div>}
++      isEmpty={(a) => a.overview.totalEntries === 0}
++      empty={<EmptyState icon={BarChart3} title="Nothing to analyse yet" description="Add an entity and its worth will be charted here." />}
++    >
++      {(a) => {
++        const projects = Object.entries(a.byProject)
++          .map(([name, v]) => ({ name, value: v.totalValue }))
++          .sort((x, y) => y.value - x.value).slice(0, 8);
++        const platforms = (["twitter", "discord", "telegram"] as const).map((p) => ({
++          name: p.charAt(0).toUpperCase() + p.slice(1), value: a.perPlatform[p].totalWorth,
++        }));
++        return (
++          <div className="grid gap-4 lg:grid-cols-2">
++            <Widget title="Worth by project" description="Top 8 by current value">
++              <HBarChart data={projects} format={usdAxis} label="Entity worth by project" />
++            </Widget>
++            <Widget title="Worth by platform" description="Social platform accounts across all entities">
++              <HBarChart data={platforms} format={usdAxis} label="Worth by platform" />
++            </Widget>
++            <Widget title="Best performing" description="Highest return on cost" padded={false}>
++              {a.bestPerforming.length ? <PerformerTable rows={a.bestPerforming} kind="best" /> : <EmptyState icon={TrendingUp} title="No data" />}
++            </Widget>
++            <Widget title="Worst performing" description="Lowest return on cost" padded={false}>
++              {a.worstPerforming.length ? <PerformerTable rows={a.worstPerforming} kind="worst" /> : <EmptyState icon={TrendingDown} title="No data" />}
++            </Widget>
++          </div>
++        );
++      }}
++    </QueryBoundary>
++  );
++}
++
++function CategoryAnalysis({ summary, noun }: { summary: AccountSummary; noun: string }) {
++  const bars = summary.byCategory.slice(0, 8).map((c) => ({ name: c.category, value: c.worth }));
++  return (
++    <div className="grid gap-4 lg:grid-cols-2">
++      <Widget title="Worth by category" description={`Top 8 categories by total ${noun} worth`}>
++        <HBarChart data={bars} format={usdAxis} label={`Worth by ${noun} category`} />
++      </Widget>
++      <Widget title="Category returns" description="Worth against cost basis" padded={false}>
++        <div className="overflow-x-auto">
++          <table className="w-full text-sm">
++            <thead>
++              <tr className="border-b border-border/60 text-left text-xs text-muted-foreground">
++                <th scope="col" className="px-4 py-2 font-medium">Category</th>
++                <th scope="col" className="px-4 py-2 text-right font-medium">Count</th>
++                <th scope="col" className="px-4 py-2 text-right font-medium">Worth</th>
++                <th scope="col" className="px-4 py-2 text-right font-medium">P&amp;L</th>
++                <th scope="col" className="px-4 py-2 text-right font-medium">ROI</th>
++              </tr>
++            </thead>
++            <tbody className="divide-y divide-border/60">
++              {summary.byCategory.map((c) => (
++                <tr key={c.category}>
++                  <th scope="row" className="px-4 py-2 text-left font-medium text-foreground">{c.category}</th>
++                  <td className="px-4 py-2 text-right tabular-nums text-muted-foreground">{c.count}</td>
++                  <td className="px-4 py-2 text-right tabular-nums">{formatUsd(c.worth)}</td>
++                  <td className={cn("px-4 py-2 text-right tabular-nums", c.worth - c.buy >= 0 ? "text-success" : "text-danger")}>{formatSignedUsd(c.worth - c.buy)}</td>
++                  <td className="px-4 py-2 text-right"><RoiCell worth={c.worth} buy={c.buy} /></td>
++                </tr>
++              ))}
++            </tbody>
++          </table>
++        </div>
++      </Widget>
++    </div>
++  );
++}
++
++const CATEGORY_SKELETON = (
++  <div className="grid gap-4 lg:grid-cols-2">
++    <WidgetSkeleton rows={5} />
++    <WidgetSkeleton announce={false} rows={5} />
++  </div>
++);
++
++function LocalAnalysis() {
++  const query = useLocalSummary();
++  return (
++    <QueryBoundary query={query} skeleton={CATEGORY_SKELETON} isEmpty={(s) => s.total === 0}
++      empty={<EmptyState icon={BarChart3} title="Nothing to analyse yet" description="Add local accounts and their worth will be charted here." />}>
++      {(s) => <CategoryAnalysis summary={s} noun="local account" />}
++    </QueryBoundary>
++  );
++}
++
++function KycAnalysis() {
++  const query = useKycSummary();
++  return (
++    <QueryBoundary query={query} skeleton={CATEGORY_SKELETON} isEmpty={(s) => s.total === 0}
++      empty={<EmptyState icon={BarChart3} title="Nothing to analyse yet" description="Add KYC entries and their worth will be charted here." />}>
++      {(s) => <CategoryAnalysis summary={s} noun="KYC" />}
++    </QueryBoundary>
++  );
++}
++
++export default function SectionAnalysis({ section }: { section: Exclude<AccountSection, "game"> }) {
++  if (section === "entity") return <EntityAnalysis />;
++  if (section === "local") return <LocalAnalysis />;
++  return <KycAnalysis />;
++}
+diff --git a/artifacts/ayzen/src/components/sylo/views/section-home.tsx b/artifacts/ayzen/src/components/sylo/views/section-home.tsx
+new file mode 100644
+index 0000000..d0e09d5
+--- /dev/null
++++ b/artifacts/ayzen/src/components/sylo/views/section-home.tsx
+@@ -0,0 +1,46 @@
++/**
++ * Home view: headline figures for the section, a way into each of its views,
++ * and (entity only) anything that needs attention.
++ */
++import { Link } from "wouter";
++import { ArrowRight } from "lucide-react";
++import { accountPath, type AccountSection, type AccountView } from "@/lib/sylo-routes";
++import { SECTION_VIEWS, VIEW_BLURB, VIEW_META } from "../sections";
++import { AttentionWidget, EntityStatGrid, KycStatGrid, LocalStatGrid } from "../widgets";
++
++type ExploreView = Exclude<AccountView, "home">;
++
++export default function SectionHome({ section }: { section: Exclude<AccountSection, "game"> }) {
++  const explore = SECTION_VIEWS[section].filter((v): v is ExploreView => v !== "home");
++  return (
++    <div className="space-y-6">
++      {section === "entity" && <EntityStatGrid />}
++      {section === "local" && <LocalStatGrid />}
++      {section === "kyc" && <KycStatGrid />}
++
++      <div className="grid gap-3 md:grid-cols-3">
++        {explore.map((view) => {
++          const { label, icon: Icon } = VIEW_META[view];
++          return (
++            <Link
++              key={view}
++              href={accountPath(section, view)}
++              className="group flex flex-col rounded-xl border border-border bg-card p-4 font-ui shadow-elevation-1 transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
++            >
++              <span className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary ring-1 ring-primary/20">
++                <Icon className="size-4" aria-hidden="true" />
++              </span>
++              <span className="mt-3 text-sm font-semibold text-foreground">{label}</span>
++              <span className="mt-1 flex-1 text-xs leading-relaxed text-muted-foreground">{VIEW_BLURB[view]}</span>
++              <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary">
++                Open <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
++              </span>
++            </Link>
++          );
++        })}
++      </div>
++
++      {section === "entity" && <AttentionWidget />}
++    </div>
++  );
++}
+diff --git a/artifacts/ayzen/src/components/sylo/widgets.tsx b/artifacts/ayzen/src/components/sylo/widgets.tsx
+new file mode 100644
+index 0000000..c283829
+--- /dev/null
++++ b/artifacts/ayzen/src/components/sylo/widgets.tsx
+@@ -0,0 +1,204 @@
++/**
++ * components/sylo/widgets.tsx
++ * ─────────────────────────────────────────────────────────────────────────────
++ * Data-bound widgets shared by the Console and the section Home pages. Each
++ * owns its query and renders all four states (loading / error / empty / data)
++ * through QueryBoundary, so a failed request never reads as "no data".
++ */
++import { Link } from "wouter";
++import { formatDistanceToNow } from "date-fns";
++import {
++  Ban, CheckCircle2, Clock, Coins, History, KeyRound, ShieldAlert, ShieldCheck, TrendingDown, TrendingUp, Wallet,
++} from "lucide-react";
++import {
++  EmptyState, ListSkeleton, QueryBoundary, StatGridSkeleton, StatTile, Widget, WidgetLink,
++  type Tone,
++} from "@/components/console";
++import {
++  useKycSummary, useLocalSummary, useVaultActivity, useVaultAnalytics, useVaultHealth,
++  type HealthSeverity,
++} from "@/hooks/use-sylo-data";
++import { formatPct, formatSignedUsd, formatUsd } from "@/lib/format-money";
++import { accountPath } from "@/lib/sylo-routes";
++import { cn } from "@/lib/utils";
++
++const GRID = "grid grid-cols-2 gap-3 lg:grid-cols-4";
++const ERROR_BOX = "rounded-xl border border-border bg-card";
++
++const pnlTone = (n: number): Tone => (n > 0 ? "success" : n < 0 ? "danger" : "neutral");
++
++/* ─── Stat grids ─────────────────────────────────────────────────────────── */
++
++export function EntityStatGrid() {
++  const query = useVaultAnalytics();
++  return (
++    <QueryBoundary query={query} skeleton={<StatGridSkeleton />} errorClassName={ERROR_BOX}>
++      {({ overview: o }) => (
++        <div className={GRID}>
++          <StatTile label="Entities" value={o.totalEntries} icon={KeyRound} tone="primary" />
++          <StatTile label="Total worth" value={formatUsd(o.totalVaultWorth)} icon={Wallet} hint={`Cost basis ${formatUsd(o.totalBuyValue)}`} />
++          <StatTile
++            label="Net P&L" value={formatSignedUsd(o.netPnl)} tone={pnlTone(o.netPnl)}
++            icon={o.netPnl < 0 ? TrendingDown : TrendingUp}
++          />
++          <StatTile
++            label="2FA coverage" value={formatPct(o.twofaCoveragePct, 0)} icon={ShieldCheck}
++            tone={o.twofaCoveragePct >= 90 ? "success" : o.twofaCoveragePct >= 60 ? "warning" : "danger"}
++            hint={`Avg. score ${o.avgScore.toFixed(0)}`}
++          />
++        </div>
++      )}
++    </QueryBoundary>
++  );
++}
++
++export function LocalStatGrid() {
++  const query = useLocalSummary();
++  return (
++    <QueryBoundary query={query} skeleton={<StatGridSkeleton />} errorClassName={ERROR_BOX}>
++      {(s) => (
++        <div className={GRID}>
++          <StatTile label="Accounts" value={s.total} icon={KeyRound} tone="primary" />
++          <StatTile label="Total worth" value={formatUsd(s.totalWorth)} icon={Wallet} hint={`Cost basis ${formatUsd(s.totalBuy)}`} />
++          <StatTile label="Net P&L" value={formatSignedUsd(s.netPnl)} tone={pnlTone(s.netPnl)} icon={s.netPnl < 0 ? TrendingDown : TrendingUp} />
++          <StatTile label="Banned" value={s.banned} icon={Ban} tone={s.banned > 0 ? "danger" : "neutral"} hint={`${s.byCategory.length} categories`} />
++        </div>
++      )}
++    </QueryBoundary>
++  );
++}
++
++export function KycStatGrid() {
++  const query = useKycSummary();
++  return (
++    <QueryBoundary query={query} skeleton={<StatGridSkeleton />} errorClassName={ERROR_BOX}>
++      {(s) => (
++        <div className={GRID}>
++          <StatTile label="Entries" value={s.total} icon={ShieldCheck} tone="primary" />
++          <StatTile label="Paid" value={`${s.paid} / ${s.total}`} icon={CheckCircle2} tone={s.unpaid === 0 && s.total > 0 ? "success" : "neutral"} hint={`${s.unpaid} unpaid`} />
++          <StatTile label="Total worth" value={formatUsd(s.totalWorth)} icon={Coins} hint={`Cost basis ${formatUsd(s.totalBuy)}`} />
++          <StatTile label="Net P&L" value={formatSignedUsd(s.netPnl)} tone={pnlTone(s.netPnl)} icon={s.netPnl < 0 ? TrendingDown : TrendingUp} />
++        </div>
++      )}
++    </QueryBoundary>
++  );
++}
++
++/* ─── Needs attention (entity health) ────────────────────────────────────── */
++
++const SEVERITY_BADGE: Record<HealthSeverity, string> = {
++  alert: "bg-danger-muted text-danger ring-danger/25",
++  warn: "bg-warning-muted text-warning ring-warning/25",
++  flag: "bg-info-muted text-info ring-info/25",
++};
++
++export function AttentionWidget({ className }: { className?: string }) {
++  const query = useVaultHealth();
++  return (
++    <Widget
++      className={className}
++      title="Needs attention"
++      description="Entities that tripped a health rule"
++      padded={false}
++      footer={<WidgetLink href={accountPath("entity", "management")}>Review entities</WidgetLink>}
++    >
++      <QueryBoundary
++        query={query}
++        skeleton={<div className="p-4"><ListSkeleton rows={4} /></div>}
++        isEmpty={(r) => r.flaggedEntries.length === 0}
++        empty={<EmptyState icon={ShieldCheck} title="All clear" description="No entity currently breaks a health rule." />}
++      >
++        {(report) => (
++          <div>
++            <dl className="grid grid-cols-2 gap-px border-b border-border/60 bg-border/60 sm:grid-cols-4">
++              {([
++                ["Low score", report.counts.lowScore],
++                ["No 2FA", report.counts.missing2fa],
++                ["Inactive 30d", report.counts.inactive30d],
++                ["Banned / suspended", report.counts.bannedOrSuspended],
++              ] as const).map(([label, count]) => (
++                <div key={label} className="bg-card px-4 py-3">
++                  <dt className="text-[11px] text-muted-foreground">{label}</dt>
++                  <dd className={cn("text-lg font-semibold tabular-nums", count > 0 ? "text-foreground" : "text-muted-foreground/60")}>{count}</dd>
++                </div>
++              ))}
++            </dl>
++            <ul className="divide-y divide-border/60">
++              {report.flaggedEntries.slice(0, 5).map((e) => {
++                const worst = e.hits.some((h) => h.severity === "alert") ? "alert" : e.hits.some((h) => h.severity === "warn") ? "warn" : "flag";
++                return (
++                  <li key={e.id}>
++                    <Link
++                      href={`/vault/entity/${e.id}`}
++                      className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring"
++                    >
++                      <ShieldAlert className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
++                      <span className="min-w-0 flex-1">
++                        <span className="block truncate text-sm font-medium text-foreground">{e.projectName}</span>
++                        <span className="block truncate text-xs text-muted-foreground">
++                          {e.entitySerial ?? `#${e.id}`} · {e.hits[0]?.message ?? "Flagged"}
++                          {e.hits.length > 1 ? ` (+${e.hits.length - 1})` : ""}
++                        </span>
++                      </span>
++                      <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium capitalize ring-1", SEVERITY_BADGE[worst])}>{worst}</span>
++                    </Link>
++                  </li>
++                );
++              })}
++            </ul>
++          </div>
++        )}
++      </QueryBoundary>
++    </Widget>
++  );
++}
++
++/* ─── Recent activity ────────────────────────────────────────────────────── */
++
++const humanise = (action: string): string => {
++  const text = action.replace(/[_.-]+/g, " ").trim();
++  return text.charAt(0).toUpperCase() + text.slice(1);
++};
++
++export function ActivityWidget({ limit = 6, className }: { limit?: number; className?: string }) {
++  const query = useVaultActivity(limit);
++  return (
++    <Widget className={className} title="Recent activity" description="Latest changes across your entities">
++      <QueryBoundary
++        query={query}
++        skeleton={<ListSkeleton rows={Math.min(limit, 5)} />}
++        isEmpty={(p) => p.entries.length === 0}
++        empty={<EmptyState icon={History} title="No activity yet" description="Changes you make to entities will appear here." />}
++      >
++        {(page) => (
++          <ol className="space-y-3.5">
++            {page.entries.map((row) => (
++              <li key={row.id} className="flex items-start gap-3">
++                <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
++                  <Clock className="size-3.5" aria-hidden="true" />
++                </span>
++                <div className="min-w-0 flex-1">
++                  <p className="truncate text-sm text-foreground">
++                    {humanise(row.action)}
++                    {row.entitySerial && (
++                      <>
++                        {" · "}
++                        <Link href={`/vault/entity/${row.vaultEntryId}`} className="font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
++                          {row.entitySerial}
++                        </Link>
++                      </>
++                    )}
++                  </p>
++                  {row.detail && <p className="truncate text-xs text-muted-foreground">{row.detail}</p>}
++                </div>
++                <time dateTime={row.createdAt} className="shrink-0 text-xs text-muted-foreground">
++                  {formatDistanceToNow(new Date(row.createdAt), { addSuffix: true })}
++                </time>
++              </li>
++            ))}
++          </ol>
++        )}
++      </QueryBoundary>
++    </Widget>
++  );
++}
+diff --git a/artifacts/ayzen/src/components/vault/vault-loading-intro.tsx b/artifacts/ayzen/src/components/vault/vault-loading-intro.tsx
+deleted file mode 100644
+index 367fbae..0000000
+--- a/artifacts/ayzen/src/components/vault/vault-loading-intro.tsx
++++ /dev/null
+@@ -1,122 +0,0 @@
+-import { useEffect, useRef, useState } from "react";
+-import { Lock, Cookie, Globe, ShieldCheck, Sparkles, CheckCircle2, Fingerprint } from "lucide-react";
+-import { cn } from "@/lib/utils";
+-
+-/**
+- * components/vault/vault-loading-intro.tsx
+- * ───────────────────────────────────────────────────────────────────────────
+- * Replaces the plain `<Loader2 className="animate-spin" />` that used to sit
+- * on Vault's initial entity load and its lazy dashboard Suspense fallbacks
+- * with a small "intro" — a progress bar that advances through a fixed list
+- * of checkpoints (collecting cookies, browser call, decrypting, etc.)
+- * instead of one static spinner the whole time.
+- *
+- * Two modes, controlled by whether `done` is passed:
+- *  - `done` provided (the isLoading-gated case, e.g. Vault's entity grid):
+- *    progress is capped at 92% until `done` flips true, then finishes to
+- *    100% and calls `onFinished` after the fill/checkmark settle — so the
+- *    bar never looks stuck on a slow fetch, and never rushes past its own
+- *    checkpoints on a fast one.
+- *  - `done` omitted (a Suspense fallback, which has no such signal):
+- *    the same checkpoint sequence loops continuously; React swaps it out
+- *    the moment the lazy chunk resolves, same as the old spinner did.
+- */
+-
+-interface Checkpoint {
+-  label: string;
+-  icon: React.ComponentType<{ className?: string }>;
+-}
+-
+-const CHECKPOINTS: Checkpoint[] = [
+-  { label: "Establishing secure session", icon: Lock },
+-  { label: "Collecting cookies", icon: Cookie },
+-  { label: "Browser call successful", icon: Globe },
+-  { label: "Verifying vault integrity", icon: ShieldCheck },
+-  { label: "Decrypting entries", icon: Fingerprint },
+-  { label: "Finalizing", icon: Sparkles },
+-];
+-
+-export function VaultLoadingIntro({
+-  done,
+-  title = "Opening your Vault",
+-  onFinished,
+-  className,
+-}: {
+-  /** Omit for a Suspense fallback (loops); pass isLoading-derived state to finish the bar once real data arrives. */
+-  done?: boolean;
+-  title?: string;
+-  onFinished?: () => void;
+-  className?: string;
+-}) {
+-  const [progress, setProgress] = useState(0);
+-  const doneRef = useRef(done);
+-  doneRef.current = done;
+-  const finishedRef = useRef(false);
+-  const onFinishedRef = useRef(onFinished);
+-  onFinishedRef.current = onFinished;
+-  const looping = done === undefined;
+-
+-  useEffect(() => {
+-    const interval = setInterval(() => {
+-      setProgress(p => {
+-        if (looping) {
+-          // No completion signal (Suspense fallback) — ease toward 96%, then
+-          // loop back so the checkpoints keep visibly cycling for as long
+-          // as the fallback stays mounted.
+-          if (p >= 96) return 4;
+-          return p + (96 - p) * 0.12 + 0.8;
+-        }
+-        const ceiling = doneRef.current ? 100 : 92;
+-        if (p >= ceiling) {
+-          if (ceiling === 100 && !finishedRef.current) {
+-            finishedRef.current = true;
+-            onFinishedRef.current?.();
+-          }
+-          return p;
+-        }
+-        return Math.min(p + (ceiling - p) * 0.18 + 0.6, ceiling);
+-      });
+-    }, 110);
+-    return () => clearInterval(interval);
+-  }, [looping]);
+-
+-  const stepIndex = Math.min(CHECKPOINTS.length - 1, Math.floor((progress / 100) * CHECKPOINTS.length));
+-
+-  return (
+-    <div className={cn("flex flex-col items-center justify-center py-20", className)}>
+-      <div className="w-full max-w-xs space-y-5">
+-        <div className="text-center space-y-1">
+-          <p className="text-sm font-medium text-foreground">{title}</p>
+-          <p className="text-xs text-muted-foreground font-mono tabular-nums">{Math.round(progress)}%</p>
+-        </div>
+-        <div className="h-1.5 w-full rounded-full bg-muted/40 overflow-hidden">
+-          <div className="h-full rounded-full bg-primary transition-[width] duration-200 ease-out" style={{ width: `${progress}%` }} />
+-        </div>
+-        <div className="space-y-2">
+-          {CHECKPOINTS.map((cp, i) => {
+-            const Icon = cp.icon;
+-            const state = i < stepIndex ? "done" : i === stepIndex ? "active" : "pending";
+-            return (
+-              <div
+-                key={cp.label}
+-                className={cn(
+-                  "flex items-center gap-2 text-xs transition-colors duration-300",
+-                  state === "pending" && "text-muted-foreground/35",
+-                  state === "active" && "text-foreground",
+-                  state === "done" && "text-success",
+-                )}
+-              >
+-                {state === "done" ? (
+-                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+-                ) : (
+-                  <Icon className={cn("w-3.5 h-3.5 shrink-0", state === "active" && "animate-pulse")} />
+-                )}
+-                <span>{cp.label}</span>
+-              </div>
+-            );
+-          })}
+-        </div>
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/artifacts/ayzen/src/components/vault/vault-loading.tsx b/artifacts/ayzen/src/components/vault/vault-loading.tsx
+new file mode 100644
+index 0000000..c8815d8
+--- /dev/null
++++ b/artifacts/ayzen/src/components/vault/vault-loading.tsx
+@@ -0,0 +1,52 @@
++/**
++ * components/vault/vault-loading.tsx
++ * ─────────────────────────────────────────────────────────────────────────────
++ * Loading state for vault screens. Replaces the old VaultLoadingIntro, which animated
++ * a progress bar through a fixed list of made-up checkpoints ("Collecting
++ * cookies", "Browser call successful") that bore no relation to what the app
++ * was doing — a progress indicator should never claim work that isn't
++ * happening.
++ *
++ * This shows what is actually true: something is loading, and roughly what
++ * the screen will look like. Same props as before so call sites are drop-in:
++ *   - `done` omitted → Suspense fallback; React unmounts it when the chunk arrives.
++ *   - `done` provided → once it turns true, `onFinished` fires (once).
++ */
++import { useEffect, useRef } from "react";
++import { Spinner } from "@/components/ui/spinner";
++import { StatGridSkeleton, WidgetSkeleton } from "@/components/console";
++import { cn } from "@/lib/utils";
++
++export function VaultLoading({
++  done,
++  title = "Loading",
++  onFinished,
++  className,
++}: {
++  done?: boolean;
++  title?: string;
++  onFinished?: () => void;
++  className?: string;
++}) {
++  const fired = useRef(false);
++  const onFinishedRef = useRef(onFinished);
++  onFinishedRef.current = onFinished;
++
++  useEffect(() => {
++    if (done && !fired.current) {
++      fired.current = true;
++      onFinishedRef.current?.();
++    }
++  }, [done]);
++
++  return (
++    <div role="status" aria-busy="true" className={cn("space-y-5 font-ui", className)}>
++      <div className="flex items-center gap-2 text-sm text-muted-foreground">
++        <Spinner className="size-4 motion-reduce:animate-none" aria-hidden="true" />
++        <span>{title}…</span>
++      </div>
++      <StatGridSkeleton announce={false} />
++      <WidgetSkeleton announce={false} />
++    </div>
++  );
++}
+diff --git a/artifacts/ayzen/src/hooks/use-sylo-data.ts b/artifacts/ayzen/src/hooks/use-sylo-data.ts
+new file mode 100644
+index 0000000..41005dc
+--- /dev/null
++++ b/artifacts/ayzen/src/hooks/use-sylo-data.ts
+@@ -0,0 +1,168 @@
++/**
++ * hooks/use-sylo-data.ts
++ * ─────────────────────────────────────────────────────────────────────────────
++ * Typed read hooks for the Sylo Console and Account section pages. Every hook
++ * throws on failure (customFetch → ApiError) so QueryBoundary can render a
++ * real error state instead of an empty one.
++ *
++ * Local / KYC lists are reduced to non-secret aggregates INSIDE queryFn: the
++ * list endpoints return full rows (local accounts include decrypted
++ * credentials), and reducing here keeps those out of the TanStack cache and
++ * out of component state. When a server-side summary endpoint exists, only the
++ * body of these two queryFns changes.
++ */
++import { useQuery } from "@tanstack/react-query";
++import { customFetch } from "@workspace/api-client-react";
++
++export const syloKeys = {
++  analytics: ["sylo", "entity-analytics"] as const,
++  health: ["sylo", "entity-health"] as const,
++  activity: (limit: number) => ["sylo", "activity", limit] as const,
++  localSummary: ["sylo", "local-summary"] as const,
++  kycSummary: ["sylo", "kyc-summary"] as const,
++};
++
++/* ─── Entity ─────────────────────────────────────────────────────────────── */
++
++export interface Performer {
++  id: number;
++  entitySerial: string | null;
++  projectName: string;
++  currentValue: number;
++  currentBuyValue: number;
++  roiPct: number;
++}
++
++export interface PlatformWorth { totalWorth: number; totalBuyValue: number; count: number }
++
++export interface VaultAnalytics {
++  overview: {
++    totalEntries: number;
++    totalVaultWorth: number;
++    totalBuyValue: number;
++    netPnl: number;
++    avgScore: number;
++    twofaCoveragePct: number;
++  };
++  byProject: Record<string, { count: number; totalValue: number; totalBuyValue: number; avgScore: number }>;
++  perPlatform: { twitter: PlatformWorth; discord: PlatformWorth; telegram: PlatformWorth };
++  bestPerforming: Performer[];
++  worstPerforming: Performer[];
++}
++
++export type HealthSeverity = "flag" | "warn" | "alert";
++
++export interface VaultHealthReport {
++  totalEntries: number;
++  counts: { lowScore: number; missing2fa: number; inactive30d: number; bannedOrSuspended: number };
++  flaggedEntries: {
++    id: number;
++    entitySerial: string | null;
++    projectName: string;
++    score: number;
++    hits: { id: string; severity: HealthSeverity; message: string }[];
++  }[];
++}
++
++export interface VaultActivityRow {
++  id: number;
++  vaultEntryId: number;
++  action: string;
++  detail: string | null;
++  createdAt: string;
++  entitySerial: string | null;
++  entityId: number | null;
++}
++
++export interface VaultActivityPage { entries: VaultActivityRow[]; total: number; page: number; limit: number }
++
++export const useVaultAnalytics = () =>
++  useQuery({ queryKey: syloKeys.analytics, queryFn: () => customFetch<VaultAnalytics>("/api/vault/analytics") });
++
++export const useVaultHealth = () =>
++  useQuery({ queryKey: syloKeys.health, queryFn: () => customFetch<VaultHealthReport>("/api/vault/health-report") });
++
++export const useVaultActivity = (limit = 8) =>
++  useQuery({
++    queryKey: syloKeys.activity(limit),
++    queryFn: () => customFetch<VaultActivityPage>(`/api/vault/activity?limit=${limit}`),
++  });
++
++/* ─── Local accounts / KYC (aggregated, secret-free) ─────────────────────── */
++
++export interface CategoryBucket { category: string; count: number; worth: number; buy: number }
++
++export interface AccountSummary {
++  total: number;
++  totalWorth: number;
++  totalBuy: number;
++  netPnl: number;
++  banned: number;
++  byCategory: CategoryBucket[];
++}
++
++interface RawAccountRow {
++  category?: string | null;
++  account_worth?: number | string | null;
++  buy_price?: number | string | null;
++  status?: string | null;
++  paid?: boolean | null;
++}
++
++const num = (v: unknown): number => {
++  const n = typeof v === "string" ? Number(v) : typeof v === "number" ? v : 0;
++  return Number.isFinite(n) ? n : 0;
++};
++
++function unwrapRows(payload: unknown, key: string): RawAccountRow[] {
++  if (Array.isArray(payload)) return payload as RawAccountRow[];
++  if (payload && typeof payload === "object") {
++    const inner = (payload as Record<string, unknown>)[key];
++    if (Array.isArray(inner)) return inner as RawAccountRow[];
++  }
++  return [];
++}
++
++function summarise(rows: RawAccountRow[]): AccountSummary {
++  const buckets = new Map<string, CategoryBucket>();
++  let totalWorth = 0, totalBuy = 0, banned = 0;
++  for (const r of rows) {
++    const worth = num(r.account_worth);
++    totalWorth += worth;
++    totalBuy += num(r.buy_price);
++    if (r.status === "banned") banned++;
++    const category = r.category?.trim() || "Other";
++    const b = buckets.get(category) ?? { category, count: 0, worth: 0, buy: 0 };
++    b.count++;
++    b.worth += worth;
++    b.buy += num(r.buy_price);
++    buckets.set(category, b);
++  }
++  return {
++    total: rows.length,
++    totalWorth,
++    totalBuy,
++    netPnl: totalWorth - totalBuy,
++    banned,
++    byCategory: [...buckets.values()].sort((a, b) => b.count - a.count),
++  };
++}
++
++export const useLocalSummary = () =>
++  useQuery({
++    queryKey: syloKeys.localSummary,
++    queryFn: async () => summarise(unwrapRows(await customFetch<unknown>("/api/local-accounts"), "accounts")),
++  });
++
++export interface KycSummary extends AccountSummary { paid: number; unpaid: number }
++
++export const useKycSummary = () =>
++  useQuery({
++    queryKey: syloKeys.kycSummary,
++    queryFn: async (): Promise<KycSummary> => {
++      const rows = unwrapRows(await customFetch<unknown>("/api/kyc-entries"), "entries");
++      const base = summarise(rows);
++      const paid = rows.filter((r) => r.paid === true).length;
++      return { ...base, paid, unpaid: rows.length - paid };
++    },
++  });
+diff --git a/artifacts/ayzen/src/index.css b/artifacts/ayzen/src/index.css
+index abff733..31ce5c4 100644
+--- a/artifacts/ayzen/src/index.css
++++ b/artifacts/ayzen/src/index.css
+@@ -39,6 +39,11 @@
+   --font-sans: var(--ui-font-sans, 'Space Mono', 'Inter', monospace, sans-serif);
+   --font-mono: var(--ui-font-mono, 'Space Mono', monospace);
+ 
++  /* Proportional UI face for the console kit (components/console). Space Mono
++     stays the default for the rest of the app and for tabular data; the kit
++     uses font-ui for labels/prose so dense screens stay readable. */
++  --font-ui: var(--ui-font-ui, 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
++
+   --radius-sm: var(--ui-radius-sm, 2px);
+   --radius-md: var(--ui-radius-md, 4px);
+   --radius-lg: var(--ui-radius-lg, 8px);
+diff --git a/artifacts/ayzen/src/lib/format-money.ts b/artifacts/ayzen/src/lib/format-money.ts
+new file mode 100644
+index 0000000..a35a77b
+--- /dev/null
++++ b/artifacts/ayzen/src/lib/format-money.ts
+@@ -0,0 +1,18 @@
++/** Currency / percentage formatting shared by the Sylo console. USD only: every Sylo figure is USD-denominated. */
++const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
++const usdCompact = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 });
++
++export const formatUsd = (n: number, opts: { compact?: boolean } = {}): string =>
++  (opts.compact ? usdCompact : usd).format(Number.isFinite(n) ? n : 0);
++
++/** "+$1,200.00" / "−$300.00" — explicit sign so profit and loss read at a glance. */
++export const formatSignedUsd = (n: number): string => {
++  const v = Number.isFinite(n) ? n : 0;
++  return `${v > 0 ? "+" : v < 0 ? "−" : ""}${usd.format(Math.abs(v))}`;
++};
++
++export const formatPct = (n: number, digits = 1): string =>
++  `${Number.isFinite(n) ? n.toFixed(digits) : "0.0"}%`;
++
++/** ROI as a percentage of cost; null when there is no cost basis to compare against. */
++export const roiPct = (worth: number, buy: number): number | null => (buy > 0 ? ((worth - buy) / buy) * 100 : null);
+diff --git a/artifacts/ayzen/src/lib/route-config.tsx b/artifacts/ayzen/src/lib/route-config.tsx
+index b13d0a9..a9ee239 100644
+--- a/artifacts/ayzen/src/lib/route-config.tsx
++++ b/artifacts/ayzen/src/lib/route-config.tsx
+@@ -94,8 +94,9 @@ const UserProjectDetail = lazy(() => import("@/pages/user/project-detail"));
+ const UserProjectEntities = lazy(() => import("@/pages/user/project-entities"));
+ const UserTasks         = lazy(() => import("@/pages/user/tasks"));
+ const UserDeveloper     = lazy(() => import("@/pages/user/developer"));
+-const UserVault         = lazy(() => import("@/pages/user/vault"));
+-const VaultHub          = lazy(() => import("@/pages/user/vault-hub"));
++const SyloConsole       = lazy(() => import("@/pages/sylo/console"));
++const SyloAccount       = lazy(() => import("@/pages/sylo/account"));
++const VaultHubRedirect  = lazy(() => import("@/pages/sylo/redirects"));
+ const VaultEntityDetail = lazy(() => import("@/pages/user/vault-entity-detail"));
+ const VaultEntityAccess = lazy(() => import("@/pages/user/vault-entity-access"));
+ const VaultLocalDetail  = lazy(() => import("@/pages/user/vault-local-detail"));
+@@ -292,8 +293,13 @@ export const USER_ROUTES: RouteConfig[] = [
+   { path: "/tasks",              component: UserTasks },
+   // Gamification
+   { path: "/leaderboard",        component: UserLeaderboard },
+-  { path: "/vault",              component: UserVault },
+-  { path: "/vault/hub",          component: VaultHub },
++  // Sylo home. Also forwards legacy /vault?tab=… links (see lib/sylo-routes.ts).
++  { path: "/vault",              component: SyloConsole },
++  // Retired Vault Hub card grid → Console.
++  { path: "/vault/hub",          component: VaultHubRedirect },
++  // Account sections: /vault/account/:section[/:view]
++  { path: "/vault/account/:section",       component: SyloAccount },
++  { path: "/vault/account/:section/:view", component: SyloAccount },
+   // Wallet Hub — rename/expansion of the old flat "Wallet" access item into
+   // its own sub-category with three addressable views (see
+   // vault-wallet-hub.tsx). Bare "/vault/wallet-hub" falls back to Overview.
+diff --git a/artifacts/ayzen/src/lib/sylo-routes.test.ts b/artifacts/ayzen/src/lib/sylo-routes.test.ts
+new file mode 100644
+index 0000000..fc5c300
+--- /dev/null
++++ b/artifacts/ayzen/src/lib/sylo-routes.test.ts
+@@ -0,0 +1,44 @@
++import assert from "node:assert/strict";
++import test from "node:test";
++import {
++  ACCOUNT_SECTIONS, ACCOUNT_VIEWS, accountPath, isAccountSection, isAccountView, resolveLegacyTab,
++} from "./sylo-routes";
++
++test("accountPath builds /vault/account/:section/:view, defaulting to home", () => {
++  assert.equal(accountPath("entity"), "/vault/account/entity/home");
++  assert.equal(accountPath("kyc", "analysis"), "/vault/account/kyc/analysis");
++});
++
++test("every generated path stays inside Sylo's /vault route prefix", () => {
++  for (const s of ACCOUNT_SECTIONS) for (const v of ACCOUNT_VIEWS) assert.ok(accountPath(s, v).startsWith("/vault/"));
++});
++
++test("type guards reject unknown segments (used to 404 bad URLs)", () => {
++  assert.equal(isAccountSection("entity"), true);
++  assert.equal(isAccountSection("wallet"), false);
++  assert.equal(isAccountSection(undefined), false);
++  assert.equal(isAccountView("analysis"), true);
++  assert.equal(isAccountView("settings"), false);
++});
++
++test("legacy ?tab= for entity/local/kyc keeps the old Dashboard landing", () => {
++  assert.equal(resolveLegacyTab("?tab=entity"), "/vault/account/entity/dashboard");
++  assert.equal(resolveLegacyTab("?tab=local"), "/vault/account/local/dashboard");
++  assert.equal(resolveLegacyTab("tab=kyc"), "/vault/account/kyc/dashboard", "leading ? is optional (wouter's useSearch omits it)");
++});
++
++test("legacy editId opens the editor and survives the redirect", () => {
++  assert.equal(resolveLegacyTab("?tab=entity&editId=42"), "/vault/account/entity/management?editId=42");
++});
++
++test("legacy tabs that moved elsewhere map to their new homes", () => {
++  assert.equal(resolveLegacyTab("?tab=game"), "/vault/account/game/management");
++  assert.equal(resolveLegacyTab("?tab=wallet"), "/vault/wallet-hub/wallet");
++  assert.equal(resolveLegacyTab("?tab=mail&view=settings"), "/vault/mail-hub/entity", "the old in-tab `view` has no equivalent and is dropped");
++});
++
++test("no tab (or an unknown one) means 'show the Console'", () => {
++  assert.equal(resolveLegacyTab(""), null);
++  assert.equal(resolveLegacyTab("?foo=bar"), null);
++  assert.equal(resolveLegacyTab("?tab=nonsense"), null);
++});
+diff --git a/artifacts/ayzen/src/lib/sylo-routes.ts b/artifacts/ayzen/src/lib/sylo-routes.ts
+new file mode 100644
+index 0000000..2a86bb6
+--- /dev/null
++++ b/artifacts/ayzen/src/lib/sylo-routes.ts
+@@ -0,0 +1,61 @@
++/**
++ * lib/sylo-routes.ts
++ * ─────────────────────────────────────────────────────────────────────────────
++ * Single source of truth for Sylo's Account URLs, plus the legacy `?tab=`
++ * translation. Everything lives under /vault because that is Sylo's
++ * routePrefix (packages/module-registry) — a route outside it would be
++ * bounced by the subdomain scope guard in App.tsx.
++ *
++ *   /vault                                  Console (Sylo home)
++ *   /vault/account/:section/:view           section ∈ entity|local|kyc|game
++ *                                           view    ∈ home|dashboard|analysis|management
++ */
++export const ACCOUNT_SECTIONS = ["entity", "local", "kyc", "game"] as const;
++export type AccountSection = (typeof ACCOUNT_SECTIONS)[number];
++
++export const ACCOUNT_VIEWS = ["home", "dashboard", "analysis", "management"] as const;
++export type AccountView = (typeof ACCOUNT_VIEWS)[number];
++
++export const isAccountSection = (v: string | undefined): v is AccountSection =>
++  !!v && (ACCOUNT_SECTIONS as readonly string[]).includes(v);
++
++export const isAccountView = (v: string | undefined): v is AccountView =>
++  !!v && (ACCOUNT_VIEWS as readonly string[]).includes(v);
++
++export const SYLO_HOME = "/vault";
++
++export const accountPath = (section: AccountSection, view: AccountView = "home"): string =>
++  `/vault/account/${section}/${view}`;
++
++/**
++ * Maps a legacy `/vault?tab=…` query to its new location, or null when the
++ * query carries no legacy tab (i.e. the user really wants the Console).
++ * Unrelated params (e.g. `editId`) are preserved. Old behaviour is kept:
++ * entity/local/kyc opened on their Dashboard, unless an `editId` asked for the
++ * editor.
++ */
++export function resolveLegacyTab(search: string): string | null {
++  const params = new URLSearchParams(search);
++  const tab = params.get("tab");
++  if (!tab) return null;
++
++  params.delete("tab");
++  params.delete("view");
++  const rest = params.toString();
++  const withRest = (path: string) => (rest ? `${path}?${rest}` : path);
++
++  switch (tab) {
++    case "entity":
++    case "local":
++    case "kyc":
++      return withRest(accountPath(tab, params.has("editId") ? "management" : "dashboard"));
++    case "game":
++      return withRest(accountPath("game", "management"));
++    case "wallet":
++      return withRest("/vault/wallet-hub/wallet");
++    case "mail":
++      return withRest("/vault/mail-hub/entity");
++    default:
++      return null;
++  }
++}
+diff --git a/artifacts/ayzen/src/pages/not-found.tsx b/artifacts/ayzen/src/pages/not-found.tsx
+index dba9f83..e386346 100644
+--- a/artifacts/ayzen/src/pages/not-found.tsx
++++ b/artifacts/ayzen/src/pages/not-found.tsx
+@@ -1,21 +1,6 @@
+-import { Card, CardContent } from "@/components/ui/card";
+-import { AlertCircle } from "lucide-react";
++import { NotFoundPage } from "@/components/console";
+ 
++/** Catch-all route. Standalone (outside AppLayout), so it renders full-screen. */
+ export default function NotFound() {
+-  return (
+-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
+-      <Card className="w-full max-w-md mx-4">
+-        <CardContent className="pt-6">
+-          <div className="flex mb-4 gap-2">
+-            <AlertCircle className="h-8 w-8 text-red-500" />
+-            <h1 className="text-2xl font-bold text-gray-900">404 Page Not Found</h1>
+-          </div>
+-
+-          <p className="mt-4 text-sm text-gray-600">
+-            Did you forget to add the page to the router?
+-          </p>
+-        </CardContent>
+-      </Card>
+-    </div>
+-  );
++  return <NotFoundPage />;
+ }
+diff --git a/artifacts/ayzen/src/pages/sylo/account.tsx b/artifacts/ayzen/src/pages/sylo/account.tsx
+new file mode 100644
+index 0000000..d888be6
+--- /dev/null
++++ b/artifacts/ayzen/src/pages/sylo/account.tsx
+@@ -0,0 +1,98 @@
++/**
++ * pages/sylo/account.tsx — /vault/account/:section/:view
++ *
++ * One routed shell for every Account section/view pair. The shell owns the
++ * header and tabs; the view body is lazy-loaded so opening Local never pays
++ * for the 1,700-line Entity manager. Existing dashboards and managers are
++ * reused as-is — this page only changes where they live and how you reach them.
++ *
++ * Access control: any path under /vault is wrapped in VaultUnlockGate by
++ * App.tsx, so nothing here re-implements it.
++ */
++import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
++import { Redirect, useParams } from "wouter";
++import { NotFoundPage, PageHeader, StatGridSkeleton, WidgetSkeleton } from "@/components/console";
++import { SECTION_META, SECTION_VIEWS, VIEW_META } from "@/components/sylo/sections";
++import { SectionTabs } from "@/components/sylo/section-tabs";
++import {
++  SYLO_HOME, accountPath, isAccountSection, isAccountView,
++  type AccountSection, type AccountView,
++} from "@/lib/sylo-routes";
++
++type Body = LazyExoticComponent<ComponentType>;
++type PlainView = Extract<AccountView, "dashboard" | "management">;
++
++const SectionHome = lazy(() => import("@/components/sylo/views/section-home"));
++const SectionAnalysis = lazy(() => import("@/components/sylo/views/section-analysis"));
++
++const PLAIN: Record<AccountSection, Partial<Record<PlainView, Body>>> = {
++  entity: {
++    dashboard: lazy(() => import("@/pages/user/vault-entity-dashboard")),
++    management: lazy(() => import("@/components/sylo/entity-manager").then((m) => ({ default: m.EntityManager }))),
++  },
++  local: {
++    dashboard: lazy(() => import("@/pages/user/vault-local-dashboard")),
++    management: lazy(() => import("@/components/local-accounts")),
++  },
++  kyc: {
++    dashboard: lazy(() => import("@/pages/user/vault-kyc-dashboard")),
++    management: lazy(() => import("@/components/kyc-entries")),
++  },
++  game: {
++    management: lazy(() => import("@/components/game-entries")),
++  },
++};
++
++/** Content-only fallback: the header and tabs stay put while the body loads. */
++function BodyFallback() {
++  return (
++    <div className="space-y-6">
++      <StatGridSkeleton />
++      <div className="grid gap-4 lg:grid-cols-2">
++        <WidgetSkeleton announce={false} />
++        <WidgetSkeleton announce={false} />
++      </div>
++    </div>
++  );
++}
++
++function ViewBody({ section, view }: { section: AccountSection; view: AccountView }) {
++  if (section !== "game" && view === "home") return <SectionHome section={section} />;
++  if (section !== "game" && view === "analysis") return <SectionAnalysis section={section} />;
++  const Body = view === "dashboard" || view === "management" ? PLAIN[section][view] : undefined;
++  return Body ? <Body /> : <NotFoundPage embedded />;
++}
++
++export default function AccountSectionPage() {
++  const { section, view } = useParams<{ section: string; view?: string }>();
++
++  if (!isAccountSection(section)) return <NotFoundPage embedded />;
++  const allowed = SECTION_VIEWS[section];
++
++  // /vault/account/entity  →  its first view
++  if (view === undefined) return <Redirect to={accountPath(section, allowed[0])} replace />;
++  if (!isAccountView(view)) return <NotFoundPage embedded />;
++  // e.g. /vault/account/game/dashboard — valid view name, but not offered for this section
++  if (!allowed.includes(view)) return <Redirect to={accountPath(section, allowed[0])} replace />;
++
++  const meta = SECTION_META[section];
++  return (
++    <div className="space-y-6 page-enter">
++      <PageHeader
++        eyebrow="Account"
++        title={meta.label}
++        description={meta.description}
++        breadcrumbs={[
++          { label: "Sylo", href: SYLO_HOME },
++          { label: "Account" },
++          { label: meta.label, href: view === "home" ? undefined : accountPath(section, "home") },
++          ...(view === "home" ? [] : [{ label: VIEW_META[view].label }]),
++        ]}
++      />
++      <SectionTabs section={section} active={view} />
++      <Suspense fallback={<BodyFallback />}>
++        <ViewBody section={section} view={view} />
++      </Suspense>
++    </div>
++  );
++}
+diff --git a/artifacts/ayzen/src/pages/sylo/console.tsx b/artifacts/ayzen/src/pages/sylo/console.tsx
+new file mode 100644
+index 0000000..8800bde
+--- /dev/null
++++ b/artifacts/ayzen/src/pages/sylo/console.tsx
+@@ -0,0 +1,121 @@
++/**
++ * pages/sylo/console.tsx — /vault (Sylo home)
++ *
++ * The Console replaces the old Vault Hub card grid and the tabbed /vault page.
++ * It is a read-only overview: every widget links into the Account section that
++ * owns the data. Legacy `/vault?tab=…` links (46 call sites, plus any saved
++ * sidebar entries in the DB) are forwarded to their new location before the
++ * Console renders.
++ */
++import { Link, Redirect, useSearch } from "wouter";
++import {
++  Coins, Gamepad2, KeyRound, LockKeyhole, Mail, Plus, ShieldCheck, Smartphone, Wallet, type LucideIcon,
++} from "lucide-react";
++import { PageHeader, StatTile, Widget } from "@/components/console";
++import { Button } from "@/components/ui/button";
++import { ActivityWidget, AttentionWidget } from "@/components/sylo/widgets";
++import { useKycSummary, useLocalSummary, useVaultAnalytics } from "@/hooks/use-sylo-data";
++import { formatUsd } from "@/lib/format-money";
++import { accountPath, resolveLegacyTab } from "@/lib/sylo-routes";
++
++const UNAVAILABLE = { value: "—", hint: "Couldn’t load" } as const;
++
++function PortfolioTiles() {
++  const entity = useVaultAnalytics();
++  const local = useLocalSummary();
++  const kyc = useKycSummary();
++
++  const eWorth = entity.data?.overview.totalVaultWorth;
++  const allLoaded = eWorth !== undefined && local.data !== undefined && kyc.data !== undefined;
++  const combined = allLoaded ? eWorth + local.data!.totalWorth + kyc.data!.totalWorth : null;
++
++  return (
++    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
++      <StatTile
++        label="Combined worth" icon={Coins} tone="primary"
++        loading={entity.isPending || local.isPending || kyc.isPending}
++        value={combined !== null ? formatUsd(combined) : UNAVAILABLE.value}
++        hint={combined !== null ? "Entity + local + KYC" : UNAVAILABLE.hint}
++      />
++      <StatTile
++        label="Entities" icon={KeyRound} href={accountPath("entity", "home")} loading={entity.isPending}
++        value={entity.data ? entity.data.overview.totalEntries : UNAVAILABLE.value}
++        hint={entity.data ? formatUsd(entity.data.overview.totalVaultWorth) : UNAVAILABLE.hint}
++      />
++      <StatTile
++        label="Local accounts" icon={Smartphone} href={accountPath("local", "home")} loading={local.isPending}
++        value={local.data ? local.data.total : UNAVAILABLE.value}
++        hint={local.data ? formatUsd(local.data.totalWorth) : UNAVAILABLE.hint}
++      />
++      <StatTile
++        label="KYC entries" icon={ShieldCheck} href={accountPath("kyc", "home")} loading={kyc.isPending}
++        value={kyc.data ? kyc.data.total : UNAVAILABLE.value}
++        hint={kyc.data ? `${kyc.data.paid} paid · ${formatUsd(kyc.data.totalWorth)}` : UNAVAILABLE.hint}
++      />
++    </div>
++  );
++}
++
++interface Shortcut { label: string; hint: string; href: string; icon: LucideIcon }
++
++const SHORTCUTS: readonly Shortcut[] = [
++  { label: "Vault security", hint: "PIN, 2FA and passkeys", href: "/vault/security", icon: LockKeyhole },
++  { label: "Wallet hub", hint: "Addresses and seed phrases", href: "/vault/wallet-hub/wallet", icon: Wallet },
++  { label: "Mail hub", hint: "Entity mailboxes", href: "/vault/mail-hub/entity", icon: Mail },
++  { label: "Game accounts", hint: "Tracked game and platform accounts", href: accountPath("game", "management"), icon: Gamepad2 },
++];
++
++function ShortcutsWidget() {
++  return (
++    <Widget title="Shortcuts" padded={false}>
++      <ul className="divide-y divide-border/60">
++        {SHORTCUTS.map(({ label, hint, href, icon: Icon }) => (
++          <li key={href}>
++            <Link
++              href={href}
++              className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring"
++            >
++              <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground ring-1 ring-border">
++                <Icon className="size-4" aria-hidden="true" />
++              </span>
++              <span className="min-w-0">
++                <span className="block text-sm font-medium text-foreground">{label}</span>
++                <span className="block truncate text-xs text-muted-foreground">{hint}</span>
++              </span>
++            </Link>
++          </li>
++        ))}
++      </ul>
++    </Widget>
++  );
++}
++
++function Console() {
++  return (
++    <div className="space-y-6 page-enter">
++      <PageHeader
++        eyebrow="Sylo"
++        title="Console"
++        description="Everything you hold in Sylo, and what needs your attention."
++        actions={
++          <Button asChild>
++            <Link href={`${accountPath("entity", "management")}?new=1`}><Plus aria-hidden="true" /> New entity</Link>
++          </Button>
++        }
++      />
++      <PortfolioTiles />
++      <div className="grid gap-4 lg:grid-cols-3">
++        <AttentionWidget className="lg:col-span-2" />
++        <ShortcutsWidget />
++      </div>
++      <ActivityWidget limit={6} />
++    </div>
++  );
++}
++
++export default function SyloConsoleRoute() {
++  const search = useSearch();
++  const legacy = resolveLegacyTab(search);
++  if (legacy) return <Redirect to={legacy} replace />;
++  return <Console />;
++}
+diff --git a/artifacts/ayzen/src/pages/sylo/redirects.tsx b/artifacts/ayzen/src/pages/sylo/redirects.tsx
+new file mode 100644
+index 0000000..4e4df29
+--- /dev/null
++++ b/artifacts/ayzen/src/pages/sylo/redirects.tsx
+@@ -0,0 +1,8 @@
++/** Route component that exists only to keep a retired URL working. */
++import { Redirect } from "wouter";
++import { SYLO_HOME } from "@/lib/sylo-routes";
++
++/** /vault/hub was the old card grid; the Console is its replacement. */
++export default function VaultHubRedirect() {
++  return <Redirect to={SYLO_HOME} replace />;
++}
+diff --git a/artifacts/ayzen/src/pages/user/vault-activity.tsx b/artifacts/ayzen/src/pages/user/vault-activity.tsx
+index 74cef69..3a020fe 100644
+--- a/artifacts/ayzen/src/pages/user/vault-activity.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-activity.tsx
+@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
+ import { Badge } from "@/components/ui/badge";
+ import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/vault-sidebar";
+ import { getVaultActivity, type VaultActivityEntry } from "@/lib/vault-security-api";
+-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
++import { VaultLoading } from "@/components/vault/vault-loading";
+ import { cn } from "@/lib/utils";
+ import { useModuleAwareNavigate } from "@/components/module-link";
+ 
+@@ -119,7 +119,7 @@ export default function VaultActivity() {
+       }
+     >
+       {isLoading ? (
+-        <VaultLoadingIntro title="Loading activity log" done={!isLoading} />
++        <VaultLoading title="Loading activity log" done={!isLoading} />
+       ) : entries.length === 0 ? (
+         <VaultSectionEmptyState
+           icon={History}
+diff --git a/artifacts/ayzen/src/pages/user/vault-backup.tsx b/artifacts/ayzen/src/pages/user/vault-backup.tsx
+index 3908f07..69f80bb 100644
+--- a/artifacts/ayzen/src/pages/user/vault-backup.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-backup.tsx
+@@ -16,7 +16,7 @@ import {
+   LayoutDashboard, ChevronRight, ArrowLeft, Copy, Check,
+ } from "lucide-react";
+ import { VaultSectionPage, VaultSectionEmptyState, CategoryTabBar } from "@/components/layout/vault-sidebar";
+-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
++import { VaultLoading } from "@/components/vault/vault-loading";
+ import { useModuleAwareNavigate } from "@/components/module-link";
+ 
+ // ─── Copy button + entity-scoped backup detail — kept exported for
+@@ -162,7 +162,7 @@ function EntityBackupList({ category }: { category: Exclude<Category, "overview"
+   const isLoading = category === "entity" ? vaultLoading : loading;
+   const Icon = CATEGORY_META[category].icon;
+ 
+-  if (isLoading) return <VaultLoadingIntro title="Loading backup codes" done={!isLoading} className="py-8" />;
++  if (isLoading) return <VaultLoading title="Loading backup codes" done={!isLoading} className="py-8" />;
+ 
+   if (rows.length === 0) {
+     return (
+@@ -226,7 +226,7 @@ function OverviewBackupList() {
+   const isLoading = vaultLoading || loading;
+   const totalCodes = rows.reduce((sum, r) => sum + r.count, 0);
+ 
+-  if (isLoading) return <VaultLoadingIntro title="Loading backup codes" done={!isLoading} className="py-8" />;
++  if (isLoading) return <VaultLoading title="Loading backup codes" done={!isLoading} className="py-8" />;
+ 
+   if (rows.length === 0) {
+     return (
+diff --git a/artifacts/ayzen/src/pages/user/vault-banned.tsx b/artifacts/ayzen/src/pages/user/vault-banned.tsx
+index 64b934d..1935051 100644
+--- a/artifacts/ayzen/src/pages/user/vault-banned.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-banned.tsx
+@@ -22,6 +22,7 @@ import {
+   Twitter, MessageCircle, Send, LayoutGrid,
+ } from "lucide-react";
+ import { cn } from "@/lib/utils";
++import { accountPath } from "@/lib/sylo-routes";
+ 
+ type EntryAny = any;
+ 
+@@ -197,7 +198,7 @@ export default function VaultBanned() {
+           id: `kyc-${k.id}`,
+           title: k.name || k.username || `KYC #${k.id}`,
+           subtitle: k.nid_number ? `NID: ${k.nid_number}` : k.category,
+-          navigate: `/vault?tab=kyc`,
++          navigate: accountPath("kyc", "management"),
+         })),
+     },
+   ].filter(g => g.rows.length > 0);
+diff --git a/artifacts/ayzen/src/pages/user/vault-enrollment-overview.tsx b/artifacts/ayzen/src/pages/user/vault-enrollment-overview.tsx
+index 4e11b1d..e85c881 100644
+--- a/artifacts/ayzen/src/pages/user/vault-enrollment-overview.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-enrollment-overview.tsx
+@@ -13,7 +13,7 @@ import {
+ } from "lucide-react";
+ import { useListVaultEntries, customFetch } from "@workspace/api-client-react";
+ import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/vault-sidebar";
+-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
++import { VaultLoading } from "@/components/vault/vault-loading";
+ import { Badge } from "@/components/ui/badge";
+ import { cn } from "@/lib/utils";
+ import { useModuleAwareNavigate } from "@/components/module-link";
+@@ -71,7 +71,7 @@ export default function VaultEnrollmentOverview() {
+       icon={LayoutDashboard}
+     >
+       {loading ? (
+-        <VaultLoadingIntro title="Loading enrollment overview" done={!loading} />
++        <VaultLoading title="Loading enrollment overview" done={!loading} />
+       ) : (
+         <div className="space-y-5">
+           {/* Dashboard summary */}
+diff --git a/artifacts/ayzen/src/pages/user/vault-entity-access.tsx b/artifacts/ayzen/src/pages/user/vault-entity-access.tsx
+index 1f639b9..3d7e0d5 100644
+--- a/artifacts/ayzen/src/pages/user/vault-entity-access.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-entity-access.tsx
+@@ -39,6 +39,7 @@ import { TOTPCard } from "@/components/vault/totp-card";
+ import { VaultMailEntityBody } from "@/pages/user/vault-mail-entity";
+ import { EntityBackupDetail } from "@/pages/user/vault-backup";
+ import { useModuleAwareNavigate } from "@/components/module-link";
++import { accountPath } from "@/lib/sylo-routes";
+ 
+ type EntryAny = any;
+ type AccessTab = "2fa" | "mail" | "backup";
+@@ -82,7 +83,7 @@ function VaultEntityAccessContent() {
+   if (!entry) {
+     return (
+       <div className="space-y-4">
+-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=entity")} className="font-mono text-xs gap-1.5">
++        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("entity", "management"))} className="font-mono text-xs gap-1.5">
+           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
+         </Button>
+         <div className="text-center py-20">
+diff --git a/artifacts/ayzen/src/pages/user/vault-entity-detail.tsx b/artifacts/ayzen/src/pages/user/vault-entity-detail.tsx
+index b9db0c4..f100b55 100644
+--- a/artifacts/ayzen/src/pages/user/vault-entity-detail.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-entity-detail.tsx
+@@ -35,6 +35,7 @@ import { updateVaultField, getVaultFieldHistory, type VaultFieldHistoryEntry } f
+ import { ReceiptLinkDialog } from "@/components/receipt-link-dialog";
+ import { vaultEntityReceiptApi } from "@/lib/receipt-api";
+ import { useModuleAwareNavigate } from "@/components/module-link";
++import { accountPath } from "@/lib/sylo-routes";
+ 
+ type EntryAny = any;
+ 
+@@ -386,7 +387,7 @@ function VaultEntityDetailContent() {
+   if (!entry) {
+     return (
+       <div className="space-y-4">
+-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=entity")} className="font-mono text-xs gap-1.5">
++        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("entity", "management"))} className="font-mono text-xs gap-1.5">
+           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
+         </Button>
+         <div className="text-center py-20">
+@@ -411,7 +412,7 @@ function VaultEntityDetailContent() {
+       onSuccess: () => {
+         toast({ title: "Moved to Trash", description: "Restorable from Vault → Trash for 30 days." });
+         queryClient.invalidateQueries();
+-        navigate("/vault?tab=entity");
++        navigate(accountPath("entity", "management"));
+       },
+       onError: () => toast({ variant: "destructive", title: "Failed to delete" }),
+     });
+@@ -484,7 +485,7 @@ function VaultEntityDetailContent() {
+       {/* Back + header */}
+       <div className="flex items-start justify-between gap-4">
+         <div>
+-          <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=entity")} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
++          <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("entity", "management"))} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
+             <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
+           </Button>
+           <div className="flex items-center gap-3">
+@@ -519,7 +520,7 @@ function VaultEntityDetailContent() {
+           <Button variant="outline" size="sm" onClick={() => setReceiptDialogOpen(true)} className="font-mono text-xs gap-1.5">
+             <Sparkles className="w-3.5 h-3.5" /> Receipt
+           </Button>
+-          <Button variant="outline" size="sm" onClick={() => navigate(`/vault?tab=entity&editId=${entry.id}`)} className="font-mono text-xs gap-1.5">
++          <Button variant="outline" size="sm" onClick={() => navigate(`${accountPath("entity", "management")}?editId=${entry.id}`)} className="font-mono text-xs gap-1.5">
+             <Edit2 className="w-3.5 h-3.5" /> Edit
+           </Button>
+           <Button
+diff --git a/artifacts/ayzen/src/pages/user/vault-hub.tsx b/artifacts/ayzen/src/pages/user/vault-hub.tsx
+deleted file mode 100644
+index 89bf49a..0000000
+--- a/artifacts/ayzen/src/pages/user/vault-hub.tsx
++++ /dev/null
+@@ -1,149 +0,0 @@
+-/**
+- * pages/user/vault-hub.tsx
+- * ─────────────────────────────────────────────────────────────────────────────
+- * Landing page for the whole Vault section — mounted at /vault/hub, and what
+- * clicking the "Vault" group in the main app sidebar (app-sidebar.tsx)
+- * navigates to. Mirrors the public landing page's hero + feature-grid feel,
+- * but in the app's own dark/mono theme, and the four cards below map 1:1
+- * onto the 4-step Vault sidebar (components/layout/vault-sidebar.tsx —
+- * STEP 01 Account · 02 Access · 03 Enrollment · 04 Other) so this page and
+- * the in-page VaultSidebar never drift out of sync.
+- */
+-import { Link } from "wouter";
+-import { useEffect, useState } from "react";
+-import { useListVaultEntries } from "@workspace/api-client-react";
+-import {
+-  Vault, Shield, Smartphone, ShieldCheck, Gamepad2,
+-  Key, Mail, Wallet, UserPlus, LayoutDashboard, Link2, FolderGit2,
+-  Share2, Ban, Trash2, History, Lock, ArrowRight,
+-} from "lucide-react";
+-
+-interface HubCard {
+-  step: string;
+-  href: string;
+-  icon: React.ElementType;
+-  title: string;
+-  description: string;
+-  chips: { label: string; icon: React.ElementType }[];
+-  color: "cyan" | "violet";
+-}
+-
+-const CARDS: HubCard[] = [
+-  {
+-    step: "01", href: "/vault?tab=entity", icon: Shield, title: "Account",
+-    description: "Every entity, local account, KYC document, and game account you're storing in the vault.",
+-    chips: [
+-      { label: "Entity", icon: Shield }, { label: "Local", icon: Smartphone },
+-      { label: "KYC", icon: ShieldCheck }, { label: "Game", icon: Gamepad2 },
+-    ],
+-    color: "cyan",
+-  },
+-  {
+-    step: "02", href: "/vault/2fa/overview", icon: Key, title: "Access",
+-    description: "2FA codes, backup codes, connected mail inboxes, and every wallet address & seed on file.",
+-    chips: [
+-      { label: "2FA", icon: ShieldCheck }, { label: "Backup Code", icon: Key },
+-      { label: "Mail Hub", icon: Mail }, { label: "Wallet Hub", icon: Wallet },
+-    ],
+-    color: "violet",
+-  },
+-  {
+-    step: "03", href: "/vault/enrollment/overview", icon: UserPlus, title: "Enrollment",
+-    description: "Which entities are enrolled in which projects, linked accounts, and per-project reward totals.",
+-    chips: [
+-      { label: "Overview", icon: LayoutDashboard }, { label: "Enroll", icon: UserPlus },
+-      { label: "Linked", icon: Link2 }, { label: "Project", icon: FolderGit2 },
+-    ],
+-    color: "cyan",
+-  },
+-  {
+-    step: "04", href: "/vault/security", icon: Lock, title: "Other",
+-    description: "Sharing, the banned/trash bins, the full activity log, and vault-wide security settings.",
+-    chips: [
+-      { label: "Shared", icon: Share2 }, { label: "Banned", icon: Ban },
+-      { label: "Trash", icon: Trash2 }, { label: "Activity Log", icon: History },
+-    ],
+-    color: "violet",
+-  },
+-];
+-
+-function useCountUpLocal(target: number, ms = 900) {
+-  const [val, setVal] = useState(0);
+-  useEffect(() => {
+-    if (!target) { setVal(0); return; }
+-    let start = 0;
+-    const step = Math.max(1, Math.ceil(target / 30));
+-    const id = setInterval(() => { start = Math.min(start + step, target); setVal(start); if (start >= target) clearInterval(id); }, ms / 30);
+-    return () => clearInterval(id);
+-  }, [target, ms]);
+-  return val;
+-}
+-
+-export default function VaultHub() {
+-  const { data, isLoading } = useListVaultEntries();
+-  const entities: any[] = Array.isArray(data) ? data : [];
+-  const entityCount = useCountUpLocal(entities.length);
+-
+-  return (
+-    <div className="space-y-8 page-enter">
+-      {/* Hero */}
+-      <div className="relative overflow-hidden rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.06] px-6 py-10 sm:px-10 sm:py-14 text-center">
+-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+-          style={{ backgroundImage: "linear-gradient(to right, #808080 1px, transparent 1px), linear-gradient(to bottom, #808080 1px, transparent 1px)", backgroundSize: "36px 36px" }} />
+-        <div className="relative">
+-          <div className="inline-flex items-center gap-2 border border-primary/20 bg-primary/5 rounded-full px-3.5 py-1 mb-5">
+-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+-            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">Vault · Command Center</span>
+-          </div>
+-          <h1 className="text-3xl sm:text-4xl font-mono font-bold tracking-tighter text-foreground mb-3 flex items-center justify-center gap-3">
+-            <Vault className="w-7 h-7 text-primary" /> Your Vault
+-          </h1>
+-          <p className="text-sm text-muted-foreground font-mono max-w-xl mx-auto leading-relaxed mb-6">
+-            Everything encrypted and stored under your account — accounts, access credentials, project enrollment, and vault-wide management — organized into four steps below.
+-          </p>
+-          <div className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground/70">
+-            <span className="text-2xl font-bold text-primary tabular-nums">{isLoading ? "—" : entityCount}</span>
+-            <span className="uppercase tracking-widest">entities secured</span>
+-          </div>
+-        </div>
+-      </div>
+-
+-      {/* Step cards — mirrors VaultSidebar's 4-step structure 1:1 */}
+-      <div className="grid sm:grid-cols-2 gap-4">
+-        {CARDS.map(card => {
+-          const Icon = card.icon;
+-          const isCyan = card.color === "cyan";
+-          return (
+-            <Link key={card.step} href={card.href}>
+-              <div className={`group relative h-full rounded-xl border p-5 cursor-pointer transition-all hover:-translate-y-0.5 ${
+-                isCyan ? "border-cyan-900/40 hover:border-cyan-500/40 hover:shadow-[0_0_24px_rgba(34,211,238,0.08)]"
+-                       : "border-violet-900/40 hover:border-violet-500/40 hover:shadow-[0_0_24px_rgba(167,139,250,0.08)]"
+-              } bg-card`}>
+-                <div className="flex items-start justify-between mb-3">
+-                  <div className="flex items-center gap-2.5">
+-                    <span className={`font-mono text-[9px] font-bold tabular-nums ${isCyan ? "text-cyan-400/50" : "text-violet-400/50"}`}>{card.step}</span>
+-                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center border ${
+-                      isCyan ? "bg-cyan-500/10 border-cyan-500/20" : "bg-violet-500/10 border-violet-500/20"
+-                    }`}>
+-                      <Icon className={`w-4 h-4 ${isCyan ? "text-cyan-400" : "text-violet-400"}`} />
+-                    </div>
+-                  </div>
+-                  <ArrowRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+-                </div>
+-                <h3 className="font-mono font-bold text-base text-foreground mb-1.5">{card.title}</h3>
+-                <p className="text-xs text-muted-foreground leading-relaxed mb-4">{card.description}</p>
+-                <div className="flex flex-wrap gap-1.5">
+-                  {card.chips.map(chip => (
+-                    <span key={chip.label} className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-wider text-muted-foreground/60 border border-border/30 rounded-full px-2 py-0.5">
+-                      <chip.icon className="w-2.5 h-2.5" /> {chip.label}
+-                    </span>
+-                  ))}
+-                </div>
+-              </div>
+-            </Link>
+-          );
+-        })}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx b/artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx
+index 0284254..e7fc303 100644
+--- a/artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-kyc-dashboard.tsx
+@@ -8,7 +8,7 @@ import {
+ } from "lucide-react";
+ import { Badge } from "@/components/ui/badge";
+ import { KYC_CATEGORIES, getKycCategoryMeta, KYC_CATEGORY_ICON } from "@/config/vault-kyc";
+-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
++import { VaultLoading } from "@/components/vault/vault-loading";
+ import { useModuleAwareNavigate } from "@/components/module-link";
+ 
+ // Same shape as components/kyc-entries.tsx's KycEntry — kept narrow here to
+@@ -340,7 +340,7 @@ export default function VaultKycDashboard() {
+       </div>
+ 
+       {loading ? (
+-        <VaultLoadingIntro title="Loading KYC dashboard" done={!loading} />
++        <VaultLoading title="Loading KYC dashboard" done={!loading} />
+       ) : tab === "overview" ? (
+         <OverviewTab entries={entries} onSelectCategory={openCategory} />
+       ) : (
+diff --git a/artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx b/artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx
+index 9e6c51a..1be240a 100644
+--- a/artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-kyc-detail.tsx
+@@ -19,6 +19,7 @@ import type { KycEntry } from "@/components/kyc-entries";
+ import { KycDialog } from "@/components/kyc-entries";
+ import { TOTPCard } from "@/components/vault/totp-card";
+ import { useModuleAwareNavigate } from "@/components/module-link";
++import { accountPath } from "@/lib/sylo-routes";
+ 
+ // Access dialog tabs — same 2FA/Mail/Backup split as vault-entity-access.tsx,
+ // scoped to this KYC entity's own fields only. Mail is deliberately just the
+@@ -181,7 +182,7 @@ export default function VaultKycDetail() {
+     try {
+       await customFetch<unknown>(`/api/kyc-entries/${entry.id}`, { method: "DELETE" });
+       toast({ title: "KYC entity deleted" });
+-      navigate("/vault?tab=kyc");
++      navigate(accountPath("kyc", "management"));
+     } catch {
+       toast({ variant: "destructive", title: "Delete failed" });
+     } finally { setDeleting(false); setConfirmDelete(false); }
+@@ -240,7 +241,7 @@ export default function VaultKycDetail() {
+   if (!entry) {
+     return (
+       <div className="space-y-4">
+-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=kyc")} className="font-mono text-xs gap-1.5">
++        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("kyc", "management"))} className="font-mono text-xs gap-1.5">
+           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
+         </Button>
+         <div className="text-center py-20">
+@@ -263,7 +264,7 @@ export default function VaultKycDetail() {
+     <div className="space-y-5 page-enter max-w-2xl mx-auto">
+       {/* Header */}
+       <div>
+-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=kyc")} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
++        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("kyc", "management"))} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
+           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
+         </Button>
+ 
+diff --git a/artifacts/ayzen/src/pages/user/vault-local-dashboard.tsx b/artifacts/ayzen/src/pages/user/vault-local-dashboard.tsx
+index e55c4a8..c0192ea 100644
+--- a/artifacts/ayzen/src/pages/user/vault-local-dashboard.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-local-dashboard.tsx
+@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
+ import { getLocalAccountDashboardMeta } from "@/config/vault-local";
+ import { ReceiptLinkDialog } from "@/components/receipt-link-dialog";
+ import { categoryReceiptApi } from "@/lib/receipt-api";
+-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
++import { VaultLoading } from "@/components/vault/vault-loading";
+ 
+ interface LocalAccount {
+   id: number;
+@@ -404,7 +404,7 @@ export default function VaultLocalDashboard() {
+       </div>
+ 
+       {loading ? (
+-        <VaultLoadingIntro title="Loading local accounts" done={!loading} />
++        <VaultLoading title="Loading local accounts" done={!loading} />
+       ) : tab === "overview" ? (
+         <OverviewTab accounts={accounts} onSelectCategory={openCategory} />
+       ) : tab === "category" ? (
+diff --git a/artifacts/ayzen/src/pages/user/vault-local-detail.tsx b/artifacts/ayzen/src/pages/user/vault-local-detail.tsx
+index 3c16132..3cbb4bc 100644
+--- a/artifacts/ayzen/src/pages/user/vault-local-detail.tsx
++++ b/artifacts/ayzen/src/pages/user/vault-local-detail.tsx
+@@ -28,6 +28,7 @@ import { HealthChecklistCard, HealthScoreBadge } from "@/components/vault/health
+ import { LOCAL_ACCOUNT_HEALTH_CHECKS } from "@/config/columns/entity-view";
+ import { ImapSmtpForm, type EmailAccount } from "@/components/mail/imap-smtp-form";
+ import { useModuleAwareNavigate } from "@/components/module-link";
++import { accountPath } from "@/lib/sylo-routes";
+ 
+ const MAIL_BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
+ 
+@@ -247,7 +248,7 @@ function VaultLocalDetailContent() {
+     try {
+       await customFetch<unknown>(`/api/local-accounts/${account.id}`, { method: "DELETE" });
+       toast({ title: "Account deleted" });
+-      navigate("/vault?tab=local");
++      navigate(accountPath("local", "management"));
+     } catch {
+       toast({ variant: "destructive", title: "Delete failed" });
+     } finally { setDeleting(false); setConfirmDelete(false); }
+@@ -329,7 +330,7 @@ function VaultLocalDetailContent() {
+   if (!account) {
+     return (
+       <div className="space-y-4">
+-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=local")} className="font-mono text-xs gap-1.5">
++        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("local", "management"))} className="font-mono text-xs gap-1.5">
+           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
+         </Button>
+         <div className="text-center py-20">
+@@ -349,7 +350,7 @@ function VaultLocalDetailContent() {
+     <div className="space-y-5 page-enter max-w-2xl mx-auto">
+       {/* Header */}
+       <div>
+-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=local")} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
++        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("local", "management"))} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
+           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
+         </Button>
+ 
+-- 
+2.43.0
+
