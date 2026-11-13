@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test:mega-engine": "node --test --import tsx src/lib/mega-engine/*.test.ts",
     "test:new-engines": "node --test --import tsx src/lib/new-engines/*.test.ts",
+    "test:auth-signup": "node --test --import tsx src/lib/signup-validation.test.ts",
     "test:role-hosts": "node --test --import tsx src/lib/role-hosts.test.ts src/lib/api-hosts.test.ts",
     "test:mcp": "node --test --experimental-test-module-mocks --import tsx src/mcp-server/*.test.ts src/routes/mcp.http.test.ts",
     "test:telegram": "node --test --import tsx src/lib/telegram-command-adapter.test.ts src/lib/telegram-bot-registry.test.ts src/lib/telegram-bot-links.test.ts src/lib/telegram-launcher.test.ts src/lib/telegram-gateway-dispatch.test.ts src/lib/module-settings-paths.test.ts src/lib/module-nav.test.ts",
