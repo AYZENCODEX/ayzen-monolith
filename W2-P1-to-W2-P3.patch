@@ -1,0 +1,2522 @@
+From a1d351cf21fb98a6a2c2d4c08e0171c3b98368a2 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 13 Nov 2026 10:17:26 +0600
+Subject: [PATCH 1/3] W2-P1: server-side module guard (req 4)
+
+Another module's API or page path is a plain 404 for a request acting for a module host.
+- decideModuleHostAccess in the module registry (case, //, dot-segment, percent-encoding safe)
+- MODULE_HOST_GUARD_MODE off|report|owned|strict (default off), API + page guards
+- per-module CORS allow-list (registered hosts only) and CSP frame-ancestors / Referrer-Policy on module hosts
+- scripts/check-module-isolation.mjs (CI, 23-mutant self-test), unit tests, docs
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HipLewAAStoWhxYqWcJWWQ
+---
+ .github/workflows/ci.yml                      |   3 +
+ CHANGES_W2_P1_MODULE_HOST_GUARD.md            |  32 ++++
+ artifacts/api-server/package.json             |   1 +
+ artifacts/api-server/src/app.ts               |   8 +-
+ .../src/lib/module-host-guard-core.ts         |  67 +++++++
+ .../src/lib/module-host-guard.test.ts         |  94 ++++++++++
+ .../api-server/src/lib/module-host-guard.ts   |  60 +++++++
+ .../api-server/src/middlewares/security.ts    |   6 +
+ docs/identity-boundaries.md                   |  15 ++
+ package.json                                  |   1 +
+ packages/module-registry/src/index.d.mts      |   7 +
+ packages/module-registry/src/index.mjs        |  49 +++++
+ scripts/check-module-isolation.mjs            | 168 ++++++++++++++++++
+ 13 files changed, 510 insertions(+), 1 deletion(-)
+ create mode 100644 CHANGES_W2_P1_MODULE_HOST_GUARD.md
+ create mode 100644 artifacts/api-server/src/lib/module-host-guard-core.ts
+ create mode 100644 artifacts/api-server/src/lib/module-host-guard.test.ts
+ create mode 100644 artifacts/api-server/src/lib/module-host-guard.ts
+ create mode 100644 scripts/check-module-isolation.mjs
+
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 476e381..fb8bfd1 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -75,6 +75,9 @@ jobs:
+       - run: node scripts/validate-w1-p2.mjs
+       - run: node scripts/validate-w1-p4.mjs
+       - run: node scripts/validate-w1-p4.mjs --self-test
++      - run: node scripts/check-module-isolation.mjs
++      - run: node scripts/check-module-isolation.mjs --self-test
++      - run: pnpm --filter @workspace/api-server test:module-host-guard
+       - run: node scripts/validate-w1-p5.mjs
+       - run: node scripts/validate-w1-p5.mjs --self-test
+       - run: pnpm --filter @workspace/api-server test:clerk
+diff --git a/CHANGES_W2_P1_MODULE_HOST_GUARD.md b/CHANGES_W2_P1_MODULE_HOST_GUARD.md
+new file mode 100644
+index 0000000..d5ff5cf
+--- /dev/null
++++ b/CHANGES_W2_P1_MODULE_HOST_GUARD.md
+@@ -0,0 +1,32 @@
++# CHANGES — W2-P1: server-side module guard (req 4)
++
++Before: `shared-apps.ts` only mapped host -> module and "does not perform authentication or authorization", so a page on one module's host could call another module's API path and the server did not care. Now the server refuses.
++
++## What was added
++| Piece | Where |
++|---|---|
++| Pure decision (`decideModuleHostAccess`, `pathCandidates`, `MODULE_HOST_ALLOWED_PREFIXES`) | `packages/module-registry/src/index.mjs` (+ `.d.mts`) |
++| Mode switch, registered-origin check, frame-ancestors value | `lib/module-host-guard-core.ts` (pure, install-free) |
++| Middlewares `moduleHostApiGuard`, `moduleHostPageGuard`, `moduleHostHeaders` | `lib/module-host-guard.ts`, mounted in `app.ts` |
++| Per-module CORS allow-list | `middlewares/security.ts` |
++| CI check (blocking) with 23-mutant self-test | `scripts/check-module-isolation.mjs` |
++| Tests | `lib/module-host-guard.test.ts` (10) |
++| Docs | `docs/identity-boundaries.md` (new section) |
++
++## Behavior
++`MODULE_HOST_GUARD_MODE` = `off` (default, nothing changes) | `report` (log only) | `owned` | `strict`. See the docs section for the table.
++* A request acting for module M (first-party Origin, else Host) gets the **same 404 body as an unknown endpoint** on any path another module owns, so existence is not revealed. API paths (relative to `/api`) and page paths on a module host are both covered.
++* Allow-list always reachable: `/auth /oidc /.well-known /health /connector`.
++* Paths are judged under every spelling: lower-cased raw, plus percent-decoded once, `//` collapsed, `.`/`..` resolved. Bad escapes/NUL/backslash are refused. `/FINANCE`, `/%66inance`, `/vault/../finance`, `/auth/../finance` all stay denied.
++* `owned`/`strict` also: CORS accepts a production first-party origin only if it is a registered host (module, role, central, API, MCP, OIDC issuer, `MODULE_CORS_EXTRA_HOSTS`; `ALLOWED_ORIGINS` still wins), and module hosts get `Content-Security-Policy: frame-ancestors 'self'` (+ `MODULE_FRAME_ANCESTORS_EXTRA`) and `Referrer-Policy: no-referrer`.
++* Rollout: `report` first, read `module_host_guard.would_deny` logs, then `owned`. Kill switch: `off`.
++
++## Deviations / limits (read these)
++1. **The roadmap's "routePrefixes baire hole 404" is only available as `strict`, and strict is not recommended yet.** 672 of 1235 registered endpoints belong to no module prefix (`/admin` 209, `/users`, `/notifications`, `/vault-shares`, `/kyc-*`, ...). Strict would 404 shared platform APIs and several module-specific ones. `owned` implements the isolation guarantee (done criterion: another module's path = 404) without that breakage. Completing route ownership in the registry is the prerequisite for strict; the check prints the coverage numbers on every run.
++2. **Defence in depth, not authentication.** A caller with no `Origin` (curl, server-to-server) is not "acting for a module" and is not touched; a non-browser client can also spoof `Origin`. Authentication and authorization still decide who may call what.
++3. `Referrer-Policy` was already `no-referrer` through helmet; it is now set explicitly per module host and pinned by the check.
++4. Host/Origin routing and CORS rely on registered hosts: `id.ayzen.tech` is accepted only when `AYZEN_OIDC_ISSUER` is set to it (otherwise add it to `MODULE_CORS_EXTRA_HOSTS`).
++
++## Verified / not verified
++Verified: 10 unit tests, the 12-rule isolation check incl. the full module x prefix matrix, 23/23 mutants caught, types of the pure files, earlier suites still green.
++Not verified: the Express middleware wiring at runtime (express is not installable here; only checked statically), CSP/CORS behavior in a real browser, and report-mode logs against real traffic.
+diff --git a/artifacts/api-server/package.json b/artifacts/api-server/package.json
+index 8fb14df..69122ae 100644
+--- a/artifacts/api-server/package.json
++++ b/artifacts/api-server/package.json
+@@ -14,6 +14,7 @@
+     "test:new-engines": "node --test --import tsx src/lib/new-engines/*.test.ts",
+     "test:module-auth": "node --test --import tsx src/lib/module-session-policy.test.ts src/lib/module-request-context.test.ts src/lib/module-password.test.ts",
+     "test:module-auth-db": "node --test --import tsx src/lib/module-auth-service.db.test.ts src/lib/module-clerk-service.db.test.ts",
++    "test:module-host-guard": "node --test --import tsx src/lib/module-host-guard.test.ts",
+     "test:clerk": "node --test --import tsx src/lib/clerk.test.ts",
+     "test:role-hosts": "node --test --import tsx src/lib/role-hosts.test.ts src/lib/api-hosts.test.ts",
+     "test:mcp": "node --test --experimental-test-module-mocks --import tsx src/mcp-server/*.test.ts src/routes/mcp.http.test.ts",
+diff --git a/artifacts/api-server/src/app.ts b/artifacts/api-server/src/app.ts
+index 68d2eb0..c5dc95c 100644
+--- a/artifacts/api-server/src/app.ts
++++ b/artifacts/api-server/src/app.ts
+@@ -52,6 +52,7 @@ import {
+ } from "./middlewares/security";
+ import { apiKeyScopeGate } from "./middlewares/api-key-scope";
+ import { roleHostApiGate, roleHostPageGate } from "./middlewares/role-host";
++import { moduleHostApiGuard, moduleHostHeaders, moduleHostPageGuard } from "./lib/module-host-guard";
+ import mcpRouter from "./routes/mcp";
+ import { db } from "@workspace/db";
+ import { sql } from "drizzle-orm";
+@@ -131,6 +132,8 @@ app.use((req, res, next) => {
+ // ── Security layer ───────────────────────────────────────────────────────────
+ // See middlewares/security.ts for the full rationale behind each piece.
+ app.use(securityHeaders);
++// W2-P1: per-module CSP frame-ancestors + Referrer-Policy on module hosts (only when MODULE_HOST_GUARD_MODE is owned|strict).
++app.use(moduleHostHeaders);
+ app.use(corsMiddleware);
+ // Reads the AYZEN Account session cookie (lib/session-cookie.ts) so
+ // getTokenFromReq() can fall back to it when a request has no
+@@ -290,7 +293,8 @@ app.use(oidcRevokeRouter);
+ // so it needs neither apiKeyScopeGate nor globalLimiter here. Phase 8.
+ app.use((req, res, next) => (isApiHost(req.hostname) ? (mcpRouter as unknown as RequestHandler)(req, res, next) : next()));
+ 
+-app.use("/api", globalLimiter, roleHostApiGate, apiKeyScopeGate, router);
++// W2-P1: another module's API path is a plain 404 for a request acting for this module (lib/module-host-guard.ts; off by default).
++app.use("/api", globalLimiter, moduleHostApiGuard, roleHostApiGate, apiKeyScopeGate, router);
+ 
+ app.use("/api/{*splat}", notFoundHandler);
+ app.use(globalErrorHandler as any);
+@@ -310,6 +314,8 @@ app.use((req, res, next) => {
+ // ── Role hosts (admin / mod / team leader) ──────────────────────────────────
+ // Phase 7. No-op unless ROLE_HOSTS_ENABLED=1. See lib/role-hosts.ts for the
+ // decision table; the API half of the same rule is mounted on /api above.
++// W2-P1: another module's PAGE path on a module host is a 404 too (same mode switch).
++app.use(moduleHostPageGuard);
+ app.use(roleHostPageGate);
+ 
+ // ── Serve built frontend in production ───────────────────────────────────────
+diff --git a/artifacts/api-server/src/lib/module-host-guard-core.ts b/artifacts/api-server/src/lib/module-host-guard-core.ts
+new file mode 100644
+index 0000000..46cf01b
+--- /dev/null
++++ b/artifacts/api-server/src/lib/module-host-guard-core.ts
+@@ -0,0 +1,67 @@
++/**
++ * lib/module-host-guard-core.ts — W2-P1: the pure half of the module host guard (mode switch, decision, registered-origin check,
++ * frame-ancestors value). No logger, no express: importable by tests and scripts without installing anything.
++ * The middleware that uses it is lib/module-host-guard.ts (read its header for the full design).
++ */
++import { decideModuleHostAccess, type ModuleId } from "@ayzen/module-registry";
++import { getApiHosts, getMcpHosts, isFirstPartyProdOrigin } from "./api-hosts";
++import { SHARED_APP_DEFINITIONS, getSharedAppHosts } from "./shared-apps";
++import { ROLE_HOST_DEFINITIONS, getCentralHosts, getRoleHostHosts, normalizeHostname } from "./role-hosts";
++
++export type ModuleHostGuardMode = "off" | "report" | "owned" | "strict";
++const MODES: readonly ModuleHostGuardMode[] = ["off", "report", "owned", "strict"];
++
++export function moduleHostGuardMode(env: NodeJS.ProcessEnv = process.env): ModuleHostGuardMode {
++  const raw = env.MODULE_HOST_GUARD_MODE?.trim().toLowerCase();
++  return (MODES as readonly string[]).includes(raw ?? "") ? (raw as ModuleHostGuardMode) : "off";
++}
++/** owned / strict: the guard refuses requests and the CORS + header tightening is on. */
++export const isModuleHostGuardEnforcing = (env: NodeJS.ProcessEnv = process.env): boolean => {
++  const m = moduleHostGuardMode(env);
++  return m === "owned" || m === "strict";
++};
++
++export function sharedPrefixes(env: NodeJS.ProcessEnv = process.env): string[] {
++  return (env.MODULE_HOST_GUARD_SHARED_PREFIXES ?? "").split(",").map((p) => p.trim().toLowerCase()).filter((p) => p.startsWith("/"));
++}
++
++/** Pure core, exported for tests: what the guard does for (mode, module, path). */
++export function evaluateGuard(mode: ModuleHostGuardMode, module: ModuleId | null, path: string, env: NodeJS.ProcessEnv = process.env) {
++  if (mode === "off" || !module) return { refuse: false as const, wouldDeny: false, reason: "n/a" };
++  const d = decideModuleHostAccess({ module, path, strict: mode === "strict", sharedPrefixes: sharedPrefixes(env) });
++  const wouldDeny = d.action === "deny";
++  return { refuse: wouldDeny && mode !== "report", wouldDeny, reason: d.reason };
++}
++
++// ─── per-module CORS allow-list ──────────────────────────────────────────────────────────────────────────────────
++
++function registeredHosts(env: NodeJS.ProcessEnv = process.env): Set<string> {
++  const hosts = new Set<string>([...getApiHosts(), ...getMcpHosts(), ...getCentralHosts(env)]);
++  for (const d of SHARED_APP_DEFINITIONS) for (const h of getSharedAppHosts(d)) hosts.add(h);
++  for (const d of ROLE_HOST_DEFINITIONS) for (const h of getRoleHostHosts(d, env)) hosts.add(h);
++  for (const raw of [env.AYZEN_OIDC_ISSUER, env.APP_URL]) { try { if (raw) hosts.add(normalizeHostname(new URL(raw).host)); } catch { /* ignore */ } }
++  for (const h of (env.MODULE_CORS_EXTRA_HOSTS ?? "").split(",")) if (h.trim()) hosts.add(normalizeHostname(h));
++  return hosts;
++}
++
++/**
++ * Production first-party origins are only trusted when they are a REGISTERED host (module, role, central, API, MCP, OIDC
++ * issuer, or MODULE_CORS_EXTRA_HOSTS), not merely "<anything>.ayzen.tech": a forgotten or hijacked subdomain gets no CORS.
++ * Origins that are not production first-party (localhost dev, explicit ALLOWED_ORIGINS) are left to the existing rules.
++ */
++export function isRegisteredFirstPartyOrigin(origin: string, env: NodeJS.ProcessEnv = process.env): boolean {
++  if (!isFirstPartyProdOrigin(origin)) return true;
++  try { return registeredHosts(env).has(normalizeHostname(new URL(origin).host)); } catch { return false; }
++}
++
++// ─── per-module response headers ─────────────────────────────────────────────────────────────────────────────────
++
++/**
++ * On a module's own host: `frame-ancestors 'self'` (+ MODULE_FRAME_ANCESTORS_EXTRA origins) so no other site, and no other
++ * module, can embed it, and an explicit `Referrer-Policy: no-referrer`. Only the frame-ancestors directive is set, so it
++ * cannot break scripts or styles; helmet's X-Frame-Options: SAMEORIGIN already says the same for old browsers.
++ */
++export function moduleFrameAncestors(env: NodeJS.ProcessEnv = process.env): string {
++  const extra = (env.MODULE_FRAME_ANCESTORS_EXTRA ?? "").split(",").map((s) => s.trim()).filter((s) => /^https:\/\/[a-z0-9.-]+$/i.test(s));
++  return ["'self'", ...extra].join(" ");
++}
+diff --git a/artifacts/api-server/src/lib/module-host-guard.test.ts b/artifacts/api-server/src/lib/module-host-guard.test.ts
+new file mode 100644
+index 0000000..41c487d
+--- /dev/null
++++ b/artifacts/api-server/src/lib/module-host-guard.test.ts
+@@ -0,0 +1,94 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { MODULES, MODULE_HOST_ALLOWED_PREFIXES, decideModuleHostAccess, pathCandidates } from "@ayzen/module-registry";
++import {
++  evaluateGuard, isModuleHostGuardEnforcing, isRegisteredFirstPartyOrigin, moduleFrameAncestors, moduleHostGuardMode, sharedPrefixes,
++} from "./module-host-guard-core";
++
++const env = (o: Record<string, string> = {}) => o as NodeJS.ProcessEnv;
++const own = (m: { routePrefixes: readonly string[] }) => m.routePrefixes[0];
++
++test("mode: unknown or missing value is off; only owned|strict enforce", () => {
++  assert.equal(moduleHostGuardMode(env()), "off");
++  assert.equal(moduleHostGuardMode(env({ MODULE_HOST_GUARD_MODE: "STRICT " })), "strict");
++  assert.equal(moduleHostGuardMode(env({ MODULE_HOST_GUARD_MODE: "yes" })), "off");
++  assert.equal(isModuleHostGuardEnforcing(env({ MODULE_HOST_GUARD_MODE: "report" })), false);
++  assert.equal(isModuleHostGuardEnforcing(env({ MODULE_HOST_GUARD_MODE: "owned" })), true);
++});
++
++test("isolation matrix: every module host gets 404 on every OTHER module's prefix, and keeps its own + plumbing", () => {
++  for (const m of MODULES) for (const other of MODULES) for (const p of other.routePrefixes) {
++    const d = decideModuleHostAccess({ module: m.id, path: `${p}/x` });
++    if (other.id === m.id) assert.equal(d.action, "allow", `${m.id} must keep ${p}`);
++    else assert.deepEqual([d.action, d.owner], ["deny", other.id], `${m.id} -> ${p}`);
++  }
++  for (const m of MODULES) for (const a of MODULE_HOST_ALLOWED_PREFIXES) {
++    assert.equal(decideModuleHostAccess({ module: m.id, path: `${a}/x`, strict: true }).action, "allow", `${m.id} ${a}`);
++  }
++});
++
++test("registry sanity: no prefix is owned by two modules, none collides with the allow-list", () => {
++  const seen = new Map<string, string>();
++  for (const m of MODULES) for (const p of m.routePrefixes) {
++    assert.ok(!seen.has(p), `${p} owned by ${seen.get(p)} and ${m.id}`);
++    seen.set(p, m.id);
++    assert.ok(!MODULE_HOST_ALLOWED_PREFIXES.some((a) => p === a || p.startsWith(a + "/")), `${p} collides with allow-list`);
++  }
++});
++
++test("path tricks cannot reach another module: case, //, ./.., percent-encoding, query, allow-list laundering", () => {
++  const fyra = MODULES.find((m) => m.id === "fyra")!, p = own(fyra); // /finance
++  const tricks = [p.toUpperCase(), `/${p}`, `/./${p.slice(1)}`, `/vault/../${p.slice(1)}`, `/auth/../${p.slice(1)}`, `/health/..${p}`,
++    "/%66inance", "/%46INANCE/x", `${p}?next=/vault`, `${p}#/vault`, `/oidc/%2e%2e${p}`];
++  for (const t of tricks) for (const strict of [false, true]) {
++    assert.equal(decideModuleHostAccess({ module: "sylo", path: t, strict }).action, "deny", `${t} (strict=${strict})`);
++  }
++  for (const bad of ["/%zz", "/a%00b", "/a\\b", "/%5cfinance"]) assert.equal(decideModuleHostAccess({ module: "sylo", path: bad }).reason, "malformed_path", bad);
++  assert.equal(pathCandidates("/%zz"), null);
++});
++
++test("an allow-listed prefix is a boundary, not a substring", () => {
++  assert.equal(decideModuleHostAccess({ module: "sylo", path: "/authx/y", strict: true }).action, "deny");
++  assert.equal(decideModuleHostAccess({ module: "sylo", path: "/auth", strict: true }).action, "allow");
++  assert.equal(decideModuleHostAccess({ module: "sylo", path: "/.well-known/openid-configuration", strict: true }).action, "allow");
++  assert.equal(decideModuleHostAccess({ module: "sylo", path: "/vaultx", strict: false }).action, "allow"); // unowned, not "vault"
++});
++
++test("unowned paths: allowed in owned mode, denied in strict unless shared-listed", () => {
++  assert.equal(decideModuleHostAccess({ module: "sylo", path: "/users/me" }).action, "allow");
++  assert.equal(decideModuleHostAccess({ module: "sylo", path: "/users/me", strict: true }).action, "deny");
++  assert.equal(decideModuleHostAccess({ module: "sylo", path: "/users/me", strict: true, sharedPrefixes: ["/users"] }).action, "allow");
++  assert.deepEqual(sharedPrefixes(env({ MODULE_HOST_GUARD_SHARED_PREFIXES: "/users, /Notifications ,bad,/x" })), ["/users", "/notifications", "/x"]);
++});
++
++test("unknown module id never gets access", () => {
++  assert.equal(decideModuleHostAccess({ module: "nope", path: "/auth" }).action, "deny");
++});
++
++test("evaluateGuard: off and no-module are never refused; report logs but does not refuse; owned/strict refuse", () => {
++  assert.equal(evaluateGuard("off", "sylo", "/finance").refuse, false);
++  assert.equal(evaluateGuard("owned", null, "/finance").refuse, false);
++  const rep = evaluateGuard("report", "sylo", "/finance");
++  assert.deepEqual([rep.refuse, rep.wouldDeny], [false, true]);
++  assert.equal(evaluateGuard("owned", "sylo", "/finance").refuse, true);
++  assert.equal(evaluateGuard("owned", "sylo", "/vault/items").refuse, false);
++  assert.equal(evaluateGuard("owned", "sylo", "/users").refuse, false);
++  assert.equal(evaluateGuard("strict", "sylo", "/users").refuse, true);
++});
++
++test("per-module CORS: only registered first-party hosts; localhost and non-first-party are not this check's business", () => {
++  const e = env();
++  for (const m of MODULES) assert.equal(isRegisteredFirstPartyOrigin(m.defaultHost ? `https://${m.defaultHost}` : "", e), true, m.id);
++  for (const ok of ["https://api.ayzen.tech", "https://ayzen.tech", "https://admin.ayzen.tech", "https://mod.ayzen.tech", "https://team.ayzen.tech", "https://mcp.ayzen.tech"]) assert.equal(isRegisteredFirstPartyOrigin(ok, e), true, ok);
++  assert.equal(isRegisteredFirstPartyOrigin("https://forgotten.ayzen.tech", e), false);
++  assert.equal(isRegisteredFirstPartyOrigin("https://id.ayzen.tech", e), false, "OIDC issuer host is trusted only when configured");
++  assert.equal(isRegisteredFirstPartyOrigin("https://id.ayzen.tech", env({ AYZEN_OIDC_ISSUER: "https://id.ayzen.tech" })), true);
++  assert.equal(isRegisteredFirstPartyOrigin("https://x.ayzen.tech", env({ MODULE_CORS_EXTRA_HOSTS: "X.ayzen.tech" })), true);
++  assert.equal(isRegisteredFirstPartyOrigin("http://sylo.localhost", e), true);
++  assert.equal(isRegisteredFirstPartyOrigin("https://evil.example", e), true, "not first-party: left to ALLOWED_ORIGINS");
++});
++
++test("frame-ancestors: self plus https extras only", () => {
++  assert.equal(moduleFrameAncestors(env()), "'self'");
++  assert.equal(moduleFrameAncestors(env({ MODULE_FRAME_ANCESTORS_EXTRA: "https://ayzen.tech, http://bad.test, *, https://x.y;script-src" })), "'self' https://ayzen.tech");
++});
+diff --git a/artifacts/api-server/src/lib/module-host-guard.ts b/artifacts/api-server/src/lib/module-host-guard.ts
+new file mode 100644
+index 0000000..da572d3
+--- /dev/null
++++ b/artifacts/api-server/src/lib/module-host-guard.ts
+@@ -0,0 +1,60 @@
++/**
++ * lib/module-host-guard.ts — W2-P1 (req 4): the server stops trusting the browser to keep modules apart.
++ *
++ * shared-apps.ts only maps host -> module; it never blocked anything, so a page on sylo.ayzen.tech could call another
++ * module's API. This file adds the enforcement, controlled by ONE switch:
++ *
++ *   MODULE_HOST_GUARD_MODE   off (default) | report | owned | strict
++ *     off     nothing changes.
++ *     report  log `module_host_guard.would_deny` for what owned/strict would refuse; refuse nothing. Use it first.
++ *     owned   a request acting for module M gets a plain 404 on any path owned by ANOTHER module (registry routePrefixes).
++ *             Paths owned by nobody (shared platform APIs) stay reachable. Recommended steady state.
++ *     strict  as owned, and unowned paths are 404 too unless allow-listed (/auth /oidc /.well-known /health /connector)
++ *             or listed in MODULE_HOST_GUARD_SHARED_PREFIXES (comma list). NOT recommended until the registry's route
++ *             ownership is complete: today ~half of the API surface (e.g. /users, /notifications, /vault-shares) is unowned.
++ *   owned and strict additionally turn on: a per-module CORS allow-list (a first-party origin must be a REGISTERED host,
++ *   not just any *.ayzen.tech) and per-module response headers (CSP frame-ancestors, Referrer-Policy) on module hosts.
++ *
++ * "Acting for module M" is lib/module-request-context.ts: the first-party Origin when the browser sent one, else the Host.
++ * Requests with no module context (central app, API host without a module Origin, workers, curl) are not touched: this is
++ * defence in depth for browser traffic, and authentication/authorization stay owned by the existing middleware.
++ * A denied request gets the SAME 404 body as an unknown endpoint, so the response does not reveal that the path exists.
++ */
++import type { NextFunction, Request, RequestHandler, Response } from "express";
++import type { ModuleId } from "@ayzen/module-registry";
++import { logger } from "./logger";
++import { currentModuleContext } from "./module-request-context";
++import { resolveRequestModule } from "./module-session-policy";
++import { isApiHost } from "./api-hosts";
++import { evaluateGuard, isModuleHostGuardEnforcing, moduleFrameAncestors, moduleHostGuardMode } from "./module-host-guard-core";
++import { notFoundHandler } from "../middlewares/error-handler";
++
++export * from "./module-host-guard-core";
++
++function apply(kind: "api" | "page", module: ModuleId | null, req: Request, res: Response, next: NextFunction): void {
++  const mode = moduleHostGuardMode();
++  const r = evaluateGuard(mode, module, req.path);
++  if (r.wouldDeny) logger.warn({ module, path: req.path, method: req.method, kind, mode, reason: r.reason }, mode === "report" ? "module_host_guard.would_deny" : "module_host_guard.denied");
++  if (r.refuse) { notFoundHandler(req, res); return; }
++  next();
++}
++
++/** Mounted on /api before the router (req.path is relative to /api, exactly the prefixes the registry lists). */
++export const moduleHostApiGuard: RequestHandler = (req, res, next) => apply("api", currentModuleContext(), req, res, next);
++
++const ASSET_PATH = /\.[a-z0-9]{1,8}$/i;
++/** Page requests on a module's own host: another module's pages are 404 (the SPA shell is not served for them). */
++export const moduleHostPageGuard: RequestHandler = (req, res, next) => {
++  if ((req.method !== "GET" && req.method !== "HEAD") || req.path.startsWith("/api") || isApiHost(req.hostname)) { next(); return; }
++  // Assets (js/css/images) are shared files, not module routes. Judge by Host only: a page load has no Origin.
++  if (ASSET_PATH.test(req.path)) { next(); return; }
++  apply("page", resolveRequestModule(req.hostname), req, res, next);
++};
++
++export const moduleHostHeaders: RequestHandler = (req, res, next) => {
++  if (isModuleHostGuardEnforcing() && resolveRequestModule(req.hostname)) {
++    res.setHeader("Content-Security-Policy", `frame-ancestors ${moduleFrameAncestors()}`);
++    res.setHeader("Referrer-Policy", "no-referrer");
++  }
++  next();
++};
+diff --git a/artifacts/api-server/src/middlewares/security.ts b/artifacts/api-server/src/middlewares/security.ts
+index 5d3d237..4b1f596 100644
+--- a/artifacts/api-server/src/middlewares/security.ts
++++ b/artifacts/api-server/src/middlewares/security.ts
+@@ -29,6 +29,7 @@ import { isFirstPartyOrigin, isFirstPartyProdOrigin } from "../lib/api-hosts";
+ import cors, { type CorsOptions } from "cors";
+ import rateLimit, { type Options } from "express-rate-limit";
+ import { logger } from "../lib/logger";
++import { isModuleHostGuardEnforcing, isRegisteredFirstPartyOrigin } from "../lib/module-host-guard-core";
+ 
+ // ─── Env helpers ───────────────────────────────────────────────────────────
+ 
+@@ -80,6 +81,11 @@ const corsOptions: CorsOptions = {
+     // No Origin header = same-origin, curl, server-to-server, mobile app, bot webhook → allow.
+     if (!origin) return callback(null, true);
+ 
++    // W2-P1 (owned|strict): a production first-party origin must be a REGISTERED host, not any *.ayzen.tech subdomain.
++    // Origins named in ALLOWED_ORIGINS are still honored below.
++    if (isModuleHostGuardEnforcing() && !isRegisteredFirstPartyOrigin(origin) && !(allowedOrigins?.includes(origin))) {
++      return callback(new Error(`Origin ${origin} is not a registered AYZEN host`));
++    }
+     if (allowedOrigins) {
+       if (allowedOrigins.includes(origin) || isFirstPartyOrigin(origin)) return callback(null, true);
+       return callback(new Error(`Origin ${origin} is not allowed by CORS policy`));
+diff --git a/docs/identity-boundaries.md b/docs/identity-boundaries.md
+index 0d19161..d7141bf 100644
+--- a/docs/identity-boundaries.md
++++ b/docs/identity-boundaries.md
+@@ -49,3 +49,18 @@ several providers later, and has a composite FK `(module_account_id, module)` so
+ 2. Add a webhook endpoint `https://api.ayzen.tech/api/webhooks/clerk/<module>` for `user.created` and `user.deleted`; copy its signing secret.
+ 3. Set `CLERK_<M>_ISSUER`, `CLERK_<M>_JWKS_URL`, `CLERK_<M>_WEBHOOK_SECRET` on the API and `VITE_CLERK_<M>_PUBLISHABLE_KEY` in the module build.
+ 4. Set `MODULE_CLERK_ENABLED=1`. Check boot logs for `clerk.topology.invalid` (must be absent) and that `GET /api/auth/module/options` on the module host reports `social: true`.
++
++## Server-side module guard (W2-P1)
++
++Keeping modules apart is also enforced on the server, not just by the SPA. One switch, `MODULE_HOST_GUARD_MODE`:
++
++| Mode | Effect |
++|---|---|
++| `off` (default) | nothing changes |
++| `report` | logs `module_host_guard.would_deny`, refuses nothing: run this first and read the logs |
++| `owned` | a request acting for module M gets a plain 404 on any path owned by another module (registry `routePrefixes`); unowned shared APIs stay reachable. Recommended steady state |
++| `strict` | as `owned`, and unowned paths are 404 unless allow-listed (`/auth /oidc /.well-known /health /connector`) or in `MODULE_HOST_GUARD_SHARED_PREFIXES`. Do not use until the registry's route ownership is complete (about half of the API surface is unowned today) |
++
++`owned` and `strict` also switch on a per-module CORS allow-list (a production first-party origin must be a registered host: module, role, central, API, MCP, OIDC issuer, or `MODULE_CORS_EXTRA_HOSTS`; `ALLOWED_ORIGINS` still wins) and, on module hosts, `Content-Security-Policy: frame-ancestors 'self'` (+ `MODULE_FRAME_ANCESTORS_EXTRA`) and `Referrer-Policy: no-referrer`.
++
++"Acting for module M" is the first-party Origin when the browser sent one, else the Host. Requests with no module context (central app, curl, workers) are not touched, so this is defence in depth for browser traffic; authentication and authorization stay with the existing middleware. Kill switch: set the mode back to `off`. CI check: `scripts/check-module-isolation.mjs`.
+diff --git a/package.json b/package.json
+index 42c89f4..aca18b8 100644
+--- a/package.json
++++ b/package.json
+@@ -11,6 +11,7 @@
+     "validate:w1-p1": "node scripts/validate-w1-p1.mjs",
+     "validate:w1-p2": "node scripts/validate-w1-p2.mjs",
+     "validate:w1-p3": "pnpm --filter @workspace/scripts oidc:test-conformance && node --test scripts/smoke-oidc-endpoints.test.mjs",
++    "check:module-isolation": "node scripts/check-module-isolation.mjs && node scripts/check-module-isolation.mjs --self-test && pnpm --filter @workspace/api-server test:module-host-guard",
+     "validate:w1-p5": "node scripts/validate-w1-p5.mjs && node scripts/validate-w1-p5.mjs --self-test && pnpm --filter @workspace/api-server test:clerk && pnpm --filter @workspace/scripts clerk:test-module-client",
+     "validate:w1-p4": "node scripts/validate-w1-p4.mjs && node scripts/validate-w1-p4.mjs --self-test && pnpm --filter @workspace/scripts oidc:test-module-login",
+     "smoke:oidc": "node scripts/smoke-oidc-endpoints.mjs",
+diff --git a/packages/module-registry/src/index.d.mts b/packages/module-registry/src/index.d.mts
+index fedaf77..3cb9336 100644
+--- a/packages/module-registry/src/index.d.mts
++++ b/packages/module-registry/src/index.d.mts
+@@ -27,3 +27,10 @@ export function getModule(id: string): ModuleDefinition | null;
+ export function getModulesByOrder(): ModuleDefinition[];
+ export function hasPrefix(path: string, prefix: string): boolean;
+ export function getModuleIdForPath(path: string): ModuleId | null;
++
++export const MODULE_HOST_ALLOWED_PREFIXES: readonly string[];
++export function pathCandidates(rawPath: string): string[] | null;
++export type ModuleHostDecision =
++  | { action: "allow"; reason: "own_or_allowlisted" | "unowned"; owner: null }
++  | { action: "deny"; reason: "other_module" | "unknown_module" | "malformed_path" | "not_in_module"; owner: ModuleId | null };
++export function decideModuleHostAccess(input: { module: string; path: string; strict?: boolean; sharedPrefixes?: readonly string[] }): ModuleHostDecision;
+diff --git a/packages/module-registry/src/index.mjs b/packages/module-registry/src/index.mjs
+index 81db259..40441be 100644
+--- a/packages/module-registry/src/index.mjs
++++ b/packages/module-registry/src/index.mjs
+@@ -117,3 +117,52 @@ export function getModuleIdForPath(path) {
+   }
+   return best ? best.id : null;
+ }
++
++// ─── W2-P1: server-side module guard (req 4) ─────────────────────────────────────────────────────────────────────
++// Pure decision shared by the API middleware (artifacts/api-server/src/lib/module-host-guard.ts) and the CI check
++// (scripts/check-module-isolation.mjs), so the rule that is enforced is the rule that is tested.
++
++/** Paths every module host may reach: auth/OIDC plumbing, discovery, health and connector callbacks. */
++export const MODULE_HOST_ALLOWED_PREFIXES = Object.freeze(["/auth", "/oidc", "/.well-known", "/health", "/connector"]);
++
++/**
++ * Candidate spellings of a request path to judge: the lower-cased raw path (Express routes are case-insensitive) and a
++ * normalized one (percent-decoded once, `//` collapsed, `.`/`..` resolved). A path is only as safe as its worst spelling.
++ * Returns null for paths no router could legitimately serve (bad escapes, NUL, backslashes).
++ */
++export function pathCandidates(rawPath) {
++  const noQuery = String(rawPath ?? "").split("?")[0].split("#")[0];
++  const lowerRaw = noQuery.toLowerCase();
++  let decoded;
++  try { decoded = decodeURIComponent(noQuery); } catch { return null; }
++  if (/[\u0000\\]/.test(decoded)) return null;
++  const out = [];
++  for (const seg of decoded.toLowerCase().split("/")) {
++    if (seg === "" || seg === ".") continue;
++    if (seg === "..") { out.pop(); continue; }
++    out.push(seg);
++  }
++  const normalized = "/" + out.join("/");
++  return [...new Set([lowerRaw.startsWith("/") ? lowerRaw : "/" + lowerRaw, normalized])];
++}
++
++/**
++ * Decide whether a request acting for `module` may touch `path` (relative to /api for API calls, the URL path for pages).
++ *   - a path owned by ANOTHER module is always denied (that is the isolation guarantee);
++ *   - allow-listed plumbing is always allowed;
++ *   - in `strict` mode a path owned by nobody is denied unless it is allow-listed or in `sharedPrefixes`.
++ * Returns { action: "allow" | "deny", reason, owner }. Deny is rendered as a plain 404 by the caller.
++ */
++export function decideModuleHostAccess({ module, path, strict = false, sharedPrefixes = [] }) {
++  const own = getModule(module);
++  if (!own) return { action: "deny", reason: "unknown_module", owner: null };
++  const candidates = pathCandidates(path);
++  if (!candidates) return { action: "deny", reason: "malformed_path", owner: null };
++  for (const c of candidates) {
++    const owner = getModuleIdForPath(c);
++    if (owner && owner !== module) return { action: "deny", reason: "other_module", owner };
++  }
++  const covered = (c) => getModuleIdForPath(c) === module || [...MODULE_HOST_ALLOWED_PREFIXES, ...sharedPrefixes].some((p) => hasPrefix(c, p));
++  if (strict && !candidates.every(covered)) return { action: "deny", reason: "not_in_module", owner: null };
++  return { action: "allow", reason: candidates.every(covered) ? "own_or_allowlisted" : "unowned", owner: null };
++}
+diff --git a/scripts/check-module-isolation.mjs b/scripts/check-module-isolation.mjs
+new file mode 100644
+index 0000000..a066599
+--- /dev/null
++++ b/scripts/check-module-isolation.mjs
+@@ -0,0 +1,168 @@
++#!/usr/bin/env node
++/**
++ * scripts/check-module-isolation.mjs — W2-P1 CI check (blocking): from any module host, another module's path is a 404.
++ * Install-free. Two halves:
++ *   1. BEHAVIOR: the real decision function (packages/module-registry/src/index.mjs) over the full module x prefix matrix and
++ *      a list of path tricks (case, //, dot-segments, percent-encoding, allow-list laundering).
++ *   2. WIRING: the middleware really sits in front of the router / pages / CORS / headers, defaults to off, and denies with
++ *      the unknown-endpoint 404.
++ * Also prints an informational coverage report: how much of the API surface the registry assigns to a module.
++ *   node scripts/check-module-isolation.mjs              # check
++ *   node scripts/check-module-isolation.mjs --self-test  # prove each rule fails on a deliberate breakage
++ */
++import { mkdtempSync, readFileSync, writeFileSync, rmSync } from "node:fs";
++import { tmpdir } from "node:os";
++import { dirname, join } from "node:path";
++import { fileURLToPath, pathToFileURL } from "node:url";
++
++const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
++const API = "artifacts/api-server/src";
++const REG = "packages/module-registry/src/index.mjs";
++const FILES = [REG, `${API}/app.ts`, `${API}/middlewares/security.ts`, `${API}/lib/module-host-guard.ts`, `${API}/lib/module-host-guard-core.ts`, "docs/identity-boundaries.md", ".github/workflows/ci.yml"];
++const load = () => Object.fromEntries(FILES.map((f) => [f, readFileSync(join(ROOT, f), "utf8")]));
++
++async function importSource(src) {
++  const dir = mkdtempSync(join(tmpdir(), "isolation-"));
++  const file = join(dir, "registry.mjs");
++  writeFileSync(file, src);
++  try { return await import(pathToFileURL(file).href + `?v=${Math.random()}`); } finally { rmSync(dir, { recursive: true, force: true }); }
++}
++
++const order = (text, needles) => { let at = -1; for (const n of needles) { const i = text.indexOf(n, at + 1); if (i < 0) return `missing '${n}'`; at = i; } return null; };
++
++/** BEHAVIOR rules take the imported registry module. */
++const BEHAVIOR = [
++  ["every module host: other modules' prefixes are denied (404), own prefixes and plumbing are allowed", (r) => {
++    for (const m of r.MODULES) for (const o of r.MODULES) for (const p of o.routePrefixes) {
++      const d = r.decideModuleHostAccess({ module: m.id, path: `${p}/x` });
++      if (o.id === m.id ? d.action !== "allow" : d.action !== "deny") return `${m.id} on ${p}: ${d.action}`;
++    }
++    for (const m of r.MODULES) for (const a of r.MODULE_HOST_ALLOWED_PREFIXES) {
++      for (const strict of [false, true]) if (r.decideModuleHostAccess({ module: m.id, path: `${a}/x`, strict }).action !== "allow") return `${m.id} must reach ${a} (strict=${strict})`;
++    }
++    return null;
++  }],
++  ["path tricks never reach another module", (r) => {
++    const target = r.MODULES.find((m) => m.id === "fyra").routePrefixes[0];
++    const tricks = [target.toUpperCase(), "/" + target, "/./" + target.slice(1), "/vault/../" + target.slice(1), "/auth/../" + target.slice(1), "/health/.." + target,
++      "/%66inance", "/%46INANCE/x", target + "?next=/vault", "/oidc/%2e%2e" + target];
++    for (const t of tricks) for (const strict of [false, true]) if (r.decideModuleHostAccess({ module: "sylo", path: t, strict }).action !== "deny") return `sylo reached ${t} (strict=${strict})`;
++    for (const bad of ["/%zz", "/a%00b", "/a\\b"]) if (r.decideModuleHostAccess({ module: "sylo", path: bad }).action !== "deny") return `malformed ${bad} allowed`;
++    return null;
++  }],
++  ["allow-list is a path boundary, not a substring; strict denies unowned paths unless shared-listed", (r) => {
++    if (r.decideModuleHostAccess({ module: "sylo", path: "/authx", strict: true }).action !== "deny") return "/authx allowed";
++    if (r.decideModuleHostAccess({ module: "sylo", path: "/users", strict: true }).action !== "deny") return "strict allowed an unowned path";
++    if (r.decideModuleHostAccess({ module: "sylo", path: "/users", strict: true, sharedPrefixes: ["/users"] }).action !== "allow") return "shared prefix ignored";
++    return r.decideModuleHostAccess({ module: "sylo", path: "/users" }).action === "allow" ? null : "owned mode must leave unowned paths alone";
++  }],
++  ["registry: no prefix owned twice, none collides with the allow-list, unknown module denied", (r) => {
++    const seen = new Map();
++    for (const m of r.MODULES) for (const p of m.routePrefixes) {
++      if (seen.has(p)) return `${p} owned by ${seen.get(p)} and ${m.id}`;
++      seen.set(p, m.id);
++      if (r.MODULE_HOST_ALLOWED_PREFIXES.some((a) => p === a || p.startsWith(a + "/"))) return `${p} collides with the allow-list`;
++    }
++    return r.decideModuleHostAccess({ module: "nope", path: "/auth" }).action === "deny" ? null : "unknown module allowed";
++  }],
++];
++
++/** WIRING rules take the file map. */
++const WIRING = [
++  ["app.ts: API guard sits after the limiter and BEFORE the role-host gate and the router", (f) => order(f[`${API}/app.ts`], ['app.use("/api", globalLimiter, moduleHostApiGuard, roleHostApiGate, apiKeyScopeGate, router)'])],
++  ["app.ts: page guard runs before the role-host page gate and before the SPA is served; headers follow the security headers", (f) => {
++    const a = f[`${API}/app.ts`];
++    return order(a, ["app.use(securityHeaders)", "app.use(moduleHostHeaders)"]) || order(a, ["app.use(moduleHostPageGuard)", "app.use(roleHostPageGate)", "app.use(express.static(distPath))"]);
++  }],
++  ["guard: module comes from the request context (Origin-first) or the Host, never from body/query/headers", (f) => {
++    const g = f[`${API}/lib/module-host-guard.ts`].replace(/\/\*[\s\S]*?\*\//g, "");
++    if (!g.includes('apply("api", currentModuleContext()') || !g.includes('apply("page", resolveRequestModule(req.hostname)')) return "guard module source changed";
++    return /req\.(body|query)|headers\[|req\.get\(|req\.header\(/.test(g) ? "guard must not read module from request fields" : null;
++  }],
++  ["guard: denial is the unknown-endpoint 404 (notFoundHandler), report mode never refuses", (f) => {
++    const g = f[`${API}/lib/module-host-guard.ts`], c = f[`${API}/lib/module-host-guard-core.ts`];
++    return g.includes("if (r.refuse) { notFoundHandler(req, res); return; }") && c.includes('refuse: wouldDeny && mode !== "report"') ? null : "denial/report semantics changed";
++  }],
++  ["core: default mode is off; no module => never refused; strict flag comes from the mode; uses the registry decision", (f) => {
++    const c = f[`${API}/lib/module-host-guard-core.ts`];
++    const ok = c.includes(': "off";') && c.includes('if (mode === "off" || !module) return') && c.includes('strict: mode === "strict"') && c.includes("decideModuleHostAccess({ module");
++    return ok ? null : "mode defaults / strict mapping changed";
++  }],
++  ["CORS: a production first-party origin must be a registered host when the guard enforces (ALLOWED_ORIGINS still wins)", (f) => {
++    const s = f[`${API}/middlewares/security.ts`];
++    return s.includes("isModuleHostGuardEnforcing() && !isRegisteredFirstPartyOrigin(origin) && !(allowedOrigins?.includes(origin))") ? null : "CORS registered-host check missing";
++  }],
++  ["headers: CSP frame-ancestors + Referrer-Policy only on module hosts and only when enforcing", (f) => {
++    const g = f[`${API}/lib/module-host-guard.ts`];
++    return g.includes("isModuleHostGuardEnforcing() && resolveRequestModule(req.hostname)") && g.includes("frame-ancestors ${moduleFrameAncestors()}") && g.includes('"Referrer-Policy", "no-referrer"') ? null : "module host headers changed";
++  }],
++  ["docs + CI: isolation check is documented and runs in CI", (f) => {
++    const c = f[".github/workflows/ci.yml"];
++    const runs = (c.match(/check-module-isolation\.mjs/g) ?? []).length >= 2 && c.includes("check-module-isolation.mjs --self-test") && c.includes("test:module-host-guard");
++    return runs && f["docs/identity-boundaries.md"].includes("MODULE_HOST_GUARD_MODE") ? null : "CI wiring or docs missing";
++  }],
++];
++
++async function run(files) {
++  const problems = [];
++  let reg;
++  try { reg = await importSource(files[REG]); } catch (e) { return [`registry does not load: ${e.message}`]; }
++  for (const [id, fn] of BEHAVIOR) { let p; try { p = fn(reg); } catch (e) { p = `threw: ${e.message}`; } if (p) problems.push(`${id}: ${p}`); }
++  for (const [id, fn] of WIRING) { let p; try { p = fn(files); } catch (e) { p = `threw: ${e.message}`; } if (p) problems.push(`${id}: ${p}`); }
++  return problems;
++}
++
++async function coverage(reg) {
++  const t = readFileSync(join(ROOT, "packages/endpoint-registry/src/index.mjs"), "utf8");
++  const paths = [...t.matchAll(/^\s*\["[a-z_-]+", "[A-Z]+", "(\/api\/[^"]*)"/gm)].map((m) => m[1].replace(/^\/api/, ""));
++  const by = {}; const unowned = {};
++  for (const p of paths) { const o = reg.getModuleIdForPath(p) ?? "unowned"; by[o] = (by[o] ?? 0) + 1; if (o === "unowned") { const k = "/" + p.split("/")[1]; unowned[k] = (unowned[k] ?? 0) + 1; } }
++  const top = Object.entries(unowned).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([k, v]) => `${k}:${v}`).join(" ");
++  return { endpoints: paths.length, byOwner: by, topUnowned: top };
++}
++
++if (process.argv.includes("--self-test")) {
++  const base = load();
++  const clean = await run(base);
++  if (clean.length) { console.error("self-test needs a clean tree first:\n - " + clean.join("\n - ")); process.exit(1); }
++  const A = `${API}/app.ts`, G = `${API}/lib/module-host-guard.ts`, C = `${API}/lib/module-host-guard-core.ts`, S = `${API}/middlewares/security.ts`;
++  const mutants = [
++    ["decision ignores other modules", REG, 'if (owner && owner !== module) return { action: "deny", reason: "other_module", owner };', ""],
++    ["decision stops lower-casing", REG, "decoded.toLowerCase().split", "decoded.split"],
++    ["decision stops decoding", REG, "decoded = decodeURIComponent(noQuery);", "decoded = noQuery;"],
++    ["decision stops resolving dot segments", REG, 'if (seg === "..") { out.pop(); continue; }', 'if (seg === "..") { continue; }'],
++    ["decision judges only the normalized spelling", REG, "for (const c of candidates) {\n    const owner", "for (const c of candidates.slice(1)) {\n    const owner"],
++    ["allow-list becomes a substring match", REG, "[...MODULE_HOST_ALLOWED_PREFIXES, ...sharedPrefixes].some((p) => hasPrefix(c, p))", "[...MODULE_HOST_ALLOWED_PREFIXES, ...sharedPrefixes].some((p) => c.includes(p))"],
++    ["strict stops denying unowned paths", REG, "if (strict && !candidates.every(covered))", "if (false && !candidates.every(covered))"],
++    ["malformed paths allowed", REG, 'if (!candidates) return { action: "deny", reason: "malformed_path", owner: null };', "if (!candidates) return { action: \"allow\", reason: \"unowned\", owner: null };"],
++    ["unknown module allowed", REG, 'if (!own) return { action: "deny", reason: "unknown_module", owner: null };', ""],
++    ["API guard not mounted", A, "moduleHostApiGuard, roleHostApiGate", "roleHostApiGate"],
++    ["API guard mounted after the role gate", A, "moduleHostApiGuard, roleHostApiGate, apiKeyScopeGate", "roleHostApiGate, moduleHostApiGuard, apiKeyScopeGate"],
++    ["page guard removed", A, "app.use(moduleHostPageGuard);\n", ""],
++    ["headers removed", A, "app.use(moduleHostHeaders);\n", ""],
++    ["guard trusts a request field", G, "apply(\"api\", currentModuleContext(),", "apply(\"api\", (req.query.module as any) ?? currentModuleContext(),"],
++    ["denial leaks a distinct body", G, "if (r.refuse) { notFoundHandler(req, res); return; }", "if (r.refuse) { res.status(403).json({ error: 'wrong module' }); return; }"],
++    ["report mode refuses", C, 'refuse: wouldDeny && mode !== "report"', "refuse: wouldDeny"],
++    ["default mode becomes owned", C, ': "off";', ': "owned";'],
++    ["no module context is refused", C, 'if (mode === "off" || !module) return', 'if (mode === "off") return'],
++    ["strict flag lost", C, 'strict: mode === "strict"', "strict: false"],
++    ["CORS check removed", S, "isModuleHostGuardEnforcing() && !isRegisteredFirstPartyOrigin(origin)", "false && !isRegisteredFirstPartyOrigin(origin)"],
++    ["headers on every host", G, "isModuleHostGuardEnforcing() && resolveRequestModule(req.hostname)", "isModuleHostGuardEnforcing()"],
++    ["frame-ancestors dropped", G, "frame-ancestors ${moduleFrameAncestors()}", "default-src ${moduleFrameAncestors()}"],
++    ["CI forgets the check", ".github/workflows/ci.yml", "check-module-isolation.mjs --self-test", "check-module-isolation-x.mjs --self-test"],
++  ];
++  let survived = 0;
++  for (const [name, file, from, to] of mutants) {
++    if (!base[file].includes(from)) { console.error(`MUTANT NOT APPLICABLE (fix the self-test): ${name}`); survived++; continue; }
++    if ((await run({ ...base, [file]: base[file].replace(from, to) })).length === 0) { console.error(`SURVIVED: ${name}`); survived++; }
++  }
++  console.log(survived ? `SELF-TEST FAILED: ${survived} mutant(s) not caught` : `SELF-TEST OK: ${mutants.length}/${mutants.length} mutants caught`);
++  process.exit(survived ? 1 : 0);
++}
++
++const files = load();
++const problems = await run(files);
++const cov = await coverage(await importSource(files[REG]));
++if (problems.length) { console.error("MODULE_ISOLATION: FAIL\n - " + problems.join("\n - ")); process.exit(1); }
++console.log("MODULE_ISOLATION: PASS");
++console.log(JSON.stringify({ rules: BEHAVIOR.length + WIRING.length, ...cov }));
+-- 
+2.43.0
+
+
+From 2239b686ab320c2037c9456f331994aaecfa3d15 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 13 Nov 2026 10:25:08 +0600
+Subject: [PATCH 2/3] W2-P2: per-module build + deploy (req 4)
+
+Each module can ship as its own bundle: other modules' pages are stubbed out at build time.
+- build/module-pages.mjs ownership (route -> module, propagated along page imports), vite.module.config.ts, build:module(s)
+- the build fails if another module's page is in a chunk and writes a bundle report
+- build-module.ts: router mounts only routes that belong in the build; module build = that module
+- generated per-module Vercel deploy configs (deploy/modules)
+- client-side VITE_SPLIT_REDIRECTS retired (server-side 308 stays)
+- check-module-bundles.mjs (21-mutant self-test), tests, CI job, docs
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HipLewAAStoWhxYqWcJWWQ
+---
+ .github/workflows/ci.yml                 |  28 ++++
+ CHANGES_W2_P2_MODULE_BUILDS.md           |  39 +++++
+ artifacts/ayzen/package.json             |   2 +
+ artifacts/ayzen/src/App.tsx              |  46 ++----
+ artifacts/ayzen/src/lib/build-module.ts  |  26 ++++
+ artifacts/ayzen/src/lib/subdomain-app.ts |   5 +
+ artifacts/ayzen/vite.module.config.ts    | 116 ++++++++++++++
+ deploy/modules/fyra/vercel.json          |  51 ++++++
+ deploy/modules/manifest.json             |  86 +++++++++++
+ deploy/modules/ryft/vercel.json          |  51 ++++++
+ deploy/modules/skarn/vercel.json         |  51 ++++++
+ deploy/modules/sylo/vercel.json          |  51 ++++++
+ deploy/modules/verve/vercel.json         |  51 ++++++
+ deploy/modules/warde/vercel.json         |  51 ++++++
+ deploy/modules/wisp/vercel.json          |  51 ++++++
+ deploy/modules/zynth/vercel.json         |  51 ++++++
+ docs/module-builds.md                    |  28 ++++
+ docs/module-shell-qa.md                  |   2 +-
+ package.json                             |   1 +
+ scripts/check-module-bundles.mjs         | 189 +++++++++++++++++++++++
+ scripts/gen-module-deploy.mjs            |  61 ++++++++
+ scripts/package.json                     |   1 +
+ scripts/src/test-module-build.ts         |  36 +++++
+ 23 files changed, 1037 insertions(+), 37 deletions(-)
+ create mode 100644 CHANGES_W2_P2_MODULE_BUILDS.md
+ create mode 100644 artifacts/ayzen/src/lib/build-module.ts
+ create mode 100644 artifacts/ayzen/vite.module.config.ts
+ create mode 100644 deploy/modules/fyra/vercel.json
+ create mode 100644 deploy/modules/manifest.json
+ create mode 100644 deploy/modules/ryft/vercel.json
+ create mode 100644 deploy/modules/skarn/vercel.json
+ create mode 100644 deploy/modules/sylo/vercel.json
+ create mode 100644 deploy/modules/verve/vercel.json
+ create mode 100644 deploy/modules/warde/vercel.json
+ create mode 100644 deploy/modules/wisp/vercel.json
+ create mode 100644 deploy/modules/zynth/vercel.json
+ create mode 100644 docs/module-builds.md
+ create mode 100644 scripts/check-module-bundles.mjs
+ create mode 100644 scripts/gen-module-deploy.mjs
+ create mode 100644 scripts/src/test-module-build.ts
+
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index fb8bfd1..4b86f4c 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -104,6 +104,34 @@ jobs:
+       - run: pnpm validate:w1-p3
+       - run: pnpm --filter @workspace/scripts oidc:test-module-login
+ 
++  module-bundles:
++    # W2-P2: per-module builds. The static proof (import-graph walk, install-free) and the deploy-config check are blocking.
++    # The real `vite build` of a module bundle also fails on a leak by itself (vite.module.config.ts) and writes
++    # dist/module-reports/<id>.json; it is advisory (continue-on-error) until its first green run in CI, then make it blocking.
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++      - uses: actions/setup-node@v4
++        with:
++          node-version: 24
++      - run: node scripts/check-module-bundles.mjs
++      - run: node scripts/check-module-bundles.mjs --self-test
++      - run: node scripts/gen-module-deploy.mjs --check
++      - uses: pnpm/action-setup@v4
++        with:
++          version: 10.26.1
++      - run: pnpm install --frozen-lockfile --filter @workspace/scripts...
++      - run: pnpm --filter @workspace/scripts module-build:test
++      - run: pnpm install --frozen-lockfile --filter @workspace/ayzen...
++        continue-on-error: true
++      - name: Build the Sylo module bundle and read its report (advisory)
++        continue-on-error: true
++        env:
++          VITE_MODULE: sylo
++        run: |
++          pnpm --filter @workspace/ayzen run build:module
++          node -e "const r=require('./artifacts/ayzen/dist/module-reports/sylo.json');console.log(JSON.stringify(r.pages));if(r.pages.otherModulePagesInBundle!==0)process.exit(1)"
++
+   affected:
+     runs-on: ubuntu-latest
+     outputs:
+diff --git a/CHANGES_W2_P2_MODULE_BUILDS.md b/CHANGES_W2_P2_MODULE_BUILDS.md
+new file mode 100644
+index 0000000..c148cf4
+--- /dev/null
++++ b/CHANGES_W2_P2_MODULE_BUILDS.md
+@@ -0,0 +1,39 @@
++# CHANGES — W2-P2: per-module build + deploy (req 4)
++
++Goal (roadmap): Vite per-module entry (`VITE_MODULE`), only that module's pages in the bundle, separate deploy target per module, retire `VITE_SPLIT_REDIRECTS`. Done = bundle report: the Sylo bundle has 0 Verve/Skarn pages.
++
++## What was added
++| Piece | Where |
++|---|---|
++| Ownership (route -> module, propagated along page imports) | `artifacts/ayzen/build/module-pages.mjs`, `build/shared-page-allowlist.json` |
++| Install-free import-graph walker | `artifacts/ayzen/build/import-graph.mjs` |
++| Module build config (stubs other modules' pages, fails the build on a leak, writes the bundle report) | `artifacts/ayzen/vite.module.config.ts`, `build/build-all-modules.mjs`, scripts `build:module`, `build:modules` |
++| Runtime agreement | `src/lib/build-module.ts`, `src/lib/subdomain-app.ts` (module build = that module), `src/App.tsx` (only mounts routes that belong in the build) |
++| Deploy targets (generated) | `scripts/gen-module-deploy.mjs` -> `deploy/modules/<id>/vercel.json`, `manifest.json` |
++| Proof | `scripts/check-module-bundles.mjs` (+`--self-test`, 21 mutants), `scripts/src/test-module-build.ts` (4), CI job `module-bundles` |
++| Docs | `docs/module-builds.md` |
++
++## Result (static proof, per module)
++| module | pages in bundle | pages stubbed |
++|---|---|---|
++| sylo | 126 | 63 |
++| ryft | 84 | 99 |
++| fyra | 109 | 74 |
++| verve | 94 | 89 |
++| skarn | 91 | 92 |
++| warde | 84 | 99 |
++| wisp | 85 | 98 |
++| zynth | 83 | 100 |
++Of 164 routed pages, 61 are shared (core/admin/platform + one propagated), the rest are owned. The Sylo bundle has 0 Verve and 0 Skarn pages; no module bundle reaches another module's page except the single audited allow-list entry.
++
++## Decisions and limits (read these)
++1. **Only pages are separated.** Shared code (layout, hooks, components) is in every bundle, and 61 pages are shared (all admin pages, `/users`, `/notifications`, ...) because the registry owns only about half of the routes. "0 Verve/Skarn pages" is true; "the Sylo bundle contains only Sylo code" is not. More separation needs more route ownership in the registry (same prerequisite as the W2-P1 `strict` mode).
++2. **Stubs, not deletion.** Other modules' pages stay in `route-config.tsx` (the central build needs them) and are swapped for an empty component at resolve time; the router also does not mount their routes, so the URL is the normal not-found page.
++3. **`VITE_SPLIT_REDIRECTS` retired in the SPA.** The server-side 308 (`SPLIT_REDIRECTS`) stays and is the only central -> module redirect. Consequence: a client-side (`pushState`) navigation on the central host to a module path is no longer forwarded; in-app cross-module links already full-navigate.
++4. **Static module hosts use token-body sign-in.** A static host has no API of its own to set the host-only `__Host-<module>_sid` cookie; the API on `api.ayzen.tech` answers with the token (existing cross-origin path). Cookie-mode on a module host needs a same-origin `/api` proxy, which is not part of this change.
++5. **Deploy target = Vercel, one project per module, generated configs.** No existing deploy config for the SPA was in the repo (Docker + Express serve the full build), so nothing is replaced; the Express app keeps serving everything until a host is moved.
++6. Fixed on the way: the check found `project-entities` (a Sylo page) imported by shared pages; ownership now propagates along imports instead of breaking the other modules' builds.
++
++## Verified / not verified
++Verified: the install-free import-graph proof (every module, every pair) + 21/21 mutants caught; deploy configs generated and checked; 4 unit tests; earlier suites (OIDC login 12, conformance 28, clerk client 7, validators) still green.
++**Not verified:** a real `vite build` (vite and the SPA dependencies cannot be installed here), the real chunk-level report, the React app in a browser, a real Vercel deploy, CI. The CI job runs the real build for Sylo as an advisory step; make it blocking after its first green run.
+diff --git a/artifacts/ayzen/package.json b/artifacts/ayzen/package.json
+index d41fbef..d9e59da 100644
+--- a/artifacts/ayzen/package.json
++++ b/artifacts/ayzen/package.json
+@@ -6,6 +6,8 @@
+   "scripts": {
+     "dev": "vite --config vite.config.ts --host 0.0.0.0",
+     "build": "vite build --config vite.config.ts && cp dist/public/index.html dist/public/404.html",
++    "build:module": "vite build --config vite.module.config.ts && node -e \"const m=process.env.VITE_MODULE,f='dist/modules/'+m+'/';require('fs').copyFileSync(f+'index.html',f+'404.html')\"",
++    "build:modules": "node build/build-all-modules.mjs",
+     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
+     "typecheck": "tsc -p tsconfig.json --noEmit"
+   },
+diff --git a/artifacts/ayzen/src/App.tsx b/artifacts/ayzen/src/App.tsx
+index bf5bb0a..1c760b2 100644
+--- a/artifacts/ayzen/src/App.tsx
++++ b/artifacts/ayzen/src/App.tsx
+@@ -30,7 +30,8 @@ import { ScrollToTop } from "@/components/scroll-to-top";
+ import { ErrorBoundary } from "@/components/error-boundary";
+ import { ADMIN_ROUTES, USER_ROUTES } from "@/lib/route-config";
+ import type { RouteConfig } from "@/lib/route-config";
+-import { getCurrentSubdomainApp, isPathInSubdomainScope, getModuleForPath, moduleUrl, ALWAYS_ALLOWED_PREFIXES } from "@/lib/subdomain-app";
++import { getCurrentSubdomainApp, isPathInSubdomainScope } from "@/lib/subdomain-app";
++import { isRouteInBuild } from "@/lib/build-module";
+ import { getRoleHostRedirect } from "@/lib/role-hosts";
+ // OIDC Roadmap — Season 3, Phase 5b-a/5b-b.
+ import { startSyloOidcLogin } from "@/lib/sylo-oidc-login";
+@@ -96,37 +97,10 @@ function ProtectedRoute({
+   // calling it here doesn't affect hook-ordering rules either way.
+   const subdomainApp = getCurrentSubdomainApp();
+ 
+-  // Module Shell Split — Season 6: central -> module redirects (flagged).
+-  // On the CENTRAL domain (no scoped subdomain app), a URL that belongs to
+-  // a module (ayzen.tech/vault/... -> sylo.ayzen.tech/vault/...) full-
+-  // navigates there when VITE_SPLIT_REDIRECTS=1 and the module is enabled
+-  // in VITE_SPLIT_REDIRECT_MODULES (comma list, e.g. "sylo,skarn" — a
+-  // module not in the list stays in place). Path, query and hash are
+-  // preserved. Public/token pages (ALWAYS_ALLOWED_PREFIXES: receipts,
+-  // invoices, payment agreements, emergency access, OIDC callback) and
+-  // auth pages NEVER redirect. /nft-marketplace maps to verve. window.
+-  // location.replace() drops the central URL from history so Back never
+-  // bounces the user into a redirect loop.
+-  const splitRedirects = String(import.meta.env.VITE_SPLIT_REDIRECTS ?? "") === "1";
+-  const splitRedirectModules = String(import.meta.env.VITE_SPLIT_REDIRECT_MODULES ?? "")
+-    .split(",").map((m) => m.trim().toLowerCase()).filter(Boolean);
+-  const splitTarget = !subdomainApp && splitRedirects
+-    ? getModuleForPath(location.startsWith("/") ? location : "/" + location)
+-    : null;
+-  const splitAllowed = !!splitTarget && (splitRedirectModules.length === 0 || splitRedirectModules.includes(splitTarget));
+-  const splitIsPublic = ALWAYS_ALLOWED_PREFIXES.some((p) => {
+-    const path = location.split("?")[0];
+-    return path === p || path.startsWith(p + "/");
+-  });
+-  const [splitRedirecting, setSplitRedirecting] = useState(false);
+-  useEffect(() => {
+-    if (!splitAllowed || splitIsPublic) return;
+-    // /nft-marketplace legacy path lands on verve's marketplace
+-    const legacy = location.split("?")[0] === "/nft-marketplace";
+-    const id = legacy ? "verve" : splitTarget!;
+-    setSplitRedirecting(true);
+-    window.location.replace(moduleUrl(id, location));
+-  }, [splitAllowed, splitIsPublic, splitTarget, location]);
++  // W2-P2: the client-side central -> module redirect (VITE_SPLIT_REDIRECTS / VITE_SPLIT_REDIRECT_MODULES) is retired.
++  // Modules ship as their own builds (vite.module.config.ts) on their own hosts, and the central host forwards module
++  // URLs server-side with a 308 (SPLIT_REDIRECTS / SPLIT_REDIRECT_MODULES in the API app). In-app links between modules
++  // already full-navigate through moduleUrl() (ModuleLink).
+ 
+   // Phase 7 — role domains (flagged: VITE_ROLE_HOSTS=1, see lib/role-hosts.ts).
+   // A signed-in admin/moderator/team-leader on the central host moves to
+@@ -196,8 +170,8 @@ function ProtectedRoute({
+     void startSyloOidcLogin();
+   }, [shouldStartOidcLogin, location]);
+ 
+-  // S6: full-screen loader while a central -> module redirect is in flight.
+-  if (splitRedirecting || roleRedirecting)
++  // Full-screen loader while a role-host redirect is in flight.
++  if (roleRedirecting)
+     return (
+       <div className="min-h-screen flex items-center justify-center bg-background text-primary font-mono">
+         INITIALIZING...
+@@ -344,7 +318,7 @@ function Router() {
+       </Route>
+ 
+       {/* Admin + Dev routes — from config */}
+-      {ADMIN_ROUTES.map(({ path, component, adminOnly, allowedRoles }) => (
++      {ADMIN_ROUTES.filter((r) => isRouteInBuild(r.path)).map(({ path, component, adminOnly, allowedRoles }) => (
+         <Route key={path} path={path}>
+           {() => (
+             <ProtectedRoute
+@@ -357,7 +331,7 @@ function Router() {
+       ))}
+ 
+       {/* User routes — from config */}
+-      {USER_ROUTES.map(({ path, component }) => (
++      {USER_ROUTES.filter((r) => isRouteInBuild(r.path)).map(({ path, component }) => (
+         <Route key={path} path={path}>
+           {/* Phase 5 — Vault Security: any /vault/* path (the whole Vault
+               section — Entity/Wallet/Local/Mail/KYC/Game tabs, and the
+diff --git a/artifacts/ayzen/src/lib/build-module.ts b/artifacts/ayzen/src/lib/build-module.ts
+new file mode 100644
+index 0000000..77e7c54
+--- /dev/null
++++ b/artifacts/ayzen/src/lib/build-module.ts
+@@ -0,0 +1,26 @@
++/**
++ * lib/build-module.ts — W2-P2: which module THIS bundle was built for.
++ *
++ * `VITE_MODULE=<id>` is set by vite.module.config.ts (one build per module, see build/module-pages.mjs). Without it (the
++ * central/full build, tests, dev) every function here behaves as "no restriction", so nothing changes for existing builds.
++ * In a module build, other modules' page code is not even in the bundle (the build replaces those pages with an empty stub);
++ * this file makes the router agree, so such a URL is the ordinary not-found page instead of a blank stub.
++ */
++import { getModuleIdForPath, getModule, type ModuleId } from "@ayzen/module-registry";
++
++function readEnv(): string | undefined {
++  try { return (import.meta as any).env?.VITE_MODULE as string | undefined; } catch { return undefined; }
++}
++
++/** The module this bundle is for, or null for the central/full build. An unknown value is ignored (the build config rejects it). */
++export function buildModuleId(raw: string | undefined = readEnv()): ModuleId | null {
++  const id = raw?.trim().toLowerCase();
++  return id && getModule(id) ? (id as ModuleId) : null;
++}
++
++/** True when a route path belongs in this build: everything in the full build; in a module build, its own paths and unowned ones. */
++export function isRouteInBuild(path: string, build: ModuleId | null = buildModuleId()): boolean {
++  if (!build) return true;
++  const owner = getModuleIdForPath(path);
++  return owner === null || owner === build;
++}
+diff --git a/artifacts/ayzen/src/lib/subdomain-app.ts b/artifacts/ayzen/src/lib/subdomain-app.ts
+index 4236fb2..b157e90 100644
+--- a/artifacts/ayzen/src/lib/subdomain-app.ts
++++ b/artifacts/ayzen/src/lib/subdomain-app.ts
+@@ -4,6 +4,7 @@
+  * AYZEN Workspace — subdomain app scoping (master plan §2/§7 Phase 2:
+  * "Split Sylo onto its own subdomain").
+  *
++ * (W2-P2 update: modules now ALSO ship as per-module builds, see lib/build-module.ts; the central build below is unchanged.)
+  * This is intentionally NOT a separate build/deploy. It's the same SPA
+  * bundle served from the same Express app (see app.ts) on every
+  * `*.ayzen.tech` host — this file just makes that one bundle *behave*
+@@ -30,6 +31,7 @@
+ 
+ import type { ComponentType } from "react";
+ import { MODULES } from "@ayzen/module-registry";
++import { buildModuleId } from "./build-module";
+ 
+ export interface SubdomainApp {
+   id: string;
+@@ -92,6 +94,9 @@ function hasPrefix(path: string, prefix: string): boolean {
+  * Returns null on the main domain or any unrecognized host.
+  */
+ export function getCurrentSubdomainApp(): SubdomainApp | null {
++  // W2-P2: a module build IS that module, on any hostname (previews, dev, custom domains).
++  const built = buildModuleId();
++  if (built && SUBDOMAIN_APPS[built]) return { id: built, ...SUBDOMAIN_APPS[built] };
+   if (typeof window === "undefined") return null;
+   const host = window.location.hostname;
+ 
+diff --git a/artifacts/ayzen/vite.module.config.ts b/artifacts/ayzen/vite.module.config.ts
+new file mode 100644
+index 0000000..fe55663
+--- /dev/null
++++ b/artifacts/ayzen/vite.module.config.ts
+@@ -0,0 +1,116 @@
++/**
++ * vite.module.config.ts — W2-P2 (req 4): one build per module.
++ *
++ *   VITE_MODULE=sylo vite build --config vite.module.config.ts      # -> dist/modules/sylo
++ *   pnpm --filter @workspace/ayzen build:module  (reads VITE_MODULE)   |   build:modules  (all eight)
++ *
++ * What makes the bundle module-only: every page that belongs to ANOTHER module (build/module-pages.mjs: route path -> owner
++ * from the module registry, propagated along page-to-page imports) is swapped for an empty stub while the module graph is
++ * resolved, so its code, and everything only it imports, never reaches the bundle. Unowned pages (core, admin, platform) stay
++ * because every module host still needs them. The plugin then inspects the finished bundle and FAILS the build if any
++ * excluded page file is still in a chunk, and writes dist/module-reports/<module>.json (the bundle report: pages included,
++ * pages stubbed, chunk sizes). The fast, install-free version of the same proof is scripts/check-module-bundles.mjs (CI).
++ *
++ * The full/central build (vite.config.ts) is unchanged.
++ */
++import fs from 'fs';
++import path from 'path';
++import react from '@vitejs/plugin-react';
++import tailwindcss from '@tailwindcss/vite';
++import { defineConfig, type Plugin } from 'vite';
++import { MODULE_IDS, getModuleIdForPath } from '@ayzen/module-registry';
++import { analyzeRouteConfig, excludedPagesFor, includedPagesFor, propagateOwnership } from './build/module-pages.mjs';
++import { importsOf } from './build/import-graph.mjs';
++
++const moduleId = (process.env.VITE_MODULE ?? '').trim().toLowerCase();
++if (!(MODULE_IDS as readonly string[]).includes(moduleId)) {
++  throw new Error(`VITE_MODULE must be one of: ${MODULE_IDS.join(', ')} (got "${process.env.VITE_MODULE ?? ''}")`);
++}
++
++const root = path.resolve(import.meta.dirname);
++const src = path.join(root, 'src');
++const STUB_PREFIX = '\0ayzen-module-stub:';
++const clean = (id: string) => id.split('?')[0].replace(/\\/g, '/');
++
++const toAbs = (rel: string): string | null => {
++  for (const ext of ['.tsx', '.ts']) { const p = path.join(src, rel + ext); if (fs.existsSync(p)) return p; }
++  return null;
++};
++
++function moduleBuildPlugin(): Plugin {
++  const analysis = propagateOwnership(
++    analyzeRouteConfig(fs.readFileSync(path.join(src, 'lib/route-config.tsx'), 'utf8'), { getModuleIdForPath }),
++    (f: string) => importsOf(f, src),
++    toAbs,
++  );
++  const excludedRel = excludedPagesFor(analysis, moduleId);
++  const includedRel = includedPagesFor(analysis, moduleId);
++  const excludedAbs = new Map<string, string>();
++  for (const rel of excludedRel) { const a = toAbs(rel); if (a) excludedAbs.set(clean(a), rel); }
++
++  return {
++    name: 'ayzen-module-build',
++    enforce: 'pre',
++    async resolveId(source, importer, options) {
++      if (source.startsWith(STUB_PREFIX)) return source;
++      if (!importer || !(source.startsWith('@/') || source.startsWith('.'))) return null;
++      const resolved = await this.resolve(source, importer, { ...options, skipSelf: true });
++      const rel = resolved && excludedAbs.get(clean(resolved.id));
++      return rel ? STUB_PREFIX + rel : null;
++    },
++    load(id) {
++      if (id.startsWith(STUB_PREFIX)) return 'export default function ModuleExcludedPage() { return null; }\n';
++      return null;
++    },
++    generateBundle(_options, bundle) {
++      const chunks: { name: string; bytes: number }[] = [];
++      const pagesInBundle = new Set<string>();
++      const stubsInBundle = new Set<string>();
++      const forbidden: string[] = [];
++      for (const item of Object.values(bundle)) {
++        if (item.type !== 'chunk') continue;
++        chunks.push({ name: item.fileName, bytes: item.code.length });
++        for (const id of Object.keys(item.modules)) {
++          if (id.startsWith(STUB_PREFIX)) { stubsInBundle.add(id.slice(STUB_PREFIX.length)); continue; }
++          const c = clean(id);
++          if (excludedAbs.has(c)) forbidden.push(excludedAbs.get(c)!);
++          const m = /\/src\/(pages\/.+?)\.tsx?$/.exec(c);
++          if (m) pagesInBundle.add(m[1]);
++        }
++      }
++      const report = {
++        module: moduleId,
++        generatedAt: new Date().toISOString(),
++        pages: { includedByPolicy: includedRel.length, inBundle: pagesInBundle.size, stubbed: stubsInBundle.size, otherModulePagesInBundle: forbidden.length },
++        forbidden: [...new Set(forbidden)].sort(),
++        stubbedPages: [...stubsInBundle].sort(),
++        chunks: chunks.sort((a, b) => b.bytes - a.bytes),
++        totalBytes: chunks.reduce((n, c) => n + c.bytes, 0),
++      };
++      const dir = path.join(root, 'dist/module-reports');
++      fs.mkdirSync(dir, { recursive: true });
++      fs.writeFileSync(path.join(dir, `${moduleId}.json`), JSON.stringify(report, null, 2));
++      if (report.forbidden.length > 0) {
++        this.error(`${moduleId} bundle contains other modules' pages: ${report.forbidden.join(', ')}`);
++      }
++    },
++  };
++}
++
++export default defineConfig({
++  base: process.env.BASE_PATH ?? '/',
++  plugins: [moduleBuildPlugin(), react(), tailwindcss()],
++  define: { 'import.meta.env.VITE_MODULE': JSON.stringify(moduleId) },
++  resolve: {
++    alias: {
++      '@': src,
++      '@assets': path.resolve(import.meta.dirname, '..', '..', 'attached_assets'),
++    },
++    dedupe: ['react', 'react-dom'],
++  },
++  root,
++  build: {
++    outDir: path.join(root, 'dist/modules', moduleId),
++    emptyOutDir: true,
++  },
++});
+diff --git a/deploy/modules/fyra/vercel.json b/deploy/modules/fyra/vercel.json
+new file mode 100644
+index 0000000..b955191
+--- /dev/null
++++ b/deploy/modules/fyra/vercel.json
+@@ -0,0 +1,51 @@
++{
++  "$schema": "https://openapi.vercel.sh/vercel.json",
++  "framework": null,
++  "installCommand": "pnpm install --frozen-lockfile",
++  "buildCommand": "pnpm --filter @workspace/ayzen run build:module",
++  "outputDirectory": "artifacts/ayzen/dist/modules/fyra",
++  "build": {
++    "env": {
++      "VITE_MODULE": "fyra",
++      "VITE_API_URL": "https://api.ayzen.tech"
++    }
++  },
++  "rewrites": [
++    {
++      "source": "/(.*)",
++      "destination": "/index.html"
++    }
++  ],
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        {
++          "key": "Content-Security-Policy",
++          "value": "frame-ancestors 'self'"
++        },
++        {
++          "key": "Referrer-Policy",
++          "value": "no-referrer"
++        },
++        {
++          "key": "X-Content-Type-Options",
++          "value": "nosniff"
++        },
++        {
++          "key": "Strict-Transport-Security",
++          "value": "max-age=31536000; includeSubDomains"
++        }
++      ]
++    },
++    {
++      "source": "/assets/(.*)",
++      "headers": [
++        {
++          "key": "Cache-Control",
++          "value": "public, max-age=31536000, immutable"
++        }
++      ]
++    }
++  ]
++}
+diff --git a/deploy/modules/manifest.json b/deploy/modules/manifest.json
+new file mode 100644
+index 0000000..c918819
+--- /dev/null
++++ b/deploy/modules/manifest.json
+@@ -0,0 +1,86 @@
++{
++  "generatedFrom": "packages/module-registry",
++  "apiOrigin": "https://api.ayzen.tech",
++  "modules": [
++    {
++      "id": "sylo",
++      "host": "sylo.ayzen.tech",
++      "vercelProject": "ayzen-sylo",
++      "config": "deploy/modules/sylo/vercel.json",
++      "buildEnv": {
++        "VITE_MODULE": "sylo",
++        "VITE_API_URL": "https://api.ayzen.tech"
++      }
++    },
++    {
++      "id": "ryft",
++      "host": "ryft.ayzen.tech",
++      "vercelProject": "ayzen-ryft",
++      "config": "deploy/modules/ryft/vercel.json",
++      "buildEnv": {
++        "VITE_MODULE": "ryft",
++        "VITE_API_URL": "https://api.ayzen.tech"
++      }
++    },
++    {
++      "id": "fyra",
++      "host": "fyra.ayzen.tech",
++      "vercelProject": "ayzen-fyra",
++      "config": "deploy/modules/fyra/vercel.json",
++      "buildEnv": {
++        "VITE_MODULE": "fyra",
++        "VITE_API_URL": "https://api.ayzen.tech"
++      }
++    },
++    {
++      "id": "verve",
++      "host": "verve.ayzen.tech",
++      "vercelProject": "ayzen-verve",
++      "config": "deploy/modules/verve/vercel.json",
++      "buildEnv": {
++        "VITE_MODULE": "verve",
++        "VITE_API_URL": "https://api.ayzen.tech"
++      }
++    },
++    {
++      "id": "skarn",
++      "host": "skarn.ayzen.tech",
++      "vercelProject": "ayzen-skarn",
++      "config": "deploy/modules/skarn/vercel.json",
++      "buildEnv": {
++        "VITE_MODULE": "skarn",
++        "VITE_API_URL": "https://api.ayzen.tech"
++      }
++    },
++    {
++      "id": "warde",
++      "host": "warde.ayzen.tech",
++      "vercelProject": "ayzen-warde",
++      "config": "deploy/modules/warde/vercel.json",
++      "buildEnv": {
++        "VITE_MODULE": "warde",
++        "VITE_API_URL": "https://api.ayzen.tech"
++      }
++    },
++    {
++      "id": "wisp",
++      "host": "wisp.ayzen.tech",
++      "vercelProject": "ayzen-wisp",
++      "config": "deploy/modules/wisp/vercel.json",
++      "buildEnv": {
++        "VITE_MODULE": "wisp",
++        "VITE_API_URL": "https://api.ayzen.tech"
++      }
++    },
++    {
++      "id": "zynth",
++      "host": "zynth.ayzen.tech",
++      "vercelProject": "ayzen-zynth",
++      "config": "deploy/modules/zynth/vercel.json",
++      "buildEnv": {
++        "VITE_MODULE": "zynth",
++        "VITE_API_URL": "https://api.ayzen.tech"
++      }
++    }
++  ]
++}
+diff --git a/deploy/modules/ryft/vercel.json b/deploy/modules/ryft/vercel.json
+new file mode 100644
+index 0000000..b32d633
+--- /dev/null
++++ b/deploy/modules/ryft/vercel.json
+@@ -0,0 +1,51 @@
++{
++  "$schema": "https://openapi.vercel.sh/vercel.json",
++  "framework": null,
++  "installCommand": "pnpm install --frozen-lockfile",
++  "buildCommand": "pnpm --filter @workspace/ayzen run build:module",
++  "outputDirectory": "artifacts/ayzen/dist/modules/ryft",
++  "build": {
++    "env": {
++      "VITE_MODULE": "ryft",
++      "VITE_API_URL": "https://api.ayzen.tech"
++    }
++  },
++  "rewrites": [
++    {
++      "source": "/(.*)",
++      "destination": "/index.html"
++    }
++  ],
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        {
++          "key": "Content-Security-Policy",
++          "value": "frame-ancestors 'self'"
++        },
++        {
++          "key": "Referrer-Policy",
++          "value": "no-referrer"
++        },
++        {
++          "key": "X-Content-Type-Options",
++          "value": "nosniff"
++        },
++        {
++          "key": "Strict-Transport-Security",
++          "value": "max-age=31536000; includeSubDomains"
++        }
++      ]
++    },
++    {
++      "source": "/assets/(.*)",
++      "headers": [
++        {
++          "key": "Cache-Control",
++          "value": "public, max-age=31536000, immutable"
++        }
++      ]
++    }
++  ]
++}
+diff --git a/deploy/modules/skarn/vercel.json b/deploy/modules/skarn/vercel.json
+new file mode 100644
+index 0000000..7df262f
+--- /dev/null
++++ b/deploy/modules/skarn/vercel.json
+@@ -0,0 +1,51 @@
++{
++  "$schema": "https://openapi.vercel.sh/vercel.json",
++  "framework": null,
++  "installCommand": "pnpm install --frozen-lockfile",
++  "buildCommand": "pnpm --filter @workspace/ayzen run build:module",
++  "outputDirectory": "artifacts/ayzen/dist/modules/skarn",
++  "build": {
++    "env": {
++      "VITE_MODULE": "skarn",
++      "VITE_API_URL": "https://api.ayzen.tech"
++    }
++  },
++  "rewrites": [
++    {
++      "source": "/(.*)",
++      "destination": "/index.html"
++    }
++  ],
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        {
++          "key": "Content-Security-Policy",
++          "value": "frame-ancestors 'self'"
++        },
++        {
++          "key": "Referrer-Policy",
++          "value": "no-referrer"
++        },
++        {
++          "key": "X-Content-Type-Options",
++          "value": "nosniff"
++        },
++        {
++          "key": "Strict-Transport-Security",
++          "value": "max-age=31536000; includeSubDomains"
++        }
++      ]
++    },
++    {
++      "source": "/assets/(.*)",
++      "headers": [
++        {
++          "key": "Cache-Control",
++          "value": "public, max-age=31536000, immutable"
++        }
++      ]
++    }
++  ]
++}
+diff --git a/deploy/modules/sylo/vercel.json b/deploy/modules/sylo/vercel.json
+new file mode 100644
+index 0000000..f9ab515
+--- /dev/null
++++ b/deploy/modules/sylo/vercel.json
+@@ -0,0 +1,51 @@
++{
++  "$schema": "https://openapi.vercel.sh/vercel.json",
++  "framework": null,
++  "installCommand": "pnpm install --frozen-lockfile",
++  "buildCommand": "pnpm --filter @workspace/ayzen run build:module",
++  "outputDirectory": "artifacts/ayzen/dist/modules/sylo",
++  "build": {
++    "env": {
++      "VITE_MODULE": "sylo",
++      "VITE_API_URL": "https://api.ayzen.tech"
++    }
++  },
++  "rewrites": [
++    {
++      "source": "/(.*)",
++      "destination": "/index.html"
++    }
++  ],
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        {
++          "key": "Content-Security-Policy",
++          "value": "frame-ancestors 'self'"
++        },
++        {
++          "key": "Referrer-Policy",
++          "value": "no-referrer"
++        },
++        {
++          "key": "X-Content-Type-Options",
++          "value": "nosniff"
++        },
++        {
++          "key": "Strict-Transport-Security",
++          "value": "max-age=31536000; includeSubDomains"
++        }
++      ]
++    },
++    {
++      "source": "/assets/(.*)",
++      "headers": [
++        {
++          "key": "Cache-Control",
++          "value": "public, max-age=31536000, immutable"
++        }
++      ]
++    }
++  ]
++}
+diff --git a/deploy/modules/verve/vercel.json b/deploy/modules/verve/vercel.json
+new file mode 100644
+index 0000000..d197f7e
+--- /dev/null
++++ b/deploy/modules/verve/vercel.json
+@@ -0,0 +1,51 @@
++{
++  "$schema": "https://openapi.vercel.sh/vercel.json",
++  "framework": null,
++  "installCommand": "pnpm install --frozen-lockfile",
++  "buildCommand": "pnpm --filter @workspace/ayzen run build:module",
++  "outputDirectory": "artifacts/ayzen/dist/modules/verve",
++  "build": {
++    "env": {
++      "VITE_MODULE": "verve",
++      "VITE_API_URL": "https://api.ayzen.tech"
++    }
++  },
++  "rewrites": [
++    {
++      "source": "/(.*)",
++      "destination": "/index.html"
++    }
++  ],
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        {
++          "key": "Content-Security-Policy",
++          "value": "frame-ancestors 'self'"
++        },
++        {
++          "key": "Referrer-Policy",
++          "value": "no-referrer"
++        },
++        {
++          "key": "X-Content-Type-Options",
++          "value": "nosniff"
++        },
++        {
++          "key": "Strict-Transport-Security",
++          "value": "max-age=31536000; includeSubDomains"
++        }
++      ]
++    },
++    {
++      "source": "/assets/(.*)",
++      "headers": [
++        {
++          "key": "Cache-Control",
++          "value": "public, max-age=31536000, immutable"
++        }
++      ]
++    }
++  ]
++}
+diff --git a/deploy/modules/warde/vercel.json b/deploy/modules/warde/vercel.json
+new file mode 100644
+index 0000000..93c290b
+--- /dev/null
++++ b/deploy/modules/warde/vercel.json
+@@ -0,0 +1,51 @@
++{
++  "$schema": "https://openapi.vercel.sh/vercel.json",
++  "framework": null,
++  "installCommand": "pnpm install --frozen-lockfile",
++  "buildCommand": "pnpm --filter @workspace/ayzen run build:module",
++  "outputDirectory": "artifacts/ayzen/dist/modules/warde",
++  "build": {
++    "env": {
++      "VITE_MODULE": "warde",
++      "VITE_API_URL": "https://api.ayzen.tech"
++    }
++  },
++  "rewrites": [
++    {
++      "source": "/(.*)",
++      "destination": "/index.html"
++    }
++  ],
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        {
++          "key": "Content-Security-Policy",
++          "value": "frame-ancestors 'self'"
++        },
++        {
++          "key": "Referrer-Policy",
++          "value": "no-referrer"
++        },
++        {
++          "key": "X-Content-Type-Options",
++          "value": "nosniff"
++        },
++        {
++          "key": "Strict-Transport-Security",
++          "value": "max-age=31536000; includeSubDomains"
++        }
++      ]
++    },
++    {
++      "source": "/assets/(.*)",
++      "headers": [
++        {
++          "key": "Cache-Control",
++          "value": "public, max-age=31536000, immutable"
++        }
++      ]
++    }
++  ]
++}
+diff --git a/deploy/modules/wisp/vercel.json b/deploy/modules/wisp/vercel.json
+new file mode 100644
+index 0000000..63b6fb6
+--- /dev/null
++++ b/deploy/modules/wisp/vercel.json
+@@ -0,0 +1,51 @@
++{
++  "$schema": "https://openapi.vercel.sh/vercel.json",
++  "framework": null,
++  "installCommand": "pnpm install --frozen-lockfile",
++  "buildCommand": "pnpm --filter @workspace/ayzen run build:module",
++  "outputDirectory": "artifacts/ayzen/dist/modules/wisp",
++  "build": {
++    "env": {
++      "VITE_MODULE": "wisp",
++      "VITE_API_URL": "https://api.ayzen.tech"
++    }
++  },
++  "rewrites": [
++    {
++      "source": "/(.*)",
++      "destination": "/index.html"
++    }
++  ],
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        {
++          "key": "Content-Security-Policy",
++          "value": "frame-ancestors 'self'"
++        },
++        {
++          "key": "Referrer-Policy",
++          "value": "no-referrer"
++        },
++        {
++          "key": "X-Content-Type-Options",
++          "value": "nosniff"
++        },
++        {
++          "key": "Strict-Transport-Security",
++          "value": "max-age=31536000; includeSubDomains"
++        }
++      ]
++    },
++    {
++      "source": "/assets/(.*)",
++      "headers": [
++        {
++          "key": "Cache-Control",
++          "value": "public, max-age=31536000, immutable"
++        }
++      ]
++    }
++  ]
++}
+diff --git a/deploy/modules/zynth/vercel.json b/deploy/modules/zynth/vercel.json
+new file mode 100644
+index 0000000..a3c5579
+--- /dev/null
++++ b/deploy/modules/zynth/vercel.json
+@@ -0,0 +1,51 @@
++{
++  "$schema": "https://openapi.vercel.sh/vercel.json",
++  "framework": null,
++  "installCommand": "pnpm install --frozen-lockfile",
++  "buildCommand": "pnpm --filter @workspace/ayzen run build:module",
++  "outputDirectory": "artifacts/ayzen/dist/modules/zynth",
++  "build": {
++    "env": {
++      "VITE_MODULE": "zynth",
++      "VITE_API_URL": "https://api.ayzen.tech"
++    }
++  },
++  "rewrites": [
++    {
++      "source": "/(.*)",
++      "destination": "/index.html"
++    }
++  ],
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        {
++          "key": "Content-Security-Policy",
++          "value": "frame-ancestors 'self'"
++        },
++        {
++          "key": "Referrer-Policy",
++          "value": "no-referrer"
++        },
++        {
++          "key": "X-Content-Type-Options",
++          "value": "nosniff"
++        },
++        {
++          "key": "Strict-Transport-Security",
++          "value": "max-age=31536000; includeSubDomains"
++        }
++      ]
++    },
++    {
++      "source": "/assets/(.*)",
++      "headers": [
++        {
++          "key": "Cache-Control",
++          "value": "public, max-age=31536000, immutable"
++        }
++      ]
++    }
++  ]
++}
+diff --git a/docs/module-builds.md b/docs/module-builds.md
+new file mode 100644
+index 0000000..70f8958
+--- /dev/null
++++ b/docs/module-builds.md
+@@ -0,0 +1,28 @@
++# Per-module builds and deploys (W2-P2, req 4)
++
++Each module can ship as its own bundle on its own host. The bundle for module M contains M's pages and the shared (unowned) pages; every other module's pages are replaced by an empty stub, so their code never reaches the browser.
++
++## How ownership is decided
++`artifacts/ayzen/build/module-pages.mjs` reads the one place routes are declared (`src/lib/route-config.tsx`): page file -> the route paths that render it -> the module that owns each path (`@ayzen/module-registry` `routePrefixes`, the same table the server guard uses). A page whose routes are all owned belongs to those modules only; a page that serves any unowned route (core, admin, platform) is shared. Ownership then flows along page-to-page imports: a page imported by a shared page is shared, or the importer's build would break. The one such case today is listed in `artifacts/ayzen/build/shared-page-allowlist.json` (`pages/user/project-entities`, a Sylo route imported by two shared pages); the check fails when that list goes stale or a new coupling appears.
++
++## Build
++```
++VITE_MODULE=sylo pnpm --filter @workspace/ayzen run build:module     # -> artifacts/ayzen/dist/modules/sylo
++pnpm --filter @workspace/ayzen run build:modules                      # all eight, one after another
++```
++`vite.module.config.ts` validates `VITE_MODULE`, stubs the other modules' pages, then inspects the finished chunks, **fails the build** if any excluded page is still inside one, and writes `dist/module-reports/<id>.json` (pages in bundle, pages stubbed, chunk sizes). The central/full build (`vite.config.ts`, `build`) is unchanged and still contains everything.
++
++In a module build, `lib/build-module.ts` makes the router agree with the bundle (another module's URL is the ordinary not-found page) and `getCurrentSubdomainApp()` returns that module on any hostname.
++
++## Deploy (one target per module)
++`node scripts/gen-module-deploy.mjs` writes `deploy/modules/<id>/vercel.json` and `deploy/modules/manifest.json` from the registry (CI fails if they are stale). Layout: one repo, one Vercel project per module (`ayzen-<id>`, domain = the module's host), deployed with
++```
++vercel deploy --prod --local-config deploy/modules/<id>/vercel.json
++```
++Each project builds only its own bundle and serves a static SPA (SPA rewrite, `frame-ancestors 'self'`, `Referrer-Policy: no-referrer`, immutable asset cache). The API stays on `https://api.ayzen.tech` (`VITE_API_URL`), so sign-in on a static module host uses the token returned in the response body (the module host has no API of its own to set its host-only cookie); the API's module guard (W2-P1) still applies to those calls.
++
++## Central -> module redirects
++The client-side flags `VITE_SPLIT_REDIRECTS` / `VITE_SPLIT_REDIRECT_MODULES` are retired. The central host forwards module URLs with the server-side 308 (`SPLIT_REDIRECTS`, `SPLIT_REDIRECT_MODULES`); in-app cross-module links already full-navigate through `moduleUrl()`. A central-SPA user who types a module URL into a client-side `pushState` navigation (not a full load) is no longer forwarded; links inside the app do not do that.
++
++## Cutover and rollback
++Nothing changes until a module host is pointed at its own project: the Express app keeps serving the full build on every host. To cut one module over, deploy its project, move that host's DNS to it, watch the API logs (`module_host_guard.would_deny`). To roll back, point the host back at the Express app. Check locally: `pnpm check:module-bundles`.
+diff --git a/docs/module-shell-qa.md b/docs/module-shell-qa.md
+index 41f8a97..2612ecb 100644
+--- a/docs/module-shell-qa.md
++++ b/docs/module-shell-qa.md
+@@ -16,6 +16,6 @@ Per module x role (all 8 x 4):
+ Central (ayzen.tech) x role:
+ - Launcher: AppsMenu behind VITE_CENTRAL_LAUNCHER=1, module groups filtered out - P
+ - Flag off: sidebar identical to pre-split - P
+-- Redirects: VITE_SPLIT_REDIRECTS=1 forwards module paths (per VITE_SPLIT_REDIRECT_MODULES), public/token pages exempt - P
++- Redirects: W2-P2 retired the client-side VITE_SPLIT_REDIRECTS / VITE_SPLIT_REDIRECT_MODULES flags. Central -> module forwarding is the server-side 308 (SPLIT_REDIRECTS / SPLIT_REDIRECT_MODULES), public/token pages exempt - P
+ 
+ Not runnable here: real login flows, cookie handoff across live hosts, CORS from a deployed module. Verify during rollout smoke checks.
+diff --git a/package.json b/package.json
+index aca18b8..010c691 100644
+--- a/package.json
++++ b/package.json
+@@ -11,6 +11,7 @@
+     "validate:w1-p1": "node scripts/validate-w1-p1.mjs",
+     "validate:w1-p2": "node scripts/validate-w1-p2.mjs",
+     "validate:w1-p3": "pnpm --filter @workspace/scripts oidc:test-conformance && node --test scripts/smoke-oidc-endpoints.test.mjs",
++    "check:module-bundles": "node scripts/check-module-bundles.mjs && node scripts/check-module-bundles.mjs --self-test && node scripts/gen-module-deploy.mjs --check && pnpm --filter @workspace/scripts module-build:test",
+     "check:module-isolation": "node scripts/check-module-isolation.mjs && node scripts/check-module-isolation.mjs --self-test && pnpm --filter @workspace/api-server test:module-host-guard",
+     "validate:w1-p5": "node scripts/validate-w1-p5.mjs && node scripts/validate-w1-p5.mjs --self-test && pnpm --filter @workspace/api-server test:clerk && pnpm --filter @workspace/scripts clerk:test-module-client",
+     "validate:w1-p4": "node scripts/validate-w1-p4.mjs && node scripts/validate-w1-p4.mjs --self-test && pnpm --filter @workspace/scripts oidc:test-module-login",
+diff --git a/scripts/check-module-bundles.mjs b/scripts/check-module-bundles.mjs
+new file mode 100644
+index 0000000..387f84a
+--- /dev/null
++++ b/scripts/check-module-bundles.mjs
+@@ -0,0 +1,189 @@
++#!/usr/bin/env node
++/**
++ * scripts/check-module-bundles.mjs — W2-P2 CI check (blocking): "the Sylo bundle contains 0 Verve/Skarn pages" for every pair.
++ * Install-free stand-in for the bundle analyzer: it walks the SPA import graph from src/main.tsx exactly the way the module
++ * build resolves it (other modules' pages stubbed), then proves the other modules' pages are unreachable. The real build runs
++ * the same proof on the finished chunks (vite.module.config.ts fails the build and writes dist/module-reports/<id>.json).
++ *   node scripts/check-module-bundles.mjs              # check
++ *   node scripts/check-module-bundles.mjs --self-test  # prove each rule fails on a deliberate breakage
++ */
++import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
++import { tmpdir } from "node:os";
++import { join, relative, dirname } from "node:path";
++import { fileURLToPath } from "node:url";
++import * as registry from "../packages/module-registry/src/index.mjs";
++import { analyzeRouteConfig, excludedPagesFor, propagateOwnership } from "../artifacts/ayzen/build/module-pages.mjs";
++import { importsOf, walk } from "../artifacts/ayzen/build/import-graph.mjs";
++import { renderAll } from "./gen-module-deploy.mjs";
++
++const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
++const AYZEN = "artifacts/ayzen";
++const read = (root, f) => readFileSync(join(root, f), "utf8");
++const abs = (src) => (rel) => [".tsx", ".ts"].map((e) => join(src, rel + e)).find((p) => existsSync(p)) ?? null;
++
++/** Everything the rules need, computed from a tree root (the repo, or a mutated copy of it in self-test). */
++function analyze(root) {
++  const src = join(root, AYZEN, "src");
++  const toAbs = abs(src);
++  const routeSrc = read(root, `${AYZEN}/src/lib/route-config.tsx`);
++  const raw = analyzeRouteConfig(routeSrc, registry);
++  const rawOwners = new Map([...raw.pages].map(([k, e]) => [k, { owners: new Set(e.owners), shared: e.shared }]));
++  const propagated = propagateOwnership(analyzeRouteConfig(routeSrc, registry), (f) => importsOf(f, src), toAbs);
++  const entry = join(src, "main.tsx");
++  const builds = {};
++  for (const m of registry.MODULE_IDS) {
++    const stubbed = new Set(excludedPagesFor(propagated, m).map(toAbs).filter(Boolean));
++    const w = walk(entry, src, stubbed);
++    builds[m] = { stubbed, ...w, pages: new Set([...w.reachable].map((f) => relative(src, f).replace(/\.tsx?$/, "").replace(/\\/g, "/")).filter((r) => r.startsWith("pages/"))) };
++  }
++  return { root, src, toAbs, raw, rawOwners, propagated, builds, unresolved: raw.unresolved };
++}
++
++const allowlist = (root) => new Map(JSON.parse(read(root, `${AYZEN}/build/shared-page-allowlist.json`)).pages.map((p) => [p.page, p]));
++
++const RULES = [
++  ["route-config fully resolves: every route's component maps to a lazy page import", (a) => (a.unresolved.length ? `unresolved: ${a.unresolved.slice(0, 5).join("; ")}` : a.raw.pages.size < 100 ? `only ${a.raw.pages.size} pages parsed` : null)],
++  ["every module build stubs other modules' pages (non-empty exclusion) and keeps its own owned pages reachable", (a) => {
++    const min = JSON.parse(read(a.root, `${AYZEN}/build/shared-page-allowlist.json`)).minOwnedPages ?? {};
++    for (const m of registry.MODULE_IDS) {
++      const owned = [...a.rawOwners].filter(([, e]) => !e.shared && e.owners.has(m)).length;
++      if (owned < (min[m] ?? 1)) return `${m}: owns ${owned} pages, ratchet says at least ${min[m]} (a route moved out of its prefix?)`;
++      if (a.builds[m].stubbed.size === 0) return `${m}: nothing is excluded`;
++      for (const [page, e] of a.rawOwners) {
++        if (!e.shared && e.owners.has(m) && !a.builds[m].pages.has(page)) return `${m}: own page ${page} is not in its bundle`;
++      }
++    }
++    return null;
++  }],
++  ["PROOF: no module bundle reaches another module's page (beyond the audited allow-list)", (a) => {
++    const allowed = allowlist(a.root);
++    const leaks = new Map();
++    for (const m of registry.MODULE_IDS) for (const [page, e] of a.rawOwners) {
++      if (e.shared || e.owners.size === 0 || e.owners.has(m)) continue;
++      if (a.builds[m].pages.has(page)) leaks.set(page, [...(leaks.get(page) ?? []), m]);
++    }
++    const unexpected = [...leaks].filter(([p]) => !allowed.has(p));
++    if (unexpected.length) return `${unexpected.length} page(s) leak into other modules: ${unexpected.slice(0, 4).map(([p, ms]) => `${p} -> ${ms.join("/")}`).join("; ")}`;
++    const stale = [...allowed.keys()].filter((p) => !leaks.has(p));
++    return stale.length ? `stale allow-list entries (remove them): ${stale.join(", ")}` : null;
++  }],
++  ["the Sylo bundle has 0 Verve and 0 Skarn pages (the roadmap's done criterion, named explicitly)", (a) => {
++    const allowed = allowlist(a.root);
++    const bad = [];
++    for (const [page, e] of a.rawOwners) {
++      if (e.shared || allowed.has(page)) continue;
++      if ((e.owners.has("verve") || e.owners.has("skarn")) && !e.owners.has("sylo") && a.builds.sylo.pages.has(page)) bad.push(page);
++    }
++    const owned = (id) => [...a.rawOwners].filter(([, e]) => !e.shared && e.owners.has(id) && !e.owners.has("sylo")).length;
++    return bad.length ? `sylo bundle has ${bad.length} verve/skarn page(s): ${bad.slice(0, 4).join(", ")}` : owned("verve") + owned("skarn") === 0 ? "verve/skarn own no pages: the proof would be vacuous" : null;
++  }],
++  ["a page stubbed in some build is imported only by route-config (named imports would break that build)", (a) => {
++    const bad = new Set();
++    for (const m of registry.MODULE_IDS) for (const [t, imps] of a.builds[m].importersOfStubs) {
++      for (const i of imps) if (!i.endsWith(join("lib", "route-config.tsx"))) bad.add(`${relative(a.src, t)} <- ${relative(a.src, i)} (${m} build)`);
++    }
++    return bad.size ? [...bad].slice(0, 4).join("; ") : null;
++  }],
++  ["the full build is untouched: no source reads VITE_SPLIT_REDIRECTS, and VITE_MODULE is read only through build-module.ts", (a) => {
++    const hits = [];
++    const dirWalk = (d) => { for (const e of readdirSync(d, { withFileTypes: true })) { const p = join(d, e.name); if (e.isDirectory()) dirWalk(p); else if (/\.(tsx?|mjs)$/.test(e.name)) { const t = readFileSync(p, "utf8"); const rel = relative(a.src, p); if (/VITE_SPLIT_REDIRECT/.test(t.replace(/\/\/[^\n]*|\/\*[\s\S]*?\*\//g, ""))) hits.push(`${rel}: VITE_SPLIT_REDIRECTS`); if (/VITE_MODULE\b/.test(t.replace(/\/\/[^\n]*|\/\*[\s\S]*?\*\//g, "")) && !rel.endsWith("build-module.ts") && !rel.includes("test")) hits.push(`${rel}: reads VITE_MODULE directly`); } } };
++    dirWalk(a.src);
++    return hits.length ? hits.slice(0, 4).join("; ") : null;
++  }],
++  ["App.tsx only mounts routes that belong in this build", (a) => {
++    const t = read(a.root, `${AYZEN}/src/App.tsx`);
++    return t.includes("ADMIN_ROUTES.filter((r) => isRouteInBuild(r.path))") && t.includes("USER_ROUTES.filter((r) => isRouteInBuild(r.path))") ? null : "route filters missing";
++  }],
++  ["build-module.ts: null build = no restriction; module build keeps own + unowned paths only; unknown id ignored", (a) => {
++    const t = read(a.root, `${AYZEN}/src/lib/build-module.ts`);
++    return ["if (!build) return true;", "owner === null || owner === build", "getModule(id) ? (id as ModuleId) : null"].every((n) => t.includes(n)) ? null : "build-module.ts changed";
++  }],
++  ["subdomain-app: a module build is that module on any hostname", (a) => (read(a.root, `${AYZEN}/src/lib/subdomain-app.ts`).includes("const built = buildModuleId();") ? null : "buildModuleId not used")],
++  ["vite.module.config.ts: validates VITE_MODULE, defines it, per-module outDir, stubs via resolveId, fails the build on a leak, writes the report", (a) => {
++    const t = read(a.root, `${AYZEN}/vite.module.config.ts`);
++    const need = ["if (!(MODULE_IDS as readonly string[]).includes(moduleId)) {", "define: { 'import.meta.env.VITE_MODULE': JSON.stringify(moduleId) }", "outDir: path.join(root, 'dist/modules', moduleId)",
++      "enforce: 'pre'", "return rel ? STUB_PREFIX + rel : null;", "this.error(`${moduleId} bundle contains other modules' pages", "dist/module-reports", "propagateOwnership("];
++    return need.find((n) => !t.includes(n)) ? `missing: ${need.find((n) => !t.includes(n))}` : null;
++  }],
++  ["package scripts: build:module(s) exist; CI runs this check, the deploy check and builds a module bundle", (a) => {
++    const p = read(a.root, `${AYZEN}/package.json`), c = read(a.root, ".github/workflows/ci.yml");
++    if (!p.includes('"build:module": "vite build --config vite.module.config.ts') || !p.includes('"build:modules"')) return "package.json scripts missing";
++    return (c.match(/check-module-bundles\.mjs/g) ?? []).length >= 2 && c.includes("check-module-bundles.mjs --self-test") && c.includes("gen-module-deploy.mjs --check") && c.includes("build:module") ? null : "ci.yml wiring missing";
++  }],
++  ["deploy targets: one generated Vercel config per module (own VITE_MODULE, own outputDirectory), up to date", (a) => {
++    const files = renderAll(registry.MODULES);
++    for (const [f, content] of files) {
++      if (!existsSync(join(a.root, f)) || read(a.root, f) !== content) return `${f} is missing or stale (node scripts/gen-module-deploy.mjs)`;
++    }
++    for (const m of registry.MODULES) {
++      const cfg = JSON.parse(read(a.root, `deploy/modules/${m.id}/vercel.json`));
++      if (cfg.build.env.VITE_MODULE !== m.id || !cfg.outputDirectory.endsWith(`/${m.id}`)) return `${m.id} deploy config points at another module`;
++    }
++    return null;
++  }],
++];
++
++function run(a) {
++  return RULES.flatMap(([id, fn]) => { let p; try { p = fn(a); } catch (e) { p = `threw: ${e.message}`; } return p ? [`${id}: ${p}`] : []; });
++}
++
++function report(a) {
++  const total = a.raw.pages.size;
++  return Object.fromEntries(registry.MODULE_IDS.map((m) => [m, { pagesInBundle: a.builds[m].pages.size, stubbed: a.builds[m].stubbed.size, sourceFiles: a.builds[m].reachable.size }]).concat([["_routedPages", { total }]]));
++}
++
++if (process.argv.includes("--self-test")) {
++  const clean = run(analyze(ROOT));
++  if (clean.length) { console.error("self-test needs a clean tree first:\n - " + clean.join("\n - ")); process.exit(1); }
++  const A = `${AYZEN}/src`;
++  /** Each mutant edits a COPY of the files it needs (the whole src tree is copied once per mutant). */
++  const mutants = [
++    ["a shared page statically imports a verve page", `${A}/pages/user/home.tsx`, (t) => `import "@/pages/user/marketplace";\n${t}`],
++    ["a shared component imports a skarn page", `${A}/components/layout/app-layout.tsx`, (t) => `import "@/pages/user/projects";\n${t}`],
++    ["route-config drops the lazy import of a page", `${A}/lib/route-config.tsx`, (t) => t.replace(/const UserProjects\s*= lazy\(\(\) => import\("@\/pages\/user\/projects"\)\);/, "")],
++    ["a sylo route is renamed out of its prefix (page becomes shared)", `${A}/lib/route-config.tsx`, (t) => t.replace('{ path: "/vault/settings",', '{ path: "/vaultx/settings",')],
++    ["a verve page becomes shared through a shared importer", `${A}/pages/user/home.tsx`, (t) => `import "@/pages/user/marketplace-hub";\n${t}`],
++    ["App.tsx stops filtering admin routes", `${A}/App.tsx`, (t) => t.replace("ADMIN_ROUTES.filter((r) => isRouteInBuild(r.path)).map(", "ADMIN_ROUTES.map(")],
++    ["App.tsx stops filtering user routes", `${A}/App.tsx`, (t) => t.replace("USER_ROUTES.filter((r) => isRouteInBuild(r.path)).map(", "USER_ROUTES.map(")],
++    ["the split-redirect flag comes back", `${A}/App.tsx`, (t) => t + '\nconst legacyFlag = import.meta.env.VITE_SPLIT_REDIRECTS;\n'],
++    ["a component reads VITE_MODULE directly", `${A}/components/layout/app-layout.tsx`, (t) => t + '\nconst m = import.meta.env.VITE_MODULE;\n'],
++    ["build-module treats no build as restricted", `${A}/lib/build-module.ts`, (t) => t.replace("if (!build) return true;", "if (!build) return false;")],
++    ["build-module drops the unowned-path rule", `${A}/lib/build-module.ts`, (t) => t.replace("owner === null || owner === build", "owner === build")],
++    ["subdomain-app ignores the build module", `${A}/lib/subdomain-app.ts`, (t) => t.replace("const built = buildModuleId();", "const built = null as string | null;")],
++    ["vite config stops failing on a leak", `${AYZEN}/vite.module.config.ts`, (t) => t.replace("this.error(`${moduleId} bundle contains other modules' pages", "console.log(`${moduleId} bundle contains other modules' pages")],
++    ["vite config stops validating the module", `${AYZEN}/vite.module.config.ts`, (t) => t.replace("MODULE_IDS as readonly string[]).includes(moduleId)", "MODULE_IDS as readonly string[]).includes(moduleId) || true")],
++    ["vite config writes every module to the same dir", `${AYZEN}/vite.module.config.ts`, (t) => t.replace("outDir: path.join(root, 'dist/modules', moduleId)", "outDir: path.join(root, 'dist/modules')")],
++    ["vite config skips ownership propagation", `${AYZEN}/vite.module.config.ts`, (t) => t.replace("propagateOwnership(\n    analyzeRouteConfig", "((x: any) => x)(\n    analyzeRouteConfig")],
++    ["build:module script removed", `${AYZEN}/package.json`, (t) => t.replace('"build:module": "vite build --config vite.module.config.ts', '"build:module": "vite build --config vite.config.ts')],
++    ["CI forgets the bundle check", ".github/workflows/ci.yml", (t) => t.replace("check-module-bundles.mjs --self-test", "check-module-bundles-x.mjs --self-test")],
++    ["a deploy config points at another module", "deploy/modules/ryft/vercel.json", (t) => t.replace('"VITE_MODULE": "ryft"', '"VITE_MODULE": "sylo"')],
++    ["allow-list gains a stale entry", `${AYZEN}/build/shared-page-allowlist.json`, (t) => t.replace('"pages": [', '"pages": [{"page":"pages/user/vault-hub","ownedBy":"sylo","why":"x"},')],
++    ["allow-list loses the audited entry", `${AYZEN}/build/shared-page-allowlist.json`, (t) => t.replace('"page": "pages/user/project-entities"', '"page": "pages/user/nope"')],
++  ];
++  let survived = 0;
++  for (const [name, file, edit] of mutants) {
++    const dir = mkdtempSync(join(tmpdir(), "bundles-"));
++    try {
++      cpSync(join(ROOT, AYZEN, "src"), join(dir, AYZEN, "src"), { recursive: true });
++      for (const f of [`${AYZEN}/vite.module.config.ts`, `${AYZEN}/package.json`, `${AYZEN}/build/shared-page-allowlist.json`, ".github/workflows/ci.yml"]) {
++        const dest = join(dir, f); cpSync(join(ROOT, f), dest, { recursive: true });
++      }
++      cpSync(join(ROOT, "deploy"), join(dir, "deploy"), { recursive: true });
++      const target = join(dir, file);
++      const before = existsSync(target) ? readFileSync(target, "utf8") : null;
++      if (before === null) { console.error(`MUTANT NOT APPLICABLE (file missing): ${name}`); survived++; continue; }
++      const after = edit(before);
++      if (after === before) { console.error(`MUTANT NOT APPLICABLE (no change): ${name}`); survived++; continue; }
++      writeFileSync(target, after);
++      if (run(analyze(dir)).length === 0) { console.error(`SURVIVED: ${name}`); survived++; }
++    } finally { rmSync(dir, { recursive: true, force: true }); }
++  }
++  console.log(survived ? `SELF-TEST FAILED: ${survived} mutant(s) not caught` : `SELF-TEST OK: ${mutants.length}/${mutants.length} mutants caught`);
++  process.exit(survived ? 1 : 0);
++}
++
++const a = analyze(ROOT);
++const problems = run(a);
++if (problems.length) { console.error("MODULE_BUNDLES: FAIL\n - " + problems.join("\n - ")); process.exit(1); }
++console.log("MODULE_BUNDLES: PASS");
++console.log(JSON.stringify({ rules: RULES.length, ...report(a) }));
+diff --git a/scripts/gen-module-deploy.mjs b/scripts/gen-module-deploy.mjs
+new file mode 100644
+index 0000000..e15d632
+--- /dev/null
++++ b/scripts/gen-module-deploy.mjs
+@@ -0,0 +1,61 @@
++#!/usr/bin/env node
++/**
++ * scripts/gen-module-deploy.mjs — W2-P2: one deploy target per module, generated from the module registry (never hand-edited).
++ *   node scripts/gen-module-deploy.mjs           # write deploy/modules/<id>/vercel.json + deploy/modules/manifest.json
++ *   node scripts/gen-module-deploy.mjs --check   # fail if the committed files differ (CI)
++ * Layout: single repo, one Vercel project per module (project name `ayzen-<id>`, domain = the module's host), each deployed with
++ *   vercel deploy --prod --local-config deploy/modules/<id>/vercel.json
++ * Each project builds ONLY its own module bundle (VITE_MODULE) and serves it as a static SPA; the API stays on VITE_API_URL.
++ */
++import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
++import { dirname, join } from "node:path";
++import { fileURLToPath } from "node:url";
++
++const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
++export const API_ORIGIN = "https://api.ayzen.tech";
++
++export function renderAll(modules) {
++  const files = new Map();
++  const manifest = { generatedFrom: "packages/module-registry", apiOrigin: API_ORIGIN, modules: [] };
++  for (const m of modules) {
++    const config = {
++      $schema: "https://openapi.vercel.sh/vercel.json",
++      framework: null,
++      installCommand: "pnpm install --frozen-lockfile",
++      buildCommand: "pnpm --filter @workspace/ayzen run build:module",
++      outputDirectory: `artifacts/ayzen/dist/modules/${m.id}`,
++      build: { env: { VITE_MODULE: m.id, VITE_API_URL: API_ORIGIN } },
++      // Static files first (Vercel serves the filesystem before rewrites), everything else is the SPA shell.
++      rewrites: [{ source: "/(.*)", destination: "/index.html" }],
++      headers: [
++        {
++          source: "/(.*)",
++          headers: [
++            { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
++            { key: "Referrer-Policy", value: "no-referrer" },
++            { key: "X-Content-Type-Options", value: "nosniff" },
++            { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
++          ],
++        },
++        { source: "/assets/(.*)", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
++      ],
++    };
++    files.set(`deploy/modules/${m.id}/vercel.json`, JSON.stringify(config, null, 2) + "\n");
++    manifest.modules.push({ id: m.id, host: m.defaultHost, vercelProject: `ayzen-${m.id}`, config: `deploy/modules/${m.id}/vercel.json`, buildEnv: config.build.env });
++  }
++  files.set("deploy/modules/manifest.json", JSON.stringify(manifest, null, 2) + "\n");
++  return files;
++}
++
++if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
++  const { MODULES } = await import("../packages/module-registry/src/index.mjs");
++  const files = renderAll(MODULES);
++  if (process.argv.includes("--check")) {
++    const stale = [...files].filter(([f, c]) => !existsSync(join(ROOT, f)) || readFileSync(join(ROOT, f), "utf8") !== c).map(([f]) => f);
++    if (stale.length) { console.error("MODULE_DEPLOY: STALE (run node scripts/gen-module-deploy.mjs)\n - " + stale.join("\n - ")); process.exit(1); }
++    console.log(`MODULE_DEPLOY: PASS (${files.size} files up to date)`);
++  } else {
++    for (const [f, c] of files) { mkdirSync(dirname(join(ROOT, f)), { recursive: true }); writeFileSync(join(ROOT, f), c); }
++    console.log(`wrote ${files.size} files under deploy/modules/`);
++  }
++}
+diff --git a/scripts/package.json b/scripts/package.json
+index b9c97d5..80db4cd 100644
+--- a/scripts/package.json
++++ b/scripts/package.json
+@@ -43,6 +43,7 @@
+     "oidc:test-seed-clients": "tsx ./src/test-seed-oidc-clients.ts",
+     "oidc:test-module-login": "tsx ./src/test-oidc-module-login.ts",
+     "clerk:test-module-client": "tsx ./src/test-clerk-module-client.ts",
++    "module-build:test": "tsx ./src/test-module-build.ts",
+     "oidc:test-conformance": "tsx ./src/test-oidc-conformance.ts && tsx ./src/test-seed-oidc-clients.ts && tsx ./src/test-oidc-discovery-metadata.ts",
+     "oidc:test-client-validation": "tsx ./src/test-oidc-client-validation.ts",
+     "oidc:test-scope-validation": "tsx ./src/test-oidc-scope-validation.ts",
+diff --git a/scripts/src/test-module-build.ts b/scripts/src/test-module-build.ts
+new file mode 100644
+index 0000000..ab4b1d0
+--- /dev/null
++++ b/scripts/src/test-module-build.ts
+@@ -0,0 +1,36 @@
++/**
++ * scripts/src/test-module-build.ts — W2-P2 browser-side pieces of per-module builds: which module a bundle is for, and which
++ * routes it mounts. Pure. Run: npx tsx scripts/src/test-module-build.ts
++ */
++import assert from "node:assert/strict";
++import { test } from "node:test";
++import { MODULES } from "@ayzen/module-registry";
++import { buildModuleId, isRouteInBuild } from "../../artifacts/ayzen/src/lib/build-module";
++
++test("buildModuleId: only a known module id counts; case and spaces are tolerated; anything else is the full build", () => {
++  assert.equal(buildModuleId("sylo"), "sylo");
++  assert.equal(buildModuleId(" Verve "), "verve");
++  assert.equal(buildModuleId(undefined), null);
++  assert.equal(buildModuleId(""), null);
++  assert.equal(buildModuleId("central"), null);
++  assert.equal(buildModuleId("__proto__"), null);
++});
++
++test("the full build mounts every route", () => {
++  for (const p of ["/vault", "/finance", "/marketplace", "/projects", "/admin/users", "/dashboard"]) assert.equal(isRouteInBuild(p, null), true, p);
++});
++
++test("a module build mounts its own routes and unowned ones, never another module's", () => {
++  for (const m of MODULES) for (const o of MODULES) for (const p of o.routePrefixes) {
++    assert.equal(isRouteInBuild(`${p}/x`, m.id), o.id === m.id, `${m.id} on ${p}`);
++  }
++  for (const m of MODULES) for (const shared of ["/dashboard", "/profile", "/admin/users", "/login"]) assert.equal(isRouteInBuild(shared, m.id), true, `${m.id} ${shared}`);
++});
++
++test("route ownership agrees with the server guard (same registry decision)", async () => {
++  const { decideModuleHostAccess } = await import("@ayzen/module-registry");
++  for (const m of MODULES) for (const o of MODULES) for (const p of o.routePrefixes) {
++    const server = decideModuleHostAccess({ module: m.id, path: p }).action === "allow";
++    assert.equal(isRouteInBuild(p, m.id), server, `${m.id} ${p}`);
++  }
++});
+-- 
+2.43.0
+
+
+From 3744dcd423cbcf9ef7d5ecfeddbaf9c196a04988 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 13 Nov 2026 17:22:17 +0600
+Subject: [PATCH 3/3] W2-P3: remove the mobile bottom dock (req 5)
+
+- delete mobile-dock.tsx; AppLayout no longer renders it or reserves dock padding
+- the drawer (Sheet + AppSidebar/ModuleSidebar) is the mobile navigation: accessible hamburger + drawer title, test ids
+- validate-w2-p3 (14-mutant self-test), mobile viewport screenshot spec with a real-chromium fixture self-test, CI job
+- ADR Q4 default recorded, QA doc updated
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01HipLewAAStoWhxYqWcJWWQ
+---
+ .github/workflows/ci.yml                      | 14 +++
+ CHANGES_W2_P3_REMOVE_MOBILE_DOCK.md           | 22 +++++
+ .../src/components/layout/app-layout.tsx      | 13 +--
+ .../src/components/layout/mobile-dock.tsx     | 95 ------------------
+ docs/architecture/ADR-W0-FREEZE.md            |  2 +-
+ docs/module-shell-qa.md                       |  4 +-
+ package.json                                  |  1 +
+ scripts/validate-w2-p3.mjs                    | 97 ++++++++++++++++++
+ tests/e2e/mobile-nav/mobile-no-dock.spec.mjs  | 98 +++++++++++++++++++
+ 9 files changed, 242 insertions(+), 104 deletions(-)
+ create mode 100644 CHANGES_W2_P3_REMOVE_MOBILE_DOCK.md
+ delete mode 100644 artifacts/ayzen/src/components/layout/mobile-dock.tsx
+ create mode 100644 scripts/validate-w2-p3.mjs
+ create mode 100644 tests/e2e/mobile-nav/mobile-no-dock.spec.mjs
+
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 4b86f4c..c748371 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -132,6 +132,20 @@ jobs:
+           pnpm --filter @workspace/ayzen run build:module
+           node -e "const r=require('./artifacts/ayzen/dist/module-reports/sylo.json');console.log(JSON.stringify(r.pages));if(r.pages.otherModulePagesInBundle!==0)process.exit(1)"
+ 
++  mobile-nav:
++    # W2-P3: no bottom dock; the drawer is the mobile navigation. Static validator + the viewport spec's own self-test
++    # (fixture pages: the old dock layout must fail, the drawer-only layout must pass; real chromium, 3 phone widths).
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++      - uses: actions/setup-node@v4
++        with:
++          node-version: 24
++      - run: node scripts/validate-w2-p3.mjs
++      - run: node scripts/validate-w2-p3.mjs --self-test
++      - run: npm install --no-save --no-package-lock playwright && npx playwright install --with-deps chromium
++      - run: node tests/e2e/mobile-nav/mobile-no-dock.spec.mjs --self-test
++
+   affected:
+     runs-on: ubuntu-latest
+     outputs:
+diff --git a/CHANGES_W2_P3_REMOVE_MOBILE_DOCK.md b/CHANGES_W2_P3_REMOVE_MOBILE_DOCK.md
+new file mode 100644
+index 0000000..c00aeea
+--- /dev/null
++++ b/CHANGES_W2_P3_REMOVE_MOBILE_DOCK.md
+@@ -0,0 +1,22 @@
++# CHANGES — W2-P3: remove the mobile bottom dock (req 5)
++
++## What changed
++* `components/layout/mobile-dock.tsx` deleted (Home / Projects / Market / Vault / Teams tabs, `fixed bottom-0 ... md:hidden`).
++* `components/layout/app-layout.tsx`: the dock is no longer rendered; the `pb-24 md:pb-8` padding that reserved room for it is now `pb-8`.
++* The mobile navigation is the drawer that already existed (`Sheet` + `AppSidebar`, which renders `ModuleSidebar` on a module host). It is now the *only* mobile navigation, so it got the accessibility it was missing: the hamburger has `aria-label="Open navigation menu"` + `aria-expanded`, the drawer has a screen-reader title/description, and both carry `data-testid`s for tests. It still closes on navigate (`onNavigate`).
++* ADR Q4 ("remove only Home/Market/Vault tabs or the whole dock?") is still pending the owner's answer; the plan's default (whole dock) is implemented and recorded in `ADR-W0-FREEZE.md`. If the answer is "keep Projects/Teams", restore the file from git history and cut it down to those tabs.
++* `docs/module-shell-qa.md` no longer lists dock tabs.
++
++## Proof
++| Check | What it proves |
++|---|---|
++| `scripts/validate-w2-p3.mjs` (+`--self-test`, 14 mutants) | dock file gone and unreferenced, no other full-width fixed bottom bar anywhere in the SPA, no reserved dock padding, drawer wiring + a11y, module nav inside the drawer, docs, CI |
++| `tests/e2e/mobile-nav/mobile-no-dock.spec.mjs` | the roadmap's "mobile viewport screenshot test": at 375, 412 and 767 px it asserts no fixed bottom bar, the hamburger opens the drawer (links inside), Escape closes it, no horizontal overflow, and saves closed/open screenshots. Needs `E2E_BASE_URL` + `E2E_TOKEN`; without them it prints SKIPPED |
++| `... --self-test` | runs the same assertions in real chromium against two fixture pages: the old dock layout FAILS, the drawer-only layout PASSES. CI job `mobile-nav` runs it |
++
++## Verified / not verified
++Verified: the validator and its mutants; the viewport spec's detector in real chromium against fixtures (dock layout detected, drawer-only layout clean, screenshots written).
++**Not verified:** the real app. The SPA cannot be built here, so the viewport spec has not run against the real AppLayout, and the screenshots I looked at are of the fixtures, not the product. Run it once against a deployed/preview build: `E2E_BASE_URL=... E2E_TOKEN=... node tests/e2e/mobile-nav/mobile-no-dock.spec.mjs`.
++
++## Behavior note
++On phones, people who used the dock to hop between modules now open the drawer (central drawer: all groups; module host: that module's nav plus the "AYZEN" link back to central). The desktop UI is untouched.
+diff --git a/artifacts/ayzen/src/components/layout/app-layout.tsx b/artifacts/ayzen/src/components/layout/app-layout.tsx
+index bc263ce..a9aef5a 100644
+--- a/artifacts/ayzen/src/components/layout/app-layout.tsx
++++ b/artifacts/ayzen/src/components/layout/app-layout.tsx
+@@ -1,10 +1,9 @@
+ import { ReactNode, useState, useEffect, useRef, useCallback } from "react";
+ import { getCurrentSubdomainApp, getModuleForPath, moduleUrl, centralUrl } from "@/lib/subdomain-app";
+ import { AppSidebar } from "./app-sidebar";
+-import { MobileDock } from "./mobile-dock";
+ import { Menu, Mail, X, RefreshCw, Inbox, ExternalLink } from "lucide-react";
+ import { Button } from "@/components/ui/button";
+-import { Sheet, SheetContent } from "@/components/ui/sheet";
++import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+ import { useIsMobile } from "@/hooks/use-mobile";
+ import { NotificationBell } from "@/components/notification-bell";
+ import { GlobalSearch } from "@/components/global-search";
+@@ -191,7 +190,9 @@ export function AppLayout({ children }: AppLayoutProps) {
+       {isMobile ? (
+         <>
+           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+-            <SheetContent side="left" className="p-0 w-64 border-r border-sidebar-border bg-sidebar">
++            <SheetContent side="left" className="p-0 w-64 border-r border-sidebar-border bg-sidebar" data-testid="mobile-nav-drawer">
++              <SheetTitle className="sr-only">Navigation</SheetTitle>
++              <SheetDescription className="sr-only">Navigate between pages and modules</SheetDescription>
+               <AppSidebar onNavigate={() => setMobileOpen(false)} />
+             </SheetContent>
+           </Sheet>
+@@ -207,7 +208,7 @@ export function AppLayout({ children }: AppLayoutProps) {
+ 
+         {isMobile && (
+           <div className="relative z-10 flex items-center gap-3 px-4 py-3 border-b border-border bg-sidebar/80 backdrop-blur-sm sticky top-0">
+-            <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="text-primary hover:bg-primary/10">
++            <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="text-primary hover:bg-primary/10" aria-label="Open navigation menu" aria-expanded={mobileOpen} data-testid="mobile-nav-toggle">
+               <Menu className="w-5 h-5" />
+             </Button>
+             {/* Module Shell Split S2: on a module subdomain the mobile top bar shows the module label (still links home centrally). */}
+@@ -233,11 +234,11 @@ export function AppLayout({ children }: AppLayoutProps) {
+           </div>
+         )}
+ 
+-        <div className="relative z-10 p-4 md:p-6 lg:p-8 flex-1 pb-24 md:pb-8">
++        <div className="relative z-10 p-4 md:p-6 lg:p-8 flex-1 pb-8">
+           {children}
+         </div>
+       </main>
+-      <MobileDock />
++      {/* W2-P3: the bottom dock is gone. On mobile the only navigation is the drawer above (module nav on a module host). */}
+     </div>
+   );
+ }
+diff --git a/artifacts/ayzen/src/components/layout/mobile-dock.tsx b/artifacts/ayzen/src/components/layout/mobile-dock.tsx
+deleted file mode 100644
+index 1f44dbb..0000000
+--- a/artifacts/ayzen/src/components/layout/mobile-dock.tsx
++++ /dev/null
+@@ -1,95 +0,0 @@
+-import { Link, useLocation } from "wouter";
+-import { Home, FolderGit2, Store, Shield, Users } from "lucide-react";
+-import { cn } from "@/lib/utils";
+-import { getCurrentSubdomainApp, getModuleForPath, moduleUrl, centralUrl } from "@/lib/subdomain-app";
+-import { useAuth } from "@/hooks/use-auth";
+-
+-const DOCK_ITEMS = [
+-  { href: "/home",        icon: Home,       label: "Home",    authRequired: "/home" },
+-  { href: "/projects",    icon: FolderGit2, label: "Projects", authRequired: "/projects" },
+-  { href: "/marketplace", icon: Store,      label: "Market",  authRequired: "/marketplace" },
+-  { href: "/vault?tab=entity", icon: Shield, label: "Vault",  authRequired: "/vault" },
+-  { href: "/teams",       icon: Users,      label: "Teams",   authRequired: "/teams" },
+-] as const;
+-
+-export function MobileDock() {
+-  const [location] = useLocation();
+-  const { user } = useAuth();
+-
+-  const isActive = (href: string) => {
+-    const path = href.split("?")[0];
+-    return location === path || location.startsWith(path + "/");
+-  };
+-
+-  return (
+-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-sidebar/95 backdrop-blur-xl border-t border-sidebar-border safe-area-pb md:hidden">
+-      <div className="flex items-center justify-around px-2 py-2">
+-        {DOCK_ITEMS.map(item => {
+-          const Icon = item.icon;
+-          const active = isActive(item.href);
+-          // If not logged in, redirect to landing (root)
+-          // S5: each dock tab goes to its module on any host. Home is central.
+-          const cur = getCurrentSubdomainApp();
+-          const target = user ? item.href : "/";
+-          const tabModule = getModuleForPath(target);
+-          const cross = tabModule !== null && tabModule !== (cur ? cur.id : null);
+-          const href = user
+-            ? (cross && tabModule ? moduleUrl(tabModule, target) : (cur ? target : centralUrl(target)))
+-            : centralUrl("/");
+-
+-          return cross ? (
+-            <a key={item.href} href={href}>
+-              <button className="flex flex-col items-center gap-1 px-3 py-1.5 min-w-[56px] relative group">
+-                {active && (
+-                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-primary" />
+-                )}
+-                <div className={cn(
+-                  "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200",
+-                  active
+-                    ? "bg-primary/15 border border-primary/30 shadow-[0_0_12px_rgba(34,211,238,0.15)]"
+-                    : "bg-transparent group-hover:bg-sidebar-accent border border-transparent"
+-                )}>
+-                  <Icon className={cn(
+-                    "w-5 h-5 transition-colors",
+-                    active ? "text-primary" : "text-sidebar-foreground/50 group-hover:text-sidebar-foreground/80"
+-                  )} />
+-                </div>
+-                <span className={cn(
+-                  "text-[9px] font-mono font-bold tracking-wider transition-colors leading-none",
+-                  active ? "text-primary" : "text-sidebar-foreground/40"
+-                )}>
+-                  {item.label}
+-                </span>
+-              </button>
+-            </a>
+-          ) : (
+-            <Link key={item.href} href={href}>
+-              <button className="flex flex-col items-center gap-1 px-3 py-1.5 min-w-[56px] relative group">
+-                {active && (
+-                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-primary" />
+-                )}
+-                <div className={cn(
+-                  "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200",
+-                  active
+-                    ? "bg-primary/15 border border-primary/30 shadow-[0_0_12px_rgba(34,211,238,0.15)]"
+-                    : "bg-transparent group-hover:bg-sidebar-accent border border-transparent"
+-                )}>
+-                  <Icon className={cn(
+-                    "w-5 h-5 transition-colors",
+-                    active ? "text-primary" : "text-sidebar-foreground/50 group-hover:text-sidebar-foreground/80"
+-                  )} />
+-                </div>
+-                <span className={cn(
+-                  "text-[9px] font-mono font-bold tracking-wider transition-colors leading-none",
+-                  active ? "text-primary" : "text-sidebar-foreground/40"
+-                )}>
+-                  {item.label}
+-                </span>
+-              </button>
+-            </Link>
+-          );
+-        })}
+-      </div>
+-    </nav>
+-  );
+-}
+diff --git a/docs/architecture/ADR-W0-FREEZE.md b/docs/architecture/ADR-W0-FREEZE.md
+index bd9ff4d..183789f 100644
+--- a/docs/architecture/ADR-W0-FREEZE.md
++++ b/docs/architecture/ADR-W0-FREEZE.md
+@@ -23,7 +23,7 @@ Nothing in Waves 1+ should start on an ADR that is still "Proposed". Sign-off =
+ | Q1 | ID format: `SYL-000001` (6 digit) or `SYL-01` style? | Short style runs out at 99 users. | _pending_ |
+ | Q2 | 8 separate Clerk apps (full isolation, more cost) or 1 app + module metadata? | Requirements were read as 8 apps. | _pending_ |
+ | Q3 | Open mail send / wallet transfer / finance write via MCP? | If yes: confirm token + `mcp-sensitive` scope + `dry_run`. Currently closed by design. | _pending_ |
+-| Q4 | Remove only Home/Market/Vault tabs or delete the whole mobile dock? | Plan assumes whole dock deleted. | _pending_ |
++| Q4 | Remove only Home/Market/Vault tabs or delete the whole mobile dock? | Plan assumes whole dock deleted. | _pending_ (W2-P3 implemented with this default: whole dock deleted; mobile navigation is the drawer) |
+ | Q5 | `ayzen.tech/api`: proxy, or 308 redirect to `api.ayzen.tech`? | Audit recommends proxy + deprecation header. | _pending_ |
+ | Q6 | Is Exchange a 9th module (own host, prefix `EXC`, landing, login)? | Affects registry size (W0-P3 is built for 8; adding one is a single registry entry). | _pending_ |
+ | Q7 | Where do self-hosted tools run (Hetzner / DigitalOcean VPS, k8s)? Budget? | Bitcoin Core needs hundreds of GB unless pruned. | _pending_ |
+diff --git a/docs/module-shell-qa.md b/docs/module-shell-qa.md
+index 2612ecb..f50ccdf 100644
+--- a/docs/module-shell-qa.md
++++ b/docs/module-shell-qa.md
+@@ -4,13 +4,13 @@ Static analysis of the shipped code (S1-S7). Browser smoke tests were NOT runnab
+ 
+ Modules: sylo, skarn, warde, wisp, ryft, fyra, verve, zynth
+ Roles: user, admin, moderator, team_leader
+-Surfaces: desktop, mobile (Sheet drawer, no rail)
++Surfaces: desktop, mobile (Sheet drawer, no rail; no bottom dock since W2-P3)
+ 
+ Per module x role (all 8 x 4):
+ - Sidebar contents: module-only nav (filterGroupsBySubdomain over role groups; DB-driven useNavConfig merges first, static arrays fallback) - P
+ - Back link: "<- AYZEN" plain anchor to centralUrl("/") - P
+ - Collapse: 4rem icon rail desktop, per-module localStorage, [ shortcut - P; mobile no rail - P
+-- Cross-module link: ModuleLink/module-aware go() full-navigates to the target subdomain (wisp mail shortcuts, dock tabs, search results) - P; page-level links partly pending (82, listed in CHANGES_MODULE_SHELL_S5.md) - KNOWN
++- Cross-module link: ModuleLink/module-aware go() full-navigates to the target subdomain (wisp mail shortcuts, search results; the mobile dock was removed in W2-P3) - P; page-level links partly pending (82, listed in CHANGES_MODULE_SHELL_S5.md) - KNOWN
+ - Public link: ALWAYS_ALLOWED_PREFIXES render on any host, never redirected (S6) - P
+ 
+ Central (ayzen.tech) x role:
+diff --git a/package.json b/package.json
+index 010c691..08be3ac 100644
+--- a/package.json
++++ b/package.json
+@@ -11,6 +11,7 @@
+     "validate:w1-p1": "node scripts/validate-w1-p1.mjs",
+     "validate:w1-p2": "node scripts/validate-w1-p2.mjs",
+     "validate:w1-p3": "pnpm --filter @workspace/scripts oidc:test-conformance && node --test scripts/smoke-oidc-endpoints.test.mjs",
++    "validate:w2-p3": "node scripts/validate-w2-p3.mjs && node scripts/validate-w2-p3.mjs --self-test",
+     "check:module-bundles": "node scripts/check-module-bundles.mjs && node scripts/check-module-bundles.mjs --self-test && node scripts/gen-module-deploy.mjs --check && pnpm --filter @workspace/scripts module-build:test",
+     "check:module-isolation": "node scripts/check-module-isolation.mjs && node scripts/check-module-isolation.mjs --self-test && pnpm --filter @workspace/api-server test:module-host-guard",
+     "validate:w1-p5": "node scripts/validate-w1-p5.mjs && node scripts/validate-w1-p5.mjs --self-test && pnpm --filter @workspace/api-server test:clerk && pnpm --filter @workspace/scripts clerk:test-module-client",
+diff --git a/scripts/validate-w2-p3.mjs b/scripts/validate-w2-p3.mjs
+new file mode 100644
+index 0000000..881f777
+--- /dev/null
++++ b/scripts/validate-w2-p3.mjs
+@@ -0,0 +1,97 @@
++#!/usr/bin/env node
++/**
++ * scripts/validate-w2-p3.mjs — W2-P3 static validator (remove the mobile bottom dock, req 5). Install-free.
++ *   node scripts/validate-w2-p3.mjs            # validate the tree
++ *   node scripts/validate-w2-p3.mjs --self-test  # prove each rule fails on a deliberate breakage
++ * The viewport behavior is tested by tests/e2e/mobile-nav/mobile-no-dock.spec.mjs (needs a browser).
++ */
++import { existsSync, readFileSync, readdirSync } from "node:fs";
++import { dirname, join, relative } from "node:path";
++import { fileURLToPath } from "node:url";
++
++const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
++const SRC = "artifacts/ayzen/src";
++const FILES = [`${SRC}/components/layout/app-layout.tsx`, `${SRC}/components/layout/app-sidebar.tsx`, "tests/e2e/mobile-nav/mobile-no-dock.spec.mjs",
++  ".github/workflows/ci.yml", "docs/module-shell-qa.md", "docs/architecture/ADR-W0-FREEZE.md"];
++
++function load(extra = {}) {
++  const files = Object.fromEntries(FILES.map((f) => [f, readFileSync(join(ROOT, f), "utf8")]));
++  const tree = {};
++  const walk = (d) => { for (const e of readdirSync(join(ROOT, d), { withFileTypes: true })) { const p = `${d}/${e.name}`; if (e.isDirectory()) walk(p); else if (/\.(tsx?|css)$/.test(e.name)) tree[p] = readFileSync(join(ROOT, p), "utf8"); } };
++  walk(SRC);
++  return { files: { ...files, ...extra.files }, tree: { ...tree, ...extra.tree }, dockFileExists: extra.dockFileExists ?? existsSync(join(ROOT, `${SRC}/components/layout/mobile-dock.tsx`)) };
++}
++const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'`\\])\/\/[^\n]*/g, "$1");
++
++const RULES = [
++  ["mobile-dock.tsx is deleted and nothing in the SPA refers to it", (t) => {
++    if (t.dockFileExists) return "components/layout/mobile-dock.tsx still exists";
++    const refs = Object.entries(t.tree).filter(([, s]) => /MobileDock|mobile-dock/.test(strip(s))).map(([f]) => relative(SRC, f));
++    return refs.length ? `still referenced from: ${refs.join(", ")}` : null;
++  }],
++  ["no other full-width fixed bottom bar exists in the SPA (a dock under another name)", (t) => {
++    // components/ui/* are modal primitives (drawer, sheet, toast): overlays that appear on demand, not a persistent bar.
++    const bad = Object.entries(t.tree).filter(([f]) => !f.startsWith(`${SRC}/components/ui/`)).filter(([, s]) => /fixed[^"'`]*\bbottom-0\b[^"'`]*\bleft-0\b[^"'`]*\bright-0\b|fixed[^"'`]*\binset-x-0\b[^"'`]*\bbottom-0\b/.test(strip(s))).map(([f]) => relative(SRC, f));
++    return bad.length ? `fixed bottom bar in: ${bad.join(", ")}` : null;
++  }],
++  ["AppLayout: no bottom padding reserved for a dock (pb-24 md:pb-8 is gone)", (t) => {
++    const a = strip(t.files[`${SRC}/components/layout/app-layout.tsx`]);
++    return /pb-24/.test(a) ? "pb-24 is still reserved" : /flex-1 pb-8">/.test(a) ? null : "content padding changed";
++  }],
++  ["mobile navigation is the drawer: Sheet with AppSidebar, closes on navigate, opened by an accessible hamburger", (t) => {
++    const a = t.files[`${SRC}/components/layout/app-layout.tsx`];
++    const need = ["isMobile ? (", "<Sheet open={mobileOpen} onOpenChange={setMobileOpen}>", 'data-testid="mobile-nav-drawer"', '<SheetTitle className="sr-only">', "<AppSidebar onNavigate={() => setMobileOpen(false)} />",
++      'aria-label="Open navigation menu"', 'data-testid="mobile-nav-toggle"', "onClick={() => setMobileOpen(true)}"];
++    return need.find((n) => !a.includes(n)) ? `missing: ${need.find((n) => !a.includes(n))}` : null;
++  }],
++  ["the drawer shows the module's own navigation on a module host (ModuleSidebar via AppSidebar)", (t) => (/if \(scopedApp\) \{?\s*return <ModuleSidebar app=\{scopedApp\} onNavigate=\{onNavigate\} \/>/.test(t.files[`${SRC}/components/layout/app-sidebar.tsx`].replace(/\n/g, " ")) || t.files[`${SRC}/components/layout/app-sidebar.tsx`].includes("return <ModuleSidebar app={scopedApp} onNavigate={onNavigate} />") ? null : "AppSidebar no longer renders ModuleSidebar with onNavigate")],
++  ["viewport e2e exists (3 phone widths, screenshots, dock detector, self-test) and CI runs its self-test", (t) => {
++    const e = t.files["tests/e2e/mobile-nav/mobile-no-dock.spec.mjs"], c = t.files[".github/workflows/ci.yml"];
++    const need = ["375", "412", "767", "page.screenshot", "full-width fixed bottom bar", "--self-test", "mobile-nav-drawer"];
++    if (need.find((n) => !e.includes(n))) return `spec missing: ${need.find((n) => !e.includes(n))}`;
++    return c.includes("mobile-no-dock.spec.mjs --self-test") && c.includes("validate-w2-p3.mjs") ? null : "ci.yml does not run the spec self-test and this validator";
++  }],
++  ["docs: QA matrix no longer lists dock tabs; ADR Q4 records the default taken", (t) => {
++    const q = t.files["docs/module-shell-qa.md"], a = t.files["docs/architecture/ADR-W0-FREEZE.md"];
++    return !/\bdock tabs\b/.test(q.replace("the mobile dock was removed in W2-P3", "")) && a.includes("W2-P3 implemented with this default") ? null : "docs not updated";
++  }],
++];
++
++function run(t) { return RULES.flatMap(([id, fn]) => { let p; try { p = fn(t); } catch (e) { p = `threw: ${e.message}`; } return p ? [`${id}: ${p}`] : []; }); }
++
++if (process.argv.includes("--self-test")) {
++  const base = load();
++  const clean = run(base);
++  if (clean.length) { console.error("self-test needs a clean tree first:\n - " + clean.join("\n - ")); process.exit(1); }
++  const L = `${SRC}/components/layout/app-layout.tsx`, S = `${SRC}/components/layout/app-sidebar.tsx`;
++  const edit = (path, from, to) => (t) => { if (!t.files[path]?.includes(from)) return null; return { ...t, files: { ...t.files, [path]: t.files[path].replace(from, to) } }; };
++  const mutants = [
++    ["dock file comes back", (t) => ({ ...t, dockFileExists: true })],
++    ["a component imports the dock", (t) => ({ ...t, tree: { ...t.tree, [`${SRC}/components/x.tsx`]: 'import { MobileDock } from "./layout/mobile-dock";' } })],
++    ["a dock under another name", (t) => ({ ...t, tree: { ...t.tree, [`${SRC}/components/tabbar.tsx`]: 'export const T = () => <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden" />;' } })],
++    ["a dock via inset-x-0", (t) => ({ ...t, tree: { ...t.tree, [`${SRC}/components/tabbar2.tsx`]: 'export const T = () => <nav className="fixed inset-x-0 bottom-0" />;' } })],
++    ["bottom padding returns", edit(L, "flex-1 pb-8\">", "flex-1 pb-24 md:pb-8\">")],
++    ["drawer removed", edit(L, "<Sheet open={mobileOpen} onOpenChange={setMobileOpen}>", "<div>")],
++    ["drawer does not close on navigate", edit(L, "<AppSidebar onNavigate={() => setMobileOpen(false)} />", "<AppSidebar />")],
++    ["hamburger loses its label", edit(L, 'aria-label="Open navigation menu"', "")],
++    ["drawer loses its accessible title", edit(L, '<SheetTitle className="sr-only">', "<span>")],
++    ["drawer no longer shows module nav", edit(S, "return <ModuleSidebar app={scopedApp} onNavigate={onNavigate} />", "return <CentralSidebar onNavigate={onNavigate} />")],
++    ["e2e spec loses the dock detector", edit("tests/e2e/mobile-nav/mobile-no-dock.spec.mjs", "full-width fixed bottom bar", "bar")],
++    ["CI forgets the spec self-test", edit(".github/workflows/ci.yml", "mobile-no-dock.spec.mjs --self-test", "mobile-no-dock-x.spec.mjs --self-test")],
++    ["QA doc lists dock tabs again", edit("docs/module-shell-qa.md", "(wisp mail shortcuts, search results; the mobile dock was removed in W2-P3)", "(wisp mail shortcuts, dock tabs, search results)")],
++    ["ADR Q4 forgotten", edit("docs/architecture/ADR-W0-FREEZE.md", "W2-P3 implemented with this default", "pending")],
++  ];
++  let survived = 0;
++  for (const [name, mutate] of mutants) {
++    const m = mutate(base);
++    if (!m) { console.error(`MUTANT NOT APPLICABLE (fix the self-test): ${name}`); survived++; continue; }
++    if (run(m).length === 0) { console.error(`SURVIVED: ${name}`); survived++; }
++  }
++  console.log(survived ? `SELF-TEST FAILED: ${survived} mutant(s) not caught` : `SELF-TEST OK: ${mutants.length}/${mutants.length} mutants caught`);
++  process.exit(survived ? 1 : 0);
++}
++
++const problems = run(load());
++if (problems.length) { console.error("W2_P3_VALIDATION: FAIL\n - " + problems.join("\n - ")); process.exit(1); }
++console.log("W2_P3_VALIDATION: PASS");
++console.log(JSON.stringify({ rules: RULES.length }));
+diff --git a/tests/e2e/mobile-nav/mobile-no-dock.spec.mjs b/tests/e2e/mobile-nav/mobile-no-dock.spec.mjs
+new file mode 100644
+index 0000000..050be54
+--- /dev/null
++++ b/tests/e2e/mobile-nav/mobile-no-dock.spec.mjs
+@@ -0,0 +1,98 @@
++#!/usr/bin/env node
++/**
++ * tests/e2e/mobile-nav/mobile-no-dock.spec.mjs — W2-P3 mobile viewport screenshot test.
++ * Opens the app at phone widths and proves: no fixed bottom bar, the hamburger opens the navigation drawer (the only mobile
++ * navigation), the drawer closes again, nothing scrolls sideways; then saves a screenshot per viewport and drawer state.
++ *
++ *   E2E_BASE_URL=https://sylo.ayzen.tech E2E_TOKEN=<a valid session JWT> node tests/e2e/mobile-nav/mobile-no-dock.spec.mjs
++ *   (needs `playwright` + its chromium; screenshots go to E2E_OUT_DIR, default ./reports/mobile-nav)
++ * Without E2E_BASE_URL and E2E_TOKEN it prints SKIPPED and exits 0, so it never blocks a machine that has no running app.
++ */
++import { mkdirSync } from "node:fs";
++import { join } from "node:path";
++
++import { createServer } from "node:http";
++
++const VIEWPORTS = [{ name: "iphone-se", width: 375, height: 667 }, { name: "pixel-7", width: 412, height: 915 }, { name: "small-tablet", width: 767, height: 1024 }];
++const SELF_TEST = process.argv.includes("--self-test");
++
++// Two tiny fixture pages that model the layouts: with the old dock, and drawer-only (what AppLayout renders now).
++const page = (withDock) => `<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><style>
++body{margin:0;font-family:sans-serif}.top{display:flex;gap:8px;padding:12px;border-bottom:1px solid #ccc}
++.dock{position:fixed;bottom:0;left:0;right:0;height:64px;background:#eee;display:flex;justify-content:space-around;align-items:center}
++.drawer{position:fixed;top:0;left:0;bottom:0;width:256px;background:#fafafa;box-shadow:2px 0 8px #0003}[hidden]{display:none!important}
++main{padding:16px 16px ${withDock ? "96px" : "32px"}}</style>
++<div class=top><button data-testid=mobile-nav-toggle aria-label="Open navigation menu" aria-expanded=false>☰</button><b>Sylo</b></div>
++<main>content</main>${withDock ? '<nav class=dock><a href=/home>Home</a><a href=/projects>Projects</a><a href=/marketplace>Market</a></nav>' : ""}
++<div class=drawer data-testid=mobile-nav-drawer hidden><a href=/vault>Vault</a><a href=/projects>Projects</a></div>
++<script>const d=document.querySelector('[data-testid=mobile-nav-drawer]'),t=document.querySelector('[data-testid=mobile-nav-toggle]');
++t.onclick=()=>{d.hidden=false;t.setAttribute('aria-expanded','true')};addEventListener('keydown',e=>{if(e.key==='Escape'){d.hidden=true;t.setAttribute('aria-expanded','false')}})</script>`;
++
++async function serve(withDock) {
++  const server = createServer((_, res) => { res.setHeader("content-type", "text/html"); res.end(page(withDock)); });
++  await new Promise((r) => server.listen(0, "127.0.0.1", r));
++  return { server, url: `http://127.0.0.1:${server.address().port}` };
++}
++
++async function runAgainst(base, token, out) {
++  mkdirSync(out, { recursive: true });
++  const { chromium } = await import("playwright");
++  const failures = [];
++  const check = (ok, msg) => { if (!ok) failures.push(msg); };
++  const browser = await chromium.launch();
++  try {
++    for (const vp of VIEWPORTS) {
++      const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
++      await ctx.addInitScript((t) => { try { localStorage.setItem("ayzen_token", t); } catch { /* ignore */ } }, token);
++      const page = await ctx.newPage();
++      await page.goto(new URL("/home", base).href, { waitUntil: "networkidle" });
++      const toggle = page.getByTestId("mobile-nav-toggle");
++      await toggle.waitFor({ state: "visible", timeout: 20000 });
++  
++      // 1. No fixed element glued to the bottom edge that spans the width (the old dock was `fixed bottom-0 left-0 right-0`).
++      const bottomBars = await page.evaluate(() => [...document.querySelectorAll("nav, div, footer")].filter((el) => {
++        const s = getComputedStyle(el); const r = el.getBoundingClientRect();
++        return s.position === "fixed" && r.width >= innerWidth * 0.9 && Math.abs(r.bottom - innerHeight) < 2 && r.height < 140 && r.height > 20;
++      }).length);
++      check(bottomBars === 0, `${vp.name}: found ${bottomBars} full-width fixed bottom bar(s)`);
++  
++      // 2. The drawer is the navigation: opens from the hamburger, shows links, closes.
++      check((await toggle.getAttribute("aria-label")) === "Open navigation menu", `${vp.name}: hamburger lost its aria-label`);
++      await page.screenshot({ path: join(out, `${vp.name}-closed.png`) });
++      await toggle.click();
++      const drawer = page.getByTestId("mobile-nav-drawer");
++      await drawer.waitFor({ state: "visible", timeout: 5000 });
++      check((await drawer.locator("a").count()) > 0, `${vp.name}: drawer has no navigation links`);
++      await page.screenshot({ path: join(out, `${vp.name}-drawer-open.png`) });
++      await page.keyboard.press("Escape");
++      await drawer.waitFor({ state: "hidden", timeout: 5000 });
++  
++      // 3. No horizontal overflow and the page content reaches the bottom (no dead 6rem gap left by the old dock).
++      const m = await page.evaluate(() => ({ overflowX: document.documentElement.scrollWidth - innerWidth }));
++      check(m.overflowX <= 1, `${vp.name}: horizontal overflow of ${m.overflowX}px`);
++      await ctx.close();
++    }
++  } finally { await browser.close(); }
++  
++  
++  return failures;
++}
++
++if (SELF_TEST) {
++  let bad = 0;
++  const withDock = await serve(true), drawerOnly = await serve(false);
++  try {
++    const f1 = await runAgainst(withDock.url, "x", "reports/mobile-nav-selftest/dock");
++    if (!f1.some((m) => m.includes("fixed bottom bar"))) { console.error("SELF-TEST FAILED: the old dock layout was not detected"); bad++; }
++    const f2 = await runAgainst(drawerOnly.url, "x", "reports/mobile-nav-selftest/drawer");
++    if (f2.length) { console.error("SELF-TEST FAILED: the drawer-only layout was flagged:\n - " + f2.join("\n - ")); bad++; }
++  } finally { withDock.server.close(); drawerOnly.server.close(); }
++  console.log(bad ? "SELF-TEST FAILED" : "SELF-TEST OK: dock layout fails, drawer-only layout passes (3 viewports each)");
++  process.exit(bad ? 1 : 0);
++}
++
++const base = process.env.E2E_BASE_URL, token = process.env.E2E_TOKEN;
++if (!base || !token) { console.log("SKIPPED: set E2E_BASE_URL and E2E_TOKEN (a valid session JWT) to run the mobile viewport test"); process.exit(0); }
++const failures = await runAgainst(base, token, process.env.E2E_OUT_DIR ?? "reports/mobile-nav");
++if (failures.length) { console.error("MOBILE_NAV_E2E: FAIL\n - " + failures.join("\n - ")); process.exit(1); }
++console.log(`MOBILE_NAV_E2E: PASS (${VIEWPORTS.length} viewports, screenshots in ${process.env.E2E_OUT_DIR ?? "reports/mobile-nav"})`);
+-- 
+2.43.0
+
