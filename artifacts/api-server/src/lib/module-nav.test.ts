@@ -11,9 +11,9 @@ const section = (label: string, children: unknown[], extra: object = {}) => ({ l
 
 // Same shape as the "Vault" group in USER_NAV / ADMIN_NAV (app-sidebar.tsx).
 const vaultGroup = (withHref = true) => ({
-  label: "Vault", icon: Icon, ...(withHref ? { href: "/vault/hub" } : {}),
+  label: "Vault", icon: Icon, ...(withHref ? { href: "/vault" } : {}),
   items: [
-    section("Account", [leaf("/vault?tab=entity", "Entity"), leaf("/vault?tab=local", "Local")]),
+    section("Account", [leaf("/vault/account/entity/home", "Entity"), leaf("/vault/account/local/home", "Local")]),
     section("Access", [leaf("/vault/2fa/overview", "2FA"), leaf("/vault/backup/overview", "Backup Code")]),
     section("Enrollment", [leaf("/vault/enrollment/overview", "Overview"), leaf("/vault/projects", "Enroll")]),
     section("Other", [leaf("/vault/shared", "Shared"), leaf("/vault/trash", "Trash")]),
@@ -24,43 +24,43 @@ const labels = (groups: Array<{ label: string }>) => groups.map((g) => g.label);
 
 test("Sylo: the Vault wrapper is dissolved into Account / Access / Enroll / Other", () => {
   const out = restructureModuleGroups(syloNav, [vaultGroup()]);
-  assert.deepEqual(labels(out), ["Hub", "Account", "Access", "Enroll", "Other"]);
+  assert.deepEqual(labels(out), ["Home", "Account", "Access", "Enroll", "Other"]);
   assert.ok(!labels(out).includes("Vault"));
   assert.deepEqual(out[1].items.map((i: any) => i.label), ["Entity", "Local"]);
   assert.deepEqual(out[3].items.map((i: any) => i.label), ["Overview", "Enroll"], "Enrollment renamed to Enroll, children kept");
-  assert.equal((out[0].items[0] as any).href, "/vault/hub", "the wrapper's hub link stays reachable");
+  assert.equal((out[0].items[0] as any).href, "/vault", "the Console link stays reachable");
 });
 
 test("works on the DB-driven nav (no group href) too", () => {
   const out = restructureModuleGroups(syloNav, [vaultGroup(false)]);
-  assert.deepEqual(labels(out), ["Hub", "Account", "Access", "Enroll", "Other"]);
+  assert.deepEqual(labels(out), ["Home", "Account", "Access", "Enroll", "Other"]);
 });
 
 test("every leaf survives, none duplicated", () => {
   const hrefs = (gs: any[]): string[] => gs.flatMap((g) => g.items.flatMap(function walk(e: any): string[] { return e.children ? e.children.flatMap(walk) : [e.href]; }));
   const before = hrefs([vaultGroup()]);
-  const after = hrefs(restructureModuleGroups(syloNav, [vaultGroup()])).filter((h) => h !== "/vault/hub");
+  const after = hrefs(restructureModuleGroups(syloNav, [vaultGroup()])).filter((h) => h !== "/vault");
   assert.deepEqual(after.sort(), before.sort());
 });
 
 test("order is enforced even if the source order differs; unknown sections go last", () => {
   const g: any = vaultGroup();
   g.items = [g.items[3], section("Extras", [leaf("/vault/x", "X")]), g.items[2], g.items[1], g.items[0]];
-  assert.deepEqual(labels(restructureModuleGroups(syloNav, [g])), ["Hub", "Account", "Access", "Enroll", "Other", "Extras"]);
+  assert.deepEqual(labels(restructureModuleGroups(syloNav, [g])), ["Home", "Account", "Access", "Enroll", "Other", "Extras"]);
 });
 
 test("admin and non-vault groups are untouched and keep their position", () => {
   const admin: any = { label: "Team Vault", icon: Icon, items: [leaf("/admin/team-vault", "Team Vault")] };
   const adminVault: any = { label: "Vault", icon: Icon, items: [leaf("/admin/vault", "Entities")] };
   const out = restructureModuleGroups(syloNav, [adminVault, vaultGroup(), admin]);
-  assert.deepEqual(labels(out), ["Vault", "Hub", "Account", "Access", "Enroll", "Other", "Team Vault"]);
+  assert.deepEqual(labels(out), ["Vault", "Home", "Account", "Access", "Enroll", "Other", "Team Vault"]);
   assert.equal(out[0], adminVault, "an admin 'Vault' group is not mistaken for the user wrapper");
 });
 
 test("loose leaves under the wrapper land in Other; a plugin gate on a section is kept", () => {
   const g: any = vaultGroup();
   g.items.push(leaf("/vault/loose", "Loose"));
-  g.items[0] = section("Account", [leaf("/vault?tab=entity", "Entity")], { pluginSlug: "vault" });
+  g.items[0] = section("Account", [leaf("/vault/account/entity/home", "Entity")], { pluginSlug: "vault" });
   const out = restructureModuleGroups(syloNav, [g]);
   assert.ok(out.find((x) => x.label === "Other")!.items.some((i: any) => i.href === "/vault/loose"));
   assert.equal(out.find((x) => x.label === "Account")!.pluginSlug, "vault");
@@ -79,7 +79,7 @@ test("modules without a config keep the inherited sidebar", () => {
 
 test("the real central nav still has the Vault group shape this config expects", () => {
   const source = readFileSync(new URL("../../../ayzen/src/components/layout/app-sidebar.tsx", import.meta.url), "utf8");
-  const start = source.indexOf('label: "Vault", icon: Vault, href: "/vault/hub"');
+  const start = source.indexOf('label: "Vault", icon: Vault, href: SYLO_HOME');
   assert.notEqual(start, -1);
   const block = source.slice(start, start + 2600);
   for (const section of ['label: "Account"', 'label: "Access"', 'label: "Enrollment"', 'label: "Other"']) assert.ok(block.includes(section), section);

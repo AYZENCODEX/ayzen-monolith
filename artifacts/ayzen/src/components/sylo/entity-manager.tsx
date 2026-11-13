@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, lazy, Suspense } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
 import { useListVaultEntries, useDeleteVaultEntry, customFetch } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
@@ -7,55 +7,34 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Plus, KeyRound, Trash2, Eye, EyeOff,
-  Copy, Check, Mail, Hash, Lock, Shield,
-  Phone, AtSign, X, Smartphone,
-  QrCode, Search, Download, Upload, Wallet, AlertTriangle, Star,
-  Loader2, Edit2, MoreVertical, LayoutDashboard, List, Users, HardDrive,
-  ShieldCheck, Tag, CheckSquare, Share2,
-  TrendingUp, TrendingDown, Minus, FolderGit2, ShieldAlert, Ban, XCircle, CheckCircle2,
+  Plus, KeyRound, Trash2, Mail, Lock, Shield, X, Search, Download, Upload, Wallet,
+  AlertTriangle, Star, Loader2, Edit2, MoreVertical, Users, HardDrive, ShieldCheck, Tag,
+  CheckSquare, Share2, TrendingUp, TrendingDown, Minus, FolderGit2, ShieldAlert, Ban, XCircle,
+  CheckCircle2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
-import { RankBadge, getEntityRank } from "@/lib/entity-rank";
+import { RankBadge } from "@/lib/entity-rank";
 import { computeEntityPerformanceScore, type EntityLeaderboardRow } from "@/lib/performance-score";
-import LocalAccounts from "@/components/local-accounts";
 import { LocalEntityPicker } from "@/components/vault/local-entity-picker";
-import { VaultSidebar } from "@/components/layout/vault-sidebar";
 import { DataEntityPicker } from "@/components/vault/data-entity-picker";
-import KycEntries from "@/components/kyc-entries";
-import GameEntries from "@/components/game-entries";
 import { QRCodeSVG } from "qrcode.react";
 import { computeEntityWorth, computeEntityBuyValue, computeEntityProfit, computeEntityProfitPct, metricLabelFor } from "@/lib/entity-worth";
 import { SchemaForm } from "@/components/schema/SchemaForm";
 import { ENTITY_FIELDS, ACCOUNT_SUBTABS } from "@/config/fields/entity-create";
-import { ValueEntryDialog, ValueEntryButton, FollowerEntryDialog, FollowerEntryButton } from "@/components/value-entry-dialog";
-import { ValuePnlPanel } from "@/components/value-pnl-panel";
+import { ValueEntryDialog, FollowerEntryDialog } from "@/components/value-entry-dialog";
 import { ImapSmtpForm, type EmailAccount } from "@/components/mail/imap-smtp-form";
 import { ShareEntityDialog, type ShareTarget } from "@/components/vault/share-entity-dialog";
 import { validateWalletKey, type WalletKeyValidationResult } from "@/lib/vault-key-validation-api";
 import { ManageSharesDialog } from "@/components/vault/manage-shares-dialog";
-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
+import { VaultLoading } from "@/components/vault/vault-loading";
 import { useModuleAwareNavigate } from "@/components/module-link";
 
 const MAIL_BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
-
-const VaultLocalDashboard = lazy(() => import("@/pages/user/vault-local-dashboard"));
-const VaultKycDashboard = lazy(() => import("@/pages/user/vault-kyc-dashboard"));
-const VaultEntityDashboard = lazy(() => import("@/pages/user/vault-entity-dashboard"));
-const VaultMail = lazy(() => import("@/pages/user/vault-mail"));
-const VaultWalletSeed = lazy(() => import("@/pages/user/vault-wallet-seed"));
-
-
-
-function LoadingTab() {
-  return <VaultLoadingIntro title="Loading dashboard" />;
-}
 
 // ─── Phase 18 — buy-value vs worth badge ────────────────────────────────────
 // Reuses the existing computeEntityBuyValue/computeEntityProfit(Pct) helpers
@@ -121,64 +100,6 @@ function EntityStatusFlags({ entry, leaderboardRow }: { entry: EntryAny; leaderb
           <f.icon className="w-2.5 h-2.5" /> {f.label}
         </span>
       ))}
-    </div>
-  );
-}
-
-function CopyBtn({ value }: { value: string }) {
-  const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  return (
-    <button onClick={copy} className={cn("p-1.5 rounded transition-all", copied ? "text-emerald-400" : "text-muted-foreground/40 hover:text-primary hover:bg-primary/10")}>
-      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-    </button>
-  );
-}
-
-function CredField({ label, value }: { label: string; value: string | null | undefined }) {
-  const [shown, setShown] = useState(false);
-  const [copied, setCopied] = useState(false);
-  if (!value) return null;
-  const copy = async () => {
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  return (
-    <div className="flex items-center gap-2 group/row py-0.5">
-      <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-wider w-14 flex-shrink-0">{label}</span>
-      <span className={cn("flex-1 font-mono text-[11px] truncate", shown ? "text-foreground/90" : "text-muted-foreground/60")}>
-        {shown ? value : "•".repeat(Math.min(value.length, 12))}
-      </span>
-      <div className="flex items-center gap-1 flex-shrink-0">
-        <button onClick={() => setShown(s => !s)} className="text-muted-foreground/40 hover:text-primary transition-colors">
-          {shown ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-        </button>
-        <button onClick={copy} className={cn("transition-colors", copied ? "text-emerald-400" : "text-muted-foreground/40 hover:text-primary")}>
-          {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function PlatformSection({ title, color, icon: Icon, fields }: {
-  title: string; color: string; icon: React.ElementType;
-  fields: { label: string; value: string | null | undefined }[];
-}) {
-  const hasAny = fields.some(f => f.value);
-  if (!hasAny) return null;
-  return (
-    <div className="space-y-0.5 py-2 border-t border-border/30 first:border-0 first:pt-0">
-      <div className="flex items-center gap-1.5 mb-1.5">
-        <Icon className={cn("w-3 h-3", color)} />
-        <span className={cn("text-[9px] font-mono uppercase tracking-widest font-bold", color)}>{title}</span>
-      </div>
-      {fields.map(f => <CredField key={f.label} label={f.label} value={f.value} />)}
     </div>
   );
 }
@@ -394,7 +315,7 @@ function newIdempotencyKey(): string {
 }
 
 // ── Entity Manager (full CRUD) ─────────────────────────────────────────────────
-function EntityManager() {
+export function EntityManager() {
   const { data, isLoading } = useListVaultEntries();
   // VLT-GAP-19: every create carries an Idempotency-Key so a request whose response was lost (dropped connection, server restart)
   // can be retried without creating a second entity. The key is kept for as long as the same payload is being (re)submitted and
@@ -522,6 +443,20 @@ function EntityManager() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlEditIdParam, isLoading, allEntries]);
+
+  // Open the Add dialog for ?new=1 (the Console's "New entity" action), then
+  // drop the param so a refresh or Back doesn't reopen it.
+  const [location, setLocation] = useLocation();
+  const wantsNew = new URLSearchParams(urlSearch).get("new") === "1";
+  useEffect(() => {
+    if (!wantsNew) return;
+    resetForm(); setEditId(null); setDialogKey(k => k + 1); setOpen(true);
+    const params = new URLSearchParams(urlSearch);
+    params.delete("new");
+    const rest = params.toString();
+    setLocation(rest ? `${location}?${rest}` : location, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wantsNew]);
 
   // Per-entity project progress, for the badge/performance-score formula
   // (see src/lib/performance-score.ts). Fetched once for the whole list
@@ -1105,7 +1040,7 @@ function EntityManager() {
 
       {/* Entity grid */}
       {isLoading || !entriesIntroFinished ? (
-        <VaultLoadingIntro
+        <VaultLoading
           title="Loading your vault entities"
           done={!isLoading}
           onFinished={() => setEntriesIntroFinished(true)}
@@ -1845,154 +1780,3 @@ function EntityManager() {
   );
 }
 
-// ── Entity Tab wrapper (Dashboard + List) ───────────────────────────────────────
-function EntityTab() {
-  const search = useSearch();
-  const urlEditId = new URLSearchParams(search).get("editId");
-  // Force list view when a specific editId is passed in the URL (from Edit button on detail page)
-  const [view, setView] = useState<"dashboard" | "list">(urlEditId ? "list" : "dashboard");
-  const effectiveView = urlEditId ? "list" : view;
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-1 bg-muted/20 rounded-lg p-1 w-fit">
-        <button
-          onClick={() => setView("dashboard")}
-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", effectiveView === "dashboard" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
-        >
-          <LayoutDashboard className="w-3 h-3" /> Dashboard
-        </button>
-        <button
-          onClick={() => setView("list")}
-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", effectiveView === "list" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
-        >
-          <List className="w-3 h-3" /> Manage
-        </button>
-      </div>
-      {effectiveView === "dashboard" ? (
-        <Suspense fallback={<LoadingTab />}>
-          <VaultEntityDashboard />
-        </Suspense>
-      ) : (
-        <EntityManager />
-      )}
-    </div>
-  );
-}
-
-// ── Local Tab wrapper (Dashboard + Account) ─────────────────────────────────────
-function LocalTab() {
-  const [view, setView] = useState<"dashboard" | "account">("dashboard");
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-1 bg-muted/20 rounded-lg p-1 w-fit">
-        <button
-          onClick={() => setView("dashboard")}
-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", view === "dashboard" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
-        >
-          <LayoutDashboard className="w-3 h-3" /> Dashboard
-        </button>
-        <button
-          onClick={() => setView("account")}
-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", view === "account" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
-        >
-          <Smartphone className="w-3 h-3" /> Account
-        </button>
-      </div>
-      {view === "dashboard" ? (
-        <Suspense fallback={<LoadingTab />}>
-          <VaultLocalDashboard />
-        </Suspense>
-      ) : (
-        <LocalAccounts />
-      )}
-    </div>
-  );
-}
-
-// ── KYC Tab wrapper (Dashboard + Manage) ────────────────────────────────────
-// Same Dashboard/Manage split as LocalTab above: Dashboard gives an
-// Overview (progress cards per category) + Category switch (view entities
-// grouped by exchange/platform category), Manage is the existing KycEntries
-// create/edit/list view.
-function KycTab() {
-  const [view, setView] = useState<"dashboard" | "manage">("dashboard");
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-1 bg-muted/20 rounded-lg p-1 w-fit">
-        <button
-          onClick={() => setView("dashboard")}
-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", view === "dashboard" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
-        >
-          <LayoutDashboard className="w-3 h-3" /> Dashboard
-        </button>
-        <button
-          onClick={() => setView("manage")}
-          className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", view === "manage" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}
-        >
-          <List className="w-3 h-3" /> Manage
-        </button>
-      </div>
-      {view === "dashboard" ? (
-        <Suspense fallback={<LoadingTab />}>
-          <VaultKycDashboard />
-        </Suspense>
-      ) : (
-        <KycEntries />
-      )}
-    </div>
-  );
-}
-
-// ── Main Vault Page ────────────────────────────────────────────────────────────
-type VaultTab = "entity" | "wallet" | "local" | "mail" | "kyc" | "game";
-
-const TAB_META: Record<VaultTab, { label: string; desc: string }> = {
-  entity: { label: "Entity Vault",   desc: "Manage credentials and track entity health completeness" },
-  wallet: { label: "Wallet & Seeds", desc: "Seed phrases encrypted per entity + real-time MetaMask connect" },
-  local:  { label: "Local Accounts", desc: "Dashboard analytics and account management for local platforms" },
-  mail:   { label: "Mail Hub",       desc: "All emails from entities and local accounts in one place" },
-  kyc:    { label: "KYC",            desc: "KYC entities per exchange/platform — account, email, and seller/buyer info" },
-  game:   { label: "Game",           desc: "Game accounts vault — account, email, rank/level/tags per platform" },
-};
-
-export default function UserVault() {
-  const search = useSearch();
-  const tab = (new URLSearchParams(search).get("tab") as VaultTab) || "entity";
-  const meta = TAB_META[tab] ?? TAB_META["entity"];
-
-  return (
-    <div className="space-y-5 page-enter">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold font-mono tracking-tighter uppercase flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-              <KeyRound className="w-4 h-4 text-primary" />
-            </div>
-            {meta.label}
-          </h1>
-          <p className="text-muted-foreground font-mono text-xs mt-1 pl-0.5">{meta.desc}</p>
-        </div>
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-5 min-h-0">
-        <VaultSidebar />
-        <div className="flex-1 min-w-0">
-          {tab === "entity" && <EntityTab />}
-          {tab === "local"  && <LocalTab />}
-          {tab === "kyc"    && <KycTab />}
-          {tab === "game"   && <GameEntries />}
-          {tab === "wallet" && (
-            <Suspense fallback={<LoadingTab />}>
-              <VaultWalletSeed />
-            </Suspense>
-          )}
-          {tab === "mail" && (
-            <Suspense fallback={<LoadingTab />}>
-              <VaultMail />
-            </Suspense>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}

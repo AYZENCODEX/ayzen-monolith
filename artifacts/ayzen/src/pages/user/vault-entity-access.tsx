@@ -39,6 +39,7 @@ import { TOTPCard } from "@/components/vault/totp-card";
 import { VaultMailEntityBody } from "@/pages/user/vault-mail-entity";
 import { EntityBackupDetail } from "@/pages/user/vault-backup";
 import { useModuleAwareNavigate } from "@/components/module-link";
+import { accountPath } from "@/lib/sylo-routes";
 
 type EntryAny = any;
 type AccessTab = "2fa" | "mail" | "backup";
@@ -82,7 +83,7 @@ function VaultEntityAccessContent() {
   if (!entry) {
     return (
       <div className="space-y-4">
-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=entity")} className="font-mono text-xs gap-1.5">
+        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("entity", "management"))} className="font-mono text-xs gap-1.5">
           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
         </Button>
         <div className="text-center py-20">

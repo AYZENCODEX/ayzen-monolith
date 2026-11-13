@@ -8,7 +8,7 @@ const DOCK_ITEMS = [
   { href: "/home",        icon: Home,       label: "Home",    authRequired: "/home" },
   { href: "/projects",    icon: FolderGit2, label: "Projects", authRequired: "/projects" },
   { href: "/marketplace", icon: Store,      label: "Market",  authRequired: "/marketplace" },
-  { href: "/vault?tab=entity", icon: Shield, label: "Vault",  authRequired: "/vault" },
+  { href: "/vault", icon: Shield, label: "Vault",  authRequired: "/vault" },
   { href: "/teams",       icon: Users,      label: "Teams",   authRequired: "/teams" },
 ] as const;
 

@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { getLocalAccountDashboardMeta } from "@/config/vault-local";
 import { ReceiptLinkDialog } from "@/components/receipt-link-dialog";
 import { categoryReceiptApi } from "@/lib/receipt-api";
-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
+import { VaultLoading } from "@/components/vault/vault-loading";
 
 interface LocalAccount {
   id: number;
@@ -404,7 +404,7 @@ export default function VaultLocalDashboard() {
       </div>
 
       {loading ? (
-        <VaultLoadingIntro title="Loading local accounts" done={!loading} />
+        <VaultLoading title="Loading local accounts" done={!loading} />
       ) : tab === "overview" ? (
         <OverviewTab accounts={accounts} onSelectCategory={openCategory} />
       ) : tab === "category" ? (

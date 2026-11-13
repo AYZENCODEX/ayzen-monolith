@@ -39,6 +39,11 @@
   --font-sans: var(--ui-font-sans, 'Space Mono', 'Inter', monospace, sans-serif);
   --font-mono: var(--ui-font-mono, 'Space Mono', monospace);
 
+  /* Proportional UI face for the console kit (components/console). Space Mono
+     stays the default for the rest of the app and for tabular data; the kit
+     uses font-ui for labels/prose so dense screens stay readable. */
+  --font-ui: var(--ui-font-ui, 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+
   --radius-sm: var(--ui-radius-sm, 2px);
   --radius-md: var(--ui-radius-md, 4px);
   --radius-lg: var(--ui-radius-lg, 8px);

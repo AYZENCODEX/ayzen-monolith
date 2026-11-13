@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/vault-sidebar";
 import { getVaultActivity, type VaultActivityEntry } from "@/lib/vault-security-api";
-import { VaultLoadingIntro } from "@/components/vault/vault-loading-intro";
+import { VaultLoading } from "@/components/vault/vault-loading";
 import { cn } from "@/lib/utils";
 import { useModuleAwareNavigate } from "@/components/module-link";
 
@@ -119,7 +119,7 @@ export default function VaultActivity() {
       }
     >
       {isLoading ? (
-        <VaultLoadingIntro title="Loading activity log" done={!isLoading} />
+        <VaultLoading title="Loading activity log" done={!isLoading} />
       ) : entries.length === 0 ? (
         <VaultSectionEmptyState
           icon={History}

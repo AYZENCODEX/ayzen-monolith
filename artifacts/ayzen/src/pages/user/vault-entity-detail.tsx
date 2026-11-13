@@ -35,6 +35,7 @@ import { updateVaultField, getVaultFieldHistory, type VaultFieldHistoryEntry } f
 import { ReceiptLinkDialog } from "@/components/receipt-link-dialog";
 import { vaultEntityReceiptApi } from "@/lib/receipt-api";
 import { useModuleAwareNavigate } from "@/components/module-link";
+import { accountPath } from "@/lib/sylo-routes";
 
 type EntryAny = any;
 
@@ -386,7 +387,7 @@ function VaultEntityDetailContent() {
   if (!entry) {
     return (
       <div className="space-y-4">
-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=entity")} className="font-mono text-xs gap-1.5">
+        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("entity", "management"))} className="font-mono text-xs gap-1.5">
           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
         </Button>
         <div className="text-center py-20">
@@ -411,7 +412,7 @@ function VaultEntityDetailContent() {
       onSuccess: () => {
         toast({ title: "Moved to Trash", description: "Restorable from Vault → Trash for 30 days." });
         queryClient.invalidateQueries();
-        navigate("/vault?tab=entity");
+        navigate(accountPath("entity", "management"));
       },
       onError: () => toast({ variant: "destructive", title: "Failed to delete" }),
     });
@@ -484,7 +485,7 @@ function VaultEntityDetailContent() {
       {/* Back + header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=entity")} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
+          <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("entity", "management"))} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
             <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
           </Button>
           <div className="flex items-center gap-3">
@@ -519,7 +520,7 @@ function VaultEntityDetailContent() {
           <Button variant="outline" size="sm" onClick={() => setReceiptDialogOpen(true)} className="font-mono text-xs gap-1.5">
             <Sparkles className="w-3.5 h-3.5" /> Receipt
           </Button>
-          <Button variant="outline" size="sm" onClick={() => navigate(`/vault?tab=entity&editId=${entry.id}`)} className="font-mono text-xs gap-1.5">
+          <Button variant="outline" size="sm" onClick={() => navigate(`${accountPath("entity", "management")}?editId=${entry.id}`)} className="font-mono text-xs gap-1.5">
             <Edit2 className="w-3.5 h-3.5" /> Edit
           </Button>
           <Button

@@ -391,13 +391,13 @@ const MODERATOR_NAV: NavGroup[] = [
     ],
   },
   {
-    label: "Vault", icon: Vault, href: "/vault/hub",
+    label: "Vault", icon: Vault, href: SYLO_HOME,
     items: [
       { label: "Account", icon: Shield, children: [
-        { href: "/vault?tab=entity",          label: "Entity",       icon: Shield },
-        { href: "/vault?tab=local",           label: "Local",        icon: Smartphone },
-        { href: "/vault?tab=kyc",             label: "KYC",          icon: ShieldCheck },
-        { href: "/vault?tab=game",            label: "Game",         icon: Gamepad2 },
+        { href: accountPath("entity", "home"),          label: "Entity",       icon: Shield },
+        { href: accountPath("local", "home"),           label: "Local",        icon: Smartphone },
+        { href: accountPath("kyc", "home"),             label: "KYC",          icon: ShieldCheck },
+        { href: accountPath("game", "management"),            label: "Game",         icon: Gamepad2 },
       ]},
       { label: "Access", icon: Key, children: [
         { href: "/vault/2fa/overview",        label: "2FA",          icon: ShieldCheck },
@@ -712,13 +712,13 @@ const TEAM_LEADER_NAV: NavGroup[] = [
     ],
   },
   {
-    label: "Vault", icon: Vault, href: "/vault/hub",
+    label: "Vault", icon: Vault, href: SYLO_HOME,
     items: [
       { label: "Account", icon: Shield, children: [
-        { href: "/vault?tab=entity",          label: "Entity",       icon: Shield },
-        { href: "/vault?tab=local",           label: "Local",        icon: Smartphone },
-        { href: "/vault?tab=kyc",             label: "KYC",          icon: ShieldCheck },
-        { href: "/vault?tab=game",            label: "Game",         icon: Gamepad2 },
+        { href: accountPath("entity", "home"),          label: "Entity",       icon: Shield },
+        { href: accountPath("local", "home"),           label: "Local",        icon: Smartphone },
+        { href: accountPath("kyc", "home"),             label: "KYC",          icon: ShieldCheck },
+        { href: accountPath("game", "management"),            label: "Game",         icon: Gamepad2 },
       ]},
       { label: "Access", icon: Key, children: [
         { href: "/vault/2fa/overview",        label: "2FA",          icon: ShieldCheck },
@@ -1098,13 +1098,13 @@ const USER_NAV: NavGroup[] = [
     ],
   },
   {
-    label: "Vault", icon: Vault, href: "/vault/hub",
+    label: "Vault", icon: Vault, href: SYLO_HOME,
     items: [
       { label: "Account", icon: Shield, children: [
-        { href: "/vault?tab=entity",          label: "Entity",       icon: Shield },
-        { href: "/vault?tab=local",           label: "Local",        icon: Smartphone },
-        { href: "/vault?tab=kyc",             label: "KYC",          icon: ShieldCheck },
-        { href: "/vault?tab=game",            label: "Game",         icon: Gamepad2 },
+        { href: accountPath("entity", "home"),          label: "Entity",       icon: Shield },
+        { href: accountPath("local", "home"),           label: "Local",        icon: Smartphone },
+        { href: accountPath("kyc", "home"),             label: "KYC",          icon: ShieldCheck },
+        { href: accountPath("game", "management"),            label: "Game",         icon: Gamepad2 },
       ]},
       { label: "Access", icon: Key, children: [
         { href: "/vault/2fa/overview",        label: "2FA",          icon: ShieldCheck },
@@ -1227,6 +1227,7 @@ const USER_NAV: NavGroup[] = [
 interface Message { role: "user" | "assistant"; content: string; }
 
 import { getApiBase } from "@/lib/api-base";
+import { accountPath, SYLO_HOME } from "@/lib/sylo-routes";
 const BASE = getApiBase();
 
 export function SidebarAiPanel() {

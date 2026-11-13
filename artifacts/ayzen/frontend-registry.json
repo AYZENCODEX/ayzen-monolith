@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "registryId": "frontend-registry",
-  "generatedAt": "2026-11-05",
+  "generatedAt": "2026-11-08",
   "generatedBy": "tools/ui-circuit-validator/build.mjs",
   "schema": "schemas/ui-circuit/frontend-route-entry.v1.json",
   "sourceRegistries": [
@@ -12,13 +12,13 @@
     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
   ],
   "completeness": {
-    "totalRoutes": 191,
-    "resolvedToPage": 191,
-    "totalPageFiles": 188,
+    "totalRoutes": 193,
+    "resolvedToPage": 193,
+    "totalPageFiles": 189,
     "deadPages": 10,
-    "routesWithNoApiCalls": 126,
+    "routesWithNoApiCalls": 129,
     "routesWithOrphanCalls": 0,
-    "routesOk": 65
+    "routesOk": 64
   },
   "findings": [
     {
@@ -204,8 +204,26 @@
     {
       "severity": "warning",
       "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault",
+      "pageFile": "pages/sylo/console.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
       "path": "/vault/hub",
-      "pageFile": "pages/user/vault-hub.tsx"
+      "pageFile": "pages/sylo/redirects.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/account/:section",
+      "pageFile": "pages/sylo/account.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/account/:section/:view",
+      "pageFile": "pages/sylo/account.tsx"
     },
     {
       "severity": "warning",
@@ -3505,61 +3523,50 @@
     },
     {
       "path": "/vault",
-      "component": "UserVault",
+      "component": "SyloConsole",
       "adminOnly": false,
       "allowedRoles": [],
       "source": "USER_ROUTES",
-      "pageFile": "pages/user/vault.tsx",
+      "pageFile": "pages/sylo/console.tsx",
       "resolution": {
         "status": "resolved",
-        "apiCalls": [
-          {
-            "method": "GET",
-            "path": "/api/email-accounts",
-            "raw": "/api/email-accounts",
-            "backend": {
-              "method": "GET",
-              "path": "/api/email-accounts"
-            }
-          },
-          {
-            "method": "PATCH",
-            "path": "/api/vault/bulk-tag",
-            "raw": "/api/vault/bulk-tag",
-            "backend": {
-              "method": "PATCH",
-              "path": "/api/vault/:id"
-            }
-          },
-          {
-            "method": "PATCH",
-            "path": "/api/vault/bulk-action",
-            "raw": "/api/vault/bulk-action",
-            "backend": {
-              "method": "PATCH",
-              "path": "/api/vault/:id"
-            }
-          },
-          {
-            "method": "PATCH",
-            "path": "/api/vault/bulk-action",
-            "raw": "/api/vault/bulk-action",
-            "backend": {
-              "method": "PATCH",
-              "path": "/api/vault/:id"
-            }
-          }
-        ],
-        "classification": "OK"
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
       }
     },
     {
       "path": "/vault/hub",
-      "component": "VaultHub",
+      "component": "VaultHubRedirect",
       "adminOnly": false,
       "allowedRoles": [],
       "source": "USER_ROUTES",
-      "pageFile": "pages/user/vault-hub.tsx",
+      "pageFile": "pages/sylo/redirects.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/account/:section",
+      "component": "SyloAccount",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/account.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/account/:section/:view",
+      "component": "SyloAccount",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/account.tsx",
       "resolution": {
         "status": "resolved",
         "apiCalls": [],

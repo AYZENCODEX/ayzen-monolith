@@ -22,6 +22,7 @@ import {
   Twitter, MessageCircle, Send, LayoutGrid,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { accountPath } from "@/lib/sylo-routes";
 
 type EntryAny = any;
 
@@ -197,7 +198,7 @@ export default function VaultBanned() {
           id: `kyc-${k.id}`,
           title: k.name || k.username || `KYC #${k.id}`,
           subtitle: k.nid_number ? `NID: ${k.nid_number}` : k.category,
-          navigate: `/vault?tab=kyc`,
+          navigate: accountPath("kyc", "management"),
         })),
     },
   ].filter(g => g.rows.length > 0);

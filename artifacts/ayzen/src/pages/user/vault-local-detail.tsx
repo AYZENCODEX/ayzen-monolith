@@ -28,6 +28,7 @@ import { HealthChecklistCard, HealthScoreBadge } from "@/components/vault/health
 import { LOCAL_ACCOUNT_HEALTH_CHECKS } from "@/config/columns/entity-view";
 import { ImapSmtpForm, type EmailAccount } from "@/components/mail/imap-smtp-form";
 import { useModuleAwareNavigate } from "@/components/module-link";
+import { accountPath } from "@/lib/sylo-routes";
 
 const MAIL_BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -247,7 +248,7 @@ function VaultLocalDetailContent() {
     try {
       await customFetch<unknown>(`/api/local-accounts/${account.id}`, { method: "DELETE" });
       toast({ title: "Account deleted" });
-      navigate("/vault?tab=local");
+      navigate(accountPath("local", "management"));
     } catch {
       toast({ variant: "destructive", title: "Delete failed" });
     } finally { setDeleting(false); setConfirmDelete(false); }
@@ -329,7 +330,7 @@ function VaultLocalDetailContent() {
   if (!account) {
     return (
       <div className="space-y-4">
-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=local")} className="font-mono text-xs gap-1.5">
+        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("local", "management"))} className="font-mono text-xs gap-1.5">
           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
         </Button>
         <div className="text-center py-20">
@@ -349,7 +350,7 @@ function VaultLocalDetailContent() {
     <div className="space-y-5 page-enter max-w-2xl mx-auto">
       {/* Header */}
       <div>
-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=local")} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
+        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("local", "management"))} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
         </Button>
 

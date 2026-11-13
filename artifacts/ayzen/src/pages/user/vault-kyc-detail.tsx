@@ -19,6 +19,7 @@ import type { KycEntry } from "@/components/kyc-entries";
 import { KycDialog } from "@/components/kyc-entries";
 import { TOTPCard } from "@/components/vault/totp-card";
 import { useModuleAwareNavigate } from "@/components/module-link";
+import { accountPath } from "@/lib/sylo-routes";
 
 // Access dialog tabs — same 2FA/Mail/Backup split as vault-entity-access.tsx,
 // scoped to this KYC entity's own fields only. Mail is deliberately just the
@@ -181,7 +182,7 @@ export default function VaultKycDetail() {
     try {
       await customFetch<unknown>(`/api/kyc-entries/${entry.id}`, { method: "DELETE" });
       toast({ title: "KYC entity deleted" });
-      navigate("/vault?tab=kyc");
+      navigate(accountPath("kyc", "management"));
     } catch {
       toast({ variant: "destructive", title: "Delete failed" });
     } finally { setDeleting(false); setConfirmDelete(false); }
@@ -240,7 +241,7 @@ export default function VaultKycDetail() {
   if (!entry) {
     return (
       <div className="space-y-4">
-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=kyc")} className="font-mono text-xs gap-1.5">
+        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("kyc", "management"))} className="font-mono text-xs gap-1.5">
           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
         </Button>
         <div className="text-center py-20">
@@ -263,7 +264,7 @@ export default function VaultKycDetail() {
     <div className="space-y-5 page-enter max-w-2xl mx-auto">
       {/* Header */}
       <div>
-        <Button variant="ghost" size="sm" onClick={() => navigate("/vault?tab=kyc")} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
+        <Button variant="ghost" size="sm" onClick={() => navigate(accountPath("kyc", "management"))} className="font-mono text-xs gap-1.5 mb-3 -ml-2">
           <ChevronLeft className="w-3.5 h-3.5" /> Back to Vault
         </Button>
 
