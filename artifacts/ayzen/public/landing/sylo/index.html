@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Sylo, the vault inside AYZEN</title>
+<meta name="description" content="Sylo keeps your logins, project identities, wallets and seed phrases in one vault with its own passkey unlock and emergency access for people you trust." />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#0f1213" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%230f1213' stroke='%23c29a52' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='13' r='3.2' fill='%23c29a52'/%3E%3Cpath d='M14.6 15.5h2.8l1 7h-4.8z' fill='%23c29a52'/%3E%3C/svg%3E" />
+<link rel="preload" href="./fonts/big-shoulders-display-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="./fonts/newsreader-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<style>
+/* ---------- fonts (self-hosted, OFL; see ./fonts/LICENSE-*) ---------- */
+@font-face{font-family:"Big Shoulders Display";font-weight:600;font-style:normal;font-display:swap;src:url(./fonts/big-shoulders-display-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Big Shoulders Display";font-weight:800;font-style:normal;font-display:swap;src:url(./fonts/big-shoulders-display-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:"Newsreader";font-weight:400;font-style:normal;font-display:swap;src:url(./fonts/newsreader-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Newsreader";font-weight:500;font-style:normal;font-display:swap;src:url(./fonts/newsreader-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Newsreader";font-weight:400;font-style:italic;font-display:swap;src:url(./fonts/newsreader-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-weight:400;font-style:normal;font-display:swap;src:url(./fonts/ibm-plex-mono-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-weight:500;font-style:normal;font-display:swap;src:url(./fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2")}
+
+/* ---------- tokens ---------- */
+:root{
+  --ink:#0f1213;        /* graphite */
+  --slate:#181d1f;
+  --steel:#232a2d;
+  --line:#2f383c;
+  --bone:#e9e3d3;
+  --bone-dim:#aaa594;
+  --brass:#c29a52;
+  --brass-hi:#e3c280;
+  --brass-lo:#7d5f2c;
+  --patina:#74bba5;
+  --paper:#f3eee0;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --text:"Newsreader",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter:clamp(16px,4vw,40px);
+  --maxw:1240px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--bone);font:400 1.1875rem/1.62 var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg,canvas{display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-60px;background:var(--brass);color:var(--ink);padding:10px 14px;font:600 1rem var(--display);z-index:100;transition:top .2s}
+.skip:focus{top:12px}
+
+h1,h2,h3{font-family:var(--display);font-weight:800;margin:0;letter-spacing:.002em;text-wrap:balance}
+h2{font-size:clamp(2.6rem,5.2vw,4.5rem);line-height:.96}
+h3{font-size:1.9rem;line-height:1}
+p{margin:0}
+.lede{font-size:clamp(1.15rem,1.5vw,1.35rem);color:var(--bone-dim);max-width:34rem}
+.mono{font-family:var(--mono);font-size:.8125rem;letter-spacing:.01em}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.5rem;font:800 1.35rem/1 var(--display);letter-spacing:.02em;text-decoration:none;border-radius:2px;cursor:pointer;border:0;transition:transform .18s,background .18s,box-shadow .18s}
+.btn-brass{background:linear-gradient(180deg,var(--brass-hi),var(--brass));color:#1a1305;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 0 0 1px var(--brass-lo),0 10px 28px -12px rgba(194,154,82,.55)}
+.btn-brass:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 0 0 1px var(--brass-lo),0 16px 34px -12px rgba(227,194,128,.6)}
+.btn-line{background:transparent;color:var(--bone);box-shadow:inset 0 0 0 1px var(--line)}
+.btn-line:hover{box-shadow:inset 0 0 0 1px var(--brass);color:var(--brass-hi)}
+.link{color:var(--bone);text-decoration:underline;text-decoration-color:var(--brass-lo);text-underline-offset:.28em;text-decoration-thickness:1px}
+.link:hover{text-decoration-color:var(--brass-hi)}
+
+/* ---------- header ---------- */
+.top{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .25s,border-color .25s,backdrop-filter .25s;border-bottom:1px solid transparent}
+.top.scrolled{background:rgba(15,18,19,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+.top-in{display:flex;align-items:center;gap:2rem;height:68px}
+.brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;font:800 1.9rem/1 var(--display);letter-spacing:.01em}
+.brand svg{width:30px;height:30px}
+.nav{display:flex;gap:1.75rem;margin-left:auto;margin-right:.5rem}
+.nav a{text-decoration:none;color:var(--bone-dim);font-size:1rem;transition:color .15s}
+.nav a:hover{color:var(--bone)}
+.top .btn{padding:.6rem 1.05rem;font-size:1.1rem}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:112px 0 72px;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;
+  background:radial-gradient(60% 70% at 78% 48%,rgba(194,154,82,.10),transparent 70%),radial-gradient(40% 50% at 8% 100%,rgba(116,187,165,.05),transparent 70%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .28 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.hero>.wrap{width:100%}
+.hero-copy{position:relative;z-index:3;max-width:620px}
+.hero h1{font-size:clamp(3.6rem,8.4vw,7.6rem);line-height:.9;margin-bottom:1.6rem}
+.hero .lede{margin-bottom:2.2rem}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.5rem}
+.facts{display:grid;gap:.45rem;margin-top:2.8rem;font-size:1rem;color:var(--bone-dim)}
+.facts span{display:flex;align-items:baseline;gap:.8rem}
+.facts span::before{content:"";flex:none;width:1.1rem;height:2px;background:var(--brass-lo);transform:translateY(-.3em)}
+
+.dial-wrap{perspective:1500px;position:absolute;z-index:1;right:-9vw;top:53%;width:min(76vh,50vw,800px);aspect-ratio:1;transform:translateY(-50%)}
+.dial-wrap svg{width:100%;height:100%;overflow:visible}
+.dial-sheen{position:absolute;inset:1.5%;border-radius:50%;pointer-events:none;mix-blend-mode:screen;
+  background:conic-gradient(from 210deg,transparent 0 8%,rgba(255,255,255,.09) 14%,transparent 24% 52%,rgba(227,194,128,.10) 60%,transparent 70%)}
+.dial-state{position:absolute;left:50%;top:-4.4%;transform:translateX(16px);font:500 .8125rem var(--mono);color:var(--patina);opacity:0;transition:opacity .5s}
+.dial-state.on{opacity:1}
+#led{transition:fill .4s,filter .4s}
+#led.on{fill:var(--patina);filter:drop-shadow(0 0 6px var(--patina))}
+.dial-wrap g{transform-box:view-box;transform-origin:0 0}
+/* looping 3D: three SVG plates at different depths, swaying slowly so the layers drift against each other */
+.dial-3d{position:absolute;inset:0;transform-style:preserve-3d;animation:sway 16s ease-in-out infinite}
+.dial-3d::before{content:"";position:absolute;inset:5%;border-radius:50%;background:radial-gradient(circle,rgba(0,0,0,.65),transparent 68%);filter:blur(22px);transform:translateZ(-70px) scale(1.06)}
+.layer{position:absolute;inset:0}
+.l1{transform:translateZ(28px)}
+.l2{transform:translateZ(62px)}
+.dial-3d .dial-sheen{transform:translateZ(70px)}
+@keyframes sway{0%,100%{transform:rotateY(-15deg) rotateX(7deg)}50%{transform:rotateY(15deg) rotateX(-5deg)}}
+
+/* ---------- sections ---------- */
+section{position:relative}
+.pad{padding:clamp(80px,11vw,150px) 0}
+.sec-head{display:grid;gap:1.1rem;margin-bottom:clamp(2.2rem,4vw,3.4rem);max-width:46rem}
+
+/* ---------- drawer wall ---------- */
+.wall{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;padding:14px;background:linear-gradient(180deg,#14191b,#101416);border:1px solid var(--line);border-radius:4px;box-shadow:inset 0 2px 30px rgba(0,0,0,.5)}
+.drawer{position:relative;height:196px;overflow:hidden;background:#0b0e0f;border-radius:3px;box-shadow:inset 0 0 0 1px #000}
+.d-a{grid-column:span 2}.d-b{grid-column:span 4}.d-c{grid-column:span 3}.d-d{grid-column:span 3}.d-e{grid-column:span 4}.d-f{grid-column:span 2}
+.front{all:unset;box-sizing:border-box;position:absolute;inset:0;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;padding:18px 20px 16px;
+  background:linear-gradient(180deg,#2d363a 0%,#222a2d 55%,#1c2325 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px #3a444a,0 8px 24px rgba(0,0,0,.45);
+  transition:transform .6s cubic-bezier(.2,.85,.2,1)}
+.front:focus-visible{outline:2px solid var(--brass-hi);outline-offset:-4px}
+.plate{align-self:flex-start;background:var(--bone);color:#16191a;font:600 1.6rem/1 var(--display);padding:.38rem .8rem .3rem;border-radius:2px;box-shadow:inset 0 0 0 1px #b8b29f,0 2px 0 rgba(0,0,0,.5)}
+.front .what{font-style:italic;color:var(--bone-dim);font-size:1.02rem;line-height:1.35;max-width:26ch}
+.handle{position:absolute;right:20px;bottom:18px;width:70px;height:9px;border-radius:5px;background:linear-gradient(180deg,var(--brass-hi),var(--brass-lo));box-shadow:0 2px 3px rgba(0,0,0,.6)}
+.drawer.open .front{transform:translateX(calc(100% - 46px))}
+.contents{position:absolute;inset:0;padding:18px 22px;display:flex;flex-direction:column;justify-content:center;gap:.35rem;visibility:hidden;transition:visibility 0s .6s}
+.drawer.open .contents{visibility:visible;transition-delay:0s}
+.contents .tag{font:500 .75rem var(--mono);color:var(--brass);margin-bottom:.25rem}
+.contents .row{font:400 .875rem/1.5 var(--mono);color:var(--bone);display:flex;gap:.9rem}
+.contents .row i{font-style:normal;color:var(--bone-dim);min-width:6.8rem}
+.contents .row b{font-weight:500}
+.ok{color:var(--patina)}
+
+.drawer,.door,.st,.it,.slip{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.it{border-radius:3px;transition:background .25s}
+.it:hover{background:rgba(233,227,211,.035)}
+.it:focus-visible{outline:2px solid var(--brass-hi);outline-offset:2px}
+@keyframes glow{
+  0%{box-shadow:0 0 0 0 rgba(205,205,205,0),inset 0 0 0 0 rgba(205,205,205,0)}
+  18%{box-shadow:0 0 34px 3px rgba(205,205,205,.34),inset 0 0 38px 5px rgba(205,205,205,.2)}
+  100%{box-shadow:0 0 0 0 rgba(205,205,205,0),inset 0 0 0 0 rgba(205,205,205,0)}}
+.is-glow{animation:glow .85s ease-out}
+
+/* ---------- workflow ---------- */
+.flow{--p:0;position:relative}
+.rail{position:relative;height:2px;background:var(--line);margin:0 10% 0;}
+.rail-fill{position:absolute;inset:0 auto 0 0;width:calc(var(--p) * 100%);background:linear-gradient(90deg,var(--brass-lo),var(--brass-hi));transition:width .9s cubic-bezier(.65,0,.25,1)}
+.rail .dot{position:absolute;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:var(--ink);box-shadow:inset 0 0 0 2px var(--line);transition:box-shadow .4s,background .4s}
+.rail .dot.on{background:var(--brass-hi);box-shadow:0 0 0 4px rgba(227,194,128,.18)}
+.token{position:absolute;top:50%;left:calc(var(--p) * 100%);width:58px;height:36px;margin:-18px 0 0 -29px;border-radius:5px;display:grid;place-items:center;background:var(--bone);color:#1a1305;box-shadow:0 8px 22px -6px rgba(0,0,0,.7),inset 0 0 0 1px rgba(0,0,0,.25);transition:left .9s cubic-bezier(.65,0,.25,1),background .5s}
+.token svg{width:18px;height:18px}
+.flow:not([data-step="0"]) .token{background:linear-gradient(180deg,var(--brass-hi),var(--brass))}
+.stations{display:grid;grid-template-columns:repeat(5,1fr);margin:34px 0 0;padding:0;list-style:none;counter-reset:st}
+.st{all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;cursor:pointer;padding:0 clamp(8px,1.4vw,22px);text-align:center;opacity:.5;transition:opacity .4s}
+.st:focus-visible{outline:2px solid var(--brass-hi);outline-offset:4px}
+.st .n{display:block;font:500 .8125rem var(--mono);color:var(--bone-dim);margin-bottom:.5rem}
+.st h3{font-size:clamp(1.6rem,2.3vw,2.2rem);margin-bottom:.5rem;transition:color .4s}
+.st p{color:var(--bone-dim);font-size:1rem;line-height:1.45}
+.st.on{opacity:1}
+.st.on h3{color:var(--brass-hi)}
+.readout{margin-top:clamp(28px,4vw,52px);background:#0a0d0e;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.ro-bar{display:flex;justify-content:space-between;gap:1rem;padding:.75rem 1.2rem;border-bottom:1px solid var(--line);font:500 .8125rem var(--mono);color:var(--bone-dim)}
+.ro-state{color:var(--brass-hi)}
+.flow[data-step="1"] .ro-state{color:var(--patina)}
+.flow[data-step="3"] .ro-state{color:var(--patina)}
+.ro-body{margin:0;padding:1.3rem 1.2rem 1.4rem;min-height:7.6rem;font:400 .95rem/1.7 var(--mono);color:var(--bone);white-space:pre-wrap}
+.flow-ctl{display:flex;align-items:center;gap:1rem;margin-top:1rem;font:400 .8125rem var(--mono);color:var(--bone-dim)}
+.flow-ctl button{all:unset;cursor:pointer;color:var(--bone);text-decoration:underline;text-decoration-color:var(--brass-lo);text-underline-offset:.28em}
+.flow-ctl button:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px}
+@media (max-width:760px){
+  .rail,.token{display:none}
+  .stations{grid-template-columns:1fr;margin-top:0;gap:1.1rem}
+  .st{text-align:left;align-items:flex-start;padding:0 0 0 1rem;border-left:2px solid var(--line)}
+  .st.on{border-left-color:var(--brass-hi)}
+}
+
+/* ---------- entity graph ---------- */
+.graph-sec{background:linear-gradient(180deg,var(--ink),#0b0e0f 40%,var(--ink))}
+.graph-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr);gap:clamp(24px,5vw,72px);align-items:center}
+.graph-box{position:relative;border:1px solid var(--line);border-radius:4px;background:radial-gradient(70% 80% at 40% 50%,#13181a,#0c0f10);overflow:hidden}
+.graph-box canvas{width:100%;height:clamp(360px,46vw,560px);touch-action:pan-y}
+.legend{display:flex;flex-wrap:wrap;gap:.4rem 1.3rem;padding:.8rem 1rem;border-top:1px solid var(--line);font:400 .8125rem var(--mono);color:var(--bone-dim)}
+.legend span{display:inline-flex;align-items:center;gap:.5rem}
+.legend svg{width:12px;height:12px}
+
+/* ---------- unlocking doors ---------- */
+.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2.4vw,32px);align-items:start}
+.door{position:relative;height:clamp(330px,34vw,400px);background:radial-gradient(60% 50% at 50% 55%,rgba(227,194,128,.28),rgba(194,154,82,.05) 60%,transparent 80%),#0a0d0e;border-radius:3px;box-shadow:inset 0 0 0 1px var(--line)}
+.door:nth-child(2){margin-top:clamp(20px,3.6vw,52px)}
+.door:nth-child(3){margin-top:clamp(40px,7.2vw,104px)}
+.leaf{position:absolute;inset:0;padding:22px 22px 20px;display:flex;flex-direction:column;background:linear-gradient(160deg,#2b3438,#1d2427 60%,#171c1e);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px #3a444a,0 18px 40px -18px rgba(0,0,0,.8);transform-origin:0% 50%;transition:transform .7s cubic-bezier(.2,.85,.2,1);border-radius:3px;outline:0}
+.leaf{animation:swing 8s ease-in-out infinite}
+.door:nth-child(2) .leaf{animation-delay:-2.7s}
+.door:nth-child(3) .leaf{animation-delay:-5.3s}
+.door:hover .leaf,.door:focus-within .leaf{animation-play-state:paused}
+.door.held .leaf{animation:none;transform:perspective(1200px) rotateY(-28deg)}
+@keyframes swing{0%,12%,100%{transform:perspective(1200px) rotateY(0)}38%,62%{transform:perspective(1200px) rotateY(-28deg)}88%{transform:perspective(1200px) rotateY(0)}}
+.leaf:focus-visible{outline:2px solid var(--brass-hi);outline-offset:3px}
+.door .n{font:800 5.4rem/.8 var(--display);color:transparent;-webkit-text-stroke:1.5px var(--brass);margin-bottom:auto}
+.door h3{margin:1.2rem 0 .6rem;font-size:2.2rem}
+.door p{color:var(--bone-dim);font-size:1.04rem;line-height:1.5}
+.door .hinge{position:absolute;left:0;top:10%;bottom:10%;width:6px;background:repeating-linear-gradient(180deg,var(--brass) 0 28px,transparent 28px 60px);opacity:.55}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,48px);margin-top:clamp(44px,6vw,80px);padding-top:28px;border-top:1px solid var(--line)}
+.rules p{color:var(--bone-dim);max-width:30rem}
+.rules b{color:var(--bone);font-weight:500}
+
+/* ---------- emergency (paper) ---------- */
+.paper{background:var(--paper);color:#1c1a14;position:relative}
+.paper::before{content:"";position:absolute;left:0;right:0;top:-1px;height:14px;background:linear-gradient(135deg,var(--ink) 25%,transparent 25%) -14px 0/28px 14px,linear-gradient(225deg,var(--ink) 25%,transparent 25%) -14px 0/28px 14px;}
+.paper h2{color:#14120c}
+.paper .lede{color:#4d493c}
+.em-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:clamp(28px,6vw,96px);align-items:center}
+.em-points{margin:2rem 0 0;padding:0;list-style:none;display:grid;gap:1rem;max-width:32rem}
+.em-points li{padding-left:1.4rem;position:relative;color:#2d2a20}
+.em-points li::before{content:"";position:absolute;left:0;top:.62em;width:.7rem;height:2px;background:var(--brass-lo)}
+.slip{position:relative;background:#fffdf6;border:1px solid #d5cdb6;padding:28px 28px 24px;box-shadow:0 1px 0 #fff inset,0 24px 40px -22px rgba(40,30,10,.45);transform:rotate(-1.3deg);max-width:440px;margin-inline:auto}
+.slip .kicker{font:500 .8125rem var(--mono);color:#7d6b3f;margin-bottom:.9rem}
+.slip h3{font-size:2.3rem;color:#17150e;margin-bottom:.6rem}
+.slip p{color:#4d493c;font-size:1.08rem;line-height:1.5}
+.slip .sample{font:400 .75rem var(--mono);color:#8a8470;margin-top:1.1rem}
+.slip .btn{margin-top:1.4rem;background:#17150e;color:var(--paper);font-size:1.2rem;padding:.75rem 1.2rem}
+.slip .btn:hover{background:#2c281a}
+.slip .done,.slip[data-state="cancelled"] .pending{display:none}
+.slip[data-state="cancelled"] .done{display:block}
+.stamp{display:none;position:absolute;right:20px;top:20px;border:3px solid var(--patina);color:#2f7a63;font:800 1.6rem/1 var(--display);padding:.3rem .7rem;border-radius:3px;transform:rotate(9deg)}
+.slip[data-state="cancelled"] .stamp{display:block;animation:stamp .42s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes stamp{0%{transform:rotate(-4deg) scale(2.2);opacity:0}100%{transform:rotate(9deg) scale(1);opacity:1}}
+.slip .replay{all:unset;cursor:pointer;margin-top:1.1rem;font:500 .8125rem var(--mono);color:#6b6450;text-decoration:underline;text-underline-offset:.25em}
+.slip .replay:focus-visible{outline:2px solid #17150e;outline-offset:3px}
+
+/* ---------- careful parts ---------- */
+.careful{display:grid;grid-template-columns:repeat(2,1fr);column-gap:clamp(24px,6vw,96px)}
+.careful dl{margin:0}
+.careful .it{display:grid;grid-template-columns:11rem 1fr;gap:1.2rem;padding:1.15rem .8rem;margin-inline:-.8rem;border-top:1px solid var(--line)}
+.careful dt{font:800 1.7rem/1.05 var(--display)}
+.careful dd{margin:0;color:var(--bone-dim);font-size:1.05rem;line-height:1.5}
+
+/* ---------- closing ---------- */
+.close{background:linear-gradient(180deg,var(--ink),#14110a);border-top:1px solid var(--line)}
+.close-in{display:grid;grid-template-columns:minmax(0,1.3fr) auto;gap:2rem;align-items:center}
+.close h2{font-size:clamp(3.4rem,9vw,8rem);line-height:.88}
+.close .lede{margin-top:1.2rem}
+.foot{background:#0a0c0d;border-top:1px solid var(--line);color:var(--bone-dim);font-size:1rem}
+.talk{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);align-items:end;padding:clamp(64px,9vw,120px) 0 clamp(40px,5vw,64px)}
+.talk h2{font-size:clamp(4.4rem,12vw,10.5rem);line-height:.84;color:var(--bone)}
+.talk .lede{margin-bottom:1.6rem}
+.social{display:flex;flex-wrap:wrap;gap:.7rem;margin:0;padding:0;list-style:none}
+.sicon{display:grid;place-items:center;width:52px;height:52px;border-radius:3px;color:var(--bone);background:var(--slate);box-shadow:inset 0 0 0 1px var(--line);transition:color .2s,box-shadow .2s,transform .2s;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sicon svg{width:22px;height:22px;fill:currentColor}
+.sicon:hover{color:var(--brass-hi);box-shadow:inset 0 0 0 1px var(--brass);transform:translateY(-2px)}
+.social-note{min-height:1.5rem;margin-top:.9rem;font:400 .8125rem var(--mono);color:var(--bone-dim)}
+.foot-bar{display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-between;border-top:1px solid var(--line);padding:22px 0 36px}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .graph-grid,.em-grid,.close-in,.talk{grid-template-columns:1fr}
+  .doors{grid-template-columns:1fr}
+  .door,.door:nth-child(2),.door:nth-child(3){margin-top:0;height:auto;min-height:280px}
+  .door .n{font-size:4rem;margin-bottom:1.6rem}
+  .leaf{position:relative;min-height:280px}
+  .careful{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .nav{display:none}
+  .top .btn{margin-left:auto}
+  .hero{flex-direction:column;align-items:stretch;justify-content:flex-start;padding-top:104px;min-height:0;padding-bottom:0}
+  .dial-wrap{position:relative;right:auto;top:auto;transform:none;width:128vw;margin:2.4rem 0 -34vw -14vw}
+  .hero .wrap{display:block}
+  .facts{margin-top:2rem}
+  .wall{grid-template-columns:1fr 1fr}
+  .d-a,.d-b,.d-c,.d-d,.d-e,.d-f{grid-column:span 2}
+  .careful .it{grid-template-columns:1fr;gap:.3rem}
+  .slip{transform:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .dial-3d,.leaf{animation:none!important}
+  .is-glow{animation-duration:.6s!important}
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-delay:0s!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#inside">Skip to content</a>
+
+<header class="top" id="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#hero" aria-label="Sylo home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="#0f1213" stroke="#c29a52" stroke-width="2"/><circle cx="16" cy="12.8" r="3.3" fill="#c29a52"/><path d="M14.5 15.4h3l1.1 7.4h-5.2z" fill="#c29a52"/></svg>
+      Sylo
+    </a>
+    <nav class="nav" aria-label="Page">
+      <a href="#inside">What's inside</a>
+      <a href="#flow">How it works</a>
+      <a href="#graph">Entities</a>
+      <a href="#unlock">Unlocking</a>
+      <a href="#emergency">Emergency access</a>
+    </nav>
+    <a class="btn btn-brass" href="/login">Open Sylo</a>
+  </div>
+</header>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero" aria-label="Sylo">
+  <div class="wrap">
+    <div class="hero-copy">
+      <h1>Every key you own, in one locked room.</h1>
+      <p class="lede">Sylo is the vault inside AYZEN. Keep your logins, project identities, wallets and seed phrases together, unlock them with a passkey, and let someone you trust in if you ever can't.</p>
+      <div class="cta-row">
+        <a class="btn btn-brass" href="/login">Open Sylo</a>
+        <a class="link" href="#inside">See what's inside</a>
+      </div>
+      <div class="facts" aria-label="Highlights">
+        <span>Passkey unlock</span>
+        <span>Encrypted at rest with AES-256-GCM</span>
+        <span>Emergency access for contacts you choose</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dial-wrap" id="dialWrap" aria-hidden="true">
+    <div class="dial-3d">
+    <svg class="layer l0" id="dial" viewBox="-300 -300 600 600">
+      <defs>
+        <radialGradient id="gDisc" cx="35%" cy="28%" r="85%"><stop offset="0" stop-color="#323c41"/><stop offset=".6" stop-color="#1b2124"/><stop offset="1" stop-color="#111517"/></radialGradient>
+        <linearGradient id="gBrass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3c280"/><stop offset=".55" stop-color="#b08a45"/><stop offset="1" stop-color="#6f5224"/></linearGradient>
+        <radialGradient id="gHub" cx="40%" cy="32%" r="80%"><stop offset="0" stop-color="#1d2326"/><stop offset="1" stop-color="#0a0d0e"/></radialGradient>
+      </defs>
+      <circle r="297" fill="#101415" stroke="#2f383c" stroke-width="2"/>
+      <g id="ringOuter"></g>
+      </svg>
+    <svg class="layer l1" viewBox="-300 -300 600 600">
+      <g id="ringMid">
+        <circle r="226" fill="none" stroke="url(#gBrass)" stroke-opacity=".7" stroke-width="26" stroke-dasharray="1.7 4.3"/>
+        <circle r="240" fill="none" stroke="#3a444a" stroke-width="2"/>
+        <circle r="213" fill="none" stroke="#3a444a" stroke-width="2"/>
+      </g>
+      <g id="ringInner">
+        <circle r="200" fill="url(#gDisc)" stroke="#3a444a" stroke-width="2"/>
+        <g id="bolts"></g>
+        <circle r="150" fill="none" stroke="#2c3539" stroke-width="1.5"/>
+        <circle r="116" fill="none" stroke="#2c3539" stroke-width="1.5" stroke-dasharray="3 9"/>
+      </g>
+      </svg>
+    <svg class="layer l2" viewBox="-300 -300 600 600">
+      <g id="hub">
+        <circle r="90" fill="url(#gHub)" stroke="url(#gBrass)" stroke-width="3"/>
+        <circle cx="0" cy="-14" r="19" fill="#c29a52"/>
+        <path d="M-8 -2h16l7 44h-30z" fill="#c29a52"/>
+        <circle cx="0" cy="-14" r="7" fill="#0a0d0e"/>
+      </g>
+      <g id="notch" style="transform:none">
+        <path d="M0 -258 L-11 -283 L11 -283 Z" fill="#e3c280"/>
+        <circle id="led" cx="0" cy="-297" r="5" fill="#3a3f41"/>
+      </g>
+    </svg>
+    <div class="dial-sheen"></div>
+    </div>
+    <div class="dial-state" id="dialState">Sealed</div>
+  </div>
+</section>
+
+<!-- ================= DRAWERS ================= -->
+<section class="pad" id="inside" aria-labelledby="h-inside">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-inside">A drawer for everything</h2>
+      <p class="lede">Open a drawer to see what a record looks like. These are samples, not real data.</p>
+    </div>
+
+    <div class="wall" id="wall">
+      <div class="drawer d-a">
+        <div class="contents" id="c1">
+          <div class="tag">Sample login</div>
+          <div class="row"><i>Site</i><b>forum.example</b></div>
+          <div class="row"><i>Username</i><b>nova07</b></div>
+          <div class="row"><i>Password</i><b>••••••••••••</b></div>
+          <div class="row"><i>2FA</i><b class="ok">on</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c1"><span class="plate">Logins</span><span class="what">Usernames, passwords and 2FA for every site.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-b">
+        <div class="contents" id="c2">
+          <div class="tag">Sample entity</div>
+          <div class="row"><i>Name</i><b>Nova-07</b></div>
+          <div class="row"><i>Holds</i><b>3 logins, 2 wallets, 1 mailbox, 2 documents</b></div>
+          <div class="row"><i>Entity view</i><b class="ok">asks for its own PIN</b></div>
+          <div class="row"><i>Backup codes</i><b>stored with the entity</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c2"><span class="plate">Entities</span><span class="what">One identity per account or project, with everything that belongs to it.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-c">
+        <div class="contents" id="c3">
+          <div class="tag">Sample wallets</div>
+          <div class="row"><i>Wallet 1</i><b>0x71C…9a3F</b></div>
+          <div class="row"><i>Wallet 2</i><b>0xB04…1d7E</b></div>
+          <div class="row"><i>Linked to</i><b>Nova-07</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c3"><span class="plate">Wallets</span><span class="what">Addresses, grouped under the entity that uses them.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-d">
+        <div class="contents" id="c4">
+          <div class="tag">Sample seed phrase</div>
+          <div class="row"><i>Words</i><b>••••  ••••  ••••  ••••  ••••  ••••</b></div>
+          <div class="row"><i>State</i><b class="ok">hidden</b></div>
+          <div class="row"><i>To read it</i><b>reveal it on purpose</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c4"><span class="plate">Seed phrases</span><span class="what">Hidden until you choose to reveal them.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-e">
+        <div class="contents" id="c5">
+          <div class="tag">Sample KYC set</div>
+          <div class="row"><i>Document</i><b>Passport scan</b></div>
+          <div class="row"><i>Used on</i><b>2 projects</b></div>
+          <div class="row"><i>Unused</i><b>Address proof</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c5"><span class="plate">KYC data</span><span class="what">Identity details, marked used or unused so you don't reuse the wrong one.</span><span class="handle"></span></button>
+      </div>
+
+      <div class="drawer d-f">
+        <div class="contents" id="c6">
+          <div class="tag">Sample mailbox</div>
+          <div class="row"><i>Address</i><b>nova07@mail.example</b></div>
+          <div class="row"><i>Inbox</i><b>per entity</b></div>
+        </div>
+        <button class="front" aria-expanded="false" aria-controls="c6"><span class="plate">Mail</span><span class="what">An inbox for each entity.</span><span class="handle"></span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WORKFLOW ================= -->
+<section class="pad" id="flow" aria-labelledby="h-flow">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-flow">Follow one record through the Vault</h2>
+      <p class="lede">From the moment you add something to the moment someone you trust could ask for it. Pick a step, or let it play.</p>
+    </div>
+    <div class="flow" id="flowBox" data-step="0">
+      <div class="rail" aria-hidden="true">
+        <span class="rail-fill"></span>
+        <span class="dot on" style="left:0%"></span><span class="dot" style="left:25%"></span><span class="dot" style="left:50%"></span><span class="dot" style="left:75%"></span><span class="dot" style="left:100%"></span>
+        <span class="token"><svg viewBox="0 0 32 32"><circle cx="16" cy="12.8" r="4.4" fill="currentColor"/><path d="M13.5 15.8h5l1.6 10h-8.2z" fill="currentColor"/></svg></span>
+      </div>
+      <div class="stations" role="tablist" aria-label="Steps">
+        <button class="st on" role="tab" aria-selected="true"  type="button"><span class="n">Step 1</span><h3>Add</h3><p>Save a login, wallet, seed phrase or document.</p></button>
+        <button class="st" role="tab" aria-selected="false" type="button"><span class="n">Step 2</span><h3>Seal</h3><p>It's stored encrypted with AES-256-GCM.</p></button>
+        <button class="st" role="tab" aria-selected="false" type="button"><span class="n">Step 3</span><h3>Group</h3><p>It joins an entity, beside the wallets, mail and logins it belongs with.</p></button>
+        <button class="st" role="tab" aria-selected="false" type="button"><span class="n">Step 4</span><h3>Unlock</h3><p>Open the Vault with a passkey, or PIN and 2FA. Entities ask for their own PIN.</p></button>
+        <button class="st" role="tab" aria-selected="false" type="button"><span class="n">Step 5</span><h3>Hand over</h3><p>If you can't get in, a contact you named can request access. You can cancel it.</p></button>
+      </div>
+      <div class="readout" role="tabpanel" aria-live="polite">
+        <div class="ro-bar"><span class="ro-state" id="roState">Plain text, on your screen</span><span>Sample data</span></div>
+        <pre class="ro-body" id="roBody"></pre>
+      </div>
+      <div class="flow-ctl"><button type="button" id="flowPlay">Pause</button><span id="flowHint">Plays on a loop while you're looking at it.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ENTITY GRAPH ================= -->
+<section class="pad graph-sec" id="graph" aria-labelledby="h-graph">
+  <div class="wrap graph-grid">
+    <div class="sec-head" style="margin:0">
+      <h2 id="h-graph">See who owns what</h2>
+      <p class="lede">Group the logins, wallets, mail and documents that belong to one identity. Hover a point to see what it is and which entity holds it.</p>
+      <p class="mono" style="color:var(--bone-dim)">Sample data. Your own graph is private to you.</p>
+    </div>
+    <div class="graph-box">
+      <canvas id="graphCv" role="img" aria-label="Animated sample graph: three entities, each surrounded by the logins, wallets, mailboxes and documents it holds."></canvas>
+      <div class="legend" aria-hidden="true">
+        <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="#c29a52"/></svg>Entity</span>
+        <span><svg viewBox="0 0 12 12"><path d="M6 1l5 5-5 5-5-5z" fill="#e9e3d3"/></svg>Login</span>
+        <span><svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" fill="#e9e3d3"/></svg>Wallet</span>
+        <span><svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4" fill="none" stroke="#e9e3d3" stroke-width="1.6"/></svg>Mail</span>
+        <span><svg viewBox="0 0 12 12"><path d="M6 1.5l5 9H1z" fill="#e9e3d3"/></svg>Document</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= UNLOCKING ================= -->
+<section class="pad" id="unlock" aria-labelledby="h-unlock">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-unlock">Three doors, tried in order</h2>
+      <p class="lede">The Vault has its own lock. It never accepts your AYZEN account password or your login 2FA.</p>
+    </div>
+    <div class="doors">
+      <div class="door"><div class="leaf" tabindex="0" role="button" aria-pressed="false"><span class="hinge"></span>
+        <span class="n">1</span><h3>Passkey</h3><p>If you've registered one, it's the first and fastest way in.</p></div></div>
+      <div class="door"><div class="leaf" tabindex="0" role="button" aria-pressed="false"><span class="hinge"></span>
+        <span class="n">2</span><h3>Vault PIN and 2FA</h3><p>No passkey on hand? Use your Vault PIN or password plus the Vault's own authenticator code.</p></div></div>
+      <div class="door"><div class="leaf" tabindex="0" role="button" aria-pressed="false"><span class="hinge"></span>
+        <span class="n">3</span><h3>Email code and PIN</h3><p>If the second door isn't available, a code sent to your email and your Vault PIN get you through.</p></div></div>
+    </div>
+    <div class="rules">
+      <p><b>Entity details have a separate PIN.</b> Even with the Vault open, viewing an entity asks for its Entity-view PIN.</p>
+      <p><b>Secrets are encrypted at rest.</b> Vault secrets use AES-256-GCM, so what's stored isn't readable as plain text.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EMERGENCY ================= -->
+<section class="pad paper" id="emergency" aria-labelledby="h-em">
+  <div class="wrap em-grid">
+    <div>
+      <div class="sec-head" style="margin:0">
+        <h2 id="h-em">If you can't get in, someone you trust can</h2>
+        <p class="lede">Name the contacts who may ask for access. Their request waits as pending, and you can cancel it.</p>
+      </div>
+      <ul class="em-points">
+        <li>You choose who the contacts are, and you can revoke any of them.</li>
+        <li>A pending request is not an open door. If you're fine, cancel it and nothing changes.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="slip" id="slip" data-state="pending">
+        <div class="stamp" aria-hidden="true">Cancelled</div>
+        <div class="kicker">Emergency access request (sample)</div>
+        <div class="pending">
+          <h3>A trusted contact asked to open your Vault</h3>
+          <p>The request is pending. You can cancel it while it is.</p>
+          <button class="btn" id="cancelBtn" type="button">Cancel request</button>
+        </div>
+        <div class="done" role="status">
+          <h3>Request cancelled</h3>
+          <p>Good to know you're okay. The pending request is gone.</p>
+          <button class="replay" id="replayBtn" type="button">Show the sample again</button>
+        </div>
+        <div class="sample">Try it. Nothing here is real.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CAREFUL PARTS ================= -->
+<section class="pad" id="careful" aria-labelledby="h-careful">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-careful">The careful parts</h2>
+      <p class="lede">What you'll want when something goes wrong, or when you move on.</p>
+    </div>
+    <div class="careful">
+      <dl>
+        <div class="it" tabindex="0"><dt>Activity log</dt><dd>Everything you've done inside the Vault: what happened, when and where.</dd></div>
+        <div class="it" tabindex="0"><dt>Trash</dt><dd>Deleted entities can be restored within 30 days, then they're purged automatically.</dd></div>
+        <div class="it" tabindex="0"><dt>Backup codes</dt><dd>Kept per entity, next to the account they belong to.</dd></div>
+      </dl>
+      <dl>
+        <div class="it" tabindex="0"><dt>Encrypted snapshot</dt><dd>Export the whole Vault as one encrypted file.</dd></div>
+        <div class="it" tabindex="0"><dt>Import and export</dt><dd>Bring entries in from another tool, or send them out as CSV or JSON.</dd></div>
+        <div class="it" tabindex="0"><dt>Compliance report</dt><dd>Export your account and Vault activity for any date range as CSV or PDF.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLOSE ================= -->
+<section class="pad close" aria-labelledby="h-close">
+  <div class="wrap close-in">
+    <div>
+      <h2 id="h-close">Open your vault</h2>
+      <p class="lede">Sign in and Sylo asks for its own lock before it shows you anything.</p>
+    </div>
+    <a class="btn btn-brass" style="font-size:1.8rem;padding:1.2rem 2.2rem" href="/login">Open Sylo</a>
+  </div>
+</section>
+</main>
+
+<footer class="foot" id="talk">
+  <div class="wrap">
+    <div class="talk">
+      <h2>Let's talk</h2>
+      <div>
+        <p class="lede">Questions about Sylo, something missing, or a bug to report? Find us wherever you are.</p>
+        <ul class="social" aria-label="Social links">
+        <li><a class="sicon" data-link="x" href="#" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a></li>
+        <li><a class="sicon" data-link="telegram" href="#" aria-label="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a></li>
+        <li><a class="sicon" data-link="discord" href="#" aria-label="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a></li>
+        <li><a class="sicon" data-link="github" href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+        <li><a class="sicon" data-link="linkedin" href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+        <li><a class="sicon" data-link="email" href="#" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5zm2.2.3L12 12.2l7.8-6.4zm15.8 2.3-7.4 6.1a1 1 0 0 1-1.2 0L4 8.1v10.4h16z"/></svg></a></li>
+        </ul>
+        <p class="social-note" id="socialNote" role="status"></p>
+      </div>
+    </div>
+    <div class="foot-bar">
+      <span>Sylo is one of eight modules in AYZEN.</span>
+      <a class="link" href="/landing/">Back to AYZEN</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = (s, r = document) => r.querySelector(s);
+  const el = (n, a = {}, p) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+
+  /* ---- header state ---- */
+  const top = $("#top");
+  const onScrollHeader = () => top.classList.toggle("scrolled", scrollY > 8);
+  addEventListener("scroll", onScrollHeader, { passive: true }); onScrollHeader();
+
+  /* ---- dial: build ticks + numerals + bolts ---- */
+  const outer = $("#ringOuter");
+  el("circle", { r: 294, fill: "none", stroke: "#3a444a", "stroke-width": 2 }, outer);
+  el("circle", { r: 258, fill: "none", stroke: "#2c3539", "stroke-width": 1.5 }, outer);
+  for (let i = 0; i < 100; i++) {
+    const a = (i / 100) * Math.PI * 2, s = Math.sin(a), c = -Math.cos(a);
+    const len = i % 10 === 0 ? 24 : i % 5 === 0 ? 16 : 8;
+    el("line", { x1: s * 291, y1: c * 291, x2: s * (291 - len), y2: c * (291 - len), stroke: i % 10 === 0 ? "#e3c280" : "#7b857b", "stroke-width": i % 10 === 0 ? 2.4 : 1.4, "stroke-linecap": "round" }, outer);
+    if (i % 10 === 0) {
+      const t = el("text", { x: s * 258, y: c * 258, "text-anchor": "middle", "dominant-baseline": "middle", fill: "#aaa594", "font-size": 15, "font-family": "IBM Plex Mono, monospace" }, outer);
+      t.textContent = String(i).padStart(2, "0");
+    }
+  }
+  const bolts = $("#bolts");
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2 + Math.PI / 8, x = Math.sin(a) * 176, y = -Math.cos(a) * 176;
+    el("circle", { cx: x, cy: y, r: 7, fill: "#101517", stroke: "#4a555b", "stroke-width": 1.5 }, bolts);
+    el("line", { x1: x - 4, y1: y - 4, x2: x + 4, y2: y + 4, stroke: "#4a555b", "stroke-width": 1.5 }, bolts);
+  }
+
+  /* ---- dial: one load sequence, then scroll-driven rotation ---- */
+  const rings = { outer: $("#ringOuter"), mid: $("#ringMid"), inner: $("#ringInner") };
+  const state = $("#dialState"), led = $("#led"), wrap = $("#dialWrap");
+  const seal = () => { led.classList.add("on"); state.classList.add("on"); };
+  const ang = (k) => scrollY * k;
+  const applyScroll = () => {
+    rings.outer.style.transform = `rotate(${ang(-0.045)}deg)`;
+    rings.mid.style.transform = `rotate(${ang(0.07)}deg)`;
+    rings.inner.style.transform = `rotate(${ang(-0.025)}deg)`;
+  };
+  if (reduce) { seal(); }
+  else {
+    const ease = "cubic-bezier(.16,1,.3,1)";
+    const spin = (g, from, ms) => g.animate([{ transform: `rotate(${from}deg)` }, { transform: "rotate(0deg)" }], { duration: ms, easing: ease });
+    spin(rings.outer, -520, 2800); spin(rings.mid, 380, 2500);
+    const last = spin(rings.inner, -240, 2200);
+    last.finished.then(() => {
+      wrap.animate([{ transform: "translateY(-50%) translateY(0) scale(1)" }, { transform: "translateY(-50%) translateY(4px) scale(.994)" }, { transform: "translateY(-50%) translateY(0) scale(1)" }], { duration: 260, easing: "ease-out" });
+      seal();
+    }).catch(seal);
+    setTimeout(seal, 3600);
+  }
+  let ticking = false;
+  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { applyScroll(); ticking = false; }); } }, { passive: true });
+  applyScroll();
+
+  /* ---- drawers ---- */
+  const drawers = [...document.querySelectorAll(".drawer")];
+  drawers.forEach((d) => {
+    const b = $(".front", d);
+    b.addEventListener("click", () => {
+      const willOpen = !d.classList.contains("open");
+      drawers.forEach((o) => { o.classList.remove("open"); $(".front", o).setAttribute("aria-expanded", "false"); });
+      if (willOpen) { d.classList.add("open"); b.setAttribute("aria-expanded", "true"); }
+    });
+  });
+
+  /* ---- emergency demo ---- */
+  const slip = $("#slip");
+  $("#cancelBtn").addEventListener("click", () => { slip.dataset.state = "cancelled"; $("#replayBtn").focus(); });
+  $("#replayBtn").addEventListener("click", () => { slip.dataset.state = "pending"; $("#cancelBtn").focus(); });
+
+  /* ---- click glow on cards ---- */
+  const pulse = (n) => { n.classList.remove("is-glow"); void n.offsetWidth; n.classList.add("is-glow"); };
+  document.addEventListener("animationend", (e) => { if (e.animationName === "glow") e.target.classList.remove("is-glow"); });
+  document.addEventListener("click", (e) => { const c = e.target.closest(".drawer,.door,.st,.it,.slip,.sicon"); if (c) pulse(c); });
+  document.querySelectorAll(".it").forEach((n) => n.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pulse(n); } }));
+
+  /* ---- doors: click to hold one open, click again to let it swing again ---- */
+  document.querySelectorAll(".door").forEach((d) => {
+    const leaf = $(".leaf", d);
+    const toggle = () => { const on = d.classList.toggle("held"); leaf.setAttribute("aria-pressed", on); };
+    d.addEventListener("click", toggle);
+    leaf.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); pulse(d); } });
+  });
+
+  /* ---- social links (placeholders) ----
+     Put the real URL in SOCIAL_LINKS. Until a value is set the icon does nothing but say so. */
+  const SOCIAL_LINKS = { x: "", telegram: "", discord: "", github: "", linkedin: "", email: "" }; // email: "mailto:you@example.com"
+  const note = $("#socialNote"); let noteT = 0;
+  document.querySelectorAll("[data-link]").forEach((a) => {
+    const url = SOCIAL_LINKS[a.dataset.link];
+    if (url) { a.href = url; if (!url.startsWith("mailto:")) { a.target = "_blank"; a.rel = "noopener noreferrer"; } return; }
+    a.addEventListener("click", (e) => { e.preventDefault(); note.textContent = a.getAttribute("aria-label") + " link isn't set yet."; clearTimeout(noteT); noteT = setTimeout(() => (note.textContent = ""), 2800); });
+  });
+
+  /* ---- workflow ---- */
+  (() => {
+    const box = $("#flowBox"); if (!box) return;
+    const sts = [...box.querySelectorAll(".st")], dots = [...box.querySelectorAll(".dot")];
+    const roState = $("#roState"), roBody = $("#roBody"), playBtn = $("#flowPlay"), hint = $("#flowHint");
+    const STEPS = [
+      ["Plain text, on your screen", "site       forum.example\nusername   nova07\npassword   (typed by you)"],
+      ["Sealed", "9f3a 71c2 e08b 4d15\nb7a9 06fe 2c84 d3e1\n3a90 c5d7 1e42 f68b"],
+      ["Grouped under Nova-07", "entity     Nova-07\nholds      login, wallet, document\nentity view needs its own PIN"],
+      ["Unlocked", "passkey    accepted\nvault      open\nentity     Nova-07 asks for its PIN"],
+      ["Emergency request pending", "contact    named by you\nrequest    pending\nyou        can cancel it"],
+    ];
+    const GL = "0123456789abcdef";
+    let step = 0, timer = 0, playing = !reduce, visible = false, raf = 0, shown = "";
+    const paint = (txt) => { roBody.textContent = txt; };
+    const scramble = (to) => {
+      cancelAnimationFrame(raf);
+      if (reduce) { paint(to); return; }
+      const t0 = performance.now(), dur = 650, n = to.length;
+      const tick = (t) => {
+        const k = Math.min(1, (t - t0) / dur); let out = "";
+        for (let i = 0; i < n; i++) { const c = to[i]; out += (c === " " || c === "\n" || i < k * n * 1.15) ? c : GL[(Math.random() * 16) | 0]; }
+        paint(out); if (k < 1) raf = requestAnimationFrame(tick); else paint(to);
+      };
+      raf = requestAnimationFrame(tick);
+    };
+    const go = (i, userAction) => {
+      step = (i + STEPS.length) % STEPS.length;
+      box.dataset.step = step; box.style.setProperty("--p", step / (STEPS.length - 1));
+      sts.forEach((b, j) => { b.classList.toggle("on", j === step); b.setAttribute("aria-selected", j === step); });
+      dots.forEach((d, j) => d.classList.toggle("on", j <= step));
+      roState.textContent = STEPS[step][0]; scramble(STEPS[step][1]);
+      if (userAction) setPlaying(false);
+    };
+    const schedule = () => { clearTimeout(timer); if (playing && visible) timer = setTimeout(() => { go(step + 1); schedule(); }, 3400); };
+    const setPlaying = (v) => { playing = v; playBtn.textContent = v ? "Pause" : "Play"; hint.textContent = v ? "Plays on a loop while you're looking at it." : "Paused. Pick any step."; schedule(); };
+    sts.forEach((b, i) => b.addEventListener("click", () => go(i, true)));
+    playBtn.addEventListener("click", () => setPlaying(!playing));
+    box.addEventListener("pointerenter", () => clearTimeout(timer));
+    box.addEventListener("pointerleave", schedule);
+    new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) schedule(); else clearTimeout(timer); }, { threshold: .35 }).observe(box);
+    if (reduce) setPlaying(false);
+    go(0);
+  })();
+
+  /* ---- entity graph ---- */
+  const cv = $("#graphCv"); if (!cv) return;
+  const ctx = cv.getContext("2d");
+  const BONE = "#e9e3d3", BRASS = "#c29a52", BRASSHI = "#e3c280", INK = "#0f1213";
+  const hubs = [
+    { name: "Nova-07", fx: .43, fy: .52, r: 13, sats: [["login", "airdrop-07 login"], ["login", "forum login"], ["login", "exchange login"], ["wallet", "0x71C…9a3F"], ["wallet", "0xB04…1d7E"], ["mail", "nova07 mailbox"], ["doc", "Passport scan"], ["doc", "Address proof"]] },
+    { name: "Kite-02", fx: .83, fy: .24, r: 10, sats: [["login", "dex login"], ["wallet", "0x2aE…c410"], ["mail", "kite02 mailbox"], ["doc", "Selfie check"]] },
+    { name: "Orin-11", fx: .8, fy: .8, r: 10, sats: [["login", "quest login"], ["login", "social login"], ["wallet", "0x9fD…7b02"]] },
+  ];
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  hubs.forEach((h, hi) => h.sats.forEach((s, i) => {
+    s.kind = s[0]; s.label = s[1];
+    s.a0 = (i / h.sats.length) * Math.PI * 2 + rnd() * .5;
+    s.rad = 62 + rnd() * 62 + (i % 2) * 16;
+    s.spd = (rnd() < .5 ? -1 : 1) * (.00011 + rnd() * .00018);
+    s.hub = h; s.x = s.y = 0;
+  }));
+  let W = 0, H = 0, dpr = 1, hover = null, visible = false, raf = 0, T = 0;
+  const size = () => {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  const place = (t) => {
+    const k = Math.min(W, H) / 500;
+    hubs.forEach((h, i) => {
+      h.x = h.fx * W + Math.sin(t * .0004 + i * 2) * 6;
+      h.y = h.fy * H + Math.cos(t * .00035 + i) * 6;
+      h.k = k;
+      h.sats.forEach((s) => {
+        const a = s.a0 + t * s.spd;
+        s.x = h.x + Math.cos(a) * s.rad * k * 1.05;
+        s.y = h.y + Math.sin(a) * s.rad * k * .9;
+      });
+    });
+  };
+  const shape = (kind, x, y, r) => {
+    ctx.beginPath();
+    if (kind === "login") { ctx.moveTo(x, y - r); ctx.lineTo(x + r, y); ctx.lineTo(x, y + r); ctx.lineTo(x - r, y); ctx.closePath(); ctx.fill(); }
+    else if (kind === "wallet") { ctx.fillRect(x - r * .8, y - r * .8, r * 1.6, r * 1.6); }
+    else if (kind === "mail") { ctx.arc(x, y, r * .85, 0, Math.PI * 2); ctx.lineWidth = 1.6; ctx.stroke(); }
+    else { ctx.moveTo(x, y - r); ctx.lineTo(x + r, y + r * .8); ctx.lineTo(x - r, y + r * .8); ctx.closePath(); ctx.fill(); }
+  };
+  const draw = (t) => {
+    ctx.clearRect(0, 0, W, H); place(t);
+    // faint grid
+    ctx.strokeStyle = "rgba(233,227,211,.035)"; ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, H); ctx.stroke(); }
+    for (let y = 0; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y + .5); ctx.lineTo(W, y + .5); ctx.stroke(); }
+    const active = hover ? (hover.hub || hover) : hubs[0];
+    // hub to hub
+    ctx.setLineDash([4, 6]); ctx.lineWidth = 1; ctx.strokeStyle = "rgba(227,194,128,.28)";
+    [[0, 1], [0, 2]].forEach(([a, b]) => { ctx.beginPath(); ctx.moveTo(hubs[a].x, hubs[a].y); ctx.lineTo(hubs[b].x, hubs[b].y); ctx.stroke(); });
+    ctx.setLineDash([]);
+    hubs.forEach((h) => {
+      const on = h === active, dim = on ? 1 : .35;
+      h.sats.forEach((s) => {
+        ctx.globalAlpha = dim;
+        ctx.strokeStyle = on ? "rgba(227,194,128,.55)" : "rgba(233,227,211,.2)"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(h.x, h.y); ctx.lineTo(s.x, s.y); ctx.stroke();
+        ctx.fillStyle = BONE; ctx.strokeStyle = BONE;
+        const r = s === hover ? 7.5 : 5.2;
+        shape(s.kind, s.x, s.y, r);
+      });
+      ctx.globalAlpha = 1;
+      const pulse = on ? 1 + Math.sin(t * .003) * .08 : 1;
+      ctx.beginPath(); ctx.arc(h.x, h.y, (h.r + 9) * h.k * pulse, 0, Math.PI * 2);
+      ctx.strokeStyle = on ? "rgba(227,194,128,.45)" : "rgba(194,154,82,.18)"; ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath(); ctx.arc(h.x, h.y, h.r * h.k, 0, Math.PI * 2);
+      ctx.fillStyle = on ? BRASSHI : BRASS; ctx.globalAlpha = on ? 1 : .6; ctx.fill(); ctx.globalAlpha = 1;
+    });
+    // labels
+    const label = (x, y, text, strong) => {
+      ctx.font = "500 12px 'IBM Plex Mono', monospace";
+      const w = ctx.measureText(text).width + 16, h = 24;
+      let lx = x + 14, ly = y - 34; if (lx + w > W - 6) lx = x - w - 14; if (ly < 6) ly = y + 12;
+      ctx.fillStyle = "rgba(15,18,19,.94)"; ctx.fillRect(lx, ly, w, h);
+      ctx.strokeStyle = strong ? BRASSHI : "#3a444a"; ctx.lineWidth = 1; ctx.strokeRect(lx + .5, ly + .5, w - 1, h - 1);
+      ctx.fillStyle = strong ? BRASSHI : BONE; ctx.textBaseline = "middle"; ctx.fillText(text, lx + 8, ly + h / 2 + .5);
+    };
+    hubs.forEach((h) => { if (!hover || hover.hub === h || hover === h) { if (h !== hover) label(h.x, h.y + 40, "Entity " + h.name, h === active); } });
+    if (hover) label(hover.x, hover.y, hover.label ? (hover.kind[0].toUpperCase() + hover.kind.slice(1)) + ": " + hover.label : "Entity " + hover.name, true);
+  };
+  const loop = (t) => { T = t; draw(t); if (visible && !reduce) raf = requestAnimationFrame(loop); };
+  const start = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); };
+  const pick = (mx, my) => {
+    let best = null, bd = 18;
+    hubs.forEach((h) => { const d = Math.hypot(h.x - mx, h.y - my) - h.r * h.k * .4; if (d < bd) { bd = d; best = h; } h.sats.forEach((s) => { const e = Math.hypot(s.x - mx, s.y - my); if (e < bd) { bd = e; best = s; } }); });
+    return best;
+  };
+  cv.addEventListener("pointermove", (e) => { const r = cv.getBoundingClientRect(); hover = pick(e.clientX - r.left, e.clientY - r.top); cv.style.cursor = hover ? "pointer" : "default"; if (reduce) draw(T); });
+  cv.addEventListener("pointerleave", () => { hover = null; if (reduce) draw(T); });
+  new ResizeObserver(() => { size(); draw(T); }).observe(cv);
+  new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) start(); else cancelAnimationFrame(raf); }, { threshold: .05 }).observe(cv);
+  size(); draw(0);
+})();
+</script>
+</body>
+</html>
