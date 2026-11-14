@@ -70,7 +70,7 @@ export function designedLandingHtml(id, opts = {}) {
     baseTag = `<base href="${assetBase}">`;
     html = html.replace(/href="#([^"]+)"/g, 'href="/#$1"');
   } else {
-    html = html.replace(/\b(href|src)="((?:assets|fonts|media)\/)/g, `$1="${assetBase}$2`).replace(/url\((['"]?)((?:assets|fonts|media)\/)/g, `url($1${assetBase}$2`);
+    html = html.replace(/\b(href|src)="(?:\.\/)?((?:assets|fonts|media)\/)/g, `$1="${assetBase}$2`).replace(/url\((['"]?)(?:\.\/)?((?:assets|fonts|media)\/)/g, `url($1${assetBase}$2`);
   }
 
   // 3) head: drop the design's own SEO tags, add the registry ones (same set for all 8 modules)

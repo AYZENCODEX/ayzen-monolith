@@ -101,9 +101,9 @@ const RULES = [
     }
     return null;
   }],
-  ["designs: every module with a design file ships it; the designed set is exactly the expected 7 (sylo uses the generic landing)", (t) => {
-    const have = [...t.designs].sort().join(","); const want = ["fyra", "ryft", "skarn", "verve", "warde", "wisp", "zynth"].join(",");
-    return have === want && !hasDesign("sylo") ? null : `designs: ${have}`;
+  ["designs: every module has its design file; the designed set is exactly the 8 modules", (t) => {
+    const have = [...t.designs].sort().join(","); const want = ["fyra", "ryft", "skarn", "sylo", "verve", "warde", "wisp", "zynth"].join(",");
+    return have === want && hasDesign("sylo") ? null : `designs: ${have}`;
   }],
   ["demo auth is neutralised: no anchor/form/button reaches a design's demo sign-in; sign-in goes to /login and /register", (t) => {
     for (const id of t.ids.filter((i) => t.designs.includes(i))) {
@@ -163,7 +163,7 @@ const RULES = [
   }],
   ["server: MODULE_LANDING_ENABLED, '/' answered before express.static, asset allow-list, bundle-safe landings dir", (t) => {
     const a = t.files["artifacts/api-server/src/app.ts"], pk = JSON.parse(t.files["packages/module-registry/package.json"]);
-    if (!/MODULE_LANDING_ENABLED === "1"/.test(a) || !/designedLandingHtml\(c\.id/.test(a)) return "server landing switch missing";
+    if (!/MODULE_LANDING_ENABLED !== "0"/.test(a) || !/designedLandingHtml\(c\.id/.test(a)) return "server landing switch missing";
     const i = a.indexOf('app.get("/", (req, res, next) => {\n    const landing'), j = a.indexOf("app.use(express.static(distPath))");
     if (i < 0 || j < 0 || i > j) return "'/' must be registered before express.static";
     if (!/LANDING_ASSET_FILES\.get\(key\)/.test(a)) return "asset allow-list missing";
@@ -219,7 +219,7 @@ if (process.argv.includes("--self-test")) {
     ["landing not written as index.html", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts").replace("designedLandingHtml(moduleId)!", "''") } }, "module build:"],
     ["shell injected again", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts") + "\n// transformIndexHtml(html)\n" } }, "module build:"],
     ["deploy rewrite back to index.html", { files: { "deploy/modules/fyra/vercel.json": f("deploy/modules/fyra/vercel.json").replace("/app.html", "/index.html") } }, "module build:"],
-    ["server switch removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('MODULE_LANDING_ENABLED === "1"', "false") } }, "server:"],
+    ["server switch removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('MODULE_LANDING_ENABLED !== "0"', "false") } }, "server:"],
     ["static before landing route", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('app.use(express.static(distPath));\n  app.get("/{*splat}"', 'app.get("/{*splat}"').replace('app.get("/", (req, res, next) => {\n    const landing', 'app.use(express.static(distPath));\n  app.get("/", (req, res, next) => {\n    const landing') } }, "server:"],
     ["asset allow-list removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace("LANDING_ASSET_FILES.get(key)", "key") } }, "server:"],
     ["SPA gate removed", { files: { "artifacts/ayzen/src/main.tsx": f("artifacts/ayzen/src/main.tsx").replace("shouldShowModuleLanding(", "noop(") } }, "SPA fallback gate"],

@@ -402,9 +402,9 @@ if (SPLIT_REDIRECTS) {
 
 if (process.env.NODE_ENV === "production") {
   const distPath = path.resolve(__dirname, "../../ayzen/dist/public");
-  // W2-P4: with MODULE_LANDING_ENABLED=1 a module host serves its own landing (SEO tags + prerendered body) at "/" instead of a
+  // W2-P4: unless MODULE_LANDING_ENABLED=0 a module host serves its own landing (SEO tags + prerendered body) at "/" instead of a
   // 302. The inline guard in the HTML clears it for signed-in visitors, and the SPA then redirects them to the module home.
-  const landingByHost = process.env.MODULE_LANDING_ENABLED === "1" ? buildLandingByHost() : new Map<string, string>();
+  const landingByHost = process.env.MODULE_LANDING_ENABLED !== "0" ? buildLandingByHost() : new Map<string, string>();
   app.get("/landing-assets/{*file}", (req, res, next) => {
     if (!landingByHost.size) return next();
     const key = [].concat((req.params as any).file ?? []).join("/");
