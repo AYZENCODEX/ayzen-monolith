@@ -35,7 +35,8 @@ import {
   revokeSessionByJti,
   revokeAllSessionsExcept,
 } from "../lib/sessions";
-import { setSessionCookie, clearSessionCookie, getSessionCookie } from "../lib/session-cookie";
+import { setSessionCookie, clearSessionCookie, getSessionCookie, setModuleSessionCookie, clearModuleSessionCookie } from "../lib/session-cookie";
+import { resolveRequestModule } from "../lib/module-session-policy";
 // Enforcement Roadmap Track H, Phase H14: resolves the real RBAC-derived
 // `scopes`/`roles` a freshly-authenticated user's token should carry — see
 // that file's header for why a resolution failure degrades to no scopes
@@ -724,6 +725,18 @@ router.post("/auth/refresh", async (req, res): Promise<void> => {
   // had one (pre-sessions-feature tokens).
   const decoded = verifyAuthToken(refreshToken);
   let token: string;
+  // W1-P2: refreshing a MODULE session keeps it a module session (same `mod`/`mac`, same row, module cookie). It must
+  // never fall into the branch below that mints a fresh SHARED session, which would turn a token that is valid on one
+  // host into one that is valid everywhere.
+  if (decoded?.mod) {
+    if (!decoded.sid || !(await touchSession(decoded.sid))) { res.status(401).json({ error: "Invalid token" }); return; }
+    token = signAuthToken(user.id, user.role, {
+      sid: decoded.sid, scopes: decoded.scopes, roles: decoded.roles, stepUpAt: decoded.stepUpAt, mod: decoded.mod, mac: decoded.mac,
+    });
+    if (resolveRequestModule(req.hostname) === decoded.mod) setModuleSessionCookie(res, decoded.mod, token);
+    res.json({ token, refreshToken: token, user: sanitizeUser(user) });
+    return;
+  }
   if (decoded?.sid && (await touchSession(decoded.sid))) {
     // Phase H14: a refresh does not re-verify a credential, so it must not
     // manufacture a fresh step-up window or silently re-resolve (and
@@ -834,11 +847,19 @@ router.post("/auth/verify-2fa", async (_req, res): Promise<void> => {
 // really the account's single-sign-on session — this is the surface that
 // lets the owner see it and kill a specific one (or all-but-this-one).
 
+/** W1-P2: the device list and its revoke actions manage the CENTRAL account; a module session may not touch them. */
+function refuseModuleSession(res: import("express").Response, result: { moduleId?: string }): boolean {
+  if (!result.moduleId) return false;
+  res.status(403).json({ error: "Forbidden", code: "CENTRAL_SESSION_REQUIRED", solution: "Manage sessions from your central AYZEN account, not from a module." });
+  return true;
+}
+
 router.get("/auth/sessions", async (req, res): Promise<void> => {
   const token = getTokenFromReq(req);
   if (!token) { res.status(401).json({ error: "Unauthorized" }); return; }
   const result = await getUserFromToken(token);
   if (!result) { res.status(401).json({ error: "Invalid token" }); return; }
+  if (refuseModuleSession(res, result)) return;
 
   const decoded = verifyAuthToken(token);
   const currentSid = decoded?.sid ?? null;
@@ -862,6 +883,7 @@ router.post("/auth/sessions/:id/revoke", authLimiter, async (req, res): Promise<
   if (!token) { res.status(401).json({ error: "Unauthorized" }); return; }
   const result = await getUserFromToken(token);
   if (!result) { res.status(401).json({ error: "Invalid token" }); return; }
+  if (refuseModuleSession(res, result)) return;
 
   const sessionId = Number(req.params.id);
   if (!Number.isInteger(sessionId) || sessionId <= 0) { res.status(400).json({ error: "Invalid session id" }); return; }
@@ -880,6 +902,7 @@ router.post("/auth/sessions/revoke-others", authLimiter, async (req, res): Promi
   if (!token) { res.status(401).json({ error: "Unauthorized" }); return; }
   const result = await getUserFromToken(token);
   if (!result) { res.status(401).json({ error: "Invalid token" }); return; }
+  if (refuseModuleSession(res, result)) return;
 
   const decoded = verifyAuthToken(token);
   const revoked = await revokeAllSessionsExcept(result.userId, decoded?.sid ?? null);
@@ -908,6 +931,15 @@ router.get("/auth/me", async (req, res): Promise<void> => {
 // the same way `/auth/sessions/:id/revoke` does, scoped to their own token.
 router.post("/auth/logout", async (req, res): Promise<void> => {
   const token = getTokenFromReq(req);
+  // W1-P2: logging out of a module ends THAT module session only — it must not clear the shared cookie or fan a
+  // back-channel logout out to the user's other apps (that is what a central logout does).
+  const moduleDecoded = token ? verifyAuthToken(token) : null;
+  if (moduleDecoded?.mod) {
+    if (moduleDecoded.sid) await revokeSessionByJti(moduleDecoded.sid).catch(() => {});
+    clearModuleSessionCookie(res, moduleDecoded.mod);
+    res.json({ message: "Signed out" });
+    return;
+  }
   clearSessionCookie(res);
   if (!token) { res.json({ message: "Signed out" }); return; }
 
@@ -991,6 +1023,11 @@ router.post("/auth/session-exchange", authLimiter, async (req, res): Promise<voi
   // /auth/refresh above) it carries the original session's scopes/roles/
   // stepUpAt forward rather than re-resolving or resetting them.
   const originalClaims = verifyAuthToken(cookieToken);
+  // W1-P2: this mints a SHARED token. Exchanging a module session for one would widen it from one host to all of them.
+  if (originalClaims?.mod) {
+    res.status(403).json({ error: "Forbidden", code: "CENTRAL_SESSION_REQUIRED", solution: "Exchange your central AYZEN session, not a module session." });
+    return;
+  }
   const token = signAuthToken(user.id, user.role, {
     sid: jti,
     scopes: originalClaims?.scopes,

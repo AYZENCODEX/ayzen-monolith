@@ -3,7 +3,11 @@ import * as Sentry from "@sentry/node"; // sentry express error handler (init ha
 import express, { type Express, type RequestHandler } from "express";
 import pinoHttp from "pino-http";
 import cookieParser from "cookie-parser";
+import { moduleRequestContext } from "./lib/module-request-context";
 import path from "path";
+import fs from "fs";
+import { robotsTxt, sitemapXml } from "@ayzen/module-registry/landing";
+import { designAssets, designIds, designedLandingHtml } from "@ayzen/module-registry/landing-designs";
 import { fileURLToPath } from "url";
 import router from "./routes";
 import wellKnownJwksRouter from "./routes/well-known-jwks";
@@ -38,6 +42,7 @@ import oidcIntrospectRouter from "./routes/oidc-introspect";
 // tier as oidcIntrospectRouter just above.
 import oidcRevokeRouter from "./routes/oidc-revoke";
 import { logger } from "./lib/logger";
+import { issuerProblem, resolveIssuer } from "./lib/oidc-discovery";
 import { logBus } from "./lib/log-bus";
 import { globalErrorHandler, notFoundHandler } from "./middlewares/error-handler";
 import {
@@ -50,6 +55,7 @@ import {
 } from "./middlewares/security";
 import { apiKeyScopeGate } from "./middlewares/api-key-scope";
 import { roleHostApiGate, roleHostPageGate } from "./middlewares/role-host";
+import { moduleHostApiGuard, moduleHostHeaders, moduleHostPageGuard } from "./lib/module-host-guard";
 import mcpRouter from "./routes/mcp";
 import { db } from "@workspace/db";
 import { sql } from "drizzle-orm";
@@ -129,6 +135,8 @@ app.use((req, res, next) => {
 // ── Security layer ───────────────────────────────────────────────────────────
 // See middlewares/security.ts for the full rationale behind each piece.
 app.use(securityHeaders);
+// W2-P1: per-module CSP frame-ancestors + Referrer-Policy on module hosts (only when MODULE_HOST_GUARD_MODE is owned|strict).
+app.use(moduleHostHeaders);
 app.use(corsMiddleware);
 // Reads the AYZEN Account session cookie (lib/session-cookie.ts) so
 // getTokenFromReq() can fall back to it when a request has no
@@ -136,13 +144,20 @@ app.use(corsMiddleware);
 // one login without each one re-sending a bearer token. Unsigned (JWT
 // verification happens later, same as the header path) — just parsing.
 app.use(cookieParser());
+// W1-P2: records which module this request is acting for (first-party Origin, else Host) so getUserFromToken() can
+// refuse a module session anywhere but its own module. Must run before every router that authenticates.
+app.use(moduleRequestContext);
 // Resend's inbound webhook needs the RAW body to verify its Svix signature
 // (see routes/resend-webhook.ts) — carve it out before the global json/urlencoded
 // parsers touch anything under /api, or the raw bytes are gone by the time we see them.
 const RESEND_WEBHOOK_PATH = "/api/webhooks/resend/inbound";
 app.use(RESEND_WEBHOOK_PATH, express.raw({ type: "*/*", limit: "10mb" }));
-app.use((req, res, next) => (req.originalUrl === RESEND_WEBHOOK_PATH ? next() : express.json({ limit: JSON_BODY_LIMIT })(req, res, next)));
-app.use((req, res, next) => (req.originalUrl === RESEND_WEBHOOK_PATH ? next() : express.urlencoded({ extended: true, limit: JSON_BODY_LIMIT })(req, res, next)));
+// W1-P5: Clerk (Svix) webhooks, one path per module, also signature-verified over the raw body (routes/clerk-webhook.ts).
+const CLERK_WEBHOOK_PREFIX = "/api/webhooks/clerk";
+app.use(CLERK_WEBHOOK_PREFIX, express.raw({ type: "*/*", limit: "1mb" }));
+const hasRawBody = (url: string) => url === RESEND_WEBHOOK_PATH || url.startsWith(`${CLERK_WEBHOOK_PREFIX}/`);
+app.use((req, res, next) => (hasRawBody(req.originalUrl) ? next() : express.json({ limit: JSON_BODY_LIMIT })(req, res, next)));
+app.use((req, res, next) => (hasRawBody(req.originalUrl) ? next() : express.urlencoded({ extended: true, limit: JSON_BODY_LIMIT })(req, res, next)));
 // Accepts raw CSV body (e.g. vault bulk import/export) alongside JSON.
 app.use(express.text({ type: ["text/csv", "text/plain"], limit: "5mb" }));
 app.use(dedupeQueryParams);
@@ -160,6 +175,12 @@ app.use(sioraRequestTelemetry);
 // rationale).
 app.use(wellKnownJwksRouter);
 app.use(wellKnownOpenidConfigurationRouter);
+// W1-P3: the issuer is baked into every ID token and each relying party's config, so a malformed one
+// (no scheme, http in prod, query string) breaks all logins at once — fail loud in the boot log.
+{
+  const problem = issuerProblem(resolveIssuer());
+  if (problem) logger.error({ issuer: resolveIssuer(), problem }, "oidc.issuer.invalid");
+}
 
 // `/oidc/authorize` — Season 2, Phase 3a (Authorization Request
 // Validation only; see routes/oidc-authorize.ts for the full scope
@@ -275,7 +296,8 @@ app.use(oidcRevokeRouter);
 // so it needs neither apiKeyScopeGate nor globalLimiter here. Phase 8.
 app.use((req, res, next) => (isApiHost(req.hostname) ? (mcpRouter as unknown as RequestHandler)(req, res, next) : next()));
 
-app.use("/api", globalLimiter, roleHostApiGate, apiKeyScopeGate, router);
+// W2-P1: another module's API path is a plain 404 for a request acting for this module (lib/module-host-guard.ts; off by default).
+app.use("/api", globalLimiter, moduleHostApiGuard, roleHostApiGate, apiKeyScopeGate, router);
 
 app.use("/api/{*splat}", notFoundHandler);
 app.use(globalErrorHandler as any);
@@ -295,6 +317,8 @@ app.use((req, res, next) => {
 // ── Role hosts (admin / mod / team leader) ──────────────────────────────────
 // Phase 7. No-op unless ROLE_HOSTS_ENABLED=1. See lib/role-hosts.ts for the
 // decision table; the API half of the same rule is mounted on /api above.
+// W2-P1: another module's PAGE path on a module host is a 404 too (same mode switch).
+app.use(moduleHostPageGuard);
 app.use(roleHostPageGate);
 
 // ── Serve built frontend in production ───────────────────────────────────────
@@ -323,6 +347,26 @@ const SPLIT_APP_HOST_CONFIG: SplitAppHostConfig[] = SHARED_APP_DEFINITIONS.map((
 // Flat hostname → homePath lookup built once at startup, so the per-request
 // redirect check below is a single Map.get() rather than looping every app
 // on every request.
+const SPLIT_APP_ID_BY_HOST = new Map<string, string>(
+  SPLIT_APP_HOST_CONFIG.flatMap((c) => c.hosts.map((h) => [h, c.id] as const)),
+);
+// The server is bundled, so tell the registry where the landing designs live (repo checkout, next to the API build).
+process.env.MODULE_LANDINGS_DIR ??= path.resolve(__dirname, "../../../packages/module-registry/landings");
+function buildLandingByHost(): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const c of SPLIT_APP_HOST_CONFIG) {
+    for (const host of c.hosts) {
+      const html = designedLandingHtml(c.id, { origin: `https://${host}` });
+      if (html) out.set(host, html);
+    }
+  }
+  return out;
+}
+// Files a designed landing may load (fonts, css, js, sibling pages), allow-listed so the raw design (with its demo sign-in
+// markup) is never served from here.
+const LANDING_ASSET_FILES = new Map<string, string>(
+  designIds().flatMap((id) => designAssets(id).map((a) => [`${id}/${a.rel}`, a.abs] as const)),
+);
 const SPLIT_APP_HOME_BY_HOST = new Map<string, string>(
   SPLIT_APP_HOST_CONFIG.flatMap((c) => c.hosts.map((h) => [h, c.homePath] as const)),
 );
@@ -358,6 +402,34 @@ if (SPLIT_REDIRECTS) {
 
 if (process.env.NODE_ENV === "production") {
   const distPath = path.resolve(__dirname, "../../ayzen/dist/public");
+  // W2-P4: with MODULE_LANDING_ENABLED=1 a module host serves its own landing (SEO tags + prerendered body) at "/" instead of a
+  // 302. The inline guard in the HTML clears it for signed-in visitors, and the SPA then redirects them to the module home.
+  const landingByHost = process.env.MODULE_LANDING_ENABLED === "1" ? buildLandingByHost() : new Map<string, string>();
+  app.get("/landing-assets/{*file}", (req, res, next) => {
+    if (!landingByHost.size) return next();
+    const key = [].concat((req.params as any).file ?? []).join("/");
+    const abs = LANDING_ASSET_FILES.get(key);
+    if (!abs) return next();
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    res.sendFile(abs);
+  });
+  app.get("/robots.txt", (req, res, next) => {
+    const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
+    if (!id || !landingByHost.size) return next();
+    res.type("text/plain").send(robotsTxt(id, { origin: `https://${req.hostname}` }));
+  });
+  app.get("/sitemap.xml", (req, res, next) => {
+    const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
+    if (!id || !landingByHost.size) return next();
+    res.type("application/xml").send(sitemapXml(id, { origin: `https://${req.hostname}` }));
+  });
+  // "/" must be answered BEFORE express.static, which would otherwise serve the SPA's index.html for it.
+  app.get("/", (req, res, next) => {
+    const landing = landingByHost.get(req.hostname);
+    if (!landing) return next();
+    res.setHeader("Cache-Control", "public, max-age=300");
+    res.type("html").send(landing);
+  });
   app.use(express.static(distPath));
   app.get("/{*splat}", (req, res) => {
     const homePath = SPLIT_APP_HOME_BY_HOST.get(req.hostname);

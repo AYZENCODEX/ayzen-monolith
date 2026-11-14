@@ -42,16 +42,12 @@ import {
   evaluateOidcRolloutHealth,
 } from "../lib/oidc-login-attempts";
 import { logger } from "../lib/logger";
+import { ROLLOUT_ALLOWED_WITHOUT_OVERRIDE } from "../lib/oidc-rollout-scope";
 
 const router: IRouter = Router();
 
-/**
- * Season 3 only migrates Sylo (roadmap section 1.3's own execution
- * boundary) — identical to `set-oidc-rollout-flag.ts`'s
- * `args.app !== "sylo"` guard, see file header for why this is
- * duplicated rather than shared.
- */
-const ALLOWED_WITHOUT_OVERRIDE = new Set(["sylo"]);
+/** W1-P4: every module's own client id (see lib/oidc-rollout-scope.ts); anything else needs `allowNonSylo`. */
+const ALLOWED_WITHOUT_OVERRIDE = ROLLOUT_ALLOWED_WITHOUT_OVERRIDE;
 
 // ── GET /admin/oidc-rollout/:appId — current flag + 5c-d/5e comparison stats ──
 router.get("/admin/oidc-rollout/:appId", requireDev, async (req, res): Promise<void> => {
@@ -95,7 +91,7 @@ router.patch("/admin/oidc-rollout/:appId", requireDev, async (req, res): Promise
       error: "Refusing to touch this app_id",
       code: "NON_SYLO_APP_ID",
       solution:
-        `Season 3 only migrates Sylo. Pass { "allowNonSylo": true } once "${appId}" has its own OIDC client wiring (Phase 5a/5b equivalent).`,
+        `Only the eight module client ids can be toggled directly. Pass { "allowNonSylo": true } once "${appId}" has its own OIDC client wiring.`,
     });
     return;
   }

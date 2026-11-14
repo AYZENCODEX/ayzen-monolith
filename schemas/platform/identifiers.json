@@ -8,6 +8,11 @@
       "type": "string",
       "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
       "description": "Shared format for every id type below. Deliberately narrower than a component id (no '@' or '/') because these are runtime-minted values (typically UUIDv4), not registry slugs."
+    },
+    "moduleUid": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}-[0-9]{6,}$",
+      "description": "W1-P1 (ADR A1). Durable per-module account id: <PREFIX>-<6+ digit zero-padded sequence>, e.g. SYL-000001. Prefix comes from packages/module-registry (uidPrefix). Canonical spelling only: no extra leading zeros, no SYL-000000."
     }
   },
   "identifierTypes": {
@@ -52,6 +57,13 @@
       "pattern": "#/definitions/instanceId",
       "generator": "crypto.randomUUID",
       "propagation": { "http": "x-deployment-id", "eventEnvelope": "deploymentId", "workflowContext": null }
+    },
+    "moduleUid": {
+      "description": "One per (user, module) account. Durable, unlike the request-scoped ids above: it identifies an account, not a hop, so it is NOT part of the causation chain. Minted by the database (ayzen_provision_module_account, migrations/125_module_accounts.sql) from a per-module sequence, never by crypto.randomUUID. Internal foreign keys stay integers; this id is for display and lookup.",
+      "pattern": "#/definitions/moduleUid",
+      "generator": "db-sequence-per-module",
+      "propagation": { "http": null, "eventEnvelope": null, "workflowContext": null },
+      "claim": "module_uid (access-token / OIDC claim, per-module client only)"
     }
   },
   "causationRule": "Every hop after the entrypoint MUST set causationId to the id of the specific upstream item that produced it (the inbound requestId, the eventId being consumed, or the workflowRunId that scheduled the step) — never to correlationId or traceId, which stay constant across the whole chain and therefore cannot serve as a resolvable parent pointer.",

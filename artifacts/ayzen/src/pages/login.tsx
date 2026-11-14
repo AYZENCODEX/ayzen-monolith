@@ -14,6 +14,8 @@ import { getCurrentSubdomainApp } from "@/lib/subdomain-app";
 import { getRoleHostRedirect } from "@/lib/role-hosts";
 import { getSyloOidcRolloutFlag } from "@/lib/sylo-oidc-rollout-flag";
 import { startSyloOidcLogin } from "@/lib/sylo-oidc-login";
+import { getModuleAuthOptions, type ModuleAuthOptions } from "@/lib/module-auth-api";
+import { ModuleAuthScreen } from "@/components/module-auth-screen";
 
 import { getApiBase } from "@/lib/api-base";
 import { useModuleAwareNavigate } from "@/components/module-link";
@@ -113,6 +115,7 @@ export default function Login() {
   // `oidcRolloutEnabled` state uses, and the identical loader is shown
   // while unresolved so this page never flashes the credential form for a
   // visitor who's about to be redirected away from it.
+  const [moduleOptions, setModuleOptions] = useState<ModuleAuthOptions | null>(null);
   const [cutoverRedirectState, setCutoverRedirectState] = useState<"checking" | "redirecting" | "done">(() => {
     if (typeof window === "undefined") return "done";
     return getCurrentSubdomainApp() && !oidcReturnTo ? "checking" : "done";
@@ -123,7 +126,12 @@ export default function Login() {
     const subdomainApp = getCurrentSubdomainApp();
     if (!subdomainApp) { setCutoverRedirectState("done"); return; }
     let cancelled = false;
-    void getSyloOidcRolloutFlag(subdomainApp.id).then((enabled) => {
+    // W1-P4: on a module host with module sessions on, the module's own sign-in screen (credentials + Continue with AYZEN)
+    // replaces both the legacy form and the automatic OIDC redirect. `null` = module sessions off: legacy behavior below.
+    void getModuleAuthOptions().then(async (opts) => {
+      if (cancelled) return;
+      if (opts) { setModuleOptions(opts); setCutoverRedirectState("done"); return; }
+      const enabled = await getSyloOidcRolloutFlag(subdomainApp.id);
       if (cancelled) return;
       if (enabled) {
         setCutoverRedirectState("redirecting");
@@ -446,6 +454,8 @@ export default function Login() {
       </div>
     );
   }
+
+  if (moduleOptions) return <ModuleAuthScreen options={moduleOptions} returnToPath={getCurrentSubdomainApp()?.homePath ?? "/"} />;
 
   const view = tab === "signin" ? (signinStep === "stepup" && stepUp ? "stepup" : "signin") : "signup";
   const showTabs = view === "signin" || view === "signup";

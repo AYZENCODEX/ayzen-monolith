@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zynth — the MCP agent for AYZEN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050507;--fg:#EAF2FF;--teal:#5FE3D6;--violet:#8F7CFF;--pink:#FF6FB5;--muted:rgba(234,242,255,.62);--dim:rgba(234,242,255,.42);--line:rgba(234,242,255,.12);--glass:rgba(12,12,20,.6);--iri:linear-gradient(100deg,var(--teal),var(--violet) 55%,var(--pink));--serif:"Instrument Serif",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}h1,h2,h3,p,ul{margin:0;padding:0}ul{list-style:none}
+.hero{position:relative;min-height:100svh;overflow:clip;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-start;padding:120px 20px 72px}
+#c{position:absolute;inset:0;width:100%;height:100%;z-index:-2}
+.hero:after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 90% at 50% 62%,transparent 40%,var(--bg) 100%),linear-gradient(180deg,rgba(5,5,7,.55),transparent 22%,transparent 60%,var(--bg))}
+.nav{position:absolute;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:20px;gap:16px}
+.logo{font:500 .95rem var(--sans);letter-spacing:.22em}.logo span{font:400 .75rem var(--mono);letter-spacing:.08em;color:var(--dim);margin-left:.9em}
+.nav nav{display:flex;gap:22px;font-size:.85rem;color:var(--muted)}.nav nav a:hover{color:var(--fg)}
+.pill{display:inline-flex;align-items:center;gap:.7em;padding:.7em 1.2em;border-radius:999px;font-weight:500;font-size:.88rem;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.pill:hover{transform:translateY(-2px)}.pill i{font-style:normal;display:inline-grid;place-items:center;width:1.6em;height:1.6em;border-radius:50%;background:rgba(7,7,11,.12)}
+.solid{background:var(--fg);color:#07070b}.ghost{border:1px solid var(--line);backdrop-filter:blur(10px)}.ghost:hover{border-color:rgba(234,242,255,.35)}
+.chip{display:inline-flex;align-items:center;gap:.6em;padding:.4em .9em;border:1px solid var(--line);border-radius:999px;font:400 .72rem var(--mono);letter-spacing:.06em;color:var(--muted);backdrop-filter:blur(10px)}
+.chip:before,.live:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);animation:bl 2.4s ease-in-out infinite}
+@keyframes bl{50%{opacity:.35}}
+.copy{max-width:780px;margin:0 auto 24px;text-align:center}
+h1{font:400 clamp(2.5rem,7.4vw,4.9rem)/1.02 var(--serif);letter-spacing:-.02em;margin:18px 0 16px}
+h1 em{font-style:italic;background:var(--iri);-webkit-background-clip:text;background-clip:text;color:transparent}
+.copy p{color:var(--muted);max-width:56ch;margin-inline:auto}.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;justify-content:center}
+.panel{width:100%;background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:16px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);font-family:var(--mono)}
+.ph{display:flex;justify-content:space-between;align-items:center;font-size:.68rem;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+.live{display:inline-flex;align-items:center;gap:.6em}
+#ttl{display:block;margin:12px 0;font-size:.82rem;color:var(--fg);min-height:1.4em}#ttl:after{content:"";display:inline-block;width:7px;height:1em;vertical-align:-2px;margin-left:3px;background:var(--teal);animation:bl 1s steps(2) infinite}
+#steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+#steps li{font-size:.62rem;color:var(--dim);letter-spacing:.04em;transition:color .3s}#steps li b{display:block;font-weight:400;opacity:.6}
+#steps li i{display:block;height:2px;margin-top:6px;background:var(--line);position:relative;overflow:hidden}#steps li i:after{content:"";position:absolute;inset:0;background:var(--iri);transform:scaleX(var(--p,0));transform-origin:left}
+#steps li.on{color:var(--fg)}
+#log{margin-top:14px;height:152px;overflow:hidden;font-size:.7rem;display:flex;flex-direction:column;gap:5px;-webkit-mask-image:linear-gradient(180deg,#000 60%,transparent);mask-image:linear-gradient(180deg,#000 60%,transparent)}
+#log li{display:flex;gap:10px;white-space:nowrap;animation:in .5s cubic-bezier(.2,.8,.2,1)}@keyframes in{from{opacity:0;transform:translateY(-6px)}}
+#log time{color:var(--dim)}#log b{font-weight:500;min-width:4.6em}#log span{color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+#labels{position:absolute;inset:0;z-index:1;pointer-events:none}
+.lab{position:absolute;left:0;top:0;display:flex;align-items:center;gap:7px;margin:-6px 0 0 14px;font:400 .66rem var(--mono);letter-spacing:.08em;text-transform:uppercase;transition:opacity .4s;will-change:transform}
+.lab b{font-weight:500}.lab em{font-style:normal;color:var(--dim);display:none}
+.sec{padding:96px 20px;width:min(1200px,100%);margin-inline:auto}
+.eyebrow{font:400 .72rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+h2{font:400 clamp(2rem,4.6vw,3.2rem)/1.08 var(--serif);letter-spacing:-.015em;margin:14px 0 40px;max-width:20ch}
+.flow{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.flow div{background:var(--bg);padding:22px}.flow b{font:400 .7rem var(--mono);color:var(--teal)}.flow h3{font:500 1rem var(--sans);margin:10px 0 6px}.flow p{font-size:.88rem;color:var(--muted)}
+.grid{display:grid;gap:14px}
+.card{position:relative;padding:22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(234,242,255,.035),transparent);overflow:hidden;opacity:0;transform:translateY(14px);transition:opacity .7s,transform .7s cubic-bezier(.2,.8,.2,1),border-color .3s}
+.card.v{opacity:1;transform:none}.card:hover{border-color:var(--c)}
+.card:before{content:"";position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,transparent,var(--c),transparent);opacity:.7}
+.card h3{font:500 .78rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--c)}.card small{display:block;color:var(--dim);font-size:.8rem;margin:4px 0 14px}.card p{font-size:.9rem;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:28px 20px;text-align:center;font:400 .72rem var(--mono);color:var(--dim);letter-spacing:.06em}
+@media(min-width:720px){.nav{padding:24px 40px}.nav nav{display:flex}.hero{padding:130px 40px 76px}.flow{grid-template-columns:repeat(5,1fr)}.grid{grid-template-columns:repeat(2,1fr)}.lab em{display:inline}}
+@media(min-width:960px){.grid{grid-template-columns:repeat(4,1fr)}.sec{padding:120px 40px}}
+@media(min-width:1000px){.hero{flex-direction:row;align-items:center;justify-content:space-between;gap:56px;padding:140px max(40px,calc((100vw - 1200px)/2)) 100px}.copy{text-align:left;margin:0;max-width:600px}.copy p{margin-inline:0}.hero .ctas,.mods{justify-content:flex-start}.panel{flex:none;width:470px;margin:0}#log{height:190px}}
+@media(prefers-reduced-motion:reduce){.card{opacity:1;transform:none}*{animation-duration:.001ms!important}}
+[hidden]{display:none!important}
+.panel{margin-top:8px}.nav nav a.on{color:var(--fg)}
+.stats{display:flex;justify-content:center;gap:34px;margin-top:30px;font:400 .68rem var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase}.stats b{display:block;font:400 1.7rem var(--serif);color:var(--fg);letter-spacing:0;text-transform:none}
+.tick{position:absolute;left:0;right:0;bottom:0;z-index:2;overflow:hidden;border-top:1px solid var(--line);padding:13px 0;background:rgba(5,5,7,.6);backdrop-filter:blur(8px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+#tk{display:flex;gap:34px;width:max-content;font:400 .7rem var(--mono);animation:mq 90s linear infinite}#tk span{opacity:.75;white-space:nowrap}@keyframes mq{to{transform:translateX(-50%)}}
+.lead{color:var(--muted);max-width:62ch;margin:-20px 0 28px}.lead code{font:.8rem var(--mono);color:var(--fg)}
+.bar{display:flex;flex-direction:column;gap:14px;margin-bottom:12px}
+#q{width:100%;background:rgba(234,242,255,.04);border:1px solid var(--line);border-radius:12px;padding:12px 16px;color:var(--fg);font:400 .9rem var(--mono)}#q:focus{outline:none;border-color:var(--teal)}
+#chips{display:flex;flex-wrap:wrap;gap:8px}#chips button{padding:.35em .85em;border:1px solid var(--line);border-radius:999px;font:400 .72rem var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;cursor:pointer;background:none}#chips .on{background:var(--fg);color:#07070b;border-color:var(--fg)}
+#cnt{font:.72rem var(--mono);color:var(--dim);margin:10px 0}
+#tl{border:1px solid var(--line);border-radius:16px;overflow:hidden}.tool+.tool{border-top:1px solid var(--line)}.none{padding:24px;color:var(--dim);font:.8rem var(--mono)}
+.tool>button{width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:14px 18px;background:none;border:0;border-left:2px solid transparent;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.tool:hover>button,.tool.open>button{background:rgba(234,242,255,.035);border-left-color:var(--c)}
+.tool code{flex:1 1 100%;font:500 .84rem var(--mono)}.g{font:.66rem var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--c);margin-right:auto}
+.t,.s{font:.64rem var(--mono);padding:.15em .6em;border-radius:6px;border:1px solid var(--line);color:var(--muted)}
+.t-A{color:var(--pink);border-color:rgba(255,111,181,.4)}.t-W{color:var(--violet);border-color:rgba(143,124,255,.4)}.s-L{color:var(--teal);border-color:rgba(95,227,214,.4)}
+.td{display:none;padding:0 18px 18px 20px;font-size:.88rem;color:var(--muted)}.tool.open .td{display:block}
+.td dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:12px 0 0;font:.74rem var(--mono)}.td dt{color:var(--dim)}.td dd{margin:0;color:var(--fg)}
+footer{text-align:left;padding:0;letter-spacing:0;font-family:var(--sans);color:var(--fg);background:radial-gradient(80% 120% at 50% 0,rgba(143,124,255,.12),transparent 70%)}
+.ft{width:min(1200px,100%);margin-inline:auto;padding:88px 20px 40px;display:flex;flex-direction:column;gap:40px}
+.ft h2{margin:14px 0 28px;max-width:16ch;font-size:clamp(2.2rem,5.5vw,4rem)}
+.soc{display:flex;flex-wrap:wrap;gap:12px}.soc a{display:grid;place-items:center;width:46px;height:46px;border:1px solid var(--line);border-radius:50%;color:var(--muted);transition:all .25s}.soc a:hover{color:var(--fg);border-color:var(--teal);transform:translateY(-3px);box-shadow:0 0 24px rgba(95,227,214,.2)}
+.soc svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.fb{width:min(1200px,100%);margin-inline:auto;border-top:1px solid var(--line);padding:22px 20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:400 .7rem var(--mono);color:var(--dim);letter-spacing:.06em}
+@media(min-width:720px){.ft{padding:120px 40px 56px;flex-direction:row;justify-content:space-between;align-items:flex-end}.fb{padding:22px 40px}.bar{flex-direction:row;align-items:center;justify-content:space-between}.tool code{flex:1 1 auto;min-width:260px}.tool>button{flex-wrap:nowrap}.g{margin:0 auto 0 0;min-width:70px}}
+@media(max-width:719px){.logo span{display:none}.stats{gap:22px}}@media(max-width:519px){.nav>.pill{display:none}#log{height:112px}}
+.hero{align-items:center}.logo .wm{font:500 .95rem var(--sans);letter-spacing:.22em;color:var(--fg);margin:0;display:inline}
+.aur{position:absolute;inset:-20%;z-index:-2;background:radial-gradient(40% 35% at 25% 30%,rgba(95,227,214,.16),transparent 70%),radial-gradient(35% 35% at 75% 25%,rgba(143,124,255,.18),transparent 70%),radial-gradient(35% 30% at 55% 85%,rgba(255,111,181,.1),transparent 70%);animation:dr 18s ease-in-out infinite alternate}@keyframes dr{to{transform:translate3d(3%,-2%,0) scale(1.08)}}
+.hero:before{content:"";position:absolute;inset:0;z-index:-2;background-image:radial-gradient(rgba(234,242,255,.1) 1px,transparent 1px);background-size:28px 28px;-webkit-mask-image:radial-gradient(70% 60% at 50% 45%,#000,transparent);mask-image:radial-gradient(70% 60% at 50% 45%,#000,transparent)}
+.hero:after{background:linear-gradient(180deg,rgba(5,5,7,.4),transparent 25%,transparent 75%,var(--bg))}
+.con{--lw:60px;width:min(1120px,100%);background:var(--glass);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 40px 120px -40px rgba(95,227,214,.25);font-family:var(--mono);overflow:hidden;text-align:left}
+.cb{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim)}.cb #ttl{margin:0;color:var(--fg);text-transform:none;letter-spacing:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cg{display:grid}.lw{padding:14px 18px 18px;min-width:0}
+#hd{display:flex;margin-left:var(--lw);margin-bottom:8px;font-size:.6rem;color:var(--dim)}
+#hd span{position:relative;padding-bottom:7px;border-bottom:2px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .3s}#hd span:after{content:"";position:absolute;left:0;bottom:-2px;height:2px;width:100%;background:var(--iri);transform:scaleX(var(--p,0));transform-origin:left}#hd .on{color:var(--fg)}#hd b{font-weight:400;opacity:.5;margin-right:4px}
+.lanes{position:relative}.ln{display:grid;grid-template-columns:var(--lw) 1fr;align-items:center;height:30px;border-top:1px solid rgba(234,242,255,.05)}.ln>span{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}.tr{position:relative;height:100%}
+.bar{position:absolute;top:5px;bottom:5px;border:1px solid color-mix(in srgb,var(--c) 40%,transparent);border-radius:6px;overflow:hidden;opacity:.4;transition:opacity .4s,box-shadow .4s}
+.bar u{position:absolute;inset:0;background:linear-gradient(90deg,color-mix(in srgb,var(--c) 22%,transparent),color-mix(in srgb,var(--c) 52%,transparent));transform-origin:left;transform:scaleX(0)}
+.bar span{position:relative;display:block;padding:0 7px;font-size:.58rem;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--fg)}.bar.run,.bar.done{opacity:1}.bar.run{box-shadow:0 0 18px color-mix(in srgb,var(--c) 45%,transparent)}
+#pl{position:absolute;left:var(--lw);right:0;top:-4px;bottom:0;pointer-events:none}#pl i{position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--teal),rgba(95,227,214,.05));box-shadow:0 0 14px var(--teal)}
+.con #log{margin:0;height:auto;min-height:120px;padding:14px 18px;border-top:1px solid var(--line);gap:6px}
+.path{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.pc{display:block;padding:22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(234,242,255,.04),transparent);box-shadow:0 10px 30px -14px rgba(95,227,214,.22);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s}
+.pc:hover{transform:translateY(-4px);border-color:rgba(95,227,214,.4);box-shadow:0 18px 44px -14px rgba(95,227,214,.38)}.pc b{font:400 .7rem var(--mono);color:var(--teal)}.pc h3{font:400 1.5rem var(--serif);margin:10px 0 6px}.pc p{font-size:.88rem;color:var(--muted)}.pc span{display:inline-block;margin-top:16px;font:400 .72rem var(--mono);color:var(--teal)}
+a.card{display:block}.card em{display:inline-block;margin-top:14px;font:normal .7rem var(--mono);color:var(--c)}.card:hover{box-shadow:0 18px 44px -18px var(--c)}
+.g3{grid-template-columns:1fr}
+.st{display:grid;gap:20px;padding:40px 0;border-top:1px solid var(--line);scroll-margin-top:90px}.sn{font:400 2.4rem var(--serif);color:var(--dim)}.st h3{font:400 1.9rem var(--serif);margin-bottom:10px}.st p{color:var(--muted)}
+.st ul{margin-top:14px}.st li{position:relative;padding-left:18px;margin-top:8px;font-size:.9rem;color:var(--muted)}.st li:before{content:"";position:absolute;left:0;top:.65em;width:6px;height:1px;background:var(--teal)}
+.st pre{margin:0;padding:18px;background:rgba(234,242,255,.04);border:1px solid var(--line);border-radius:12px;font:400 .74rem/1.7 var(--mono);color:var(--muted);overflow-x:auto}
+.sub{position:relative;isolation:isolate;overflow:clip;padding:150px 20px 72px;border-bottom:1px solid var(--line)}.sub .in{width:min(1200px,100%);margin-inline:auto;display:grid;gap:40px;align-items:center}
+.ds{width:100%}#dl{display:flex;flex-direction:column;font:400 .72rem var(--mono);padding:6px 0}#dl li{display:flex;gap:12px;align-items:center;padding:9px 18px;border-top:1px solid rgba(234,242,255,.05);animation:in .5s cubic-bezier(.2,.8,.2,1)}#dl li:first-child{border-top:0}#dl time{color:var(--dim)}#dl code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.d-ok{color:var(--teal);font-weight:500}.d-h{color:var(--pink);font-weight:500}
+@media(min-width:900px){.cg{grid-template-columns:1fr 290px}.con #log{border-top:0;border-left:1px solid var(--line)}.st{grid-template-columns:80px 1fr 1fr;gap:32px}.sub .in{grid-template-columns:1fr 1fr;gap:64px}.sub{padding:170px 40px 96px}.g3{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:719px){.nav nav{gap:16px;font-size:.78rem}.con{--lw:48px}.bar span{display:none}}@media(max-width:519px){.logo .wm,.logo span:not(.wm){display:none}}
+.mods{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:30px}
+.mc{display:inline-flex;align-items:center;gap:7px;padding:.35em .8em;border:1px solid var(--line);border-radius:999px;font:400 .68rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--dim);transition:all .4s}
+.mc i{width:6px;height:6px;border-radius:50%;background:var(--c);opacity:.4;transition:opacity .4s}.mc.on{color:var(--fg);border-color:color-mix(in srgb,var(--c) 45%,transparent)}.mc.on i{opacity:1}.mc.hot{box-shadow:0 0 18px color-mix(in srgb,var(--c) 50%,transparent)}
+.hero .panel{box-shadow:0 40px 120px -40px rgba(95,227,214,.25)}#live .con{width:100%}
+.hero:before{display:none}.lab{margin:0}.copy{position:relative;z-index:2}.panel{position:relative;z-index:2}
+.lab.g{padding:.25em .6em;border:1px solid rgba(95,227,214,.28);border-radius:6px;background:rgba(5,5,7,.55);backdrop-filter:blur(6px);color:var(--teal)}
+.hero:after{background:linear-gradient(90deg,rgba(5,5,7,.78),rgba(5,5,7,.15) 52%,transparent),linear-gradient(180deg,rgba(5,5,7,.35),transparent 20%,transparent 78%,var(--bg))}
+@media(max-width:719px){.lab.t{display:none}.hero .copy{margin-bottom:190px}}
+@media(min-width:1000px){.hero{align-items:flex-start}.panel{position:absolute;right:max(40px,calc((100vw - 1200px)/2));bottom:96px;width:410px;margin:0}#log{height:128px}}
+body.au .nav,body.au footer{display:none}
+#p-auth{min-height:100svh;display:grid;place-items:center;padding:64px 16px 32px}#ab{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
+.bk{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));left:20px;z-index:3;font:400 .75rem var(--mono);color:var(--muted);letter-spacing:.06em}.bk:hover{color:var(--fg)}
+.ac{width:min(1040px,100%);display:grid;background:rgba(9,9,16,.68);border:1px solid var(--line);border-radius:24px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);overflow:hidden;box-shadow:0 40px 120px -30px rgba(143,124,255,.4)}
+.al{display:none;padding:40px;flex-direction:column;justify-content:space-between;background:linear-gradient(160deg,rgba(143,124,255,.2),rgba(95,227,214,.05) 55%,transparent);border-right:1px solid var(--line)}
+.al h1{font-size:clamp(2.4rem,4vw,3.3rem);margin:0 0 14px}.al p{color:var(--muted);max-width:34ch}.al ul{display:grid;gap:12px;font:400 .76rem var(--mono);color:var(--muted)}.al li:before{content:"◆";color:var(--teal);margin-right:10px;font-size:.6rem}
+.ar{padding:30px clamp(20px,5vw,46px) 22px;min-height:640px;display:flex;flex-direction:column}#av{flex:1;display:flex;flex-direction:column;gap:14px;animation:in .45s cubic-bezier(.2,.8,.2,1)}#av.sh{animation:sh .4s}@keyframes sh{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.tabs{display:grid;grid-template-columns:1fr 1fr;padding:4px;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;background:rgba(234,242,255,.03)}.tabs button{padding:.6em;border:0;border-radius:9px;background:none;color:var(--muted);font:500 .85rem var(--sans);cursor:pointer;transition:all .25s}.tabs .on{background:var(--fg);color:#07070b}
+.ar h2{font:400 1.9rem/1.1 var(--serif);margin:0;max-width:none;letter-spacing:-.01em}.sb{color:var(--muted);font-size:.88rem;margin-top:-6px}.f{display:grid;gap:14px}
+.fl{display:grid;gap:7px}.fl label{font:400 .68rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.ai{width:100%;padding:13px 14px;background:rgba(234,242,255,.045);border:1px solid var(--line);border-radius:12px;color:var(--fg);font:400 .92rem var(--sans);transition:border-color .2s,box-shadow .2s}.ai:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(95,227,214,.12)}.ai.bad{border-color:var(--pink)}.ai.ok{border-color:rgba(155,227,124,.6)}textarea.ai{resize:vertical;min-height:76px}
+.pw{position:relative}.pw button{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--dim);font:.7rem var(--mono);cursor:pointer}
+.hn{font:400 .72rem var(--mono);min-height:1.1em;color:var(--dim)}.hn.bad{color:var(--pink)}.hn.ok{color:#9BE37C}
+.sm{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.sm i{height:3px;border-radius:2px;background:var(--line);transition:background .3s}
+.b1{padding:14px;border:0;border-radius:12px;background:var(--iri);color:#07070b;font:500 .92rem var(--sans);cursor:pointer;text-align:center;transition:transform .2s,opacity .2s,box-shadow .2s}.b1:hover{transform:translateY(-1px);box-shadow:0 10px 30px -10px rgba(143,124,255,.6)}.b1:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.b2{padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(234,242,255,.03);color:var(--fg);font:500 .85rem var(--sans);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:border-color .2s}.b2:hover{border-color:rgba(234,242,255,.35)}.b2 svg{width:18px;height:18px}
+.hf{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dv{display:flex;align-items:center;gap:12px;font:.68rem var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.1em}.dv:before,.dv:after{content:"";flex:1;height:1px;background:var(--line)}
+.lk{background:none;border:0;color:var(--teal);cursor:pointer;font:inherit;padding:0}.rw{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.82rem;color:var(--muted)}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;color:var(--muted);cursor:pointer}.ck input{accent-color:#5FE3D6;margin-top:3px}
+.cl{margin-top:auto;padding-top:18px;text-align:center;font:400 .68rem var(--mono);color:var(--dim);letter-spacing:.06em}
+.sg{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}.sg i{height:3px;border-radius:2px;background:var(--line)}.sg i.d{background:var(--iri)}
+.otp{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.otp input{text-align:center;padding:14px 0;font:500 1.2rem var(--mono)}
+.rows{display:grid;gap:8px}.rr{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:12px;font-size:.88rem}.rr .b2{padding:6px 12px;font-size:.75rem}.rr .b2.on{border-color:var(--teal);color:var(--teal)}
+.chs{display:flex;flex-wrap:wrap;gap:8px}.chs button{padding:.4em .9em;border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);font:.72rem var(--mono);text-transform:uppercase;cursor:pointer;transition:all .25s}.chs .on{color:var(--fg);border-color:var(--c);box-shadow:0 0 14px color-mix(in srgb,var(--c) 40%,transparent)}
+.fp{width:88px;height:88px;margin:14px auto;border-radius:50%;border:1.5px solid var(--teal);display:grid;place-items:center;color:var(--teal);animation:pu 1.8s ease-in-out infinite}.fp svg{width:36px;height:36px}@keyframes pu{50%{box-shadow:0 0 44px rgba(95,227,214,.4)}}
+.mo{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:rgba(5,5,7,.7);backdrop-filter:blur(8px);padding:20px}.mo>div{width:min(380px,100%);text-align:center;padding:32px 28px;background:#0c0c14;border:1px solid var(--line);border-radius:20px;animation:pop .45s cubic-bezier(.2,.9,.3,1.2);display:grid;gap:12px}@keyframes pop{from{opacity:0;transform:scale(.9) translateY(10px)}}
+.ckc{width:64px;height:64px;margin:0 auto 6px;border-radius:50%;border:1.5px solid var(--teal);display:grid;place-items:center;color:var(--teal);box-shadow:0 0 40px rgba(95,227,214,.3)}.ckc svg{width:30px;height:30px}.mo h3{font:400 1.7rem var(--serif)}.mo p{color:var(--muted);font-size:.88rem}
+#ts{position:fixed;bottom:24px;left:50%;transform:translate(-50%,20px);opacity:0;z-index:60;padding:12px 18px;border:1px solid var(--line);border-radius:12px;background:#0c0c14;font:.78rem var(--mono);transition:all .4s;max-width:90vw}#ts.on{opacity:1;transform:translate(-50%,0)}
+@media(min-width:900px){.ac{grid-template-columns:1fr 1.05fr}.al{display:flex}}@media(max-width:899px){.ar{min-height:0}}
+.lg{filter:drop-shadow(0 0 10px rgba(143,124,255,.45));overflow:visible}.lg .z{stroke-dasharray:90;stroke-dashoffset:90;animation:zd 1.6s .3s cubic-bezier(.2,.8,.2,1) forwards}@keyframes zd{to{stroke-dashoffset:0}}
+.logo svg{margin-right:.7em;vertical-align:-7px;display:inline-block}
+.aw{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;max-width:660px;padding:20px}.aw>*{animation:zup .8s cubic-bezier(.2,.8,.2,1) both}.aw>:nth-child(2){animation-delay:.1s}.aw>:nth-child(3){animation-delay:.2s}.aw>:nth-child(4){animation-delay:.3s}.aw>:nth-child(5){animation-delay:.4s}.aw>:nth-child(6){animation-delay:.5s}.aw>:nth-child(7){animation-delay:.6s}
+@keyframes zup{from{opacity:0;transform:translateY(16px)}}
+.aw h1{margin:0;font-size:clamp(2.6rem,8vw,5.2rem)}.aw p{color:var(--muted);max-width:46ch}
+.lgx{position:relative;display:grid;place-items:center;width:150px;height:150px}.lgx svg{width:96px;height:96px;position:relative}
+.lgx:before,.lgx:after{content:"";position:absolute;inset:20px;border-radius:50%;border:1px solid rgba(143,124,255,.5);animation:rp 3.6s ease-out infinite}.lgx:after{animation-delay:1.8s}@keyframes rp{from{transform:scale(.6);opacity:.8}to{transform:scale(1.5);opacity:0}}
+#awm{font:400 .7rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+button.pill{border:0;cursor:pointer;font-family:inherit}button.pill.ghost{border:1px solid var(--line);color:var(--fg);background:rgba(234,242,255,.03)}
+.aw .ctas{margin-top:8px}.aw .pill{padding:.95em 1.7em;font-size:.95rem}
+.b1{background:var(--fg);color:#07070b;border-radius:10px;position:relative;overflow:hidden}.b1:hover{box-shadow:0 8px 24px -10px rgba(234,242,255,.4)}.b1:active{transform:scale(.985)}
+.b1.ld{color:transparent;pointer-events:none}.b1.ld:after,.b2.ld:after{content:"";position:absolute;inset:0;margin:auto;width:18px;height:18px;border:2px solid rgba(7,7,11,.25);border-top-color:#07070b;border-radius:50%;animation:spn .7s linear infinite}.b2.ld{position:relative;color:transparent;pointer-events:none}.b2.ld:after{border-color:rgba(234,242,255,.25);border-top-color:var(--fg)}@keyframes spn{to{transform:rotate(360deg)}}
+.ai{height:46px;padding:0 14px;border-radius:10px}textarea.ai{height:auto;padding:12px 14px}.b2{border-radius:10px;height:46px;padding:0 12px}
+#av{animation:none}#av.sh{animation:sh .4s}#av>*{animation:zup .5s cubic-bezier(.2,.8,.2,1) both}#av>:nth-child(2){animation-delay:.04s}#av>:nth-child(3){animation-delay:.08s}#av>:nth-child(4){animation-delay:.12s}#av>:nth-child(5){animation-delay:.16s}#av>:nth-child(6){animation-delay:.2s}#av>:nth-child(7){animation-delay:.24s}#av>:nth-child(8){animation-delay:.28s}#av>:nth-child(9){animation-delay:.32s}
+.fxs{display:grid;gap:10px}.fx{padding:14px;border:1px solid var(--line);border-radius:12px;background:rgba(234,242,255,.025);transition:border-color .3s,background .3s}.fx.ok{border-color:rgba(155,227,124,.5);background:rgba(155,227,124,.05)}.fx.bad{animation:sh .4s;border-color:var(--pink)}
+.fh{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;margin-bottom:10px}.fh b{font:500 .85rem var(--sans)}.fh span{grid-column:1;font:.7rem var(--mono);color:var(--dim)}
+.fs{grid-column:2;grid-row:1/3;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);transition:all .3s;position:relative}.fx.ok .fs{background:#9BE37C;border-color:#9BE37C}.fx.ok .fs:after,.os .d i:after{content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;border:solid #07070b;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.otp input{height:46px;padding:0}.otp input.pp{animation:ppop .25s}@keyframes ppop{50%{transform:scale(1.08)}}.fx .b2{width:100%}
+.os{display:grid;gap:14px;margin:10px 0}.os li{display:flex;align-items:center;gap:12px;font:.8rem var(--mono);color:var(--dim);transition:color .3s}.os i{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);position:relative;flex:none;transition:all .3s}.os .c{color:var(--fg)}.os .c i{border-color:var(--teal);border-top-color:transparent;animation:spn .8s linear infinite}.os .d{color:var(--muted)}.os .d i{background:#9BE37C;border-color:#9BE37C}.os .x{color:var(--pink)}.os .x i{border-color:var(--pink)}
+</style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="zg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5FE3D6"/><stop offset=".55" stop-color="#8F7CFF"/><stop offset="1" stop-color="#FF6FB5"/></linearGradient></defs></svg>
+<header class="nav"><a class="logo" href="#overview"><i style="font-style:normal;color:var(--teal);margin-right:.6em">◆</i><span class="wm">AYZEN</span><span>/ zynth</span></a><nav><a data-nav="over" href="#overview">Overview</a><a data-nav="how" href="#how">How it works</a><a data-nav="tools" href="#tools">Tools</a><a data-nav="gov" href="#governance">Governance</a></nav><a class="pill solid" href="#login">Open Zynth <i>→</i></a></header>
+<main id="p-over"><section class="hero"><div class="aur"></div><canvas id="c" aria-hidden="true"></canvas><div id="labels" aria-hidden="true"></div>
+<div class="copy"><span class="chip">ZYNTH · THE AGENT LAYER OF AYZEN</span>
+<h1>Say the goal. <em>Zynth</em> runs the work.</h1>
+<p>Give Zynth a goal in plain language. It plans the steps, checks policy, and carries them out across Sylo, Skarn, Warde, Wisp, Ryft, Fyra and Verve.</p>
+<div class="ctas"><a class="pill solid" href="#login">Open Zynth <i>→</i></a><a class="pill ghost" href="#how">How it works</a></div>
+<div class="mods" id="mods"></div></div>
+<aside class="panel" aria-label="Illustrative run trace"><div class="ph"><span>Run trace</span><span class="live">illustrative run</span></div><span id="ttl"></span><ul id="steps"></ul><ul id="log"></ul></aside>
+</section>
+<section class="sec"><div class="eyebrow">Governed path</div><h2>Every run takes the same five steps.</h2><div class="path" id="path"></div></section>
+<section class="sec" id="modules" style="padding-top:0"><div class="eyebrow">Module surface</div><h2>What Zynth can do in each module.</h2><div class="grid" id="grid"></div></section>
+</main>
+<main id="p-how" hidden><section class="sec" style="padding-top:140px"><div class="eyebrow">How it works</div><h2>From a plain-language goal to a delivered result.</h2><p class="lead">The same five stages run for every goal, whichever modules are involved.</p><div id="stg"></div>
+<div class="ctas" style="justify-content:flex-start;margin-top:40px"><a class="pill solid" href="#tools">Browse the tool catalog <i>→</i></a><a class="pill ghost" href="#governance">How governance works</a></div></section></main>
+<main id="p-gov" hidden><section class="sub"><div class="aur"></div><div class="in"><div><div class="eyebrow">Governance</div><h1>Autonomy with <em>guardrails</em>.</h1><p class="lead" style="margin:0">Zynth acts with the caller’s access and nothing more. Every tool call is checked against policy first, and the sensitive ones wait for an owner.</p></div>
+<div class="con ds"><div class="cb"><span>Policy decisions</span><span class="live">streaming</span></div><ul id="dl"></ul></div></div></section>
+<section class="sec"><div class="eyebrow">Permission tiers</div><h2>Three tiers, one rule: default deny.</h2><div class="grid g3">
+<div class="card v" style="--c:var(--teal)"><h3>Read</h3><small>ai.execute</small><p>Runs immediately for any member with access. Nothing is changed.</p></div>
+<div class="card v" style="--c:var(--violet)"><h3>Write</h3><small>ai.execute</small><p>Runs inside the caller’s own scope, so changes stay limited to what that member could do directly.</p></div>
+<div class="card v" style="--c:var(--pink)"><h3>Approval</h3><small>ai.manage</small><p>Held until an owner approves. Covers sending, sharing, inviting and moving money.</p></div></div></section>
+<section class="sec" style="padding-top:0"><div class="eyebrow">Principles</div><h2>What holds on every run.</h2><div class="grid g3">
+<div class="card v" style="--c:var(--teal)"><h3>Default deny</h3><small>Roles</small><p>Access comes only from explicit grants: members hold ai.execute, owners hold ai.execute and ai.manage.</p></div>
+<div class="card v" style="--c:var(--violet)"><h3>Scope inheritance</h3><small>Identity</small><p>A run carries the caller’s identity and workspace, so it can never reach further than the person who asked.</p></div>
+<div class="card v" style="--c:var(--pink)"><h3>Replayable trace</h3><small>Planned</small><p>ayzen_audit_log is planned to replay calls, results and policy decisions for any run.</p></div></div>
+<div class="ctas" style="justify-content:flex-start;margin-top:40px"><a class="pill solid" href="#tools">See every tool and its tier <i>→</i></a><a class="pill ghost" href="#how">How a run works</a></div></section></main>
+<main id="p-auth" hidden><canvas id="ab" aria-hidden="true"></canvas><a class="bk" href="#overview">← Back to Zynth</a>
+<section class="aw" id="aw"><div class="lgx" id="lgx"></div><span class="chip">ZYNTH · AI AGENT BY AYZEN</span><h1>Welcome to <em>Zynth</em> AI</h1><p>Plan, authorize and run work across every AYZEN module, starting from a single goal.</p><div id="awm"></div>
+<div class="ctas"><button class="pill solid" data-w="up">Sign up <i>→</i></button><button class="pill ghost" data-w="in">Log in</button></div><div class="cl">Secured by Clerk · powered auth</div></section>
+<div class="ac"><aside class="al"><div><div class="logo" style="margin-bottom:56px"><i style="font-style:normal;color:var(--teal);margin-right:.6em">◆</i><span class="wm">AYZEN</span><span>/ zynth</span></div><h1>Welcome to <em>Zynth</em> AI</h1><p>The agent that turns a plain-language goal into governed work across every AYZEN module.</p></div>
+<ul><li>Every tool call is policy-checked</li><li>Works across Sylo, Skarn, Warde, Wisp, Ryft, Fyra and Verve</li><li>Your username becomes your @ayzen.tech mail</li></ul></aside>
+<section class="ar"><div id="av"></div></section></div><div id="ts" role="status"></div></main>
+<main id="p-tools" hidden><section class="sec" style="padding-top:140px"><div class="eyebrow">Tool catalog</div><h2>The MCP surface Zynth can call.</h2>
+<p class="lead">Every tool runs through policy. <b>Read</b> runs immediately, <b>Write</b> runs inside the member’s scope, and <b>Approval</b> waits for an owner (<code>ai.manage</code>). <b>Live</b> tools ship today; <b>Planned</b> tools are on the roadmap.</p>
+<div class="bar"><input id="q" type="search" placeholder="Search tools…" aria-label="Search tools"><div id="chips"></div></div><div id="cnt"></div><ul id="tl"></ul></section></main>
+<footer><div class="ft"><div><div class="eyebrow">Let’s talk</div><h2>Put Zynth to work across your workspace.</h2><div class="ctas" style="justify-content:flex-start"><a class="pill solid" href="mailto:hello@ayzen.tech">Talk to us <i>→</i></a><a class="pill ghost" href="#login">Open Zynth</a></div></div><div class="soc"><a href="https://github.com/AYZENCODEX" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></a><a href="https://x.com/ayzen_tech" target="_blank" rel="noopener noreferrer" aria-label="X"><svg viewBox="0 0 24 24"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a><a href="https://t.me/ayzen_tech" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></a><a href="https://www.linkedin.com/company/ayzen" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg></a><a href="https://youtube.com/@ayzen" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg></a><a href="mailto:hello@ayzen.tech" target="_blank" rel="noopener noreferrer" aria-label="Email"><svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 5L2 7"/></svg></a></div></div><div class="fb"><span>© 2026 AYZEN</span><span>ZYNTH · MCP-NATIVE AUTOMATION</span></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const M=[
+{k:'sylo',r:'Vault',c:0x5FE3D6,z:'Read and update vault entries inside the access scope of the person who started the run.'},
+{k:'skarn',r:'Projects',c:0x8F7CFF,z:'Create, assign and track project tasks as part of a larger goal.'},
+{k:'warde',r:'Teams',c:0x7CC4FF,z:'Resolve teams and membership so every step runs with the right context.'},
+{k:'wisp',r:'Mailbox',c:0xFF6FB5,z:'Triage the inbox, draft replies and send messages once approved.'},
+{k:'ryft',r:'Wallet',c:0xFFB86B,z:'Read wallet activity and prepare actions for explicit approval.'},
+{k:'fyra',r:'Finance',c:0x9BE37C,z:'Summarize and categorize financial records into reports.'},
+{k:'verve',r:'Marketplace',c:0xC58CFF,z:'Browse listings and orders, and reconcile them with other modules.'}];
+const S=[
+{t:'Prepare the weekly operations brief',c:[[3,'ayzen_list_mail','flagged items found'],[0,'ayzen_list_vault_entries','records in scope'],[1,'skarn_list_projects','open tasks listed'],[5,'fyra_summarize_period','period summarized']],o:[2,'warde · brief shared with team']},
+{t:'Onboard a new teammate',c:[[2,'ayzen_list_teams','team resolved'],[0,'ayzen_create_vault_entry','scoped entry created'],[1,'skarn_assign_task','starter tasks assigned'],[3,'wisp_send_mail','invite sent']],o:[2,'warde · member added']},
+{t:'Reconcile this month’s wallet activity',c:[[4,'ryft_list_transactions','transactions loaded'],[5,'fyra_categorize_records','records categorized'],[6,'verve_list_orders','orders matched'],[0,'ayzen_update_vault_entry','records updated']],o:[5,'fyra · report exported']}];
+const GR=M.concat([{k:'ayzen',r:'Core',c:0xEAF2FF}]);
+const TL=`ayzen|ayzen_dashboard_summary|R|L|—|Cross-module snapshot of what needs attention.
+ayzen|ayzen_search|R|P|query, modules|Search every module the caller can access.
+ayzen|ayzen_audit_log|R|P|run_id|Replay the calls, results and policy decisions of a run.
+sylo|ayzen_list_vault_entries|R|L|limit, cursor|List vault entries in the caller’s scope.
+sylo|ayzen_get_vault_entry|R|L|id|Fetch one entry with its metadata.
+sylo|ayzen_create_vault_entry|W|L|title, fields|Create a scoped vault entry.
+sylo|ayzen_update_vault_entry|W|L|id, patch|Update fields on an existing entry.
+sylo|sylo_share_entry|A|P|id, member_id|Share an entry with a teammate.
+sylo|sylo_rotate_secret|A|P|id|Rotate a stored secret and update dependents.
+skarn|skarn_list_projects|R|P|status, limit|List projects and their state.
+skarn|skarn_get_project|R|P|id|Read a project with tasks and owners.
+skarn|skarn_create_task|W|P|project_id, title, due|Create a task inside a project.
+skarn|skarn_assign_task|W|P|task_id, member_id|Assign a task to a team member.
+skarn|skarn_update_status|W|P|task_id, status|Move a task between states.
+skarn|skarn_plan_roadmap|W|P|project_id, goal|Draft a milestone plan from a goal.
+warde|ayzen_list_teams|R|L|—|List the teams the caller belongs to.
+warde|warde_list_members|R|P|team_id|List members with their roles.
+warde|warde_create_team|W|P|name, members|Create a team.
+warde|warde_invite_member|A|P|team_id, email|Invite a person to a team.
+warde|warde_set_role|A|P|member_id, role|Change a member’s role.
+wisp|ayzen_list_mail|R|L|folder, limit|List recent messages.
+wisp|wisp_read_thread|R|P|thread_id|Read a full conversation thread.
+wisp|wisp_draft_reply|W|P|thread_id, tone|Draft a reply and leave it unsent.
+wisp|wisp_label_thread|W|P|thread_id, label|Label or archive a thread.
+wisp|wisp_send_mail|A|P|to, subject, body|Send a message.
+wisp|wisp_schedule_send|A|P|draft_id, at|Schedule a draft to go out later.
+ryft|ryft_get_balance|R|P|wallet_id|Read balances for a wallet.
+ryft|ryft_list_transactions|R|P|range, limit|List transactions in a period.
+ryft|ryft_export_statement|R|P|range, format|Export a statement.
+ryft|ryft_prepare_transfer|A|P|from, to, amount|Prepare a transfer for approval.
+fyra|fyra_summarize_period|R|P|range|Summarize income and spend.
+fyra|fyra_generate_report|R|P|range, type|Generate a financial report.
+fyra|fyra_categorize_records|W|P|record_ids|Categorize records.
+fyra|fyra_create_invoice|W|P|client, items|Draft an invoice.
+fyra|fyra_reconcile_accounts|W|P|range|Match records against wallet activity.
+verve|verve_list_listings|R|P|query, limit|Browse marketplace listings.
+verve|verve_list_orders|R|P|status|List orders.
+verve|verve_create_listing|W|P|title, price|Create a listing.
+verve|verve_match_orders|W|P|range|Match orders to finance records.`.split("\n").map(l=>{const[m,n,t,st,a,d]=l.split("|");return{m,n,t,s:st,a,d,g:GR.findIndex(x=>x.k===m)}});
+const D=[2.2,2.4,1.8,4.2,2.6],TOT=D.reduce((a,b)=>a+b),$=s=>document.querySelector(s);
+const css=c=>'#'+c.toString(16).padStart(6,'0');
+const TN={R:'Read',W:'Write',A:'Approval'},TP={R:'ai.execute · runs immediately',W:'ai.execute · runs inside the member’s scope',A:'ai.manage · owner approval before it runs'};let fl='all';
+const chips=$('#chips');chips.innerHTML=['all',...GR.map(g=>g.k)].map(k=>`<button data-k="${k}" class="${k==='all'?'on':''}">${k}</button>`).join('');
+function draw(){const q=$('#q').value.toLowerCase(),a=TL.filter(t=>(fl==='all'||t.m===fl)&&(t.n+t.d).toLowerCase().includes(q));$('#cnt').textContent=a.length+' of '+TL.length+' tools';
+$('#tl').innerHTML=a.map(t=>`<li class="tool" style="--c:${css(GR[t.g].c)}"><button aria-expanded="false"><code>${t.n}</code><span class="g">${t.m}</span><span class="t t-${t.t}">${TN[t.t]}</span><span class="s s-${t.s}">${t.s==='L'?'Live':'Planned'}</span></button><div class="td"><p>${t.d}</p><dl><dt>Arguments</dt><dd>${t.a}</dd><dt>Policy</dt><dd>${TP[t.t]}</dd></dl></div></li>`).join('')||'<li class="none">No tools match.</li>'}
+chips.onclick=e=>{const b=e.target.closest('button');if(!b)return;fl=b.dataset.k;[...chips.children].forEach(c=>c.classList.toggle('on',c===b));draw()};
+$('#q').oninput=draw;$('#tl').onclick=e=>{const b=e.target.closest('.tool>button');if(b)b.setAttribute('aria-expanded',b.parentNode.classList.toggle('open'))};draw();
+
+$('#grid').innerHTML=M.map(m=>`<a class="card" href="#tools" data-m="${m.k}" style="--c:${css(m.c)}"><h3>${m.k}</h3><small>${m.r}</small><p>${m.z}</p><em>Browse tools →</em></a>`).join('');
+const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('v')),{threshold:.15});
+document.querySelectorAll('.card').forEach((c,i)=>{c.style.transitionDelay=(i%4)*70+'ms';io.observe(c)});
+const STG=[
+{id:'intent',h:'Intent',s:'A goal arrives in plain language.',p:'You describe the outcome, not the steps. Zynth reads the goal together with who is asking and which workspace it belongs to, so every later step is bound to that identity.',b:['Goals arrive from chat, the bot or the API','Caller identity and workspace are attached to the run','Unclear goals are clarified before any tool is called'],k:'goal    "Prepare the weekly operations brief"\ncaller  member · workspace scope'},
+{id:'plan',h:'Plan',s:'Zynth breaks it into module calls.',p:'The goal becomes an ordered set of tool calls across modules. Independent steps are grouped so they can run in parallel; dependent ones wait for their inputs.',b:['One tool call per step, named from the catalog','Independent steps run side by side','The plan is visible before anything executes'],k:'1  ayzen_list_mail\n2  ayzen_list_vault_entries\n3  skarn_list_projects\n4  fyra_summarize_period'},
+{id:'authorize',h:'Authorize',s:'Each call is checked against policy.',p:'Before a tool runs, its tier is checked against the caller’s role. Access is default deny: a call no role explicitly allows does not run.',b:['Read and Write calls need ai.execute','Approval calls wait for an owner with ai.manage','Denied calls are reported, never skipped silently'],k:'ayzen_list_mail   read      allow\nwisp_send_mail    approval  hold · owner'},
+{id:'execute',h:'Execute',s:'Tools run over MCP across modules.',p:'Approved calls go out over MCP to the modules that own the data. Results stream back to Zynth as they finish, and later steps pick them up as inputs.',b:['Parallel wherever steps are independent','Each module enforces its own scope','Failures are reported per step, with the reason'],k:'dispatch  4 calls · MCP\nresults   streaming to agent'},
+{id:'deliver',h:'Deliver',s:'The outcome lands where the work lives.',p:'The result is written into the module that should hold it, such as a shared brief in Warde or an exported report in Fyra, and the run closes with a summary of what was done.',b:['Output goes to the right module, not just chat','Anything sensitive is held for approval first','A closing summary lists every call made'],k:'warde   brief shared with team\nrun     closed · 4 calls · 0 held'}];
+$('#path').innerHTML=STG.map((g,i)=>`<a class="pc" href="#how-${g.id}"><b>0${i+1}</b><h3>${g.h}</h3><p>${g.s}</p><span>Read the details →</span></a>`).join('');
+$('#stg').innerHTML=STG.map((g,i)=>`<article class="st" id="st-${g.id}"><div class="sn">0${i+1}</div><div><h3>${g.h}</h3><p>${g.p}</p><ul>${g.b.map(x=>`<li>${x}</li>`).join('')}</ul></div><pre>${g.k}</pre></article>`).join('');
+$('#grid').onclick=e=>{const a=e.target.closest('a');if(a){fl=a.dataset.m;[...chips.children].forEach(c=>c.classList.toggle('on',c.dataset.k===fl));draw()}};
+const PH=['Intent','Plan','Authorize','Execute','Deliver'],W5=[11,13,10,46,20],CW=[0,11,24,34,80];
+const logEl=$('#log'),ttl=$('#ttl'),hero=$('.hero'),cv=$('#c'),slow=matchMedia('(prefers-reduced-motion: reduce)').matches?.25:1;
+const stEl=$('#steps');stEl.innerHTML=PH.map((p,i)=>`<li><b>0${i+1}</b>${p}<i></i></li>`).join('');const stf=[...stEl.children];
+const MC=M.map(m=>{const c=document.createElement('span');c.className='mc';c.style.setProperty('--c',css(m.c));c.innerHTML='<i></i>'+m.k;$('#mods').append(c);return c});
+let sc=0,cyc=0,ph=-1,vis=true,last=performance.now(),fired=[0,0,0,0],T=0;
+const hk={phase(){},call(){},draw(){}};
+const fmt=t=>'00:'+t.toFixed(1).padStart(4,'0');
+const add=(tag,msg,c)=>{const li=document.createElement('li');li.innerHTML=`<time>${fmt(cyc)}</time><b style="color:${c}">${tag}</b><span>${msg}</span>`;logEl.prepend(li);while(logEl.children.length>7)logEl.lastChild.remove()};
+function enter(p){const s=S[sc];
+if(p===0){fired=[0,0,0,0];logEl.innerHTML='';MC.forEach(c=>c.className='mc');add('intent','goal received','var(--teal)')}
+if(p===1){s.c.forEach(c=>MC[c[0]].classList.add('on'));add('plan',s.c.length+' steps · '+[...new Set(s.c.map(c=>M[c[0]].k))].join(', '),'var(--violet)')}
+if(p===2)add('policy','ai.execute → allow','var(--pink)');
+if(p===3)add('run','dispatching over MCP','var(--teal)');
+if(p===4){MC[s.o[0]].classList.add('on');add('deliver',s.o[1],'var(--teal)')}
+hk.phase(p)}
+new IntersectionObserver(e=>{vis=e[0].isIntersecting}).observe(hero);
+function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-last)/1000)*slow;last=now;if(!vis)return;
+T+=dt;cyc+=dt;if(cyc>=TOT){cyc-=TOT;sc=(sc+1)%S.length;ph=-1}
+let p=0,ac=0;while(p<4&&cyc>=ac+D[p]){ac+=D[p];p++}const lt=cyc-ac,s=S[sc];
+if(p!==ph){ph=p;enter(p)}
+if(p===3)s.c.forEach((c,i)=>{const t0=i*.85;if(fired[i]<1&&lt>=t0){fired[i]=1;add('call',c[1],css(M[c[0]].c));MC[c[0]].classList.add('hot');hk.call(c[0])}if(fired[i]<2&&lt>=t0+1.4){fired[i]=2;add('ok',c[2],'#9BE37C');MC[c[0]].classList.remove('hot')}});
+stf.forEach((li,j)=>{li.classList.toggle('on',j<=p);li.lastChild.style.setProperty('--p',j<p?1:j===p?lt/D[p]:0)});
+const t=s.t;ttl.textContent='▸ '+t.slice(0,p===0?Math.ceil(Math.min(1,lt/1.4)*t.length):t.length);
+hk.draw(dt,p)}
+let R;try{R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,powerPreference:'high-performance'})}catch(e){}
+if(R){
+R.setClearColor(0x000000,0);
+const AD=THREE.AdditiveBlending,scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(42,1,.1,200);scene.fog=new THREE.FogExp2(0x050507,.028);
+const gc=document.createElement('canvas');gc.width=gc.height=64;const gx=gc.getContext('2d'),gg=gx.createRadialGradient(32,32,0,32,32,32);gg.addColorStop(0,'rgba(255,255,255,1)');gg.addColorStop(.3,'rgba(255,255,255,.3)');gg.addColorStop(1,'rgba(255,255,255,0)');gx.fillStyle=gg;gx.fillRect(0,0,64,64);
+const GT=new THREE.CanvasTexture(gc),glow=(c,sz,o)=>{const m=new THREE.Sprite(new THREE.SpriteMaterial({map:GT,color:c,blending:AD,depthWrite:false,transparent:true,opacity:o}));m.scale.set(sz,sz,1);return m};
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(70,150),new THREE.ShaderMaterial({transparent:true,depthWrite:false,
+vertexShader:'varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
+fragmentShader:'varying vec3 vW;void main(){vec2 f=abs(fract(vW.xz*.5)-.5);float l=max(smoothstep(.478,.5,f.x),smoothstep(.478,.5,f.y));float d=exp(-distance(cameraPosition,vW)*.032)*exp(-abs(vW.x)*.06);gl_FragColor=vec4(.37,.89,.84,l*.3*d);}'}));
+floor.rotation.x=-Math.PI/2;floor.position.z=-45;scene.add(floor);
+const GZ=[-6,-17,-28,-39,-50.5];
+const gates=GZ.map(z=>{const g=new THREE.Group();g.position.z=z;
+const fr=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(7.4,4.6,.25)),new THREE.LineBasicMaterial({color:0x5FE3D6,transparent:true,opacity:.5,blending:AD}));
+const pl=new THREE.Mesh(new THREE.PlaneGeometry(7.4,4.6),new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:AD,side:THREE.DoubleSide,uniforms:{uF:{value:0}},
+vertexShader:'varying vec2 vU;void main(){vU=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+fragmentShader:'varying vec2 vU;uniform float uF;void main(){vec2 p=abs(vU-.5)*2.;float e=max(p.x,p.y);gl_FragColor=vec4(.37,.89,.84,smoothstep(.7,1.,e)*.2+uF*.3*(1.-e*.6)+.012);}'}));
+fr.position.y=pl.position.y=2.3;g.add(fr,pl);g.userData={fr,pl,f:0};scene.add(g);return g});
+const TX=[[-5.6,-40.5],[-8.4,-42.2],[-5.6,-43.8],[-8.4,-45],[5.6,-40.5],[8.4,-42.2],[5.6,-43.8]],TH=[3.2,5.2,4,6,4.6,3.4,5.6];
+const towers=M.map((m,k)=>{const h=TH[k],g=new THREE.Group();g.position.set(TX[k][0],0,TX[k][1]);
+const b=new THREE.Mesh(new THREE.BoxGeometry(1.3,h,1.3),new THREE.MeshBasicMaterial({color:m.c,transparent:true,opacity:.06,blending:AD,depthWrite:false}));
+const ed=new THREE.LineSegments(new THREE.EdgesGeometry(b.geometry),new THREE.LineBasicMaterial({color:m.c,transparent:true,opacity:.35,blending:AD})),gl=glow(m.c,3.4,.12);
+b.position.y=ed.position.y=h/2;gl.position.y=h+.2;g.add(b,ed,gl);g.userData={b,ed,gl,f:0};scene.add(g);return g});
+const dp=new Float32Array(780);for(let i=0;i<260;i++)dp.set([(Math.random()-.5)*60,.4+Math.random()*13,-70+Math.random()*82],i*3);
+const dg=new THREE.BufferGeometry();dg.setAttribute('position',new THREE.BufferAttribute(dp,3));scene.add(new THREE.Points(dg,new THREE.PointsMaterial({size:.07,color:0x9fb4ff,transparent:true,opacity:.45,blending:AD,depthWrite:false})));
+const NP=56,tt=new Float32Array(NP),sp=new Float32Array(NP),jx=new Float32Array(NP),jy=new Float32Array(NP),tg=new Uint8Array(NP),pz=new Float32Array(NP).fill(8),PA=new Float32Array(NP*12),CA=new Float32Array(NP*12);
+const pg_=new THREE.BufferGeometry();pg_.setAttribute('position',new THREE.BufferAttribute(PA,3));pg_.setAttribute('color',new THREE.BufferAttribute(CA,3));
+const pts=new THREE.Points(pg_,new THREE.PointsMaterial({size:.26,map:GT,vertexColors:true,transparent:true,blending:AD,depthWrite:false}));pts.frustumCulled=false;scene.add(pts);
+const burst=[],TEAL=new THREE.Color(0x5FE3D6),ICE=new THREE.Color(0xEAF2FF),MCOL=M.map(m=>new THREE.Color(m.c)),col=new THREE.Color();
+let rr=0;const cl=x=>Math.max(0,Math.min(1,x));let ax,ay,az,au,ar;
+function respawn(i){tt[i]=Math.random()*.03;sp[i]=.17+Math.random()*.06;const a=Math.random()*6.283,r=Math.sqrt(Math.random())*1.5;jx[i]=Math.cos(a)*r;jy[i]=Math.sin(a)*r*.7;const am=S[sc].c;tg[i]=burst.length?burst.shift():rr++%7;pz[i]=8}
+function at(t,i){az=8-58*t;const u1=cl((-36.5-az)/4);ar=cl((-45.5-az)/4.5);au=u1*(1-ar);const e=au*au*(3-2*au),k=tg[i];ax=jx[i]*(1-e)+TX[k][0]*e;ay=(1.3+jy[i])*(1-e)+TH[k]*.55*e}
+for(let i=0;i<NP;i++){respawn(i);tt[i]=Math.random();pz[i]=8-58*tt[i]}
+const labs=[...M.map((m,k)=>({x:TX[k][0],y:TH[k]+.9,z:TX[k][1],h:`<b>${m.k}</b>`,c:'t',col:css(m.c)}))].map(o=>{const d=document.createElement('div');d.className='lab '+o.c;if(o.col)d.style.color=o.col;d.innerHTML=o.h;$('#labels').append(d);o.d=d;return o});
+let Wd=1,Hd=1,px=0,py=0,tx=0,ty=0;const v3=new THREE.Vector3();
+function size(){const W=hero.clientWidth,H=hero.clientHeight;if(!W||!H)return;Wd=W;Hd=H;R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(W,H,false);cam.aspect=W/H;cam.fov=W<720?62:42;if(W>=1000)cam.setViewOffset(W,H,-W*.14,0,W,H);else cam.clearViewOffset();cam.updateProjectionMatrix()}
+new ResizeObserver(size).observe(hero);size();
+addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-.5)*2;ty=(e.clientY/innerHeight-.5)*2});
+hk.phase=p=>{gates[p].userData.f=1};hk.call=k=>{burst.push(k,k,k)};
+hk.draw=(dt,p)=>{const nA=NP,dk=Math.exp(-dt*1.6);
+for(let i=0;i<NP;i++){if(tt[i]<0){if(i<nA)respawn(i)}else{tt[i]+=dt*sp[i];if(tt[i]>=1){tt[i]=-1;if(i<nA)respawn(i)}}
+for(let k=0;k<4;k++){const j=(i*4+k)*3,t=tt[i]-k*.012;
+if(t<0){PA[j+1]=-999;CA[j]=CA[j+1]=CA[j+2]=0;continue}
+at(t,i);PA[j]=ax;PA[j+1]=ay;PA[j+2]=az;
+if(k===0){const z0=pz[i];GZ.forEach((g,gi)=>{if(z0>g&&az<=g)gates[gi].userData.f=Math.min(1,gates[gi].userData.f+.04)});const q=TX[tg[i]];if(au>.6&&z0>q[1]&&az<=q[1])towers[tg[i]].userData.f=Math.min(1,towers[tg[i]].userData.f+.3);pz[i]=az}
+col.copy(TEAL).lerp(MCOL[tg[i]],Math.min(1,au*1.6)).lerp(ICE,ar);const b=(1-k*.27)*Math.min(1,t*20)*Math.min(1,(1-t)*14);CA[j]=col.r*b;CA[j+1]=col.g*b;CA[j+2]=col.b*b}}
+pg_.attributes.position.needsUpdate=pg_.attributes.color.needsUpdate=true;
+gates.forEach(g=>{const u=g.userData;u.f*=dk;u.pl.material.uniforms.uF.value=u.f;u.fr.material.opacity=.45+u.f*.5});
+towers.forEach(g=>{const u=g.userData;u.f*=dk;u.ed.material.opacity=.35+u.f*.65;u.b.material.opacity=.06+u.f*.28;u.gl.material.opacity=.1+u.f*.7});
+px+=(tx-px)*.02;py+=(ty-py)*.02;cam.position.set(Math.sin(T*.05)*.5+px*.3,2.7+Math.sin(T*.06)*.08-py*.1,13+Math.sin(T*.04)*.5);cam.lookAt(0,1.9,-30);cam.updateMatrixWorld();
+labs.forEach(o=>{v3.set(o.x,o.y,o.z).project(cam);const dist=Math.hypot(o.x-cam.position.x,o.z-cam.position.z);o.d.style.opacity=v3.z>1?0:Math.max(.2,Math.min(1,1.5-dist/42));o.d.style.transform=`translate(${(v3.x*.5+.5)*Wd}px,${(-v3.y*.5+.5)*Hd}px) translate(-50%,-100%)`});
+R.render(scene,cam)}}
+requestAnimationFrame(frame);
+/* ---- auth ---- */
+const AB=$('#ab'),ax=AB.getContext('2d'),AC=['rgba(95,227,214,.5)','rgba(143,124,255,.55)','rgba(255,111,181,.4)'];let aw=0,ah=0,aOn=false;
+function ars(){aw=AB.width=innerWidth;ah=AB.height=innerHeight}
+function adr(t){requestAnimationFrame(adr);if(!aOn)return;t*=slow;ax.globalCompositeOperation='source-over';ax.globalAlpha=1;ax.fillStyle='#050507';ax.fillRect(0,0,aw,ah);ax.globalCompositeOperation='lighter';
+for(let i=0;i<7;i++){const p=i*1.1+t*.00022*(1+i*.12);ax.beginPath();for(let x=-20;x<=aw+20;x+=16){const y=ah*(.22+.085*i)+Math.sin(x*.0032+p*3)*ah*.13+Math.sin(x*.0085-p*2)*ah*.045;x<0?ax.moveTo(x,y):ax.lineTo(x,y)}
+const g=ax.createLinearGradient(0,0,aw,0);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(.5,AC[i%3]);g.addColorStop(1,'rgba(0,0,0,0)');ax.strokeStyle=g;ax.lineWidth=7;ax.globalAlpha=.08;ax.stroke();ax.lineWidth=1.3;ax.globalAlpha=.9;ax.stroke()}}
+addEventListener('resize',ars);ars();requestAnimationFrame(adr);
+const GI='<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h6.2a5.3 5.3 0 0 1-2.3 3.5v2.9h3.7c2.2-2 3.4-5 3.4-8.4z"/><path fill="#34A853" d="M12 24c3.1 0 5.7-1 7.6-2.8l-3.7-2.9c-1 .7-2.3 1.1-3.9 1.1-3 0-5.5-2-6.4-4.8H1.8v3A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.6 14.6a7.2 7.2 0 0 1 0-4.6V7H1.8a12 12 0 0 0 0 10.8l3.8-3.2z"/><path fill="#EA4335" d="M12 4.8c1.7 0 3.2.6 4.4 1.7l3.3-3.3A12 12 0 0 0 1.8 7l3.8 3C6.5 6.8 9 4.8 12 4.8z"/></svg>';
+const SV=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const HI=SV('<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>'),KEY=SV('<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/>'),CHK=SV('<path d="M20 6 9 17l-5-5"/>');
+const EM=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,SL=['Too short','Weak','Fair','Good','Strong'],av=$('#av');
+const str=p=>{let n=0;if(p.length>=10)n++;if(/[a-z]/.test(p)&&/[A-Z]/.test(p))n++;if(/\d/.test(p))n++;if(/[^A-Za-z0-9]/.test(p))n++;return p.length<8?Math.min(n,1):n};
+const dbg=()=>{try{return JSON.parse(localStorage.getItem('zy')||'{}')}catch(e){return{}}},MEM=dbg(),persist=()=>{try{localStorage.setItem('zy',JSON.stringify(MEM))}catch(e){}};
+MEM['demo@ayzen.tech']=MEM['demo@ayzen.tech']||{pw:btoa('Zynth!Demo2026'),sec:{totp:true,passkey:true}};
+const A={m:'in',s:'cred',d:{},seq:[],code:''},rnd=n=>String(Math.floor(Math.random()*10**n)).padStart(n,'0');
+function toast(m){const t=$('#ts');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2800)}
+function modal(t,p,b,cb){const m=document.createElement('div');m.className='mo';m.innerHTML=`<div><div class="ckc">${CHK}</div><h3>${t}</h3><p>${p}</p><button class="b1">${b}</button></div>`;m.querySelector('button').onclick=()=>{m.remove();cb()};document.body.append(m)}
+const tabs=m=>`<div class="tabs"><button data-act="tab" data-v="in" class="${m==='in'?'on':''}">Sign in</button><button data-act="tab" data-v="up" class="${m==='up'?'on':''}">Sign up</button></div>`;
+const social=()=>`<button type="button" class="b2" data-act="ayzen">Login with AYZEN</button><div class="hf"><button type="button" class="b2" data-act="oa" data-p="Google">${GI} Google</button><button type="button" class="b2" data-act="oa" data-p="GitHub">${HI} GitHub</button></div>`;
+const clerk='<div class="cl">Secured by Clerk · powered auth</div>',hd=(t,s)=>`<h2>${t}</h2>${s?`<p class="sb">${s}</p>`:''}`,sg=n=>`<div class="sg">${[0,1,2,3,4,5].map(i=>`<i class="${i<=n?'d':''}"></i>`).join('')}</div>`;
+const fld=(l,id,t,ph,x='')=>`<div class="fl"><label for="${id}">${l}</label><input class="ai" id="${id}" type="${t}" placeholder="${ph}" ${x}></div>`;
+const pwf=(l,id)=>`<div class="fl"><label for="${id}">${l}</label><div class="pw"><input class="ai" id="${id}" type="password" placeholder="••••••••••"><button type="button" data-act="eye" data-t="${id}">Show</button></div></div>`;
+const meter='<div class="sm"><i></i><i></i><i></i><i></i></div><div class="hn" id="pm">Use 10+ characters with upper, lower case, a number and a symbol.</div>';
+const otpv=(t,s,rs,h)=>`${hd(t,s)}<div class="otp" id="otp">${'<input class="ai" inputmode="numeric" maxlength="1" autocomplete="one-time-code">'.repeat(6)}</div><div class="hn bad" id="er"></div><button class="b1" id="vb" disabled>Verify</button><div class="rw"><span class="hn" id="dm">${h||'Demo code: '+A.code}</span>${rs?'<button class="lk" data-act="resend">Resend code</button>':''}</div>${clerk}`;
+const rows=a=>`<div class="rows">${a.map(x=>`<div class="rr"><span>${x}</span><button type="button" class="b2" data-act="cn">Connect</button></div>`).join('')}</div>`;
+const V={
+'in.cred':()=>`${tabs('in')}${hd('Welcome to Zynth AI','Sign in to run goals across your AYZEN modules.')}<form class="f" id="fm" novalidate>${fld('Email','e','email','you@company.com','autocomplete="email"')}<div class="hn" id="eh"></div>${pwf('Password','p')}<div class="rw"><label class="ck"><input type="checkbox"> Remember me</label><button type="button" class="lk" data-act="to" data-m="rst" data-s="email">Forgot password?</button></div><div class="hn bad" id="er"></div><button class="b1" type="submit">Sign in</button></form><div class="dv">or</div>${social()}<div class="hn" style="text-align:center">Demo: demo@ayzen.tech · Zynth!Demo2026</div>${clerk}`,
+'in.verify':()=>{const a=MEM[A.d.email].sec,bx='<input class="ai" inputmode="numeric" maxlength="1" autocomplete="one-time-code">'.repeat(6),fx=(k,t,sb,b)=>`<div class="fx" data-k="${k}"><div class="fh"><b>${t}</b><span>${sb}</span><i class="fs"></i></div>${b}</div>`;
+return `${hd('Verify it’s you','Complete every check below to sign in.')}<div class="fxs">${fx('email','Email code','Sent to '+A.d.email,`<div class="otp">${bx}</div>`)}${a.totp?fx('totp','Authenticator code','From your authenticator app',`<div class="otp">${bx}</div>`):''}${a.passkey?fx('pk','Passkey','Face ID, fingerprint or security key',`<button type="button" class="b2" data-act="pk">${KEY} Use passkey</button>`):''}</div><div class="hn bad" id="er"></div><button class="b1" id="vb" disabled>Verify and sign in</button><div class="rw"><span class="hn" id="dm" data-t="Demo codes · email #${a.totp?' · authenticator 123456':''}">Demo codes · email ${A.code}${a.totp?' · authenticator 123456':''}</span><button class="lk" data-act="resend">Resend email code</button></div>${clerk}`},
+'oidc.run':()=>`${hd('Signing in with AYZEN','Zynth is using AYZEN’s OpenID Connect provider.')}<ol class="os">${OS.map((t,i)=>`<li><i></i><span>${t}</span></li>`).join('')}</ol><div class="hn" id="oe"></div><button class="b2" id="ob" hidden data-act="to" data-m="in" data-s="cred">Back to sign in</button><div class="cl">OpenID Connect · Authorization Code + PKCE</div>`,
+'in.done':()=>`<div class="ckc" style="margin:30px auto 0">${CHK}</div>${hd('You’re signed in','Welcome back to Zynth AI.').replace('<h2>','<h2 style="text-align:center">')}<a class="b1" href="#overview">Open Zynth</a>${clerk}`,
+'up.cred':()=>`${tabs('up')}${hd('Welcome to Zynth AI','Create your AYZEN account to start running Zynth.')}<form class="f" id="fm" novalidate>${fld('Email','e','email','you@company.com','autocomplete="email"')}<div class="hn" id="eh"></div>${pwf('Password','p')}${meter}<label class="ck"><input type="checkbox" id="tc"><span>I agree to the <b class="lk">Terms</b> and <b class="lk">Privacy Policy</b></span></label><div class="hn bad" id="er"></div><button class="b1" type="submit" id="sb" disabled>Create account</button></form><div class="dv">or</div>${social()}${clerk}`,
+'up.oa':()=>`${hd('One more step','Zynth needs a password even when you sign up with '+A.d.p+'.')}<div class="hn ok">${A.d.p} verified · ${A.d.email}</div><form class="f" id="fm">${pwf('Create a password','p')}${meter}<button class="b1" id="sb" disabled>Set password</button></form><div class="dv">or</div><button class="b2" data-act="gen">Generate one and email it to me</button>${clerk}`,
+'up.ref':()=>`${sg(1)}${hd('Verify you’re human','Enter your referral code and solve the check to continue.')}<form class="f" id="fm">${fld('Referral code','rc','text','AYZEN2026','autocomplete="off"')}<div class="hn" id="rh">6–12 letters or numbers</div><div class="fl"><label for="cq">Security check</label><div class="rw"><span class="ai" style="flex:1;font-family:var(--mono)" id="cqt"></span><button type="button" class="b2" data-act="cap" style="padding:12px 16px" aria-label="New question">↻</button></div><input class="ai" id="cq" inputmode="numeric" placeholder="Answer" autocomplete="off"></div><div class="hn" id="ch"></div><button class="b1" type="submit" id="nx" disabled>Continue</button></form>${clerk}`,
+'up.otp':()=>sg(2)+otpv('Verify your email','We sent a 6-digit code to '+A.d.email+'.',true),
+'up.name':()=>`${sg(3)}${hd('Tell us who you are','Your username becomes your AYZEN mail address.')}<form class="f" id="fm"><div class="hf">${fld('First name','fn','text','Ada','autocomplete="given-name"')}${fld('Last name','ln','text','Lovelace','autocomplete="family-name"')}</div>${fld('Username','u','text','ada.lovelace','autocomplete="off"')}<div class="hn" id="uh"></div><button class="b1" type="submit" id="nx" disabled>Continue</button></form>${clerk}`,
+'up.mods':()=>`${sg(4)}${hd('Connect your tools','Optional. You can connect or change these later.')}${rows(['Google','GitHub','Telegram','Discord'])}<div class="chs">${M.map(m=>`<button type="button" data-act="md" style="--c:${css(m.c)}">${m.k}</button>`).join('')}</div><div class="hf"><button class="b2" data-act="to" data-m="up" data-s="prof">Skip for now</button><button class="b1" data-act="to" data-m="up" data-s="prof">Continue</button></div>${clerk}`,
+'up.prof':()=>{const a=MEM[A.d.email]||{};return `${sg(5)}${hd('Update your profile','Optional. Zynth uses this to personalise runs.')}<form class="f" id="fm">${fld('Display name','dn','text','Your name','value="'+((a.first||'')+' '+(a.last||'')).trim()+'"')}${fld('Headline','hl','text','Founder, AYZEN')}<div class="fl"><label for="bio">Bio</label><textarea class="ai" id="bio" placeholder="A line about what you work on"></textarea></div><label class="ck"><input type="checkbox" id="s1"> Enable authenticator 2FA</label><label class="ck"><input type="checkbox" id="s2"> Enable passkey sign-in</label><div class="hf"><button type="button" class="b2" data-act="to" data-m="up" data-s="done">Skip</button><button class="b1" type="submit">Save profile</button></div></form>${clerk}`},
+'up.done':()=>{const a=MEM[A.d.email]||{};return `${sg(5)}<div class="ckc" style="margin:14px auto 0">${CHK}</div>${hd('You’re all set'+(a.first?', '+a.first:''),'Your account is ready.').replace('<h2>','<h2 style="text-align:center">')}<div class="rr" style="justify-content:center;font-family:var(--mono)">${a.mail||A.d.email}</div><a class="b1" href="#overview">Open Zynth</a>${clerk}`},
+'rst.email':()=>`${hd('Reset your password','Enter your account email and we’ll send a 6-digit code.')}<form class="f" id="fm" novalidate>${fld('Email','e','email','you@company.com')}<div class="hn" id="eh"></div><button class="b1" type="submit">Send code</button><button type="button" class="b2" data-act="to" data-m="in" data-s="cred">Back to sign in</button></form>${clerk}`,
+'rst.code':()=>`${hd('Choose a new password','Enter the code we sent to '+A.d.email+' and set a strong password.')}<div class="otp" id="otp">${'<input class="ai" inputmode="numeric" maxlength="1">'.repeat(6)}</div><div class="hn" id="dm">Demo code: ${A.code}</div>${pwf('New password','p')}${meter}<div class="hn bad" id="er"></div><button class="b1" id="vb" disabled>Reset password</button>${clerk}`,
+'rst.done':()=>`<div class="ckc" style="margin:30px auto 0">${CHK}</div>${hd('Password updated','You can now sign in with your new password.').replace('<h2>','<h2 style="text-align:center">')}<button class="b1" data-act="to" data-m="in" data-s="cred">Back to sign in</button>${clerk}`};
+function mtr(v){const s=str(v);document.querySelectorAll('.sm i').forEach((i,k)=>i.style.background=k<s?['','#FF6FB5','#FFB86B','#5FE3D6','#9BE37C'][s]:'');const e=$('#pm');e.textContent=v?SL[s]+(s<4?' — add 10+ chars, upper & lower case, a number and a symbol':' ✓'):'Use 10+ characters with upper, lower case, a number and a symbol.';e.className='hn '+(v?(s===4?'ok':'bad'):'');return s}
+function emv(el,h){const v=el.value.trim(),ok=EM.test(v);h.textContent=!v?'':ok?'Valid email address':'Enter a valid email like name@domain.com';h.className='hn '+(!v?'':ok?'ok':'bad');el.className='ai '+(!v?'':ok?'ok':'bad');return ok}
+function otpw(exp,cb){const bx=[...document.querySelectorAll('#otp input')],vb=$('#vb'),get=()=>bx.map(b=>b.value).join('');
+bx.forEach((b,i)=>{b.oninput=()=>{b.value=b.value.replace(/\D/g,'').slice(-1);if(b.value&&bx[i+1])bx[i+1].focus();vb.dispatchEvent(new Event('chk'))};b.onkeydown=e=>{if(e.key==='Backspace'&&!b.value&&bx[i-1])bx[i-1].focus()};b.onpaste=e=>{const t=(e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6);if(!t)return;e.preventDefault();[...t].forEach((c,j)=>bx[j].value=c);bx[Math.min(5,t.length)].focus();vb.dispatchEvent(new Event('chk'))}});
+vb.onchk=0;vb.addEventListener('chk',()=>{vb.disabled=get().length<6||(vb.dataset.pw==='1'&&str($('#p').value)<4)});bx[0].focus();
+vb.onclick=()=>{if(get()===exp())cb();else{$('#er').textContent='Invalid code. Try again.';bx.forEach(b=>b.value='');bx[0].focus();vb.disabled=true}}}
+const start=em=>{A.d={email:em};A.code=rnd(6);go('in','verify')};
+function oauth(p){const em=p.toLowerCase()+'.user@'+(p==='Google'?'gmail.com':'users.noreply.github.com');A.d={email:em,p};toast('Connecting to '+p+'…');setTimeout(()=>MEM[em]?start(em):go('up','oa'),700)}
+function cap(){A.a=2+Math.floor(Math.random()*8);A.b=2+Math.floor(Math.random()*8);$('#cqt').textContent=A.a+' + '+A.b+' = ?';$('#cq').value='';$('#cq').dispatchEvent(new Event('input'))}
+/* ---- AYZEN OIDC client (Authorization Code + PKCE). Mirrors artifacts/ayzen/src/lib/oidc-client.ts, sylo-oidc-login.ts, sylo-oidc-callback.ts ---- */
+const OIDC={issuer:'https://ayzen.tech',clientId:'zynth',redirectUri:location.origin+'/oidc/callback',scopes:['openid','profile','email'],pendingKey:'ayzen_zynth_oidc_pending'};
+OIDC.live=/(^|\.)ayzen\.tech$/.test(location.hostname);let cbDone=false;
+const OS=['Discover provider','Create PKCE challenge','Redirect to AYZEN','Verify state and nonce','Exchange code for tokens','Start Zynth session'],wait=(ms,v)=>new Promise(r=>setTimeout(()=>r(v),ms));
+const OE={discovery_failed:'Couldn’t reach the AYZEN provider. Check your connection and try again.',provider_error:'AYZEN declined the sign-in request.',state_mismatch:'This sign-in attempt expired or didn’t match. Please start again.',missing_transaction:'No sign-in attempt was found. Please start again.',token_exchange_failed:'AYZEN couldn’t issue tokens for this attempt.',nonce_mismatch:'The identity token didn’t match this attempt.',session_exchange_failed:'Signed in with AYZEN, but Zynth couldn’t start a session.'};
+const b64u=b=>btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),rb=n=>b64u(crypto.getRandomValues(new Uint8Array(n).buffer));
+async function pkce(){const v=rb(32);return{v,c:b64u(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)))}}
+async function discover(){const r=await fetch(OIDC.issuer+'/.well-known/openid-configuration',{headers:{Accept:'application/json'}});if(!r.ok)throw new Error('discovery_failed');const m=await r.json();for(const k of['issuer','authorization_endpoint','token_endpoint','userinfo_endpoint'])if(typeof m[k]!=='string')throw new Error('discovery_failed');return m}
+const oidcStep=n=>document.querySelectorAll('.os li').forEach((l,i)=>l.className=i<n?'d':i===n?'c':'');
+function oidcFail(m){const k=String(m||'').split(':')[0];document.querySelectorAll('.os li.c').forEach(l=>l.className='x');const e=$('#oe');if(!e)return;e.textContent=OE[k]||'Something went wrong. Please try again.';e.className='hn bad';$('#ob').hidden=false}
+async function startOidc(){go('oidc','run');try{oidcStep(0);const m=OIDC.live?await discover():await wait(600,{authorization_endpoint:OIDC.issuer+'/oidc/authorize'});oidcStep(1);const{v,c}=await pkce(),state=rb(16),nonce=rb(16);
+sessionStorage.setItem(OIDC.pendingKey,JSON.stringify({state,codeVerifier:v,nonce,clientId:OIDC.clientId,createdAt:Date.now()}));
+const u=new URL(m.authorization_endpoint);u.search=new URLSearchParams({response_type:'code',client_id:OIDC.clientId,redirect_uri:OIDC.redirectUri,scope:OIDC.scopes.join(' '),state,code_challenge:c,code_challenge_method:'S256',nonce}).toString();oidcStep(2);
+if(OIDC.live){location.assign(u.href);return}
+await wait(900);oidcStep(3);await wait(700);oidcStep(4);await wait(600);oidcStep(5);await wait(600);sessionStorage.removeItem(OIDC.pendingKey);A.d={email:'demo@ayzen.tech'};go('in','done')}catch(e){oidcFail(e.message)}}
+async function oidcCallback(){go('oidc','run');oidcStep(3);const q=new URLSearchParams(location.search),p=JSON.parse(sessionStorage.getItem(OIDC.pendingKey)||'null');sessionStorage.removeItem(OIDC.pendingKey);
+try{if(q.get('error'))throw new Error('provider_error');if(!p||!q.get('code'))throw new Error('missing_transaction');if(q.get('state')!==p.state)throw new Error('state_mismatch');oidcStep(4);
+const r=await fetch(OIDC.issuer+'/oidc/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'authorization_code',code:q.get('code'),redirect_uri:OIDC.redirectUri,client_id:OIDC.clientId,code_verifier:p.codeVerifier})}),t=await r.json();if(!r.ok)throw new Error('token_exchange_failed');
+if(t.id_token){const c=JSON.parse(atob(t.id_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));if(c.nonce&&c.nonce!==p.nonce)throw new Error('nonce_mismatch')}
+oidcStep(5);const x=await fetch(OIDC.issuer+'/api/auth/session-exchange',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:OIDC.clientId})});if(!x.ok)throw new Error('session_exchange_failed');
+history.replaceState(null,'','/#login');go('in','done')}catch(e){oidcFail(e.message)}}
+const W={
+'in.cred':()=>{const e=$('#e'),h=$('#eh');e.oninput=()=>emv(e,h);$('#fm').onsubmit=ev=>{ev.preventDefault();const em=e.value.trim().toLowerCase();if(!EM.test(em)){emv(e,h);return}const a=MEM[em];if(!a||a.pw!==btoa($('#p').value)){$('#er').textContent='Invalid password or email.';av.classList.remove('sh');void av.offsetWidth;av.classList.add('sh');return}start(em)}},
+'in.verify':()=>{const need=[...av.querySelectorAll('.fx')].map(f=>f.dataset.k),ok={},vb=$('#vb'),exp={email:()=>A.code,totp:()=>'123456'},chk=()=>{vb.disabled=!need.every(k=>ok[k])};
+av.querySelectorAll('.fx .otp').forEach(o=>{const fx=o.closest('.fx'),k=fx.dataset.k,bx=[...o.children],get=()=>bx.map(b=>b.value).join('');
+const done=()=>{if(get()===exp[k]()){ok[k]=1;fx.classList.add('ok');fx.classList.remove('bad');bx.forEach(b=>b.disabled=true);const n=av.querySelector('.fx:not(.ok) .otp input');if(n)n.focus()}else{fx.classList.remove('bad');void fx.offsetWidth;fx.classList.add('bad');bx.forEach(b=>b.value='');bx[0].focus()}chk()};
+bx.forEach((b,i)=>{b.oninput=()=>{b.value=b.value.replace(/\D/g,'').slice(-1);b.classList.remove('pp');void b.offsetWidth;b.classList.add('pp');if(b.value&&bx[i+1])bx[i+1].focus();if(get().length===6)done()};b.onkeydown=e=>{if(e.key==='Backspace'&&!b.value&&bx[i-1])bx[i-1].focus()};b.onpaste=e=>{const t=(e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6);if(!t)return;e.preventDefault();[...t].forEach((c,j)=>bx[j].value=c);if(t.length===6)done();else bx[t.length].focus()}})});
+const pk=av.querySelector('[data-act="pk"]');if(pk)pk.onclick=()=>{pk.classList.add('ld');setTimeout(()=>{pk.classList.remove('ld');pk.closest('.fx').classList.add('ok');pk.textContent='Passkey verified';pk.disabled=true;ok.pk=1;chk()},1300)};
+vb.onclick=()=>{vb.classList.add('ld');setTimeout(()=>go('in','done'),800)};const f=av.querySelector('.otp input');if(f&&!matchMedia('(pointer:coarse)').matches)f.focus()},
+'up.cred':()=>{const e=$('#e'),p=$('#p'),t=$('#tc'),b=$('#sb'),ck=()=>{b.disabled=!(EM.test(e.value.trim())&&str(p.value)===4&&t.checked)};e.oninput=()=>{emv(e,$('#eh'));ck()};p.oninput=()=>{mtr(p.value);ck()};t.onchange=ck;
+$('#fm').onsubmit=ev=>{ev.preventDefault();const em=e.value.trim().toLowerCase();if(MEM[em]){$('#er').textContent='An account with this email already exists. Sign in instead.';return}A.d={email:em,pw:p.value};go('up','ref')}},
+'up.oa':()=>{const p=$('#p'),b=$('#sb');p.oninput=()=>{b.disabled=mtr(p.value)<4};$('#fm').onsubmit=ev=>{ev.preventDefault();A.d.pw=p.value;go('up','ref')}},
+'up.ref':()=>{const r=$('#rc'),q=$('#cq'),b=$('#nx'),ck=()=>{const ro=/^[A-Za-z0-9]{6,12}$/.test(r.value),qo=+q.value===A.a+A.b&&q.value!=='';r.className='ai '+(!r.value?'':ro?'ok':'bad');$('#rh').className='hn '+(!r.value?'':ro?'ok':'bad');$('#ch').textContent=!q.value?'':qo?'Check passed':'Incorrect answer';$('#ch').className='hn '+(!q.value?'':qo?'ok':'bad');b.disabled=!(ro&&qo)};r.oninput=q.oninput=ck;cap();$('#fm').onsubmit=ev=>{ev.preventDefault();A.code=rnd(6);go('up','otp')}},
+'up.otp':()=>otpw(()=>A.code,()=>{MEM[A.d.email]={pw:btoa(A.d.pw||''),sec:{}};persist();modal('Email verified','Your email is confirmed and your AYZEN account has been created.','Continue',()=>go('up','name'))}),
+'up.name':()=>{const u=$('#u'),f=$('#fn'),l=$('#ln'),h=$('#uh'),b=$('#nx'),ck=()=>{const v=u.value.toLowerCase(),ok=/^[a-z0-9._]{3,20}$/.test(v),tk=['admin','root','zynth','ayzen','support'].includes(v);h.textContent=!v?'':!ok?'3–20 characters: letters, numbers, dot or underscore':tk?'That username is taken':v+'@ayzen.tech will be created for you';h.className='hn '+(!v?'':ok&&!tk?'ok':'bad');b.disabled=!(ok&&!tk&&f.value.trim()&&l.value.trim())};[u,f,l].forEach(i=>i.oninput=ck);
+$('#fm').onsubmit=ev=>{ev.preventDefault();const v=u.value.toLowerCase();Object.assign(MEM[A.d.email],{first:f.value.trim(),last:l.value.trim(),user:v,mail:v+'@ayzen.tech'});persist();go('up','mods')}},
+'up.prof':()=>{$('#fm').onsubmit=ev=>{ev.preventDefault();Object.assign(MEM[A.d.email],{name:$('#dn').value,headline:$('#hl').value,bio:$('#bio').value,sec:{totp:$('#s1').checked,passkey:$('#s2').checked}});persist();toast('Profile saved');go('up','done')}},
+'rst.email':()=>{const e=$('#e');e.oninput=()=>emv(e,$('#eh'));$('#fm').onsubmit=ev=>{ev.preventDefault();if(!emv(e,$('#eh')))return;A.d={email:e.value.trim().toLowerCase()};A.code=rnd(6);toast('If the account exists, a code is on its way');go('rst','code')}},
+'rst.code':()=>{const vb=$('#vb'),p=$('#p');vb.dataset.pw='1';otpw(()=>A.code,()=>{if(MEM[A.d.email]){MEM[A.d.email].pw=btoa(p.value);persist()}go('rst','done')});p.oninput=()=>{mtr(p.value);vb.dispatchEvent(new Event('chk'))}}};
+const LOGO=n=>`<svg class="lg" width="${n}" height="${n}" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 4 56 18v28L32 60 8 46V18z" stroke="url(#zg)" stroke-width="2" stroke-linejoin="round" fill="rgba(143,124,255,.07)"/><path class="z" d="M22 22h20L22 42h20" stroke="url(#zg)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><g fill="#EAF2FF"><circle cx="22" cy="22" r="2.4"/><circle cx="42" cy="22" r="2.4"/><circle cx="22" cy="42" r="2.4"/><circle cx="42" cy="42" r="2.4"/></g></svg>`;
+document.querySelectorAll('.logo>i').forEach(i=>i.outerHTML=LOGO(24));$('#lgx').innerHTML=LOGO(96);$('#awm').innerHTML=M.map(m=>`<span style="color:${css(m.c)}">${m.k}</span>`).join(' · ');
+const bk=$('.bk');function showW(on){$('#aw').hidden=!on;$('.ac').hidden=on;bk.textContent=on?'← Back to Zynth':'← Back'}
+bk.onclick=e=>{if($('#aw').hidden){e.preventDefault();showW(true)}};
+$('#aw').addEventListener('click',e=>{const b=e.target.closest('[data-w]');if(b)go(b.dataset.w,'cred')});
+function go(m,s){showW(false);A.m=m;A.s=s;render()}
+function render(){const k=A.m+'.'+A.s;av.style.animation='none';void av.offsetHeight;av.style.animation='';av.classList.remove('sh');av.innerHTML=V[k]();if(W[k])W[k]();const f=av.querySelector('input:not([type=checkbox])');if(f&&!f.closest('#otp')&&!matchMedia('(pointer:coarse)').matches)f.focus({preventScroll:true})}
+av.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+if(a==='tab')go(b.dataset.v,'cred');if(a==='to')go(b.dataset.m,b.dataset.s);
+if(a==='eye'){const i=$('#'+b.dataset.t);i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'Show':'Hide'}
+if(a==='ayzen')startOidc();if(a==='oa')oauth(b.dataset.p);if(a==='cap')cap();
+if(a==='cn'){b.classList.toggle('on');b.textContent=b.classList.contains('on')?'Connected':'Connect'}if(a==='md')b.classList.toggle('on');
+if(a==='resend'){A.code=rnd(6);{const d=$('#dm');d.textContent=d.dataset.t?d.dataset.t.replace('#',A.code):'Demo code: '+A.code}toast('New code sent to '+A.d.email)}
+if(a==='gen'){const c='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%&*',g=[...crypto.getRandomValues(new Uint8Array(16))].map(x=>c[x%c.length]).join('')+'aA1!';A.d.pw=g;modal('Password sent','We emailed a generated password to '+A.d.email+'. You can change it any time.<br><br><span style="font:.74rem var(--mono);color:var(--dim)">Demo preview: '+g+'</span>','Continue',()=>go('up','ref'))}});
+const pg={over:$('#p-over'),how:$('#p-how'),tools:$('#p-tools'),gov:$('#p-gov'),auth:$('#p-auth')},TT={auth:'Welcome to Zynth AI',over:'Zynth — the agent layer of AYZEN',how:'Zynth — How it works',tools:'Zynth — Tool catalog',gov:'Zynth — Governance'};
+const dl=$('#dl');function dec(){const t=TL[Math.floor(Math.random()*TL.length)],a=t.t==='A',li=document.createElement('li');li.innerHTML=`<time>${new Date().toTimeString().slice(0,8)}</time><code>${t.n}</code><b class="${a?'d-h':'d-ok'}">${a?'hold · owner':'allow'}</b>`;dl.prepend(li);while(dl.children.length>7)dl.lastChild.remove()}
+for(let i=0;i<7;i++)dec();setInterval(()=>{if(!pg.gov.hidden)dec()},1400);
+function route(){const h=location.hash.slice(1),cb=/\/oidc\/callback\/?$/.test(location.pathname)||(/[?&]code=/.test(location.search)&&/[?&]state=/.test(location.search));let k='over';if(h==='tools')k='tools';else if(h==='governance')k='gov';else if(h.startsWith('how'))k='how';else if(h==='login'||cb)k='auth';
+for(const x in pg)pg[x].hidden=x!==k;document.body.classList.toggle('au',k==='auth');aOn=k==='auth';if(aOn){ars();if(cb&&!cbDone){cbDone=true;oidcCallback()}else if(!cb)showW(true)}document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('on',a.dataset.nav===k));document.title=TT[k];
+const t=k==='how'&&h.length>4?document.getElementById('st-'+h.slice(4)):null;t?t.scrollIntoView():scrollTo(0,0)}
+addEventListener('hashchange',route);route();
+</script></body></html>

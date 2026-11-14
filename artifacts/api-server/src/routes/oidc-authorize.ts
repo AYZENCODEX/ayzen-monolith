@@ -110,6 +110,7 @@ import {
 import { getActiveConsent } from "../lib/oidc-user-consents";
 import { evaluateScopeCreep } from "../lib/oidc-consent-scope-superset";
 import { logger } from "../lib/logger";
+import { centralAuthPath, centralUiOrigin } from "../lib/oidc-central-origin";
 
 /**
  * 7c: where a non-first-party client with no active consent is sent
@@ -129,7 +130,6 @@ const CONSENT_PATH = "/oidc/consent";
  * path is correct here and never needs its own env var the way
  * `AYZEN_COOKIE_DOMAIN`/`SYLO_HOSTS` do for genuinely cross-host concerns.
  */
-const CENTRAL_LOGIN_PATH = "/login";
 
 const router: IRouter = Router();
 
@@ -204,14 +204,19 @@ export async function authorizeHandler(req: Request, res: Response): Promise<voi
   // authenticated route in this codebase uses (see file header) — never a
   // second, OIDC-only session mechanism.
   const token = getTokenFromReq(req);
-  const session = token ? await getUserFromToken(token) : null;
+  const resolved = token ? await getUserFromToken(token) : null;
+  // W1-P2: a per-module session proves a login to THAT module only. Treating it as the central login here would let
+  // a session from module A mint an authorization code for module B's client — exactly the cross-module hop the
+  // module split exists to prevent. It is handled like "no central session": send the visitor to the central login.
+  const session = resolved && !resolved.moduleId ? resolved : null;
 
   if (!session) {
     // 3b-b/3b-c — Central Login Redirect + Return-to State. See file
     // header for why `req.originalUrl` (server-observed, not client-
     // supplied) is what's safe to round-trip here.
     logger.info({ clientId: result.client.clientId }, "oidc.authorize.login_required");
-    const loginUrl = new URL(CENTRAL_LOGIN_PATH, `${req.protocol}://${req.get("host")}`);
+    // W1-P4: signup hint -> /register; UI origin is APP_URL when the issuer is a dedicated IdP host (lib/oidc-central-origin.ts).
+    const loginUrl = new URL(centralAuthPath(req.query.screen_hint), centralUiOrigin(`${req.protocol}://${req.get("host")}`));
     loginUrl.searchParams.set("return_to", req.originalUrl);
     res.redirect(302, loginUrl.toString());
     return;
@@ -254,7 +259,7 @@ export async function authorizeHandler(req: Request, res: Response): Promise<voi
     const { isSuperset } = evaluateScopeCreep(consent?.grantedScopes ?? [], result.scopes);
     if (!isSuperset) {
       logger.info({ clientId: result.client.clientId }, "oidc.authorize.consent_required");
-      const consentUrl = new URL(CONSENT_PATH, `${req.protocol}://${req.get("host")}`);
+      const consentUrl = new URL(CONSENT_PATH, centralUiOrigin(`${req.protocol}://${req.get("host")}`));
       consentUrl.searchParams.set("returnTo", req.originalUrl);
       res.redirect(302, consentUrl.toString());
       return;

@@ -12,6 +12,10 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test:mega-engine": "node --test --import tsx src/lib/mega-engine/*.test.ts",
     "test:new-engines": "node --test --import tsx src/lib/new-engines/*.test.ts",
+    "test:module-auth": "node --test --import tsx src/lib/module-session-policy.test.ts src/lib/module-request-context.test.ts src/lib/module-password.test.ts",
+    "test:module-auth-db": "node --test --import tsx src/lib/module-auth-service.db.test.ts src/lib/module-clerk-service.db.test.ts",
+    "test:module-host-guard": "node --test --import tsx src/lib/module-host-guard.test.ts",
+    "test:clerk": "node --test --import tsx src/lib/clerk.test.ts",
     "test:auth-signup": "node --test --import tsx src/lib/signup-validation.test.ts",
     "test:role-hosts": "node --test --import tsx src/lib/role-hosts.test.ts src/lib/api-hosts.test.ts",
     "test:mcp": "node --test --experimental-test-module-mocks --import tsx src/mcp-server/*.test.ts src/routes/mcp.http.test.ts",
@@ -25,6 +29,7 @@
   },
   "dependencies": {
     "@ayzen/capabilities": "workspace:*",
+    "@ayzen/identity-context": "workspace:*",
     "@ayzen/module-registry": "workspace:*",
     "@ayzen/telegram": "workspace:*",
     "@opentelemetry/api": "^1.10.0",

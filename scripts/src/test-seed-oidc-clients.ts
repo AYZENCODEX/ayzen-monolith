@@ -33,7 +33,7 @@
  * Run: npx tsx scripts/src/test-seed-oidc-clients.ts
  */
 import assert from "node:assert/strict";
-import { SEED_CLIENTS } from "./seed-oidc-clients";
+import { SEED_CLIENTS } from "./oidc-seed-clients-data"; // W1-P3: pure data (no DB import), same array seed-oidc-clients.ts re-exports
 
 function test(name: string, fn: () => void): void {
   try {
@@ -45,7 +45,7 @@ function test(name: string, fn: () => void): void {
   }
 }
 
-const SUBDOMAIN_CLIENT_IDS = ["sylo", "ryft", "wisp", "verve", "zynth", "skarn", "warde"];
+const SUBDOMAIN_CLIENT_IDS = ["sylo", "ryft", "wisp", "verve", "zynth", "skarn", "fyra", "warde"]; // W1-P3: fyra was seeded but missing here (stale)
 const EXPECTED_CLIENT_IDS = [...SUBDOMAIN_CLIENT_IDS, "workspace"];
 const EXPECTED_SCOPES = ["openid", "profile", "email"];
 
@@ -54,7 +54,7 @@ const workspaceClient = () => SEED_CLIENTS.find((c) => c.clientId === "workspace
 
 console.log("SEED_CLIENTS");
 
-test("exactly the eight first-party apps are seeded (seven subdomain apps + workspace), no more, no fewer", () => {
+test("exactly the nine first-party clients are seeded (eight module apps + workspace), no more, no fewer", () => {
   assert.deepEqual(
     SEED_CLIENTS.map((c) => c.clientId).sort(),
     [...EXPECTED_CLIENT_IDS].sort(),

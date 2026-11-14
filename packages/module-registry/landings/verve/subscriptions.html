@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Choose a service, then pick how many months you want. Longer plans cost less per month.">
+<title>Verve Subscriptions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap">
+<script>(function(){try{var t=localStorage.getItem('verve-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+</head>
+<body data-nav="subscriptions" data-cat="subscriptions">
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main">
+<section class="subhero" data-stage-zone>
+  <div class="container subhero__grid">
+    <div class="subhero__copy">
+      <a class="back-link" href="index.html" data-back><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg><span>Back to home</span></a>
+      <ol class="crumbs" aria-label="Breadcrumb"><li><a href="index.html">Home</a></li><li aria-current="page">Subscriptions</li></ol>
+      <h1>Subscriptions</h1>
+      <p class="lede">Choose a service, then pick how many months you want. Longer plans cost less per month.</p>
+    </div>
+    <div class="hero__stage"><div id="hero-stage"></div></div>
+  </div>
+</section>
+<section class="page-section">
+  <div class="container">
+    <div class="toolbar">
+      <label class="search"><span class="sr-only">Search services</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><input id="q" type="search" placeholder="Search services" autocomplete="off"></label>
+      <p class="toolbar__count" id="count" aria-live="polite"></p>
+    </div>
+    <div id="grid"></div>
+    <p class="page-note">Listings, prices and offers on this site are sample data until the backend is connected.</p>
+  </div>
+</section>
+</main>
+<footer id="site-footer"></footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/stage.js"></script>
+<script src="assets/js/pages/category.js"></script>
+</body>
+</html>

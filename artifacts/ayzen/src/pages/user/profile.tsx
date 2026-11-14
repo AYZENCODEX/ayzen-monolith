@@ -9,6 +9,7 @@ import {
   BadgeCheck, Lock, CheckCircle2, Circle, Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ModuleIdsPanel } from "@/components/layout/module-ids-panel";
 
 interface ProfileData {
   id: number;
@@ -760,6 +761,9 @@ export default function ProfilePage() {
           ))}
         </div>
       </div>
+
+      {/* W1-P1: per-module ids (SYL-000001, ...) */}
+      <ModuleIdsPanel />
 
       {/* ── Decorative bottom line ───────────────────────────────── */}
       <div className="flex items-center gap-4 py-2 animate-fade-up delay-600">

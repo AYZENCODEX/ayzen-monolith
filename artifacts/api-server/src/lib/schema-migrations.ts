@@ -3048,4 +3048,190 @@ $f11_finance_payment_agreements$`,
   `INSERT INTO service_table_ownership (service_key, table_name)
    VALUES ('telegram-gateway', 'telegram_bot_links'), ('telegram-gateway', 'telegram_link_codes')
    ON CONFLICT (service_key, table_name) DO NOTHING`,
+  // 125_module_accounts.sql — W1-P1 per-module accounts + module UIDs (SYL-000001)
+  `CREATE TABLE IF NOT EXISTS module_accounts (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  module TEXT NOT NULL,
+  module_uid TEXT NOT NULL,
+  seq INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'active',
+  source TEXT NOT NULL DEFAULT 'signup',
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT module_accounts_module_chk CHECK (module IN ('sylo','ryft','fyra','verve','skarn','warde','wisp','zynth')),
+  CONSTRAINT module_accounts_status_chk CHECK (status IN ('active','suspended','closed')),
+  CONSTRAINT module_accounts_source_chk CHECK (source IN ('backfill','signup','lazy','admin')),
+  CONSTRAINT module_accounts_uid_chk CHECK (module_uid ~ '^[A-Z]{3}-[0-9]{6,}$')
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_accounts_user_module_idx ON module_accounts(user_id, module)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_accounts_module_uid_idx ON module_accounts(module_uid)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_accounts_module_seq_idx ON module_accounts(module, seq)`,
+  `CREATE INDEX IF NOT EXISTS module_accounts_user_id_idx ON module_accounts(user_id)`,
+  `CREATE SEQUENCE IF NOT EXISTS module_uid_seq_sylo`,
+  `CREATE SEQUENCE IF NOT EXISTS module_uid_seq_ryft`,
+  `CREATE SEQUENCE IF NOT EXISTS module_uid_seq_fyra`,
+  `CREATE SEQUENCE IF NOT EXISTS module_uid_seq_verve`,
+  `CREATE SEQUENCE IF NOT EXISTS module_uid_seq_skarn`,
+  `CREATE SEQUENCE IF NOT EXISTS module_uid_seq_warde`,
+  `CREATE SEQUENCE IF NOT EXISTS module_uid_seq_wisp`,
+  `CREATE SEQUENCE IF NOT EXISTS module_uid_seq_zynth`,
+  `CREATE OR REPLACE FUNCTION ayzen_format_module_uid(p_prefix TEXT, p_seq BIGINT) RETURNS TEXT
+LANGUAGE sql IMMUTABLE AS $$
+  SELECT p_prefix || '-' || CASE WHEN p_seq > 999999 THEN p_seq::text ELSE lpad(p_seq::text, 6, '0') END
+$$`,
+  `CREATE OR REPLACE FUNCTION ayzen_provision_module_account(p_user_id INTEGER, p_module TEXT, p_source TEXT DEFAULT 'signup')
+RETURNS module_accounts
+LANGUAGE plpgsql AS $$
+DECLARE
+  v_prefix TEXT;
+  v_seq BIGINT;
+  v_row module_accounts;
+BEGIN
+  v_prefix := CASE p_module
+    WHEN 'sylo' THEN 'SYL' WHEN 'ryft' THEN 'RFT' WHEN 'fyra' THEN 'FYR' WHEN 'verve' THEN 'VRV'
+    WHEN 'skarn' THEN 'SKR' WHEN 'warde' THEN 'WRD' WHEN 'wisp' THEN 'WSP' WHEN 'zynth' THEN 'ZYN'
+    ELSE NULL END;
+  IF v_prefix IS NULL THEN
+    RAISE EXCEPTION 'unknown module: %', p_module USING ERRCODE = '22023';
+  END IF;
+
+  SELECT * INTO v_row FROM module_accounts WHERE user_id = p_user_id AND module = p_module;
+  IF FOUND THEN
+    RETURN v_row;
+  END IF;
+
+  v_seq := nextval(format('module_uid_seq_%s', p_module)::regclass);
+  INSERT INTO module_accounts (user_id, module, module_uid, seq, source)
+  VALUES (p_user_id, p_module, ayzen_format_module_uid(v_prefix, v_seq), v_seq, p_source)
+  ON CONFLICT (user_id, module) DO NOTHING
+  RETURNING * INTO v_row;
+
+  IF v_row.id IS NULL THEN
+    -- Lost a race with a concurrent provision for the same (user, module): return the winner.
+    SELECT * INTO v_row FROM module_accounts WHERE user_id = p_user_id AND module = p_module;
+  END IF;
+  RETURN v_row;
+END
+$$`,
+  `INSERT INTO service_table_ownership (service_key, table_name)
+VALUES ('identity', 'module_accounts')
+ON CONFLICT (service_key, table_name) DO NOTHING`,
+  // 126_module_credentials_sessions.sql — W1-P2 per-module credentials + per-module sessions
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_accounts_id_module_idx ON module_accounts(id, module)`,
+  `CREATE TABLE IF NOT EXISTS module_credentials (
+  id SERIAL PRIMARY KEY,
+  module_account_id INTEGER NOT NULL,
+  module TEXT NOT NULL,
+  identifier TEXT NOT NULL,
+  identifier_norm TEXT NOT NULL,
+  password_hash TEXT NOT NULL,
+  password_updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  identifier_verified_at TIMESTAMP,
+  failed_attempts INTEGER NOT NULL DEFAULT 0,
+  locked_until TIMESTAMP,
+  last_login_at TIMESTAMP,
+  mfa_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+  mfa_secret TEXT,
+  mfa_enrolled_at TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT module_credentials_account_fk FOREIGN KEY (module_account_id, module) REFERENCES module_accounts(id, module) ON DELETE CASCADE,
+  CONSTRAINT module_credentials_hash_chk CHECK (password_hash LIKE '$argon2id$%'),
+  CONSTRAINT module_credentials_ident_chk CHECK (identifier_norm = lower(btrim(identifier_norm)) AND length(identifier_norm) BETWEEN 3 AND 254),
+  CONSTRAINT module_credentials_mfa_chk CHECK (NOT mfa_enabled OR mfa_secret IS NOT NULL)
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_credentials_account_idx ON module_credentials(module_account_id)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_credentials_module_ident_idx ON module_credentials(module, identifier_norm)`,
+  `CREATE TABLE IF NOT EXISTS module_account_links (
+  id SERIAL PRIMARY KEY,
+  module_account_id INTEGER NOT NULL,
+  module TEXT NOT NULL,
+  ayzen_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  method TEXT NOT NULL,
+  linked_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT module_account_links_account_fk FOREIGN KEY (module_account_id, module) REFERENCES module_accounts(id, module) ON DELETE CASCADE,
+  CONSTRAINT module_account_links_method_chk CHECK (method IN ('backing','legacy_continue','oidc','explicit'))
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_account_links_account_user_idx ON module_account_links(module_account_id, ayzen_user_id)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_account_links_user_module_idx ON module_account_links(ayzen_user_id, module)`,
+  `CREATE INDEX IF NOT EXISTS module_account_links_account_idx ON module_account_links(module_account_id)`,
+  `CREATE TABLE IF NOT EXISTS module_password_resets (
+  id SERIAL PRIMARY KEY,
+  module_account_id INTEGER NOT NULL,
+  module TEXT NOT NULL,
+  token_hash TEXT NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  used_at TIMESTAMP,
+  requested_ip TEXT,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT module_password_resets_account_fk FOREIGN KEY (module_account_id, module) REFERENCES module_accounts(id, module) ON DELETE CASCADE
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_password_resets_token_idx ON module_password_resets(token_hash)`,
+  `CREATE INDEX IF NOT EXISTS module_password_resets_account_idx ON module_password_resets(module_account_id) WHERE used_at IS NULL`,
+  `CREATE TABLE IF NOT EXISTS module_auth_events (
+  id BIGSERIAL PRIMARY KEY,
+  module TEXT NOT NULL,
+  module_account_id INTEGER REFERENCES module_accounts(id) ON DELETE SET NULL,
+  event TEXT NOT NULL,
+  outcome TEXT NOT NULL,
+  ip TEXT,
+  user_agent TEXT,
+  detail JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT module_auth_events_module_chk CHECK (module IN ('sylo','ryft','fyra','verve','skarn','warde','wisp','zynth')),
+  CONSTRAINT module_auth_events_event_chk CHECK (event IN ('signup','login','logout','continue','password_reset_requested','password_reset_completed')),
+  CONSTRAINT module_auth_events_outcome_chk CHECK (outcome IN ('success','failure'))
+)`,
+  `CREATE INDEX IF NOT EXISTS module_auth_events_account_idx ON module_auth_events(module_account_id, created_at DESC)`,
+  `CREATE INDEX IF NOT EXISTS module_auth_events_module_event_idx ON module_auth_events(module, event, created_at DESC)`,
+  `ALTER TABLE user_sessions ADD COLUMN IF NOT EXISTS module TEXT NULL`,
+  `ALTER TABLE user_sessions ADD COLUMN IF NOT EXISTS module_account_id INTEGER NULL`,
+  `DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_sessions_module_chk') THEN
+    ALTER TABLE user_sessions ADD CONSTRAINT user_sessions_module_chk CHECK (
+      (module IS NULL AND module_account_id IS NULL)
+      OR (module IS NOT NULL AND module_account_id IS NOT NULL AND module IN ('sylo','ryft','fyra','verve','skarn','warde','wisp','zynth'))
+    ) NOT VALID;
+    ALTER TABLE user_sessions VALIDATE CONSTRAINT user_sessions_module_chk;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_sessions_module_account_fk') THEN
+    ALTER TABLE user_sessions ADD CONSTRAINT user_sessions_module_account_fk
+      FOREIGN KEY (module_account_id, module) REFERENCES module_accounts(id, module) ON DELETE CASCADE NOT VALID;
+    ALTER TABLE user_sessions VALIDATE CONSTRAINT user_sessions_module_account_fk;
+  END IF;
+END
+$$`,
+  `CREATE INDEX IF NOT EXISTS idx_user_sessions_module_account ON user_sessions(module_account_id, revoked_at) WHERE module_account_id IS NOT NULL`,
+  `INSERT INTO service_table_ownership (service_key, table_name)
+VALUES ('identity', 'module_credentials'), ('identity', 'module_account_links'), ('identity', 'module_password_resets'), ('identity', 'module_auth_events')
+ON CONFLICT (service_key, table_name) DO NOTHING`,
+  // W1-P4 (migrations/127_module_oidc_audit_events.sql)
+  `ALTER TABLE module_auth_events DROP CONSTRAINT IF EXISTS module_auth_events_event_chk`,
+  `ALTER TABLE module_auth_events ADD CONSTRAINT module_auth_events_event_chk
+  CHECK (event IN ('signup','login','logout','continue','password_reset_requested','password_reset_completed','oidc_login','link'))`,
+  // W1-P5 (migrations/128_module_external_identities.sql)
+  `CREATE TABLE IF NOT EXISTS module_external_identities (
+  id SERIAL PRIMARY KEY,
+  module_account_id INTEGER NOT NULL,
+  module TEXT NOT NULL,
+  provider TEXT NOT NULL DEFAULT 'clerk',
+  external_id TEXT NOT NULL,
+  email TEXT,
+  email_verified BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  last_login_at TIMESTAMP,
+  CONSTRAINT module_external_identities_account_fk FOREIGN KEY (module_account_id, module) REFERENCES module_accounts(id, module) ON DELETE CASCADE,
+  CONSTRAINT module_external_identities_module_chk CHECK (module IN ('sylo','ryft','fyra','verve','skarn','warde','wisp','zynth')),
+  CONSTRAINT module_external_identities_provider_chk CHECK (provider IN ('clerk')),
+  CONSTRAINT module_external_identities_clerk_id_chk CHECK (provider <> 'clerk' OR external_id ~ '^user_[A-Za-z0-9]{8,64}$')
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_external_identities_ext_idx ON module_external_identities(module, provider, external_id)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS module_external_identities_account_idx ON module_external_identities(module_account_id, provider)`,
+  `ALTER TABLE module_auth_events DROP CONSTRAINT IF EXISTS module_auth_events_event_chk`,
+  `ALTER TABLE module_auth_events ADD CONSTRAINT module_auth_events_event_chk
+  CHECK (event IN ('signup','login','logout','continue','password_reset_requested','password_reset_completed','oidc_login','link','clerk_login','clerk_user_created','clerk_user_deleted'))`,
+  `INSERT INTO service_table_ownership (service_key, table_name) VALUES ('identity', 'module_external_identities')
+ON CONFLICT (service_key, table_name) DO NOTHING`,
 ];

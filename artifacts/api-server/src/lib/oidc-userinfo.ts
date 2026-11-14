@@ -86,6 +86,8 @@ export interface OidcUserinfoClaims {
   picture?: string;
   email?: string;
   email_verified?: boolean;
+  /** W1-P1: the user's id in the module whose client is calling (e.g. SYL-000001). Only present for a per-module client whose user has a module account, and only with the `profile` scope. */
+  module_uid?: string;
 }
 
 /**
@@ -112,12 +114,14 @@ export interface OidcUserinfoClaims {
  * happened upstream, at request-validation time (`oidc-scope-validation.ts`,
  * Phase 2d), never here.
  */
-export function buildUserinfoClaims(user: OidcUserinfoRecord, scopes: string[]): OidcUserinfoClaims {
+export function buildUserinfoClaims(user: OidcUserinfoRecord, scopes: string[], moduleUid?: string | null): OidcUserinfoClaims {
   const claims: OidcUserinfoClaims = { sub: String(user.id) };
 
   if (scopes.includes("profile")) {
     claims.preferred_username = user.username;
     if (user.avatarUrl) claims.picture = user.avatarUrl;
+    // W1-P1: conditional key (never `module_uid: undefined`), same rule as `picture` above.
+    if (moduleUid) claims.module_uid = moduleUid;
   }
 
   if (scopes.includes("email")) {

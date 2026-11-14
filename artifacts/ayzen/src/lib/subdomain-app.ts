@@ -4,6 +4,7 @@
  * AYZEN Workspace — subdomain app scoping (master plan §2/§7 Phase 2:
  * "Split Sylo onto its own subdomain").
  *
+ * (W2-P2 update: modules now ALSO ship as per-module builds, see lib/build-module.ts; the central build below is unchanged.)
  * This is intentionally NOT a separate build/deploy. It's the same SPA
  * bundle served from the same Express app (see app.ts) on every
  * `*.ayzen.tech` host — this file just makes that one bundle *behave*
@@ -30,6 +31,7 @@
 
 import type { ComponentType } from "react";
 import { MODULES } from "@ayzen/module-registry";
+import { buildModuleId } from "./build-module";
 
 export interface SubdomainApp {
   id: string;
@@ -73,6 +75,8 @@ export const ALWAYS_ALLOWED_PREFIXES = [
   // at all) — it's what ESTABLISHES the session App.tsx's ProtectedRoute
   // guard checks, so it can't itself require a resolved app/session first.
   "/oidc/callback",
+  // W1-P5: same reasoning — the Clerk return page establishes the session.
+  "/clerk/callback",
 ];
 
 function hasPrefix(path: string, prefix: string): boolean {
@@ -90,6 +94,9 @@ function hasPrefix(path: string, prefix: string): boolean {
  * Returns null on the main domain or any unrecognized host.
  */
 export function getCurrentSubdomainApp(): SubdomainApp | null {
+  // W2-P2: a module build IS that module, on any hostname (previews, dev, custom domains).
+  const built = buildModuleId();
+  if (built && SUBDOMAIN_APPS[built]) return { id: built, ...SUBDOMAIN_APPS[built] };
   if (typeof window === "undefined") return null;
   const host = window.location.hostname;
 

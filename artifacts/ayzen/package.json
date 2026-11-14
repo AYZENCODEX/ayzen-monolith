@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
     "build": "vite build --config vite.config.ts && cp dist/public/index.html dist/public/404.html",
+    "build:module": "vite build --config vite.module.config.ts && node -e \"const m=process.env.VITE_MODULE,f='dist/modules/'+m+'/';require('fs').copyFileSync(f+'index.html',f+'404.html')\"",
+    "build:modules": "node build/build-all-modules.mjs",
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

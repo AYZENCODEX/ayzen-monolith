@@ -30,7 +30,7 @@
  */
 
 import jwt from "jsonwebtoken";
-import { db, usersTable, apiKeysTable } from "@workspace/db";
+import { db, pool, usersTable, apiKeysTable } from "@workspace/db";
 import { eq, and, isNull } from "drizzle-orm";
 import type { Request } from "express";
 import { verifyAuthToken } from "./jwt";
@@ -38,6 +38,10 @@ import { logger } from "./logger";
 import { hashApiKey, looksLikeApiKey } from "./api-key-crypto";
 import { isSessionRevoked, touchSession } from "./sessions";
 import { getSessionCookie } from "./session-cookie";
+import { decideTokenModuleAccess, readModuleSessionsConfig, resolveRequestModule, selectSessionToken } from "./module-session-policy";
+import { currentModuleContext } from "./module-request-context";
+import { checkModuleSession } from "./module-auth-service";
+import type { ModuleId } from "@ayzen/module-registry";
 import { verifyOidcAccessToken } from "./oidc-access-token-verification";
 import { hashOidcAccessToken, isAccessTokenRevoked } from "./oidc-token-revocation";
 
@@ -66,7 +70,16 @@ export function getTokenFromReq(req: Request): string | null {
   // fallback: any caller already sending a Bearer token (mobile app, API
   // keys, `setAuthTokenGetter`) is completely unaffected. Requires
   // `cookieParser()` to be mounted before routes (see app.ts).
-  return getSessionCookie(req);
+  //
+  // W1-P2: on a module host the module's OWN host-only cookie (`__Host-<module>_sid`) is read first, and the shared
+  // cookie is only a fallback while shared sessions are still accepted there (MODULE_SESSIONS_MODE, see
+  // lib/module-session-policy.ts). The cookie name is derived from the request's own Host, so another module's
+  // cookie is never even looked at. With the feature off this is exactly the shared-cookie read it always was.
+  return selectSessionToken({
+    contextModule: resolveRequestModule(req.hostname),
+    cookies: (req as Request & { cookies?: Record<string, unknown> }).cookies,
+    config: readModuleSessionsConfig(),
+  })?.token ?? null;
 }
 
 // ─── Base64-JSON payload parser (legacy format, no signature) ─────────────────
@@ -96,6 +109,9 @@ export function getUserIdSync(req: Request): number {
   if (!token) throw new AuthError("No authorization token provided");
 
   const verified = verifyAuthToken(token);
+  // W1-P2: a module session must be checked against its module host AND its user_sessions row, which this synchronous
+  // helper cannot do — so it refuses outright rather than answering for a token it cannot fully validate.
+  if (verified?.mod) throw new AuthError("Module sessions are not accepted by this helper");
   if (verified) return verified.userId;
 
   throw new AuthError("Invalid or unrecognized token format");
@@ -131,6 +147,9 @@ export async function getUserFromToken(
       scopes?: string[];
       /** Only set when authType === "oidc" — the `aud` this token was minted for (lib/oidc-access-token.ts). */
       oidcClientId?: string;
+      /** W1-P2: only set for a per-module session — the module it belongs to and its module_accounts.id. */
+      moduleId?: ModuleId;
+      moduleAccountId?: number;
     }
   | null
 > {
@@ -173,6 +192,28 @@ export async function getUserFromToken(
   // ── 1. Try our own signed AYZEN token first (lib/jwt.ts) ─────────────────
   const ownToken = verifyAuthToken(token);
   if (ownToken) {
+    // W1-P2 (ADR A4): per-module sessions. Decided on the token's own `mod` claim against the module the request is
+    // acting for (lib/module-request-context.ts) — never on anything the client merely asserts. A denial returns null
+    // immediately: it must NOT fall through to the OIDC / Supabase / legacy paths below.
+    const access = decideTokenModuleAccess({
+      tokenModule: ownToken.mod ?? null,
+      contextModule: currentModuleContext(),
+      config: readModuleSessionsConfig(),
+    });
+    if (!access.allow) {
+      logger.debug({ code: access.code, tokenModule: ownToken.mod ?? null, contextModule: currentModuleContext() }, "[module-sessions] token refused");
+      return null;
+    }
+    if (ownToken.mod) {
+      // A module session MUST have a live user_sessions row bound to the same module, account and user (unlike a
+      // pre-sessions shared token), so a revoke, reset or suspension kills it immediately.
+      const live = ownToken.sid
+        ? await checkModuleSession((sql, params) => pool.query(sql, params as any[]), {
+            sid: ownToken.sid, module: ownToken.mod, moduleAccountId: ownToken.mac!, userId: ownToken.userId,
+          })
+        : ({ ok: false } as const);
+      if (!live.ok) return null;
+    }
     // A `sid` claim means this token maps to a row in user_sessions (see
     // lib/sessions.ts) — the account's Security page can revoke that row
     // (e.g. "sign out of a lost device") without touching the password or
@@ -192,7 +233,10 @@ export async function getUserFromToken(
       .where(eq(usersTable.id, ownToken.userId));
     if (user && user.status !== "banned" && user.status !== "suspended") {
       if (ownToken.sid) touchSession(ownToken.sid).catch(() => {});
-      return { userId: user.id, role: user.role, authType: "session" };
+      return {
+        userId: user.id, role: user.role, authType: "session",
+        ...(ownToken.mod ? { moduleId: ownToken.mod, moduleAccountId: ownToken.mac } : {}),
+      };
     }
     if (user) return null; // valid signature, but account is banned/suspended
   }

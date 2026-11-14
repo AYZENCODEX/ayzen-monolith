@@ -4,9 +4,14 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.mjs"
+    ".": {
+      "types": "./src/index.d.mts",
+      "import": "./src/index.mjs",
+      "default": "./src/index.mjs"
+    }
   },
   "scripts": {
     "test": "node --test"
-  }
+  },
+  "types": "./src/index.d.mts"
 }

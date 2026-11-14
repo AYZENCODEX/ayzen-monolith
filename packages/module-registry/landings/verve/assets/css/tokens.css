@@ -1,0 +1,137 @@
+/*
+ * Verve design tokens.
+ *
+ * Direction: a quiet paper-and-ink storefront. Everything is restrained so the
+ * 3D hero scene and the photo cards are the only expressive things on screen.
+ *
+ * Palette (light): paper #f5f3eb, ink #17241c, pine #2c5f46, sage #b9d78f, clay #a24e3c.
+ * Type: Manrope for display, DM Sans for text. Numbers use tabular figures.
+ */
+:root {
+  color-scheme: light;
+
+  --font-display: 'Manrope', 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Surfaces */
+  --bg: #f5f3eb;
+  --surface: #fffefa;
+  --surface-2: #f0efe5;
+  --sunken: #e8e7dc;
+
+  /* Text */
+  --text: #17241c;
+  --text-2: #46534a;
+  --text-3: #637066;
+
+  /* Lines */
+  --line: #dcddd0;
+  --line-strong: #c3c8b7;
+
+  /* Brand */
+  --brand: #2c5f46;
+  --brand-hover: #224c37;
+  --on-brand: #ffffff;
+  --brand-soft: #e1ebd7;
+  --accent: #b9d78f;
+
+  /* Trade sides */
+  --buy: #2c5f46;
+  --on-buy: #ffffff;
+  --buy-soft: #e1ebd7;
+  --sell: #a24e3c;
+  --on-sell: #ffffff;
+  --sell-soft: #f4e1da;
+
+  --scrim: rgb(14 22 17 / 0.55);
+
+  /* "Let's talk" panel */
+  --talk-bg: #1a3a29;
+  --talk-fg: #eef3ea;
+
+  /* Elevation (shadow colour and strength follow the theme) */
+  --shadow-rgb: 24 37 29;
+  --k: 1;
+  --e1: 0 1px 2px rgb(var(--shadow-rgb) / calc(0.07 * var(--k)));
+  --e2: 0 10px 22px -10px rgb(var(--shadow-rgb) / calc(0.2 * var(--k))),
+        0 2px 5px rgb(var(--shadow-rgb) / calc(0.06 * var(--k)));
+  --e3: 0 28px 52px -22px rgb(var(--shadow-rgb) / calc(0.42 * var(--k))),
+        0 10px 18px -10px rgb(var(--shadow-rgb) / calc(0.16 * var(--k)));
+
+  /* Shape */
+  --r-s: 8px;
+  --r-m: 12px;
+  --r-l: 20px;
+  --r-xl: 28px;
+
+  /* Layout */
+  --container: 1240px;
+  --gutter: clamp(16px, 3vw, 40px);
+  --header-h: 68px;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Photo-card film grain */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0e1611;
+    --surface: #152019;
+    --surface-2: #1a271f;
+    --sunken: #0a100c;
+    --text: #e9efe5;
+    --text-2: #b3bfb2;
+    --text-3: #8b988b;
+    --line: #25342a;
+    --line-strong: #344a3b;
+    --brand: #86bd96;
+    --brand-hover: #9ccaa9;
+    --on-brand: #0b140e;
+    --brand-soft: #1d3125;
+    --accent: #6f9a5b;
+    --buy: #86bd96;
+    --on-buy: #0b140e;
+    --buy-soft: #1d3125;
+    --sell: #e5917d;
+    --on-sell: #1a0d0a;
+    --sell-soft: #3a2420;
+    --scrim: rgb(0 0 0 / 0.62);
+    --shadow-rgb: 0 0 0;
+    --k: 2.4;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e1611;
+  --surface: #152019;
+  --surface-2: #1a271f;
+  --sunken: #0a100c;
+  --text: #e9efe5;
+  --text-2: #b3bfb2;
+  --text-3: #8b988b;
+  --line: #25342a;
+  --line-strong: #344a3b;
+  --brand: #86bd96;
+  --brand-hover: #9ccaa9;
+  --on-brand: #0b140e;
+  --brand-soft: #1d3125;
+  --accent: #6f9a5b;
+  --buy: #86bd96;
+  --on-buy: #0b140e;
+  --buy-soft: #1d3125;
+  --sell: #e5917d;
+  --on-sell: #1a0d0a;
+  --sell-soft: #3a2420;
+  --scrim: rgb(0 0 0 / 0.62);
+  --shadow-rgb: 0 0 0;
+  --k: 2.4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --talk-bg: #1b3427; --talk-fg: #e9efe5; }
+}
+:root[data-theme="dark"] { --talk-bg: #1b3427; --talk-fg: #e9efe5; }

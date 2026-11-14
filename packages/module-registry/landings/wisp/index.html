@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wisp — mail at your own address</title>
+<meta name="description" content="Wisp gives you a username@ayzen.tech address, a mailbox that sorts itself with rules, and sending from your own accounts.">
+<meta name="theme-color" content="#e6eaed">
+<style>
+@font-face{font-family:"Bricolage Grotesque";font-weight:600;font-display:swap;src:url(fonts/bricolage-grotesque-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-weight:800;font-display:swap;src:url(fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:"Literata";font-weight:400;font-display:swap;src:url(fonts/literata-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Literata";font-weight:500;font-display:swap;src:url(fonts/literata-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Literata";font-weight:400;font-style:italic;font-display:swap;src:url(fonts/literata-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"Courier Prime";font-weight:400;font-display:swap;src:url(fonts/courier-prime-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Courier Prime";font-weight:700;font-display:swap;src:url(fonts/courier-prime-latin-700-normal.woff2) format("woff2")}
+
+:root{
+  --fog:#e6eaed; --fog2:#d9dfe4; --paper:#f6f7f4; --ink:#1a2233; --ink2:#46506a;
+  --red:#d1453b; --blue:#2b5aa6; --smoke:#9aa3b5; --night:#141b2a; --night2:#1e2740;
+  --ok:#2f8a6a;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Literata",Georgia,serif;
+  --type:"Courier Prime","Courier New",monospace;
+  --edge:repeating-linear-gradient(135deg,var(--red) 0 14px,var(--paper) 14px 22px,var(--blue) 22px 36px,var(--paper) 36px 44px);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--fog);color:var(--ink);font:400 18px/1.65 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+.wrap{width:min(1120px,100% - 48px);margin-inline:auto}
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.02em;line-height:1.02}
+h2{font-size:clamp(2rem,4.6vw,3.4rem);max-width:15ch}
+h3{font-size:1.25rem;letter-spacing:-.01em;line-height:1.15;font-weight:600}
+p{max-width:58ch}
+.lede{font-size:1.15rem;color:var(--ink2)}
+.t{font-family:var(--type)}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--fog) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--fog2)}
+header .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.mark{font:800 1.55rem var(--display);letter-spacing:-.03em;text-decoration:none;display:flex;align-items:center;gap:9px}
+.mark svg{width:26px;height:26px}
+nav{display:flex;gap:22px;margin-left:auto;font-size:.95rem}
+nav a{text-decoration:none;color:var(--ink2)} nav a:hover{color:var(--ink)}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);padding:11px 20px;border-radius:999px;text-decoration:none;font:600 .95rem var(--display);border:0;transition:transform .15s,background .15s}
+.btn:hover{background:#2a3550;transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+
+/* hero */
+.hero{padding:72px 0 96px}
+.hero .wrap{display:grid;grid-template-columns:1.02fr 1fr;gap:56px;align-items:center}
+h1{font-size:clamp(2.7rem,6.4vw,5.2rem);margin-bottom:22px}
+.claim{margin:30px 0 10px;display:flex;flex-wrap:wrap;gap:12px;align-items:stretch}
+.field{display:flex;align-items:center;background:var(--paper);border-radius:999px;padding:0 6px 0 20px;box-shadow:inset 0 0 0 1.5px var(--smoke);min-height:52px;flex:1 1 280px;max-width:420px}
+.field:focus-within{box-shadow:inset 0 0 0 2.5px var(--blue)}
+.field input{border:0;background:none;font:400 1.05rem var(--type);color:var(--ink);width:100%;min-width:0;outline:0;padding:10px 0}
+.field span{font:400 1.05rem var(--type);color:var(--ink2);padding-right:14px;white-space:nowrap}
+.fine{font-size:.9rem;color:var(--ink2)}
+
+.stage{perspective:1300px;display:grid;place-items:center;padding:56px 0 20px}
+.env-wrap{position:relative;width:min(470px,100%);animation:arrive .9s cubic-bezier(.2,.8,.2,1) both}
+.env-sway{transform-style:preserve-3d;animation:sway 10s ease-in-out infinite alternate}
+.flip{transform-style:preserve-3d;animation:flip 9s cubic-bezier(.5,0,.2,1) infinite}
+.front{backface-visibility:hidden;-webkit-backface-visibility:hidden;position:relative}
+.back{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:9px;background:var(--edge);border-radius:4px;box-shadow:0 22px 40px -18px rgba(26,34,51,.45)}
+.bface{position:relative;height:100%;background:#eceee9;border-radius:2px;perspective:700px;overflow:visible}
+.flap{position:absolute;left:0;right:0;top:0;height:62%;background:#dde2e7;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:50% 0;animation:flap 9s ease-in-out infinite;filter:drop-shadow(0 3px 2px rgba(0,0,0,.2))}
+.seal{position:absolute;left:50%;top:52%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e9695f,var(--red) 55%,#9c2a22);display:grid;place-items:center;animation:seal 9s ease-in-out infinite;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.seal svg{width:24px;height:24px;stroke:#f6d6d2;fill:none;stroke-width:2.6;stroke-linecap:round}
+.letter{position:absolute;left:7%;right:7%;top:0;height:78%;background:var(--paper);border-radius:3px;box-shadow:0 1px 0 var(--fog2),0 6px 18px rgba(26,34,51,.14);transform:translateY(-4px);animation:peek 7s ease-in-out infinite;padding:16px 18px;overflow:hidden}
+.letter i{display:block;height:5px;background:var(--fog2);border-radius:3px;margin-bottom:9px}
+.letter i:nth-child(2){width:78%}.letter i:nth-child(3){width:54%}
+.edge{position:relative;padding:9px;background:var(--edge);border-radius:4px;box-shadow:0 22px 40px -18px rgba(26,34,51,.45),0 2px 0 rgba(26,34,51,.08)}
+.face{background:var(--paper);aspect-ratio:1.6;position:relative;border-radius:2px;padding:18px 20px}
+.ret{font:400 .8rem/1.4 var(--type);color:var(--ink2)}
+.to{position:absolute;left:38%;right:18px;bottom:22%;font:400 .8rem/1.5 var(--type);color:var(--ink2)}
+.to b{display:block;font:700 clamp(.95rem,2.8vw,1.22rem)/1.25 var(--type);color:var(--ink);overflow-wrap:anywhere;margin-top:2px}
+.to b.press{animation:press .28s ease-out}
+.stamp{position:absolute;top:16px;right:18px;width:58px;height:70px;background:var(--paper);padding:5px;
+  box-shadow:0 0 0 1px var(--smoke);outline:2px dashed var(--smoke);outline-offset:3px}
+.stamp svg{width:100%;height:100%;display:block;background:linear-gradient(160deg,#cfd8ea,#9fb2d6)}
+.postmark{position:absolute;top:2px;right:56px;width:92px;height:92px;opacity:.78;transform:rotate(-14deg);animation:thump .5s .95s cubic-bezier(.3,1.6,.5,1) both}
+.postmark svg{width:100%;height:100%}
+.waves{position:absolute;top:30px;right:10px;width:70px;height:26px}
+
+@keyframes flip{0%,38%{transform:rotateY(0)}52%,74%{transform:rotateY(180deg)}88%,100%{transform:rotateY(360deg)}}
+@keyframes flap{0%,58%{transform:rotateX(0)}64%,70%{transform:rotateX(178deg)}76%,100%{transform:rotateX(0)}}
+@keyframes seal{0%,58%{opacity:1}61%,72%{opacity:0}76%,100%{opacity:1}}
+@keyframes arrive{from{opacity:0;transform:translateX(70px) rotate(5deg)}to{opacity:1;transform:none}}
+@keyframes sway{from{transform:rotateY(-9deg) rotateX(4deg)}to{transform:rotateY(7deg) rotateX(1deg)}}
+@keyframes peek{0%,18%{transform:translateY(-4px)}46%,64%{transform:translateY(-46px)}92%,100%{transform:translateY(-4px)}}
+@keyframes thump{from{opacity:0;transform:rotate(-14deg) scale(1.9)}to{opacity:.78;transform:rotate(-14deg) scale(1)}}
+@keyframes press{0%{transform:translateY(2px);opacity:.55}100%{transform:none;opacity:1}}
+
+/* sections */
+section{padding:104px 0}
+.head{display:grid;gap:18px;margin-bottom:48px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{all:unset;box-sizing:border-box;cursor:pointer;display:block;background:var(--paper);border-radius:14px;padding:26px 26px 24px;position:relative;box-shadow:0 1px 0 var(--fog2);transition:transform .18s}
+.card:hover{transform:translateY(-3px)}
+.card:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.card h3{margin-bottom:10px;display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.card h3::after{content:"+";font:600 1.3rem var(--display);color:var(--smoke);transition:transform .2s}
+.card[aria-expanded=true] h3::after{transform:rotate(45deg)}
+.card p{font-size:1rem;color:var(--ink2)}
+.card .more{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--smoke);font-size:.95rem}
+.card[aria-expanded=true] .more{display:block}
+.card.is-glow{animation:glow .7s ease-out}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(160,165,175,.0),0 1px 0 var(--fog2)}30%{box-shadow:0 0 0 6px rgba(160,165,175,.45),0 0 34px 8px rgba(160,165,175,.55)}100%{box-shadow:0 0 0 0 rgba(160,165,175,0),0 1px 0 var(--fog2)}}
+
+/* rules demo */
+.sorter{display:grid;grid-template-columns:1.25fr 1fr .8fr;gap:18px;align-items:start}
+.pane{background:var(--paper);border-radius:14px;padding:18px}
+.pane h3{font-size:1rem;margin-bottom:12px;color:var(--ink2);font-weight:600}
+.mail{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 12px;border-radius:8px;font:400 .82rem/1.35 var(--type);transition:background .3s,opacity .5s,transform .5s}
+.mail+.mail{margin-top:4px}
+.mail .s{font-weight:700;color:var(--ink)}.mail .f{color:var(--ink2);grid-column:1}
+.mail .chips{grid-column:2;grid-row:1/3;display:flex;gap:5px;align-items:center;justify-content:flex-end;flex-wrap:wrap;max-width:130px}
+.chip{font:700 .68rem var(--type);padding:2px 7px;border-radius:999px;background:var(--fog2);color:var(--ink);animation:pop .3s ease-out}
+.chip.lab{background:#d6e2f5;color:var(--blue)}.chip.mv{background:#ece3d6;color:#7a5d2a}.chip.st{background:#f6e3a8;color:#6d5400}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.mail.on{background:var(--fog)}
+.mail.gone{opacity:.38}.mail.gone .s{text-decoration:line-through}
+.rule{font:400 .8rem/1.5 var(--type);padding:11px 12px;border-radius:8px;border:1.5px solid var(--fog2);transition:border-color .25s,background .25s}
+.rule+.rule{margin-top:8px}
+.rule.hit{border-color:var(--blue);background:#e8eef9}
+.rule em{font-style:normal;color:var(--blue);font-weight:700}
+.rule small{display:block;color:var(--ink2);font-size:.76rem}
+.bins{display:grid;gap:8px}
+.bin{display:flex;justify-content:space-between;font:600 .95rem var(--display);padding:12px 14px;background:var(--fog);border-radius:8px}
+.bin b{font:700 1rem var(--type);min-width:1.4em;text-align:right}
+.bin.bump{animation:glow .6s ease-out}
+.flowctl{margin-top:16px;display:flex;gap:12px;align-items:center}
+.flowctl .btn{padding:8px 16px}
+.cap{font-size:.9rem;color:var(--ink2)}
+
+/* timing */
+.timing{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:start}
+.undo{background:var(--paper);border-radius:14px;padding:26px}
+.seg{display:inline-flex;background:var(--fog);border-radius:999px;padding:4px;margin:14px 0 20px}
+.seg button{border:0;background:none;padding:6px 14px;border-radius:999px;font:600 .9rem var(--type)}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.compose{border:1.5px solid var(--fog2);border-radius:10px;padding:14px 16px;font:400 .9rem/1.5 var(--type);color:var(--ink2);margin-bottom:16px}
+.compose b{color:var(--ink)}
+.toast{margin-top:16px;border-radius:10px;background:var(--ink);color:var(--paper);padding:12px 16px;display:none;align-items:center;gap:14px;position:relative;overflow:hidden;font:400 .92rem var(--type)}
+.toast.show{display:flex}
+.toast .bar{position:absolute;left:0;bottom:0;height:3px;background:var(--red);width:100%;transform-origin:left}
+.toast button{margin-left:auto;background:none;border:1.5px solid var(--paper);color:var(--paper);border-radius:999px;padding:3px 14px;font:700 .85rem var(--type)}
+.stack{display:grid;gap:18px}
+
+/* health */
+.band{background:var(--night);color:var(--paper);border-radius:0}
+.band .lede,.band p{color:#b9c1d4}
+.band h2{color:var(--paper)}
+.health{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.gauge{background:var(--night2);border-radius:16px;padding:26px}
+.status{display:flex;align-items:center;gap:10px;font:700 1.05rem var(--display);margin-bottom:22px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(47,138,106,.6);animation:beat 2s infinite}
+.paused .dot{background:var(--red);animation:none}
+@keyframes beat{70%{box-shadow:0 0 0 10px rgba(47,138,106,0)}100%{box-shadow:0 0 0 0 rgba(47,138,106,0)}}
+.meter{margin-bottom:18px;font:400 .85rem var(--type);color:#b9c1d4}
+.meter div{height:12px;background:#0f1522;border-radius:6px;margin-top:6px;overflow:hidden}
+.meter i{display:block;height:100%;width:6%;background:var(--ok);border-radius:6px;transition:width .8s cubic-bezier(.3,.8,.3,1),background .4s}
+.meter.bad i{background:var(--red)}
+.gbtns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.gbtns .btn{background:var(--paper);color:var(--ink);padding:9px 16px}
+.gbtns .btn.go{background:var(--red);color:#fff}
+.gmsg{min-height:3.2em;margin-top:14px;font:400 .88rem/1.5 var(--type);color:#d3d9e6}
+
+/* misc grid */
+.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mini .card{padding:18px}
+.mini .card h3{font-size:1.02rem;margin:0}
+.mini .card h3::after{content:none}
+.mini .card[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--ink)}
+.detail{margin-top:20px;background:var(--paper);border-radius:12px;padding:18px 22px;min-height:4.2em;font-size:1rem;color:var(--ink2)}
+.detail b{color:var(--ink);font-family:var(--display)}
+
+/* cta + footer */
+.cta{padding:96px 0 120px;text-align:left}
+.cta h2{max-width:14ch;margin-bottom:26px}
+footer{background:var(--ink);color:var(--paper);position:relative}
+footer::before{content:"";display:block;height:12px;background:var(--edge)}
+footer .wrap{padding:64px 0 48px;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end}
+footer h2{color:var(--paper);font-size:clamp(2rem,5vw,3.6rem);margin-bottom:12px}
+footer p{color:#b9c1d4}
+.social{display:flex;gap:12px;flex-wrap:wrap}
+.social a{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:#232d45;color:var(--paper);transition:transform .15s,background .15s;position:relative}
+.social a:hover{background:#2f3b5a;transform:translateY(-2px)}
+.social svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.social a.is-glow{animation:glowd .7s ease-out}
+@keyframes glowd{0%{box-shadow:0 0 0 0 rgba(205,205,205,0)}30%{box-shadow:0 0 0 6px rgba(205,205,205,.35),0 0 30px 8px rgba(205,205,205,.45)}100%{box-shadow:0 0 0 0 rgba(205,205,205,0)}}
+#socialNote{min-height:1.6em;margin-top:14px;font-size:.9rem;color:#b9c1d4}
+.legal{grid-column:1/-1;border-top:1px solid #2c3754;padding-top:22px;font-size:.88rem;color:#8d97b0}
+
+@media (max-width:900px){
+  .hero .wrap,.timing,.health,footer .wrap{grid-template-columns:1fr}
+  .sorter{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+  .mini{grid-template-columns:repeat(2,1fr)}
+  nav{display:none}
+  header .btn{margin-left:auto}
+  section{padding:72px 0}
+  .hero{padding:44px 0 64px}
+  .stage{padding-top:64px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .env-wrap,.env-sway,.flip,.flap,.seal,.letter,.postmark,.dot,.chip{animation:none!important}
+  .letter{transform:translateY(-30px)}
+  .card.is-glow,.bin.bump,.social a.is-glow{animation:none!important}
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="mark" href="#top" aria-label="Wisp home">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M4 21c6 0 6-9 12-9s5 8 12 6"/><path d="M8 27c4 0 5-4 9-4" opacity=".55"/></svg>
+      Wisp
+    </a>
+    <nav aria-label="Sections">
+      <a href="#address">Address</a><a href="#rules">Rules</a><a href="#timing">Timing</a><a href="#health">Sending health</a>
+    </nav>
+    <a class="btn" href="login/index.html">Open Wisp</a>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Your name, then @ayzen.tech.</h1>
+      <p class="lede">Wisp is the mailbox inside AYZEN. Claim an address, let rules file the routine mail, and send from the accounts you already have.</p>
+      <form class="claim" id="claimForm" action="login/index.html" method="get">
+        <input type="hidden" name="tab" value="signup">
+        <label class="field"><input id="uname" name="username" type="text" inputmode="email" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="30" placeholder="yourname" aria-label="Pick a username"><span>@ayzen.tech</span></label>
+        <button class="btn" type="submit">Claim it</button>
+      </form>
+      <p class="fine">Whether a name is free is checked when you claim it.</p>
+    </div>
+
+    <div class="stage" aria-hidden="true">
+      <div class="env-wrap">
+        <div class="env-sway">
+          <div class="flip"><div class="front">
+          <div class="letter"><i></i><i></i><i></i></div>
+          <div class="edge">
+            <div class="face">
+              <div class="ret">Wisp<br>AYZEN mailbox</div>
+              <div class="stamp"><svg viewBox="0 0 40 50"><path d="M6 32c8 0 8-14 16-14s6 12 14 9" fill="none" stroke="#1a2233" stroke-width="3" stroke-linecap="round"/><path d="M10 40c5 0 6-5 11-5" fill="none" stroke="#1a2233" stroke-width="2" opacity=".5" stroke-linecap="round"/></svg></div>
+              <div class="postmark"><svg viewBox="0 0 100 100" fill="none" stroke="#1a2233" stroke-width="2"><circle cx="50" cy="50" r="44"/><circle cx="50" cy="50" r="30"/><defs><path id="pmc" d="M50 50m-37 0a37 37 0 1 1 74 0a37 37 0 1 1-74 0"/></defs><text font-family="Courier Prime,monospace" font-size="10" font-weight="700" fill="#1a2233" stroke="none" letter-spacing="2"><textPath href="#pmc">DELIVERED · AYZEN.TECH ·</textPath></text></svg></div>
+              <div class="to">To<b id="addr" class="t">yourname@ayzen.tech</b></div>
+            </div>
+          </div>
+          </div>
+          <div class="back"><div class="bface"><div class="flap"></div><div class="seal"><svg viewBox="0 0 32 32"><path d="M4 21c6 0 6-9 12-9s5 8 12 6"/></svg></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="address" style="padding-top:40px">
+  <div class="wrap">
+    <div class="head">
+      <h2>One address, two ways to read it.</h2>
+      <p class="lede">Choose how mail reaches you. Pick a card to read what it does.</p>
+    </div>
+    <div class="cards">
+      <button class="card" aria-expanded="false" data-card>
+        <h3>Forward it</h3>
+        <p>Mail sent to your @ayzen.tech address lands in an inbox you already use.</p>
+        <div class="more">Forwarding runs through Cloudflare Email Routing. You keep reading where you read today; the address is the part that's new.</div>
+      </button>
+      <button class="card" aria-expanded="false" data-card>
+        <h3>Read it in Wisp</h3>
+        <p>Turn on the native mailbox and handle everything without leaving AYZEN.</p>
+        <div class="more">Inbox, drafts, sent, archive, spam and trash, with search and threads. The rules on this page work here.</div>
+      </button>
+      <button class="card" aria-expanded="false" data-card>
+        <h3>Send from your own account</h3>
+        <p>Add SMTP and IMAP accounts you already pay for and use them from Wisp.</p>
+        <div class="more">Your own provider, your own sending reputation. Wisp keeps the accounts together so you pick the sender per message.</div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section id="rules" style="padding-top:40px">
+  <div class="wrap">
+    <div class="head">
+      <h2>Rules that file the mail for you.</h2>
+      <p class="lede">A rule looks at who a message is from, who it's to, or its subject. It can add a label, move it to a folder, mark it read or star it. Watch five messages arrive.</p>
+    </div>
+    <div class="sorter" id="sorter">
+      <div class="pane"><h3>Arriving</h3><div id="mails"></div></div>
+      <div class="pane"><h3>Your rules</h3><div id="rulesList"></div></div>
+      <div class="pane"><h3>Where it ends up</h3>
+        <div class="bins">
+          <div class="bin" data-bin="inbox">Inbox <b>0</b></div>
+          <div class="bin" data-bin="receipts">Receipts <b>0</b></div>
+          <div class="bin" data-bin="archive">Archive <b>0</b></div>
+          <div class="bin" data-bin="starred">Starred <b>0</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="flowctl"><button class="btn ghost" id="flowPlay" aria-pressed="false">Pause</button><span class="cap">Rules can also run on mail that's already in your mailbox.</span></div>
+  </div>
+</section>
+
+<section id="timing" style="padding-top:40px">
+  <div class="wrap">
+    <div class="head">
+      <h2>Send now, or take it back.</h2>
+      <p class="lede">Undo send holds a message for a few seconds before it leaves. You choose how long.</p>
+    </div>
+    <div class="timing">
+      <div class="undo">
+        <h3>Undo send</h3>
+        <div class="seg" role="group" aria-label="Undo window">
+          <button aria-pressed="false" data-s="5">5s</button><button aria-pressed="true" data-s="10">10s</button><button aria-pressed="false" data-s="20">20s</button><button aria-pressed="false" data-s="30">30s</button>
+        </div>
+        <div class="compose"><b>To:</b> mara@studio.example<br><b>Subject:</b> Logo files, final<br>Attached. Sorry about the earlier version.</div>
+        <button class="btn" id="sendBtn">Send</button>
+        <div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="undoBtn">Undo</button><div class="bar" id="bar"></div></div>
+      </div>
+      <div class="stack">
+        <button class="card" aria-expanded="false" data-card>
+          <h3>Snooze</h3>
+          <p>Hide an inbox message until a time you pick. It comes back on top.</p>
+          <div class="more">Snoozed mail waits in its own folder. Only inbox messages can be snoozed, and the time has to be in the future.</div>
+        </button>
+        <button class="card" aria-expanded="false" data-card>
+          <h3>Scheduled send</h3>
+          <p>Write now, deliver later. Scheduled messages sit in their own folder until it's time.</p>
+          <div class="more">Changed your mind? Open the message from the Scheduled folder before it goes out.</div>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="health" class="band">
+  <div class="wrap health">
+    <div>
+      <h2>It stops sending before it hurts you.</h2>
+      <p class="lede" style="margin-top:18px">Wisp watches bounces and spam complaints across your whole account. If they climb, sending pauses so one bad list doesn't damage your address. You resume it when you've fixed the cause.</p>
+      <p style="margin-top:14px">Try it. The numbers here are an illustration, not your data.</p>
+    </div>
+    <div class="gauge" id="gauge">
+      <div class="status" id="status"><i class="dot"></i><span id="statusTxt">Sending is healthy</span></div>
+      <div class="meter" id="mBounce">Bounces<div><i></i></div></div>
+      <div class="meter" id="mSpam">Complaints<div><i style="width:3%"></i></div></div>
+      <div class="gbtns">
+        <button class="btn go" id="hBad">Send to a stale list</button>
+        <button class="btn" id="hClean">Remove failing recipients</button>
+        <button class="btn" id="hResume">Resume sending</button>
+      </div>
+      <div class="gmsg" id="gmsg" aria-live="polite">Everything's going through.</div>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <div class="wrap">
+    <div class="head">
+      <h2>The rest of the mailbox.</h2>
+      <p class="lede">Pick one.</p>
+    </div>
+    <div class="mini" id="mini">
+      <button class="card" aria-pressed="false" data-d="Folders and labels|Inbox, snoozed, sent, scheduled, outbox, drafts, spam, archive and trash come built in. Add your own labels and folders on top."><h3>Folders and labels</h3></button>
+      <button class="card" aria-pressed="false" data-d="Templates|Save a reply you write often and drop it in. Using a template is metered in AYZEN credits."><h3>Templates</h3></button>
+      <button class="card" aria-pressed="false" data-d="Search and threads|Messages group into conversations, and search looks across your mailbox."><h3>Search and threads</h3></button>
+      <button class="card" aria-pressed="false" data-d="Contacts and senders|Keep the people you write to, and see who writes to you most."><h3>Contacts and senders</h3></button>
+      <button class="card" aria-pressed="false" data-d="Mail analytics|Received, sent and unread counts, your top correspondents and your average response time."><h3>Mail analytics</h3></button>
+      <button class="card" aria-pressed="false" data-d="Signature|One signature, added when you write. Change it once and it changes everywhere."><h3>Signature</h3></button>
+      <button class="card" aria-pressed="false" data-d="Problem recipients|Addresses that keep bouncing are flagged so you can stop writing to them."><h3>Problem recipients</h3></button>
+      <button class="card" aria-pressed="false" data-d="Drafts and bulk actions|Drafts save as you go. Select many messages to archive, label or delete them together."><h3>Drafts and bulk actions</h3></button>
+    </div>
+    <div class="detail" id="detail" aria-live="polite">Sending a message uses AYZEN credits. Reading, sorting and searching don't need any decision from you.</div>
+  </div>
+</section>
+
+<section class="cta" style="padding-top:20px">
+  <div class="wrap">
+    <h2>Claim the name before someone else does.</h2>
+    <a class="btn" href="login/index.html">Open Wisp</a>
+  </div>
+</section>
+</main>
+
+<footer id="talk">
+  <div class="wrap">
+    <div>
+      <h2>Let's talk.</h2>
+      <p>Questions, ideas, something broken? Find us here.</p>
+    </div>
+    <div>
+      <div class="social" aria-label="Social links">
+        <a href="#" data-link="x" aria-label="X"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+        <a href="#" data-link="telegram" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M21 4L3 11l6 2 2 6 3-4 5 4z"/><path d="M9 13l8-6"/></svg></a>
+        <a href="#" data-link="discord" aria-label="Discord"><svg viewBox="0 0 24 24"><path d="M5 7c4-2 10-2 14 0l2 10c-3 2-6 2-9 2s-6 0-9-2z"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/></svg></a>
+        <a href="#" data-link="github" aria-label="GitHub"><svg viewBox="0 0 24 24"><circle cx="7" cy="6" r="2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="9" r="2"/><path d="M7 8v8M17 11c0 4-6 2-10 5"/></svg></a>
+        <a href="#" data-link="linkedin" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-7M12 13c0-4 5-4 5 0v4"/></svg></a>
+        <a href="#" data-link="email" aria-label="Email"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 7 9-7"/></svg></a>
+      </div>
+      <div id="socialNote" role="status"></div>
+    </div>
+    <div class="legal">Wisp is the mail module of AYZEN.</div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const pulse = (n, cls = "is-glow") => { n.classList.remove(cls); void n.offsetWidth; n.classList.add(cls); n.addEventListener("animationend", () => n.classList.remove(cls), { once: true }); };
+
+  /* ---- envelope address ---- */
+  const input = $("#uname"), addr = $("#addr");
+  const clean = (v) => v.toLowerCase().replace(/[^a-z0-9._-]/g, "");
+  input.addEventListener("input", () => {
+    const v = clean(input.value); if (v !== input.value) input.value = v;
+    addr.textContent = (v || "yourname") + "@ayzen.tech";
+    addr.classList.remove("press"); void addr.offsetWidth; addr.classList.add("press");
+  });
+
+  /* ---- expandable cards (glow on click) ---- */
+  $$("[data-card]").forEach((c) => c.addEventListener("click", () => {
+    c.setAttribute("aria-expanded", c.getAttribute("aria-expanded") !== "true");
+    pulse(c);
+  }));
+
+  /* ---- mini grid ---- */
+  const mini = $$("#mini .card"), detail = $("#detail");
+  mini.forEach((c) => c.addEventListener("click", () => {
+    mini.forEach((o) => o.setAttribute("aria-pressed", o === c));
+    const [t, d] = c.dataset.d.split("|");
+    detail.innerHTML = "<b></b> "; $("b", detail).textContent = t + "."; detail.append(document.createTextNode(d));
+    pulse(c);
+  }));
+
+  /* ---- rules sorter ---- */
+  const LETTERS = [
+    { f: "billing@northwind.example", s: "Receipt #2291", r: 0 },
+    { f: "mara@studio.example", s: "Re: logo files", r: -1 },
+    { f: "noreply@news.example", s: "Weekly digest, issue 48", r: 1 },
+    { f: "dad@family.example", s: "Call me when you land", r: 2 },
+    { f: "accounts@vendor.example", s: "Receipt for order 8841", r: 0 },
+  ];
+  const RULES = [
+    { when: ["subject", "contains", "receipt"], then: "Label Receipts, mark read" },
+    { when: ["subject", "contains", "digest"], then: "Move to Archive" },
+    { when: ["from", "equals", "dad@family.example"], then: "Star it" },
+  ];
+  const mailsEl = $("#mails"), rulesEl = $("#rulesList");
+  const bins = Object.fromEntries($$("[data-bin]").map((b) => [b.dataset.bin, b]));
+  RULES.forEach((r) => {
+    const d = document.createElement("div"); d.className = "rule";
+    d.innerHTML = `If <em></em> <span></span> “<em></em>”<small></small>`;
+    const [a, c] = $$("em", d); a.textContent = r.when[0]; $("span", d).textContent = r.when[1]; c.textContent = r.when[2]; $("small", d).textContent = r.then;
+    rulesEl.append(d);
+  });
+  const ruleEls = $$(".rule", rulesEl);
+  const rows = LETTERS.map((l) => {
+    const d = document.createElement("div"); d.className = "mail";
+    d.innerHTML = `<span class="s"></span><span class="chips"></span><span class="f"></span>`;
+    $(".s", d).textContent = l.s; $(".f", d).textContent = l.f; mailsEl.append(d); return d;
+  });
+  const counts = { inbox: 0, receipts: 0, archive: 0, starred: 0 };
+  const setBin = (k, d) => { counts[k] += d; $("b", bins[k]).textContent = counts[k]; if (d > 0 && !reduce) pulse(bins[k], "bump"); };
+  const chip = (row, cls, t) => { const c = document.createElement("span"); c.className = "chip " + cls; c.textContent = t; $(".chips", row).append(c); };
+  const reset = () => { rows.forEach((r) => { r.className = "mail"; $(".chips", r).innerHTML = ""; }); ruleEls.forEach((e) => e.classList.remove("hit")); Object.keys(counts).forEach((k) => { counts[k] = 0; $("b", bins[k]).textContent = 0; }); };
+  const apply = (i) => {
+    const row = rows[i], l = LETTERS[i];
+    if (l.r === 0) { chip(row, "lab", "Receipts"); chip(row, "", "read"); setBin("receipts", 1); setBin("inbox", 1); }
+    else if (l.r === 1) { chip(row, "mv", "Archive"); row.classList.add("gone"); setBin("archive", 1); }
+    else if (l.r === 2) { chip(row, "st", "★"); setBin("starred", 1); setBin("inbox", 1); }
+    else setBin("inbox", 1);
+  };
+  let playing = !reduce, visible = false, gen = 0;
+  const playBtn = $("#flowPlay");
+  async function loop(my) {
+    const waitPlay = async () => { while ((!playing || !visible) && my === gen) await sleep(150); };
+    while (my === gen) {
+      reset();
+      for (let i = 0; i < LETTERS.length && my === gen; i++) {
+        await waitPlay(); if (my !== gen) return;
+        rows[i].classList.add("on");
+        const r = LETTERS[i].r; if (r >= 0) ruleEls[r].classList.add("hit");
+        await sleep(900); apply(i); await sleep(700);
+        rows[i].classList.remove("on"); if (r >= 0) ruleEls[r].classList.remove("hit");
+      }
+      await sleep(2600);
+    }
+  }
+  if (reduce) { LETTERS.forEach((_, i) => apply(i)); playBtn.hidden = true; }
+  else { loop(++gen); }
+  new IntersectionObserver((e) => { visible = e[0].isIntersecting; }, { threshold: 0.25 }).observe($("#sorter"));
+  playBtn.addEventListener("click", () => { playing = !playing; playBtn.textContent = playing ? "Pause" : "Play"; playBtn.setAttribute("aria-pressed", !playing); });
+
+  /* ---- undo send ---- */
+  let win = 10, tick = 0, endAt = 0;
+  const seg = $$(".seg button"), toast = $("#toast"), txt = $("#toastTxt"), bar = $("#bar"), sendBtn = $("#sendBtn");
+  seg.forEach((b) => b.addEventListener("click", () => { win = +b.dataset.s; seg.forEach((o) => o.setAttribute("aria-pressed", o === b)); }));
+  const done = (msg, undo) => { clearInterval(tick); tick = 0; bar.style.transition = "none"; $("#undoBtn").hidden = !undo; txt.textContent = msg; sendBtn.disabled = false; };
+  sendBtn.addEventListener("click", () => {
+    sendBtn.disabled = true; toast.classList.add("show"); $("#undoBtn").hidden = false;
+    endAt = Date.now() + win * 1000;
+    bar.style.transition = "none"; bar.style.transform = "scaleX(1)"; void bar.offsetWidth;
+    if (!reduce) { bar.style.transition = `transform ${win}s linear`; bar.style.transform = "scaleX(0)"; }
+    const upd = () => { const left = Math.ceil((endAt - Date.now()) / 1000); if (left <= 0) done("Sent to mara@studio.example.", false); else txt.textContent = `Sending in ${left}s…`; };
+    upd(); tick = setInterval(upd, 250);
+  });
+  $("#undoBtn").addEventListener("click", () => done("Stopped. The message is back in Drafts.", false));
+
+  /* ---- sending health ---- */
+  const gauge = $("#gauge"), st = $("#statusTxt"), msg = $("#gmsg"), mB = $("i", $("#mBounce")), mS = $("i", $("#mSpam"));
+  let bad = false, paused = false;
+  const say = (s, m) => { st.textContent = s; msg.textContent = m; };
+  $("#hBad").addEventListener("click", () => {
+    bad = true; paused = true; mB.style.width = "82%"; mS.style.width = "24%"; $("#mBounce").classList.add("bad"); gauge.classList.add("paused");
+    say("Sending paused", "Most of that batch bounced, so Wisp stopped sending from this account.");
+  });
+  $("#hClean").addEventListener("click", () => {
+    bad = false; mB.style.width = "5%"; mS.style.width = "3%"; $("#mBounce").classList.remove("bad");
+    msg.textContent = paused ? "Failing recipients removed. Sending stays paused until you resume it." : "Nothing was failing. Your list is already clean.";
+  });
+  $("#hResume").addEventListener("click", () => {
+    if (!paused) { msg.textContent = "Sending isn't paused."; return; }
+    if (bad) { msg.textContent = "Still above the limit. Remove the failing recipients, then try again."; return; }
+    paused = false; gauge.classList.remove("paused"); say("Sending is healthy", "Sending resumed.");
+  });
+
+  /* ---- footer links ---- */
+  /* Put the real URL in SOCIAL_LINKS. Until a value is set the icon only says so. */
+  const SOCIAL_LINKS = { x: "", telegram: "", discord: "", github: "", linkedin: "", email: "" }; // email: "mailto:you@example.com"
+  const note = $("#socialNote"); let nt = 0;
+  $$("[data-link]").forEach((a) => {
+    const url = SOCIAL_LINKS[a.dataset.link];
+    a.addEventListener("click", (e) => {
+      pulse(a);
+      if (url) return;
+      e.preventDefault(); note.textContent = a.getAttribute("aria-label") + " link isn't set yet.";
+      clearTimeout(nt); nt = setTimeout(() => (note.textContent = ""), 2800);
+    });
+    if (url) { a.href = url; if (!url.startsWith("mailto:")) { a.target = "_blank"; a.rel = "noopener noreferrer"; } }
+  });
+})();
+</script>
+</body>
+</html>

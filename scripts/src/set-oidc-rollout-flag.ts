@@ -40,12 +40,10 @@
 
 import { getOidcRolloutFlag, setOidcRolloutFlag } from "../../artifacts/api-server/src/lib/oidc-client-rollout";
 import { pool } from "@workspace/db";
+import { ROLLOUT_ALLOWED_WITHOUT_OVERRIDE } from "../../artifacts/api-server/src/lib/oidc-rollout-scope";
 
-/** Same "Sylo only" boundary as every other 5c/5d file — see
- * `lib/oidc-cutover-gate.ts`'s own `CUTOVER_SCOPED_APP_IDS` and
- * `routes/admin-oidc-rollout.ts`'s own `ALLOWED_WITHOUT_OVERRIDE`, each a
- * deliberate duplicate of this identical `Set`. */
-const ALLOWED_WITHOUT_OVERRIDE = new Set(["sylo"]);
+/** W1-P4: the eight module client ids (lib/oidc-rollout-scope.ts); anything else needs --allow-non-sylo. */
+const ALLOWED_WITHOUT_OVERRIDE = ROLLOUT_ALLOWED_WITHOUT_OVERRIDE;
 
 export interface ParsedSetOidcRolloutFlagArgs {
   app: string;

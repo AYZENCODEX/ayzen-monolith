@@ -19,10 +19,13 @@ import authorizationTelemetryRouter from "./authorization-telemetry";
 import aiRouter from "./ai";
 import emailRoutingRouter from "./email-routing";
 import resendWebhookRouter from "./resend-webhook";
+import clerkWebhookRouter from "./clerk-webhook";
 import ayzenMailboxRouter from "./ayzen-mailbox";
 import resendAdminRouter from "./resend-admin";
 import telegramRouter from "./telegram";
 import telegramBotLinksRouter from "./telegram-bot-links";
+import moduleAccountsRouter from "./module-accounts";
+import moduleAuthRouter from "./module-auth";
 import emailAccountsRouter from "./email-accounts";
 import emailComposeRouter from "./email-compose";
 import supportRouter from "./support";
@@ -170,6 +173,7 @@ router.use(logsRouter);
 router.use(healthRouter);
 router.use(uptimeRouter);
 router.use(authRouter);
+router.use(moduleAuthRouter); // W1-P2: /auth/module/* (per-module credentials + sessions; 404 unless MODULE_SESSIONS_MODE != off)
 router.use(passkeyRouter);
 router.use(usersRouter);
 router.use(emailRouter);
@@ -190,6 +194,7 @@ router.use(aiRouter);
 router.use(emailRoutingRouter);
 router.use(telegramRouter);
 router.use(telegramBotLinksRouter);
+router.use(moduleAccountsRouter); // W1-P1: GET /me/modules, admin lookup
 router.use(emailAccountsRouter);
 router.use(emailComposeRouter);
 router.use(supportRouter);
@@ -313,6 +318,7 @@ router.use(financeInvoicesRouter);
 router.use(projectTemplatesRouter);
 router.use(sharedRouter);
 router.use(resendWebhookRouter);
+router.use(clerkWebhookRouter);
 router.use(ayzenMailboxRouter);
 router.use(resendAdminRouter);
 

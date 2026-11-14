@@ -77,6 +77,7 @@ import { Router, type IRouter, type Response } from "express";
 import { globalLimiter } from "../middlewares/security";
 import { requireOidcScope, type RequestWithOidcToken } from "../lib/oidc-scope-enforcement";
 import { fetchOidcUserinfoRecord, buildUserinfoClaims } from "../lib/oidc-userinfo";
+import { moduleUidForOidcClient } from "../lib/module-accounts";
 import { logger } from "../lib/logger";
 
 const router: IRouter = Router();
@@ -123,8 +124,20 @@ export async function userinfoHandler(req: RequestWithOidcToken, res: Response):
     return;
   }
 
+  // W1-P1: module_uid for per-module clients. Best-effort: a lookup failure must never break
+  // UserInfo (the claim is additive), so it degrades to "claim absent" and is logged.
+  let moduleUid: string | null = null;
+  // Kill switch: AYZEN_MODULE_UID_CLAIM=off drops the claim without a deploy-time code change.
+  if (token.scopes.includes("profile") && process.env.AYZEN_MODULE_UID_CLAIM !== "off") {
+    try {
+      moduleUid = await moduleUidForOidcClient(user.id, token.clientId);
+    } catch (err) {
+      logger.warn({ userId: user.id, clientId: token.clientId, err }, "oidc.userinfo.module_uid_lookup_failed");
+    }
+  }
+
   // 4c-d/4c-e
-  const claims = buildUserinfoClaims(user, token.scopes);
+  const claims = buildUserinfoClaims(user, token.scopes, moduleUid);
 
   logger.info({ userId: user.id, clientId: token.clientId }, "oidc.userinfo.served");
   res.status(200).json(claims);
