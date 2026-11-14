@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import { moduleRequestContext } from "./lib/module-request-context";
 import path from "path";
 import fs from "fs";
-import { robotsTxt, sitemapXml } from "@ayzen/module-registry/landing";
+import { robotsTxt, sitemapXml, llmsTxt } from "@ayzen/module-registry/landing";
 import { designAssets, designIds, designedLandingHtml } from "@ayzen/module-registry/landing-designs";
 import { fileURLToPath } from "url";
 import router from "./routes";
@@ -418,6 +418,11 @@ if (process.env.NODE_ENV === "production") {
     const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
     if (!id || !landingByHost.size) return next();
     res.type("text/plain").send(robotsTxt(id, { origin: `https://${req.hostname}` }));
+  });
+  app.get("/llms.txt", (req, res, next) => {
+    const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
+    if (!id || !landingByHost.size) return next();
+    res.type("text/plain; charset=utf-8").send(llmsTxt(id, { origin: `https://${req.hostname}` }));
   });
   app.get("/sitemap.xml", (req, res, next) => {
     const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);

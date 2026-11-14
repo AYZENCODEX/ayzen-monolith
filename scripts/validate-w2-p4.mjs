@@ -9,7 +9,7 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { LANDINGS, getLandingContent, landingDocument, landingIds, injectLandingIntoHtml, robotsTxt, sitemapXml } from "../packages/module-registry/src/landing.mjs";
+import { LANDINGS, getLandingContent, landingDocument, landingIds, injectLandingIntoHtml, robotsTxt, sitemapXml, llmsTxt } from "../packages/module-registry/src/landing.mjs";
 import { MODULES } from "../packages/module-registry/src/index.mjs";
 import { designedLandingHtml, designAssets, designIds, hasDesign } from "../packages/module-registry/src/landing-designs.mjs";
 
@@ -23,7 +23,7 @@ function load(over = {}) {
   const docs = Object.fromEntries(ids.map((id) => [id, landingDocument(getLandingContent(id))]));
   return { ids, docs: { ...docs, ...over.docs }, prod: { ...Object.fromEntries(ids.map((id) => [id, designedLandingHtml(id)])), ...over.prod }, designs: over.designs ?? designIds(), assets: over.assets ?? Object.fromEntries(designIds().map((id) => [id, designAssets(id).map((a) => a.rel)])), files: { ...Object.fromEntries(WIRING.map((f) => [f, read(f)])), ...over.files },
     og: over.og ?? Object.fromEntries(ids.map((id) => [id, existsSync(join(ROOT, `artifacts/ayzen/public/og/${id}.png`)) ? statSync(join(ROOT, `artifacts/ayzen/public/og/${id}.png`)).size : 0])),
-    shell: over.shell ?? read("artifacts/ayzen/index.html"), robots: over.robots, landings: over.landings };
+    shell: over.shell ?? read("artifacts/ayzen/index.html"), llms: over.llms, robots: over.robots, landings: over.landings };
 }
 const text = (h) => h.replace(/<style[\s\S]*?<\/style>/g, "").replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 const eachDoc = (t, fn) => { const bad = []; for (const [id, d] of Object.entries(t.docs)) { const m = fn(d, id); if (m) bad.push(`${id}: ${m}`); } return bad.length ? bad.join("; ") : null; };
@@ -140,6 +140,17 @@ const RULES = [
     }
     return null;
   }],
+  ["llms.txt per module: H1 = module, blockquote summary, Pages/Pricing/FAQ sections, links on the module host only; robots allows it", (t) => {
+    for (const id of t.ids) {
+      const l = t.llms?.[id] ?? llmsTxt(id); const m = MODULES.find((x) => x.id === id); const c = getLandingContent(id);
+      if (!l.startsWith(`# ${c.label}\n\n> `)) return `${id}: llms.txt must start with "# <Label>" and a "> summary"`;
+      for (const h of ["## Pages", "## Pricing", "## FAQ"]) if (!l.includes(h)) return `${id}: llms.txt missing ${h}`;
+      const links = [...l.matchAll(/\]\((https?:[^)]+)\)/g)].map((x) => x[1]);
+      if (links.length < 3 || links.some((u) => !u.startsWith(`https://${m.defaultHost}/`))) return `${id}: llms.txt links must stay on ${m.defaultHost}`;
+      if (!/Allow: \/llms\.txt/.test(robotsTxt(id))) return `${id}: robots.txt does not allow /llms.txt`;
+    }
+    return null;
+  }],
   ["SPA gate: landing rendered BEFORE App is imported; App/posthog only in the signed-in/other-path branch", (t) => {
     const m = t.files["artifacts/ayzen/src/main.tsx"];
     if (/^import (App|\{ ?initPosthog)|from "\.\/App"|from "\.\/lib\/posthog"/m.test(m.replace(/import\("[^"]+"\)/g, ""))) return "App/posthog imported statically";
@@ -157,7 +168,7 @@ const RULES = [
     const v = t.files["artifacts/ayzen/vite.module.config.ts"], g = t.files["scripts/gen-module-deploy.mjs"], d = JSON.parse(t.files["deploy/modules/fyra/vercel.json"]);
     if (!/closeBundle\(\)/.test(v) || !/renameSync\(path\.join\(out, 'index\.html'\), path\.join\(out, 'app\.html'\)\)/.test(v)) return "SPA shell is not moved to app.html";
     if (!/writeFileSync\(path\.join\(out, 'index\.html'\), designedLandingHtml\(moduleId\)/.test(v)) return "landing is not written as index.html";
-    if (!/designAssets\(moduleId\)/.test(v) || !/robots\.txt/.test(v) || !/sitemap\.xml/.test(v)) return "assets/robots/sitemap not emitted";
+    if (!/designAssets\(moduleId\)/.test(v) || !/robots\.txt/.test(v) || !/sitemap\.xml/.test(v) || !/llms\.txt/.test(v)) return "assets/robots/sitemap/llms.txt not emitted";
     if (/transformIndexHtml/.test(v)) return "the SPA shell must stay clean (no landing injected)";
     return /destination: "\/app\.html"/.test(g) && d.rewrites[0].destination === "/app.html" ? null : "deploy rewrite is not /app.html";
   }],
@@ -167,6 +178,7 @@ const RULES = [
     const i = a.indexOf('app.get("/", (req, res, next) => {\n    const landing'), j = a.indexOf("app.use(express.static(distPath))");
     if (i < 0 || j < 0 || i > j) return "'/' must be registered before express.static";
     if (!/LANDING_ASSET_FILES\.get\(key\)/.test(a)) return "asset allow-list missing";
+    if (!/app\.get\("\/llms\.txt"/.test(a) || !/app\.get\("\/robots\.txt"/.test(a) || !/app\.get\("\/sitemap\.xml"/.test(a)) return "server robots/sitemap/llms.txt routes missing";
     if (!/process\.env\.MODULE_LANDINGS_DIR \?\?=/.test(a)) return "bundled server does not set MODULE_LANDINGS_DIR";
     return pk.exports?.["./landing"] && pk.exports?.["./landing-designs"] ? null : "registry exports missing";
   }],
@@ -211,6 +223,10 @@ if (process.argv.includes("--self-test")) {
     ["verve ships demo login", { assets: { ...base.assets, verve: [...base.assets.verve, "login.html"] } }, "demo auth"],
     ["unrewritten asset url", { prod: { wisp: base.prod.wisp.replace("/landing-assets/wisp/fonts/", "fonts/") } }, "design assets"],
     ["unknown third party", { prod: { zynth: base.prod.zynth.replace("</head>", '<script src="https://evil.example/x.js"></script></head>') } }, "third parties"],
+    ["llms.txt without summary", { llms: Object.fromEntries(base.ids.map((i) => [i, llmsTxt(i).replace(/^# [^\n]*\n\n> /, "# x\n\n")])) }, "llms.txt per module"],
+    ["llms.txt links off-host", { llms: { ...Object.fromEntries(base.ids.map((i) => [i, llmsTxt(i)])), ryft: llmsTxt("ryft").replace("https://ryft.ayzen.tech/login", "https://evil.example/login") } }, "llms.txt per module"],
+    ["llms.txt route removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('app.get("/llms.txt"', 'app.get("/llms-x.txt"') } }, "server:"],
+    ["llms.txt not emitted by build", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts").replace(/llms\.txt/g, "x.txt") } }, "module build:"],
     ["design file removed", { designs: base.designs.filter((d) => d !== "wisp") }, "designs:"],
     ["robots allows everything", { robots: "User-agent: *\nAllow: /\n" }, "robots.txt"],
     ["main.tsx imports App statically", { files: { "artifacts/ayzen/src/main.tsx": 'import App from "./App";\n' + f("artifacts/ayzen/src/main.tsx") } }, "SPA gate"],

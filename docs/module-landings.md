@@ -28,3 +28,6 @@ Each of the 8 modules has its own public landing at `/` on its host (hero, featu
 
 ## Where it shows
 Only on a module host (`<id>.ayzen.tech` or `<ID>_HOSTS`). The central `ayzen.tech` keeps the AYZEN landing (`/landing/`).
+
+## SEO / sharing / AI files (per module host)
+`<title>`, description, canonical, robots meta, Open Graph + Twitter card (1200x630 image `/og/<id>.png`), JSON-LD; `robots.txt` (landing + assets + llms.txt allowed, app paths disallowed, sitemap link), `sitemap.xml`, and `llms.txt` (llmstxt.org format, generated from the registry). Served by Express (when landings are on) and written into the module build.

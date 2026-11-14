@@ -233,11 +233,42 @@ export function injectLandingIntoHtml(html, id, opts = {}) {
 export function robotsTxt(id, opts = {}) {
   const c = getLandingContent(id);
   const base = c ? origin(c, opts.origin) : "";
-  return `User-agent: *\nAllow: /$\nAllow: /og/\nAllow: /landing-assets/\nDisallow: /\n${base ? `Sitemap: ${base}/sitemap.xml\n` : ""}`;
+  return `User-agent: *\nAllow: /$\nAllow: /og/\nAllow: /landing-assets/\nAllow: /llms.txt\nDisallow: /\n${base ? `Sitemap: ${base}/sitemap.xml\n` : ""}`;
 }
 
 export function sitemapXml(id, opts = {}) {
   const c = getLandingContent(id);
   if (!c) return "";
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${esc(origin(c, opts.origin))}/</loc></url>\n</urlset>\n`;
+}
+
+/** llms.txt (llmstxt.org format): what this module is, in plain markdown, for AI crawlers and assistants. Generated from the registry content. */
+export function llmsTxt(id, opts = {}) {
+  const c = getLandingContent(id);
+  if (!c) return "";
+  const base = origin(c, opts.origin);
+  return `# ${c.label}
+
+> ${c.tagline} ${c.label} is a module of AYZEN with its own account, session and data.
+
+${c.hero.lead}
+
+## Pages
+
+- [${c.label} home](${base}/): what ${c.label} does, features and how Shards pricing works
+- [Sign in](${base}/login): sign in to ${c.label}
+- [Create account](${base}/register): create a ${c.label} account
+
+## What you get
+
+${c.features.map((f) => `- ${f.title}: ${f.text}`).join("\n")}
+
+## Pricing
+
+${c.shards}
+
+## FAQ
+
+${c.faq.map(([q, a]) => `- ${q} ${a}`).join("\n")}
+`;
 }

@@ -10,3 +10,4 @@ export function landingDocument(c: ModuleLandingContent, opts?: { origin?: strin
 export function injectLandingIntoHtml(html: string, id: string, opts?: { origin?: string }): string;
 export function robotsTxt(id: string, opts?: { origin?: string }): string;
 export function sitemapXml(id: string, opts?: { origin?: string }): string;
+export function llmsTxt(id: string, opts?: { origin?: string }): string;
