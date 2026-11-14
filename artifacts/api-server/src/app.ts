@@ -405,6 +405,7 @@ if (process.env.NODE_ENV === "production") {
   // W2-P4: unless MODULE_LANDING_ENABLED=0 a module host serves its own landing (SEO tags + prerendered body) at "/" instead of a
   // 302. The inline guard in the HTML clears it for signed-in visitors, and the SPA then redirects them to the module home.
   const landingByHost = process.env.MODULE_LANDING_ENABLED !== "0" ? buildLandingByHost() : new Map<string, string>();
+  logger.info({ hosts: [...landingByHost.keys()] }, landingByHost.size ? "module landings: serving at '/' on these hosts" : "module landings: disabled or none found");
   app.get("/landing-assets/{*file}", (req, res, next) => {
     if (!landingByHost.size) return next();
     const key = [].concat((req.params as any).file ?? []).join("/");
