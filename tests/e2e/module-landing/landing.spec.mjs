@@ -34,7 +34,7 @@ for (const id of landingIds()) {
     const h1 = await page.locator("h1").count();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
     check(reqs.length === 1 && errs.length === 0, `${id}@${vp.width}: only the document was requested (${reqs.length}), no page errors`);
-    check(h1 === 1 && !overflow && (await page.locator("#pricing a").count()) === 1 && (await page.locator("details").count()) >= 5, `${id}@${vp.width}: h1, pricing CTA, FAQ, no horizontal scroll`);
+    check(h1 === 1 && !overflow && (await page.locator("#pricing a").count()) >= 1 && (await page.locator("details").count()) >= 8, `${id}@${vp.width}: h1, pricing CTA, FAQ, no horizontal scroll`);
     await ctx.close();
   }
   // guard: token present, or deep path -> body cleared before the app mounts

@@ -13,7 +13,7 @@
  *
  * The full/central build (vite.config.ts) is unchanged.
  */
-import { robotsTxt, sitemapXml, llmsTxt } from '@ayzen/module-registry/landing';
+import { robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, getLandingContent } from '@ayzen/module-registry/landing';
 import { designedLandingHtml, designAssets, LANDING_ASSET_PREFIX } from '@ayzen/module-registry/landing-designs';
 import fs from 'fs';
 import path from 'path';
@@ -79,6 +79,9 @@ function moduleBuildPlugin(): Plugin {
       fs.writeFileSync(path.join(out, 'robots.txt'), robotsTxt(moduleId));
       fs.writeFileSync(path.join(out, 'sitemap.xml'), sitemapXml(moduleId));
       fs.writeFileSync(path.join(out, 'llms.txt'), llmsTxt(moduleId));
+      fs.writeFileSync(path.join(out, 'llms-full.txt'), llmsFullTxt(moduleId));
+      fs.mkdirSync(path.join(out, 'about'), { recursive: true });
+      fs.writeFileSync(path.join(out, 'about/index.html'), aboutDocument(getLandingContent(moduleId)!));
     },
     generateBundle(_options, bundle) {
 

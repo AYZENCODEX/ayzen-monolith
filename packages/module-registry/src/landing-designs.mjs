@@ -44,6 +44,9 @@ const guardScript = (c) => `<script>(function(){try{var h=location.hash.replace(
 /** Designs that open their demo sign-in from a button (skarn: data-go) go to the real routes instead. */
 const CTA_SCRIPT = `<script>document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-go]");if(!b||b.closest("#auth,#pg-auth,#p-auth"))return;var v=b.getAttribute("data-go")||"";if(!/^(in|up)\\./.test(v))return;e.preventDefault();e.stopImmediatePropagation();location.assign(v.indexOf("up")===0?"/register":"/login")},true)</script>`;
 
+/** A plain crawlable link from the landing to the long-form /about page (and the AI text files). */
+const ABOUT_LINK = (c) => `<p data-about-link style="text-align:center;margin:0;padding:18px 16px;font:14px/1.5 system-ui,sans-serif;opacity:.75"><a href="/about" style="color:inherit">About ${esc(c.label)}: features, how it works and FAQ</a> · <a href="/llms.txt" style="color:inherit">llms.txt</a></p>`;
+
 const PILL = `<a href="/login" data-ayzen-signin style="position:fixed;right:16px;bottom:16px;z-index:2147483000;padding:12px 20px;border-radius:999px;background:#111;color:#fff;font:600 14px/1 system-ui,sans-serif;text-decoration:none;box-shadow:0 6px 24px rgba(0,0,0,.3)">Sign in</a>`;
 
 /** The production HTML for a module's landing at "/". */
@@ -91,12 +94,13 @@ export function designedLandingHtml(id, opts = {}) {
     `<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="${esc(c.label)} — ${esc(c.tagline)}" />`,
     `<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${esc(keepTitle ? title : h.title)}" /><meta name="twitter:description" content="${esc(h.description)}" /><meta name="twitter:image" content="${esc(h.image)}" />`,
     `<script type="application/ld+json">${JSON.stringify(h.jsonLd).replace(/</g, "\\u003c")}</script>`,
+    `<link rel="alternate" type="text/markdown" href="/llms-full.txt" title="${esc(c.label)} for AI assistants" />`,
   ].join("\n");
   if (!/<html[^>]*\blang=/i.test(html)) html = html.replace(/<html/i, '<html lang="en"');
   html = html.replace(/<head[^>]*>/i, (m) => `${m}\n${guardScript(c)}\n${baseTag}\n${seo}`);
 
   // 4) every design must offer a way in
   if (!BASE_DESIGNS.has(id) && !/href="\/login"|data-go="in\./.test(html)) html = html.replace(/<\/body>/i, `${PILL}\n</body>`);
-  html = html.replace(/<\/body>/i, `${CTA_SCRIPT}\n</body>`);
+  html = html.replace(/<\/body>/i, `${ABOUT_LINK(c)}\n${CTA_SCRIPT}\n</body>`);
   return html;
 }

@@ -39,7 +39,14 @@ export interface ModuleLandingContent {
   id: ModuleId; label: string; host: string; homePath: string; tagline: string;
   hero: { eyebrow: string; title: string; lead: string };
   features: { title: string; text: string }[];
-  shards: string;
+  category: string;
+  summary: string;
+  areas: { title: string; text: string; items: string[] }[];
+  steps: { title: string; text: string }[];
+  useCases: string[];
+  limits: string[];
+  pricing: string;
   faq: [string, string][];
+  related: ModuleId[];
   brand: { bg: string; surface: string; fg: string; muted: string; accent: string; ink: string };
 }

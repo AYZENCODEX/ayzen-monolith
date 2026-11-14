@@ -11,3 +11,10 @@ export function injectLandingIntoHtml(html: string, id: string, opts?: { origin?
 export function robotsTxt(id: string, opts?: { origin?: string }): string;
 export function sitemapXml(id: string, opts?: { origin?: string }): string;
 export function llmsTxt(id: string, opts?: { origin?: string }): string;
+export function llmsFullTxt(id: string, opts?: { origin?: string }): string;
+export function moduleMarkdown(id: string, opts?: { origin?: string }, level?: number): string;
+export function aboutHead(c: ModuleLandingContent, opts?: { origin?: string }): { title: string; description: string; canonical: string; image: string; jsonLd: unknown; base: string };
+export function aboutBody(c: ModuleLandingContent): string;
+export function aboutDocument(c: ModuleLandingContent, opts?: { origin?: string }): string;
+export const AI_CRAWLERS: readonly string[];
+export const PUBLIC_PATHS: readonly string[];

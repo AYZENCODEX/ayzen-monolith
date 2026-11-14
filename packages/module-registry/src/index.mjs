@@ -123,7 +123,7 @@ export function getModuleIdForPath(path) {
 // (scripts/check-module-isolation.mjs), so the rule that is enforced is the rule that is tested.
 
 /** Paths every module host may reach: auth/OIDC plumbing, discovery, health and connector callbacks. */
-export const MODULE_HOST_ALLOWED_PREFIXES = Object.freeze(["/auth", "/oidc", "/.well-known", "/health", "/connector", "/landing-assets", "/og", "/robots.txt", "/sitemap.xml", "/llms.txt"]);
+export const MODULE_HOST_ALLOWED_PREFIXES = Object.freeze(["/auth", "/oidc", "/.well-known", "/health", "/connector", "/landing-assets", "/og", "/robots.txt", "/sitemap.xml", "/llms.txt", "/llms-full.txt", "/about"]);
 
 /**
  * Candidate spellings of a request path to judge: the lower-cased raw path (Express routes are case-insensitive) and a

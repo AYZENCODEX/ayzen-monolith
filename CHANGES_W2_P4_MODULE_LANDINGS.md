@@ -12,3 +12,10 @@
 - Demo sign-in inside the designs is neutralised (all entries -> `/login`, `/register`); module build now writes landing as `index.html` and SPA as `app.html`; Express serves `/` + allow-listed `/landing-assets/*`.
 - Validator now 23 rules / 35 mutants; new chromium spec `designed.spec.mjs` (8 modules x 2 viewports + redirects).
 - Not wired: fyra login and wisp login designs. verve sample-data catalogue pages ship under `/landing-assets/verve/`.
+
+## Extended SEO / AI content
+- New single copy source `landing-content.mjs` rebuilt from the supplied designs (the earlier generic copy contradicted them, e.g. Ryft is the exchange + wallet, not a "wallet hub"; invented "free / Shards" pricing claims removed).
+- New per-module `/about` page (FAQPage, BreadcrumbList, SoftwareApplication JSON-LD), `/llms-full.txt`, richer `llms.txt`, robots.txt naming AI crawlers, sitemap with `/about`; landing meta description = module summary; OG images regenerated in each design's colours.
+- Central: richer `llms.txt`, new `llms-full.txt`, robots with AI crawlers.
+- Validator 27 rules / 48 mutants; chromium spec now also covers `/about` and the crawler files.
+- Open point: Skarn's design (issues, cycles, modules) and the registry description ("airdrop projects") disagree; copy follows the design.

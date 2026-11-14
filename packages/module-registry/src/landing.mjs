@@ -9,113 +9,10 @@
  */
 import { getModule } from "./index.mjs";
 
-/** Brand tokens: one palette per module. `ink` is the text colour used ON the accent (buttons). */
-export const LANDINGS = Object.freeze({
-  sylo: {
-    tagline: "Your credentials, entities and wallets in one vault.",
-    hero: { eyebrow: "Sylo — Vault", title: "Keep every credential, entity and wallet in one locked-down vault", lead: "Sylo is where you store the accounts and keys you farm with, organised by entity, protected by a vault PIN and two-factor, and recoverable if something goes wrong." },
-    features: [
-      { title: "Entities, not scattered notes", text: "Group wallets, mail, KYC data and game accounts under the entity they belong to, and see everything about an entity on one screen." },
-      { title: "A separate vault lock", text: "The vault has its own PIN on top of your sign-in, and sensitive entities can have their own PIN too." },
-      { title: "Backup and emergency access", text: "Encrypted backups, plus emergency access so a person you trust can be let in if you cannot be reached." },
-      { title: "Two-factor in the vault", text: "Keep authenticator codes next to the accounts they protect instead of in another app." },
-    ],
-    shards: "Start with a free Sylo account. Heavier usage is paid in Shards, AYZEN's usage credits, so you only pay when you grow.",
-    faq: [["What is Sylo?", "Sylo is the vault module of AYZEN: a place to keep credentials, entities, wallets and related records, with its own lock."], ["Is the vault locked separately from my sign-in?", "Yes. Opening the vault asks for the vault PIN even when you are signed in."]],
-    brand: { bg: "#0b1220", surface: "#131c30", fg: "#e8eefc", muted: "#a9b6d3", accent: "#38bdf8", ink: "#04121c" },
-  },
-  ryft: {
-    tagline: "Wallet hub and wallet analysis.",
-    hero: { eyebrow: "Ryft — Wallets", title: "See every wallet you use, and what it has done", lead: "Ryft brings your wallets into one hub and analyses their activity, so you know which wallets are ready, which are idle and what each one has already done." },
-    features: [
-      { title: "One hub for all wallets", text: "Add wallets once and manage them from a single list instead of a dozen explorers." },
-      { title: "Wallet analysis", text: "Look at a wallet's activity and history to judge whether it is worth using for a project." },
-      { title: "Built for many wallets", text: "Made for people who run lots of wallets, with the overview that makes that manageable." },
-      { title: "Your own account", text: "Ryft has its own account and session, separate from every other AYZEN module." },
-    ],
-    shards: "Start with a free Ryft account. Heavier analysis is paid in Shards, AYZEN's usage credits.",
-    faq: [["What is Ryft?", "Ryft is the wallet module of AYZEN: a wallet hub plus wallet analysis."], ["Does Ryft hold my funds?", "No. Ryft is a management and analysis tool; it is not a custodian."]],
-    brand: { bg: "#100d1f", surface: "#1a1630", fg: "#efeaff", muted: "#b9b0d9", accent: "#a78bfa", ink: "#120a2a" },
-  },
-  fyra: {
-    tagline: "Cash flow, loans, investments and assets.",
-    hero: { eyebrow: "Fyra — Finance", title: "Know where your money is and where it is going", lead: "Fyra tracks cash flow, loans, investments and assets in one place and produces the receipts, invoices and payment agreements you need to share." },
-    features: [
-      { title: "Cash flow at a glance", text: "Record income and spending and see the trend instead of reconstructing it at month end." },
-      { title: "Loans and investments", text: "Keep loans you owe or gave, and your investments, next to your cash so the whole picture adds up." },
-      { title: "Assets", text: "Track what you own and what it is worth over time." },
-      { title: "Shareable documents", text: "Create receipts, invoices and payment agreements with a public link for the other party." },
-    ],
-    shards: "Start with a free Fyra account. Heavier usage is paid in Shards, AYZEN's usage credits.",
-    faq: [["What is Fyra?", "Fyra is the finance module of AYZEN: cash flow, loans, investments and assets."], ["Can I send a receipt to someone without an account?", "Yes. Receipts, invoices and payment agreements have public links that need no sign-in."]],
-    brand: { bg: "#07140f", surface: "#0e2219", fg: "#e6f8ee", muted: "#a3c7b3", accent: "#34d399", ink: "#032016" },
-  },
-  verve: {
-    tagline: "Marketplace and peer-to-peer trading.",
-    hero: { eyebrow: "Verve — Marketplace", title: "Buy, sell and trade with other people", lead: "Verve is the AYZEN marketplace: listings, offers, carts and peer-to-peer trades, with reviews and reporting so you can tell who to trust." },
-    features: [
-      { title: "A marketplace hub", text: "Browse listings and categories from one hub, and keep your order history." },
-      { title: "Offers and coupons", text: "Make and receive offers, and use coupons at checkout." },
-      { title: "Peer-to-peer trading", text: "Trade directly with other people instead of through a middleman." },
-      { title: "Reviews and reports", text: "Read reviews before you buy, and report listings that break the rules." },
-    ],
-    shards: "Start with a free Verve account. Heavier usage is paid in Shards, AYZEN's usage credits.",
-    faq: [["What is Verve?", "Verve is the marketplace module of AYZEN: listings, offers and peer-to-peer trading."], ["Do I need another account to buy?", "You need a Verve account. It is separate from your accounts in other AYZEN modules."]],
-    brand: { bg: "#1a0b10", surface: "#2a121b", fg: "#ffeaf0", muted: "#d9b0bd", accent: "#fb7185", ink: "#2a0610" },
-  },
-  skarn: {
-    tagline: "Airdrop projects, tasks and operator progress.",
-    hero: { eyebrow: "Skarn — Airdrops", title: "Run your airdrop projects like a checklist you can trust", lead: "Skarn tracks every airdrop project, its tasks and deadlines, and your progress, so nothing is missed between snapshot, task and token launch." },
-    features: [
-      { title: "Projects and tasks", text: "Keep each project with its tasks, notes and status in one place." },
-      { title: "Dates that matter", text: "See snapshot, launch and deadline dates for all projects together on a calendar." },
-      { title: "Operator progress", text: "Follow how far each operator or account has got through a project." },
-      { title: "Compare projects", text: "Put projects side by side to decide where your time is best spent." },
-    ],
-    shards: "Start with a free Skarn account. Heavier usage is paid in Shards, AYZEN's usage credits.",
-    faq: [["What is Skarn?", "Skarn is the airdrop module of AYZEN: projects, tasks and operator progress."], ["Is Skarn only for one person?", "No. You can work alone or with others on the same projects."]],
-    brand: { bg: "#17120a", surface: "#241b0e", fg: "#fff4dc", muted: "#d4c298", accent: "#fbbf24", ink: "#241600" },
-  },
-  warde: {
-    tagline: "Farming teams, chat and missions.",
-    hero: { eyebrow: "Warde — Teams", title: "Farm together without losing track of who does what", lead: "Warde is the team module: build a farming team, talk in its chat and hand out missions so everyone knows what to do next." },
-    features: [
-      { title: "Teams", text: "Create a team, invite people and see who belongs to it." },
-      { title: "Team chat", text: "Keep the conversation next to the work instead of in a separate app." },
-      { title: "Missions", text: "Assign missions to members and follow them through to done." },
-      { title: "Leaders get a view", text: "Team leaders get their own view for running the team." },
-    ],
-    shards: "Start with a free Warde account. Heavier usage is paid in Shards, AYZEN's usage credits.",
-    faq: [["What is Warde?", "Warde is the teams module of AYZEN: farming teams, chat and missions."], ["Can I be in more than one team?", "Team membership is managed inside Warde by the team's leaders."]],
-    brand: { bg: "#1a0f08", surface: "#2a180c", fg: "#ffeedf", muted: "#d9b89b", accent: "#fb923c", ink: "#2a1200" },
-  },
-  wisp: {
-    tagline: "Your AYZEN mailbox and email accounts.",
-    hero: { eyebrow: "Wisp — Mail", title: "One mailbox for the many addresses you farm with", lead: "Wisp gives you an AYZEN mailbox and lets you bring your other email accounts into one inbox, so verification mails never get lost." },
-    features: [
-      { title: "An AYZEN mailbox", text: "Get an address of your own and read and send mail from the web." },
-      { title: "Bring your other accounts", text: "Connect other email accounts and read them in the same place." },
-      { title: "Built for verification mail", text: "Find the confirmation and notification mails you need without searching five inboxes." },
-      { title: "Your own account", text: "Wisp has its own account and session, separate from every other AYZEN module." },
-    ],
-    shards: "Start with a free Wisp account. Heavier usage, such as sending volume, is paid in Shards, AYZEN's usage credits.",
-    faq: [["What is Wisp?", "Wisp is the mail module of AYZEN: a mailbox plus your connected email accounts."], ["Can I use my existing email addresses?", "You can connect other email accounts so their mail shows up in Wisp."]],
-    brand: { bg: "#06151a", surface: "#0c242c", fg: "#e2f8fc", muted: "#9cc6cf", accent: "#22d3ee", ink: "#01202a" },
-  },
-  zynth: {
-    tagline: "The AYZEN AI assistant.",
-    hero: { eyebrow: "Zynth — AI assistant", title: "An assistant that knows your AYZEN workspace", lead: "Zynth is the AI assistant of AYZEN: ask questions in plain language and get help with the work you already do in the other modules." },
-    features: [
-      { title: "Ask in plain language", text: "Type what you need instead of hunting through menus." },
-      { title: "A full-page assistant", text: "Work in a dedicated assistant page, or keep it as a panel next to what you are doing." },
-      { title: "Works with your workspace", text: "Built to help with the tasks you run across AYZEN." },
-      { title: "You stay in control", text: "Nothing happens in another module unless you connect it and allow it." },
-    ],
-    shards: "Start with a free Zynth account. Assistant usage is paid in Shards, AYZEN's usage credits.",
-    faq: [["What is Zynth?", "Zynth is the AI assistant module of AYZEN."], ["Can Zynth act in my other modules?", "Only where you have connected the modules and allowed it."]],
-    brand: { bg: "#160a1a", surface: "#24112b", fg: "#fbe9ff", muted: "#d8b4e2", accent: "#e879f9", ink: "#26072e" },
-  },
-});
+import { CONTENT } from "./landing-content.mjs";
+
+/** Copy, brand tokens and facts per module live in landing-content.mjs (grounded in the supplied designs). */
+export const LANDINGS = CONTENT;
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
@@ -124,13 +21,7 @@ export function getLandingContent(id) {
   const m = getModule(id);
   const l = LANDINGS[id];
   if (!m || !l) return null;
-  const faq = [
-    ...l.faq,
-    [`Do I need an AYZEN account to use ${m.label}?`, `${m.label} has its own account. You create it with your email; where enabled you can also continue with Google, Facebook, GitHub or your AYZEN account.`],
-    [`Is my ${m.label} data shared with other AYZEN modules?`, `No. ${m.label} keeps its own account, session and data. Nothing is shared with other modules unless you choose to connect them.`],
-    [`What does ${m.label} cost?`, `Starting is free. Heavier usage is paid in Shards, AYZEN's usage credits.`],
-  ];
-  return { id, label: m.label, host: m.defaultHost, homePath: m.homePath, ...l, faq };
+  return { id, label: m.label, host: m.defaultHost, homePath: m.homePath, ...l };
 }
 
 export const landingIds = () => Object.keys(LANDINGS);
@@ -158,14 +49,14 @@ export function landingStyles(c) {
 export function landingBody(c) {
   const L = esc(c.label);
   return `<div class="ml" data-module-landing="${esc(c.id)}">
-<header class="ml-h"><a class="ml-brand" href="/" aria-label="${L} home">${L}</a><nav aria-label="Primary"><a href="#features">Features</a><a href="#pricing">Shards</a><a href="#faq">FAQ</a><a href="/login">Sign in to ${L}</a></nav></header>
+<header class="ml-h"><a class="ml-brand" href="/" aria-label="${L} home">${L}</a><nav aria-label="Primary"><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="/about">About</a><a href="/login">Sign in to ${L}</a></nav></header>
 <main>
 <section class="ml-hero" aria-labelledby="ml-h1"><p class="ml-eyebrow">${esc(c.hero.eyebrow)}</p><h1 id="ml-h1">${esc(c.hero.title)}</h1><p class="ml-lead">${esc(c.hero.lead)}</p><div class="ml-cta"><a class="ml-btn" href="/register">Create your ${L} account</a><a class="ml-btn ml-ghost" href="/login">Sign in</a></div></section>
 <section id="features" aria-labelledby="ml-features"><h2 id="ml-features">What you get with ${L}</h2><ul class="ml-grid">${c.features.map((f) => `<li><h3>${esc(f.title)}</h3><p>${esc(f.text)}</p></li>`).join("")}</ul></section>
-<section id="pricing" aria-labelledby="ml-pricing"><div class="ml-price"><h2 id="ml-pricing">Start free, pay with Shards</h2><p>${esc(c.shards)}</p><a class="ml-btn" href="/register">Start free with ${L}</a></div></section>
+<section id="pricing" aria-labelledby="ml-pricing"><div class="ml-price"><h2 id="ml-pricing">Pricing</h2><p>${esc(c.pricing)}</p><a class="ml-btn" href="/register">Create your ${L} account</a> <a class="ml-btn ml-ghost" href="/about">Read everything about ${L}</a></div></section>
 <section id="faq" aria-labelledby="ml-faq"><h2 id="ml-faq">Questions about ${L}</h2>${c.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}</section>
 </main>
-<footer class="ml-f"><span>&copy; AYZEN. ${L} is a module of AYZEN.</span><nav aria-label="Footer"><a href="/login">Sign in</a><a href="/register">Create account</a><a href="/status">Service status</a></nav></footer>
+<footer class="ml-f"><span>&copy; AYZEN. ${L} is a module of AYZEN.</span><nav aria-label="Footer"><a href="/about">About ${L}</a><a href="/login">Sign in</a><a href="/register">Create account</a><a href="/status">Service status</a></nav></footer>
 </div>`;
 }
 
@@ -174,10 +65,10 @@ const origin = (c, o) => (o ?? `https://${c.host}`).replace(/\/$/, "");
 /** Head tags for SEO and sharing (title, description, canonical, robots, Open Graph, Twitter, JSON-LD). */
 export function landingHead(c, opts = {}) {
   const base = origin(c, opts.origin);
-  const title = `${c.label} — ${c.tagline.replace(/\.$/, "")} | AYZEN`;
-  const desc = `${c.hero.lead}`.slice(0, 200).replace(/\s+\S*$/, (m) => (c.hero.lead.length > 200 ? "…" : m));
+  const title = `${c.label} — ${c.category} | AYZEN`;
+  const desc = c.summary;
   const image = `${base}/og/${c.id}.png`;
-  const ld = { "@context": "https://schema.org", "@type": "SoftwareApplication", name: c.label, description: c.tagline, applicationCategory: "BusinessApplication", operatingSystem: "Web", url: `${base}/`, image, offers: { "@type": "Offer", price: "0", priceCurrency: "USD", description: "Free to start" } };
+  const ld = { "@context": "https://schema.org", "@type": "SoftwareApplication", name: c.label, description: c.summary, applicationCategory: "BusinessApplication", applicationSubCategory: c.category, operatingSystem: "Web", url: `${base}/`, image, featureList: c.features.map((f) => f.title), publisher: { "@type": "Organization", name: "AYZEN", url: "https://ayzen.tech/" }, isPartOf: { "@type": "WebSite", name: "AYZEN", url: "https://ayzen.tech/" } };
   return { title, description: desc, canonical: `${base}/`, image, jsonLd: ld, themeColor: c.brand.bg, base };
 }
 
@@ -230,45 +121,186 @@ export function injectLandingIntoHtml(html, id, opts = {}) {
     .replace(/<div id="root"><\/div>/, `<div id="root">${landingBody(c)}</div>\n${guard}`);
 }
 
+/** AI search / answer / assistant crawlers that are explicitly allowed on the public pages (same rules as everyone else). */
+export const AI_CRAWLERS = Object.freeze(["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "Bingbot", "DuckAssistBot", "meta-externalagent", "Amazonbot", "cohere-ai", "MistralAI-User"]);
+export const PUBLIC_PATHS = Object.freeze(["/about", "/llms.txt", "/llms-full.txt"]);
+
 export function robotsTxt(id, opts = {}) {
   const c = getLandingContent(id);
   const base = c ? origin(c, opts.origin) : "";
-  return `User-agent: *\nAllow: /$\nAllow: /og/\nAllow: /landing-assets/\nAllow: /llms.txt\nDisallow: /\n${base ? `Sitemap: ${base}/sitemap.xml\n` : ""}`;
+  const rules = `Allow: /$\nAllow: /about$\nAllow: /og/\nAllow: /landing-assets/\nAllow: /llms.txt\nAllow: /llms-full.txt\nDisallow: /\n`;
+  return `# ${c ? c.label : "AYZEN module"}: the public pages are open to search engines and AI search/answer crawlers; the signed-in app is not.\nUser-agent: *\n${rules}\n${AI_CRAWLERS.map((u) => `User-agent: ${u}`).join("\n")}\n${rules}${base ? `\nSitemap: ${base}/sitemap.xml\n` : ""}`;
 }
 
 export function sitemapXml(id, opts = {}) {
   const c = getLandingContent(id);
   if (!c) return "";
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${esc(origin(c, opts.origin))}/</loc></url>\n</urlset>\n`;
+  const base = origin(c, opts.origin);
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${["/", "/about"].map((u) => `  <url><loc>${esc(base)}${u}</loc></url>`).join("\n")}\n</urlset>\n`;
 }
 
-/** llms.txt (llmstxt.org format): what this module is, in plain markdown, for AI crawlers and assistants. Generated from the registry content. */
+const bullets = (a) => a.map((x) => `- ${x}`).join("\n");
+const modName = (id) => getModule(id)?.label ?? id;
+
+/** llms.txt (llmstxt.org format): short, link-first guide for AI crawlers and assistants. */
 export function llmsTxt(id, opts = {}) {
   const c = getLandingContent(id);
   if (!c) return "";
   const base = origin(c, opts.origin);
   return `# ${c.label}
 
-> ${c.tagline} ${c.label} is a module of AYZEN with its own account, session and data.
+> ${c.summary}
 
-${c.hero.lead}
+${c.label} is a module of AYZEN, with its own account, session and data. Category: ${c.category}.
 
 ## Pages
 
-- [${c.label} home](${base}/): what ${c.label} does, features and how Shards pricing works
+- [${c.label} home](${base}/): overview, features and FAQ
+- [About ${c.label}](${base}/about): full details, how it works, use cases, limits and FAQ
+- [Full text for AI assistants](${base}/llms-full.txt): everything on this site as one markdown file
 - [Sign in](${base}/login): sign in to ${c.label}
 - [Create account](${base}/register): create a ${c.label} account
 
 ## What you get
 
-${c.features.map((f) => `- ${f.title}: ${f.text}`).join("\n")}
+${bullets(c.features.map((f) => `${f.title}: ${f.text}`))}
 
 ## Pricing
 
-${c.shards}
+${c.pricing}
 
 ## FAQ
 
-${c.faq.map(([q, a]) => `- ${q} ${a}`).join("\n")}
+${bullets(c.faq.map(([q, a]) => `${q} ${a}`))}
+
+## Optional
+
+${bullets(c.related.map((r) => `[${modName(r)}](https://${getModule(r).defaultHost}/): another AYZEN module`))}
+`;
+}
+
+/** One module as a markdown block (shared by llms-full.txt per module and the central llms-full.txt). */
+export function moduleMarkdown(id, opts = {}, level = 1) {
+  const c = getLandingContent(id);
+  if (!c) return "";
+  const base = origin(c, opts.origin);
+  const h = (n) => "#".repeat(Math.min(6, level + n));
+  return `${h(0)} ${c.label}
+
+> ${c.summary}
+
+URL: ${base}/ · Category: ${c.category} · A module of AYZEN with its own account, session and data.
+
+${c.hero.lead}
+
+${h(1)} Features
+
+${bullets(c.features.map((f) => `**${f.title}.** ${f.text}`))}
+
+${h(1)} In detail
+
+${c.areas.map((a) => `${h(2)} ${a.title}\n\n${a.text}\n\n${bullets(a.items)}`).join("\n\n")}
+
+${h(1)} How it works
+
+${c.steps.map((st, i) => `${i + 1}. **${st.title}.** ${st.text}`).join("\n")}
+
+${h(1)} Use cases
+
+${bullets(c.useCases)}
+
+${h(1)} Limits and honest notes
+
+${bullets(c.limits)}
+
+${h(1)} Pricing
+
+${c.pricing}
+
+${h(1)} FAQ
+
+${c.faq.map(([q, a]) => `**${q}** ${a}`).join("\n\n")}
+
+${h(1)} Related AYZEN modules
+
+${bullets(c.related.map((r) => `[${modName(r)}](https://${getModule(r).defaultHost}/)`))}
+`;
+}
+
+export function llmsFullTxt(id, opts = {}) {
+  const c = getLandingContent(id);
+  if (!c) return "";
+  const base = origin(c, opts.origin);
+  return `${moduleMarkdown(id, opts, 1)}
+## Links
+
+- Home: ${base}/
+- About: ${base}/about
+- Sign in: ${base}/login
+- Create account: ${base}/register
+- Short version: ${base}/llms.txt
+`;
+}
+
+/** /about: the long-form, server-rendered page for people and for search/AI crawlers (visible FAQ + FAQPage JSON-LD). */
+export function aboutHead(c, opts = {}) {
+  const base = origin(c, opts.origin);
+  const title = `About ${c.label}: features, how it works, FAQ | AYZEN`;
+  const desc = `${c.summary} Full feature list, how ${c.label} works, use cases, limits and answers to common questions.`.slice(0, 300);
+  const image = `${base}/og/${c.id}.png`;
+  const ld = { "@context": "https://schema.org", "@graph": [
+    { "@type": "WebPage", "@id": `${base}/about#page`, url: `${base}/about`, name: title, description: desc, inLanguage: "en", isPartOf: { "@type": "WebSite", name: c.label, url: `${base}/` }, about: { "@id": `${base}/#app` } },
+    { "@type": "SoftwareApplication", "@id": `${base}/#app`, name: c.label, description: c.summary, applicationCategory: "BusinessApplication", applicationSubCategory: c.category, operatingSystem: "Web", url: `${base}/`, image, featureList: c.features.map((f) => f.title), publisher: { "@type": "Organization", name: "AYZEN", url: "https://ayzen.tech/" } },
+    { "@type": "FAQPage", mainEntity: c.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) },
+    { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: c.label, item: `${base}/` }, { "@type": "ListItem", position: 2, name: "About", item: `${base}/about` }] },
+  ] };
+  return { title, description: desc, canonical: `${base}/about`, image, jsonLd: ld, base };
+}
+
+export function aboutBody(c) {
+  const L = esc(c.label);
+  return `<div class="ml" data-module-about="${esc(c.id)}">
+<header class="ml-h"><a class="ml-brand" href="/" aria-label="${L} home">${L}</a><nav aria-label="Primary"><a href="/">Home</a><a href="#features">Features</a><a href="#detail">In detail</a><a href="#faq">FAQ</a><a href="/login">Sign in</a></nav></header>
+<main>
+<nav class="ml-crumbs" aria-label="Breadcrumb"><a href="/">${L}</a> / <span aria-current="page">About</span></nav>
+<section class="ml-hero" aria-labelledby="ab-h1"><p class="ml-eyebrow">${esc(c.category)}</p><h1 id="ab-h1">About ${L}: ${esc(c.tagline.replace(/\.$/, ""))}</h1><p class="ml-lead">${esc(c.hero.lead)}</p><div class="ml-cta"><a class="ml-btn" href="/register">Create your ${L} account</a><a class="ml-btn ml-ghost" href="/login">Sign in</a></div></section>
+<section aria-labelledby="ab-what"><h2 id="ab-what">What is ${L}?</h2><p>${esc(c.summary)} ${L} is one of eight modules of AYZEN. Each module has its own account, session and data, and nothing is shared with other modules unless you connect them.</p></section>
+<section id="features" aria-labelledby="ab-features"><h2 id="ab-features">Features</h2><ul class="ml-grid">${c.features.map((f) => `<li><h3>${esc(f.title)}</h3><p>${esc(f.text)}</p></li>`).join("")}</ul></section>
+<section id="detail" aria-labelledby="ab-detail"><h2 id="ab-detail">${L} in detail</h2>${c.areas.map((a) => `<h3>${esc(a.title)}</h3><p>${esc(a.text)}</p><ul class="ml-list">${a.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`).join("")}</section>
+<section aria-labelledby="ab-how"><h2 id="ab-how">How ${L} works</h2><ol class="ml-list">${c.steps.map((st) => `<li><strong>${esc(st.title)}.</strong> ${esc(st.text)}</li>`).join("")}</ol></section>
+<section aria-labelledby="ab-use"><h2 id="ab-use">What people use ${L} for</h2><ul class="ml-list">${c.useCases.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></section>
+<section aria-labelledby="ab-limits"><h2 id="ab-limits">Limits and honest notes</h2><ul class="ml-list">${c.limits.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></section>
+<section aria-labelledby="ab-pricing"><div class="ml-price"><h2 id="ab-pricing">Pricing</h2><p>${esc(c.pricing)}</p></div></section>
+<section id="faq" aria-labelledby="ab-faq"><h2 id="ab-faq">Frequently asked questions about ${L}</h2>${c.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}</section>
+<section aria-labelledby="ab-rel"><h2 id="ab-rel">Other AYZEN modules</h2><ul class="ml-list">${c.related.map((r) => `<li><a href="https://${esc(getModule(r).defaultHost)}/">${esc(modName(r))}</a></li>`).join("")}</ul><p><a href="https://ayzen.tech/landing/">What is AYZEN?</a></p></section>
+</main>
+<footer class="ml-f"><span>&copy; AYZEN. ${L} is a module of AYZEN.</span><nav aria-label="Footer"><a href="/">${L} home</a><a href="/login">Sign in</a><a href="/register">Create account</a><a href="/llms.txt">llms.txt</a></nav></footer>
+</div>`;
+}
+
+export function aboutDocument(c, opts = {}) {
+  const h = aboutHead(c, opts);
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>${esc(h.title)}</title>
+<meta name="description" content="${esc(h.description)}" />
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+<link rel="canonical" href="${esc(h.canonical)}" />
+<meta name="theme-color" content="${esc(c.brand.bg)}" />
+<meta property="og:type" content="article" /><meta property="og:site_name" content="${esc(c.label)}" /><meta property="og:title" content="${esc(h.title)}" />
+<meta property="og:description" content="${esc(h.description)}" /><meta property="og:url" content="${esc(h.canonical)}" /><meta property="og:image" content="${esc(h.image)}" />
+<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="${esc(c.label)} — ${esc(c.tagline)}" />
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${esc(h.title)}" /><meta name="twitter:description" content="${esc(h.description)}" /><meta name="twitter:image" content="${esc(h.image)}" />
+<link rel="alternate" type="text/markdown" href="${esc(h.base)}/llms-full.txt" title="${esc(c.label)} for AI assistants" />
+<script type="application/ld+json">${JSON.stringify(h.jsonLd).replace(/</g, "\\u003c")}</script>
+<style>${landingStyles(c)}.ml-crumbs{padding:12px 0;color:var(--muted)}.ml-list{padding-left:1.2em;margin:0 0 20px}.ml-list li{margin:6px 0}.ml h3{margin-top:24px}</style>
+</head>
+<body>
+${aboutBody(c)}
+</body>
+</html>
 `;
 }
