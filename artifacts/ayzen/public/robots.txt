@@ -1,2 +1,9 @@
+# AYZEN (central host). Each module host serves its own robots.txt, sitemap.xml and llms.txt.
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /oidc/
+Disallow: /auth/
+Disallow: /admin
+
+Sitemap: https://ayzen.tech/sitemap.xml

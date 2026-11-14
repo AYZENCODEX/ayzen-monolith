@@ -31,3 +31,6 @@ Only on a module host (`<id>.ayzen.tech` or `<ID>_HOSTS`). The central `ayzen.te
 
 ## SEO / sharing / AI files (per module host)
 `<title>`, description, canonical, robots meta, Open Graph + Twitter card (1200x630 image `/og/<id>.png`), JSON-LD; `robots.txt` (landing + assets + llms.txt allowed, app paths disallowed, sitemap link), `sitemap.xml`, and `llms.txt` (llmstxt.org format, generated from the registry). Served by Express (when landings are on) and written into the module build.
+
+## Central host (ayzen.tech)
+`node scripts/gen-central-seo.mjs` writes `public/robots.txt` (allow all, disallow /api/, /oidc/, /auth/, /admin, sitemap link), `public/sitemap.xml` (central URLs only), `public/llms.txt` (AYZEN overview + a link to every module host, generated from the registry) and the SEO head of `/landing/` (canonical, robots, Open Graph, Twitter card, Organization/WebSite JSON-LD). `--check` runs in CI. Re-run it when a module is added to the registry.
