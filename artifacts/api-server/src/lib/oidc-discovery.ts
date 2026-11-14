@@ -105,6 +105,24 @@ export interface OidcDiscoveryMetadata {
   scopes_supported: string[];
   /** RS256 only — Phase 1a/1b's signing switch. HS256 is an internal migration-grace mechanism (ALLOW_LEGACY_HS256_TOKENS, lib/jwt-keys.ts) for pre-existing session tokens, never something an OIDC client should be told to expect or accept. */
   id_token_signing_alg_values_supported: string[];
+  /** W1-P3: `POST {issuer}/oidc/register` (routes/oidc-register.ts, Phase 8a) — RFC 7591 dynamic registration. New clients are created 'pending' and unusable until an admin approves them (Phase 8c/9d). */
+  registration_endpoint: string;
+  /** W1-P3: only "S256" — lib/oidc-pkce.ts rejects "plain" and a missing challenge, so every client (public or confidential) is PKCE-only. */
+  code_challenge_methods_supported: string[];
+  /** W1-P3: only "authorization_code" — routes/oidc-token.ts answers every other grant_type with unsupported_grant_type (a refresh token is issued, but there is no refresh grant yet). */
+  grant_types_supported: string[];
+  /** W1-P3: "none" (public PKCE clients, client_secret_hash IS NULL — every seeded module client) and "client_secret_post" (confidential dynamically-registered clients). The token endpoint reads credentials from the POST body only, never the Authorization header. */
+  token_endpoint_auth_methods_supported: string[];
+  /** W1-P3: OIDC Core §8 — AYZEN only issues public (identical-for-all-clients) subject identifiers. */
+  subject_types_supported: string[];
+  /** W1-P3: the authorization response is always a query-string redirect. */
+  response_modes_supported: string[];
+  /** W1-P3: OIDC Back-Channel Logout 1.0 §2.1 — registered clients with a backchannel_logout_uri are notified (routes/oidc-backchannel-logout.ts, lib/oidc-logout-propagation.ts). */
+  backchannel_logout_supported: boolean;
+  /** W1-P3: logout tokens carry no `sid` yet (OidcLogoutTokenBinding.sid is still null), so the honest value is false. */
+  backchannel_logout_session_supported: boolean;
+  /** W1-P3: the UserInfo/ID-token claims a relying party can actually receive (lib/oidc-userinfo.ts, lib/oidc-id-token.ts; `module_uid` from W1-P1). */
+  claims_supported: string[];
 }
 
 /**
@@ -116,9 +134,26 @@ export interface OidcDiscoveryMetadata {
  * to this list before either exists would advertise a capability with
  * nothing behind it yet.
  */
-const SCOPES_SUPPORTED = ["openid"] as const;
+/**
+ * W1-P3: widened from ["openid"] to the full KNOWN_OIDC_SCOPES set (lib/oidc-scope-validation.ts).
+ * Every seeded first-party client is registered with openid+profile+email and /oidc/userinfo and
+ * /oidc/resource/{profile,email} already enforce them, so advertising only "openid" understated the
+ * provider. The conformance test (scripts/src/test-oidc-conformance.ts) pins the two lists together.
+ */
+const SCOPES_SUPPORTED = ["openid", "profile", "email"] as const;
 
 const RESPONSE_TYPES_SUPPORTED = ["code"] as const;
+
+// W1-P3 — static capability lists; each one mirrors enforcement elsewhere (see the interface above).
+const CODE_CHALLENGE_METHODS_SUPPORTED = ["S256"] as const;
+const GRANT_TYPES_SUPPORTED = ["authorization_code"] as const;
+const TOKEN_ENDPOINT_AUTH_METHODS_SUPPORTED = ["none", "client_secret_post"] as const;
+const SUBJECT_TYPES_SUPPORTED = ["public"] as const;
+const RESPONSE_MODES_SUPPORTED = ["query"] as const;
+const CLAIMS_SUPPORTED = [
+  "sub", "iss", "aud", "exp", "iat", "nonce",
+  "preferred_username", "picture", "email", "email_verified", "module_uid",
+] as const;
 
 const ID_TOKEN_SIGNING_ALG_VALUES_SUPPORTED = ["RS256"] as const;
 
@@ -137,6 +172,26 @@ export function resolveIssuer(): string {
   const explicit = process.env.AYZEN_OIDC_ISSUER?.trim();
   const raw = explicit && explicit.length > 0 ? explicit : getAppUrl();
   return raw.replace(/\/+$/, "");
+}
+
+/**
+ * W1-P3: an issuer is an absolute https origin (OIDC Discovery 1.0 §3: no query, no fragment) or, for
+ * local development only, an http://localhost origin. A path is tolerated (some deployments mount the
+ * IdP under one) but the host must be a bare hostname. Returns null when valid, else a reason.
+ *
+ * Why this exists: the issuer string is baked into every ID token `iss`, the discovery document and each
+ * relying party's configuration, so a typo (trailing space, "ayzen.tech" without a scheme, http in prod)
+ * silently breaks every login at once. See docs/architecture/ADR-W1-P3-oidc-issuer.md for which host
+ * (api. vs id. vs the central origin) the issuer should be.
+ */
+export function issuerProblem(issuer: string): string | null {
+  let u: URL;
+  try { u = new URL(issuer); } catch { return "not an absolute URL"; }
+  const local = u.hostname === "localhost" || u.hostname === "127.0.0.1";
+  if (u.protocol !== "https:" && !(local && u.protocol === "http:")) return "must be https (http only for localhost)";
+  if (u.username || u.password) return "must not contain credentials";
+  if (u.search || u.hash) return "must not contain a query or fragment";
+  return null;
 }
 
 /**
@@ -175,6 +230,15 @@ export function buildOidcDiscoveryMetadata(issuer: string): OidcDiscoveryMetadat
     response_types_supported: [...RESPONSE_TYPES_SUPPORTED],
     scopes_supported: [...SCOPES_SUPPORTED],
     id_token_signing_alg_values_supported: [...ID_TOKEN_SIGNING_ALG_VALUES_SUPPORTED],
+    registration_endpoint: `${cleanIssuer}/oidc/register`,
+    code_challenge_methods_supported: [...CODE_CHALLENGE_METHODS_SUPPORTED],
+    grant_types_supported: [...GRANT_TYPES_SUPPORTED],
+    token_endpoint_auth_methods_supported: [...TOKEN_ENDPOINT_AUTH_METHODS_SUPPORTED],
+    subject_types_supported: [...SUBJECT_TYPES_SUPPORTED],
+    response_modes_supported: [...RESPONSE_MODES_SUPPORTED],
+    backchannel_logout_supported: true,
+    backchannel_logout_session_supported: false,
+    claims_supported: [...CLAIMS_SUPPORTED],
   };
 }
 

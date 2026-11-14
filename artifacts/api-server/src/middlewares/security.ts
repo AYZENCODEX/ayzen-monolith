@@ -29,6 +29,7 @@ import { isFirstPartyOrigin, isFirstPartyProdOrigin } from "../lib/api-hosts";
 import cors, { type CorsOptions } from "cors";
 import rateLimit, { type Options } from "express-rate-limit";
 import { logger } from "../lib/logger";
+import { isModuleHostGuardEnforcing, isRegisteredFirstPartyOrigin } from "../lib/module-host-guard-core";
 
 // ─── Env helpers ───────────────────────────────────────────────────────────
 
@@ -80,6 +81,11 @@ const corsOptions: CorsOptions = {
     // No Origin header = same-origin, curl, server-to-server, mobile app, bot webhook → allow.
     if (!origin) return callback(null, true);
 
+    // W2-P1 (owned|strict): a production first-party origin must be a REGISTERED host, not any *.ayzen.tech subdomain.
+    // Origins named in ALLOWED_ORIGINS are still honored below.
+    if (isModuleHostGuardEnforcing() && !isRegisteredFirstPartyOrigin(origin) && !(allowedOrigins?.includes(origin))) {
+      return callback(new Error(`Origin ${origin} is not a registered AYZEN host`));
+    }
     if (allowedOrigins) {
       if (allowedOrigins.includes(origin) || isFirstPartyOrigin(origin)) return callback(null, true);
       return callback(new Error(`Origin ${origin} is not allowed by CORS policy`));

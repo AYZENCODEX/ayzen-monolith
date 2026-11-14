@@ -99,7 +99,9 @@ export default function Register() {
       const data = await res.json();
       if (res.ok) {
         toast({ title: "Account created!", description: refCode ? `Referral code ${refCode} applied!` : "You can now log in." });
-        setLocation("/login");
+        // W1-P4 flow 2: arriving from /oidc/authorize?screen_hint=signup, go back through login so the pending authorize resumes.
+        const rt = new URLSearchParams(window.location.search).get("return_to");
+        setLocation(rt && ["/oidc/authorize", "/oidc/consent"].some((p) => rt.startsWith(p)) ? `/login?return_to=${encodeURIComponent(rt)}` : "/login");
       } else {
         toast({ variant: "destructive", title: "Registration failed", description: data.error ?? "Please check your inputs." });
         if (data.error?.includes("code")) {

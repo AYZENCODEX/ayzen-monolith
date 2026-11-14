@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Accounts, subscriptions, game credit and peer-to-peer exchange in one catalogue.">
+<title>Verve Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap">
+<script>(function(){try{var t=localStorage.getItem('verve-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+</head>
+<body data-nav="" >
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main">
+<section class="hero hero--motion">
+  <div class="hero__motion" id="hero-motion" aria-hidden="true"></div>
+  <div class="container hero__inner">
+    <h1>Everything digital, in one considered place.</h1>
+    <p class="hero__sub">Accounts, subscriptions, game credit and peer-to-peer exchange in one catalogue.</p>
+  </div>
+</section>
+
+<section class="discover" id="discover" aria-label="Catalogue">
+  <div class="container">
+    <div class="discover__bar">
+      <div class="segmented" role="tablist" aria-label="Catalogue category" id="tabs">
+        <span class="segmented__thumb" aria-hidden="true"></span>
+        <button class="segmented__btn" role="tab" id="tab-accounts" aria-controls="panel-accounts" data-tab="accounts" aria-selected="true" tabindex="0" type="button">Accounts</button><button class="segmented__btn" role="tab" id="tab-subscriptions" aria-controls="panel-subscriptions" data-tab="subscriptions" aria-selected="false" tabindex="-1" type="button">Subscriptions</button><button class="segmented__btn" role="tab" id="tab-games" aria-controls="panel-games" data-tab="games" aria-selected="false" tabindex="-1" type="button">Game credit</button><button class="segmented__btn" role="tab" id="tab-p2p" aria-controls="panel-p2p" data-tab="p2p" aria-selected="false" tabindex="-1" type="button">P2P</button>
+      </div>
+      <p class="discover__hint">Drag the cards or use the arrows to browse.</p>
+    </div>
+    <div id="panels"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <h2 class="section__title">How an order works</h2>
+      <p class="section__lede">Three steps from browsing to checkout.</p>
+    </div>
+    <ol class="steps">
+      <li class="step"><h3>Choose a platform</h3><p>Open accounts, subscriptions, game credit or P2P and pick a card.</p></li>
+      <li class="step"><h3>Pick a variant</h3><p>Each card shows age and audience, length or amount, with the price up front.</p></li>
+      <li class="step"><h3>Check out</h3><p>Orders are placed from your AYZEN account and tracked in Order History once the backend is connected.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <h2 class="section__title">Inside the catalogue</h2>
+      <p class="section__lede">Four ways to buy and sell, each with its own page.</p>
+    </div>
+    <div class="summary" id="summary"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container info-grid">
+    <div>
+      <h2 class="section__title">Questions</h2>
+      <p class="section__lede">Short answers about this preview.</p>
+    </div>
+    <div class="faq">
+      <details><summary>Are these live listings?</summary><p>No. Everything on this site is sample data. Listings, prices and P2P offers are placeholders until the backend is connected.</p></details>
+      <details><summary>How are subscription prices set?</summary><p>Each service has a monthly price. Longer plans take a percentage off, so the 12-month plan costs less per month than the 1-month plan.</p></details>
+      <details><summary>How does P2P work?</summary><p>Choose Buy or Sell, an asset, a currency and a payment method. Offers are sorted by best price. You can open an offer to see its limits, but trading is not connected yet.</p></details>
+      <details><summary>Can I use dark mode?</summary><p>Yes. Use the toggle in the header. The site follows your system setting until you choose one.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+<footer id="site-footer"></footer>
+
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/stage.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/pages/home.js"></script>
+</body>
+</html>

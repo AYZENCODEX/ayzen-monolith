@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f1e9"><script>document.documentElement.classList.add("js")</script><title>Warde — teams that move together</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap');
+:root{--paper:#f4f1e9;--paper2:#ebe7dc;--ink:#17251f;--muted:#65716a;--line:rgba(23,37,31,.18);--forest:#153b2d;--forest2:#214d3b;--lime:#c9f36b;--orange:#d86743;--white:#fbfaf6;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--serif:'Playfair Display',Georgia,serif}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:82px}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}.wrap{width:min(1180px,88vw);margin:auto}.mono,.eyebrow,.micro{font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase}.topbar{height:76px;position:sticky;top:0;z-index:20;background:rgba(244,241,233,.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.topinner{height:100%;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:700;letter-spacing:-.08em}.brand-mark{width:22px;height:22px;background:var(--forest);display:grid;place-items:center;transform:rotate(45deg);border-radius:5px 5px 5px 1px}.brand-mark:after{content:'';width:6px;height:6px;background:var(--lime);border-radius:50%}.nav{display:flex;gap:30px;font-size:12px;color:#4d5b53}.nav a:hover{color:var(--orange)}.nav-cta{border:1px solid var(--ink);border-radius:30px;padding:11px 16px;font-weight:600;font-size:12px}.nav-cta:hover{background:var(--ink);color:var(--white)}.hero{min-height:700px;padding:76px 0 48px;display:grid;grid-template-columns:.95fr 1.05fr;gap:4vw;align-items:center;position:relative;overflow:hidden}.hero:before{content:'';position:absolute;left:-8%;top:15%;width:54%;height:63%;background:linear-gradient(115deg,rgba(201,243,107,.2),transparent);clip-path:polygon(0 9%,100% 0,83% 100%,12% 84%)}.hero-copy{position:relative;z-index:2}.eyebrow{display:flex;align-items:center;gap:10px;color:var(--muted)}.dot{width:7px;height:7px;background:#86b85d;border-radius:50%;box-shadow:0 0 0 5px rgba(134,184,93,.14)}h1{font:500 clamp(66px,8vw,112px)/.91 var(--serif);letter-spacing:-.075em;margin:29px 0 24px}h1 em,h2 em{color:var(--forest2);font-weight:500}.hero-copy>p{font-size:16px;line-height:1.8;color:var(--muted);max-width:460px}.actions{display:flex;align-items:center;gap:22px;margin-top:30px}.button{display:inline-flex;gap:24px;align-items:center;background:var(--ink);color:var(--white);padding:15px 19px;border-radius:30px;font-size:12px;font-weight:600;transition:transform .25s,background .25s}.button:hover{background:var(--forest2);transform:translateY(-2px)}.underlink{font-size:12px;border-bottom:1px solid #9da79f;padding:0 0 6px}.auth-note{display:block;margin-top:15px;color:#808a81;font:9px var(--mono);letter-spacing:.03em}.hero-art{min-height:440px;position:relative;display:grid;place-items:center;perspective:1100px}.art-glow{position:absolute;width:82%;height:75%;background:radial-gradient(ellipse,rgba(201,243,107,.32),transparent 67%);filter:blur(10px)}.orbit{position:absolute;width:88%;height:62%;border:1px solid rgba(21,59,45,.16);border-radius:50%;transform:rotate(-20deg)}.orbit.two{width:72%;height:53%;transform:rotate(23deg);border-color:rgba(21,59,45,.1)}.pill{font:8px var(--mono);letter-spacing:.08em;border:1px solid rgba(21,59,45,.22);padding:7px 9px;border-radius:20px;color:var(--forest)}.float-tag{position:absolute;z-index:3;background:var(--forest);color:var(--white);padding:12px 15px;box-shadow:0 12px 28px #17251f24;font:9px var(--mono);letter-spacing:.08em}.float-tag.one{top:10%;right:2%;transform:rotate(5deg);animation:float 6s ease-in-out infinite}.float-tag.two{bottom:-3%;left:4%;background:var(--white);color:var(--ink);border:1px solid var(--line);transform:rotate(-3deg);animation:float 7s ease-in-out infinite reverse}@media(max-width:600px){.float-tag.one{right:3%;top:7%;font-size:6px;padding:8px}.float-tag.two{left:3%;bottom:2%;font-size:6px;padding:8px}}.hero-meta{grid-column:1/-1;display:flex;justify-content:space-between;margin-top:12px;padding-top:15px;border-top:1px solid var(--line);font:9px var(--mono);letter-spacing:.09em;color:var(--muted)}.ticker{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0;background:rgba(235,231,220,.55)}.ticker-track{display:flex;justify-content:space-around;min-width:760px;font:11px var(--mono);text-transform:uppercase;letter-spacing:.1em;color:#42554a}.ticker i{color:var(--orange);font-style:normal;margin:0 18px}.section{padding:105px 0;border-bottom:1px solid var(--line)}.section-head{display:grid;grid-template-columns:1fr .7fr;gap:8vw;align-items:end;margin-bottom:50px}.eyebrow-label{color:var(--forest2)}h2{font:500 clamp(48px,6.5vw,82px)/.98 var(--serif);letter-spacing:-.065em;margin:20px 0 0}.intro{font-size:14px;line-height:1.85;color:var(--muted);max-width:450px;margin:0 0 3px}.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.cap{min-height:230px;padding:25px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .3s}.cap:hover{background:rgba(201,243,107,.13)}.cap-index{font:9px var(--mono);color:var(--muted);letter-spacing:.12em}.cap-icon{width:42px;height:42px;border:1px solid rgba(21,59,45,.22);border-radius:50%;display:grid;place-items:center;color:var(--forest);font-size:18px;margin:29px 0 16px}.cap h3{font:500 22px var(--serif);margin:0 0 9px}.cap p{font-size:12px;line-height:1.7;color:var(--muted);margin:0;max-width:300px}.dark-section{background:var(--forest);color:var(--white);padding:105px 0}.dark-layout{display:grid;grid-template-columns:.82fr 1.18fr;gap:8vw;align-items:center}.dark-section .eyebrow{color:#c1d1c3}.dark-section h2 em{color:var(--lime)}.dark-copy p{font-size:13px;line-height:1.8;color:#c2cec6;max-width:380px;margin:24px 0}.dark-section .button{background:var(--lime);color:var(--ink)}.mission-card{background:#f8f7ef;color:var(--ink);padding:25px 27px;transform:rotate(1.5deg);box-shadow:0 26px 55px #081d164a}.mission-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:16px}.mission-top b{font:500 24px var(--serif)}.mission-list{padding:7px 0}.mission{padding:16px 0;border-bottom:1px solid rgba(23,37,31,.1)}.mission-line{display:flex;justify-content:space-between;gap:15px;font-size:11px}.mission-line small{font:8px var(--mono);color:var(--muted);letter-spacing:.08em}.meter{height:4px;background:#e3e6dc;margin-top:11px;border-radius:4px;overflow:hidden}.meter i{display:block;background:var(--forest2);height:100%;width:var(--w);border-radius:4px}.mission-foot{display:flex;justify-content:space-between;padding-top:14px;font:8px var(--mono);color:var(--muted);letter-spacing:.07em}.workflow{padding:105px 0 112px;border-bottom:1px solid var(--line)}.workflow-heading{display:grid;grid-template-columns:1fr .72fr;gap:8vw;align-items:end;margin-bottom:32px}.workflow-heading h2{margin-top:21px}.workflow-stage{height:430px;position:relative;perspective:1200px;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,rgba(201,243,107,.19),transparent 62%)}.workflow-stage:before,.workflow-stage:after{content:'';position:absolute;inset:9% 6%;border:1px solid rgba(21,59,45,.1);transform:rotateX(58deg) rotateZ(-15deg)}.workflow-stage:after{inset:18% 13%;transform:rotateX(58deg) rotateZ(15deg);border-color:rgba(21,59,45,.06)}.track{position:absolute;left:12%;right:12%;top:49%;height:2px;background:linear-gradient(90deg,transparent,#153b2d55,#d8674370,#153b2d55,transparent);transform:rotate(-13deg)}.track i{position:absolute;top:-4px;width:10px;height:10px;background:var(--paper);border:1px solid #829777;border-radius:50%;box-shadow:0 0 0 5px #c9f36b30}.track i:nth-child(1){left:15%}.track i:nth-child(2){left:48%}.track i:nth-child(3){left:82%}.track span{position:absolute;top:-2px;left:0;width:28px;height:5px;background:var(--orange);border-radius:50%;filter:blur(1px);animation:travel 6s linear infinite}.node{position:absolute;width:190px;min-height:145px;padding:17px 19px;background:rgba(251,250,246,.95);border:1px solid rgba(23,37,31,.16);box-shadow:0 20px 42px #17251f1e;transform-style:preserve-3d;animation:nodefloat 7s ease-in-out infinite}.node small{font:8px var(--mono);letter-spacing:.1em;color:var(--muted)}.node b{font:500 24px var(--serif);display:block;margin:16px 0 5px}.node em{font:9px var(--mono);color:var(--forest2);font-style:normal}.node .glyph{position:absolute;right:16px;top:42px;color:#739078;font-size:20px}.n1{left:5%;top:14%;transform:rotateY(-12deg) rotateX(5deg) rotateZ(-4deg) translateZ(24px);animation-delay:-.5s}.n2{left:28%;top:48%;transform:rotateY(14deg) rotateX(4deg) rotateZ(3deg) translateZ(52px);animation-delay:-2s}.n3{right:27%;top:11%;transform:rotateY(-14deg) rotateX(-4deg) rotateZ(4deg) translateZ(36px);animation-delay:-3.5s}.n4{right:4%;top:46%;transform:rotateY(13deg) rotateX(4deg) rotateZ(-3deg) translateZ(66px);animation-delay:-1.4s}.workflow-caption{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);white-space:nowrap;font:8px var(--mono);letter-spacing:.1em;color:var(--muted)}.audit{padding:100px 0}.audit-banner{display:grid;grid-template-columns:.8fr 1.2fr;border:1px solid var(--line);background:rgba(251,250,246,.52)}.audit-side{padding:29px;background:var(--paper2)}.status{display:inline-block;font:8px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--forest);border:1px solid #153b2d44;padding:7px 9px;border-radius:20px}.audit-side h3{font:500 29px/1.1 var(--serif);margin:24px 0 12px}.audit-side p{font-size:12px;line-height:1.8;color:var(--muted)}code{font:10px var(--mono);background:#e7e5dc;padding:2px 5px}.audit-list{padding:15px 32px}.audit-item{display:grid;grid-template-columns:24px 1fr;gap:14px;padding:18px 0;border-bottom:1px solid rgba(23,37,31,.12)}.audit-item:last-child{border-bottom:0}.check{color:var(--forest);font-size:14px}.audit-item h4{font-size:12px;margin:0 0 6px}.audit-item p{font-size:11px;line-height:1.7;color:var(--muted);margin:0}.limits{padding:84px 0;background:#ebe7dc;border-top:1px solid var(--line)}.limits-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:8vw}.limits-copy{font-size:13px;color:var(--muted);line-height:1.8;max-width:390px;margin-top:20px}.limit-list{border-top:1px solid var(--line)}.limit{display:grid;grid-template-columns:26px 1fr;gap:14px;padding:17px 0;border-bottom:1px solid var(--line)}.limit i{font:14px var(--mono);color:var(--orange);font-style:normal}.limit b{font-size:11px;display:block;margin-bottom:5px}.limit span{font-size:10px;line-height:1.7;color:var(--muted);display:block}.manifesto{padding:92px 0;text-align:center}.manifesto blockquote{font:500 clamp(38px,5.5vw,69px)/1.06 var(--serif);letter-spacing:-.055em;max-width:850px;margin:25px auto}.manifesto p{font:9px var(--mono);color:var(--muted);letter-spacing:.1em;text-transform:uppercase}.final-cta{background:var(--forest);color:var(--white);text-align:center;padding:88px 0 92px}.final-cta .eyebrow{justify-content:center;color:#bfcec3}.final-cta h2{font-size:clamp(55px,8vw,94px);margin:22px 0}.final-cta p{font-size:13px;line-height:1.8;color:#cad4cd;max-width:510px;margin:0 auto 26px}.final-cta .button{background:var(--lime);color:var(--ink)}.final-cta .auth-note{color:#c0cec4}.footer{display:flex;align-items:center;justify-content:space-between;padding:25px 0}.footer small{font:8px var(--mono);letter-spacing:.1em;color:var(--muted)}.social{display:flex;gap:8px}.social a{width:27px;height:27px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;font:9px var(--mono);color:var(--muted)}@keyframes travel{to{left:calc(100% - 28px)}}@keyframes nodefloat{0%,100%{translate:0 0}50%{translate:0 -12px}}@keyframes float{0%,100%{translate:0 0}50%{translate:0 -9px}}@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:70px}.hero-art{min-height:400px}.section-head,.workflow-heading{grid-template-columns:1fr;gap:20px}.cap-grid{grid-template-columns:repeat(2,1fr)}.dark-layout{grid-template-columns:1fr;gap:36px}.audit-banner,.limits-grid{grid-template-columns:1fr}.workflow-stage{height:500px}.node{width:170px}.n1{left:4%;top:13%}.n2{left:25%;top:48%}.n3{right:23%;top:12%}.n4{right:3%;top:47%}}
+@media(max-width:600px){.wrap{width:calc(100% - 36px)}.topbar{height:64px}.nav{display:none}.brand{font-size:21px}.nav-cta{padding:10px 13px;font-size:11px}.hero{padding:61px 0 36px;min-height:0;gap:5px}.hero h1{font-size:clamp(64px,17vw,88px)}.hero-copy>p{font-size:14px}.actions{gap:14px}.button{padding:14px 16px}.hero-art{min-height:350px;margin:0 -8px}.float-tag{font-size:7px;padding:10px}.float-tag.one{right:0}.float-tag.two{left:0}.hero-meta{font-size:7px;gap:10px}.hero-meta span:nth-child(2){display:none}.ticker{padding:14px 0}.ticker-track{justify-content:flex-start;gap:0}.section,.workflow{padding:70px 0}.section-head{margin-bottom:34px}h2{font-size:52px}.intro{font-size:13px}.cap-grid{grid-template-columns:1fr}.cap{min-height:185px;padding:20px}.cap-icon{margin:19px 0 13px}.dark-section{padding:72px 0}.mission-card{padding:20px 16px;transform:rotate(.7deg)}.mission-top b{font-size:21px}.workflow-heading h2{font-size:50px}.workflow-stage{height:450px;margin:0 -8px}.workflow-stage:before{inset:12% 0}.workflow-stage:after{inset:25% 6%}.track{left:4%;right:4%;top:50%}.node{width:145px;min-height:124px;padding:13px 11px}.node b{font-size:20px;margin:12px 0 5px}.node small,.node em{font-size:7px}.n1{left:7%;top:11%;transform:rotateY(-12deg) rotateX(4deg) rotateZ(-4deg) translateZ(18px)}.n2{left:7%;top:44%;transform:rotateY(12deg) rotateX(4deg) rotateZ(3deg) translateZ(48px)}.n3{right:7%;top:10%;transform:rotateY(-12deg) rotateX(-3deg) rotateZ(4deg) translateZ(32px)}.n4{right:7%;top:45%;transform:rotateY(12deg) rotateX(4deg) rotateZ(-3deg) translateZ(60px)}.workflow-caption{font-size:6px;bottom:12px}.audit{padding:70px 0}.audit-side{padding:22px}.audit-list{padding:5px 18px}.audit-item{grid-template-columns:20px 1fr;gap:10px}.limits{padding:68px 0}.manifesto{padding:70px 0}.manifesto blockquote{font-size:42px}.final-cta{padding:70px 0}.final-cta h2{font-size:58px}.footer{flex-wrap:wrap;gap:16px}.hero-art .float-tag{display:none!important}.hero-art{overflow:hidden}.board-foot{padding-bottom:34px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+
+/* ===== motion + 3D layer ===== */
+@property --gap{syntax:'<length>';inherits:true;initial-value:56px}
+@property --rz{syntax:'<angle>';inherits:true;initial-value:-32deg}
+@property --t{syntax:'<number>';inherits:true;initial-value:0}
+.topbar:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--orange);transform-origin:0 50%;transform:scaleX(var(--page,0))}
+.ln{display:block;overflow:hidden;padding:0 .06em .13em 0;margin-bottom:-.13em}
+.ln>span{display:block}
+.hero h1 .ln>span{transform:translateY(106%);animation:rise 1.15s cubic-bezier(.2,.7,.1,1) .15s forwards}
+.hero h1 .ln:nth-child(2)>span{animation-delay:.3s}
+.hero-copy .eyebrow{animation:fade-in .8s ease both}
+.hero-copy>p{animation:fade-in .9s ease .75s both}
+.actions{animation:fade-in .9s ease .9s both}
+.auth-note{animation:fade-in .9s ease 1.05s both}
+html.js .reveal{opacity:0;transition:opacity .9s ease}
+html.js .reveal.visible{opacity:1}
+html.js .split .ln>span{transform:translateY(108%);transition:transform 1.05s cubic-bezier(.2,.7,.1,1)}
+html.js .split .ln:nth-child(2)>span{transition-delay:.12s}
+html.js .reveal.visible .split .ln>span{transform:none}
+html.js .wipe{clip-path:inset(0 0 100% 0);transition:clip-path .95s cubic-bezier(.2,.7,.1,1) var(--d,0s)}
+html.js .wipe.visible{clip-path:inset(-1px -1px -1px -1px)}
+.mission-card .meter i{transform:scaleX(0);transform-origin:0 50%;transition:transform 1.3s cubic-bezier(.2,.7,.1,1) calc(.35s + var(--k,0)*.16s)}
+.mission-card.visible .meter i{transform:scaleX(1)}
+
+/* hero stack */
+.hero-art{--hs:0}
+@media(min-width:901px){.hero-art{min-height:510px}}
+@media(max-width:900px){.hero-art{min-height:450px}}
+.scene{position:relative;z-index:2;width:340px;height:340px;transform-style:preserve-3d;transform:rotateX(calc(var(--py,0)*-5deg)) rotateY(calc(var(--px,0)*7deg))}
+.stack{--g:calc(var(--gap)*(1 + var(--hs,0)*.6));--spin:calc(var(--rz) + var(--hs,0)*34deg);position:absolute;inset:0;transform-style:preserve-3d;transform:translateY(14px) rotateX(60deg) rotateZ(var(--spin));animation:st-intro 1.9s cubic-bezier(.2,.8,.2,1) both,st-breathe 14s ease-in-out 1.9s infinite,st-spin 42s linear 1.9s infinite}
+.plate{position:absolute;left:50%;top:50%;width:280px;height:182px;margin:-91px 0 0 -140px;transform:translateZ(calc(var(--g)*(var(--i) - 2)));background:rgba(251,250,246,.74);border:1px solid rgba(21,59,45,.3);animation:pl-in .9s calc(var(--i)*.12s) both,pl-hit 10s calc(var(--i)*1.5s + 1.1s) infinite}
+.floor{position:absolute;left:50%;top:50%;width:380px;height:300px;margin:-150px 0 0 -190px;transform:translateZ(calc(var(--g)*-2.7));background:radial-gradient(ellipse,rgba(23,37,31,.2),transparent 64%)}
+.axis{position:absolute;left:50%;top:50%;width:0;height:calc(var(--g)*4);border-left:1px dashed rgba(21,59,45,.4);transform-origin:0 0;transform:translateZ(calc(var(--g)*-2)) rotateX(90deg)}
+.token{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--lime);border:1.5px solid var(--forest);box-shadow:0 0 0 7px rgba(201,243,107,.3),0 0 30px rgba(201,243,107,.95);opacity:0;transform:translateZ(calc(var(--g)*(var(--t) - 2))) rotateZ(calc(var(--spin)*-1)) rotateX(-60deg);animation:tk-fly 10s linear 1.6s infinite both}
+.plate>*{position:absolute}
+.pl-people{inset:18px;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(3,1fr)}
+.pl-people i{place-self:center;width:25px;height:25px;border-radius:50%;background:#dce6cf;border:1px solid rgba(21,59,45,.22)}
+.pl-people i:nth-child(3n){background:#f0ded1}.pl-people i:nth-child(5n){background:#d9e5e5}.pl-people i:nth-child(7n){background:var(--forest);border-color:var(--forest)}
+.pl-proj{inset:0}
+.pl-proj b{border:1px solid rgba(21,59,45,.4);background:rgba(251,250,246,.6)}
+.pl-proj b:after{content:'';position:absolute;left:10px;bottom:9px;width:42%;height:3px;background:rgba(21,59,45,.5)}
+.pl-proj .a{left:16px;top:16px;width:118px;height:78px;background:rgba(201,243,107,.28)}
+.pl-proj .b{left:146px;top:16px;width:118px;height:34px}
+.pl-proj .c{left:146px;top:60px;width:118px;height:34px}
+.pl-proj .d{left:16px;top:106px;width:248px;height:58px}
+.pl-tasks{inset:24px 22px}
+.pl-tasks p{position:relative;display:flex;align-items:center;gap:13px;margin:0 0 17px}
+.pl-tasks i{width:15px;height:15px;border:1.5px solid var(--forest);flex:none;animation:row-tick 10s calc(var(--k)*.35s + 3.2s) infinite}
+.pl-tasks b{height:5px;width:var(--w);background:rgba(21,59,45,.22);border-radius:3px}
+.pl-mis{inset:0}
+.pl-mis p{margin:0;left:22px;right:22px;height:20px}
+.pl-mis b{position:absolute;left:0;top:0;width:34%;height:3px;background:rgba(23,37,31,.3)}
+.pl-mis i{position:absolute;left:0;right:0;top:12px;height:6px;background:rgba(21,59,45,.12);overflow:hidden}
+.pl-mis i:after{content:'';position:absolute;inset:0;background:var(--forest2);transform:scaleX(0);transform-origin:0 50%;animation:ms-fill 10s calc(var(--k)*.2s + 6.1s) infinite}
+.pl-act{left:16px;top:16px;width:248px;height:150px;overflow:visible}
+.pl-act .grid{fill:none;stroke:rgba(21,59,45,.14);stroke-width:1}
+.pl-act polyline{fill:none;stroke:var(--orange);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:act-draw 10s 7.6s infinite}
+.layers{position:absolute;right:0;top:50%;translate:0 -50%;z-index:3;margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.layers li{display:flex;align-items:center;gap:9px;font:500 12px var(--sans);color:var(--muted);animation:lg-lit 10s calc(var(--i)*1.5s + 1.1s) infinite}
+.layers li:before{content:'';width:12px;height:1px;background:var(--orange);opacity:.45;animation:lg-bar 10s calc(var(--i)*1.5s + 1.1s) infinite}
+.art-note{position:absolute;z-index:3;right:0;bottom:1%;font:8px var(--mono);letter-spacing:.1em;color:var(--muted)}
+@media(max-width:760px){.layers{display:none}}
+@media(max-width:600px){.hero-art{min-height:400px}.scene{scale:.74}.art-note{right:50%;translate:50% 0;white-space:nowrap}}
+.is-off,.is-off *,.is-off *:before,.is-off *:after{animation-play-state:paused!important}
+
+/* scroll rails */
+[data-rail]{position:relative}
+.railed{padding-left:38px}
+.audit-list{padding-left:54px}
+@media(max-width:600px){.audit-list{padding-left:40px}.audit-list{--rail-x:14px!important}}
+.rail{position:absolute;left:var(--rail-x,0);top:var(--rail-y,0);bottom:var(--rail-y,0);width:13px;pointer-events:none}
+.rail:before{content:'';position:absolute;left:6px;top:0;bottom:0;width:1px;background:var(--line)}
+.rail-fill{position:absolute;left:5px;top:0;bottom:0;width:3px;background:var(--forest);border-radius:2px;transform-origin:50% 0;transform:scaleY(0)}
+.rail-tick{position:absolute;left:0;width:13px;height:1px;background:rgba(23,37,31,.3);transition:background .35s}
+.rail-tick.on{background:var(--forest)}
+.rail-dot{position:absolute;left:6.5px;top:0;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:var(--lime);border:1.5px solid var(--forest);box-shadow:0 0 0 4px var(--rail-bg,var(--paper))}
+.cap-index,.cap-icon{transition:color .4s,background .4s,border-color .4s}
+.cap.is-active{background:rgba(201,243,107,.13)}
+.cap.is-active .cap-index{color:var(--orange)}
+.cap.is-active .cap-icon{background:var(--forest);border-color:var(--forest);color:var(--lime)}
+.audit-item>div{transition:transform .5s cubic-bezier(.2,.7,.1,1)}
+.audit-item .check{transition:color .4s}
+.audit-item.is-active>div{transform:translateX(8px)}
+.audit-item.is-active .check{color:var(--orange)}
+
+/* workflow: viewing angle follows scroll */
+.workflow-stage{perspective-origin:calc(22% + var(--sp,.5)*56%) 48%}
+
+@keyframes rise{to{transform:none}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes st-intro{from{--gap:0px;--rz:-170deg}to{--gap:56px;--rz:-32deg}}
+@keyframes st-breathe{0%,100%{--gap:56px}38%,62%{--gap:90px}}
+@keyframes st-spin{from{--rz:-32deg}to{--rz:328deg}}
+@keyframes pl-in{from{opacity:0}to{opacity:1}}
+@keyframes pl-hit{0%{border-color:rgba(21,59,45,.3);box-shadow:0 0 0 0 rgba(201,243,107,0);background:rgba(251,250,246,.74)}5%{border-color:#153b2d;box-shadow:0 0 0 1px rgba(201,243,107,.95),0 0 36px rgba(201,243,107,.6);background:rgba(244,252,214,.9)}22%,100%{border-color:rgba(21,59,45,.3);box-shadow:0 0 0 0 rgba(201,243,107,0);background:rgba(251,250,246,.74)}}
+@keyframes tk-fly{0%{--t:0;opacity:0}4%{opacity:1}60%{--t:4;opacity:1}66%{--t:4;opacity:0}67%,100%{--t:0;opacity:0}}
+@keyframes row-tick{0%,8%{background:transparent}14%,84%{background:var(--forest)}92%,100%{background:transparent}}
+@keyframes ms-fill{0%{transform:scaleX(0)}30%,88%{transform:scaleX(var(--w))}97%,100%{transform:scaleX(0)}}
+@keyframes act-draw{0%{stroke-dashoffset:1}35%,86%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+@keyframes lg-lit{0%{color:var(--muted)}5%,12%{color:var(--ink)}26%,100%{color:var(--muted)}}
+@keyframes lg-bar{0%{width:12px;opacity:.45}5%,12%{width:30px;opacity:1}26%,100%{width:12px;opacity:.45}}
+@media(prefers-reduced-motion:reduce){html.js .reveal{opacity:1}html.js .split .ln>span,.hero h1 .ln>span{transform:none}html.js .wipe{clip-path:none}.mission-card .meter i{transform:none}.token{display:none}}
+</style><style id="hero-fx-css">.hero-stage{position:relative;overflow:hidden}.hero-fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(transparent,#000 14%,#000 82%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 82%,transparent)}</style>
+</head><body>
+<header class="topbar"><div class="wrap topinner"><a class="brand" href="#top" aria-label="Warde home"><i class="brand-mark"></i>warde</a><nav class="nav" aria-label="Main navigation"><a href="#workspace">Workspace</a><a href="#workflow">How it works</a><a href="#audit">Source review</a><a href="#scope">Scope</a></nav><a class="nav-cta" href="#signin">Sign in ↗</a></div></header>
+<main id="top"><section class="hero wrap"><div class="hero-copy"><div class="eyebrow"><i class="dot"></i> AYZEN / TEAM WORKSPACE</div><h1><span class="ln"><span>Make room</span></span><span class="ln"><span>for the <em>team.</em></span></span></h1><p>Warde brings team coordination into one shared space: people, projects, missions, tasks and conversation, with a view of progress that keeps the work connected.</p><div class="actions"><a class="button" href="#signup">Create account <span>↗</span></a><a class="underlink" href="#workspace">Explore the workspace</a></div><small class="auth-note">Already have an account? <a href="#signin" style="text-decoration:underline">Sign in</a></small></div>
+<div class="hero-art" role="img" aria-label="Illustrative 3D stack of five team layers: people, projects, tasks, missions and activity. A marker rises through the layers in a loop. No live data."><div class="art-glow"></div><div class="orbit"></div><div class="orbit two"></div>
+<div class="scene" aria-hidden="true"><div class="stack">
+<div class="floor"></div><div class="axis"></div>
+<div class="plate" style="--i:0"><div class="pl-people"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+<div class="plate" style="--i:1"><div class="pl-proj"><b class="a"></b><b class="b"></b><b class="c"></b><b class="d"></b></div></div>
+<div class="plate" style="--i:2"><div class="pl-tasks"><p style="--k:0;--w:62%"><i></i><b></b></p><p style="--k:1;--w:84%"><i></i><b></b></p><p style="--k:2;--w:48%"><i></i><b></b></p><p style="--k:3;--w:72%"><i></i><b></b></p></div></div>
+<div class="plate" style="--i:3"><div class="pl-mis"><p style="--k:0;--w:.74;top:30px"><b></b><i></i></p><p style="--k:1;--w:.46;top:76px"><b></b><i></i></p><p style="--k:2;--w:.88;top:122px"><b></b><i></i></p></div></div>
+<div class="plate" style="--i:4"><svg class="pl-act" viewBox="0 0 248 150" preserveAspectRatio="none"><path class="grid" d="M0 37.5H248M0 75H248M0 112.5H248"/><polyline pathLength="1" points="0,120 24,108 48,114 74,84 100,92 126,58 152,70 178,36 204,44 230,16 248,22"/></svg></div>
+<div class="token"></div></div></div>
+<ul class="layers" aria-hidden="true"><li style="--i:4">Activity</li><li style="--i:3">Missions</li><li style="--i:2">Tasks</li><li style="--i:1">Projects</li><li style="--i:0">People</li></ul>
+<span class="float-tag one">SHARED CONTEXT · NOT A LIVE FEED</span><span class="float-tag two">TASKS → MISSIONS → MOMENTUM</span><span class="art-note">ILLUSTRATIVE STACK · NO LIVE TEAM DATA</span></div>
+<div class="hero-meta"><span>TEAM OPERATIONS / AYZEN</span><span>A shared view of the work</span><span>SCROLL TO EXPLORE ↓</span></div></section>
+<div class="ticker"><div class="ticker-track"><span>Members <i>✳</i></span><span>Tasks <i>✳</i></span><span>Missions <i>✳</i></span><span>Projects <i>✳</i></span><span>Team mail <i>✳</i></span><span>Activity <i>✳</i></span></div></div>
+<section class="section wrap" id="workspace"><div class="section-head reveal"><div><div class="eyebrow eyebrow-label">01 / the workspace</div><h2>Better work<br>is shared work.</h2></div><p class="intro">The team page is more than a roster. Source code shows spaces for task and mission tracking, team projects, a shared vault and mail, member roles, chat, invites and activity. The details stay together around the team.</p></div><div class="railed" data-rail=".cap" style="--rail-x:7px"><div class="cap-grid"><article class="cap wipe"><span class="cap-index">01 / ALIGN</span><i class="cap-icon">◉</i><h3>A view of the team</h3><p>Team overview surfaces member count, project count, recent activity and mission progress, with a leaderboard and task-completion signals.</p></article><article class="cap wipe"><span class="cap-index">02 / MOVE</span><i class="cap-icon">↗</i><h3>Tasks & missions</h3><p>Dedicated task and mission areas organize work. The team dashboard reads active mission progress and task-completion totals.</p></article><article class="cap wipe"><span class="cap-index">03 / BUILD</span><i class="cap-icon">▱</i><h3>Projects together</h3><p>Team projects are part of the shared app space, with project status, task count and participant count represented in source types.</p></article><article class="cap wipe"><span class="cap-index">04 / INCLUDE</span><i class="cap-icon">＋</i><h3>Members & invites</h3><p>See member roles and membership status. Pending invites can be accepted or declined; leaders have access to invite-link tools.</p></article><article class="cap wipe"><span class="cap-index">05 / CONNECT</span><i class="cap-icon">⌁</i><h3>Chat, activity & mail</h3><p>Team chat and activity log sit alongside team-scoped mail, with a shared IMAP/SMTP and inbox-sync pipeline in the API source.</p></article><article class="cap wipe"><span class="cap-index">06 / KEEP</span><i class="cap-icon">◇</i><h3>A team vault</h3><p>Team vault entries can include project/category and optional contact or social handles. That makes access control important, but this review did not verify the vault’s runtime privacy or permission behavior.</p></article></div></div></section>
+<section class="dark-section"><div class="wrap dark-layout"><div class="dark-copy reveal"><div class="eyebrow">02 / momentum, made visible</div><h2>See what’s<br>moving <em>forward.</em></h2><p>Mission progress, tasks completed, streaks and team activity give the group a way to notice effort as it happens. This preview uses invented labels and abstract values only, not a real team’s data.</p><a class="button" href="#workflow">Follow the workflow ↓</a></div><div class="mission-card reveal" aria-label="Illustrative mission progress panel, no live data"><div class="mission-top"><b>Progress, at a glance</b><span class="pill">SAMPLE VIEW</span></div><div class="mission-list"><div class="mission"><div class="mission-line"><span>Shared milestone</span><small>MISSION / ACTIVE</small></div><div class="meter"><i style="--w:68%;--k:0"></i></div></div><div class="mission"><div class="mission-line"><span>Project delivery</span><small>TASKS / MOVING</small></div><div class="meter"><i style="--w:44%;--k:1"></i></div></div><div class="mission"><div class="mission-line"><span>Team rhythm</span><small>ACTIVITY / RECENT</small></div><div class="meter"><i style="--w:82%;--k:2"></i></div></div></div><div class="mission-foot"><span>ILLUSTRATIVE PROGRESS</span><span>NOT CONNECTED TO AYZEN</span></div></div></div></section>
+<section class="workflow wrap" id="workflow"><div class="workflow-heading reveal"><div><div class="eyebrow eyebrow-label">03 / the team loop</div><h2>From the people<br>to the <em>progress.</em></h2></div><p class="intro">A looping, dimensional interpretation of the Warde workflow: bring the team together, shape the work, move through missions and projects, then learn from progress and activity. Motion is illustrative, not a live data stream.</p></div><div class="workflow-stage" role="img" aria-label="Illustrative 3D team workflow: connect, organize, act, reflect"><div class="track"><i></i><i></i><i></i><span></span></div><article class="node n1"><small>01 / CONNECT</small><b>People</b><span class="glyph">◉</span><em>Members · roles</em></article><article class="node n2"><small>02 / ORGANIZE</small><b>Shared work</b><span class="glyph">▱</span><em>Projects · tasks</em></article><article class="node n3"><small>03 / ACT</small><b>Missions</b><span class="glyph">↗</span><em>Goals · progress</em></article><article class="node n4"><small>04 / REFLECT</small><b>Momentum</b><span class="glyph">⌁</span><em>Activity · insights</em></article><div class="workflow-caption">WARDE WORKFLOW · ILLUSTRATIVE ONLY</div></div></section>
+<section class="audit wrap" id="audit"><div class="section-head reveal"><div><div class="eyebrow eyebrow-label">04 / source review</div><h2>What the code<br>actually shows.</h2></div><p class="intro">Reviewed AYZENCODEX/ayzen-monolith source on GitHub, including the Warde nav config, team UI, route configuration and team API. These are source-level findings, not proof of production behavior.</p></div><div class="audit-banner reveal"><div class="audit-side"><span class="status">Source files reviewed</span><h3>Warde maps to the teams workspace.</h3><p>The authenticated route table maps <code>/teams</code> to <code>TeamsPage</code>. The Warde nav config describes the team wrapper and orders its proposed sections as Overview, Progress, Finance and Panel.</p><p>The page itself currently defines Overview, Task, App and Other groupings. Its nav config and rendered section names do not match one-to-one.</p></div><div class="audit-list" data-rail=".audit-item" style="--rail-x:22px;--rail-y:15px;--rail-bg:#f8f6f0"><article class="audit-item"><i class="check">✓</i><div><h4>Team overview and progress signals</h4><p><code>pages/user/teams.tsx</code> reads team stats, leaderboard and missions. UI types include member count, project count, total ROI, recent activity, task completions and streaks.</p></div></article><article class="audit-item"><i class="check">✓</i><div><h4>Membership, requests and invites</h4><p><code>routes/teams.ts</code> has authenticated team listing, team creation requests marked pending until admin approval, public browse/search and invite retrieval. UI includes accept/decline actions.</p></div></article><article class="audit-item"><i class="check">✓</i><div><h4>Shared team spaces</h4><p>Team UI includes tasks, missions, projects, members, activity, chat, invite link, panel, vault and mail surfaces. Team API source includes team-scoped mail sync and team route handlers.</p></div></article><article class="audit-item"><i class="check">✓</i><div><h4>Roles and access checks exist in source</h4><p>Team API routes use authentication and per-team membership/leader checks in the code. The team page labels invite-link and panel entries as leader-only.</p></div></article></div></div></section>
+<section class="limits" id="scope"><div class="wrap limits-grid"><div class="reveal"><div class="eyebrow eyebrow-label">05 / clear boundaries</div><h2>Good previews<br>know their <em>edges.</em></h2><p class="limits-copy">This is an independent concept page grounded in source review. It does not connect to a team, load real data, or alter the app.</p></div><div class="limit-list reveal"><div class="limit"><i>/</i><div><b>Runtime behavior not tested</b><span>API response health, deployment state, real-time behavior and current team data were not exercised.</span></div></div><div class="limit"><i>/</i><div><b>No performance or outcome guarantee</b><span>Feature surfaces and handlers in source do not verify real-world completion, accuracy or uptime.</span></div></div><div class="limit"><i>/</i><div><b>Not an HR or payroll system claim</b><span>The team source includes role, ROI and AZN-balance fields, tasks, missions and projects. This review did not verify payroll, HR records or workforce compliance workflows.</span></div></div><div class="limit"><i>/</i><div><b>Section labels need reconciliation</b><span>Warde nav config says Overview / Progress / Finance / Panel; team page code groups Overview / Task / App / Other. Preview copy describes concrete functions without implying these are identical.</span></div></div><div class="limit"><i>/</i><div><b>Standalone draft only</b><span>Open Warde points to the confirmed authenticated route <code>/teams</code>. Social icons are placeholders. This preview changes no AYZEN files.</span></div></div></div></div></section>
+<section class="manifesto wrap reveal"><div class="eyebrow" style="justify-content:center"><i class="dot"></i> the point of working together</div><blockquote>“Good work moves faster when everyone can see <em>where it belongs.</em>”</blockquote><p>Warde / teams inside AYZEN</p></section><section class="final-cta"><div class="wrap reveal"><div class="eyebrow">A shared place for the work ahead</div><h2>Bring the team<br>into focus.</h2><p>Open the teams workspace in AYZEN to see your own team context. The route is confirmed in source; sign-in may be required. This landing page is an independent preview.</p><a class="button" href="#signup">Create account <span>↗</span></a><small class="auth-note">Five short steps · passkey and 2FA supported</small></div></section></main>
+<footer class="wrap footer"><a class="brand" href="#top"><i class="brand-mark"></i>warde</a><small>PREVIEW DRAFT · AYZEN TEAMS · SOURCE REVIEWED 2026</small><div class="social"><a href="#" aria-label="LinkedIn placeholder">in</a><a href="#" aria-label="Instagram placeholder">ig</a><a href="#" aria-label="X placeholder">x</a></div></footer>
+<script>
+(()=>{
+const root=document.documentElement,$$=(q,r=document)=>Array.from(r.querySelectorAll(q)),clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* headings: each line rises out of a mask when its block enters */
+$$('h2').forEach(h=>{h.innerHTML=h.innerHTML.split(/<br\s*\/?>/i).map(p=>'<span class="ln"><span>'+p+'</span></span>').join('');h.classList.add('split')});
+$$('.cap').forEach((c,i)=>c.style.setProperty('--d',((i%3)*.09+Math.floor(i/3)*.14)+'s'));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.14,rootMargin:'0px 0px -6% 0px'});
+$$('.reveal').forEach(n=>io.observe(n));
+/* clipped cards can't be observed themselves, so watch their grid and reveal the cells together */
+const gio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){$$('.wipe',e.target).forEach(c=>c.classList.add('visible'));gio.unobserve(e.target)}}),{threshold:.12});
+new Set($$('.wipe').map(c=>c.parentElement)).forEach(g=>gio.observe(g));
+
+/* pause looping animation when it is off screen */
+const po=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('is-off',!e.isIntersecting)),{rootMargin:'80px'});
+$$('.hero-art,.workflow-stage').forEach(n=>po.observe(n));
+
+/* scroll rails */
+const rails=$$('[data-rail]').map(host=>{
+  const rail=document.createElement('div');rail.className='rail';rail.setAttribute('aria-hidden','true');
+  rail.innerHTML='<span class="rail-fill"></span><b class="rail-dot"></b>';host.appendChild(rail);
+  return{host,rail,fill:rail.children[0],dot:rail.children[1],items:$$(host.dataset.rail,host),ticks:[],cur:0,h:1}});
+function measure(r){
+  const hr=r.rail.getBoundingClientRect(),ys=[];r.h=hr.height||1;
+  r.items.forEach(it=>{const b=it.getBoundingClientRect(),y=b.top-hr.top+b.height/2;if(!ys.some(v=>Math.abs(v-y)<6))ys.push(y)});
+  r.ticks.forEach(t=>t.el.remove());
+  r.ticks=ys.map(y=>{const el=document.createElement('span');el.className='rail-tick';el.style.top=y+'px';r.rail.insertBefore(el,r.dot);return{el,y}});
+}
+const ro=new ResizeObserver(()=>{rails.forEach(measure);wake()});rails.forEach(r=>ro.observe(r.host));
+
+/* hero: pointer tilt + scroll explode */
+const hero=document.querySelector('.hero'),scene=document.querySelector('.scene'),stage=document.querySelector('.workflow-stage');
+let tx=0,ty=0,px=0,py=0;
+if(!reduce&&matchMedia('(pointer:fine)').matches){
+  hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5)*2;ty=((e.clientY-r.top)/r.height-.5)*2;wake()});
+  hero.addEventListener('pointerleave',()=>{tx=ty=0;wake()});
+}
+
+let raf=0;function wake(){if(!raf)raf=requestAnimationFrame(frame)}
+function frame(){
+  raf=0;let busy=false;const vh=innerHeight,sy=scrollY,ref=vh*.52;
+  const max=root.scrollHeight-vh;root.style.setProperty('--page',max>0?(sy/max).toFixed(4):0);
+  if(!reduce){
+    scene.style.setProperty('--hs',clamp(sy/hero.offsetHeight).toFixed(3));
+    px+=(tx-px)*.08;py+=(ty-py)*.08;if(Math.abs(tx-px)>.002||Math.abs(ty-py)>.002)busy=true;
+    scene.style.setProperty('--px',px.toFixed(4));scene.style.setProperty('--py',py.toFixed(4));
+    const sb=stage.getBoundingClientRect();stage.style.setProperty('--sp',clamp((vh-sb.top)/(vh+sb.height)).toFixed(3));
+  }
+  rails.forEach(r=>{
+    const rr=r.rail.getBoundingClientRect(),p=clamp((ref-rr.top)/rr.height);
+    if(reduce)r.cur=p;else{r.cur+=(p-r.cur)*.2;if(Math.abs(p-r.cur)<.0008)r.cur=p;else busy=true}
+    r.dot.style.transform='translateY('+(r.cur*rr.height).toFixed(1)+'px)';
+    r.fill.style.transform='scaleY('+r.cur.toFixed(4)+')';
+    const y=r.cur*rr.height;r.ticks.forEach(t=>t.el.classList.toggle('on',t.y<=y+1));
+    let best=null,bd=1e9;
+    r.items.forEach(it=>{const b=it.getBoundingClientRect(),d=ref<b.top?b.top-ref:ref>b.bottom?ref-b.bottom:0;if(d<bd){bd=d;best=b}});
+    r.items.forEach(it=>{const b=it.getBoundingClientRect();it.classList.toggle('is-active',bd<vh*.3&&Math.abs(b.top-best.top)<4)});
+  });
+  if(busy)wake();
+}
+addEventListener('scroll',wake,{passive:true});addEventListener('resize',()=>{rails.forEach(measure);wake()});
+addEventListener('load',()=>{rails.forEach(measure);wake()});
+rails.forEach(measure);wake();
+})();
+</script><script>
+(()=>{
+const hero=document.querySelector('.hero');if(!hero)return;
+const stage=document.createElement('div');stage.className='hero-stage';hero.parentNode.insertBefore(stage,hero);
+const cv=document.createElement('canvas');cv.className='hero-fx';cv.setAttribute('aria-hidden','true');stage.append(cv,hero);
+const cx=cv.getContext('2d'),still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let W=0,H=0,dpr=1,P=[],t=0,raf=0,vis=true,mx=-999,my=-999;
+const R=Math.random,TAU=Math.PI*2;
+const spawn=(p,init)=>{p.x=R()*W;p.y=R()*H;p.age=init?R()*p.life:0;p.px=p.x;p.py=p.y;return p};
+function size(){const b=stage.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);W=b.width;H=b.height;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);const n=Math.round(Math.min(110,Math.max(36,W/13)));P=Array.from({length:n},(_,k)=>spawn({life:260+R()*340,k,sp:.55+R()*.6},true));if(still)paint()}
+const ang=(x,y)=>Math.sin(x*.0028+t*.35)*Math.cos(y*.0036-t*.28)*Math.PI+Math.sin((x+y)*.0015+t*.2)*.8;
+function step(draw){for(const p of P){p.px=p.x;p.py=p.y;let a=ang(p.x,p.y);const dx=p.x-mx,dy=p.y-my,d=Math.hypot(dx,dy);if(d<130)a+=Math.atan2(dy,dx)*(1-d/130)*.35;p.x+=Math.cos(a)*p.sp*1.5;p.y+=Math.sin(a)*p.sp*1.5;p.age++;
+ if(p.age>p.life||p.x<-20||p.x>W+20||p.y<-20||p.y>H+20){spawn(p);continue}
+ if(!draw)continue;const f=Math.sin(p.age/p.life*Math.PI),o=p.k%9===0,g=p.k%13===0;
+ cx.strokeStyle=o?`rgba(216,103,67,${.5*f})`:g?`rgba(134,184,93,${.55*f})`:`rgba(21,59,45,${.26*f})`;cx.lineWidth=o||g?1.4:1;cx.beginPath();cx.moveTo(p.px,p.py);cx.lineTo(p.x,p.y);cx.stroke()}}
+function paint(){cx.clearRect(0,0,W,H);for(let i=0;i<260;i++){t+=.004;step(true)}}
+function frame(){cx.globalCompositeOperation='destination-out';cx.fillStyle='rgba(0,0,0,.045)';cx.fillRect(0,0,W,H);cx.globalCompositeOperation='source-over';t+=.004;step(true);raf=vis&&!document.hidden?requestAnimationFrame(frame):0}
+const go=()=>{if(!raf&&!still)raf=requestAnimationFrame(frame)};
+new IntersectionObserver(e=>{vis=e[0].isIntersecting;vis?go():0}).observe(stage);
+document.addEventListener('visibilitychange',go);
+stage.addEventListener('pointermove',e=>{const b=stage.getBoundingClientRect();mx=e.clientX-b.left;my=e.clientY-b.top},{passive:true});
+stage.addEventListener('pointerleave',()=>{mx=my=-999});
+new ResizeObserver(size).observe(stage);size();go();
+})();
+</script>
+<template id="auth-tpl"><style>
+:host([hidden]){display:none!important}:host{display:block;position:fixed;inset:0;z-index:100;overflow:auto;background:var(--paper);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased;--paper:#f4f1e9;--card:#fbfaf6;--ink:#17251f;--muted:#65716a;--line:rgba(23,37,31,.18);--forest:#153b2d;--lime:#c9f36b;--orange:#d86743;--bad:#b3391b;--ok:#2f7a4f;--sans:'DM Sans',system-ui,sans-serif;--serif:'Playfair Display',Georgia,serif;--mono:'DM Mono',ui-monospace,monospace;}
+
+
+*{box-sizing:border-box}
+.shell{min-height:100vh;display:grid;grid-template-columns:minmax(320px,440px) 1fr}
+.rail{background:var(--forest);color:#fbfaf6;padding:36px 40px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;height:100svh}
+.brand{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:700;letter-spacing:-.08em}
+.mark{width:22px;height:22px;background:var(--lime);display:grid;place-items:center;transform:rotate(45deg);border-radius:5px 5px 5px 1px}.mark:after{content:'';width:6px;height:6px;background:var(--forest);border-radius:50%}
+.rail h2{font:500 40px/1.05 var(--serif);letter-spacing:-.04em;margin:auto 0 12px}.rail>p{color:#b9c9be;font-size:13px;max-width:300px;margin:0 0 36px}
+.steps{list-style:none;margin:0 0 auto;padding:0}.steps li{display:grid;grid-template-columns:22px 1fr;gap:14px;padding-bottom:20px;position:relative;color:#8fa496;font-size:13px}
+.steps li:before{content:'';position:absolute;left:10px;top:22px;bottom:0;width:1px;background:#ffffff26}.steps li:last-child:before{display:none}
+.steps b{width:22px;height:22px;border:1px solid #ffffff44;border-radius:50%;display:grid;place-items:center;font:500 10px var(--mono)}
+.steps .on{color:#fff}.steps .on b{background:var(--lime);border-color:var(--lime);color:var(--forest)}.steps .done{color:#c9d6cd}.steps .done b{background:#ffffff1f}
+.rail{overflow:hidden}.rail>*{position:relative;z-index:1}.rail>canvas{position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none}.rail small{font:10px var(--mono);color:#8fa496;margin-top:24px}
+.pane{display:flex;flex-direction:column;min-height:100svh;padding:24px 32px}
+.top{display:flex;justify-content:flex-end;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.top button{background:none;border:0;color:var(--ink);font:600 13px var(--sans);padding:8px 4px;cursor:pointer;border-bottom:1px solid var(--ink)}
+.center{flex:1;display:grid;place-items:center;padding:24px 0}
+form,.done{width:min(420px,100%)}
+.prog{display:flex;gap:4px;margin-bottom:22px}.prog i{flex:1;height:3px;background:var(--line);border-radius:3px;transition:background .3s}.prog i.f{background:var(--forest)}.prog i.c{background:var(--orange)}
+
+.stepno{font:11px var(--mono);color:var(--muted);margin:0 0 10px}
+h1{font:500 34px/1.1 var(--serif);letter-spacing:-.035em;margin:0 0 8px}.lead{color:var(--muted);margin:0 0 26px;font-size:14px}
+.fld{margin-bottom:16px}label,.lbl{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px}label em,.lbl em{font:400 11px var(--mono);color:var(--muted);font-style:normal}
+input[type=text],input[type=email],input[type=password]{width:100%;height:46px;padding:0 14px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;font:15px var(--sans);transition:border-color .15s,box-shadow .15s}
+input:hover{border-color:var(--muted)}input:focus-visible,button:focus-visible{outline:2px solid var(--forest);outline-offset:2px;border-color:var(--forest)}
+
+input.bad{border-color:var(--bad)}.err{color:var(--bad);font-size:12px;margin:6px 0 0;min-height:0}.err:empty{display:none}.hint{font-size:12px;color:var(--muted);margin:8px 0 0}.hint.ok{color:var(--ok)}.hint.no{color:var(--bad)}
+.meter{display:flex;gap:4px;margin-top:-4px}.meter i{flex:1;height:4px;background:var(--line);border-radius:2px}.meter[data-s="1"] i:nth-child(-n+1){background:var(--bad)}.meter[data-s="2"] i:nth-child(-n+2){background:var(--orange)}.meter[data-s="3"] i:nth-child(-n+3){background:#8aa84a}.meter[data-s="4"] i{background:var(--ok)}
+.otp{display:flex;gap:8px}.otp input{width:100%;min-width:0;height:54px;text-align:center;font:500 22px var(--mono);padding:0;border-radius:6px;background:var(--card);color:var(--ink);border:1px solid var(--line)}.otp.bad input{border-color:var(--bad)}
+.cap{display:flex;gap:8px;margin-bottom:10px}.cap svg{flex:1;height:64px;background:var(--card);border:1px solid var(--line);border-radius:6px}.cap button{width:46px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;cursor:pointer;font-size:18px}
+.acts{display:flex;gap:10px;margin-top:26px}.btn{flex:1;height:48px;border-radius:30px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font:600 14px var(--sans);cursor:pointer;transition:background .2s,transform .2s}
+.btn:hover{background:var(--forest);border-color:var(--forest);color:#fff}.btn:active{transform:translateY(1px)}.btn[disabled]{opacity:.6;cursor:progress}.btn.g{flex:0 0 auto;padding:0 22px;background:none;color:var(--ink)}.btn.g:hover{background:var(--line);color:var(--ink)}
+.link{background:none;border:0;padding:0;color:var(--ink);font:inherit;font-size:12px;text-decoration:underline;cursor:pointer}.link[disabled]{color:var(--muted);text-decoration:none;cursor:default}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:-4px;margin-bottom:6px}
+.sw{display:flex;gap:10px}.sw button{width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;box-shadow:inset 0 0 0 2px var(--card)}.sw button[aria-pressed=true]{border-color:var(--ink)}
+.pk{width:100%;display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:center;text-align:left;padding:16px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);cursor:pointer;font:inherit}.pk:hover{border-color:var(--forest)}
+.pk b{display:block;font-size:14px}.pk span{font-size:12px;color:var(--muted)}.pk svg{width:44px;height:44px;border-radius:50%;background:var(--forest);color:var(--lime);padding:11px}.pk.w svg{animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 10px #c9f36b33}}
+.done{text-align:left}.done .ck{width:52px;height:52px;border-radius:50%;background:var(--lime);color:var(--forest);display:grid;place-items:center;margin-bottom:20px}
+dl{margin:22px 0 0;border-top:1px solid var(--line)}dl div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}dt{color:var(--muted)}dd{margin:0;font-weight:500;text-align:right;word-break:break-all}
+.dev{margin-top:22px;padding:10px 12px;border:1px dashed var(--line);border-radius:6px;font:11px/1.6 var(--mono);color:var(--muted)}
+.sr{position:absolute;left:-9999px}
+@media(max-width:860px){.shell{display:block}.rail{display:none}.pane{padding:16px 20px}.top{justify-content:space-between}.mobbrand{display:flex!important}h1{font-size:30px}}
+.mobbrand{display:none;align-items:center;gap:10px;font-weight:700;font-size:21px;letter-spacing:-.08em}.mobbrand .mark{background:var(--forest)}.mobbrand .mark:after{background:var(--lime)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style><div class="shell">
+<aside class="rail"><a class="brand" href="#top" style="color:inherit;text-decoration:none" aria-label="Warde home"><span class="mark"></span>warde</a><h2 id="rh"></h2><p id="rp"></p><ol class="steps" id="rs"></ol><small>Encrypted in transit · SOC 2 Type II</small></aside>
+<section class="pane"><div class="top"><a class="mobbrand" href="#top" style="color:inherit;text-decoration:none" aria-label="Warde home"><span class="mark"></span>warde</a><div><span id="sw"></span> <button type="button" id="swb"></button></div></div>
+<div class="center" id="c"><form id="f" novalidate></form></div></section></div></template>
+<script>
+(()=>{
+const host=document.createElement('div');host.id='warde-auth';host.hidden=true;document.body.appendChild(host);
+const R=host.attachShadow({mode:'open'});R.appendChild(document.getElementById('auth-tpl').content.cloneNode(true));
+const $=s=>R.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),wait=ms=>new Promise(r=>setTimeout(r,ms));
+let f=$('#f');const S={m:'in',i:0,d:{}},EM=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,MAILCODE='482913',TOTP='207451';
+const fld=(id,l,t='text',o='',tag='')=>`<div class="fld"><label for="${id}">${l}${tag?`<em>${tag}</em>`:''}</label><input id="${id}" name="${id}" type="${t}" ${o}><p class="err" id="e-${id}" role="alert"></p></div>`;
+const otp=(id,l)=>`<div class="fld"><div class="lbl" id="l-${id}">${l}</div><div class="otp" id="${id}" role="group" aria-labelledby="l-${id}">${[0,1,2,3,4,5].map(k=>`<input inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="${k?'off':'one-time-code'}" aria-label="Digit ${k+1}">`).join('')}</div><p class="err" id="e-${id}" role="alert"></p></div>`;
+const val=id=>($('#'+id)||{value:''}).value.trim(),otpv=id=>[...R.querySelectorAll('#'+id+' input')].map(x=>x.value).join('');
+const err=(id,m)=>{const e=$('#e-'+id),i=$('#'+id);e.textContent=m||'';i&&i.classList.toggle('bad',!!m);i&&i.setAttribute('aria-invalid',!!m);return !m};
+function bindOtp(id){const ins=[...R.querySelectorAll('#'+id+' input')];ins.forEach((el,k)=>{el.oninput=()=>{el.value=el.value.replace(/\D/g,'').slice(-1);$('#'+id).classList.remove('bad');if(el.value&&ins[k+1])ins[k+1].focus()};el.onkeydown=e=>{if(e.key==='Backspace'&&!el.value&&ins[k-1])ins[k-1].focus()};el.onpaste=e=>{const t=(e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6);if(!t)return;e.preventDefault();ins.forEach((x,j)=>x.value=t[j]||'');ins[Math.min(t.length,5)].focus()}})}
+const otpErr=(id,m)=>{$('#'+id).classList.toggle('bad',!!m);return err(id,m)};
+function resend(){const b=$('#rs2');if(!b)return;let n=30;b.disabled=true;const t=setInterval(()=>{if(!R.contains(b))return clearInterval(t);n--;b.textContent=n?`Resend code in ${n}s`:'Resend code';if(!n){b.disabled=false;clearInterval(t)}},1000);b.textContent='Resend code in 30s';b.onclick=()=>{b.textContent='New code sent';b.disabled=true;setTimeout(resend,1500)}}
+let cap='';
+function mkCap(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';cap=Array.from({length:5},()=>A[Math.random()*A.length|0]).join('');const r=n=>Math.random()*n;let s='';for(let k=0;k<4;k++)s+=`<path d="M0 ${r(64)} Q 100 ${r(64)} 220 ${r(64)}" stroke="currentColor" opacity=".35" fill="none"/>`;[...cap].forEach((c,k)=>s+=`<text x="${20+k*38}" y="${42+r(8)-4}" font-size="30" font-family="DM Mono,monospace" font-weight="500" fill="currentColor" transform="rotate(${r(30)-15} ${30+k*38} 32)">${c}</text>`);return `<svg viewBox="0 0 220 64" role="img" aria-label="Distorted characters. Use the refresh button for a new image.">${s}</svg>`}
+const sw=['#153b2d','#d86743','#6b8f3a','#3c5d8a','#7a4e8c'];
+const F={
+up:[
+{n:'Account',h:'Create your account',p:'Start with your work email and a strong password.',
+ v:()=>fld('email','Work email','email','autocomplete="email" placeholder="you@company.com"')+fld('pw','Password','password','autocomplete="new-password"')+'<div class="meter" id="mt" data-s="0"></div><p class="hint" id="mh">At least 10 characters. Mix upper and lower case, numbers and symbols.</p>',
+ on(){$('#pw').oninput=e=>{const v=e.target.value,s=[v.length>=12,/[a-z]/.test(v)&&/[A-Z]/.test(v),/\d/.test(v),/[^\w\s]/.test(v)].filter(Boolean).length;$('#mt').dataset.s=v?s:0;$('#mt').innerHTML='<i></i><i></i><i></i><i></i>'};$('#mt').innerHTML='<i></i><i></i><i></i><i></i>'},
+ async ok(){const e=val('email'),p=$('#pw').value;let g=err('email',EM.test(e)?'':'Enter a valid email address, like name@company.com.');const sc=+$('#mt').dataset.s;g=err('pw',p.length<10?'Password must be at least 10 characters.':sc<3?'Add numbers, symbols or mixed case to make it stronger.':'')&&g;if(g){await wait(500);if(e.toLowerCase().startsWith('taken@'))return err('email','An account with this email already exists. Sign in instead.');S.d.email=e}return g}},
+{n:'Verify you’re human',h:'Quick security check',p:'Type the characters you see. Have a referral code? Add it below.',
+ v:()=>`<div class="fld"><div class="lbl">Characters in the image</div><div class="cap" id="cp">${mkCap()}<button type="button" id="rf" aria-label="New image">↻</button></div><input id="cap" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Characters from the image"><p class="err" id="e-cap" role="alert"></p></div>`+fld('ref','Referral code','text','autocomplete="off" placeholder="WRD-4F2K"','Optional'),
+ on(){$('#rf').onclick=()=>{$('#cp').querySelector('svg').outerHTML=mkCap();$('#cap').value='';$('#cap').focus()}},
+ async ok(){let g=err('cap',val('cap').toUpperCase()===cap?'':'That doesn’t match the image. Try again or get a new one.');const r=val('ref');g=err('ref',r&&!/^[A-Z0-9-]{4,12}$/i.test(r)?'Referral codes are 4–12 letters, numbers or dashes.':'')&&g;if(!g)$('#rf').click();else S.d.ref=r;return g}},
+{n:'Verify email',h:'Check your inbox',p:()=>`We sent a 6-digit code to <b>${esc(S.d.email)}</b>. It expires in 10 minutes.`,
+ v:()=>otp('code','Verification code')+'<button type="button" class="link" id="rs2"></button><p class="dev">Demo: use code '+MAILCODE+'</p>',on(){bindOtp('code');resend()},
+ async ok(){await wait(600);return otpErr('code',otpv('code')===MAILCODE?'':'That code is incorrect or expired. Check the latest email.')}},
+{n:'Choose username',h:'Pick your username',p:'Teammates will use this to find and mention you.',
+ v:()=>fld('name','Full name','text','autocomplete="name"')+fld('un','Username','text','autocomplete="username" autocapitalize="none" spellcheck="false"')+'<p class="hint" id="uh">3–20 characters: lowercase letters, numbers, underscores.</p>',
+ on(){let t;S.un=null;$('#un').oninput=e=>{clearTimeout(t);const v=e.target.value.toLowerCase(),h=$('#uh');h.className='hint';if(!/^[a-z][a-z0-9_]{2,19}$/.test(v)){S.un=null;h.textContent=v?'Start with a letter. Use 3–20 lowercase letters, numbers or underscores.':'3–20 characters: lowercase letters, numbers, underscores.';return}h.textContent='Checking availability…';t=setTimeout(()=>{const free=!['admin','warde','root','support','team'].includes(v);S.un=free?v:null;h.textContent=free?`@${v} is available.`:`@${v} is taken. Try adding your team or initials.`;h.className='hint '+(free?'ok':'no')},500)}},
+ async ok(){let g=err('name',val('name').length<2?'Enter your full name.':'');g=err('un',S.un&&S.un===val('un').toLowerCase()?'':'Choose an available username.')&&g;if(g){S.d.name=val('name');S.d.un=S.un}return g}},
+{n:'Profile',h:'Add a few details',p:'Optional. It helps teammates recognize you. You can edit this later.',last:'Save and finish',skip:1,
+ v:()=>fld('role','Job title','text','autocomplete="organization-title" placeholder="Staff engineer"','Optional')+fld('org','Company','text','autocomplete="organization"','Optional')+`<div class="lbl">Avatar color <em>Optional</em></div><div class="sw" id="sw2">${sw.map((c,k)=>`<button type="button" style="background:${c}" aria-label="Color ${k+1}" aria-pressed="${k==0}" data-c="${c}"></button>`).join('')}</div>`,
+ on(){S.d.av=sw[0];R.querySelectorAll('#sw2 button').forEach(b=>b.onclick=()=>{R.querySelectorAll('#sw2 button').forEach(x=>x.setAttribute('aria-pressed',x===b));S.d.av=b.dataset.c})},
+ async ok(){S.d.role=val('role');S.d.org=val('org');await wait(500);return true}}],
+in:[
+{n:'Credentials',h:'Sign in to Warde',p:'Enter your work email and password.',
+ v:()=>fld('email','Work email','email','autocomplete="username" placeholder="you@company.com"')+fld('pw','Password','password','autocomplete="current-password"')+'<div class="row"><span></span><button type="button" class="link">Forgot password?</button></div>',
+ async ok(){const e=val('email');let g=err('email',EM.test(e)?'':'Enter a valid email address.');g=err('pw',$('#pw').value.length<8?'Password must be at least 8 characters.':'')&&g;if(g){await wait(700);if($('#pw').value.toLowerCase()==='wrongpass')return err('pw','Email or password is incorrect.');S.d.email=e}return g}},
+{n:'Two-step code',h:'Confirm it’s you',p:()=>`Enter the code we emailed to <b>${esc(S.d.email)}</b> and the code from your authenticator app.`,
+ v:()=>otp('code','Email code')+otp('totp','Authenticator code')+'<button type="button" class="link" id="rs2"></button><p class="dev">Demo: email '+MAILCODE+' · authenticator '+TOTP+'</p>',on(){bindOtp('code');bindOtp('totp');resend()},
+ async ok(){await wait(600);const a=otpErr('code',otpv('code')===MAILCODE?'':'Email code is incorrect or expired.'),b=otpErr('totp',otpv('totp')===TOTP?'':'Authenticator code is incorrect. Codes refresh every 30 seconds.');return a&&b}},
+{n:'Passkey',h:'Use your passkey',p:'Approve with Face ID, Touch ID, Windows Hello or a security key.',hideBtn:1,
+ v:()=>'<button type="button" class="pk" id="pk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="4"/><path d="M12 12l8 8M17 17l-2 2M20 20l-2 2"/></svg><div><b id="pkt">Continue with passkey</b><span id="pks">Your device will ask you to verify.</span></div></button><p class="err" id="e-pk" role="alert"></p>',
+ on(){$('#pk').onclick=async()=>{const b=$('#pk');b.classList.add('w');$('#pkt').textContent='Waiting for your device…';$('#pks').textContent='Approve the prompt to continue.';await wait(1800);S.i++;go()}}}]};
+function rail(){const L=F[S.m];$('#rh').textContent=S.m==='up'?'One account for every team you work with.':'Welcome back.';$('#rp').textContent=S.m==='up'?'Five short steps. The last one is optional.':'Three checks keep your workspace yours.';$('#rs').innerHTML=L.map((s,k)=>`<li class="${k<S.i?'done':k==S.i?'on':''}"><b>${k<S.i?'✓':k+1}</b><span>${s.n}</span></li>`).join('');$('#sw').textContent=S.m==='up'?'Already have an account?':'New to Warde?';$('#swb').textContent=S.m==='up'?'Sign in':'Create account'}
+function go(){rail();const L=F[S.m];if(S.i>=L.length)return done();const s=L[S.i],last=S.i==L.length-1;
+ f.innerHTML=`<div class="prog" aria-hidden="true">${L.map((_,k)=>`<i class="${k<S.i?'f':k==S.i?'c':''}"></i>`).join('')}</div><p class="stepno">Step ${S.i+1} of ${L.length} · ${s.n}</p><h1>${s.h}</h1><p class="lead">${typeof s.p=='function'?s.p():s.p}</p>${s.v()}${s.hideBtn?`<div class="acts">${S.i?'<button type="button" class="btn g" id="bk">Back</button>':''}</div>`:`<div class="acts">${S.i?'<button type="button" class="btn g" id="bk">Back</button>':''}${s.skip?'<button type="button" class="btn g" id="sk">Skip for now</button>':''}<button class="btn" id="go">${s.last||(last&&S.m==='in'?'Sign in':'Continue')}</button></div>`}`;
+ s.on&&s.on();const b=$('#bk');b&&(b.onclick=()=>{S.i--;go()});const k=$('#sk');k&&(k.onclick=()=>{S.i++;go()});const i=f.querySelector('input');i&&i.focus()}
+const submit=async e=>{e.preventDefault();const b=$('#go');if(!b)return;const s=F[S.m][S.i],t=b.textContent;b.disabled=true;b.textContent='Checking…';const ok=await s.ok();if(ok){S.i++;go()}else{b.disabled=false;b.textContent=t;const x=f.querySelector('.bad');x&&(x.tagName=='INPUT'?x:x.querySelector('input')).focus()}};
+function done(){const up=S.m==='up',d=S.d,rows=up?[['Email',d.email],['Username','@'+d.un],['Name',d.name],['Profile',d.role||d.org?[d.role,d.org].filter(Boolean).join(' at '):'Not added yet']]:[['Account',d.email],['Checks passed','Password, email code, authenticator, passkey'],['Session','Expires after 30 minutes idle']];
+ rail();$('#rs').querySelectorAll('li').forEach(l=>{l.className='done';l.firstChild.textContent='✓'});
+ $('#c').innerHTML=`<div class="done"><div class="ck"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h1>${up?'Your account is ready':'You’re signed in'}</h1><p class="lead">${up?'Welcome to Warde, '+esc((d.name||'').split(' ')[0])+'. Your workspace is set up.':'Redirecting you to your workspace.'}</p><dl>${rows.map(r=>`<div><dt>${r[0]}</dt><dd>${esc(r[1])}</dd></div>`).join('')}</dl><div class="acts"><button class="btn" id="again">${up?'Go to workspace':'Sign out and restart demo'}</button></div></div>`;$('#again').onclick=()=>closeAuth()}
+$('#swb').onclick=()=>openAuth(S.m==='up'?'in':'up');
+const title=document.title;
+function openAuth(m){S.m=m;S.i=0;S.d={};$('#c').innerHTML='<form id="f" novalidate></form>';f=$('#f');f.onsubmit=submit;host.hidden=false;host.scrollTop=0;document.documentElement.style.overflow='hidden';document.title='Warde – '+(m==='up'?'Create account':'Sign in');try{history.replaceState(null,'',m==='up'?'#signup':'#signin')}catch(_){}go()}
+function closeAuth(){if(host.hidden)return;host.hidden=true;document.documentElement.style.overflow='';document.title=title;try{history.replaceState(null,'',location.pathname+location.search)}catch(_){}}
+const route=()=>{const x=location.hash;x==='#signin'?openAuth('in'):x==='#signup'?openAuth('up'):closeAuth()};
+addEventListener('hashchange',route);addEventListener('keydown',e=>{if(e.key==='Escape'&&!host.hidden)closeAuth()});
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href="#signin"],a[href="#signup"]');if(!a)return;e.preventDefault();openAuth(a.getAttribute('href')==='#signup'?'up':'in')},true);
+R.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href="#top"]');if(a){e.preventDefault();closeAuth()}});
+route();
+(()=>{const rail=R.querySelector('.rail');if(!rail)return;const cv=document.createElement('canvas');cv.setAttribute('aria-hidden','true');rail.prepend(cv);
+const cx=cv.getContext('2d'),still=matchMedia('(prefers-reduced-motion:reduce)').matches,rnd=Math.random;let W=0,H=0,P=[],t=0,raf=0,on=false;
+const sp=(p,i)=>{p.x=rnd()*W;p.y=rnd()*H;p.px=p.x;p.py=p.y;p.age=i?rnd()*p.life:0};
+const ang=(x,y)=>Math.sin(x*.006+t*.35)*Math.cos(y*.005-t*.28)*Math.PI+Math.sin((x+y)*.003+t*.2)*.8;
+function size(){const b=rail.getBoundingClientRect();if(!b.width)return;const d=Math.min(devicePixelRatio||1,2);W=b.width;H=b.height;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);P=Array.from({length:44},(_,k)=>{const p={k,life:240+rnd()*320,v:.5+rnd()*.5};sp(p,1);return p});if(still)paint()}
+function step(){for(const p of P){p.px=p.x;p.py=p.y;const a=ang(p.x,p.y);p.x+=Math.cos(a)*p.v*1.4;p.y+=Math.sin(a)*p.v*1.4;p.age++;if(p.age>p.life||p.x<-20||p.x>W+20||p.y<-20||p.y>H+20){sp(p);continue}
+const f=Math.sin(p.age/p.life*Math.PI);cx.strokeStyle=p.k%8===0?`rgba(216,103,67,${.55*f})`:p.k%3===0?`rgba(201,243,107,${.4*f})`:`rgba(255,255,255,${.15*f})`;cx.lineWidth=p.k%8===0||p.k%3===0?1.3:1;cx.beginPath();cx.moveTo(p.px,p.py);cx.lineTo(p.x,p.y);cx.stroke()}}
+function paint(){cx.clearRect(0,0,W,H);for(let i=0;i<240;i++){t+=.004;step()}}
+function frame(){cx.globalCompositeOperation='destination-out';cx.fillStyle='rgba(0,0,0,.05)';cx.fillRect(0,0,W,H);cx.globalCompositeOperation='source-over';t+=.004;step();raf=on&&!document.hidden?requestAnimationFrame(frame):0}
+const go=()=>{if(!raf&&on&&!still)raf=requestAnimationFrame(frame)};
+new IntersectionObserver(e=>{on=e[0].isIntersecting;go()}).observe(rail);document.addEventListener('visibilitychange',go);new ResizeObserver(size).observe(rail)})();
+})();
+</script>
+</body></html>

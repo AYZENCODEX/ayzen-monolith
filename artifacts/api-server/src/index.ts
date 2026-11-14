@@ -6,6 +6,7 @@ initSentry();
 import app from "./app";
 import "./vault/infrastructure/crypto-key-stores"; // registers the encryption_keys stores behind the Vault crypto key-store ports (VLT-GAP-14-B)
 import { logger } from "./lib/logger";
+import { clerkTopologyProblems, isClerkFeatureEnabled } from "./lib/clerk-config";
 import { logBus } from "./lib/log-bus";
 import { initTelegramBot, stopTelegramBot } from "./lib/telegram";
 import { startTelegramLauncher, stopTelegramLauncher } from "./lib/telegram-launcher";
@@ -150,6 +151,8 @@ if (process.env.AYZEN_RUN_WORKERS !== "false") {
 
 const server = app.listen(port, () => {
   logger.info({ port }, "Server listening");
+  // W1-P5: per-module Clerk pools must never be shared; a duplicated issuer/webhook secret is a misconfiguration worth shouting about.
+  if (isClerkFeatureEnabled()) for (const problem of clerkTopologyProblems()) logger.error({ problem }, "clerk.topology.invalid");
   logBus.system(`🚀 AYZEN API Server started on port ${port}`);
   initTelegramBot();
   // Module bots (every registered bot except AYZENX that has a token): getMe +

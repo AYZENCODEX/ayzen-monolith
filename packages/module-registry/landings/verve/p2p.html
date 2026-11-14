@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Buy and sell USDT, AYZEN token and other assets directly with other people.">
+<title>Verve P2P Exchange</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap">
+<script>(function(){try{var t=localStorage.getItem('verve-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages.css">
+</head>
+<body data-nav="p2p" >
+<a class="skip-link" href="#main">Skip to content</a>
+<header id="site-header"></header>
+<main id="main">
+<section class="subhero" data-stage-zone>
+  <div class="container subhero__grid">
+    <div class="subhero__copy">
+      <a class="back-link" href="index.html" data-back><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg><span>Back to home</span></a>
+      <ol class="crumbs" aria-label="Breadcrumb"><li><a href="index.html">Home</a></li><li aria-current="page">P2P</li></ol>
+      <h1>P2P exchange</h1>
+      <p class="lede">Buy and sell USDT, AYZEN token and other assets directly with other people. Offers on this page are samples.</p>
+    </div>
+    <div class="hero__stage"><div id="hero-stage"></div></div>
+  </div>
+</section>
+<section class="page-section">
+  <div class="container">
+    <div class="p2p-controls">
+      <div class="side-toggle" role="group" aria-label="Trade side">
+        <button type="button" data-side="buy" aria-pressed="true">Buy</button>
+        <button type="button" data-side="sell" aria-pressed="false">Sell</button>
+      </div>
+      <div class="assets" id="assets" role="group" aria-label="Asset"></div>
+    </div>
+
+    <form class="filters" id="filters" novalidate>
+      <div class="field field--suffix">
+        <label class="field__label" for="amount" id="amount-label">I want to pay</label>
+        <div class="field__control"><input id="amount" type="text" inputmode="decimal" placeholder="Enter amount" autocomplete="off"><span class="field__suffix" id="amount-suffix">BDT</span></div>
+      </div>
+      <div class="field">
+        <label class="field__label" for="fiat">Currency</label>
+        <div class="field__control"><select id="fiat"></select></div>
+      </div>
+      <div class="field">
+        <label class="field__label" for="payment">Payment method</label>
+        <div class="field__control"><select id="payment"></select></div>
+      </div>
+      <button class="btn" type="button" id="refresh"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.5-3.8M4 4v4h4M4 13a8 8 0 0 0 14.5 3.8M20 20v-4h-4"/></svg>Refresh</button>
+    </form>
+
+    <p class="market-line" id="market-line" aria-live="polite"></p>
+
+    <div class="offers" role="table" aria-label="P2P offers">
+      <div class="offers__head" role="row">
+        <span role="columnheader">Advertiser</span>
+        <span role="columnheader">Price</span>
+        <span role="columnheader">Available and limit</span>
+        <span role="columnheader">Payment</span>
+        <span role="columnheader"><span class="sr-only">Action</span></span>
+      </div>
+      <div id="offers" role="rowgroup"></div>
+    </div>
+    <p class="page-note">Advertisers, prices and limits are sample data. Reference prices are placeholders, and AZN stands for the AYZEN token. No order can be placed until trading is connected.</p>
+  </div>
+</section>
+</main>
+<footer id="site-footer"></footer>
+<dialog class="drawer" id="drawer" aria-labelledby="drawer-title">
+  <form class="drawer__inner" id="order-form" novalidate>
+    <header class="drawer__head">
+      <div><p id="drawer-eyebrow"></p><h2 id="drawer-title"></h2></div>
+      <button class="icon-btn" type="button" id="drawer-close" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </header>
+    <div class="drawer__body">
+      <dl class="facts" id="facts"></dl>
+      <div class="field field--suffix">
+        <label class="field__label" for="order-amount" id="pay-label"></label>
+        <div class="field__control"><input id="order-amount" type="text" inputmode="decimal" autocomplete="off" placeholder="0.00"><span class="field__suffix" id="pay-suffix"></span></div>
+      </div>
+      <div class="drawer__receive"><span id="receive-label">I will receive</span><strong id="receive-value">—</strong></div>
+      <div><p class="field__label" style="margin-bottom:8px">Payment method</p><div class="pay-options" id="pay-options"></div></div>
+      <p class="form-error" id="form-error" role="alert"></p>
+      <p class="drawer__terms">This is a preview. Placing an order is not connected to a backend yet, so no trade is created.</p>
+    </div>
+    <footer class="drawer__foot"><button class="btn btn--block" type="submit" id="place">Place order</button></footer>
+  </form>
+</dialog>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/stage.js"></script>
+<script src="assets/js/pages/p2p.js"></script>
+</body>
+</html>

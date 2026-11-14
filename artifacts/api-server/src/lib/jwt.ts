@@ -36,6 +36,8 @@ import {
   resolveVerificationKeys,
 } from "./jwt-keys";
 import { logger } from "./logger";
+import { parseModuleClaims } from "./module-session-policy";
+import type { ModuleId } from "@ayzen/module-registry";
 
 export interface AuthTokenPayload {
   userId: number;
@@ -82,6 +84,14 @@ export interface AuthTokenPayload {
    * itself manufacture a fresh step-up window.
    */
   stepUpAt?: string;
+  /**
+   * W1-P2 (ADR A4): present ONLY on a per-module session. `mod` is the module this session belongs to and `mac` the
+   * `module_accounts.id` it was opened for. Such a token is valid only on that module's own host and only while its
+   * `user_sessions` row is live (lib/module-session-policy.ts, lib/auth-utils.ts). The two claims always appear
+   * together; a token carrying one without the other, or an unknown module, is rejected as malformed.
+   */
+  mod?: ModuleId;
+  mac?: number;
 }
 
 const DEFAULT_EXPIRY = "7d";
@@ -90,9 +100,10 @@ const DEFAULT_EXPIRY = "7d";
 export function signAuthToken(
   userId: number,
   role: string,
-  options?: SignOptions & { sid?: string; scopes?: string[]; roles?: string[]; stepUpAt?: string },
+  options?: SignOptions & { sid?: string; scopes?: string[]; roles?: string[]; stepUpAt?: string; mod?: ModuleId; mac?: number },
 ): string {
-  const { sid, scopes, roles, stepUpAt, ...signOpts } = options ?? {};
+  const { sid, scopes, roles, stepUpAt, mod, mac, ...signOpts } = options ?? {};
+  if ((mod === undefined) !== (mac === undefined)) throw new Error("signAuthToken: mod and mac must be passed together");
   const { privateKey, kid } = getActiveKeypair();
   return jwt.sign(
     {
@@ -102,6 +113,7 @@ export function signAuthToken(
       ...(scopes?.length ? { scopes } : {}),
       ...(roles?.length ? { roles } : {}),
       ...(stepUpAt ? { stepUpAt } : {}),
+      ...(mod !== undefined && mac !== undefined ? { mod, mac } : {}),
     } satisfies AuthTokenPayload,
     privateKey,
     {
@@ -187,6 +199,9 @@ function extractPayload(decoded: Record<string, unknown>): AuthTokenPayload | nu
   const scopes = stringArrayClaim(decoded.scopes);
   const roles = stringArrayClaim(decoded.roles);
   const stepUpAt = decoded.stepUpAt;
+  // W1-P2: malformed module claims make the whole token invalid — never silently downgraded to a shared session.
+  const moduleClaims = parseModuleClaims(decoded);
+  if (!moduleClaims.ok) return null;
   if (typeof userId === "number" && userId > 0 && typeof role === "string") {
     return {
       userId,
@@ -195,6 +210,7 @@ function extractPayload(decoded: Record<string, unknown>): AuthTokenPayload | nu
       ...(scopes ? { scopes } : {}),
       ...(roles ? { roles } : {}),
       ...(typeof stepUpAt === "string" ? { stepUpAt } : {}),
+      ...(moduleClaims.mod !== null ? { mod: moduleClaims.mod, mac: moduleClaims.mac } : {}),
     };
   }
   return null;

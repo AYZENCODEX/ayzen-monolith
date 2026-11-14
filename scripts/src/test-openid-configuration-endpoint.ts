@@ -111,12 +111,12 @@ test("supported-algorithm metadata matches the active signing switch (RS256 only
   assert.deepEqual(body.id_token_signing_alg_values_supported, ["RS256"]);
 });
 
-test("response_types_supported is exactly [\"code\"] and scopes_supported is exactly [\"openid\"]", () => {
+test("response_types_supported is exactly [\"code\"] and scopes_supported is exactly openid+profile+email (W1-P3)", () => {
   const { res, state } = makeFakeRes();
   openidConfigurationHandler({} as any, res);
   const body = state.body as { response_types_supported: string[]; scopes_supported: string[] };
   assert.deepEqual(body.response_types_supported, ["code"]);
-  assert.deepEqual(body.scopes_supported, ["openid"]);
+  assert.deepEqual(body.scopes_supported, ["openid", "profile", "email"]);
 });
 
 test("content type is set to application/json", () => {

@@ -99,3 +99,40 @@ test("a multi-hop chain (API -> event -> workflow -> worker) keeps one traceId/c
   assert.equal(workflow.causationId, event.hopId);
   assert.equal(worker.causationId, workflow.hopId);
 });
+
+// ─── W1-P1: module uids ──────────────────────────────────────────────────────
+import { MODULE_UID, formatModuleUid, parseModuleUid, isValidModuleUid } from "../src/index.mjs";
+
+test("formatModuleUid pads to 6 digits and grows past 999999 without truncating", () => {
+  assert.equal(formatModuleUid("SYL", 1), "SYL-000001");
+  assert.equal(formatModuleUid("ZYN", 42), "ZYN-000042");
+  assert.equal(formatModuleUid("SYL", 999999), "SYL-999999");
+  assert.equal(formatModuleUid("SYL", 1000000), "SYL-1000000");
+});
+
+test("formatModuleUid rejects bad prefixes and sequences", () => {
+  for (const p of ["syl", "SY", "SYLO", "S1L", "", undefined]) assert.throws(() => formatModuleUid(p, 1), /prefix/);
+  for (const n of [0, -1, 1.5, NaN, "1", Number.MAX_SAFE_INTEGER + 2]) assert.throws(() => formatModuleUid("SYL", n), /sequence/);
+});
+
+test("parseModuleUid round-trips and accepts only the canonical spelling", () => {
+  for (const n of [1, 9, 123456, 999999, 1000000]) {
+    assert.deepEqual(parseModuleUid(formatModuleUid("RFT", n)), { prefix: "RFT", seq: n });
+  }
+  for (const bad of ["SYL-000000", "SYL-0000001", "SYL-00001", "syl-000001", "SYL000001", "SYL-1", "SYL-01", " SYL-000001", "SYL-000001 ", 5, null, undefined, "AYZEN-0001"]) {
+    assert.equal(parseModuleUid(bad), null, `${JSON.stringify(bad)} must not parse`);
+  }
+});
+
+test("isValidModuleUid can pin the expected module prefix", () => {
+  assert.equal(isValidModuleUid("SYL-000001"), true);
+  assert.equal(isValidModuleUid("SYL-000001", { prefix: "SYL" }), true);
+  assert.equal(isValidModuleUid("SYL-000001", { prefix: "SKR" }), false);
+  assert.equal(isValidModuleUid("nope"), false);
+  assert.match("SYL-000001", MODULE_UID);
+});
+
+test("module uids are not instance ids: a UUID is not a module uid and the reverse still holds for the instance format", () => {
+  assert.equal(parseModuleUid(generateId()), null);
+  assert.equal(isValidId("SYL-000001"), true); // legal instance-id charset, but only parseModuleUid knows the module format
+});

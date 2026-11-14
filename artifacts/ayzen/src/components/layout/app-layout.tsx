@@ -1,10 +1,9 @@
 import { ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { getCurrentSubdomainApp, getModuleForPath, moduleUrl, centralUrl } from "@/lib/subdomain-app";
 import { AppSidebar } from "./app-sidebar";
-import { MobileDock } from "./mobile-dock";
 import { Menu, Mail, X, RefreshCw, Inbox, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { NotificationBell } from "@/components/notification-bell";
 import { GlobalSearch } from "@/components/global-search";
@@ -191,7 +190,9 @@ export function AppLayout({ children }: AppLayoutProps) {
       {isMobile ? (
         <>
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetContent side="left" className="p-0 w-64 border-r border-sidebar-border bg-sidebar">
+            <SheetContent side="left" className="p-0 w-64 border-r border-sidebar-border bg-sidebar" data-testid="mobile-nav-drawer">
+              <SheetTitle className="sr-only">Navigation</SheetTitle>
+              <SheetDescription className="sr-only">Navigate between pages and modules</SheetDescription>
               <AppSidebar onNavigate={() => setMobileOpen(false)} />
             </SheetContent>
           </Sheet>
@@ -207,7 +208,7 @@ export function AppLayout({ children }: AppLayoutProps) {
 
         {isMobile && (
           <div className="relative z-10 flex items-center gap-3 px-4 py-3 border-b border-border bg-sidebar/80 backdrop-blur-sm sticky top-0">
-            <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="text-primary hover:bg-primary/10">
+            <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="text-primary hover:bg-primary/10" aria-label="Open navigation menu" aria-expanded={mobileOpen} data-testid="mobile-nav-toggle">
               <Menu className="w-5 h-5" />
             </Button>
             {/* Module Shell Split S2: on a module subdomain the mobile top bar shows the module label (still links home centrally). */}
@@ -233,11 +234,11 @@ export function AppLayout({ children }: AppLayoutProps) {
           </div>
         )}
 
-        <div className="relative z-10 p-4 md:p-6 lg:p-8 flex-1 pb-24 md:pb-8">
+        <div className="relative z-10 p-4 md:p-6 lg:p-8 flex-1 pb-8">
           {children}
         </div>
       </main>
-      <MobileDock />
+      {/* W2-P3: the bottom dock is gone. On mobile the only navigation is the drawer above (module nav on a module host). */}
     </div>
   );
 }

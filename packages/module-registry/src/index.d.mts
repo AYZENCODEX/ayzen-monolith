@@ -27,3 +27,19 @@ export function getModule(id: string): ModuleDefinition | null;
 export function getModulesByOrder(): ModuleDefinition[];
 export function hasPrefix(path: string, prefix: string): boolean;
 export function getModuleIdForPath(path: string): ModuleId | null;
+
+export const MODULE_HOST_ALLOWED_PREFIXES: readonly string[];
+export function pathCandidates(rawPath: string): string[] | null;
+export type ModuleHostDecision =
+  | { action: "allow"; reason: "own_or_allowlisted" | "unowned"; owner: null }
+  | { action: "deny"; reason: "other_module" | "unknown_module" | "malformed_path" | "not_in_module"; owner: ModuleId | null };
+export function decideModuleHostAccess(input: { module: string; path: string; strict?: boolean; sharedPrefixes?: readonly string[] }): ModuleHostDecision;
+
+export interface ModuleLandingContent {
+  id: ModuleId; label: string; host: string; homePath: string; tagline: string;
+  hero: { eyebrow: string; title: string; lead: string };
+  features: { title: string; text: string }[];
+  shards: string;
+  faq: [string, string][];
+  brand: { bg: string; surface: string; fg: string; muted: string; accent: string; ink: string };
+}

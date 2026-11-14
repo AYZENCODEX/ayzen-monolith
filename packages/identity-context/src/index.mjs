@@ -76,3 +76,40 @@ export function deriveChildContext(parent, { causationId } = {}) {
     causationId: causationId ?? parent.hopId,
   });
 }
+
+// ─── Module user ids (W1-P1, ADR A1) ────────────────────────────────────────
+// Display/lookup id for a user's account inside one module: <PREFIX>-<6+ digit seq>, e.g.
+// SYL-000001. Unlike the instance ids above these are durable (they identify an account, not
+// a request), so they are minted by the database (ayzen_provision_module_account) from a
+// per-module sequence, never by generateId(). The prefix → module mapping lives in
+// @ayzen/module-registry; this package stays dependency-free, so callers that need to know
+// the module pass the expected prefix.
+export const MODULE_UID = /^([A-Z]{3})-([0-9]{6,})$/;
+const MODULE_UID_MIN_DIGITS = 6;
+
+export function formatModuleUid(prefix, seq) {
+  if (typeof prefix !== "string" || !/^[A-Z]{3}$/.test(prefix)) {
+    throw new Error(`Module uid prefix is invalid: ${JSON.stringify(prefix)}`);
+  }
+  if (!Number.isSafeInteger(seq) || seq < 1) {
+    throw new Error(`Module uid sequence must be a positive integer: ${JSON.stringify(seq)}`);
+  }
+  // Pad to 6 digits; beyond 999999 the number just grows (never truncates).
+  return `${prefix}-${String(seq).padStart(MODULE_UID_MIN_DIGITS, "0")}`;
+}
+
+/** Returns { prefix, seq } for a well-formed module uid, otherwise null. */
+export function parseModuleUid(value) {
+  if (typeof value !== "string") return null;
+  const match = MODULE_UID.exec(value);
+  if (!match) return null;
+  const seq = Number(match[2]);
+  // Reject non-canonical padding (SYL-0000001 / SYL-000000) so one account has one spelling.
+  if (!Number.isSafeInteger(seq) || seq < 1 || formatModuleUid(match[1], seq) !== value) return null;
+  return { prefix: match[1], seq };
+}
+
+export function isValidModuleUid(value, { prefix } = {}) {
+  const parsed = parseModuleUid(value);
+  return parsed !== null && (prefix === undefined || parsed.prefix === prefix);
+}

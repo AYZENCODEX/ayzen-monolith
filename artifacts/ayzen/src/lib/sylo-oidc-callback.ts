@@ -131,6 +131,8 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
 export interface SessionExchangeResult {
   token: string;
   user: { id: number; [key: string]: unknown };
+  /** W1-P4: the AYZEN identity the module session was opened for, when it differs from `user.id` (explicitly linked module account). */
+  ayzenUserId?: number;
 }
 
 /** Injectable dependencies for `completeSyloOidcLogin()` — every effectful call (token exchange, the session-exchange fetch) goes through here so 5b-g's tests can supply fakes instead of hitting a real network/DB. */
@@ -139,7 +141,8 @@ export interface CompleteSyloOidcLoginDeps {
   metadata: Pick<OidcProviderMetadata, "token_endpoint">;
   exchangeCode: typeof exchangeCodeForTokens;
   /** Calls `POST {apiBase}/api/auth/session-exchange` with the shared `ayzen_session` cookie attached (`credentials: "include"`) and returns the parsed `{ token, user }` body. Injected so tests never need a real cookie/DB. */
-  sessionExchange: () => Promise<SessionExchangeResult>;
+  /** W1-P4: receives the redeemed tokens and the pending transaction (module sign-in proves the AYZEN identity with the access token; the legacy exchange ignores both). */
+  sessionExchange: (tokens: OidcTokenResponse, pending: PendingSyloOidcTransaction) => Promise<SessionExchangeResult>;
 }
 
 export type SyloOidcCallbackErrorCode =
@@ -219,7 +222,7 @@ export async function completeSyloOidcLogin(
 
   let sessionResult: SessionExchangeResult;
   try {
-    sessionResult = await deps.sessionExchange();
+    sessionResult = await deps.sessionExchange(tokens, pending);
   } catch (err) {
     throw new SyloOidcCallbackError(
       "session_exchange_failed",
@@ -232,7 +235,8 @@ export async function completeSyloOidcLogin(
   if (tokens.id_token) {
     const claims = decodeJwtPayload(tokens.id_token);
     const idTokenSub = claims && typeof claims.sub === "string" ? claims.sub : null;
-    if (idTokenSub && idTokenSub !== String(sessionResult.user.id)) {
+    // W1-P4: a module session can belong to the account's OWNING user (explicit link), so the AYZEN identity is compared when the server reports it.
+    if (idTokenSub && idTokenSub !== String(sessionResult.ayzenUserId ?? sessionResult.user.id)) {
       throw new SyloOidcCallbackError("identity_mismatch", "The signed-in account did not match the OIDC identity.");
     }
   }

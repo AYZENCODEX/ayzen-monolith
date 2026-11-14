@@ -31,7 +31,7 @@
  * the success case, which never actually renders — it navigates away via
  * `setLocation()` before a frame would show anything.
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useLocation } from "wouter";
 import { Loader2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,11 @@ import { getSyloOidcProviderMetadata } from "@/lib/sylo-oidc-discovery";
 import { startSyloOidcLogin } from "@/lib/sylo-oidc-login";
 import { exchangeCodeForTokens } from "@/lib/oidc-client";
 import { exchangeSyloSessionCookie } from "@/lib/sylo-oidc-session-exchange";
+import { ModuleAuthError, exchangeModuleOidcSession, getModuleAuthOptions } from "@/lib/module-auth-api";
+import type { SessionExchangeResult } from "@/lib/sylo-oidc-callback";
+import type { OidcTokenResponse } from "@/lib/oidc-client";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   parseSyloOidcCallbackParams,
   readPendingSyloOidcTransaction,
@@ -51,13 +56,20 @@ import {
   SyloOidcCallbackError,
 } from "@/lib/sylo-oidc-callback";
 
-type CallbackState = { kind: "working" } | { kind: "error"; title: string; description: string; canRetry: boolean };
+type CallbackState = { kind: "working" } | { kind: "link"; label: string } | { kind: "error"; title: string; description: string; canRetry: boolean };
 
 export default function OidcCallback() {
   const [, setLocation] = useLocation();
   const { login: setAuthContext } = useAuth() as any;
   const [state, setState] = useState<CallbackState>({ kind: "working" });
   const ranRef = useRef(false);
+  // W1-P4 flow 3 (link an existing module account): the OIDC code exchange has finished and its access token waits here, in
+  // memory only, until the person has typed the module account's email + password.
+  const linkRef = useRef<{ accessToken: string; resolve: (r: SessionExchangeResult) => void } | null>(null);
+  const [linkError, setLinkError] = useState<string | null>(null);
+  const [linkBusy, setLinkBusy] = useState(false);
+  const [linkIdentifier, setLinkIdentifier] = useState("");
+  const [linkPassword, setLinkPassword] = useState("");
 
   useEffect(() => {
     if (ranRef.current) return;
@@ -70,12 +82,23 @@ export default function OidcCallback() {
       try {
         const config = getSyloOidcClientConfig();
         const metadata = await getSyloOidcProviderMetadata();
+        const moduleOpts = await getModuleAuthOptions();
 
         const result = await completeSyloOidcLogin(params, pending, {
           config,
           metadata,
           exchangeCode: exchangeCodeForTokens,
-          sessionExchange: exchangeSyloSessionCookie,
+          // W1-P4: on a module host with module sessions on, the OIDC access token (not a shared cookie) opens the module
+          // session; otherwise the legacy shared-cookie exchange runs exactly as before.
+          sessionExchange: moduleOpts?.oidc
+            ? (tokens: OidcTokenResponse) =>
+                pending?.flow === "link"
+                  ? new Promise<SessionExchangeResult>((resolve) => {
+                      linkRef.current = { accessToken: tokens.access_token, resolve };
+                      setState({ kind: "link", label: moduleOpts.label });
+                    })
+                  : exchangeModuleOidcSession(tokens.access_token)
+            : exchangeSyloSessionCookie,
         });
 
         // Sylo's own session model (Phase 5b-e) — same call shape every
@@ -100,6 +123,41 @@ export default function OidcCallback() {
       }
     })();
   }, []);
+
+  if (state.kind === "link") {
+    const submit = async (e: FormEvent) => {
+      e.preventDefault();
+      if (!linkRef.current || linkBusy) return;
+      setLinkBusy(true);
+      setLinkError(null);
+      try {
+        // `.resolve` completes completeSyloOidcLogin(), which then signs in and navigates.
+        const r = await exchangeModuleOidcSession(linkRef.current.accessToken, { identifier: linkIdentifier.trim(), password: linkPassword });
+        setLinkPassword("");
+        linkRef.current.resolve(r);
+      } catch (err) {
+        setLinkError(err instanceof ModuleAuthError ? (err.solution ?? err.message) : "Could not link the account. Try again.");
+        setLinkBusy(false);
+      }
+    };
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background px-4">
+        <form onSubmit={submit} className="max-w-sm w-full space-y-4">
+          <h1 className="text-lg font-semibold">Link your {state.label} account</h1>
+          <p className="text-sm text-muted-foreground">
+            You signed in with AYZEN. Enter the email and password of the {state.label} account you already use so both sign-ins open the same account.
+          </p>
+          <div className="space-y-2"><Label htmlFor="link-id">Email</Label><Input id="link-id" type="email" autoComplete="username" value={linkIdentifier} onChange={(e) => setLinkIdentifier(e.target.value)} required /></div>
+          <div className="space-y-2"><Label htmlFor="link-pw">Password</Label><Input id="link-pw" type="password" autoComplete="current-password" value={linkPassword} onChange={(e) => setLinkPassword(e.target.value)} required /></div>
+          {linkError && <p role="alert" className="text-sm text-destructive">{linkError}</p>}
+          <div className="flex flex-col gap-2">
+            <Button type="submit" disabled={linkBusy}>{linkBusy ? "Linking..." : "Link account"}</Button>
+            <Button type="button" variant="outline" onClick={() => setLocation("/login")}>Cancel</Button>
+          </div>
+        </form>
+      </div>
+    );
+  }
 
   if (state.kind === "working") {
     return (

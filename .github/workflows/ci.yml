@@ -22,6 +22,146 @@ jobs:
       - run: node scripts/src/check-module-registry.mjs --self-test
       - run: node --test packages/module-registry/test/registry.test.mjs
 
+  module-accounts:
+    # W1-P1: per-module accounts + module uids. Static validator, identity-context unit tests, and the
+    # SQL/backfill behavior tests against a REAL Postgres (the provisioning functions are SQL).
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --filter @workspace/db
+      - run: node scripts/validate-w1-p1.mjs
+      - run: node --test packages/identity-context/test/index.test.mjs
+      - run: node --test scripts/src/test-module-accounts-db.mjs
+        env:
+          MODULE_ACCOUNTS_TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+
+  module-auth:
+    # W1-P2: per-module credentials + sessions. Static validator (incl. the isolation wiring), the pure policy/password/
+    # context tests, and the auth-service behavior tests against a REAL Postgres (lockout, resets and signups are SQL-atomic).
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --filter @workspace/api-server...
+      - run: node scripts/validate-w1-p2.mjs
+      - run: node scripts/validate-w1-p4.mjs
+      - run: node scripts/validate-w1-p4.mjs --self-test
+      - run: node scripts/check-module-isolation.mjs
+      - run: node scripts/check-module-isolation.mjs --self-test
+      - run: pnpm --filter @workspace/api-server test:module-host-guard
+      - run: node scripts/validate-w1-p5.mjs
+      - run: node scripts/validate-w1-p5.mjs --self-test
+      - run: pnpm --filter @workspace/api-server test:clerk
+      - run: pnpm --filter @workspace/scripts clerk:test-module-client
+      - run: pnpm --filter @workspace/api-server test:module-auth
+      - run: pnpm --filter @workspace/api-server test:module-auth-db
+        env:
+          MODULE_AUTH_TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+
+  oidc-conformance:
+    # W1-P3: the discovery document vs the routes app.ts really mounts, the gateway table, the role-host gates and the
+    # seeded module clients vs the module registry. Static + pure (no database, no server boot).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --filter @workspace/scripts...
+      - run: pnpm validate:w1-p3
+      - run: pnpm --filter @workspace/scripts oidc:test-module-login
+
+  module-bundles:
+    # W2-P2: per-module builds. The static proof (import-graph walk, install-free) and the deploy-config check are blocking.
+    # The real `vite build` of a module bundle also fails on a leak by itself (vite.module.config.ts) and writes
+    # dist/module-reports/<id>.json; it is advisory (continue-on-error) until its first green run in CI, then make it blocking.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/check-module-bundles.mjs
+      - run: node scripts/check-module-bundles.mjs --self-test
+      - run: node scripts/gen-module-deploy.mjs --check
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+      - run: pnpm install --frozen-lockfile --filter @workspace/scripts...
+      - run: pnpm --filter @workspace/scripts module-build:test
+      - run: pnpm install --frozen-lockfile --filter @workspace/ayzen...
+        continue-on-error: true
+      - name: Build the Sylo module bundle and read its report (advisory)
+        continue-on-error: true
+        env:
+          VITE_MODULE: sylo
+        run: |
+          pnpm --filter @workspace/ayzen run build:module
+          node -e "const r=require('./artifacts/ayzen/dist/module-reports/sylo.json');console.log(JSON.stringify(r.pages));if(r.pages.otherModulePagesInBundle!==0)process.exit(1)"
+
+  mobile-nav:
+    # W2-P3: no bottom dock; the drawer is the mobile navigation. Static validator + the viewport spec's own self-test
+    # (fixture pages: the old dock layout must fail, the drawer-only layout must pass; real chromium, 3 phone widths).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/validate-w2-p3.mjs
+      - run: node scripts/validate-w2-p3.mjs --self-test
+      - run: npm install --no-save --no-package-lock playwright && npx playwright install --with-deps chromium
+      - run: node tests/e2e/mobile-nav/mobile-no-dock.spec.mjs --self-test
+
+  module-landings:
+    # W2-P4: per-module public landing (registry-driven). SEO/zero-network/brand validator + self-test, OG images present,
+    # and the standalone-gate unit test. Real Lighthouse is a manual/owner step (docs/module-landings.md).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/validate-w2-p4.mjs
+      - run: node scripts/validate-w2-p4.mjs --self-test
+      - run: node scripts/gen-module-og.mjs --check
+      - run: npm install --no-save --no-package-lock playwright && npx playwright install --with-deps chromium
+      - run: node tests/e2e/module-landing/landing.spec.mjs
+      - run: node tests/e2e/module-landing/designed.spec.mjs
+
   affected:
     runs-on: ubuntu-latest
     outputs:

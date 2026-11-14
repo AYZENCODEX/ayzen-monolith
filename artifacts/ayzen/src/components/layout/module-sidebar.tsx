@@ -18,6 +18,7 @@ import {
 import { centralUrl, moduleUrl, type SubdomainApp } from "@/lib/subdomain-app";
 import { moduleSettingsPath } from "@/lib/module-settings";
 import { applyModuleNav } from "./module-nav";
+import { ModuleUidBadge } from "./module-uid-badge";
 
 /**
  * components/layout/module-sidebar.tsx
@@ -82,6 +83,7 @@ export function ModuleSidebar({ app, onNavigate }: { app: SubdomainApp; onNaviga
           <ArrowLeft className="w-3.5 h-3.5 flex-shrink-0" />
           {!rail && 'AYZEN'}
         </a>
+        {!rail && <ModuleUidBadge moduleId={app.id} className="mt-2" />}
       </div>
 
       <ProfileQuickAccess user={user} logout={logout} navigate={(to: string) => { window.location.href = moduleUrl(app.id, to); onNavigate?.(); }} onNavigate={onNavigate} />

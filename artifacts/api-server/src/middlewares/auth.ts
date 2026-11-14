@@ -94,6 +94,9 @@ export interface AuthUser {
   scopes?: string[];
   /** Only set when authType === "oidc" — the client (`aud`) this token was minted for. */
   oidcClientId?: string;
+  /** W1-P2: set only for a per-module session (never for the shared AYZEN session) — its module and module_accounts.id. */
+  moduleId?: string;
+  moduleAccountId?: number;
 }
 
 declare global {
@@ -159,6 +162,15 @@ export async function requireSessionAuth(
       error: "Forbidden",
       code: "SESSION_REQUIRED",
       solution: "This action requires a real login session, not an API key. Log in via the app to manage your API keys.",
+    });
+    return;
+  }
+  // W1-P2: account-level actions (API keys, workspaces) belong to the central AYZEN login, not a per-module session.
+  if (user.moduleId) {
+    res.status(403).json({
+      error: "Forbidden",
+      code: "CENTRAL_SESSION_REQUIRED",
+      solution: "This action requires your central AYZEN session, not a module session.",
     });
     return;
   }

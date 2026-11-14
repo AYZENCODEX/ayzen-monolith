@@ -9,6 +9,16 @@
       "types": "./src/index.d.mts",
       "import": "./src/index.mjs",
       "default": "./src/index.mjs"
+    },
+    "./landing": {
+      "types": "./src/landing.d.mts",
+      "import": "./src/landing.mjs",
+      "default": "./src/landing.mjs"
+    },
+    "./landing-designs": {
+      "types": "./src/landing-designs.d.mts",
+      "import": "./src/landing-designs.mjs",
+      "default": "./src/landing-designs.mjs"
     }
   },
   "scripts": {

@@ -1,0 +1,12 @@
+import type { ModuleId, ModuleLandingContent } from "./index.mjs";
+export const LANDINGS: Readonly<Record<ModuleId, Omit<ModuleLandingContent, "id" | "label" | "host" | "homePath">>>;
+export function getLandingContent(id: string): ModuleLandingContent | null;
+export function landingIds(): ModuleId[];
+export function landingStyles(c: ModuleLandingContent): string;
+export function landingBody(c: ModuleLandingContent): string;
+export function landingHead(c: ModuleLandingContent, opts?: { origin?: string }): { title: string; description: string; canonical: string; image: string; jsonLd: unknown; themeColor: string; base: string };
+export function landingHeadHtml(c: ModuleLandingContent, opts?: { origin?: string }): string;
+export function landingDocument(c: ModuleLandingContent, opts?: { origin?: string }): string;
+export function injectLandingIntoHtml(html: string, id: string, opts?: { origin?: string }): string;
+export function robotsTxt(id: string, opts?: { origin?: string }): string;
+export function sitemapXml(id: string, opts?: { origin?: string }): string;

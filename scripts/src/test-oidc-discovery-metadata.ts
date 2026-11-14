@@ -12,7 +12,7 @@
  * Run: npx tsx scripts/src/test-oidc-discovery-metadata.ts
  */
 import assert from "node:assert/strict";
-import { buildOidcDiscoveryMetadata, resolveIssuer } from "../../artifacts/api-server/src/lib/oidc-discovery";
+import { buildOidcDiscoveryMetadata, issuerProblem, resolveIssuer } from "../../artifacts/api-server/src/lib/oidc-discovery";
 import { test } from "node:test";
 
 console.log("buildOidcDiscoveryMetadata()");
@@ -52,9 +52,9 @@ test("response_types_supported is exactly [\"code\"] — no implicit/hybrid", ()
   assert.deepEqual(meta.response_types_supported, ["code"]);
 });
 
-test("scopes_supported is exactly [\"openid\"] at this phase", () => {
+test("scopes_supported is exactly openid+profile+email (W1-P3: matches KNOWN_OIDC_SCOPES and every seeded client)", () => {
   const meta = buildOidcDiscoveryMetadata("https://ayzen.tech");
-  assert.deepEqual(meta.scopes_supported, ["openid"]);
+  assert.deepEqual(meta.scopes_supported, ["openid", "profile", "email"]);
 });
 
 test("id_token_signing_alg_values_supported is exactly [\"RS256\"] — HS256 never advertised", () => {
@@ -63,23 +63,22 @@ test("id_token_signing_alg_values_supported is exactly [\"RS256\"] — HS256 nev
   assert.equal(meta.id_token_signing_alg_values_supported.includes("HS256" as any), false);
 });
 
-test("no endpoint fields for routes that don't exist yet (registration_endpoint)", () => {
-  // UPDATE — Phase 10e: this assertion originally also named
-  // authorization_endpoint/token_endpoint/userinfo_endpoint here, back
-  // when 1E-d shipped and none of those three routes existed yet. Phase
-  // 5a-e (see this file's own header) published all three once
-  // routes/oidc-authorize.ts, routes/oidc-token.ts, and
-  // routes/oidc-userinfo.ts existed — asserting their absence today would
-  // be asserting something this document is now correctly wrong about,
-  // not a real regression check. `registration_endpoint` is the one
-  // "endpoint that doesn't exist yet" still true today: Phase 8a's
-  // routes/oidc-register.ts exists, but no discovery-metadata phase has
-  // picked up advertising it (a real, separate, still-open gap — not this
-  // pass's own scope, see lib/oidc-discovery.ts's own header for why 10e
-  // only ever named introspection_endpoint/revocation_endpoint).
-  const meta = buildOidcDiscoveryMetadata("https://ayzen.tech");
-  const asRecord = meta as unknown as Record<string, unknown>;
-  assert.equal("registration_endpoint" in asRecord, false);
+test("registration_endpoint is derived from issuer (W1-P3: routes/oidc-register.ts has been mounted since Phase 8a)", () => {
+  assert.equal(buildOidcDiscoveryMetadata("https://ayzen.tech").registration_endpoint, "https://ayzen.tech/oidc/register");
+  assert.equal(buildOidcDiscoveryMetadata("https://ayzen.tech///").registration_endpoint, "https://ayzen.tech/oidc/register");
+});
+
+test("W1-P3 capability lists tell the truth: S256 only, authorization_code only, public subjects, query responses", () => {
+  const m = buildOidcDiscoveryMetadata("https://ayzen.tech");
+  assert.deepEqual(m.code_challenge_methods_supported, ["S256"]);
+  assert.deepEqual(m.grant_types_supported, ["authorization_code"]);
+  assert.deepEqual(m.token_endpoint_auth_methods_supported, ["none", "client_secret_post"]);
+  assert.deepEqual(m.subject_types_supported, ["public"]);
+  assert.deepEqual(m.response_modes_supported, ["query"]);
+  assert.equal(m.backchannel_logout_supported, true);
+  assert.equal(m.backchannel_logout_session_supported, false);
+  assert.ok(m.claims_supported.includes("module_uid") && m.claims_supported.includes("sub"));
+  assert.equal(m.code_challenge_methods_supported.includes("plain"), false, "plain PKCE must never be advertised");
 });
 
 test("introspection_endpoint is derived from issuer (Phase 10e)", () => {
@@ -112,7 +111,9 @@ test("returned arrays are fresh copies, not shared mutable state across calls", 
   const a = buildOidcDiscoveryMetadata("https://ayzen.tech");
   const b = buildOidcDiscoveryMetadata("https://ayzen.tech");
   a.scopes_supported.push("mutated");
-  assert.deepEqual(b.scopes_supported, ["openid"]); // b unaffected by a's mutation
+  assert.deepEqual(b.scopes_supported, ["openid", "profile", "email"]); // b unaffected by a's mutation
+  a.grant_types_supported.push("implicit");
+  assert.deepEqual(b.grant_types_supported, ["authorization_code"]);
 });
 
 console.log("resolveIssuer()");
@@ -178,3 +179,14 @@ test("blank/whitespace-only AYZEN_OIDC_ISSUER is treated as unset", () => {
 });
 
 console.log("All oidc-discovery.ts tests passed.");
+
+console.log("issuerProblem() (W1-P3)");
+
+test("issuerProblem accepts https origins and http localhost, rejects the rest", () => {
+  for (const ok of ["https://ayzen.tech", "https://id.ayzen.tech", "https://api.ayzen.tech", "http://localhost:8080", "https://ayzen.tech/idp"]) {
+    assert.equal(issuerProblem(ok), null, ok);
+  }
+  for (const bad of ["ayzen.tech", "", "http://ayzen.tech", "https://ayzen.tech/?x=1", "https://ayzen.tech/#f", "https://u:p@ayzen.tech", "ftp://ayzen.tech"]) {
+    assert.notEqual(issuerProblem(bad), null, bad || "(empty)");
+  }
+});

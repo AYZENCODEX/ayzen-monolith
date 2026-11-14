@@ -58,6 +58,8 @@ export interface PendingSyloOidcTransaction {
   /** Where to return the user once login completes — the in-app path they were trying to reach, NOT the OIDC `redirect_uri` itself (that's always `/oidc/callback`, fixed). Defaults to the subdomain app's own home. */
   returnToPath: string;
   createdAt: number;
+  /** W1-P4: which module flow started this attempt (absent = the legacy Sylo/workspace login). */
+  flow?: "login" | "signup" | "link";
 }
 
 /** 32 random bytes, base64url — same `oidc-client.ts` primitives 5a-a already built for PKCE, reused here for the `nonce` too (OIDC Core's nonce has the identical "unguessable, single-use, generated fresh per attempt" requirement PKCE's own values do). Not exported from `oidc-client.ts` itself (that file only exports a `state` generator, not a bare random-string one) — `generateState()` already produces exactly this shape, so it's reused directly rather than duplicating `randomUrlSafeString()`. */

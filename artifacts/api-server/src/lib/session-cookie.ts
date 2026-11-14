@@ -36,6 +36,8 @@
  */
 
 import type { Request, Response } from "express";
+import type { ModuleId } from "@ayzen/module-registry";
+import { moduleCookieName } from "./module-session-policy";
 
 export const AYZEN_SESSION_COOKIE = "ayzen_session";
 
@@ -85,4 +87,24 @@ export function clearSessionCookie(res: Response): void {
 export function getSessionCookie(req: Request): string | null {
   const value = (req as Request & { cookies?: Record<string, unknown> }).cookies?.[AYZEN_SESSION_COOKIE];
   return typeof value === "string" && value ? value : null;
+}
+
+// ─── W1-P2: per-module, host-only session cookie (ADR A4) ────────────────────────────────────────
+// `__Host-<module>_sid`: Secure, Path=/, and deliberately NO Domain attribute — the browser keeps it on the one host
+// that set it (sylo.ayzen.tech) and refuses any attempt to set it from another subdomain. This is the opposite of the
+// shared `ayzen_session` cookie above, which is scoped to `.ayzen.tech` on purpose.
+// SameSite=Lax: a cross-site POST/fetch never carries it; same-site module navigation does.
+
+export function setModuleSessionCookie(res: Response, module: ModuleId, token: string): void {
+  res.cookie(moduleCookieName(module), token, {
+    httpOnly: true,
+    secure: isProd(),
+    sameSite: "lax",
+    maxAge: COOKIE_MAX_AGE_MS,
+    path: "/",
+  }); // no `domain` — host-only by construction
+}
+
+export function clearModuleSessionCookie(res: Response, module: ModuleId): void {
+  res.clearCookie(moduleCookieName(module), { httpOnly: true, secure: isProd(), sameSite: "lax", path: "/" });
 }

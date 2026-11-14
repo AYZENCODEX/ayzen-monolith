@@ -194,6 +194,9 @@ importers:
       '@ayzen/capabilities':
         specifier: workspace:*
         version: link:../../packages/capabilities
+      '@ayzen/identity-context':
+        specifier: workspace:*
+        version: link:../../packages/identity-context
       '@ayzen/module-registry':
         specifier: workspace:*
         version: link:../../packages/module-registry

@@ -62,112 +62,12 @@
 
 import { pool } from "@workspace/db";
 
-export interface SeedClient {
-  clientId: string;
-  label: string; // display name only, never written to the DB
-  clientSecretHash: null; // every seeded client here is public/PKCE-only
-  redirectUris: string[];
-  postLogoutRedirectUris: string[];
-  /**
-   * OIDC Roadmap — Season 3, Phase 6e-b (migration 085). `null` for every
-   * seeded client EXCEPT Sylo — this Season's own scope is "শুধু Sylo"
-   * (`CHANGES_OIDC_LOGOUT_PROPAGATION_DECISION_PHASE6D.md`'s own 6d-a),
-   * so Ryft/Wisp/Verve/Zynth are deliberately left unregistered for
-   * propagation, exactly the fail-closed state migration 085's own header
-   * describes ("a client that hasn't registered one simply never
-   * receives propagation"). Registering theirs too is future-Season
-   * work, not a schema/seed change — see migration 085's own header for
-   * why the model itself doesn't need to change to support that later.
-   */
-  backchannelLogoutUri: string | null;
-  allowedScopes: string[];
-  isFirstParty: true;
-}
+import { SEED_CLIENTS, type SeedClient } from "./oidc-seed-clients-data";
 
-/** Season 1's registered scope set for every first-party AYZEN app — see file header for why "profile"/"email" are included now. */
-const AYZEN_FIRST_PARTY_SCOPES = ["openid", "profile", "email"];
-
-function productionCallbackUrl(clientId: string): string {
-  return `https://${clientId}.ayzen.tech/oidc/callback`;
-}
-
-/** Season 3, Phase 6a-d: each app's own home page — see file header. */
-function productionPostLogoutUrl(clientId: string): string {
-  return `https://${clientId}.ayzen.tech/`;
-}
-
-/** Season 3, Phase 6e-b: the one URI a registered client's own backchannel-logout receiving endpoint lives at — see `routes/oidc-backchannel-logout.ts`'s own header for why this exact path. */
-function productionBackchannelLogoutUrl(clientId: string): string {
-  return `https://${clientId}.ayzen.tech/oidc/backchannel-logout`;
-}
-
-function seedClient(clientId: string, label: string, opts?: { backchannelLogout?: boolean }): SeedClient {
-  return {
-    clientId,
-    label,
-    clientSecretHash: null,
-    redirectUris: [productionCallbackUrl(clientId)],
-    postLogoutRedirectUris: [productionPostLogoutUrl(clientId)],
-    backchannelLogoutUri: opts?.backchannelLogout ? productionBackchannelLogoutUrl(clientId) : null,
-    allowedScopes: AYZEN_FIRST_PARTY_SCOPES,
-    isFirstParty: true,
-  };
-}
-
-// 2B-a..2B-e: one entry per first-party app.
-//
-// UPDATE — backchannel logout coverage extended beyond Sylo. 6e-b's own
-// receiving endpoint (`routes/oidc-backchannel-logout.ts`) and dispatch
-// path (`lib/oidc-logout-propagation.ts`'s `resolveBackchannelLogoutTargets()`)
-// were ALREADY fully generic over any registered `client_id` — the only
-// thing scoping this to Sylo alone was this seed data. 6d-c's own Decision
-// Record said as much: "this model has to keep working once Ryft/Wisp/
-// Verve/Zynth become real ... RPs" — that Season deliberately deferred
-// turning it on for them, not deferred building the mechanism. Since
-// they're still the same monorepo Express app on the same domain family as
-// Sylo (subdomain-app.ts), there's no remaining reason to leave them
-// unregistered; flipping `backchannelLogout: true` here is the entire
-// change. `workspace` (the main-domain "Login with AYZEN" client) gets the
-// same treatment for the identical reason.
-const workspaceClient: SeedClient = {
-  clientId: "workspace",
-  label: "AYZEN Workspace",
-  clientSecretHash: null,
-  redirectUris: [
-    "https://ayzen.tech/oidc/callback",
-    "https://workspace.ayzen.tech/oidc/callback",
-  ],
-  postLogoutRedirectUris: [
-    "https://ayzen.tech/",
-    "https://workspace.ayzen.tech/",
-  ],
-  // Same server-to-server target shape productionBackchannelLogoutUrl()
-  // builds for every other first-party app — this client's own receiving
-  // endpoint lives at the bare main domain, not a `workspace.` subdomain,
-  // matching its redirect/post-logout URIs above.
-  backchannelLogoutUri: "https://ayzen.tech/oidc/backchannel-logout",
-  allowedScopes: AYZEN_FIRST_PARTY_SCOPES,
-  isFirstParty: true,
-};
-
-export const SEED_CLIENTS: SeedClient[] = [
-  seedClient("sylo", "Sylo", { backchannelLogout: true }),
-  seedClient("ryft", "Ryft", { backchannelLogout: true }),
-  seedClient("wisp", "Wisp", { backchannelLogout: true }),
-  seedClient("verve", "Verve", { backchannelLogout: true }),
-  seedClient("zynth", "Zynth", { backchannelLogout: true }),
-  // Skarn (master plan §7 Phase 3, this pass) — the existing "Protocols"
-  // nav group (route-config.tsx / app-sidebar.tsx) IS Skarn's product
-  // surface, already built; this just registers its OIDC client the same
-  // way every other split app got one, so skarn.ayzen.tech gets the same
-  // "Sign in with AYZEN" auto-cutover the rest already have.
-  seedClient("skarn", "Skarn", { backchannelLogout: true }),
-  // Fyra (Module Shell Split, Season 1) - own module at fyra.ayzen.tech;
-  // same first-party PKCE client pattern as every other split app.
-  seedClient("fyra", "Fyra", { backchannelLogout: true }),
-  seedClient("warde", "Warde", { backchannelLogout: true }),
-  workspaceClient,
-];
+// W1-P3: the client definitions moved to ./oidc-seed-clients-data.ts (pure data, derived from
+// packages/module-registry). Re-exported so every existing importer keeps working.
+export { SEED_CLIENTS };
+export type { SeedClient };
 
 async function main(): Promise<void> {
   const dryRun = process.argv.slice(2).includes("--dry-run");
@@ -194,9 +94,12 @@ async function main(): Promise<void> {
   for (const c of SEED_CLIENTS) {
     try {
       await pool.query(
-        `INSERT INTO oidc_clients (client_id, client_secret_hash, redirect_uris, post_logout_redirect_uris, backchannel_logout_uri, allowed_scopes, is_first_party, updated_at)
-         VALUES ($1, $2, $3::jsonb, $4::jsonb, $5, $6::jsonb, $7, NOW())
+        `INSERT INTO oidc_clients (client_id, client_secret_hash, registration_status, redirect_uris, post_logout_redirect_uris, backchannel_logout_uri, allowed_scopes, is_first_party, updated_at)
+         VALUES ($1, $2, 'approved', $3::jsonb, $4::jsonb, $5, $6::jsonb, $7, NOW())
          ON CONFLICT (client_id) DO UPDATE SET
+           -- W1-P3: a seeded first-party client stuck in 'pending' (inserted after migration 091 by an older seed that never set the
+           -- column) is repaired; 'approved' stays, and 'suspended' is an admin's decision a re-seed must NEVER undo.
+           registration_status = CASE WHEN oidc_clients.registration_status = 'pending' THEN 'approved' ELSE oidc_clients.registration_status END,
            redirect_uris = EXCLUDED.redirect_uris,
            post_logout_redirect_uris = EXCLUDED.post_logout_redirect_uris,
            backchannel_logout_uri = EXCLUDED.backchannel_logout_uri,

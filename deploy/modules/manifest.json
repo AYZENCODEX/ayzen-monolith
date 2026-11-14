@@ -1,0 +1,86 @@
+{
+  "generatedFrom": "packages/module-registry",
+  "apiOrigin": "https://api.ayzen.tech",
+  "modules": [
+    {
+      "id": "sylo",
+      "host": "sylo.ayzen.tech",
+      "vercelProject": "ayzen-sylo",
+      "config": "deploy/modules/sylo/vercel.json",
+      "buildEnv": {
+        "VITE_MODULE": "sylo",
+        "VITE_API_URL": "https://api.ayzen.tech"
+      }
+    },
+    {
+      "id": "ryft",
+      "host": "ryft.ayzen.tech",
+      "vercelProject": "ayzen-ryft",
+      "config": "deploy/modules/ryft/vercel.json",
+      "buildEnv": {
+        "VITE_MODULE": "ryft",
+        "VITE_API_URL": "https://api.ayzen.tech"
+      }
+    },
+    {
+      "id": "fyra",
+      "host": "fyra.ayzen.tech",
+      "vercelProject": "ayzen-fyra",
+      "config": "deploy/modules/fyra/vercel.json",
+      "buildEnv": {
+        "VITE_MODULE": "fyra",
+        "VITE_API_URL": "https://api.ayzen.tech"
+      }
+    },
+    {
+      "id": "verve",
+      "host": "verve.ayzen.tech",
+      "vercelProject": "ayzen-verve",
+      "config": "deploy/modules/verve/vercel.json",
+      "buildEnv": {
+        "VITE_MODULE": "verve",
+        "VITE_API_URL": "https://api.ayzen.tech"
+      }
+    },
+    {
+      "id": "skarn",
+      "host": "skarn.ayzen.tech",
+      "vercelProject": "ayzen-skarn",
+      "config": "deploy/modules/skarn/vercel.json",
+      "buildEnv": {
+        "VITE_MODULE": "skarn",
+        "VITE_API_URL": "https://api.ayzen.tech"
+      }
+    },
+    {
+      "id": "warde",
+      "host": "warde.ayzen.tech",
+      "vercelProject": "ayzen-warde",
+      "config": "deploy/modules/warde/vercel.json",
+      "buildEnv": {
+        "VITE_MODULE": "warde",
+        "VITE_API_URL": "https://api.ayzen.tech"
+      }
+    },
+    {
+      "id": "wisp",
+      "host": "wisp.ayzen.tech",
+      "vercelProject": "ayzen-wisp",
+      "config": "deploy/modules/wisp/vercel.json",
+      "buildEnv": {
+        "VITE_MODULE": "wisp",
+        "VITE_API_URL": "https://api.ayzen.tech"
+      }
+    },
+    {
+      "id": "zynth",
+      "host": "zynth.ayzen.tech",
+      "vercelProject": "ayzen-zynth",
+      "config": "deploy/modules/zynth/vercel.json",
+      "buildEnv": {
+        "VITE_MODULE": "zynth",
+        "VITE_API_URL": "https://api.ayzen.tech"
+      }
+    }
+  ]
+}
