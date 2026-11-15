@@ -10,7 +10,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getLandingContent, landingDocument, landingHead } from "./landing.mjs";
+import { getModule } from "./index.mjs";
+import { aboutDocument, getLandingContent, landingDocument, landingHead, llmsFullTxt, llmsTxt, robotsTxt, sitemapXml } from "./landing.mjs";
 
 const DEFAULT_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "landings");
 /** Read lazily: a bundled server (esbuild) cannot locate the folder from import.meta.url, so it sets MODULE_LANDINGS_DIR. */
@@ -21,6 +22,10 @@ const BASE_DESIGNS = new Set(["verve"]);
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 export const designFile = (id) => path.join(designRoot(), id, "index.html");
+/** A module's OWN sign-in page (landings/<id>/login.html). Only a design that talks to the real /api/auth routes may be shipped here. */
+export const loginFile = (id) => path.join(designRoot(), id, "login.html");
+export const hasLogin = (id) => fs.existsSync(loginFile(id));
+export const loginIds = () => designIds().filter((d) => hasLogin(d));
 export const hasDesign = (id) => fs.existsSync(designFile(id));
 export const designIds = () => (fs.existsSync(designRoot()) ? fs.readdirSync(designRoot()).filter((d) => hasDesign(d)) : []);
 
@@ -32,7 +37,7 @@ export function designAssets(id) {
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
       const abs = path.join(d, e.name);
       if (e.isDirectory()) walk(abs);
-      else { const rel = path.relative(root, abs).split(path.sep).join("/"); if (rel !== "index.html") out.push({ rel, abs }); }
+      else { const rel = path.relative(root, abs).split(path.sep).join("/"); if (rel !== "index.html" && rel !== "login.html") out.push({ rel, abs }); }
     }
   };
   if (fs.existsSync(root)) walk(root);
@@ -103,4 +108,49 @@ export function designedLandingHtml(id, opts = {}) {
   if (!BASE_DESIGNS.has(id) && !/href="\/login"|data-go="in\./.test(html)) html = html.replace(/<\/body>/i, `${PILL}\n</body>`);
   html = html.replace(/<\/body>/i, `${ABOUT_LINK(c)}\n${CTA_SCRIPT}\n</body>`);
   return html;
+}
+
+/**
+ * The module's own sign-in page, exactly as designed, plus a runtime prelude:
+ *  - always: the module's OIDC client id (the design reads window.<ID>_OIDC_CLIENT_ID);
+ *  - when the API lives on another origin (static hosting, opts.apiOrigin): "/api/..." fetches go to that origin (the same rewrite
+ *    lib/api-routing.ts applies inside the SPA) and the OIDC issuer is that origin.
+ * Brand/back links "/<id>/" point at "/". The page is noindex (a sign-in form has no search value).
+ */
+export function designedLoginHtml(id, opts = {}) {
+  if (!hasLogin(id)) return null;
+  const m = getModule(id);
+  const P = id.toUpperCase();
+  const api = opts.apiOrigin ? String(opts.apiOrigin).replace(/\/+$/, "") : "";
+  const prelude = [
+    `window.${P}_OIDC_CLIENT_ID=${JSON.stringify(m.oidcClientId)};`,
+    api
+      ? `window.${P}_OIDC_ISSUER=${JSON.stringify(api)};(function(A){var f=window.fetch;window.fetch=function(u,i){if(typeof u==="string"&&u.indexOf("/api/")===0){u=A+u;i=Object.assign({},i,{credentials:i&&i.credentials==="omit"?"omit":"include"})}return f.call(this,u,i)}})(${JSON.stringify(api)});`
+      : "",
+  ].join("");
+  let html = fs.readFileSync(loginFile(id), "utf8").replace(/href="\/[a-z]+\/"/g, 'href="/"');
+  html = html.replace(/<head[^>]*>/i, (h) => `${h}<meta name="robots" content="noindex, nofollow"><script>${prelude}</script>`);
+  return html;
+}
+
+/** Everything a module serves besides the SPA: landing, own login, about, robots/sitemap/llms. Used by the module build (dir = dist root) and the central build (dir = dist/m/<id>). */
+export function emitModuleSite(id, dir, opts = {}) {
+  const w = (rel, body) => { const f = path.join(dir, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, body); };
+  w("index.html", designedLandingHtml(id, opts));
+  const login = designedLoginHtml(id, opts);
+  if (login) w("login/index.html", login);
+  w("robots.txt", robotsTxt(id, opts));
+  w("sitemap.xml", sitemapXml(id, opts));
+  w("llms.txt", llmsTxt(id, opts));
+  w("llms-full.txt", llmsFullTxt(id, opts));
+  w("about/index.html", aboutDocument(getLandingContent(id), opts));
+}
+
+/** Design assets under <outRoot>/landing-assets/<id>/ (the prefix the landing HTML refers to). */
+export function emitLandingAssets(id, outRoot) {
+  for (const a of designAssets(id)) {
+    const dest = path.join(outRoot, LANDING_ASSET_PREFIX.slice(1), id, a.rel);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(a.abs, dest);
+  }
 }

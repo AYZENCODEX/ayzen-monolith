@@ -19,3 +19,9 @@
 - Central: richer `llms.txt`, new `llms-full.txt`, robots with AI crawlers.
 - Validator 27 rules / 48 mutants; chromium spec now also covers `/about` and the crawler files.
 - Open point: Skarn's design (issues, cycles, modules) and the registry description ("airdrop projects") disagree; copy follows the design.
+
+## Follow-up: module-own login + central hand-over
+* Fyra's supplied login design is `landings/fyra/login.html` (byte-identical) and is served at `/login` on Express, per-module builds and the central build; `designedLoginHtml`, `emitModuleSite`, `emitLandingAssets` in `landing-designs.mjs`.
+* Central bundle on a module host (sylo/skarn were showing the generic page): `designHandoff` in `module-landing-gate.ts` + `main.tsx`; central `vite.config.ts` emits `/m/<id>/`.
+* Validator 28 rules / 54 mutants; new `tests/e2e/module-landing/login.spec.mjs` (chromium).
+* Not verified: real `vite build`, tsc (deps not installable here), a live Vercel deploy, token compatibility of the login page with the SPA session beyond the `ayzen_token`/`ayzen_user` keys.

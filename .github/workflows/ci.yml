@@ -163,6 +163,7 @@ jobs:
       - run: npm install --no-save --no-package-lock playwright && npx playwright install --with-deps chromium
       - run: node tests/e2e/module-landing/landing.spec.mjs
       - run: node tests/e2e/module-landing/designed.spec.mjs
+      - run: node tests/e2e/module-landing/login.spec.mjs
 
   affected:
     runs-on: ubuntu-latest

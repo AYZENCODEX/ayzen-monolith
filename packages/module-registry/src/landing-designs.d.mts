@@ -1,0 +1,13 @@
+export function designRoot(): string;
+export const LANDING_ASSET_PREFIX: string;
+export function designFile(id: string): string;
+export function hasDesign(id: string): boolean;
+export function designIds(): string[];
+export function loginFile(id: string): string;
+export function hasLogin(id: string): boolean;
+export function loginIds(): string[];
+export function designAssets(id: string): { rel: string; abs: string }[];
+export function designedLandingHtml(id: string, opts?: { origin?: string }): string | null;
+export function designedLoginHtml(id: string, opts?: { apiOrigin?: string }): string | null;
+export function emitModuleSite(id: string, dir: string, opts?: { origin?: string; apiOrigin?: string }): void;
+export function emitLandingAssets(id: string, outRoot: string): void;
