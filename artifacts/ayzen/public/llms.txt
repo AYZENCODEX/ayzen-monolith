@@ -1,0 +1,27 @@
+# AYZEN
+
+> AYZEN is a Web3 workspace of 8 connected modules for airdrop teams and crypto builders: vault, wallets, finance, marketplace, airdrops, teams, mail and an AI assistant.
+
+AYZEN runs as separate modules, each with its own account, session and data. Nothing is shared between modules unless the person connects them. Each module host publishes its own llms.txt and llms-full.txt.
+
+## Modules
+
+- [Sylo](https://sylo.ayzen.tech/): Sylo is the vault inside AYZEN: keep logins, identities, wallets, seed phrases and KYC data in one place, locked with a passkey and a separate vault PIN. (details: https://sylo.ayzen.tech/about, full text: https://sylo.ayzen.tech/llms-full.txt)
+- [Ryft](https://ryft.ayzen.tech/): Ryft is the exchange and wallet module of AYZEN: spot markets with order books, instant convert, a wallet, and P2P trading with escrow, behind passkeys and 2FA. (details: https://ryft.ayzen.tech/about, full text: https://ryft.ayzen.tech/llms-full.txt)
+- [Fyra](https://fyra.ayzen.tech/): Fyra is the finance workspace of AYZEN: ledger, budgets, invoices, loans, investments and double-entry accounting with P&L, balance sheet and cash-flow reports. (details: https://fyra.ayzen.tech/about, full text: https://fyra.ayzen.tech/llms-full.txt)
+- [Verve](https://verve.ayzen.tech/): Verve is the AYZEN marketplace: browse accounts, subscriptions and game credit, and trade peer to peer, all in one considered catalogue. (details: https://verve.ayzen.tech/about, full text: https://verve.ayzen.tech/llms-full.txt)
+- [Skarn](https://skarn.ayzen.tech/): Skarn is the project module of AYZEN: issues, cycles, modules, views and pages in one calm workspace, with its own login and its own ID. (details: https://skarn.ayzen.tech/about, full text: https://skarn.ayzen.tech/llms-full.txt)
+- [Warde](https://warde.ayzen.tech/): Warde is the team module of AYZEN: team overview, tasks and missions, projects, members and invites, chat, activity, team mail and a shared team vault. (details: https://warde.ayzen.tech/about, full text: https://warde.ayzen.tech/llms-full.txt)
+- [Wisp](https://wisp.ayzen.tech/): Wisp is the mail module of AYZEN: claim a username@ayzen.tech address, sort mail with rules, undo or schedule sends, and use your own SMTP and IMAP accounts. (details: https://wisp.ayzen.tech/about, full text: https://wisp.ayzen.tech/llms-full.txt)
+- [Zynth](https://zynth.ayzen.tech/): Zynth is the AI agent of AYZEN: give it a goal in plain language and it plans, checks policy and runs the work across your AYZEN modules through MCP tools. (details: https://zynth.ayzen.tech/about, full text: https://zynth.ayzen.tech/llms-full.txt)
+
+## Pages
+
+- [AYZEN overview](https://ayzen.tech/landing/): what AYZEN is
+- [Full text for AI assistants](https://ayzen.tech/llms-full.txt): every module described in one markdown file
+- [Sign in](https://ayzen.tech/login): sign in with your AYZEN account
+- [Create account](https://ayzen.tech/register): create an AYZEN account
+
+## Pricing
+
+Prices are not listed here. Anything that costs money is shown inside the product before you confirm it.

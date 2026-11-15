@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import { moduleRequestContext } from "./lib/module-request-context";
 import path from "path";
 import fs from "fs";
-import { robotsTxt, sitemapXml } from "@ayzen/module-registry/landing";
+import { robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, getLandingContent } from "@ayzen/module-registry/landing";
 import { designAssets, designIds, designedLandingHtml } from "@ayzen/module-registry/landing-designs";
 import { fileURLToPath } from "url";
 import router from "./routes";
@@ -402,9 +402,10 @@ if (SPLIT_REDIRECTS) {
 
 if (process.env.NODE_ENV === "production") {
   const distPath = path.resolve(__dirname, "../../ayzen/dist/public");
-  // W2-P4: with MODULE_LANDING_ENABLED=1 a module host serves its own landing (SEO tags + prerendered body) at "/" instead of a
+  // W2-P4: unless MODULE_LANDING_ENABLED=0 a module host serves its own landing (SEO tags + prerendered body) at "/" instead of a
   // 302. The inline guard in the HTML clears it for signed-in visitors, and the SPA then redirects them to the module home.
-  const landingByHost = process.env.MODULE_LANDING_ENABLED === "1" ? buildLandingByHost() : new Map<string, string>();
+  const landingByHost = process.env.MODULE_LANDING_ENABLED !== "0" ? buildLandingByHost() : new Map<string, string>();
+  logger.info({ hosts: [...landingByHost.keys()] }, landingByHost.size ? "module landings: serving at '/' on these hosts" : "module landings: disabled or none found");
   app.get("/landing-assets/{*file}", (req, res, next) => {
     if (!landingByHost.size) return next();
     const key = [].concat((req.params as any).file ?? []).join("/");
@@ -417,6 +418,23 @@ if (process.env.NODE_ENV === "production") {
     const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
     if (!id || !landingByHost.size) return next();
     res.type("text/plain").send(robotsTxt(id, { origin: `https://${req.hostname}` }));
+  });
+  app.get("/llms.txt", (req, res, next) => {
+    const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
+    if (!id || !landingByHost.size) return next();
+    res.type("text/plain; charset=utf-8").send(llmsTxt(id, { origin: `https://${req.hostname}` }));
+  });
+  app.get("/llms-full.txt", (req, res, next) => {
+    const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
+    if (!id || !landingByHost.size) return next();
+    res.type("text/markdown; charset=utf-8").send(llmsFullTxt(id, { origin: `https://${req.hostname}` }));
+  });
+  app.get("/about", (req, res, next) => {
+    const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
+    const c = id && landingByHost.size ? getLandingContent(id) : null;
+    if (!c) return next();
+    res.setHeader("Cache-Control", "public, max-age=300");
+    res.type("html").send(aboutDocument(c, { origin: `https://${req.hostname}` }));
   });
   app.get("/sitemap.xml", (req, res, next) => {
     const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);

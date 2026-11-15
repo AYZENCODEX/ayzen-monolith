@@ -9,7 +9,7 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { LANDINGS, getLandingContent, landingDocument, landingIds, injectLandingIntoHtml, robotsTxt, sitemapXml } from "../packages/module-registry/src/landing.mjs";
+import { LANDINGS, getLandingContent, landingDocument, landingIds, robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, AI_CRAWLERS } from "../packages/module-registry/src/landing.mjs";
 import { MODULES } from "../packages/module-registry/src/index.mjs";
 import { designedLandingHtml, designAssets, designIds, hasDesign } from "../packages/module-registry/src/landing-designs.mjs";
 
@@ -23,7 +23,7 @@ function load(over = {}) {
   const docs = Object.fromEntries(ids.map((id) => [id, landingDocument(getLandingContent(id))]));
   return { ids, docs: { ...docs, ...over.docs }, prod: { ...Object.fromEntries(ids.map((id) => [id, designedLandingHtml(id)])), ...over.prod }, designs: over.designs ?? designIds(), assets: over.assets ?? Object.fromEntries(designIds().map((id) => [id, designAssets(id).map((a) => a.rel)])), files: { ...Object.fromEntries(WIRING.map((f) => [f, read(f)])), ...over.files },
     og: over.og ?? Object.fromEntries(ids.map((id) => [id, existsSync(join(ROOT, `artifacts/ayzen/public/og/${id}.png`)) ? statSync(join(ROOT, `artifacts/ayzen/public/og/${id}.png`)).size : 0])),
-    shell: over.shell ?? read("artifacts/ayzen/index.html"), robots: over.robots, landings: over.landings };
+    shell: over.shell ?? read("artifacts/ayzen/index.html"), llms: over.llms, abouts: over.abouts, fulls: over.fulls, robots: over.robots, landings: over.landings };
 }
 const text = (h) => h.replace(/<style[\s\S]*?<\/style>/g, "").replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 const eachDoc = (t, fn) => { const bad = []; for (const [id, d] of Object.entries(t.docs)) { const m = fn(d, id); if (m) bad.push(`${id}: ${m}`); } return bad.length ? bad.join("; ") : null; };
@@ -41,12 +41,13 @@ const RULES = [
     }
     return null;
   }],
-  ["content depth: hero, >=4 features, shards pricing CTA, FAQ with >=5 questions", (t) => eachDoc(t, (d) => {
+  ["content depth: hero, >=4 features, pricing section with CTA, FAQ with >=8 questions", (t) => eachDoc(t, (d) => {
     const n = (re) => (d.match(re) ?? []).length;
     if (n(/<h1[ >]/g) !== 1) return "need exactly one h1";
     if (n(/<li><h3>/g) < 4) return "fewer than 4 features";
-    if (!/id="pricing"/.test(d) || !/Shards/.test(d) || !/href="\/register"/.test(d)) return "no shards pricing section with a CTA";
-    if (n(/<details>/g) < 5) return "fewer than 5 FAQ items";
+    if (!/id="pricing"/.test(d) || !/href="\/register"/.test(d)) return "no pricing section with a CTA";
+    if (/Shards|Start free|Free to start/i.test(d)) return "invented pricing claim (the repo defines no prices)";
+    if (n(/<details>/g) < 8) return "fewer than 8 FAQ items";
     return null;
   })],
   ["SEO: <title> (<=70), meta description (50-170), viewport, html lang, charset", (t) => eachDoc(t, (d) => {
@@ -101,9 +102,9 @@ const RULES = [
     }
     return null;
   }],
-  ["designs: every module with a design file ships it; the designed set is exactly the expected 7 (sylo uses the generic landing)", (t) => {
-    const have = [...t.designs].sort().join(","); const want = ["fyra", "ryft", "skarn", "verve", "warde", "wisp", "zynth"].join(",");
-    return have === want && !hasDesign("sylo") ? null : `designs: ${have}`;
+  ["designs: every module has its design file; the designed set is exactly the 8 modules", (t) => {
+    const have = [...t.designs].sort().join(","); const want = ["fyra", "ryft", "skarn", "sylo", "verve", "warde", "wisp", "zynth"].join(",");
+    return have === want && hasDesign("sylo") ? null : `designs: ${have}`;
   }],
   ["demo auth is neutralised: no anchor/form/button reaches a design's demo sign-in; sign-in goes to /login and /register", (t) => {
     for (const id of t.ids.filter((i) => t.designs.includes(i))) {
@@ -136,7 +137,62 @@ const RULES = [
     for (const id of t.ids) {
       const r = t.robots ?? robotsTxt(id); const host = MODULES.find((m) => m.id === id).defaultHost;
       if (!/Allow: \/\$/.test(r) || !/Disallow: \/\n/.test(r) || !r.includes(`Sitemap: https://${host}/sitemap.xml`)) return `${id}: robots.txt wrong`;
-      if (!sitemapXml(id).includes(`<loc>https://${host}/</loc>`)) return `${id}: sitemap wrong`;
+      if (!sitemapXml(id).includes(`<loc>https://${host}/</loc>`) || !sitemapXml(id).includes(`<loc>https://${host}/about</loc>`)) return `${id}: sitemap must list / and /about`;
+      if (!/Allow: \/about\$/.test(r) || !/Allow: \/llms-full\.txt/.test(r)) return `${id}: robots.txt must allow /about and /llms-full.txt`;
+      for (const bot of ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended", "OAI-SearchBot"]) if (!r.includes(`User-agent: ${bot}`)) return `${id}: robots.txt does not name ${bot}`;
+      const groups = r.split(/\n\n/).filter((g) => /User-agent:/.test(g)); if (groups.length < 2 || groups.some((g) => !/Disallow: \/(\n|$)/.test(g) || !/Allow: \/\$/.test(g))) return `${id}: every robots group must carry the same allow/disallow rules`;
+    }
+    return null;
+  }],
+  ["llms.txt per module: H1 = module, blockquote summary, Pages/Pricing/FAQ sections, links on the module host only; robots allows it", (t) => {
+    for (const id of t.ids) {
+      const l = t.llms?.[id] ?? llmsTxt(id); const m = MODULES.find((x) => x.id === id); const c = getLandingContent(id);
+      if (!l.startsWith(`# ${c.label}\n\n> `)) return `${id}: llms.txt must start with "# <Label>" and a "> summary"`;
+      for (const h of ["## Pages", "## Pricing", "## FAQ"]) if (!l.includes(h)) return `${id}: llms.txt missing ${h}`;
+      const pages = l.split("## Pages")[1]?.split("\n## ")[0] ?? "";
+      const links = [...pages.matchAll(/\]\((https?:[^)]+)\)/g)].map((x) => x[1]);
+      if (links.length < 5 || !pages.includes("/about") || !pages.includes("/llms-full.txt")) return `${id}: llms.txt Pages must list home, /about, /llms-full.txt, login, register`;
+      if (links.some((u) => !u.startsWith(`https://${m.defaultHost}/`))) return `${id}: llms.txt links must stay on ${m.defaultHost}`;
+      if (!/Allow: \/llms\.txt/.test(robotsTxt(id))) return `${id}: robots.txt does not allow /llms.txt`;
+    }
+    return null;
+  }],
+  ["/about page per module: one h1, canonical /about, OG/Twitter, FAQPage JSON-LD that matches the visible FAQ, BreadcrumbList, all content sections", (t) => {
+    for (const id of t.ids) {
+      const c = getLandingContent(id); const m = MODULES.find((x) => x.id === id); const d = t.abouts?.[id] ?? aboutDocument(c);
+      const n = (re) => (d.match(re) ?? []).length;
+      if (n(/<h1[ >]/g) !== 1 || !/<title>[^<]{10,70}<\/title>/.test(d)) return `${id}: about needs one h1 and a <=70 char title`;
+      if (!d.includes(`<link rel="canonical" href="https://${m.defaultHost}/about"`) || n(/rel="canonical"/g) !== 1) return `${id}: about canonical wrong`;
+      if (!d.includes('property="og:image"') || !d.includes('name="twitter:card"') || !/<meta name="description" content="[^"]{80,300}"/.test(d)) return `${id}: about OG/Twitter/description missing`;
+      const ld = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(d); let g; try { g = JSON.parse(ld[1])["@graph"]; } catch { return `${id}: about JSON-LD does not parse`; }
+      const faq = g?.find((x) => x["@type"] === "FAQPage"); if (!faq) return `${id}: no FAQPage JSON-LD`;
+      if (faq.mainEntity.length !== n(/<details>/g) || faq.mainEntity.length < 8) return `${id}: FAQPage must match the visible FAQ (>=8)`;
+      if (!g.some((x) => x["@type"] === "BreadcrumbList") || !g.some((x) => x["@type"] === "SoftwareApplication" && x.featureList?.length >= 4)) return `${id}: BreadcrumbList/SoftwareApplication JSON-LD missing`;
+      for (const h of ["What is ", "Features", "in detail", "How ", "Limits and honest notes", "Pricing", "Frequently asked questions"]) if (!d.includes(h)) return `${id}: about is missing the "${h}" section`;
+      if (/<script(?![^>]*ld\+json)\b/i.test(d) || /<link\b[^>]*rel="stylesheet"/i.test(d)) return `${id}: about must not load scripts or stylesheets`;
+    }
+    return null;
+  }],
+  ["llms-full.txt per module: complete (every feature title, FAQ question, step) and honest (limits, pricing)", (t) => {
+    for (const id of t.ids) {
+      const c = getLandingContent(id); const l = t.fulls?.[id] ?? llmsFullTxt(id);
+      if (!l.startsWith(`# ${c.label}\n`)) return `${id}: llms-full.txt must start with the module name`;
+      for (const f of c.features) if (!l.includes(f.title)) return `${id}: llms-full.txt misses feature "${f.title}"`;
+      for (const [q] of c.faq) if (!l.includes(q)) return `${id}: llms-full.txt misses "${q}"`;
+      for (const st of c.steps) if (!l.includes(st.title)) return `${id}: llms-full.txt misses step "${st.title}"`;
+      for (const h of ["## Limits and honest notes", "## Pricing", "## FAQ", "## How it works"]) if (!l.includes(h)) return `${id}: llms-full.txt missing ${h}`;
+      if (l.length < 2500) return `${id}: llms-full.txt is too thin (${l.length} chars)`;
+    }
+    return null;
+  }],
+  ["copy matches the supplied designs: summary shares the module's own anchor terms with its design, and the meta description is the summary", (t) => {
+    const ANCHORS = { sylo: ["AES-256-GCM", "passkey", "Emergency access"], ryft: ["escrow", "order book", "P2P"], fyra: ["double-entry", "ledger", "invoice"], verve: ["peer-to-peer", "subscriptions", "game credit"], skarn: ["cycles", "modules", "its own login"], warde: ["missions", "invite", "team"], wisp: ["Cloudflare Email Routing", "rules", "undo send"], zynth: ["default deny", "policy", "MCP"] };
+    for (const id of t.ids) {
+      const o = t.prod[id]; const c = getLandingContent(id);
+      const hay = o.toLowerCase();
+      for (const a of ANCHORS[id] ?? []) { if (!hay.includes(a.toLowerCase())) return `${id}: the design no longer mentions "${a}" (update landing-content.mjs or the design)`; if (!JSON.stringify([c.features, c.areas, c.faq]).toLowerCase().includes(a.toLowerCase())) return `${id}: landing-content.mjs does not mention "${a}"`; }
+      if (!o.includes(`<meta name="description" content="${c.summary.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}"`)) return `${id}: meta description is not the module summary`;
+      if (c.summary.length > 160) return `${id}: summary longer than 160 characters`;
     }
     return null;
   }],
@@ -157,16 +213,18 @@ const RULES = [
     const v = t.files["artifacts/ayzen/vite.module.config.ts"], g = t.files["scripts/gen-module-deploy.mjs"], d = JSON.parse(t.files["deploy/modules/fyra/vercel.json"]);
     if (!/closeBundle\(\)/.test(v) || !/renameSync\(path\.join\(out, 'index\.html'\), path\.join\(out, 'app\.html'\)\)/.test(v)) return "SPA shell is not moved to app.html";
     if (!/writeFileSync\(path\.join\(out, 'index\.html'\), designedLandingHtml\(moduleId\)/.test(v)) return "landing is not written as index.html";
-    if (!/designAssets\(moduleId\)/.test(v) || !/robots\.txt/.test(v) || !/sitemap\.xml/.test(v)) return "assets/robots/sitemap not emitted";
+    if (!/designAssets\(moduleId\)/.test(v) || !/robots\.txt/.test(v) || !/sitemap\.xml/.test(v) || !/llms\.txt/.test(v) || !/llms-full\.txt/.test(v) || !/about\/index\.html/.test(v)) return "assets/robots/sitemap/llms.txt/llms-full.txt/about not emitted";
     if (/transformIndexHtml/.test(v)) return "the SPA shell must stay clean (no landing injected)";
     return /destination: "\/app\.html"/.test(g) && d.rewrites[0].destination === "/app.html" ? null : "deploy rewrite is not /app.html";
   }],
   ["server: MODULE_LANDING_ENABLED, '/' answered before express.static, asset allow-list, bundle-safe landings dir", (t) => {
     const a = t.files["artifacts/api-server/src/app.ts"], pk = JSON.parse(t.files["packages/module-registry/package.json"]);
-    if (!/MODULE_LANDING_ENABLED === "1"/.test(a) || !/designedLandingHtml\(c\.id/.test(a)) return "server landing switch missing";
+    if (!/MODULE_LANDING_ENABLED !== "0"/.test(a) || !/designedLandingHtml\(c\.id/.test(a)) return "server landing switch missing";
     const i = a.indexOf('app.get("/", (req, res, next) => {\n    const landing'), j = a.indexOf("app.use(express.static(distPath))");
     if (i < 0 || j < 0 || i > j) return "'/' must be registered before express.static";
     if (!/LANDING_ASSET_FILES\.get\(key\)/.test(a)) return "asset allow-list missing";
+    if (!/app\.get\("\/llms-full\.txt"/.test(a) || !/app\.get\("\/about"/.test(a)) return "server /about or /llms-full.txt route missing";
+    if (!/app\.get\("\/llms\.txt"/.test(a) || !/app\.get\("\/robots\.txt"/.test(a) || !/app\.get\("\/sitemap\.xml"/.test(a)) return "server robots/sitemap/llms.txt routes missing";
     if (!/process\.env\.MODULE_LANDINGS_DIR \?\?=/.test(a)) return "bundled server does not set MODULE_LANDINGS_DIR";
     return pk.exports?.["./landing"] && pk.exports?.["./landing-designs"] ? null : "registry exports missing";
   }],
@@ -211,6 +269,19 @@ if (process.argv.includes("--self-test")) {
     ["verve ships demo login", { assets: { ...base.assets, verve: [...base.assets.verve, "login.html"] } }, "demo auth"],
     ["unrewritten asset url", { prod: { wisp: base.prod.wisp.replace("/landing-assets/wisp/fonts/", "fonts/") } }, "design assets"],
     ["unknown third party", { prod: { zynth: base.prod.zynth.replace("</head>", '<script src="https://evil.example/x.js"></script></head>') } }, "third parties"],
+    ["llms.txt without summary", { llms: Object.fromEntries(base.ids.map((i) => [i, llmsTxt(i).replace(/^# [^\n]*\n\n> /, "# x\n\n")])) }, "llms.txt per module"],
+    ["llms.txt links off-host", { llms: { ...Object.fromEntries(base.ids.map((i) => [i, llmsTxt(i)])), ryft: llmsTxt("ryft").replace("https://ryft.ayzen.tech/login", "https://evil.example/login") } }, "llms.txt per module"],
+    ["llms.txt route removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('app.get("/llms.txt"', 'app.get("/llms-x.txt"') } }, "server:"],
+    ["llms.txt not emitted by build", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts").replace(/llms\.txt/g, "x.txt") } }, "module build:"],
+    ["about: FAQPage out of sync", { abouts: { ...Object.fromEntries(base.ids.map((i) => [i, aboutDocument(getLandingContent(i))])), wisp: aboutDocument(getLandingContent("wisp")).replace("<details>", "<details data-x>").replace(/<details data-x>[\s\S]*?<\/details>/, "") } }, "/about page"],
+    ["about: canonical wrong", { abouts: { ...Object.fromEntries(base.ids.map((i) => [i, aboutDocument(getLandingContent(i))])), fyra: aboutDocument(getLandingContent("fyra")).replace('/about" />', '/" />') } }, "/about page"],
+    ["about: loads a script", { abouts: { ...Object.fromEntries(base.ids.map((i) => [i, aboutDocument(getLandingContent(i))])), zynth: aboutDocument(getLandingContent("zynth")).replace("</body>", '<script src="/x.js"></script></body>') } }, "/about page"],
+    ["llms-full too thin", { fulls: { ...Object.fromEntries(base.ids.map((i) => [i, llmsFullTxt(i)])), skarn: "# Skarn\n\nshort\n" } }, "llms-full.txt per module"],
+    ["llms-full misses a FAQ", { fulls: { ...Object.fromEntries(base.ids.map((i) => [i, llmsFullTxt(i)])), verve: llmsFullTxt("verve").replace("What is Verve?", "x") } }, "llms-full.txt per module"],
+    ["design drifts from copy", { prod: { sylo: base.prod.sylo.replace(/AES-256-GCM/g, "ROT13") } }, "copy matches"],
+    ["meta description diverges", { prod: { ryft: base.prod.ryft.replace(/<meta name="description" content="[^"]*"/, '<meta name="description" content="something else entirely"') } }, "copy matches"],
+    ["robots loses an AI bot", { robots: robotsTxt("ryft").replace("User-agent: GPTBot\n", "") }, "robots.txt"],
+    ["robots AI group without rules", { robots: robotsTxt("ryft").replace(/(User-agent: MistralAI-User\n)[\s\S]*?(\nSitemap)/, "$1$2") }, "robots.txt"],
     ["design file removed", { designs: base.designs.filter((d) => d !== "wisp") }, "designs:"],
     ["robots allows everything", { robots: "User-agent: *\nAllow: /\n" }, "robots.txt"],
     ["main.tsx imports App statically", { files: { "artifacts/ayzen/src/main.tsx": 'import App from "./App";\n' + f("artifacts/ayzen/src/main.tsx") } }, "SPA gate"],
@@ -219,7 +290,7 @@ if (process.argv.includes("--self-test")) {
     ["landing not written as index.html", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts").replace("designedLandingHtml(moduleId)!", "''") } }, "module build:"],
     ["shell injected again", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts") + "\n// transformIndexHtml(html)\n" } }, "module build:"],
     ["deploy rewrite back to index.html", { files: { "deploy/modules/fyra/vercel.json": f("deploy/modules/fyra/vercel.json").replace("/app.html", "/index.html") } }, "module build:"],
-    ["server switch removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('MODULE_LANDING_ENABLED === "1"', "false") } }, "server:"],
+    ["server switch removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('MODULE_LANDING_ENABLED !== "0"', "false") } }, "server:"],
     ["static before landing route", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('app.use(express.static(distPath));\n  app.get("/{*splat}"', 'app.get("/{*splat}"').replace('app.get("/", (req, res, next) => {\n    const landing', 'app.use(express.static(distPath));\n  app.get("/", (req, res, next) => {\n    const landing') } }, "server:"],
     ["asset allow-list removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace("LANDING_ASSET_FILES.get(key)", "key") } }, "server:"],
     ["SPA gate removed", { files: { "artifacts/ayzen/src/main.tsx": f("artifacts/ayzen/src/main.tsx").replace("shouldShowModuleLanding(", "noop(") } }, "SPA fallback gate"],

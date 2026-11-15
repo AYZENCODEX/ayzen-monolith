@@ -15,6 +15,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import { MODULES } from "../../../packages/module-registry/src/index.mjs";
+import { aboutDocument, getLandingContent, llmsTxt, llmsFullTxt, robotsTxt, sitemapXml } from "../../../packages/module-registry/src/landing.mjs";
 import { designedLandingHtml, designAssets, designIds } from "../../../packages/module-registry/src/landing-designs.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -27,6 +28,11 @@ let current = null;
 const server = http.createServer((req, res) => {
   const u = new URL(req.url, "http://x"); hits.push(u.pathname);
   if (u.pathname === "/") { res.setHeader("content-type", "text/html"); return res.end(designedLandingHtml(current)); }
+  if (u.pathname === "/about") { res.setHeader("content-type", "text/html"); return res.end(aboutDocument(getLandingContent(current))); }
+  if (u.pathname === "/llms.txt") { res.setHeader("content-type", "text/plain"); return res.end(llmsTxt(current)); }
+  if (u.pathname === "/llms-full.txt") { res.setHeader("content-type", "text/markdown"); return res.end(llmsFullTxt(current)); }
+  if (u.pathname === "/robots.txt") { res.setHeader("content-type", "text/plain"); return res.end(robotsTxt(current)); }
+  if (u.pathname === "/sitemap.xml") { res.setHeader("content-type", "application/xml"); return res.end(sitemapXml(current)); }
   if (allow.has(u.pathname)) { const f = allow.get(u.pathname); res.setHeader("content-type", MIME[path.extname(f)] ?? "application/octet-stream"); return res.end(fs.readFileSync(f)); }
   if (u.pathname.startsWith("/og/")) { const f = path.join(root, "artifacts/ayzen/public", u.pathname); if (fs.existsSync(f)) { res.setHeader("content-type", "image/png"); return res.end(fs.readFileSync(f)); } }
   if (["/login", "/register"].includes(u.pathname) || MODULES.some((m) => m.homePath === u.pathname)) { res.setHeader("content-type", "text/html"); return res.end(`<!doctype html><title>SPA ${u.pathname}</title><body>spa</body>`); }
@@ -62,6 +68,21 @@ for (const m of MODULES) {
     if (shots) { fs.mkdirSync(shots, { recursive: true }); await page.screenshot({ path: path.join(shots, `${m.id}-${vp.width}.png`) }); }
     await ctx.close();
   }
+  // /about (long-form page) and the crawler files
+  for (const vp of [{ width: 1280, height: 800 }, { width: 375, height: 800 }]) {
+    const { ctx, page, log } = await mk(vp);
+    await page.goto(origin + "/about"); await page.waitForTimeout(500);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+    check(log.req.length === 1 && log.errs.length === 0 && !overflow, `${m.id}@${vp.width}: /about is one document request, no errors, no horizontal scroll`);
+    check((await page.locator("h1").count()) === 1 && (await page.locator("details").count()) >= 8, `${m.id}@${vp.width}: /about has one h1 and >=8 FAQ items`);
+    await ctx.close();
+  }
+  { const ctx = await browser.newContext(); const r = ctx.request;
+    for (const [p, ct, min] of [["/llms.txt", /text\/plain/, 800], ["/llms-full.txt", /markdown/, 2500], ["/robots.txt", /text\/plain/, 200], ["/sitemap.xml", /xml/, 100]]) {
+      const res = await r.get(origin + p); const body = await res.text();
+      check(res.status() === 200 && ct.test(res.headers()["content-type"] ?? "") && body.length >= min, `${m.id}: ${p} is served (${body.length} chars)`);
+    }
+    await ctx.close(); }
   // sign-in entries
   { const { ctx, page } = await mk({ width: 1280, height: 800 });
     await page.goto(origin + "/"); await page.waitForTimeout(500);

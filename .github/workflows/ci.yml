@@ -158,6 +158,8 @@ jobs:
       - run: node scripts/validate-w2-p4.mjs
       - run: node scripts/validate-w2-p4.mjs --self-test
       - run: node scripts/gen-module-og.mjs --check
+      - run: node scripts/gen-central-seo.mjs --check
+      - run: node scripts/gen-central-seo.mjs --self-test
       - run: npm install --no-save --no-package-lock playwright && npx playwright install --with-deps chromium
       - run: node tests/e2e/module-landing/landing.spec.mjs
       - run: node tests/e2e/module-landing/designed.spec.mjs

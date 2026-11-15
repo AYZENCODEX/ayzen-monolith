@@ -1,0 +1,741 @@
+# AYZEN: full text
+
+> AYZEN is a Web3 workspace of 8 connected modules for airdrop teams and crypto builders: vault, wallets, finance, marketplace, airdrops, teams, mail and an AI assistant.
+
+AYZEN is a Web3 workspace made of 8 modules. Each module has its own account, session and data; nothing is shared between modules unless the person connects them. Sign in at https://ayzen.tech/login. Each module also publishes its own site, llms.txt and llms-full.txt.
+
+## Sylo
+
+> Sylo is the vault inside AYZEN: keep logins, identities, wallets, seed phrases and KYC data in one place, locked with a passkey and a separate vault PIN.
+
+URL: https://sylo.ayzen.tech/ · Category: Password, wallet and identity vault · A module of AYZEN with its own account, session and data.
+
+Sylo is the vault inside AYZEN. Keep your logins, project identities, wallets and seed phrases together, unlock them with a passkey, and let someone you trust in if you ever can't.
+
+### Features
+
+- **Entities, not scattered notes.** One entity per identity, account or project, holding the logins, wallets, mail and documents that belong to it.
+- **A lock of its own.** The Vault never accepts your AYZEN account password or login 2FA. It opens with a passkey, or a Vault PIN plus the Vault's own authenticator code.
+- **Encrypted at rest.** Vault secrets are stored with AES-256-GCM, so what is saved is not readable as plain text.
+- **Seed phrases stay hidden.** Seed phrases are masked until you choose to reveal them, and entity details ask for a separate Entity-view PIN.
+- **Emergency access.** Name contacts who may request access. A request stays pending, you can cancel it, and you can revoke any contact.
+- **Backup, restore and export.** Export the whole Vault as one encrypted file, import from another tool, and restore deleted entities within 30 days.
+
+### In detail
+
+#### What the Vault holds
+
+Everything you need to run many accounts and identities without mixing them up.
+
+- Logins: usernames, passwords and 2FA for every site
+- Entities: one identity per account or project, with everything that belongs to it
+- Wallets: addresses grouped under the entity that uses them
+- Seed phrases: hidden until you choose to reveal them
+- KYC data: identity details marked used or unused so the wrong one is not reused
+- Mail: an inbox for each entity
+- Documents kept next to the account they belong to
+
+#### Unlocking
+
+Three doors, tried in order.
+
+- Passkey, the first and fastest way in if you registered one
+- Vault PIN or password plus the Vault's own authenticator code
+- A code sent to your email plus your Vault PIN when the second door is not available
+- Entity details ask for their own Entity-view PIN even when the Vault is open
+
+#### When something goes wrong
+
+Recovery and records.
+
+- Emergency access for contacts you choose; requests wait as pending and can be cancelled
+- Activity log of what happened in the Vault, when and where
+- Trash: deleted entities can be restored within 30 days, then are purged automatically
+- Encrypted full-Vault backup, plus import and export as CSV or JSON
+- Export account and Vault activity for any date range as CSV or PDF
+
+### How it works
+
+1. **Save.** Add a login, wallet, seed phrase or document.
+2. **Encrypt.** It is stored encrypted with AES-256-GCM.
+3. **Group.** It joins an entity, beside the wallets, mail and logins it belongs with.
+4. **Unlock.** Open the Vault with a passkey, or PIN and 2FA. Entities ask for their own PIN.
+5. **Recover.** If you cannot get in, a contact you named can request access. You can cancel it.
+
+### Use cases
+
+- Keeping the logins, wallets and mailbox of each project identity together
+- Storing seed phrases and wallet addresses under the entity that uses them
+- Tracking which KYC details have already been used
+- Letting a trusted person in if you are ever locked out
+- Moving a password collection in from another tool
+
+### Limits and honest notes
+
+- The sample records on the landing page are not real data.
+- Sylo is a vault, not a bank or custodian.
+
+### Pricing
+
+Prices are not listed on this page. Anything that costs money is shown inside the product before you confirm it.
+
+### FAQ
+
+**What is Sylo?** Sylo is the vault module of AYZEN. It stores logins, entities, wallets, seed phrases, KYC data and documents, and locks them behind a passkey or a separate Vault PIN.
+
+**Is the Vault locked separately from my AYZEN sign-in?** Yes. The Vault has its own lock and never accepts your AYZEN account password or your login 2FA.
+
+**How are secrets protected?** Vault secrets are encrypted at rest with AES-256-GCM. Entity details also ask for a separate Entity-view PIN.
+
+**What is an entity?** An entity is one identity, account or project, with the logins, wallets, mail and documents that belong to it.
+
+**Can I recover access if I am locked out?** You can name trusted contacts for emergency access. Their request stays pending, you can cancel it while it is pending, and you can revoke any contact.
+
+**Can I back up and move my data?** Yes. You can export the whole Vault as one encrypted file, import entries from another tool, and export or import CSV or JSON.
+
+**What happens to deleted entities?** They go to trash and can be restored within 30 days, then are purged automatically.
+
+**Can I export a record of what I did?** Yes. You can export account and Vault activity for any date range as CSV or PDF.
+
+**Is Sylo connected to other AYZEN modules?** Sylo is one of eight AYZEN modules. It has its own account and session, and nothing is shared with other modules unless you connect it.
+
+### Related AYZEN modules
+
+- [Ryft](https://ryft.ayzen.tech/)
+- [Wisp](https://wisp.ayzen.tech/)
+- [Zynth](https://zynth.ayzen.tech/)
+
+## Ryft
+
+> Ryft is the exchange and wallet module of AYZEN: spot markets with order books, instant convert, a wallet, and P2P trading with escrow, behind passkeys and 2FA.
+
+URL: https://ryft.ayzen.tech/ · Category: Crypto exchange and wallet · A module of AYZEN with its own account, session and data.
+
+Ryft is the exchange and wallet of AYZEN: real-time order books, clear pricing and security controls built in from the first deposit.
+
+### Features
+
+- **Spot markets.** Limit, market and stop orders with a live order book and clear fees.
+- **Convert.** Swap one asset for another at a price shown before you confirm.
+- **Wallet.** Deposit, hold and withdraw in one place, tied to your AYZEN identity.
+- **P2P with escrow.** Trade directly with verified merchants using local payment methods; crypto stays in escrow until both sides confirm.
+- **Security controls.** Passkeys, authenticator 2FA, email confirmation and address allowlists for withdrawals.
+- **One AYZEN account.** Create your AYZEN account once and use it across every module.
+
+### In detail
+
+#### Markets and terminal
+
+A terminal that stays out of the way.
+
+- Candles, depth and an order ticket on one screen
+- Limit, market and stop orders
+- Live order book with price, amount and total
+- Pairs sortable by movers, with 24h change, high, low and volume
+- Logging in is required to place orders
+
+#### P2P trading
+
+Buy and sell crypto directly, in your currency.
+
+- Pick a merchant by price, limits and payment method
+- Send the fiat amount with the listed method while the crypto is held in escrow
+- The crypto is released to your Ryft wallet once the seller confirms payment
+- Filter by currency, for example BDT, USD, INR or EUR, and by payment method
+
+#### Wallet and security
+
+Balances sit next to your vault, finance and marketplace orders.
+
+- Deposit, hold and withdraw
+- Passkeys and authenticator 2FA
+- Email confirmation
+- Address allowlists for withdrawals
+
+### How it works
+
+1. **Create your AYZEN account.** One account works across every AYZEN module.
+2. **Fund your wallet.** Deposit assets into your Ryft wallet.
+3. **Trade or convert.** Place spot orders, convert at a displayed price, or trade P2P.
+
+### Use cases
+
+- Trading spot pairs with an order book
+- Converting one asset to another at a price you see first
+- Buying or selling crypto peer to peer in your local currency
+- Keeping balances next to your vault, finance and marketplace orders
+
+### Limits and honest notes
+
+- Crypto assets are volatile and you can lose some or all of your capital.
+- Prices, volumes and charts on the landing page are simulated sample data and are not an offer or advice.
+
+### Pricing
+
+Fees are shown on the order ticket and the price is shown before you confirm a convert. This page does not state fee amounts.
+
+### FAQ
+
+**What is Ryft?** Ryft is the exchange and wallet module of AYZEN, with spot markets, convert, a wallet and P2P trading.
+
+**Which order types are supported?** Limit, market and stop orders, with a live order book and clear fees.
+
+**How does P2P trading work?** You pick a merchant by price, limits and payment method, send the fiat amount with the listed method, and the crypto, held in escrow, is released to your Ryft wallet when the seller confirms payment.
+
+**How is my account protected?** Ryft supports passkeys, authenticator 2FA, email confirmation and address allowlists for withdrawals.
+
+**Do I need a separate account?** Ryft uses your AYZEN account, created once and usable across every module.
+
+**What is Convert?** Convert swaps one asset for another at a price shown before you confirm.
+
+**Is the market data on the landing page real?** No. The prices, volumes and charts on the landing page are simulated sample data for preview.
+
+**Is trading risky?** Yes. Crypto assets are volatile and you can lose some or all of your capital. Nothing on this page is advice.
+
+### Related AYZEN modules
+
+- [Sylo](https://sylo.ayzen.tech/)
+- [Fyra](https://fyra.ayzen.tech/)
+- [Verve](https://verve.ayzen.tech/)
+- [Zynth](https://zynth.ayzen.tech/)
+
+## Fyra
+
+> Fyra is the finance workspace of AYZEN: ledger, budgets, invoices, loans, investments and double-entry accounting with P&L, balance sheet and cash-flow reports.
+
+URL: https://fyra.ayzen.tech/ · Category: Personal and business finance workspace · A module of AYZEN with its own account, session and data.
+
+Fyra is AYZEN's finance workspace for the everyday shape of money: what came in, what is owed, what is invested, and what may be ahead. A grounded ledger, with room for the bigger picture.
+
+### Features
+
+- **Ledger and activity.** Track entries by type and status, import transactions from CSV and export filtered records as CSV or PDF.
+- **What you own and owe.** Summaries cover balance, net worth, receivables, payables, lending, borrowing, investments, expenses and upcoming dues.
+- **Budgets and projections.** Set category-based monthly limits and review trend-based scenarios, including receivables-collected and payables-paid cases.
+- **Invoices and evidence.** Invoices with line items, tax and discounts, branding, payment agreements, and attachments on entries.
+- **Reports.** Profit and loss, cash-flow, balance-sheet, trial-balance and custom reports.
+- **Accounting and goals.** A chart of accounts, journals, financial goals and multiple books, for example separate business and personal books.
+
+### In detail
+
+#### Everyday money
+
+Record and understand what moves.
+
+- Ledger of income and expense entries with filters
+- Receivables, payables, lending and borrowing, with repayments
+- Investments and assets, including asset depreciation
+- Recurring entries and upcoming dues
+- Multiple currencies
+
+#### Accounting layer
+
+A clearer trail from the small line item to the shape of the whole.
+
+- Double-entry accounting with a chart of accounts and journal entries
+- Trial balance, balance sheet, income statement and cash-flow statement
+- Multi-book support for separate business and personal books
+- Custom reports
+
+#### Planning and documents
+
+Look ahead and share what you need to.
+
+- Budgets by category with monthly limits
+- Projections from trends
+- Financial goals
+- Invoices, receipts and payment agreements, with tax, discounts and branding
+- CSV import and CSV/PDF export
+
+### How it works
+
+1. **Record.** Add entries or import them from CSV.
+2. **Organise.** Entries post to accounts and journals, and roll into statements.
+3. **Understand.** Read profit and loss, balance sheet, cash flow and custom reports.
+4. **Plan.** Set budgets and review projections.
+
+### Use cases
+
+- Tracking cash flow, receivables and payables in one place
+- Keeping business and personal books separate
+- Creating invoices and payment agreements
+- Reviewing profit and loss, balance sheet and cash flow
+- Setting monthly budgets by category
+
+### Limits and honest notes
+
+- Entries are added manually or by CSV import; bank feeds are not claimed.
+- Fyra is not an accounting audit or compliance certification.
+- The ledger figures shown on the landing page are illustrative.
+
+### Pricing
+
+Prices are not listed on this page. Anything that costs money is shown inside the product before you confirm it.
+
+### FAQ
+
+**What is Fyra?** Fyra is the finance module of AYZEN: a ledger, budgets, invoices, loans, investments and accounting.
+
+**Does Fyra do double-entry accounting?** Yes. It includes a chart of accounts, journal entries, trial balance, balance sheet, income statement and cash-flow statement.
+
+**Can I keep business and personal finances apart?** Yes. Fyra supports multiple books, for example separate business and personal books.
+
+**Can I import and export data?** You can import transactions from CSV and export filtered records as CSV or PDF.
+
+**Can I create invoices?** Yes. Invoices support line items, tax, discounts and branding, and Fyra also covers payment agreements and attachments on entries.
+
+**Does Fyra connect to my bank?** This page does not claim bank-feed integration. Entries are added manually or imported from CSV.
+
+**Can I set budgets?** Yes. Set category-based monthly limits and review trend-based projections.
+
+**Is Fyra an accounting certification?** No. Fyra is a workspace for keeping and reading your books; it does not certify accuracy or regulatory compliance.
+
+### Related AYZEN modules
+
+- [Ryft](https://ryft.ayzen.tech/)
+- [Verve](https://verve.ayzen.tech/)
+- [Zynth](https://zynth.ayzen.tech/)
+
+## Verve
+
+> Verve is the AYZEN marketplace: browse accounts, subscriptions and game credit, and trade peer to peer, all in one considered catalogue.
+
+URL: https://verve.ayzen.tech/ · Category: Marketplace and peer-to-peer exchange · A module of AYZEN with its own account, session and data.
+
+Accounts, subscriptions, game credit and peer-to-peer exchange in one catalogue.
+
+### Features
+
+- **Accounts.** Pick a platform and see profiles with their age, audience and price.
+- **Subscriptions.** Plans for popular services, from 1 to 12 months.
+- **Game credit.** Top-up packs for popular games.
+- **Peer-to-peer exchange.** Buy and sell offers with asset and currency filters.
+- **One catalogue.** Platform pages with their own URL, title and description, and a search across the catalogue.
+- **Order history.** Keep track of your marketplace orders.
+
+### In detail
+
+#### Catalogue
+
+Browse by category.
+
+- Accounts, by platform
+- Subscriptions, with 1 to 12 month plans
+- Game credit, with top-up packs
+- P2P offers, with asset and currency filters
+
+#### Also in the marketplace
+
+Other areas of the Verve app.
+
+- Marketplace hub and order history
+- AZN, spot, staking and Polymarket sections
+- Marketplace vault, wallet and game areas
+- Marketplace settings
+
+### How it works
+
+1. **Browse.** Choose Accounts, Subscriptions, Game credit or P2P.
+2. **Pick.** Open a platform to see listings, plans or packs.
+3. **Order.** Place your order from the order bar.
+
+### Use cases
+
+- Finding an account, subscription or game top-up by platform
+- Comparing subscription plans by length
+- Trading peer to peer by asset and currency
+
+### Limits and honest notes
+
+- The listings on the landing page are sample data for preview.
+- Prices are not listed on this page. Anything that costs money is shown inside the product before you confirm it.
+
+### Pricing
+
+Prices are not listed on this page. Anything that costs money is shown inside the product before you confirm it.
+
+### FAQ
+
+**What is Verve?** Verve is the marketplace module of AYZEN, covering accounts, subscriptions, game credit and peer-to-peer exchange.
+
+**What can I buy on Verve?** Accounts by platform, subscriptions with 1 to 12 month plans, and game credit top-up packs.
+
+**Does Verve support peer-to-peer trades?** Yes. P2P has buy and sell offers with asset and currency filters and an order drawer.
+
+**Can I search the catalogue?** Yes. Platform pages have search.
+
+**Do I need a separate account?** Verve has its own account and session, separate from your accounts in other AYZEN modules.
+
+**Are the listings on the landing page real?** No. They are sample data for preview.
+
+**Where do I see my orders?** In the marketplace order history.
+
+**Is Verve connected to other AYZEN modules?** Verve is one of eight modules. Nothing is shared with other modules unless you connect them.
+
+### Related AYZEN modules
+
+- [Ryft](https://ryft.ayzen.tech/)
+- [Fyra](https://fyra.ayzen.tech/)
+- [Sylo](https://sylo.ayzen.tech/)
+
+## Skarn
+
+> Skarn is the project module of AYZEN: issues, cycles, modules, views and pages in one calm workspace, with its own login and its own ID.
+
+URL: https://skarn.ayzen.tech/ · Category: Project and issue tracking · A module of AYZEN with its own account, session and data.
+
+Skarn brings issues, cycles and modules into one workspace, on its own login and its own ID. Nothing is shared with other AYZEN modules until you connect it.
+
+### Features
+
+- **Issues, cycles and modules.** Plan work as issues, group it into cycles and modules, and see every stage with its own colour, owner and count.
+- **Views and pages.** Saved views and pages next to the work they describe.
+- **Its own login and ID.** Skarn has its own account and its own ID, separate from every other AYZEN module.
+- **A connector.** Link other modules from the connector, and unlink them again with a tap.
+- **OIDC sign-in.** Sign in with your AYZEN account over OpenID Connect where enabled.
+- **Scoped API keys and an audit trail.** API keys with limited scope, and an audit trail of what happened.
+
+### In detail
+
+#### Workflow
+
+From backlog to shipped.
+
+- Issues move through stages, each with its own colour, owner and count
+- Cycles group the work for a period
+- Modules group related issues
+- Views and pages round out the workspace
+
+#### Isolation and connection
+
+Standalone first.
+
+- Own login and own ID
+- Nothing shared with other AYZEN modules until you connect it
+- Connector to link or unlink modules
+
+### How it works
+
+1. **Plan.** Create issues for the work ahead.
+2. **Cycle.** Group them into cycles and modules.
+3. **Ship.** Move cards through the stages to done.
+
+### Use cases
+
+- Planning and shipping work in cycles
+- Keeping a project's issues, modules and pages together
+- Running Skarn on its own, then connecting it to other AYZEN modules later
+
+### Limits and honest notes
+
+- Workflow cards on the landing page are an illustration.
+
+### Pricing
+
+Prices are not listed on this page. Anything that costs money is shown inside the product before you confirm it.
+
+### FAQ
+
+**What is Skarn?** Skarn is the project module of AYZEN: issues, cycles, modules, views and pages in one workspace.
+
+**Does Skarn share data with other AYZEN modules?** No, not until you connect it. Skarn has its own login and its own ID.
+
+**How do I connect another module?** Use the connector: tap a module to link it, and tap again to remove the link.
+
+**How do I sign in?** Create a Skarn account, or sign in with your AYZEN account over OpenID Connect where enabled.
+
+**Can I use Skarn on its own?** Yes. Skarn works standalone.
+
+**Are there API keys?** Skarn lists scoped API keys and an audit trail among its capabilities.
+
+**What are cycles?** Cycles group work for a period, so you can plan and track what ships.
+
+**Is Skarn only for one person?** No. You can work alone or with a team.
+
+### Related AYZEN modules
+
+- [Warde](https://warde.ayzen.tech/)
+- [Zynth](https://zynth.ayzen.tech/)
+- [Sylo](https://sylo.ayzen.tech/)
+
+## Warde
+
+> Warde is the team module of AYZEN: team overview, tasks and missions, projects, members and invites, chat, activity, team mail and a shared team vault.
+
+URL: https://warde.ayzen.tech/ · Category: Team coordination · A module of AYZEN with its own account, session and data.
+
+Warde brings team coordination into one shared space: people, projects, missions, tasks and conversation, with a view of progress that keeps the work connected.
+
+### Features
+
+- **Team overview.** Member count, project count, recent activity and mission progress, with a leaderboard and task-completion signals.
+- **Tasks and missions.** Dedicated task and mission areas, with active mission progress and task-completion totals on the dashboard.
+- **Team projects.** Projects with status, task count and participant count.
+- **Members and invites.** Member roles and status, accept or decline pending invites, and invite-link tools for leaders.
+- **Chat and activity.** Team chat and an activity log next to team-scoped mail.
+- **Shared vault and mail.** A team vault for shared entries, and team mail over a shared IMAP/SMTP pipeline.
+
+### In detail
+
+#### Work together
+
+Everything around a team in one place.
+
+- Overview with members, projects, activity and mission progress
+- Tasks and missions
+- Team projects
+- Leaderboard, streaks and task-completion signals
+
+#### People
+
+Roles and membership.
+
+- Member roles and membership status
+- Accept or decline pending invites
+- Invite links and a panel for team leaders
+- Team creation requests stay pending until an admin approves them
+
+#### Shared spaces
+
+Conversation and shared resources.
+
+- Team chat
+- Activity log
+- Team-scoped mail
+- Team vault entries, optionally with project, category and contact or social handles
+
+### How it works
+
+1. **Bring the team together.** Request a team, invite members and set roles.
+2. **Shape the work.** Create tasks, missions and projects.
+3. **Move through missions.** Track mission progress and completions.
+4. **Learn from progress.** Read activity, streaks and the leaderboard.
+
+### Use cases
+
+- Coordinating a farming or project team
+- Assigning missions and tracking completions
+- Keeping team chat, mail and a shared vault in one workspace
+- Letting leaders invite and manage members
+
+### Limits and honest notes
+
+- Values and labels on the landing page are illustrative, not a real team's data.
+
+### Pricing
+
+Prices are not listed on this page. Anything that costs money is shown inside the product before you confirm it.
+
+### FAQ
+
+**What is Warde?** Warde is the team module of AYZEN, with team overview, tasks, missions, projects, members, chat, mail and a team vault.
+
+**How do I create a team?** Team creation is requested and stays pending until an admin approves it.
+
+**How do invites work?** Pending invites can be accepted or declined, and team leaders have invite-link tools.
+
+**Can the team share mail and a vault?** Yes. Warde has team-scoped mail and a team vault for shared entries.
+
+**What does the team overview show?** Member count, project count, recent activity and mission progress, with a leaderboard and task-completion signals.
+
+**Are there roles?** Yes. Warde shows member roles and status, and some tools, such as invite links, are for leaders.
+
+**Is Warde a payroll or HR system?** No. Warde is for coordinating team work.
+
+**Is Warde connected to other AYZEN modules?** Warde is one of eight modules, with its own account and session.
+
+### Related AYZEN modules
+
+- [Skarn](https://skarn.ayzen.tech/)
+- [Wisp](https://wisp.ayzen.tech/)
+- [Sylo](https://sylo.ayzen.tech/)
+- [Zynth](https://zynth.ayzen.tech/)
+
+## Wisp
+
+> Wisp is the mail module of AYZEN: claim a username@ayzen.tech address, sort mail with rules, undo or schedule sends, and use your own SMTP and IMAP accounts.
+
+URL: https://wisp.ayzen.tech/ · Category: Email and mailbox · A module of AYZEN with its own account, session and data.
+
+Wisp is the mailbox inside AYZEN. Claim an address, let rules file the routine mail, and send from the accounts you already have.
+
+### Features
+
+- **An address of your own.** Claim username@ayzen.tech. Whether a name is free is checked when you claim it.
+- **Two ways to read it.** Forward to an inbox you already use (through Cloudflare Email Routing), or turn on the native mailbox and handle everything inside AYZEN.
+- **Your own accounts.** Add SMTP and IMAP accounts you already use and pick the sender per message.
+- **Rules.** Match on who a message is from, who it is to, or its subject, then label, move, mark read or star it, including on mail already in your mailbox.
+- **Undo, snooze and schedule.** Undo send holds a message for a few seconds, snooze hides an inbox message until a time you pick, and scheduled send delivers later.
+- **Sending health.** Bounces and spam complaints are watched across your account, and sending pauses if they climb until you resume it.
+
+### In detail
+
+#### Mailbox
+
+The native mailbox.
+
+- Inbox, drafts, sent, archive, spam and trash
+- Search and threads
+- Snoozed and scheduled folders
+- Rules that run on arrival and on existing mail
+
+#### Sending
+
+Control over what leaves.
+
+- Undo send, with a hold time you choose
+- Scheduled send; open a scheduled message before it goes out to change your mind
+- Pick the sender per message across your connected accounts
+- Sending health pauses sending when bounces or spam complaints climb
+
+#### Addresses and accounts
+
+How mail reaches you.
+
+- username@ayzen.tech address
+- Forwarding through Cloudflare Email Routing
+- Native mailbox
+- Your own SMTP and IMAP accounts
+
+### How it works
+
+1. **Claim your name.** Choose username@ayzen.tech.
+2. **Choose how mail reaches you.** Forward to your current inbox, or use the native mailbox.
+3. **Add rules.** Let rules file routine mail.
+4. **Send.** Send from your AYZEN address or from your own accounts.
+
+### Use cases
+
+- Using a clean @ayzen.tech address for sign-ups
+- Filing routine mail automatically with rules
+- Sending from several accounts in one place
+- Scheduling mail and undoing a send you regret
+
+### Limits and honest notes
+
+- The health numbers on the landing page are an illustration, not your data.
+
+### Pricing
+
+Sending a message uses AYZEN credits. Reading, sorting and searching do not need any decision from you. This page does not state credit prices.
+
+### FAQ
+
+**What is Wisp?** Wisp is the mail module of AYZEN: a username@ayzen.tech address, a native mailbox with rules, and sending from your own accounts.
+
+**How does mail reach me?** Either forwarded to an inbox you already use (through Cloudflare Email Routing) or read in the native mailbox inside AYZEN.
+
+**Can I use my own email accounts?** Yes. You can add SMTP and IMAP accounts and pick the sender per message.
+
+**What can rules do?** A rule looks at who a message is from, who it is to, or its subject, and can add a label, move it to a folder, mark it read or star it. Rules can also run on mail already in your mailbox.
+
+**What is undo send?** Undo send holds a message for a few seconds before it leaves. You choose how long.
+
+**Can I snooze or schedule mail?** Yes. Snooze hides an inbox message until a time you pick (only inbox messages, and the time must be in the future), and scheduled messages wait in their own folder until it is time.
+
+**What is sending health?** Wisp watches bounces and spam complaints across your account and pauses sending if they climb, so one bad list does not damage your address. You resume it when you have fixed the cause.
+
+**Does sending cost anything?** Sending a message uses AYZEN credits. Reading, sorting and searching do not.
+
+### Related AYZEN modules
+
+- [Sylo](https://sylo.ayzen.tech/)
+- [Warde](https://warde.ayzen.tech/)
+- [Zynth](https://zynth.ayzen.tech/)
+
+## Zynth
+
+> Zynth is the AI agent of AYZEN: give it a goal in plain language and it plans, checks policy and runs the work across your AYZEN modules through MCP tools.
+
+URL: https://zynth.ayzen.tech/ · Category: AI agent and MCP automation · A module of AYZEN with its own account, session and data.
+
+Give Zynth a goal in plain language. It plans the steps, checks policy, and carries them out across Sylo, Skarn, Warde, Wisp, Ryft, Fyra and Verve.
+
+### Features
+
+- **Plain-language goals.** State what you want; Zynth plans the steps and carries them out.
+- **Works across modules.** Sylo, Skarn, Warde, Wisp, Ryft, Fyra and Verve.
+- **Policy on every tool call.** Every tool call is checked against policy first, and the sensitive ones wait for an owner.
+- **Three tiers, default deny.** Read runs immediately, write runs inside the caller's own scope, and approval-tier actions are held for an owner.
+- **Acts with your access and no more.** A run carries the caller's identity and workspace, so it can never reach further than the person who asked.
+- **MCP-native.** Zynth works through a catalogue of MCP tools, each with its tier.
+
+### In detail
+
+#### How a run works
+
+The same five stages run for every goal, whichever modules are involved.
+
+- Goal in plain language
+- Plan the steps
+- Check policy
+- Run the tools
+- Deliver the result
+
+#### Tiers
+
+Default deny.
+
+- Read: runs immediately for any member with access; nothing is changed
+- Write: runs inside the caller's own scope, so changes stay limited to what that member could do directly
+- Approval: held until an owner approves; covers sending, sharing, inviting and moving money
+
+#### Access
+
+Explicit grants only.
+
+- Members hold ai.execute
+- Owners hold ai.execute and ai.manage
+- An audit log to replay calls, results and policy decisions is planned
+
+### How it works
+
+1. **Say the goal.** Describe what you want in plain language.
+2. **Plan.** Zynth breaks it into steps.
+3. **Authorize.** Each tool call is checked against policy.
+4. **Run.** Allowed tools run; sensitive ones wait for an owner.
+5. **Deliver.** You get the result.
+
+### Use cases
+
+- Turning a plain-language goal into governed work across modules
+- Letting members automate routine work within their own access
+- Keeping sensitive actions, such as sending or moving money, behind owner approval
+
+### Limits and honest notes
+
+- Some tools are planned and not yet available; planned tools are marked on the landing page.
+- The planned audit log is not described here as available.
+
+### Pricing
+
+Prices are not listed on this page. Anything that costs money is shown inside the product before you confirm it.
+
+### FAQ
+
+**What is Zynth?** Zynth is the AI agent module of AYZEN. It turns a plain-language goal into governed work across the other modules.
+
+**Which modules can Zynth work across?** Sylo, Skarn, Warde, Wisp, Ryft, Fyra and Verve.
+
+**Can Zynth do things I am not allowed to do?** No. A run carries the caller's identity and workspace, so it can never reach further than the person who asked.
+
+**What are the tiers?** Read runs immediately, write runs inside the caller's own scope, and approval-tier actions, covering sending, sharing, inviting and moving money, are held until an owner approves.
+
+**What permissions are needed?** Members hold ai.execute; owners hold ai.execute and ai.manage.
+
+**What does default deny mean?** Access comes only from explicit grants, and every tool call is checked against policy first.
+
+**Is there an audit log?** An audit log to replay calls, results and policy decisions is planned.
+
+**What is MCP?** The Model Context Protocol, a standard way for an AI agent to call tools. Zynth works through a catalogue of MCP tools, each with its tier.
+
+### Related AYZEN modules
+
+- [Sylo](https://sylo.ayzen.tech/)
+- [Skarn](https://skarn.ayzen.tech/)
+- [Warde](https://warde.ayzen.tech/)
+- [Wisp](https://wisp.ayzen.tech/)
+- [Ryft](https://ryft.ayzen.tech/)
+- [Fyra](https://fyra.ayzen.tech/)
+- [Verve](https://verve.ayzen.tech/)
+
