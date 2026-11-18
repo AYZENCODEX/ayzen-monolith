@@ -2,7 +2,7 @@
 /**
  * Browser check for a module's OWN login page (fyra). Page = designedLoginHtml with the API on ANOTHER origin (static hosting):
  *  - renders the design (heading, tabs), is noindex, brand/back links go to "/",
- *  - sign-in posts to <apiOrigin>/api/auth/login (not the page origin), the token lands in localStorage under ayzen_token,
+ *  - sign-in posts to <apiOrigin>/api/auth/module/v2/login (not the page origin; the module API, never the central one), the token lands in localStorage under ayzen_token,
  *  - the person is sent to ?next= (same-origin path) / the module home.
  *   node tests/e2e/module-landing/login.spec.mjs
  */
@@ -19,7 +19,8 @@ const api = http.createServer((req, res) => {
   let b = ""; req.on("data", (c) => (b += c)); req.on("end", () => {
     apiHits.push(`${req.method} ${req.url} ${b}`);
     res.setHeader("content-type", "application/json");
-    if (req.url === "/api/auth/login") return res.end(JSON.stringify({ token: "tok123", user: { username: "demoadmin", email: "demoadmin@ayzen.io" } }));
+    if (req.url === "/api/auth/module/v2/login") return res.end(JSON.stringify({ stepUp: { challenge: "ch1", methods: ["email"] } }));
+    if (req.url === "/api/auth/module/v2/login/verify") return res.end(JSON.stringify({ token: "tok123", account: { module: "fyra", moduleUid: "FYR-000001" } }));
     res.statusCode = 404; res.end("{}");
   });
 });
@@ -46,8 +47,11 @@ if ((await p.locator('meta[name="robots"]').getAttribute("content")) !== "noinde
 if ((await p.locator("a.brand").getAttribute("href")) !== "/") fail("brand link must go to /");
 await p.fill("#e", "demoadmin@ayzen.io"); await p.fill("#p", "Password1!");
 await p.click("button.b1");
+await p.waitForSelector("text=Confirm it");
+for (let i = 0; i < 6; i++) await p.locator(".otp input").nth(i).fill("123456"[i]);
+await p.click("#vb");
 await p.waitForFunction(() => location.pathname === "/finance/dashboard", null, { timeout: 8000 });
-if (!apiHits.some((h) => h.startsWith("POST /api/auth/login"))) fail("login did not reach the API origin: " + JSON.stringify(apiHits));
+if (!apiHits.some((h) => h.startsWith("POST /api/auth/module/v2/login"))) fail("login did not reach the API origin: " + JSON.stringify(apiHits));
 const tok = await p.evaluate(() => localStorage.getItem("ayzen_token") ?? sessionStorage.getItem("ayzen_token"));
 if (tok !== "tok123") fail("token not stored under ayzen_token");
 if (errors.length) fail("page errors: " + errors.join("; "));

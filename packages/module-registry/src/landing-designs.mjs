@@ -11,6 +11,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getModule } from "./index.mjs";
+import { loginAdapterScript } from "./login-adapters.mjs";
 import { aboutDocument, getLandingContent, landingDocument, landingHead, llmsFullTxt, llmsTxt, robotsTxt, sitemapXml } from "./landing.mjs";
 
 const DEFAULT_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "landings");
@@ -127,6 +128,7 @@ export function designedLoginHtml(id, opts = {}) {
     api
       ? `window.${P}_OIDC_ISSUER=${JSON.stringify(api)};(function(A){var f=window.fetch;window.fetch=function(u,i){if(typeof u==="string"&&u.indexOf("/api/")===0){u=A+u;i=Object.assign({},i,{credentials:i&&i.credentials==="omit"?"omit":"include"})}return f.call(this,u,i)}})(${JSON.stringify(api)});`
       : "",
+    loginAdapterScript(id),
   ].join("");
   let html = fs.readFileSync(loginFile(id), "utf8").replace(/href="\/[a-z]+\/"/g, 'href="/"');
   html = html.replace(/<head[^>]*>/i, (h) => `${h}<meta name="robots" content="noindex, nofollow"><script>${prelude}</script>`);

@@ -73,6 +73,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile --filter @workspace/api-server...
       - run: node scripts/validate-w1-p2.mjs
+      - run: node scripts/validate-w3-auth-v2.mjs
+      - run: node scripts/validate-w3-auth-v2.mjs --self-test
       - run: node scripts/validate-w1-p4.mjs
       - run: node scripts/validate-w1-p4.mjs --self-test
       - run: node scripts/check-module-isolation.mjs

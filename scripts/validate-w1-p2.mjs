@@ -61,8 +61,8 @@ for (const s of statements) check(boot.includes(norm(s)), `schema-migrations.ts 
 
 // 1c. vocabularies: service <-> SQL
 const svc = read(`${API}/lib/module-auth-service.ts`);
-// W1-P5 (migration 128) widened the event list again; the LAST definition wins, exactly as in the database.
-const sql127 = read("migrations/128_module_external_identities.sql");
+// W1-P5 (128) and W3 (129) widened the event list again; the LAST definition wins, exactly as in the database.
+const sql127 = read("migrations/129_module_auth_v2.sql");
 const sqlEvents = [...(/event IN \(([^)]*)\)/.exec(sql127)?.[1] ?? "").matchAll(/'([a-z_]+)'/g)].map((m) => m[1]).sort();
 const tsEvents = [...(/type AuthEvent =([^;]*);/.exec(svc)?.[1] ?? "").matchAll(/"([a-z_]+)"/g)].map((m) => m[1]).sort();
 check(JSON.stringify(sqlEvents) === JSON.stringify(tsEvents) && sqlEvents.length > 0, `audit events: SQL [${sqlEvents}] != service [${tsEvents}]`);
