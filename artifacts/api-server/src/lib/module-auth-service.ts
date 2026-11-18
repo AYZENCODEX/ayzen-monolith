@@ -105,7 +105,7 @@ export interface IssuedModuleSession {
   moduleUid: string;
 }
 
-export type AuthEvent = "signup" | "login" | "logout" | "continue" | "password_reset_requested" | "password_reset_completed" | "oidc_login" | "link" | "clerk_login" | "clerk_user_created" | "clerk_user_deleted";
+export type AuthEvent = "signup" | "login" | "logout" | "continue" | "password_reset_requested" | "password_reset_completed" | "oidc_login" | "link" | "clerk_login" | "clerk_user_created" | "clerk_user_deleted" | "step_up" | "profile_updated";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -151,7 +151,13 @@ export async function insertSession(
 
 export async function signupWithPassword(
   db: AuthDb,
-  input: { module: unknown; identifier: unknown; password: unknown; client: ClientInfo },
+  input: {
+    module: unknown; identifier: unknown; password: unknown; client: ClientInfo;
+    /** v2 sign-up: the mailbox was proven with an emailed code, so the identifier is stored as verified. */
+    verified?: boolean;
+    /** v2 sign-up: runs inside the creation transaction (profile row); a throw rolls the whole sign-up back. */
+    afterCreate?: (q: Query, account: { id: number; moduleUid: string; module: ModuleId; userId: number }) => Promise<void>;
+  },
 ): Promise<({ ok: true } & IssuedModuleSession) | Fail> {
   if (!isKnownModuleId(input.module)) return { ok: false, code: "INVALID_MODULE" };
   const module = input.module;
@@ -179,11 +185,12 @@ export async function signupWithPassword(
       const userId: number = u.rows[0].id;
       const acct = (await q(`SELECT id, module_uid FROM ayzen_provision_module_account($1::int, $2, 'signup')`, [userId, module])).rows[0];
       await q(
-        `INSERT INTO module_credentials (module_account_id, module, identifier, identifier_norm, password_hash)
-         VALUES ($1, $2, $3, $3, $4)`,
-        [acct.id, module, identifier, passwordHash],
+        `INSERT INTO module_credentials (module_account_id, module, identifier, identifier_norm, password_hash, identifier_verified_at)
+         VALUES ($1, $2, $3, $3, $4, CASE WHEN $5::boolean THEN NOW() ELSE NULL END)`,
+        [acct.id, module, identifier, passwordHash, input.verified === true],
       );
       await q(`INSERT INTO module_account_links (module_account_id, module, ayzen_user_id, method) VALUES ($1, $2, $3, 'backing')`, [acct.id, module, userId]);
+      if (input.afterCreate) await input.afterCreate(q, { id: acct.id, moduleUid: acct.module_uid, module, userId });
       const session = await insertSession(q, { userId, moduleAccountId: acct.id, module, moduleUid: acct.module_uid }, input.client);
       await audit(q, module, acct.id, "signup", "success", input.client);
       return { ok: true, ...session } as const;
@@ -197,10 +204,20 @@ export async function signupWithPassword(
 
 // ─── Login ───────────────────────────────────────────────────────────────────
 
-export async function loginWithPassword(
+/** What a verified password check yields; the session (and the success bookkeeping) is opened by the caller. */
+export interface VerifiedLogin {
+  module: ModuleId; password: string;
+  row: { cred_id: number; module_account_id: number; password_hash: string; user_id: number; module_uid: string; mfa_enabled: boolean; mfa_secret: string | null; identifier: string };
+}
+
+/**
+ * Password check with lockout, no session. Failure answers are the same INVALID_CREDENTIALS as always (see loginWithPassword).
+ * Used by loginWithPassword (opens the session at once) and by the step-up login (opens it after the extra factors).
+ */
+export async function verifyLoginCredentials(
   db: AuthDb,
   input: { module: unknown; identifier: unknown; password: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv },
-): Promise<({ ok: true } & IssuedModuleSession) | Fail> {
+): Promise<({ ok: true } & VerifiedLogin) | Fail> {
   if (!isKnownModuleId(input.module)) return { ok: false, code: "INVALID_MODULE" };
   const module = input.module;
   const password = typeof input.password === "string" ? input.password.slice(0, 1024) : "";
@@ -214,7 +231,7 @@ export async function loginWithPassword(
   if (!identifier) { await burnVerificationTime(password); return fail(null, { reason: "bad_identifier" }); }
 
   const found = await db.query(
-    `SELECT c.id AS cred_id, c.module_account_id, c.password_hash, c.locked_until,
+    `SELECT c.id AS cred_id, c.module_account_id, c.password_hash, c.locked_until, c.mfa_enabled, c.mfa_secret, c.identifier,
             (c.locked_until IS NOT NULL AND c.locked_until > NOW()) AS is_locked,
             a.user_id, a.status, a.module_uid, u.status AS user_status
        FROM module_credentials c
@@ -250,6 +267,21 @@ export async function loginWithPassword(
     return fail(row.module_account_id, { reason: "bad_password", failedAttempts: upd.rows[0]?.failed_attempts });
   }
 
+  return { ok: true, module, password, row };
+}
+
+export async function loginWithPassword(
+  db: AuthDb,
+  input: { module: unknown; identifier: unknown; password: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv },
+): Promise<({ ok: true } & IssuedModuleSession) | Fail> {
+  const v = await verifyLoginCredentials(db, input);
+  if (!v.ok) return v;
+  return finishPasswordLogin(db, v, input.client);
+}
+
+/** Success bookkeeping (reset lockout counter, stamp last login, upgrade an old hash) and the session. */
+export async function finishPasswordLogin(db: AuthDb, v: VerifiedLogin, client: ClientInfo): Promise<{ ok: true } & IssuedModuleSession> {
+  const { module, password, row } = v;
   // Upgrade an old-parameter hash while we hold the plaintext (computed outside the transaction).
   const rehash = modulePasswordNeedsRehash(row.password_hash) ? await hashModulePassword(password) : null;
   return db.transaction(async (q) => {
@@ -259,8 +291,8 @@ export async function loginWithPassword(
         WHERE id = $1`,
       [row.cred_id, rehash],
     );
-    const session = await insertSession(q, { userId: row.user_id, moduleAccountId: row.module_account_id, module, moduleUid: row.module_uid }, input.client);
-    await audit(q, module, row.module_account_id, "login", "success", input.client, rehash ? { rehashed: true } : {});
+    const session = await insertSession(q, { userId: row.user_id, moduleAccountId: row.module_account_id, module, moduleUid: row.module_uid }, client);
+    await audit(q, module, row.module_account_id, "login", "success", client, rehash ? { rehashed: true } : {});
     return { ok: true, ...session } as const;
   });
 }
@@ -295,7 +327,7 @@ export async function continueWithAyzen(
 
 /**
  * Opens a module session for an AYZEN identity that has ALREADY been proven by the caller (the route verifies an OIDC
- * access token issued to THIS module's client). Three outcomes, in order:
+ * access token issued to THIS module's input.client). Three outcomes, in order:
  *   1. the identity is linked to a module account (explicitly, or via an earlier sign-in): that account's session;
  *   2. the identity already owns a module account (W1-P1 backfill / earlier lazy provision): link it (method 'oidc');
  *   3. otherwise a new module account is provisioned (source 'lazy', module_uid issued) and linked.
