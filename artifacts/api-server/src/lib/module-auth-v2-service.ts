@@ -33,6 +33,10 @@ const secretOf = (env: NodeJS.ProcessEnv = process.env) =>
 const hmac = (secret: string, s: string) => createHmac("sha256", secret).update(s, "utf8").digest("hex");
 const safeEq = (a: string, b: string) => a.length === b.length && timingSafeEqual(Buffer.from(a), Buffer.from(b));
 
+/** Modules whose sign-up page has the captcha step (their design asks for it); the others rely on the per-address and per-IP limits. */
+export const captchaModules = (env: NodeJS.ProcessEnv = process.env): Set<string> =>
+  new Set((env.MODULE_SIGNUP_CAPTCHA_MODULES ?? "wisp").split(",").map((x) => x.trim()).filter(Boolean));
+
 /** Step-up at login: off (default) = only accounts with an enrolled authenticator are challenged; email = everyone gets an emailed code. */
 export type StepUpMode = "off" | "email";
 export const stepUpMode = (env: NodeJS.ProcessEnv = process.env): StepUpMode => (env.MODULE_LOGIN_STEP_UP === "email" ? "email" : "off");
@@ -152,7 +156,7 @@ export async function startSignup(
   const module = input.module;
   const identifier = normalizeIdentifier(input.email);
   if (!identifier) return bad("INVALID_IDENTIFIER");
-  if (!checkCaptcha(module, input.captchaId, input.captchaAnswer, { env: input.env, now: input.now })) return bad("INVALID_CAPTCHA");
+  if (captchaModules(input.env).has(module) && !checkCaptcha(module, input.captchaId, input.captchaAnswer, { env: input.env, now: input.now })) return bad("INVALID_CAPTCHA");
   const taken = await db.query(`SELECT 1 FROM module_credentials WHERE module=$1 AND identifier_norm=$2`, [module, identifier]);
   if (taken.rows.length) return { ok: true, send: null };
   const otp = await issueOtp(db, { module, purpose: "signup", identifier, ip: input.client.ip, env: input.env });
@@ -235,28 +239,23 @@ export type LoginResult =
 /** Password check, then either a session (default) or a short-lived challenge when an extra factor is required. */
 export async function startLogin(
   db: AuthDb,
-  input: { module: unknown; email: unknown; password: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv; now?: number },
+  input: { module: unknown; email: unknown; password: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv; now?: number; requireCode?: boolean },
 ): Promise<LoginResult> {
   const v = await verifyLoginCredentials(db, { module: input.module, identifier: input.email, password: input.password, client: input.client, env: input.env });
   if (!v.ok) return v;
-  const mode = stepUpMode(input.env);
+  const mode = input.requireCode ? "email" : stepUpMode(input.env);
   const totp = v.row.mfa_enabled && !!v.row.mfa_secret;
   if (!totp && mode === "off") return finishPasswordLogin(db, v, input.client);
   const methods: Array<"totp" | "email"> = totp ? ["totp", "email"] : ["email"];
   const secret = secretOf(input.env);
   const challenge = sign("stepup", v.module, { a: v.row.module_account_id, c: v.row.cred_id }, CHALLENGE_TTL_SECONDS, secret, input.now);
+  // The emailed code goes out at once when it is the only way through; with an authenticator it is sent on request.
   let send: { to: string; code: string } | null = null;
-  // Email is offered as the fallback for a lost authenticator only when the mailbox was verified at sign-up/reset.
-  const idn = normalizeIdentifier(input.email)!;
-  const vr = await db.query(`SELECT identifier_verified_at FROM module_credentials WHERE id=$1`, [v.row.cred_id]);
-  const emailOk = !!vr.rows[0]?.identifier_verified_at;
-  if (!emailOk) { const i = methods.indexOf("email"); if (i >= 0) methods.splice(i, 1); }
-  if (!totp && emailOk) {
-    const otp = await issueOtp(db, { module: v.module, purpose: "login", identifier: idn, ip: input.client.ip, env: input.env });
+  if (!totp) {
+    const otp = await issueOtp(db, { module: v.module, purpose: "login", identifier: normalizeIdentifier(input.email)!, ip: input.client.ip, env: input.env });
     if (!otp) return bad("TOO_MANY_CODES");
     send = { to: v.row.identifier, code: otp.code };
   }
-  if (methods.length === 0) return finishPasswordLogin(db, v, input.client); // unverified mailbox and no authenticator: nothing to challenge with
   return { ok: true, stepUp: { challenge, methods, send } };
 }
 
@@ -268,11 +267,11 @@ export async function sendLoginEmailCode(
   const p = open("stepup", input.module, input.challenge, secretOf(input.env), input.now);
   if (!p) return bad("CHALLENGE_INVALID");
   const r = await db.query(
-    `SELECT identifier, identifier_norm, identifier_verified_at FROM module_credentials WHERE id=$1 AND module_account_id=$2 AND module=$3`,
+    `SELECT identifier, identifier_norm FROM module_credentials WHERE id=$1 AND module_account_id=$2 AND module=$3`,
     [p.c, p.a, input.module],
   );
   const row = r.rows[0];
-  if (!row || !row.identifier_verified_at) return bad("CHALLENGE_INVALID");
+  if (!row) return bad("CHALLENGE_INVALID");
   const otp = await issueOtp(db, { module: input.module, purpose: "login", identifier: row.identifier_norm, ip: input.client.ip, env: input.env });
   if (!otp) return bad("TOO_MANY_CODES");
   return { ok: true, send: { to: row.identifier, code: otp.code } };
@@ -288,7 +287,7 @@ export async function completeLogin(
   const p = open("stepup", module, input.challenge, secretOf(input.env), input.now);
   if (!p) return bad("CHALLENGE_INVALID");
   const found = await db.query(
-    `SELECT c.id AS cred_id, c.module_account_id, c.password_hash, c.mfa_enabled, c.mfa_secret, c.identifier, c.identifier_norm, c.identifier_verified_at,
+    `SELECT c.id AS cred_id, c.module_account_id, c.password_hash, c.mfa_enabled, c.mfa_secret, c.identifier, c.identifier_norm,
             a.user_id, a.status, a.module_uid, u.status AS user_status
        FROM module_credentials c JOIN module_accounts a ON a.id=c.module_account_id JOIN users u ON u.id=a.user_id
       WHERE c.id=$1 AND c.module_account_id=$2 AND c.module=$3`,
@@ -300,15 +299,20 @@ export async function completeLogin(
   const code = typeof input.code === "string" ? input.code.trim() : "";
   let ok = false;
   if (row.mfa_enabled && row.mfa_secret && /^\d{6}$/.test(code)) ok = totpVerify(code, row.mfa_secret);
-  if (!ok && row.identifier_verified_at) {
-    ok = await db.transaction((q) => checkOtp(q, { module, purpose: "login", identifier: row.identifier_norm, code, consume: true, env: input.env }));
+  if (!ok) {
+    // Receiving the emailed code proves the mailbox, so a successful one also verifies the identifier.
+    ok = await db.transaction(async (q) => {
+      const good = await checkOtp(q, { module, purpose: "login", identifier: row.identifier_norm, code, consume: true, env: input.env });
+      if (good) await q(`UPDATE module_credentials SET identifier_verified_at = COALESCE(identifier_verified_at, NOW()) WHERE id=$1`, [row.cred_id]);
+      return good;
+    });
   }
   if (!ok) {
     await audit(db.query, module, row.module_account_id, "step_up", "failure", input.client).catch(() => {});
     return bad("INVALID_CODE");
   }
   await audit(db.query, module, row.module_account_id, "step_up", "success", input.client).catch(() => {});
-  return finishPasswordLogin(db, { module, password: "", row: { ...row, password_hash: row.password_hash } } as any, input.client);
+  return finishPasswordLogin(db, { module, password: "", row } as any, input.client);
 }
 
 // ─── code-based password reset ───────────────────────────────────────────────────────────────────

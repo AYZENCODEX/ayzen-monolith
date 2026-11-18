@@ -84,7 +84,8 @@ test("sign-up: code -> verified account + profile + session; code is single-use"
 
 test("sign-up refuses bad captcha, wrong code (attempt cap), taken username, bad referral, weak password — and a typo does not burn the code", { skip }, async () => {
   const e = email(), cap = solve("fyra");
-  assert.equal(((await startSignup(db, { module: "fyra", email: e, captchaId: cap.id, captchaAnswer: 0, client: CLIENT, env: ENV })) as any).code, "INVALID_CAPTCHA");
+  assert.equal(((await startSignup(db, { module: "wisp", email: e, captchaId: cap.id, captchaAnswer: 0, client: CLIENT, env: ENV })) as any).code, "INVALID_CAPTCHA");
+  assert.equal(((await startSignup(db, { module: "wisp", email: e, captchaId: undefined, captchaAnswer: undefined, client: CLIENT, env: ENV })) as any).code, "INVALID_CAPTCHA", "wisp always needs it");
   const s: any = await startSignup(db, { module: "fyra", email: e, captchaId: cap.id, captchaAnswer: cap.answer, client: CLIENT, env: ENV });
   const base = { module: "fyra", email: e, password: PW, client: CLIENT, env: ENV };
   assert.equal(((await completeSignup(db, { ...base, code: s.send.code, username: "ab" })) as any).code, "USERNAME_INVALID");
@@ -198,4 +199,22 @@ test("profile: update is scoped to the account and module, audited; no profile r
 test("audit rows never contain codes, passwords or emails", { skip }, async () => {
   const rows = (await q("SELECT detail::text d FROM module_auth_events WHERE event IN ('step_up','signup','password_reset_completed','profile_updated')")).rows;
   for (const r of rows) assert.doesNotMatch(r.d, /password|\b\d{6}\b|@example/i);
+});
+
+test("fyra sign-up has no captcha step (its design has none); wisp does", { skip }, async () => {
+  const s: any = await startSignup(db, { module: "fyra", email: email(), captchaId: undefined, captchaAnswer: undefined, client: CLIENT, env: ENV });
+  assert.ok(s.ok && s.send);
+});
+
+test("requireCode: an account with an UNVERIFIED mailbox (v1 sign-up) is challenged too, and the emailed code verifies the mailbox", { skip }, async () => {
+  const { signupWithPassword } = await import("./module-auth-service");
+  const e = email();
+  const su: any = await signupWithPassword(db, { module: "fyra", identifier: e, password: PW, client: CLIENT });
+  assert.equal(su.ok, true);
+  const direct: any = await startLogin(db, { module: "fyra", email: e, password: PW, client: CLIENT, env: ENV });
+  assert.ok(direct.jti, "without requireCode it is still a plain login");
+  const st: any = await startLogin(db, { module: "fyra", email: e, password: PW, client: CLIENT, env: ENV, requireCode: true });
+  assert.ok(st.stepUp?.send?.code);
+  assert.equal(((await completeLogin(db, { module: "fyra", challenge: st.stepUp.challenge, code: st.stepUp.send.code, client: CLIENT, env: ENV })) as any).ok, true);
+  assert.ok((await q("SELECT identifier_verified_at FROM module_credentials WHERE module_account_id=$1", [su.moduleAccountId])).rows[0].identifier_verified_at);
 });

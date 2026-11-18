@@ -24,7 +24,7 @@ import { clientInfo, fail as baseFail, issue, jsonOnly, moduleGate, moduleOf, pu
  *   POST /auth/module/v2/referral/check               { code }                          { valid }
  *   POST /auth/module/v2/signup/start                 { email, captcha: { id, answer } }  202 (always)
  *   POST /auth/module/v2/signup/complete              { email, code, password, username, referral?, profile? }  201 { token, account }
- *   POST /auth/module/v2/login                        { email, password }               200 { token, account } | 200 { stepUp: { challenge, methods } }
+ *   POST /auth/module/v2/login                        { email, password, requireCode? } 200 { token, account } | 200 { stepUp: { challenge, methods } }
  *   POST /auth/module/v2/login/email-code             { challenge }                     202
  *   POST /auth/module/v2/login/verify                 { challenge, code }               200 { token, account }
  *   POST /auth/module/v2/reset/request                { email }                         202 (always)
@@ -104,7 +104,7 @@ router.post("/auth/module/v2/signup/complete", moduleGate, authLimiter, jsonOnly
 
 router.post("/auth/module/v2/login", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
   const module = moduleOf(res);
-  const r = await startLogin(authDb, { module, email: req.body?.email, password: req.body?.password, client: clientInfo(req) });
+  const r = await startLogin(authDb, { module, email: req.body?.email, password: req.body?.password, client: clientInfo(req), requireCode: req.body?.requireCode === true });
   if (!r.ok) { fail(res, r); return; }
   if (r.stepUp) {
     if (r.stepUp.send) mail(module, r.stepUp.send.to, r.stepUp.send.code, "sign-in");
