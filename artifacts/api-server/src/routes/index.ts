@@ -26,6 +26,7 @@ import telegramRouter from "./telegram";
 import telegramBotLinksRouter from "./telegram-bot-links";
 import moduleAccountsRouter from "./module-accounts";
 import moduleAuthRouter from "./module-auth";
+import moduleAuthV2Router from "./module-auth-v2";
 import emailAccountsRouter from "./email-accounts";
 import emailComposeRouter from "./email-compose";
 import supportRouter from "./support";
@@ -174,6 +175,7 @@ router.use(healthRouter);
 router.use(uptimeRouter);
 router.use(authRouter);
 router.use(moduleAuthRouter); // W1-P2: /auth/module/* (per-module credentials + sessions; 404 unless MODULE_SESSIONS_MODE != off)
+router.use(moduleAuthV2Router); // W3: /auth/module/v2/* (designed login steps: email code, captcha, username, step-up, profile)
 router.use(passkeyRouter);
 router.use(usersRouter);
 router.use(emailRouter);

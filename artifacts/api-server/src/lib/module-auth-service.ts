@@ -283,7 +283,7 @@ export async function loginWithPassword(
 export async function finishPasswordLogin(db: AuthDb, v: VerifiedLogin, client: ClientInfo): Promise<{ ok: true } & IssuedModuleSession> {
   const { module, password, row } = v;
   // Upgrade an old-parameter hash while we hold the plaintext (computed outside the transaction).
-  const rehash = modulePasswordNeedsRehash(row.password_hash) ? await hashModulePassword(password) : null;
+  const rehash = password && modulePasswordNeedsRehash(row.password_hash) ? await hashModulePassword(password) : null;
   return db.transaction(async (q) => {
     await q(
       `UPDATE module_credentials SET failed_attempts = 0, locked_until = NULL, last_login_at = NOW(), updated_at = NOW(),

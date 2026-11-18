@@ -43,7 +43,7 @@ const authDb = poolAuthDb(pool as any);
 
 // ─── guards ──────────────────────────────────────────────────────────────────
 
-function moduleGate(req: Request, res: Response, next: NextFunction): void {
+export function moduleGate(req: Request, res: Response, next: NextFunction): void {
   if (!isModuleSessionsEnabled()) { res.status(404).json({ error: "Route not found", code: "NOT_FOUND" }); return; }
   const module = currentModuleContext();
   if (!module) {
@@ -55,14 +55,14 @@ function moduleGate(req: Request, res: Response, next: NextFunction): void {
 }
 
 /** Only JSON bodies: a cross-site HTML form (urlencoded / text/plain) can never reach these state-changing routes. */
-function jsonOnly(req: Request, res: Response, next: NextFunction): void {
+export function jsonOnly(req: Request, res: Response, next: NextFunction): void {
   if (!req.is("application/json")) { res.status(415).json({ error: "Send application/json", code: "UNSUPPORTED_MEDIA_TYPE" }); return; }
   next();
 }
 
-const moduleOf = (res: Response): ModuleId => res.locals.moduleId as ModuleId;
+export const moduleOf = (res: Response): ModuleId => res.locals.moduleId as ModuleId;
 
-function clientInfo(req: Request): ClientInfo {
+export function clientInfo(req: Request): ClientInfo {
   const userAgent = (req.headers["user-agent"] as string) || null;
   return { ip: getClientIp(req), userAgent, deviceLabel: deviceLabelFromUserAgent(userAgent) };
 }
@@ -80,12 +80,12 @@ const SOLUTION: Partial<Record<Fail["code"], string>> = {
   ACCOUNT_ALREADY_LINKED: "That module account is already linked to a different AYZEN identity.",
   EMAIL_ACCOUNT_EXISTS: "This email already has a password account in this module. Log in with your password; social sign-in is not merged into existing accounts.",
 };
-function fail(res: Response, f: Fail): void {
+export function fail(res: Response, f: Fail): void {
   res.status(STATUS[f.code] ?? 400).json({ error: f.code === "INVALID_CREDENTIALS" ? "Invalid credentials" : "Request rejected", code: f.code, ...(SOLUTION[f.code] ? { solution: SOLUTION[f.code] } : {}) });
 }
 
 /** Signs the module token and, when the request is on the module's own host, sets its host-only cookie. */
-async function issue(req: Request, res: Response, s: IssuedModuleSession, opts: { stepUpAt?: string; role?: string } = {}): Promise<string> {
+export async function issue(req: Request, res: Response, s: IssuedModuleSession, opts: { stepUpAt?: string; role?: string } = {}): Promise<string> {
   let role = opts.role;
   if (!role) role = (await pool.query("SELECT role FROM users WHERE id = $1", [s.userId])).rows[0]?.role ?? "user";
   const { scopes, roles } = await resolveSessionScopes(s.userId, role!);
@@ -96,7 +96,7 @@ async function issue(req: Request, res: Response, s: IssuedModuleSession, opts: 
   return token;
 }
 
-const publicAccount = (s: IssuedModuleSession, identifier?: string) => ({
+export const publicAccount = (s: IssuedModuleSession, identifier?: string) => ({
   module: s.module, label: getModule(s.module)?.label ?? s.module, moduleUid: s.moduleUid, ...(identifier ? { identifier } : {}),
 });
 const str = (v: unknown) => (typeof v === "string" ? v : undefined);
