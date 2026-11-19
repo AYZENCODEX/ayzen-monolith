@@ -38,9 +38,13 @@ CREATE TABLE IF NOT EXISTS module_profiles (
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   CONSTRAINT module_profiles_account_fk FOREIGN KEY (module_account_id, module) REFERENCES module_accounts(id, module) ON DELETE CASCADE,
-  CONSTRAINT module_profiles_username_chk CHECK (username_norm IS NULL OR username_norm ~ '^[a-z0-9_]{3,30}$')
+  CONSTRAINT module_profiles_username_chk CHECK (username_norm IS NULL OR username_norm ~ '^[a-z0-9._]{3,30}$')
 );
 CREATE UNIQUE INDEX IF NOT EXISTS module_profiles_username_idx ON module_profiles(module, username_norm) WHERE username_norm IS NOT NULL;
+ALTER TABLE module_profiles ADD COLUMN IF NOT EXISTS mail_local TEXT;
+ALTER TABLE module_profiles DROP CONSTRAINT IF EXISTS module_profiles_mail_chk;
+ALTER TABLE module_profiles ADD CONSTRAINT module_profiles_mail_chk CHECK (mail_local IS NULL OR mail_local ~ '^[a-z0-9._-]{3,30}$');
+CREATE UNIQUE INDEX IF NOT EXISTS module_profiles_mail_idx ON module_profiles(module, mail_local) WHERE mail_local IS NOT NULL;
 
 ALTER TABLE module_auth_events DROP CONSTRAINT IF EXISTS module_auth_events_event_chk;
 ALTER TABLE module_auth_events ADD CONSTRAINT module_auth_events_event_chk

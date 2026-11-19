@@ -13,7 +13,7 @@ const FILES = {
   sql: "migrations/129_module_auth_v2.sql", boot: "artifacts/api-server/src/lib/schema-migrations.ts",
   svc: "artifacts/api-server/src/lib/module-auth-v2-service.ts", route: "artifacts/api-server/src/routes/module-auth-v2.ts",
   index: "artifacts/api-server/src/routes/index.ts", adapters: "packages/module-registry/src/login-adapters.mjs",
-  designs: "packages/module-registry/src/landing-designs.mjs", ci: ".github/workflows/ci.yml", pkg: "artifacts/api-server/package.json",
+  designs: "packages/module-registry/src/landing-designs.mjs", wisp: "packages/module-registry/landings/wisp/login.html", verve: "packages/module-registry/landings/verve/assets/js/pages/login.js", ci: ".github/workflows/ci.yml", pkg: "artifacts/api-server/package.json",
 };
 const load = (over = {}) => Object.fromEntries(Object.entries(FILES).map(([k, f]) => [k, over[k] ?? readFileSync(join(ROOT, f), "utf8")]));
 const norm = (s) => s.replace(/\s+/g, " ").trim();
@@ -21,7 +21,7 @@ const norm = (s) => s.replace(/\s+/g, " ").trim();
 const RULES = [
   ["migration 129 creates module_otps and module_profiles with a composite FK to module_accounts(id, module)", (t) =>
     /CREATE TABLE IF NOT EXISTS module_otps/.test(t.sql) && /CREATE TABLE IF NOT EXISTS module_profiles/.test(t.sql) && /FOREIGN KEY \(module_account_id, module\)\s+REFERENCES module_accounts\s*\(id, module\)/.test(t.sql) ? null : "tables or composite FK missing"],
-  ["usernames are unique per module and constrained in SQL", (t) => /module_profiles_username_idx[\s\S]*?\(module, username_norm\)/.test(t.sql) && /\^\[a-z0-9_\]\{3,30\}\$/.test(t.sql) ? null : "unique index or CHECK missing"],
+  ["usernames are unique per module and constrained in SQL", (t) => /module_profiles_username_idx[\s\S]*?\(module, username_norm\)/.test(t.sql) && /\^\[a-z0-9._\]\{3,30\}\$/.test(t.sql) ? null : "unique index or CHECK missing"],
   ["the boot-time schema mirror carries every migration 129 table", (t) => ["module_otps", "module_profiles", "module_profiles_username_idx", "module_otps_lookup_idx"].every((n) => norm(t.boot).includes(n)) ? null : "schema-migrations.ts lacks a 129 object"],
   ["codes are stored only as HMAC hashes and compared in constant time", (t) => /code_hash/.test(t.svc) && /createHmac/.test(t.svc) && /timingSafeEqual/.test(t.svc) && !/INSERT INTO module_otps[^;]*\$\d,\s*\$\d,\s*\$\d,\s*code[,)]/.test(t.svc) ? null : "codes may be stored or compared in clear"],
   ["codes are single-use with an attempt cap and an hourly issue cap", (t) => /OTP_MAX_ATTEMPTS/.test(t.svc) && /OTP_MAX_PER_HOUR/.test(t.svc) && /used_at = NOW\(\)/.test(t.svc) ? null : "caps or single-use missing"],
@@ -36,6 +36,13 @@ const RULES = [
   ["v2 router is mounted after the module router", (t) => /router\.use\(moduleAuthV2Router\)/.test(t.index) ? null : "not mounted"],
   ["the login adapter only maps the legacy /api/auth calls to /api/auth/module/v2 and passes everything else through", (t) => /\/api\/auth\/module\/v2/.test(t.adapters) && /return F\.apply\(this,arguments\)\};/.test(t.adapters) && !/localStorage/.test(t.adapters) ? null : "adapter overreaches"],
   ["the adapter is injected into the served login page", (t) => /loginAdapterScript\(id\)/.test(t.designs) ? null : "designedLoginHtml does not inject it"],
+  ["wisp and verve login designs call the module v2 API natively, keep no demo accounts/codes, and never fake a social login", (t) => {
+    for (const [id, src] of [["wisp", t.wisp], ["verve", t.verve]]) {
+      if (!/\/api\/auth\/module\/v2|B='\/api\/auth\/module\/v2'|B="\/api\/auth\/module\/v2"/.test(src)) return `${id}: does not call /api/auth/module/v2`;
+      if (/Demo code|any 6 digits|verve-demo-accounts|Design preview|MEM\[/.test(src)) return `${id}: demo code or demo accounts left in`;
+    }
+    return /function oauth\(p\)\{toast\(/.test(t.verve) ? null : "verve social buttons are not neutralised";
+  }],
   ["CI runs this validator, its self-test and the v2 DB tests", (t) => /validate-w3-auth-v2\.mjs --self-test/.test(t.ci) && /module-auth-v2-service\.db\.test/.test(t.pkg) ? null : "CI step missing"],
 ];
 
@@ -52,6 +59,10 @@ const MUTANTS = [
   ["router not mounted", { index: (s) => s.replace("router.use(moduleAuthV2Router);", "") }],
   ["adapter swallows unknown calls", { adapters: (s) => s.replace("return F.apply(this,arguments)};", "return J(200,{})};") }],
   ["adapter not injected", { designs: (s) => s.replace("loginAdapterScript(id),", "") }],
+  ["wisp demo code left in", { wisp: (s) => s + "\nDemo: any 6 digits work." }],
+  ["verve demo accounts left in", { verve: (s) => s + "\nlocalStorage.getItem('verve-demo-accounts')" }],
+  ["verve fake social login", { verve: (s) => s.replace("function oauth(p){toast(", "function oauth(p){A.d={email:p};go('up','oa');toast(") }],
+  ["wisp not calling the API", { wisp: (s) => s.replace(/\/api\/auth\/module\/v2/g, "/x") }],
   ["CI step removed", { ci: (s) => s.replace(/validate-w3-auth-v2\.mjs --self-test/g, "nothing") }],
 ];
 

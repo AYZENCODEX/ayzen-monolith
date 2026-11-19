@@ -131,7 +131,9 @@ export function designedLoginHtml(id, opts = {}) {
     loginAdapterScript(id),
   ].join("");
   let html = fs.readFileSync(loginFile(id), "utf8").replace(/href="\/[a-z]+\/"/g, 'href="/"');
-  html = html.replace(/<head[^>]*>/i, (h) => `${h}<meta name="robots" content="noindex, nofollow"><script>${prelude}</script>`);
+  // Multi-page designs (verve) resolve their relative css/js through a <base>, exactly like their landing.
+  const baseTag = BASE_DESIGNS.has(id) ? `<base href="${LANDING_ASSET_PREFIX}/${id}/">` : "";
+  html = html.replace(/<head[^>]*>/i, (h) => `${h}<meta name="robots" content="noindex, nofollow"><script>${prelude}</script>${baseTag}`);
   return html;
 }
 

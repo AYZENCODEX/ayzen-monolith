@@ -20,11 +20,11 @@ export const OTP_TTL_MINUTES = 10;
 export const OTP_MAX_ATTEMPTS = 5;
 export const OTP_MAX_PER_HOUR = 5;
 export const CHALLENGE_TTL_SECONDS = 300;
-export const USERNAME_RE = /^[a-z0-9_]{3,30}$/;
+export const USERNAME_RE = /^[a-z0-9._]{3,30}$/;
 
 export type V2ErrorCode =
   | "INVALID_CAPTCHA" | "INVALID_CODE" | "TOO_MANY_CODES" | "USERNAME_INVALID" | "USERNAME_TAKEN" | "REFERRAL_INVALID"
-  | "CHALLENGE_INVALID" | "PROFILE_INVALID";
+  | "CHALLENGE_INVALID" | "PROFILE_INVALID" | "MAIL_INVALID" | "MAIL_TAKEN";
 export type V2Fail = { ok: false; code: V2ErrorCode | Fail["code"] };
 const bad = (code: V2Fail["code"]): V2Fail => ({ ok: false, code });
 
@@ -33,9 +33,9 @@ const secretOf = (env: NodeJS.ProcessEnv = process.env) =>
 const hmac = (secret: string, s: string) => createHmac("sha256", secret).update(s, "utf8").digest("hex");
 const safeEq = (a: string, b: string) => a.length === b.length && timingSafeEqual(Buffer.from(a), Buffer.from(b));
 
-/** Modules whose sign-up page has the captcha step (their design asks for it); the others rely on the per-address and per-IP limits. */
+/** Modules whose sign-up page has the captcha step (wisp, verve) (their design asks for it); the others rely on the per-address and per-IP limits. */
 export const captchaModules = (env: NodeJS.ProcessEnv = process.env): Set<string> =>
-  new Set((env.MODULE_SIGNUP_CAPTCHA_MODULES ?? "wisp").split(",").map((x) => x.trim()).filter(Boolean));
+  new Set((env.MODULE_SIGNUP_CAPTCHA_MODULES ?? "wisp,verve").split(",").map((x) => x.trim()).filter(Boolean));
 
 /** Step-up at login: off (default) = only accounts with an enrolled authenticator are challenged; email = everyone gets an emailed code. */
 export type StepUpMode = "off" | "email";
@@ -138,6 +138,32 @@ export async function isUsernameFree(q: Query, module: ModuleId, raw: unknown): 
   return { ok: true, available: r.rows.length === 0, username };
 }
 
+export const normalizeMailLocal = (raw: unknown): string | null => {
+  if (typeof raw !== "string") return null;
+  const v = raw.trim().toLowerCase();
+  return /^[a-z0-9._-]{3,30}$/.test(v) ? v : null;
+};
+
+/** Mail-style modules (wisp) let people claim a local part; unique per module, independent of the username. */
+export async function isMailLocalFree(q: Query, module: ModuleId, raw: unknown): Promise<{ ok: true; available: boolean; mail: string } | V2Fail> {
+  const mail = normalizeMailLocal(raw);
+  if (!mail) return bad("MAIL_INVALID");
+  const r = await q(`SELECT 1 FROM module_profiles WHERE module=$1 AND mail_local=$2`, [module, mail]);
+  return { ok: true, available: r.rows.length === 0, mail };
+}
+
+/** Looks at the emailed sign-up code without consuming it (wrong guesses still count toward the cap). */
+export async function checkSignupCode(
+  db: AuthDb, input: { module: unknown; email: unknown; code: unknown; env?: NodeJS.ProcessEnv },
+): Promise<{ ok: true } | V2Fail> {
+  if (!isKnownModuleId(input.module)) return bad("INVALID_MODULE");
+  const identifier = normalizeIdentifier(input.email);
+  if (!identifier) return bad("INVALID_CODE");
+  const module = input.module;
+  const good = await db.transaction((q) => checkOtp(q, { module, purpose: "signup", identifier, code: input.code, consume: false, env: input.env }));
+  return good ? { ok: true } : bad("INVALID_CODE");
+}
+
 /** A referral code is an existing AYZEN user's code. Only validity is revealed, never whose it is. */
 export async function isReferralValid(q: Query, raw: unknown): Promise<boolean> {
   if (typeof raw !== "string" || !/^[A-Za-z0-9_-]{3,40}$/.test(raw.trim())) return false;
@@ -164,18 +190,22 @@ export async function startSignup(
   return { ok: true, send: { to: identifier, code: otp.code } };
 }
 
-export interface ProfileInput { firstName?: unknown; lastName?: unknown; location?: unknown; bio?: unknown; links?: unknown }
+export interface ProfileInput { firstName?: unknown; lastName?: unknown; location?: unknown; bio?: unknown; links?: unknown; extra?: unknown }
+const EXTRA_KEYS = ["x", "telegram", "discord", "headline"] as const;
 const clip = (v: unknown, max: number): string | null => (typeof v === "string" && v.trim() ? v.trim().slice(0, max) : null);
 export function cleanProfile(p: ProfileInput | undefined) {
   const links = Array.isArray(p?.links) ? (p!.links as unknown[]).filter((l): l is string => typeof l === "string" && /^https?:\/\//i.test(l)).slice(0, 5).map((l) => l.slice(0, 300)) : [];
-  return { firstName: clip(p?.firstName, 60), lastName: clip(p?.lastName, 60), location: clip(p?.location, 120), bio: clip(p?.bio, 500), links };
+  const extra: Record<string, string> = {};
+  const rawExtra = (p?.extra && typeof p.extra === "object" ? p.extra : {}) as Record<string, unknown>;
+  for (const k of EXTRA_KEYS) { const v = clip(rawExtra[k], 100); if (v) extra[k] = v; }
+  return { firstName: clip(p?.firstName, 60), lastName: clip(p?.lastName, 60), location: clip(p?.location, 120), bio: clip(p?.bio, 500), links, extra };
 }
 
 /** Step 2. Proves the mailbox with the code, then creates account + credential (identifier verified) + profile in one transaction. */
 export async function completeSignup(
   db: AuthDb,
   input: {
-    module: unknown; email: unknown; code: unknown; password: unknown; username: unknown; referral?: unknown; profile?: ProfileInput;
+    module: unknown; email: unknown; code: unknown; password: unknown; username: unknown; referral?: unknown; profile?: ProfileInput; mail?: unknown;
     client: ClientInfo; env?: NodeJS.ProcessEnv;
   },
 ): Promise<({ ok: true } & IssuedModuleSession) | V2Fail> {
@@ -196,6 +226,13 @@ export async function completeSignup(
   const free = await isUsernameFree(db.query, module, username);
   if (!free.ok) return free;
   if (!free.available) return bad("USERNAME_TAKEN");
+  let mail: string | null = null;
+  if (input.mail !== undefined && input.mail !== null && input.mail !== "") {
+    const m = await isMailLocalFree(db.query, module, input.mail);
+    if (!m.ok) return m;
+    if (!m.available) return bad("MAIL_TAKEN");
+    mail = m.mail;
+  }
   const profile = cleanProfile(input.profile);
 
   // The code is checked-and-burned only together with the account creation: if creation fails, the code survives.
@@ -210,10 +247,10 @@ export async function completeSignup(
           module, identifier, password: input.password, client: input.client, verified: true,
           afterCreate: async (tq, acct) => {
             await tq(
-              `INSERT INTO module_profiles (module_account_id, module, username, username_norm, first_name, last_name, display_name, location, bio, links, referral_code_used)
-               VALUES ($1,$2,$3,$3,$4,$5,$6,$7,$8,$9::jsonb,$10)`,
+              `INSERT INTO module_profiles (module_account_id, module, username, username_norm, first_name, last_name, display_name, location, bio, links, extra, referral_code_used, mail_local)
+               VALUES ($1,$2,$3,$3,$4,$5,$6,$7,$8,$9::jsonb,$10::jsonb,$11,$12)`,
               [acct.id, module, username, profile.firstName, profile.lastName, [profile.firstName, profile.lastName].filter(Boolean).join(" ") || username,
-               profile.location, profile.bio, JSON.stringify(profile.links), referral],
+               profile.location, profile.bio, JSON.stringify(profile.links), JSON.stringify(profile.extra), referral, mail],
             );
           },
         },
@@ -225,6 +262,7 @@ export async function completeSignup(
     return r;
   } catch (e) {
     if ((e as any)?.code === "23505" && /username/.test(String((e as any).constraint))) return bad("USERNAME_TAKEN");
+    if ((e as any)?.code === "23505" && /mail/.test(String((e as any).constraint))) return bad("MAIL_TAKEN");
     throw e;
   }
 }
@@ -361,9 +399,9 @@ export async function completeCodeReset(
 // ─── profile ─────────────────────────────────────────────────────────────────────────────────────
 
 export async function getProfile(q: Query, moduleAccountId: number) {
-  const r = await q(`SELECT username, first_name, last_name, display_name, location, bio, links FROM module_profiles WHERE module_account_id=$1`, [moduleAccountId]);
+  const r = await q(`SELECT username, first_name, last_name, display_name, location, bio, links, extra, mail_local FROM module_profiles WHERE module_account_id=$1`, [moduleAccountId]);
   const p = r.rows[0];
-  return p ? { username: p.username as string, firstName: p.first_name as string | null, lastName: p.last_name as string | null, displayName: p.display_name as string | null, location: p.location as string | null, bio: p.bio as string | null, links: (p.links ?? []) as string[] } : null;
+  return p ? { username: p.username as string, firstName: p.first_name as string | null, lastName: p.last_name as string | null, displayName: p.display_name as string | null, location: p.location as string | null, bio: p.bio as string | null, links: (p.links ?? []) as string[], extra: (p.extra ?? {}) as Record<string, string>, mail: p.mail_local as string | null } : null;
 }
 
 export async function updateProfile(
@@ -373,9 +411,9 @@ export async function updateProfile(
   return db.transaction(async (q) => {
     const u = await q(
       `UPDATE module_profiles SET first_name=$3, last_name=$4, display_name=COALESCE(NULLIF(trim(concat_ws(' ', $3::text, $4::text)), ''), username),
-              location=$5, bio=$6, links=$7::jsonb, updated_at=NOW()
+              location=$5, bio=$6, links=$7::jsonb, extra=$8::jsonb, updated_at=NOW()
         WHERE module_account_id=$1 AND module=$2`,
-      [input.moduleAccountId, input.module, p.firstName, p.lastName, p.location, p.bio, JSON.stringify(p.links)],
+      [input.moduleAccountId, input.module, p.firstName, p.lastName, p.location, p.bio, JSON.stringify(p.links), JSON.stringify(p.extra)],
     );
     if (!u.rowCount) return bad("PROFILE_INVALID");
     await audit(q, input.module, input.moduleAccountId, "profile_updated", "success", input.client);

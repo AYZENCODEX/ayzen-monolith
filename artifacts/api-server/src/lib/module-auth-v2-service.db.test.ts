@@ -10,7 +10,7 @@ import pg from "pg";
 import { poolAuthDb, loginWithPassword, type AuthDb, type ClientInfo } from "./module-auth-service";
 import {
   checkCaptcha, completeCodeReset, completeLogin, completeSignup, getProfile, isReferralValid, isUsernameFree, newCaptcha, normalizeUsername,
-  sendLoginEmailCode, startCodeReset, startLogin, startSignup, updateProfile, OTP_MAX_ATTEMPTS,
+  sendLoginEmailCode, checkSignupCode, isMailLocalFree, startCodeReset, startLogin, startSignup, updateProfile, OTP_MAX_ATTEMPTS,
 } from "./module-auth-v2-service";
 import { generateBase32Secret, totpGenerate } from "./totp";
 
@@ -217,4 +217,34 @@ test("requireCode: an account with an UNVERIFIED mailbox (v1 sign-up) is challen
   assert.ok(st.stepUp?.send?.code);
   assert.equal(((await completeLogin(db, { module: "fyra", challenge: st.stepUp.challenge, code: st.stepUp.send.code, client: CLIENT, env: ENV })) as any).ok, true);
   assert.ok((await q("SELECT identifier_verified_at FROM module_credentials WHERE module_account_id=$1", [su.moduleAccountId])).rows[0].identifier_verified_at);
+});
+
+test("signup/verify looks at the code without burning it; wrong guesses count", { skip }, async () => {
+  const e = email(), cap = solve("wisp");
+  const s: any = await startSignup(db, { module: "wisp", email: e, captchaId: cap.id, captchaAnswer: cap.answer, client: CLIENT, env: ENV });
+  assert.equal(((await checkSignupCode(db, { module: "wisp", email: e, code: s.send.code, env: ENV })) as any).ok, true);
+  assert.equal(((await checkSignupCode(db, { module: "wisp", email: e, code: s.send.code, env: ENV })) as any).ok, true, "not consumed");
+  const wrong = s.send.code === "000000" ? "111111" : "000000";
+  assert.equal(((await checkSignupCode(db, { module: "wisp", email: e, code: wrong, env: ENV })) as any).code, "INVALID_CODE");
+  const done: any = await completeSignup(db, { module: "wisp", email: e, code: s.send.code, password: PW, username: uname(), client: CLIENT, env: ENV });
+  assert.equal(done.ok, true, JSON.stringify(done));
+});
+
+test("mail alias: unique per module, validated, stored with the profile; extra links are whitelisted", { skip }, async () => {
+  const mail = `box.${randomBytes(3).toString("hex")}`;
+  assert.equal(((await isMailLocalFree(db.query, "wisp", "ab")) as any).code, "MAIL_INVALID");
+  assert.equal(((await isMailLocalFree(db.query, "wisp", mail)) as any).available, true);
+  const cap = solve("wisp"), e = email();
+  const s: any = await startSignup(db, { module: "wisp", email: e, captchaId: cap.id, captchaAnswer: cap.answer, client: CLIENT, env: ENV });
+  const r: any = await completeSignup(db, { module: "wisp", email: e, code: s.send.code, password: PW, username: uname(), mail, client: CLIENT, env: ENV, profile: { extra: { x: "@ada", telegram: "ada_t", evil: "x" } } });
+  assert.equal(r.ok, true, JSON.stringify(r));
+  assert.equal(((await isMailLocalFree(db.query, "wisp", mail)) as any).available, false);
+  assert.equal(((await isMailLocalFree(db.query, "fyra", mail)) as any).available, true, "per module");
+  const e2 = email(), cap2 = solve("wisp");
+  const s2: any = await startSignup(db, { module: "wisp", email: e2, captchaId: cap2.id, captchaAnswer: cap2.answer, client: CLIENT, env: ENV });
+  assert.equal(((await completeSignup(db, { module: "wisp", email: e2, code: s2.send.code, password: PW, username: uname(), mail, client: CLIENT, env: ENV })) as any).code, "MAIL_TAKEN");
+  const p: any = await getProfile(pool.query.bind(pool), r.moduleAccountId);
+  assert.deepEqual([p.mail, p.extra], [mail, { x: "@ada", telegram: "ada_t" }]);
+  assert.deepEqual(await updateProfile(db, { module: "wisp", moduleAccountId: r.moduleAccountId, profile: { extra: { discord: "ada#1" } }, client: CLIENT }), { ok: true });
+  assert.deepEqual(((await getProfile(pool.query.bind(pool), r.moduleAccountId)) as any).extra, { discord: "ada#1" });
 });

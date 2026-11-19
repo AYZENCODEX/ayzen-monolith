@@ -9,7 +9,7 @@ import { authLimiter, otpLimiter } from "../middlewares/security";
 import { moduleCookieName } from "../lib/module-session-policy";
 import { poolAuthDb } from "../lib/module-auth-service";
 import {
-  completeCodeReset, completeLogin, completeSignup, getProfile, isReferralValid, isUsernameFree, newCaptcha, sendLoginEmailCode,
+  checkSignupCode, completeCodeReset, completeLogin, completeSignup, getProfile, isMailLocalFree, isReferralValid, isUsernameFree, newCaptcha, sendLoginEmailCode,
   startCodeReset, startLogin, startSignup, updateProfile, OTP_TTL_MINUTES, type V2Fail,
 } from "../lib/module-auth-v2-service";
 import { clientInfo, fail as baseFail, issue, jsonOnly, moduleGate, moduleOf, publicAccount } from "./module-auth";
@@ -22,6 +22,8 @@ import { clientInfo, fail as baseFail, issue, jsonOnly, moduleGate, moduleOf, pu
  *   GET  /auth/module/v2/captcha                      { id, question }
  *   POST /auth/module/v2/username/check               { username }                      { available }
  *   POST /auth/module/v2/referral/check               { code }                          { valid }
+ *   POST /auth/module/v2/mail/check                   { mail }                          { available }   (mail-style modules)
+ *   POST /auth/module/v2/signup/verify                { email, code }                   { valid }       (looks, does not consume)
  *   POST /auth/module/v2/signup/start                 { email, captcha: { id, answer } }  202 (always)
  *   POST /auth/module/v2/signup/complete              { email, code, password, username, referral?, profile? }  201 { token, account }
  *   POST /auth/module/v2/login                        { email, password, requireCode? } 200 { token, account } | 200 { stepUp: { challenge, methods } }
@@ -37,13 +39,13 @@ const ACK = { message: "If that address can be used, a code is on its way." };
 
 const V2_STATUS: Record<string, number> = {
   INVALID_CAPTCHA: 400, INVALID_CODE: 400, TOO_MANY_CODES: 429, USERNAME_INVALID: 400, USERNAME_TAKEN: 409,
-  REFERRAL_INVALID: 400, CHALLENGE_INVALID: 400, PROFILE_INVALID: 404,
+  REFERRAL_INVALID: 400, CHALLENGE_INVALID: 400, PROFILE_INVALID: 404, MAIL_INVALID: 400, MAIL_TAKEN: 409,
 };
 const V2_SOLUTION: Record<string, string> = {
   INVALID_CAPTCHA: "Solve the check again.", INVALID_CODE: "That code is wrong or expired. Request a new one.",
   TOO_MANY_CODES: "Too many codes requested. Try again in an hour.", USERNAME_INVALID: "Use 3-30 letters, numbers or underscores.",
   USERNAME_TAKEN: "That username is taken.", REFERRAL_INVALID: "That referral code is not valid.",
-  CHALLENGE_INVALID: "This sign-in step expired. Start again.",
+  CHALLENGE_INVALID: "This sign-in step expired. Start again.", MAIL_INVALID: "Use 3-30 letters, numbers, dots, dashes or underscores.", MAIL_TAKEN: "That address is taken.",
 };
 function fail(res: Response, f: V2Fail): void {
   if (f.code in V2_STATUS) {
@@ -82,6 +84,18 @@ router.post("/auth/module/v2/username/check", moduleGate, otpLimiter, jsonOnly, 
   res.json({ available: r.available, username: r.username });
 });
 
+router.post("/auth/module/v2/mail/check", moduleGate, otpLimiter, jsonOnly, async (req, res): Promise<void> => {
+  const r = await isMailLocalFree(authDb.query, moduleOf(res), req.body?.mail);
+  if (!r.ok) { fail(res, r); return; }
+  res.json({ available: r.available, mail: r.mail });
+});
+
+router.post("/auth/module/v2/signup/verify", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+  const r = await checkSignupCode(authDb, { module: moduleOf(res), email: req.body?.email, code: req.body?.code });
+  if (!r.ok) { fail(res, r); return; }
+  res.json({ valid: true });
+});
+
 router.post("/auth/module/v2/referral/check", moduleGate, otpLimiter, jsonOnly, async (req, res): Promise<void> => {
   res.json({ valid: await isReferralValid(authDb.query, req.body?.code) });
 });
@@ -96,7 +110,7 @@ router.post("/auth/module/v2/signup/start", moduleGate, otpLimiter, jsonOnly, as
 
 router.post("/auth/module/v2/signup/complete", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
   const b = req.body ?? {};
-  const r = await completeSignup(authDb, { module: moduleOf(res), email: b.email, code: b.code, password: b.password, username: b.username, referral: b.referral, profile: b.profile, client: clientInfo(req) });
+  const r = await completeSignup(authDb, { module: moduleOf(res), email: b.email, code: b.code, password: b.password, username: b.username, referral: b.referral, profile: b.profile, mail: b.mail, client: clientInfo(req) });
   if (!r.ok) { fail(res, r); return; }
   const token = await issue(req, res, r, { role: "user", stepUpAt: new Date().toISOString() });
   res.status(201).json({ token, account: publicAccount(r, str(b.email)?.trim().toLowerCase()) });
@@ -160,7 +174,7 @@ router.put("/auth/module/v2/profile", moduleGate, authLimiter, jsonOnly, async (
 });
 
 export const MODULE_AUTH_V2_ROUTE_PATHS = [
-  "/auth/module/v2/captcha", "/auth/module/v2/username/check", "/auth/module/v2/referral/check", "/auth/module/v2/signup/start",
+  "/auth/module/v2/captcha", "/auth/module/v2/username/check", "/auth/module/v2/referral/check", "/auth/module/v2/mail/check", "/auth/module/v2/signup/verify", "/auth/module/v2/signup/start",
   "/auth/module/v2/signup/complete", "/auth/module/v2/login", "/auth/module/v2/login/email-code", "/auth/module/v2/login/verify",
   "/auth/module/v2/reset/request", "/auth/module/v2/reset/confirm", "/auth/module/v2/profile",
 ] as const;

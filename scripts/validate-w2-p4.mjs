@@ -24,7 +24,7 @@ function load(over = {}) {
   return { ids, docs: { ...docs, ...over.docs }, prod: { ...Object.fromEntries(ids.map((id) => [id, designedLandingHtml(id)])), ...over.prod }, designs: over.designs ?? designIds(), assets: over.assets ?? Object.fromEntries(designIds().map((id) => [id, designAssets(id).map((a) => a.rel)])), files: { ...Object.fromEntries(WIRING.map((f) => [f, read(f)])), ...over.files },
     og: over.og ?? Object.fromEntries(ids.map((id) => [id, existsSync(join(ROOT, `artifacts/ayzen/public/og/${id}.png`)) ? statSync(join(ROOT, `artifacts/ayzen/public/og/${id}.png`)).size : 0])),
     shell: over.shell ?? read("artifacts/ayzen/index.html"), llms: over.llms, abouts: over.abouts, fulls: over.fulls, robots: over.robots, landings: over.landings,
-    logins: over.logins ?? Object.fromEntries(loginIds().map((id) => [id, readFileSync(loginFile(id), "utf8")])) };
+    logins: over.logins ?? Object.fromEntries(loginIds().map((id) => { const js = join(dirname(loginFile(id)), "assets/js/pages/login.js"); return [id, readFileSync(loginFile(id), "utf8") + (existsSync(js) ? readFileSync(js, "utf8") : "")]; })) };
 }
 const text = (h) => h.replace(/<style[\s\S]*?<\/style>/g, "").replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 const eachDoc = (t, fn) => { const bad = []; for (const [id, d] of Object.entries(t.docs)) { const m = fn(d, id); if (m) bad.push(`${id}: ${m}`); } return bad.length ? bad.join("; ") : null; };
@@ -116,7 +116,7 @@ const RULES = [
       if (!/hash|location\.hash/.test(o) || !/location\.replace\("\/login"\)/.test(o) || !/location\.replace\("\/register"\)/.test(o)) return `${id}: hash deep links are not redirected`;
       if (!/stopImmediatePropagation/.test(o)) return `${id}: data-go click redirect missing`;
     }
-    const v = t.assets.verve ?? []; if (v.some((r) => /login|auth\.css/.test(r))) return "verve ships a demo login asset";
+    const v = t.assets.verve ?? []; if (v.some((r) => /(^|\/)login\.html$/.test(r))) return "verve ships a demo login asset";
     return null;
   }],
   ["design assets: relative urls are rewritten (no bare assets/ fonts/ refs except under <base>), shipped files exist", (t) => {
@@ -233,8 +233,8 @@ const RULES = [
   ["module-own login: a design login must hit the real /api/auth routes (no demo), be served at /login by Express, the module build and the central build, and the central SPA hands module hosts over", (t) => {
     const a = t.files["artifacts/api-server/src/app.ts"], vc = t.files["artifacts/ayzen/vite.config.ts"], g = t.files["artifacts/ayzen/src/lib/module-landing-gate.ts"], m = t.files["artifacts/ayzen/src/main.tsx"], d = JSON.parse(t.files["deploy/modules/fyra/vercel.json"]);
     for (const [id, html] of Object.entries(t.logins ?? {})) {
-      if (!/\/api\/auth\/login/.test(html)) return `${id}: login design does not call /api/auth/login (a mock login must not ship)`;
-      if (/any 6-digit code|Design preview, not connected/i.test(html)) return `${id}: login design is a demo`;
+      if (!/\/api\/auth\/login|\/api\/auth\/module\/v2/.test(html)) return `${id}: login design does not call the auth API (a mock login must not ship)`;
+      if (/any 6-digit code|Design preview, not connected|verve-demo-accounts|Demo code|demo: any 6 digits/i.test(html)) return `${id}: login design is a demo`;
     }
     if (!/designedLoginHtml\(c\.id\)/.test(a) || !/app\.get\(\["\/login", "\/login\/"\]/.test(a)) return "server does not serve the module login at /login";
     if (a.indexOf('app.get(["/login", "/login/"]') > a.indexOf("app.use(express.static(distPath))")) return "/login must be registered before express.static";
@@ -309,6 +309,7 @@ if (process.argv.includes("--self-test")) {
     ["asset allow-list removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace("LANDING_ASSET_FILES.get(key)", "key") } }, "server:"],
     ["SPA gate removed", { files: { "artifacts/ayzen/src/main.tsx": f("artifacts/ayzen/src/main.tsx").replace("shouldShowModuleLanding(", "noop(") } }, "SPA fallback gate"],
     ["demo login shipped", { logins: { wisp: "<html>Design preview, not connected to a server: any 6-digit code works.</html>" } }, "module-own login"],
+    ["verve demo accounts leak into login", { logins: { verve: "<html>/api/auth/module/v2 localStorage.getItem('verve-demo-accounts')</html>" } }, "module-own login"],
     ["login not calling real API", { logins: { fyra: "<html>no api</html>" } }, "module-own login"],
     ["server login route removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('app.get(["/login", "/login/"]', 'app.get(["/x", "/x/"]') } }, "module-own login"],
     ["central build stops emitting /m/<id>", { files: { "artifacts/ayzen/vite.config.ts": f("artifacts/ayzen/vite.config.ts").replace("emitModuleSite(id, path.join(out, 'm', id)", "noop(id, path.join(out, 'm', id)") } }, "module-own login"],
