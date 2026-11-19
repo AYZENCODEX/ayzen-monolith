@@ -7,7 +7,7 @@ import { moduleRequestContext } from "./lib/module-request-context";
 import path from "path";
 import fs from "fs";
 import { robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, getLandingContent } from "@ayzen/module-registry/landing";
-import { designAssets, designIds, designedLandingHtml, designedLoginHtml } from "@ayzen/module-registry/landing-designs";
+import { designAssets, designIds, designedLandingHtml, designedLoginHtml, designedRegisterHtml } from "@ayzen/module-registry/landing-designs";
 import { fileURLToPath } from "url";
 import router from "./routes";
 import wellKnownJwksRouter from "./routes/well-known-jwks";
@@ -363,6 +363,14 @@ function buildLandingByHost(): Map<string, string> {
   return out;
 }
 // A module's OWN sign-in page (only modules whose design talks to the real /api/auth routes, e.g. fyra); others use the SPA /login.
+function buildRegisterByHost(): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const c of SPLIT_APP_HOST_CONFIG) {
+    const html = designedRegisterHtml(c.id);
+    if (html) for (const host of c.hosts) out.set(host, html);
+  }
+  return out;
+}
 function buildLoginByHost(): Map<string, string> {
   const out = new Map<string, string>();
   for (const c of SPLIT_APP_HOST_CONFIG) {
@@ -463,6 +471,13 @@ if (process.env.NODE_ENV === "production") {
     if (!login) return next();
     res.setHeader("Cache-Control", "no-store");
     res.type("html").send(login);
+  });
+  const registerByHost = landingByHost.size ? buildRegisterByHost() : new Map<string, string>();
+  app.get(["/register", "/register/"], (req, res, next) => {
+    const page = registerByHost.get(req.hostname);
+    if (!page) return next();
+    res.setHeader("Cache-Control", "no-store");
+    res.type("html").send(page);
   });
   app.use(express.static(distPath));
   app.get("/{*splat}", (req, res) => {

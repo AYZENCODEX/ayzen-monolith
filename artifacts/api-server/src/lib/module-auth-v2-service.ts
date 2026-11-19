@@ -35,7 +35,7 @@ const safeEq = (a: string, b: string) => a.length === b.length && timingSafeEqua
 
 /** Modules whose sign-up page has the captcha step (wisp, verve) (their design asks for it); the others rely on the per-address and per-IP limits. */
 export const captchaModules = (env: NodeJS.ProcessEnv = process.env): Set<string> =>
-  new Set((env.MODULE_SIGNUP_CAPTCHA_MODULES ?? "wisp,verve").split(",").map((x) => x.trim()).filter(Boolean));
+  new Set((env.MODULE_SIGNUP_CAPTCHA_MODULES ?? "wisp,verve,ryft,zynth").split(",").map((x) => x.trim()).filter(Boolean));
 
 /** Step-up at login: off (default) = only accounts with an enrolled authenticator are challenged; email = everyone gets an emailed code. */
 export type StepUpMode = "off" | "email";
@@ -191,7 +191,7 @@ export async function startSignup(
 }
 
 export interface ProfileInput { firstName?: unknown; lastName?: unknown; location?: unknown; bio?: unknown; links?: unknown; extra?: unknown }
-const EXTRA_KEYS = ["x", "telegram", "discord", "headline"] as const;
+const EXTRA_KEYS = ["x", "telegram", "discord", "headline", "country", "workspace", "workspaceSlug", "teamSize"] as const;
 const clip = (v: unknown, max: number): string | null => (typeof v === "string" && v.trim() ? v.trim().slice(0, max) : null);
 export function cleanProfile(p: ProfileInput | undefined) {
   const links = Array.isArray(p?.links) ? (p!.links as unknown[]).filter((l): l is string => typeof l === "string" && /^https?:\/\//i.test(l)).slice(0, 5).map((l) => l.slice(0, 300)) : [];

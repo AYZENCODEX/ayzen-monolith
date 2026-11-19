@@ -8,3 +8,10 @@
 - Wisp and Verve login pages added to `landings/` and wired to the v2 routes (design kept; demo logic replaced). Extra routes: `mail/check`, `signup/verify`; profile `extra` (x, telegram, discord, headline) and claimable mail local part; usernames may contain dots.
 - `designedLoginHtml` adds the `<base>` for multi-page designs (verve); `validate-w2-p4` accepts the v2 API and checks verve's `login.js`.
 - Not done: ryft/skarn/zynth embedded sign-in still redirects to `/login` (no own login design); passkeys, authenticator enrolment and social connections for module accounts.
+
+## Portal designs: ryft, zynth, skarn
+- Landings' embedded sign-up (5 steps) / sign-in (3 steps) now use `/api/auth/module/v2/*`; demo accounts, codes, inbox and fake social/OIDC removed.
+- `/login` + `/register` redirect into the portal (`landing-designs.mjs` `isPortal`, `portalRedirectHtml`, `designedRegisterHtml`; Express `/register`; Vercel rewrites).
+- New profile extras `country`, `workspace`, `workspaceSlug`, `teamSize`; captcha default list adds ryft, zynth.
+- Fixed a design bug in skarn's reset screen (OTP binding also swallowed the password field).
+- Tests: login-v2 e2e (ryft, zynth, skarn), designed.spec portal checks, W2-P4 portal rule (+11 mutants), DB test.

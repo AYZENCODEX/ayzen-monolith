@@ -10,7 +10,7 @@ import pg from "pg";
 import { poolAuthDb, loginWithPassword, type AuthDb, type ClientInfo } from "./module-auth-service";
 import {
   checkCaptcha, completeCodeReset, completeLogin, completeSignup, getProfile, isReferralValid, isUsernameFree, newCaptcha, normalizeUsername,
-  sendLoginEmailCode, checkSignupCode, isMailLocalFree, startCodeReset, startLogin, startSignup, updateProfile, OTP_MAX_ATTEMPTS,
+  captchaModules, sendLoginEmailCode, checkSignupCode, isMailLocalFree, startCodeReset, startLogin, startSignup, updateProfile, OTP_MAX_ATTEMPTS,
 } from "./module-auth-v2-service";
 import { generateBase32Secret, totpGenerate } from "./totp";
 
@@ -204,6 +204,21 @@ test("audit rows never contain codes, passwords or emails", { skip }, async () =
 test("fyra sign-up has no captcha step (its design has none); wisp does", { skip }, async () => {
   const s: any = await startSignup(db, { module: "fyra", email: email(), captchaId: undefined, captchaAnswer: undefined, client: CLIENT, env: ENV });
   assert.ok(s.ok && s.send);
+});
+
+test("portal designs: ryft/zynth have the captcha step, skarn does not; their profile extras (country, workspace) are kept", { skip }, async () => {
+  assert.deepEqual(["ryft", "zynth", "skarn"].map((m) => captchaModules({} as any).has(m)), [true, true, false]);
+  const e = email();
+  const s: any = await startSignup(db, { module: "skarn", email: e, captchaId: undefined, captchaAnswer: undefined, client: CLIENT, env: ENV });
+  assert.ok(s.ok && s.send, "skarn: no captcha needed");
+  const r: any = await completeSignup(db, { module: "skarn", email: e, code: s.send.code, password: PW, username: uname(), client: CLIENT, env: ENV, profile: { firstName: "Ada", extra: { workspace: "Acme", workspaceSlug: "acme", teamSize: "2–10", country: "BD", evil: "x" } } });
+  assert.equal(r.ok, true, JSON.stringify(r));
+  const p: any = await getProfile(pool.query.bind(pool), r.moduleAccountId);
+  assert.deepEqual(p.extra, { workspace: "Acme", workspaceSlug: "acme", teamSize: "2–10", country: "BD" });
+  const cap = solve("ryft"), e2 = email();
+  assert.ok(((await startSignup(db, { module: "ryft", email: e2, captchaId: undefined, captchaAnswer: undefined, client: CLIENT, env: ENV })) as any).ok === false, "ryft: captcha is required");
+  const s2: any = await startSignup(db, { module: "ryft", email: e2, captchaId: cap.id, captchaAnswer: cap.answer, client: CLIENT, env: ENV });
+  assert.ok(s2.ok && s2.send);
 });
 
 test("requireCode: an account with an UNVERIFIED mailbox (v1 sign-up) is challenged too, and the emailed code verifies the mailbox", { skip }, async () => {

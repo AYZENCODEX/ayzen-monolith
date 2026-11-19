@@ -16,7 +16,7 @@ backend they need under `/api/auth/module/v2/*` (host-scoped like `/api/auth/mod
 ## Behaviour and knobs
 - Codes: HMAC-hashed at rest (`MODULE_AUTH_HMAC_SECRET`, falls back to the JWT secret), 10 min, single use, 5 wrong tries, 5 codes per address per hour.
 - `MODULE_LOGIN_STEP_UP=email` challenges every login with an emailed code; unset, only accounts with an enrolled authenticator are challenged (the Fyra page sends `requireCode`, so it always asks).
-- `MODULE_SIGNUP_CAPTCHA_MODULES` (default `wisp,verve`): modules whose sign-up page has the captcha step. Others rely on the per-address/IP limits.
+- `MODULE_SIGNUP_CAPTCHA_MODULES` (default `wisp,verve,ryft,zynth` (skarn has no captcha step)): modules whose sign-up page has the captcha step. Others rely on the per-address/IP limits.
 - Usernames: 3-30 of `a-z 0-9 . _`; mail local parts: `a-z 0-9 . _ -`; both unique per module.
 - A successful emailed code at login marks the mailbox verified.
 - Passwords keep the module policy (min 10). The designs' hint says 6 — the server answer is shown on the form.
@@ -36,3 +36,15 @@ Status:
 - `tests/e2e/module-login/login-v2.spec.mts` — chromium + real Postgres for fyra, wisp and verve (sign-up steps, sign-in with code, forgot-password, social buttons never fake a login; asserts no call bypasses the module API). The HTTP layer is a thin stand-in for the Express router (same service calls). Run manually:
   `MODULE_AUTH_TEST_DATABASE_URL=… node --import tsx tests/e2e/module-login/login-v2.spec.mts`
 - `node scripts/validate-w3-auth-v2.mjs [--self-test]`.
+
+## Embedded-portal designs (ryft, zynth, skarn)
+
+These three landings carry their own sign-in (3 steps) and sign-up (5 steps) **inside the landing page** (`#login`, `#signup`, `#reset`; skarn uses `#/in/cred`, `#/up/cred`). They are wired natively to `/api/auth/module/v2/*` (same calls as wisp/verve; designs and animations unchanged):
+
+- **Sign-in:** password (ryft: + slider) → emailed/authenticator code (`requireCode`, `login/verify`) → session. Token goes to `ayzen_token`/`ayzen_user`, then redirect to `?next=` (same-origin paths only) or the module home path.
+- **Sign-up:** credentials → referral + captcha (ryft, zynth) → emailed code → name/username (+ country for ryft; workspace for skarn) → optional extras → session.
+- **/login and /register** are thin redirect pages into the portal (`/?next=…#login` / `#signup`), served by Express (before static) and as static files (`login/index.html`, `register/index.html`, Vercel rewrites).
+- Removed: demo accounts/codes, "Demo inbox", fake Google/GitHub login, simulated OIDC. "Login with AYZEN" uses the shared `/oidc/callback` transaction (`ayzen_sylo_oidc_pending`, `returnToPath`).
+- Not available yet (UI says so): passkey, authenticator enrolment, social connections.
+- Profile extras stored: `country` (ryft); `workspace`, `workspaceSlug`, `teamSize` (skarn; no workspace registry yet, slug is not checked for uniqueness).
+- Captcha modules default: `wisp,verve,ryft,zynth`.

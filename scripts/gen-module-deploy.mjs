@@ -10,7 +10,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { hasLogin } from "../packages/module-registry/src/landing-designs.mjs";
+import { hasLogin, isPortal } from "../packages/module-registry/src/landing-designs.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const API_ORIGIN = "https://api.ayzen.tech";
@@ -28,7 +28,7 @@ export function renderAll(modules) {
       build: { env: { VITE_MODULE: m.id, VITE_API_URL: API_ORIGIN } },
       // Static files first (Vercel serves the filesystem before rewrites), everything else is the SPA shell (app.html; index.html is the module's public landing, W2-P4).
       // A module with its OWN real sign-in page (landings/<id>/login.html) serves it at /login; the rest of the app uses the SPA's login.
-      rewrites: [...(hasLogin(m.id) ? [{ source: "/login", destination: "/login/index.html" }] : []), { source: "/(.*)", destination: "/app.html" }],
+      rewrites: [...(hasLogin(m.id) ? [{ source: "/login", destination: "/login/index.html" }, ...(isPortal(m.id) ? [{ source: "/register", destination: "/register/index.html" }] : [])] : []), { source: "/(.*)", destination: "/app.html" }],
       headers: [
         {
           source: "/(.*)",

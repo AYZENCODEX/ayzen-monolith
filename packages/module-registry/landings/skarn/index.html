@@ -354,12 +354,9 @@ h2{font:400 1.9rem/1.1 var(--serif);letter-spacing:-.01em;outline:none}.sb{color
 <aside class="brand" aria-hidden="false"><div><div class="wm" id="wm"></div><h1>Welcome to <em>Skarn</em></h1><p>One workspace for issues, cycles and modules, on its own login and its own ID.</p></div>
 <div class="mini" aria-hidden="true"><i></i><i></i><i></i><b style="--r:0;--c:var(--c3);--d:0s"></b><b style="--r:1;--c:var(--c1);--d:-3s"></b><b style="--r:2;--c:var(--c5);--d:-6s"></b></div>
 <ul><li>Separate Skarn account and a SKR ID of your own</li><li>Sign in with AYZEN over OpenID Connect, or with Skarn credentials</li><li>Nothing is shared with other modules until you connect it</li></ul></aside>
-<div class="pane"><div id="view" tabindex="-1"></div><p class="cl">Separate Skarn account · Social sign-in by Clerk</p></div>
+<div class="pane"><div id="view" tabindex="-1"></div><p class="cl">Separate Skarn account · Secured by AYZEN</p></div>
 </section>
 </main>
-<button class="ibtn" id="ibtn" type="button" aria-expanded="false" aria-controls="inbox">Demo inbox <b id="in" data-n="0">0</b></button>
-<aside class="drawer" id="inbox" hidden aria-label="Demo inbox"><header><span>Demo inbox</span><button type="button" id="iclose" aria-label="Close inbox">✕</button></header>
-<div class="demo">Stands in for real email in this demo.<br>Demo account <b>demo@ayzen.tech</b><br>Password <b>Skarn!Demo2026</b> · authenticator <b>123456</b></div><div id="mails"><p class="none">No messages yet.</p></div></aside>
 <div id="toast" role="status" aria-live="polite"></div>
 </div></template>
 <script>
@@ -368,7 +365,7 @@ function mountPortal(root, hooks) {
 'use strict';
 /* ============ config & utilities ============ */
 const CFG = { maxAttempts: 5, lockSeconds: 30, resendSeconds: 30, latency: [450, 850],
-  oidc: { issuer: 'https://ayzen.tech', clientId: 'skarn', scopes: ['openid', 'profile', 'email'], pendingKey: 'ayzen_skarn_oidc_pending' } };
+  oidc: { issuer: 'https://ayzen.tech', clientId: 'skarn', scopes: ['openid', 'profile', 'email'], pendingKey: 'ayzen_sylo_oidc_pending' } };
 const $ = (s, r = root) => r.querySelector(s), $$ = (s, r = root) => [...r.querySelectorAll(s)];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const wait = (ms, v) => new Promise(r => setTimeout(() => r(v), ms));
@@ -391,18 +388,24 @@ const I = {
 };
 const LOGO = n => `<svg class="lg" width="${n}" height="${n}" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 4 56 18v28L32 60 8 46V18z" stroke="url(#sg)" stroke-width="2" stroke-linejoin="round" fill="rgba(250,132,83,.07)"/><rect class="bar" x="20" y="22" width="6" height="22" rx="2" fill="#B8A1FF"/><rect class="bar" x="29" y="22" width="6" height="14" rx="2" fill="#FA8453"/><rect class="bar" x="38" y="22" width="6" height="8" rx="2" fill="#7CF0C8"/></svg>`;
 
-/* ============ mock identity service (in-memory only, nothing persisted) ============ */
-const DB = { users: new Map(), seq: 412, code: '', mails: [], taken: new Set(['admin', 'root', 'skarn', 'ayzen', 'support']), slugs: new Set(['skarn', 'ayzen', 'acme']) };
-DB.users.set('demo@ayzen.tech', { pw: 'Skarn!Demo2026', first: 'Demo', last: 'User', id: 'SKR-' + pad(7), mfa: { totp: true, passkey: true }, workspaces: [{ name: 'Acme Platform', role: 'Owner', members: 24 }, { name: 'Skarn Labs', role: 'Member', members: 6 }] });
+/* ============ identity service: AYZEN module accounts (/api/auth/module/v2) ============ */
+const NXT = new URLSearchParams(location.search).get('next'), NEXT = NXT && /^\/(?!\/)/.test(NXT) ? NXT : (window.__AYZEN_HOME || '/'), AUTHB = '/api/auth/module/v2';
+let TOKEN = null;
+const req = async (p, b, m) => { try { const h = { 'Content-Type': 'application/json' }; if (TOKEN && m) h.Authorization = 'Bearer ' + TOKEN; const r = await fetch(AUTHB + p, { method: m || 'POST', headers: h, body: b ? JSON.stringify(b) : undefined }); let d = {}; try { d = await r.json(); } catch (e) {} return { ok: r.ok, status: r.status, d: d || {} }; } catch (e) { return { ok: false, status: 0, d: {} }; } };
+const say = r => r.status === 0 ? 'Could not reach the server. Try again.' : r.d.solution || (r.d.code === 'INVALID_CREDENTIALS' ? 'Incorrect email or password.' : r.d.error) || 'Something went wrong.';
+const keep = (t, email, name, remember) => { try { for (const w of [localStorage, sessionStorage]) { w.removeItem('ayzen_user'); w.removeItem('ayzen_token'); } const w = remember === false ? sessionStorage : localStorage; w.setItem('ayzen_token', t); w.setItem('ayzen_user', JSON.stringify({ username: name || email.split('@')[0], email })); } catch (e) {} TOKEN = t; };
+const mk = (acc, first, last, ws) => ({ first: first || '', last: last || '', id: String((acc && acc.moduleUid) || '').toUpperCase(), workspaces: [{ name: ws || 'Personal workspace', role: 'Owner', members: 1 }] });
 const api = {
-  async signIn(email, pw) { await lag(); const u = DB.users.get(email); return u && u.pw === pw ? { ok: true, user: u } : { ok: false }; },
-  async emailExists(email) { await lag(); return DB.users.has(email); },
-  async sendCode(to, subject) { await wait(350); DB.code = String(Math.floor(Math.random() * 1e6)).padStart(6, '0'); mail(to, subject, DB.code); return true; },
-  checkCode: c => c === DB.code,
-  async username(u) { await wait(380); return /^[a-z0-9._]{3,20}$/.test(u) && !DB.taken.has(u); },
-  async slug(s) { await wait(380); return s.length >= 3 && !DB.slugs.has(s); },
-  async createAccount(d) { await lag(); const id = 'SKR-' + pad(++DB.seq); const u = { pw: d.pw || null, first: d.first, last: d.last, id, mfa: {}, workspaces: [{ name: d.workspace, role: 'Owner', members: 1 }] }; DB.users.set(d.email, u); DB.taken.add(d.username); DB.slugs.add(d.slug); return u; },
-  async resetPassword(email, pw) { await lag(); const u = DB.users.get(email); if (u) u.pw = pw; return true; }
+  login: (email, password) => req('/login', { email, password, requireCode: true }),
+  sendLoginCode: challenge => req('/login/email-code', { challenge }),
+  verifyLogin: (challenge, code) => req('/login/verify', { challenge, code }),
+  startSignup: email => req('/signup/start', { email }),
+  checkSignup: (email, code) => req('/signup/verify', { email, code }),
+  async username(u) { const r = await req('/username/check', { username: u }); return r.ok && !!r.d.available; },
+  completeSignup: d => req('/signup/complete', { email: d.email, code: d.code, password: d.pw, username: d.username, profile: { firstName: d.first, lastName: d.last, extra: { workspace: d.workspace, workspaceSlug: d.slug, teamSize: d.size } } }),
+  requestReset: email => req('/reset/request', { email }),
+  confirmReset: (email, code, password) => req('/reset/confirm', { email, code, password }),
+  async profile() { const r = await req('/profile', null, 'GET'); return r.ok ? (r.d.profile || null) : null; }
 };
 
 /* ============ ui primitives ============ */
@@ -410,11 +413,6 @@ const view = $('#view'), toastEl = $('#toast');
 function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => toastEl.classList.remove('on'), 3200); }
 function busy(btn, on) { btn.classList.toggle('ld', on); btn.disabled = on; btn.setAttribute('aria-busy', on); }
 function shake() { view.classList.remove('sh'); void view.offsetWidth; view.classList.add('sh'); }
-function mail(to, subject, code) { DB.mails.unshift({ to, subject, code, t: new Date() }); renderInbox(); toast(`Code sent to ${to} · open Demo inbox`); }
-function renderInbox() {
-  $('#in').textContent = DB.mails.length; $('#in').dataset.n = DB.mails.length;
-  $('#mails').innerHTML = DB.mails.length ? DB.mails.map(m => `<div class="mail"><small>To ${esc(m.to)} · ${m.t.toTimeString().slice(0, 8)}</small>${esc(m.subject)}<br><span class="code">${esc(m.code)}</span></div>`).join('') : '<p class="none">No messages yet.</p>';
-}
 const hd = (t, s) => `<h2 id="vt" tabindex="-1">${t}</h2>${s ? `<p class="sb">${s}</p>` : ''}`;
 const tabs = m => `<div class="tabs" role="tablist">${[['in', 'Sign in'], ['up', 'Sign up']].map(([k, l]) => `<button type="button" role="tab" aria-selected="${m === k}" class="${m === k ? 'on' : ''}" data-go="${k}.cred">${l}</button>`).join('')}</div>`;
 const fld = (id, label, o = {}) => `<div class="fl"><label for="${id}">${label}</label><input class="ai" id="${id}" name="${id}" type="${o.type || 'text'}" placeholder="${o.ph || ''}" autocomplete="${o.ac || 'off'}" ${o.x || ''}></div>`;
@@ -461,30 +459,24 @@ const views = {
         const em = e.value.trim().toLowerCase();
         if (!EMAIL.test(em)) { e.classList.add('bad'); e.setAttribute('aria-invalid', 'true'); showErr('Enter a valid email address.'); e.focus(); return; }
         e.classList.remove('bad'); if (!p.value) { showErr('Enter your password.'); p.focus(); return; }
-        busy(sb, true); const r = await api.signIn(em, p.value); busy(sb, false);
-        if (!r.ok) { S.attempts++; if (S.attempts >= CFG.maxAttempts) { S.lockUntil = Date.now() + CFG.lockSeconds * 1000; tick(); shake(); return; } showErr(`Incorrect email or password. ${CFG.maxAttempts - S.attempts} attempts left.`); shake(); p.select(); return; }
-        S.attempts = 0; S.d = { email: em, user: r.user };
-        if (r.user.mfa.totp || r.user.mfa.passkey) { await api.sendCode(em, 'Your Skarn sign-in code'); go('in.mfa'); } else go(r.user.workspaces.length > 1 ? 'in.ws' : 'in.done');
+        busy(sb, true); const r = await api.login(em, p.value); busy(sb, false);
+        if (!r.ok) { if (r.status === 429 || r.status === 0) { showErr(say(r)); shake(); return; } S.attempts++; if (S.attempts >= CFG.maxAttempts) { S.lockUntil = Date.now() + CFG.lockSeconds * 1000; tick(); shake(); return; } showErr(`${say(r)} ${CFG.maxAttempts - S.attempts} attempts left.`); shake(); p.select(); return; }
+        S.attempts = 0; S.d = { email: em, remember: $('#rm').checked };
+        if (r.d.stepUp) { S.d.step = r.d.stepUp; S.d.user = {}; return go('in.mfa'); }
+        keep(r.d.token, em, null, S.d.remember); S.d.user = mk(r.d.account); return go('in.done');
       });
     }
   },
   'in.mfa': {
     title: 'Verify it’s you',
-    html: () => { const m = S.d.user.mfa, fx = (k, t, sb, b) => `<div class="fx" data-k="${k}"><div class="fh"><b>${t}</b><span>${sb}</span><i class="fs"></i></div>${b}</div>`;
-      return `${hd('Verify it’s you', 'Complete every check to continue.')}<div class="fxs">${fx('email', 'Email code', 'Sent to ' + esc(S.d.email), otpBoxes())}${m.totp ? fx('totp', 'Authenticator code', 'From your authenticator app', otpBoxes()) : ''}${m.passkey ? fx('pk', 'Passkey', 'Face ID, fingerprint or security key', `<button type="button" class="b2" data-pk>${I.key} Use passkey</button>`) : ''}</div>${errBox}<button class="b1" id="vb" disabled>Verify and continue</button><div class="rw"><span class="hn">Check the Demo inbox for the email code.</span><button type="button" class="lk" id="rs">Resend email code</button></div>`; },
+    html: () => { const tot = S.d.step.methods.indexOf('totp') >= 0, fx = (k, t, sb, b) => `<div class="fx" data-k="${k}"><div class="fh"><b>${t}</b><span>${sb}</span><i class="fs"></i></div>${b}</div>`;
+      return `${hd('Verify it’s you', 'Enter the code to continue.')}<div class="fxs">${tot ? fx('totp', 'Authenticator code', 'From your authenticator app', otpBoxes()) : fx('email', 'Email code', 'Sent to ' + esc(S.d.email), otpBoxes())}</div>${errBox}<button class="b1" id="vb" disabled>Verify and continue</button><div class="rw"><span class="hn">Codes expire after 10 minutes.</span>${tot ? '' : '<button type="button" class="lk" id="rs">Resend email code</button>'}</div>`; },
     bind() {
-      const need = $$('.fx').map(f => f.dataset.k), ok = {}, vb = $('#vb'), chk = () => { vb.disabled = !need.every(k => ok[k]); };
-      const exp = { email: c => api.checkCode(c), totp: c => c === '123456' };
-      $$('.fx .otp').forEach(o => { const fx = o.closest('.fx'), k = fx.dataset.k; const h = bindOtp(o, c => { if (exp[k](c)) { ok[k] = 1; fx.classList.add('ok'); fx.classList.remove('bad'); h.lock(); const n = $('.fx:not(.ok) .otp input'); if (n) n.focus(); } else { fx.classList.remove('bad'); void fx.offsetWidth; fx.classList.add('bad'); h.clear(); } chk(); }); });
-      const pk = $('[data-pk]'); if (pk) pk.onclick = async () => { busy(pk, true); await wait(1200); busy(pk, false); pk.closest('.fx').classList.add('ok'); pk.textContent = 'Passkey verified'; pk.disabled = true; ok.pk = 1; chk(); };
-      $('#rs').onclick = async () => { await api.sendCode(S.d.email, 'Your Skarn sign-in code'); };
-      vb.onclick = async () => { busy(vb, true); await wait(700); go(S.d.user.workspaces.length > 1 ? 'in.ws' : 'in.done'); };
+      const vb = $('#vb'); let ok = false; const o = $('.fx .otp'), fx = o.closest('.fx');
+      const h = bindOtp(o, async c => { h.lock(); const r = await api.verifyLogin(S.d.step.challenge, c); if (r.ok) { ok = true; fx.classList.add('ok'); fx.classList.remove('bad'); showErr(''); keep(r.d.token, S.d.email, null, S.d.remember); S.d.user = mk(r.d.account); vb.disabled = false; vb.click(); } else { showErr(say(r)); if (r.d.code === 'CHALLENGE_INVALID') { S.d.step = null; return go('in.cred'); } fx.classList.remove('bad'); void fx.offsetWidth; fx.classList.add('bad'); o.querySelectorAll('input').forEach(i => i.disabled = false); h.clear(); } });
+      const rs = $('#rs'); if (rs) rs.onclick = async () => { const r = await api.sendLoginCode(S.d.step.challenge); toast(r.ok ? 'New code sent to ' + S.d.email : say(r)); };
+      vb.onclick = async () => { if (!ok) return; busy(vb, true); await wait(300); go('in.done'); };
     }
-  },
-  'in.ws': {
-    title: 'Choose a workspace',
-    html: () => `${hd('Choose a workspace', 'You belong to more than one. You can switch later.')}<form class="f" id="fm"><div class="rows" role="radiogroup" aria-label="Workspaces">${S.d.user.workspaces.map((w, i) => `<label class="rr"><input type="radio" name="ws" value="${i}" ${i === 0 ? 'checked' : ''}><span class="av" style="--c:var(--c${i ? 4 : 1})">${esc(w.name.slice(0, 2).toUpperCase())}</span><span><b>${esc(w.name)}</b><small>${esc(w.role)} · ${w.members} members</small></span></label>`).join('')}</div><button class="b1" type="submit" id="sb">Continue</button></form>`,
-    bind() { $('#fm').onsubmit = async ev => { ev.preventDefault(); const sb = $('#sb'); S.d.ws = S.d.user.workspaces[+$('input[name=ws]:checked').value]; busy(sb, true); await wait(500); go('in.done'); }; }
   },
   'in.done': { title: 'Signed in', html: () => doneHtml('in'), bind: bindDone },
   'up.cred': {
@@ -496,16 +488,16 @@ const views = {
       e.oninput = () => { const v = e.value.trim(), ok = EMAIL.test(v); eh.textContent = !v ? '' : ok ? 'Valid email address' : 'Enter a valid email like name@domain.com'; eh.className = 'hn ' + (!v ? '' : ok ? 'ok' : 'bad'); e.className = 'ai ' + (!v ? '' : ok ? 'ok' : 'bad'); ck(); };
       p.oninput = () => { const s = pwScore(p.value); $$('.sm i').forEach((i, k) => i.style.background = k < s ? ['', '#FF7AA8', '#FFB86B', '#7CF0C8', '#8FE3A1'][s] : ''); const m = $('#pm'); m.textContent = p.value ? SCORE_LABEL[s] + (s < 4 ? ' — add 10+ chars, upper and lower case, a number and a symbol' : ' ✓') : 'Use 10+ characters with upper and lower case, a number and a symbol.'; m.className = 'hn ' + (p.value ? (s === 4 ? 'ok' : 'bad') : ''); ck(); };
       t.onchange = ck;
-      $('#fm').onsubmit = async ev => { ev.preventDefault(); showErr(''); const em = e.value.trim().toLowerCase(); busy(sb, true); if (await api.emailExists(em)) { busy(sb, false); showErr('An account with this email already exists. Sign in instead.'); shake(); return; } S.d = { email: em, pw: p.value }; await api.sendCode(em, 'Verify your Skarn email'); go('up.otp'); };
+      $('#fm').onsubmit = async ev => { ev.preventDefault(); showErr(''); const em = e.value.trim().toLowerCase(); busy(sb, true); const r = await api.startSignup(em); busy(sb, false); if (!r.ok) { showErr(say(r)); shake(); return; } S.d = { email: em, pw: p.value }; go('up.otp'); };
     }
   },
   'up.otp': {
     title: 'Verify your email',
-    html: () => `${sg(1)}${hd('Verify your email', 'We sent a 6-digit code to ' + esc(S.d.email) + '.')}${otpBoxes()}${errBox}<div class="rw"><span class="hn">Check the Demo inbox for the code.</span><button type="button" class="lk" id="rs">Resend code</button></div>`,
+    html: () => `${sg(1)}${hd('Verify your email', 'We sent a 6-digit code to ' + esc(S.d.email) + '.')}${otpBoxes()}${errBox}<div class="rw"><span class="hn">Codes expire after 10 minutes.</span><button type="button" class="lk" id="rs">Resend code</button></div>`,
     bind() {
       const rs = $('#rs'); cooldown(rs, 'Resend code', CFG.resendSeconds);
-      rs.onclick = async () => { await api.sendCode(S.d.email, 'Verify your Skarn email'); cooldown(rs, 'Resend code', CFG.resendSeconds); };
-      const h = bindOtp(view, async c => { if (api.checkCode(c)) { h.lock(); showErr(''); toast('Email verified'); await wait(450); go('up.profile'); } else { showErr('Invalid code. Try again.'); shake(); h.clear(); } });
+      rs.onclick = async () => { const r = await api.startSignup(S.d.email); toast(r.ok ? 'New code sent to ' + S.d.email : say(r)); if (r.ok) cooldown(rs, 'Resend code', CFG.resendSeconds); };
+      const h = bindOtp(view, async c => { const r = await api.checkSignup(S.d.email, c); if (r.ok) { h.lock(); showErr(''); S.d.code = c; toast('Email verified'); await wait(450); go('up.profile'); } else { showErr(say(r)); shake(); h.clear(); } });
       if (!COARSE) h.first.focus();
     }
   },
@@ -525,18 +517,20 @@ const views = {
     html: () => `${sg(3)}${hd('Create your workspace', 'This is where your team’s projects will live.')}<form class="f" id="fm" novalidate>${fld('wn', 'Workspace name', { ph: 'Acme Product Team', ac: 'organization' })}${fld('ws', 'Workspace URL', { ph: 'acme-product', x: 'spellcheck="false" autocapitalize="none"' })}<div class="hn" id="wh" aria-live="polite">skarn.ayzen.tech/w/…</div><div class="fl"><label>Team size</label><div class="chs" role="radiogroup" aria-label="Team size">${['Just me', '2–10', '11–50', '50+'].map((s, i) => `<button type="button" role="radio" aria-checked="${i === 1}" class="${i === 1 ? 'on' : ''}" data-size>${s}</button>`).join('')}</div></div>${errBox}<button class="b1" type="submit" id="nx" disabled>Create workspace</button></form>`,
     bind() {
       const wn = $('#wn'), ws = $('#ws'), wh = $('#wh'), b = $('#nx'); let ok = false, seq = 0, touched = false;
-      const chk = () => { const v = ws.value, id = ++seq; ok = false; b.disabled = true; if (v.length < 3) { wh.textContent = v ? 'At least 3 characters' : 'skarn.ayzen.tech/w/…'; wh.className = 'hn' + (v ? ' bad' : ''); return; } wh.textContent = 'Checking availability…'; wh.className = 'hn'; clearTimeout(ws.t); ws.t = setTimeout(async () => { const r = await api.slug(v); if (id !== seq) return; ok = r; wh.textContent = r ? `skarn.ayzen.tech/w/${v} is available` : 'That URL is taken'; wh.className = 'hn ' + (r ? 'ok' : 'bad'); b.disabled = !(ok && wn.value.trim()); }, 300); };
+      const chk = () => { const v = ws.value, id = ++seq; ok = false; b.disabled = true; if (v.length < 3) { wh.textContent = v ? 'At least 3 characters' : 'skarn.ayzen.tech/w/…'; wh.className = 'hn' + (v ? ' bad' : ''); return; } wh.textContent = 'Checking availability…'; wh.className = 'hn'; clearTimeout(ws.t); ws.t = setTimeout(async () => { if (id !== seq) return; const r = true; ok = r; wh.textContent = `skarn.ayzen.tech/w/${v}`; wh.className = 'hn ok'; b.disabled = !(ok && wn.value.trim()); }, 300); };
       wn.oninput = () => { if (!touched) ws.value = slugify(wn.value); chk(); };
       ws.oninput = () => { touched = true; ws.value = slugify(ws.value); chk(); };
       $$('[data-size]').forEach(c => c.onclick = () => { $$('[data-size]').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-checked', 'false'); }); c.classList.add('on'); c.setAttribute('aria-checked', 'true'); });
-      $('#fm').onsubmit = async ev => { ev.preventDefault(); busy(b, true); const u = await api.createAccount({ email: S.d.email, pw: S.d.pw, first: S.d.first, last: S.d.last, username: S.d.username, workspace: wn.value.trim(), slug: ws.value }); S.d.user = u; S.d.ws = u.workspaces[0]; go('up.done'); };
+      $('#fm').onsubmit = async ev => { ev.preventDefault(); busy(b, true); const size = ($('[data-size].on') || {}).textContent || ''; const r = await api.completeSignup({ email: S.d.email, code: S.d.code, pw: S.d.pw, first: S.d.first, last: S.d.last, username: S.d.username, workspace: wn.value.trim(), slug: ws.value, size }); busy(b, false);
+        if (!r.ok) { const c = r.d.code; toast(say(r)); if (c === 'INVALID_CODE') return go('up.cred'); if (/^PASSWORD_/.test(c)) return go('up.cred'); if (c === 'USERNAME_TAKEN') return go('up.profile'); return; }
+        keep(r.d.token, S.d.email, S.d.username); const u = mk(r.d.account, S.d.first, S.d.last, wn.value.trim()); S.d.user = u; S.d.ws = u.workspaces[0]; go('up.done'); };
     }
   },
   'up.done': { title: 'All set', html: () => doneHtml('up'), bind: bindDone },
   'rst.email': {
     title: 'Reset password',
     html: () => `${hd('Reset your password', 'Enter your account email and we’ll send a 6-digit code.')}<form class="f" id="fm" novalidate>${fld('e', 'Email', { type: 'email', ph: 'you@company.com', ac: 'email' })}${errBox}<button class="b1" type="submit" id="sb">Send code</button><button type="button" class="b2" data-go="in.cred">Back to sign in</button></form>`,
-    bind() { $('#fm').onsubmit = async ev => { ev.preventDefault(); const e = $('#e'), em = e.value.trim().toLowerCase(); if (!EMAIL.test(em)) { showErr('Enter a valid email address.'); e.focus(); return; } const sb = $('#sb'); busy(sb, true); S.d = { email: em }; if (DB.users.has(em)) await api.sendCode(em, 'Reset your Skarn password'); else await lag(); toast('If the account exists, a code is on its way'); go('rst.code'); }; }
+    bind() { $('#fm').onsubmit = async ev => { ev.preventDefault(); const e = $('#e'), em = e.value.trim().toLowerCase(); if (!EMAIL.test(em)) { showErr('Enter a valid email address.'); e.focus(); return; } const sb = $('#sb'); busy(sb, true); S.d = { email: em }; await api.requestReset(em); toast('If the account exists, a code is on its way'); go('rst.code'); }; }
   },
   'rst.code': {
     title: 'New password',
@@ -544,10 +538,10 @@ const views = {
     bind() {
       const p = $('#p'), vb = $('#vb'); let code = '';
       const ck = () => { vb.disabled = !(code.length === 6 && pwScore(p.value) === 4); };
-      bindOtp(view, c => { code = c; ck(); });
+      bindOtp($('.otp'), c => { code = c; ck(); });
       $$('.otp input').forEach(i => i.addEventListener('input', () => { code = $$('.otp input').map(x => x.value).join(''); ck(); }));
       p.oninput = () => { const s = pwScore(p.value); $$('.sm i').forEach((i, k) => i.style.background = k < s ? ['', '#FF7AA8', '#FFB86B', '#7CF0C8', '#8FE3A1'][s] : ''); const m = $('#pm'); m.textContent = p.value ? SCORE_LABEL[s] + (s < 4 ? ' — add 10+ chars, upper and lower case, a number and a symbol' : ' ✓') : 'Use 10+ characters with upper and lower case, a number and a symbol.'; m.className = 'hn ' + (p.value ? (s === 4 ? 'ok' : 'bad') : ''); ck(); };
-      vb.onclick = async () => { if (!api.checkCode(code)) { showErr('Invalid code. Try again.'); shake(); return; } busy(vb, true); await api.resetPassword(S.d.email, p.value); go('rst.done'); };
+      vb.onclick = async () => { busy(vb, true); const r = await api.confirmReset(S.d.email, code, p.value); busy(vb, false); if (!r.ok) { showErr(say(r)); shake(); return; } go('rst.done'); };
     }
   },
   'rst.done': { title: 'Password updated', html: () => `<div class="okr">${checkSvg()}</div>${hd('Password updated', 'You can now sign in with your new password.').replace('<h2', '<h2 class="ctr"')}<button class="b1" data-go="in.cred">Back to sign in</button>`, bind() {} },
@@ -560,18 +554,17 @@ const views = {
 function checkSvg() { return '<svg viewBox="0 0 84 84" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="42" cy="42" r="36"/><path d="M27 43l10 10 20-22"/></svg>'; }
 function doneHtml(kind) {
   const u = S.d.user, ws = S.d.ws || u.workspaces[0];
+  if (kind === 'in' && !S.d.wsLoaded) { S.d.wsLoaded = true; api.profile().then(pr => { if (pr && pr.extra && pr.extra.workspace) { u.workspaces[0].name = pr.extra.workspace; u.first = pr.firstName || ''; if (S.flow === 'in' && S.step === 'done') render(); } }); }
   return `<div class="okr">${checkSvg()}</div>${hd(kind === 'up' ? `You’re all set, ${esc(u.first)}` : 'You’re signed in', kind === 'up' ? 'Your account and workspace are ready.' : 'Welcome back to Skarn.').replace('<h2', '<h2 class="ctr"').replace('<p class="sb">', '<p class="sb ctr">')}<dl class="meta"><div><dt>Skarn ID</dt><dd class="mono" id="sid">${u.id}</dd></div><div><dt>Workspace</dt><dd>${esc(ws.name)}</dd></div><div><dt>Email</dt><dd>${esc(S.d.email)}</dd></div></dl><button class="b1" id="open">Open Skarn</button>`;
 }
 function bindDone() {
-  const el = $('#sid'), target = parseInt(el.textContent.slice(4), 10);
-  if (!RM) { const t0 = performance.now(), run = n => { const u = Math.min(1, (n - t0) / 900), v = Math.round(target * (1 - Math.pow(1 - u, 3))); el.textContent = 'SKR-' + pad(v); if (u < 1) requestAnimationFrame(run); }; requestAnimationFrame(run); }
-  $('#open').onclick = async e => { busy(e.currentTarget, true); await wait(900); busy(e.currentTarget, false); toast('Demo complete. In production this opens your workspace.'); };
+  const el = $('#sid'); if (el && !el.textContent) el.textContent = '—';
+  const go2 = () => location.assign(NEXT); $('#open').onclick = e => { busy(e.currentTarget, true); go2(); }; setTimeout(go2, 2600);
 }
-
 /* ============ AYZEN OIDC client (Authorization Code + PKCE) ============ */
 const OS = ['Discover provider', 'Create PKCE challenge', 'Redirect to AYZEN', 'Verify state and nonce', 'Exchange code for tokens', 'Start Skarn session'];
 const OE = { discovery_failed: 'Couldn’t reach the AYZEN provider. Check your connection and try again.', provider_error: 'AYZEN declined the sign-in request.', state_mismatch: 'This sign-in attempt expired or didn’t match. Please start again.', missing_transaction: 'No sign-in attempt was found. Please start again.', token_exchange_failed: 'AYZEN couldn’t issue tokens for this attempt.', nonce_mismatch: 'The identity token didn’t match this attempt.', session_exchange_failed: 'Signed in with AYZEN, but Skarn couldn’t start a session.' };
-const OIDC = { ...CFG.oidc, redirectUri: location.origin + '/oidc/callback', live: /(^|\.)ayzen\.tech$/.test(location.hostname) };
+const OIDC = { ...CFG.oidc, redirectUri: location.origin + '/oidc/callback', live: true };
 const b64u = b => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''), rb = n => b64u(crypto.getRandomValues(new Uint8Array(n)).buffer);
 async function pkce() { const v = rb(32); return { v, c: b64u(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v))) }; }
 async function discover() { const r = await fetch(OIDC.issuer + '/.well-known/openid-configuration', { headers: { Accept: 'application/json' } }); if (!r.ok) throw new Error('discovery_failed'); const m = await r.json(); for (const k of ['issuer', 'authorization_endpoint', 'token_endpoint', 'userinfo_endpoint']) if (typeof m[k] !== 'string') throw new Error('discovery_failed'); return m; }
@@ -582,30 +575,13 @@ async function startOidc() {
   try {
     oidcStep(0); const m = OIDC.live ? await discover() : await wait(600, { authorization_endpoint: OIDC.issuer + '/oidc/authorize' });
     oidcStep(1); const { v, c } = await pkce(), state = rb(16), nonce = rb(16);
-    sessionStorage.setItem(OIDC.pendingKey, JSON.stringify({ state, codeVerifier: v, nonce, clientId: OIDC.clientId, createdAt: Date.now() }));
+    sessionStorage.setItem(OIDC.pendingKey, JSON.stringify({ state, codeVerifier: v, nonce, clientId: OIDC.clientId, returnToPath: NEXT, createdAt: Date.now() }));
     const u = new URL(m.authorization_endpoint); u.search = new URLSearchParams({ response_type: 'code', client_id: OIDC.clientId, redirect_uri: OIDC.redirectUri, scope: OIDC.scopes.join(' '), state, code_challenge: c, code_challenge_method: 'S256', nonce }).toString(); oidcStep(2);
-    if (OIDC.live) { location.assign(u.href); return; }
-    await wait(900); oidcStep(3); await wait(700); oidcStep(4); await wait(600); oidcStep(5); await wait(700); sessionStorage.removeItem(OIDC.pendingKey);
-    const user = DB.users.get('demo@ayzen.tech'); S.d = { email: 'demo@ayzen.tech', user, ws: user.workspaces[0] }; go('in.done');
+    location.assign(u.href);
   } catch (e) { oidcFail(e.message); }
 }
-async function oidcCallback() {
-  go('oidc.run', true); oidcStep(3);
-  const q = new URLSearchParams(location.search), p = JSON.parse(sessionStorage.getItem(OIDC.pendingKey) || 'null'); sessionStorage.removeItem(OIDC.pendingKey);
-  try {
-    if (q.get('error')) throw new Error('provider_error'); if (!p || !q.get('code')) throw new Error('missing_transaction'); if (q.get('state') !== p.state) throw new Error('state_mismatch'); oidcStep(4);
-    const r = await fetch(OIDC.issuer + '/oidc/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ grant_type: 'authorization_code', code: q.get('code'), redirect_uri: OIDC.redirectUri, client_id: OIDC.clientId, code_verifier: p.codeVerifier }) }), t = await r.json(); if (!r.ok) throw new Error('token_exchange_failed');
-    if (t.id_token) { const c = JSON.parse(atob(t.id_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); if (c.nonce && c.nonce !== p.nonce) throw new Error('nonce_mismatch'); }
-    oidcStep(5); const x = await fetch(OIDC.issuer + '/api/auth/session-exchange', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ client_id: OIDC.clientId }) }); if (!x.ok) throw new Error('session_exchange_failed');
-    history.replaceState(null, '', '/#/in/done'); const user = DB.users.get('demo@ayzen.tech'); S.d = { email: 'AYZEN account', user, ws: user.workspaces[0] }; go('in.done', true);
-  } catch (e) { oidcFail(e.message); }
-}
-async function socialSignIn(provider, btn) {
-  busy(btn, true); toast(`Connecting to ${provider}…`); await wait(900); busy(btn, false);
-  const email = `${provider.toLowerCase()}.user@example.com`, u = DB.users.get(email);
-  if (u) { S.d = { email, user: u }; return go(u.workspaces.length > 1 ? 'in.ws' : 'in.done'); }
-  S.d = { email, social: provider }; go('up.profile');
-}
+async function oidcCallback() { location.replace('/oidc/callback' + location.search); }
+function socialSignIn(provider) { toast(`${provider} sign-in is not enabled on this AYZEN deployment yet.`); }
 
 /* ============ render ============ */
 function render() {
@@ -626,8 +602,7 @@ root.addEventListener('click', e => {
 });
 $('#back').onclick = () => { const t = BACK[S.flow + '.' + S.step]; if (t === 'close') hooks.close(); else go(t || 'in.cred'); };
 addEventListener('popstate', () => { if (/^#\/(in|up|rst|oidc|welcome)/.test(location.hash)) route(); });
-const ib = $('#ibtn'), inbox = $('#inbox'), setInbox = o => { inbox.hidden = !o; ib.setAttribute('aria-expanded', o); };
-ib.onclick = () => setInbox(inbox.hidden); $('#iclose').onclick = () => setInbox(false); addEventListener('keydown', e => { if (e.key === 'Escape') setInbox(false); });
+
 $('#lgx').innerHTML = LOGO(96); $('#wm').innerHTML = LOGO(28) + '<span>SKARN</span>';
 
 /* ============ background: perspective lanes (2D projection) ============ */
@@ -662,7 +637,6 @@ const bgScene = (function scene() {
 })();
 
 /* ============ public api ============ */
-renderInbox();
 return { route, oidcCallback, setActive: on => bgScene.active(on) };
 }
 

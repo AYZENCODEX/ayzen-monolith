@@ -12,7 +12,7 @@ import path from "node:path";
 import { randomBytes } from "node:crypto";
 import pg from "pg";
 import { chromium } from "playwright";
-import { designedLoginHtml, designRoot } from "../../../packages/module-registry/src/landing-designs.mjs";
+import { designedLoginHtml, designedLandingHtml, designedRegisterHtml, isPortal, designRoot } from "../../../packages/module-registry/src/landing-designs.mjs";
 import { poolAuthDb, signupWithPassword, loginWithPassword } from "../../../artifacts/api-server/src/lib/module-auth-service";
 import * as V2 from "../../../artifacts/api-server/src/lib/module-auth-v2-service";
 
@@ -71,6 +71,11 @@ async function serve(MODULE: any): Promise<Served> {
           if (!a) return ok(res, 401, { error: "Unauthorized" });
           const r: any = await V2.updateProfile(db, { module: MODULE, moduleAccountId: a.module_account_id, profile: b, client: CLIENT }); return r.ok ? ok(res, 200, {}) : bad(res, r);
         }
+        if (p === "/profile" && req.method === "GET") {
+          const jti = String(req.headers.authorization ?? "").replace("Bearer tok.", ""); const a = (await pool.query("SELECT module_account_id FROM user_sessions WHERE jti=$1 AND revoked_at IS NULL", [jti])).rows[0];
+          if (!a) return ok(res, 401, { error: "Unauthorized" });
+          return ok(res, 200, { profile: await V2.getProfile(db.query, a.module_account_id) });
+        }
         ok(res, 404, { error: "no route " + req.url });
       } catch (e) { console.error(e); ok(res, 500, { error: "boom" }); }
     });
@@ -86,12 +91,14 @@ async function serve(MODULE: any): Promise<Served> {
       return res.end(readFileSync(f));
     }
     res.setHeader("content-type", "text/html");
+    if (isPortal(MODULE) && pth === "/") return res.end(designedLandingHtml(MODULE, { apiOrigin })!);
+    if (isPortal(MODULE) && pth === "/register") return res.end(designedRegisterHtml(MODULE)!);
     res.end(pth === "/login" ? designedLoginHtml(MODULE, { apiOrigin })! : `<!doctype html><title>stub ${pth}</title>`);
   });
   await new Promise<void>((r) => site.listen(0, "127.0.0.1", r));
   return { origin: `http://127.0.0.1:${(site.address() as any).port}`, outbox, hits, close: () => { api.close(); site.close(); } };
 }
-const fyra = await serve("fyra"), wisp = await serve("wisp"), verve = await serve("verve");
+const fyra = await serve("fyra"), wisp = await serve("wisp"), verve = await serve("verve"), ryft = await serve("ryft"), zynth = await serve("zynth"), skarn = await serve("skarn");
 
 // ── browser ──
 const browser = await chromium.launch();
@@ -104,6 +111,7 @@ const lastCode = (to: string, what: string, sv: Served = fyra) => [...sv.outbox]
 const tokenOf = (page: any) => page.evaluate(() => localStorage.getItem("ayzen_token") || sessionStorage.getItem("ayzen_token"));
 
 try {
+  if (!process.env.E2E_ONLY) {
   // 1) sign up: username + email + password -> emailed code -> account
   {
     const { ctx, page } = await fresh(); const em = `new.${randomBytes(3).toString("hex")}@example.test`;
@@ -249,9 +257,106 @@ try {
     console.log("ok  verve: sign-up (referral, captcha, emailed code, username, profile), sign-in with code, forgot-password");
   }
   // 4) the design never talks to the legacy central auth API
-  for (const sv of [fyra, wisp, verve]) if (sv.hits.some((h) => !h.includes("/api/auth/module/v2/"))) fail("a request bypassed the module API: " + sv.hits.filter((h) => !h.includes("/module/v2/")).join(", "));
+
+  }
+  // 6) embedded portals (ryft, zynth, skarn): the landing's own sign-up (5 steps) and sign-in (3 steps) against the real service
+  {
+    const STRONG = "Correct-Horse-9!", NEWP = "Another-Strong-Pass-7#";
+    const sol = async (page: any) => { await page.waitForFunction(() => /\d+ \+ \d+ = \?/.test(document.querySelector("#cqt")?.textContent ?? "")); const [a, b] = (await page.locator("#cqt").innerText()).match(/(\d+) \+ (\d+)/)!.slice(1).map(Number); return String(a + b); };
+    const ctxFor = async () => { const c = await browser.newContext(); await c.route(/fonts\.(googleapis|gstatic)\.com|api\.binance|coingecko/, (r) => r.abort()); return c; };
+    await pool.query("INSERT INTO users (username,email,password_hash,referral_code) VALUES ('refp','refp@x.test','h','AYZPRT01')");
+    for (const [sv, name] of [[ryft, "ryft"], [zynth, "zynth"]] as const) {
+      const em = `${name}.${randomBytes(3).toString("hex")}@example.test`, un = `${name}.ada`;
+      // redirect pages keep ?next=
+      { const c = await ctxFor(); const pg = await c.newPage(); await pg.goto(`${sv.origin}/login?next=/portal/next`); await pg.waitForFunction(() => location.hash === "#login" && location.search.includes("next=%2Fportal%2Fnext")); await c.close(); }
+      // sign-up
+      const c1 = await ctxFor(); const page = await c1.newPage();
+      await page.goto(`${sv.origin}/?next=/portal/next#login`);
+      if (name === "zynth") await page.click('[data-w="up"]'); else await page.click('[data-act="tab"][data-v="up"]');
+      await page.fill("#e", em); await page.fill("#p", STRONG); await page.check(name === "ryft" ? "#tos" : "#tc"); await page.click("#sb");
+      await page.waitForSelector("#rc");
+      await page.fill("#rc", "NOTAREAL1"); await page.fill("#cq", await sol(page)); await page.click("#nx"); await page.waitForSelector("#rh.bad");
+      await page.fill("#rc", "AYZPRT01"); await page.fill("#cq", "999"); await page.click("#nx"); await page.waitForSelector("#ch.bad");
+      if (await page.locator("text=Verify your email").count()) fail(`${name}: wrong captcha advanced`);
+      await page.fill("#cq", await sol(page)); await page.click("#nx"); await page.waitForSelector("text=Verify your email");
+      await digits(page, "000000"); await page.click("#vb"); await page.waitForSelector("#er:not(:empty)");
+      await digits(page, lastCode(em, "signup", sv)); await page.click("#vb"); await page.waitForSelector(".mo button"); await page.click(".mo button");
+      await page.waitForSelector("#u"); await page.fill("#fn", "Ada"); await page.fill("#ln", "Lovelace"); await page.fill("#u", un);
+      if (name === "ryft") await page.selectOption("#co", "Bangladesh");
+      await page.waitForSelector("#uh.ok"); await page.click("#nx");
+      await page.waitForFunction(() => String(localStorage.getItem("ayzen_token") || "").startsWith("tok."), null, { timeout: 8000 }).catch(() => fail(`${name}: sign-up stored no token`));
+      if (name === "ryft") { await page.waitForSelector("#s1"); await page.click('[data-act="finish"] >> nth=0'); await page.waitForSelector(".mo button"); await page.click(".mo button"); }
+      else { await page.waitForSelector("text=Connect your tools"); await page.click('[data-act="to"][data-s="prof"] >> nth=1'); await page.waitForSelector("#dn"); await page.fill("#hl", "Founder"); await page.fill("#bio", "Hello"); await page.click("#fm .b1"); }
+      await page.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 });
+      const row = (await pool.query("SELECT first_name,last_name,extra,referral_code_used,mail_local FROM module_profiles WHERE username_norm=$1 AND module=$2", [un, name])).rows[0];
+      if (!row || row.first_name !== "Ada" || row.referral_code_used !== "AYZPRT01" || row.mail_local !== un) fail(`${name}: profile row wrong ` + JSON.stringify(row));
+      if (name === "ryft" && row.extra.country !== "Bangladesh") fail("ryft: country not stored");
+      if (name === "zynth" && row.extra.headline !== "Founder") fail("zynth: headline not stored");
+      const cr = (await pool.query("SELECT identifier_verified_at FROM module_credentials WHERE identifier_norm=$1", [em])).rows[0]; if (!cr?.identifier_verified_at) fail(`${name}: mailbox not verified`);
+      await c1.close();
+      // sign-in: wrong password, then password + (ryft: slider) + emailed code
+      const c2 = await ctxFor(); const p2 = await c2.newPage();
+      await p2.goto(`${sv.origin}/?next=/portal/next#login`); if (name === "zynth") await p2.click('[data-w="in"]');
+      await p2.fill("#e", em); await p2.fill("#p", "wrong-password-123");
+      if (name === "ryft") { await p2.click("#fm .b1"); await p2.waitForSelector("#sk"); const b = (await p2.locator("#sk").boundingBox())!, t = (await p2.locator("#sl").boundingBox())!; await p2.mouse.move(b.x + 5, b.y + 5); await p2.mouse.down(); await p2.mouse.move(t.x + t.width, b.y + 5, { steps: 12 }); await p2.mouse.up(); }
+      else await p2.click("#fm .b1");
+      await p2.waitForSelector("#er:not(:empty)"); if (await tokenOf(p2)) fail(`${name}: token after wrong password`);
+      await p2.fill("#e", em); await p2.fill("#p", STRONG);
+      if (name === "ryft") { await p2.click("#fm .b1"); await p2.waitForSelector("#sk"); const b = (await p2.locator("#sk").boundingBox())!, t = (await p2.locator("#sl").boundingBox())!; await p2.mouse.move(b.x + 5, b.y + 5); await p2.mouse.down(); await p2.mouse.move(t.x + t.width, b.y + 5, { steps: 12 }); await p2.mouse.up(); }
+      else await p2.click("#fm .b1");
+      await p2.waitForSelector(".fx"); if (await tokenOf(p2)) fail(`${name}: token before the code`);
+      await digits(p2, lastCode(em, "login", sv)); await p2.waitForSelector(".fx.ok"); await p2.click("#vb");
+      await p2.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 });
+      if (!String(await tokenOf(p2)).startsWith("tok.")) fail(`${name}: no token after the code`);
+      await c2.close();
+      // forgot password
+      const c3 = await ctxFor(); const p3 = await c3.newPage(); await p3.goto(`${sv.origin}/#login`); if (name === "zynth") await p3.click('[data-w="in"]');
+      await p3.click('[data-act="to"][data-m="rst"]'); await p3.fill("#e", em); await p3.click("#fm .b1"); await p3.waitForSelector("#vb");
+      await digits(p3, lastCode(em, "reset", sv)); await p3.fill("#p", NEWP); await p3.click("#vb"); await p3.waitForSelector("text=Password updated");
+      if ((await loginWithPassword(db, { module: name, identifier: em, password: NEWP, client: CLIENT })).ok !== true) fail(`${name}: new password not accepted`);
+      await c3.close();
+      // fake social login is gone
+      const c4 = await ctxFor(); const p4 = await c4.newPage(); await p4.goto(`${sv.origin}/#login`); if (name === "zynth") await p4.click('[data-w="in"]');
+      await p4.click('[data-act="oa"][data-p="Google"]'); await p4.waitForTimeout(900); if (await tokenOf(p4)) fail(`${name}: Google button created a session`); await c4.close();
+      console.log(`ok  ${name}: portal sign-up (referral, captcha, emailed code, username, profile), sign-in with code, forgot-password`);
+    }
+    { // skarn: its own engine (hash routes, workspace step, no captcha/referral)
+      const name = "skarn", sv = skarn, em = `skarn.${randomBytes(3).toString("hex")}@example.test`;
+      { const c = await ctxFor(); const pg = await c.newPage(); await pg.goto(`${sv.origin}/register?next=/portal/next`); await pg.waitForFunction(() => location.hash === "#/up/cred" && location.search.includes("next=%2Fportal%2Fnext")); await c.close(); }
+      const c1 = await ctxFor(); const page = await c1.newPage(); await page.goto(`${sv.origin}/?next=/portal/next#/up/cred`);
+      const D = (sel: string) => page.locator("#portal-host").locator(sel);
+      await D("#e").fill(em); await D("#p").fill(STRONG); await D("#tc").check(); await D("#sb").click();
+      await D(".otp input").first().waitFor(); for (let i = 0; i < 6; i++) await D(".otp input").nth(i).fill("000000"[i]);
+      await D("#er:not(:empty)").waitFor();
+      const code = lastCode(em, "signup", sv); for (let i = 0; i < 6; i++) await D(".otp input").nth(i).fill(code[i]);
+      await D("#u").waitFor(); await D("#fn").fill("Ada"); await D("#ln").fill("Lovelace"); await D("#u").fill("skarn.ada"); await D("#uh.ok").waitFor(); await D("#nx").click();
+      await D("#wn").waitFor(); await D("#wn").fill("Acme Product Team"); await D("#nx:not([disabled])").waitFor(); await D("#nx").click();
+      await page.waitForFunction(() => location.pathname === "/portal/next" || !!document.querySelector("#portal-host") , null, { timeout: 8000 });
+      await page.waitForFunction(() => String(localStorage.getItem("ayzen_token") || "").startsWith("tok."), null, { timeout: 8000 }).catch(() => fail("skarn: sign-up stored no token"));
+      await page.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 });
+      const row = (await pool.query("SELECT first_name,extra FROM module_profiles WHERE username_norm='skarn.ada' AND module='skarn'")).rows[0];
+      if (!row || row.first_name !== "Ada" || row.extra.workspace !== "Acme Product Team" || row.extra.workspaceSlug !== "acme-product-team") fail("skarn: profile/workspace wrong " + JSON.stringify(row));
+      await c1.close();
+      const c2 = await ctxFor(); const p2 = await c2.newPage(); await p2.goto(`${sv.origin}/?next=/portal/next#/in/cred`);
+      const E = (sel: string) => p2.locator("#portal-host").locator(sel);
+      await E("#e").fill(em); await E("#p").fill("wrong-password-123"); await E("#sb").click(); await E("#er:not(:empty)").waitFor(); if (await tokenOf(p2)) fail("skarn: token after wrong password");
+      await E("#p").fill(STRONG); await E("#sb").click(); await E(".fx").first().waitFor(); if (await tokenOf(p2)) fail("skarn: token before the code");
+      const lc = lastCode(em, "login", sv); for (let i = 0; i < 6; i++) await E(".otp input").nth(i).fill(lc[i]);
+      await p2.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 });
+      if (!String(await tokenOf(p2)).startsWith("tok.")) fail("skarn: no token after the code");
+      await c2.close();
+      const c3 = await ctxFor(); const p3 = await c3.newPage(); await p3.goto(`${sv.origin}/#/rst/email`);
+      const F = (sel: string) => p3.locator("#portal-host").locator(sel);
+      await F("#e").fill(em); await F("#sb").click(); await F(".otp input").first().waitFor();
+      const rc = lastCode(em, "reset", sv); for (let i = 0; i < 6; i++) await F(".otp input").nth(i).fill(rc[i]); await F("#p").fill(NEWP); await F("#vb:not([disabled])").waitFor(); await F("#vb").click(); await F("text=Password updated").waitFor();
+      if ((await loginWithPassword(db, { module: "skarn", identifier: em, password: NEWP, client: CLIENT })).ok !== true) fail("skarn: new password not accepted");
+      await c3.close();
+      console.log("ok  skarn: portal sign-up (emailed code, username, workspace), sign-in with code, forgot-password");
+    }
+  }
+  for (const sv of [fyra, wisp, verve, ryft, zynth, skarn]) if (sv.hits.some((h) => !h.includes("/api/auth/module/v2/"))) fail("a request bypassed the module API: " + sv.hits.filter((h) => !h.includes("/module/v2/")).join(", "));
   console.log("ok  every call went to /api/auth/module/v2/*");
-  console.log("PASS login e2e (fyra, wisp, verve)");
+  console.log("PASS login e2e (fyra, wisp, verve, ryft, zynth, skarn)");
 } finally {
-  await browser.close(); fyra.close(); wisp.close(); verve.close(); await pool.end(); await admin.query(`DROP DATABASE ${dbName}`); await admin.end();
+  await browser.close(); fyra.close(); wisp.close(); verve.close(); ryft.close(); zynth.close(); skarn.close(); await pool.end(); await admin.query(`DROP DATABASE ${dbName}`); await admin.end();
 }

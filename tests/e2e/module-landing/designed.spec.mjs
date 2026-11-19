@@ -6,7 +6,8 @@
  *  - no request to /api, /oidc, /.well-known or any auth endpoint while the page loads or idles (no auth call before login),
  *  - no same-origin 404s (all design assets resolve), no page errors apart from the blocked CDN's `THREE`,
  *  - every visible sign-in/sign-up entry goes to /login or /register (never the design's demo auth),
- *  - #login / #signup deep links and a stored token redirect (/login, /register, homePath).
+ *  - #login / #signup deep links and a stored token redirect (/login, /register, homePath); the embedded-portal designs
+ *    (ryft, zynth, skarn) keep their own sign-in/sign-up inside the landing instead (hash deep links open it, /login and /register redirect into it).
  *   node tests/e2e/module-landing/designed.spec.mjs [--shots <dir>]
  */
 import fs from "node:fs";
@@ -16,7 +17,7 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import { MODULES } from "../../../packages/module-registry/src/index.mjs";
 import { aboutDocument, getLandingContent, llmsTxt, llmsFullTxt, robotsTxt, sitemapXml } from "../../../packages/module-registry/src/landing.mjs";
-import { designedLandingHtml, designAssets, designIds } from "../../../packages/module-registry/src/landing-designs.mjs";
+import { designedLandingHtml, designedLoginHtml, designedRegisterHtml, designAssets, designIds, isPortal } from "../../../packages/module-registry/src/landing-designs.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const shots = process.argv.includes("--shots") ? process.argv[process.argv.indexOf("--shots") + 1] : null;
@@ -35,6 +36,7 @@ const server = http.createServer((req, res) => {
   if (u.pathname === "/sitemap.xml") { res.setHeader("content-type", "application/xml"); return res.end(sitemapXml(current)); }
   if (allow.has(u.pathname)) { const f = allow.get(u.pathname); res.setHeader("content-type", MIME[path.extname(f)] ?? "application/octet-stream"); return res.end(fs.readFileSync(f)); }
   if (u.pathname.startsWith("/og/")) { const f = path.join(root, "artifacts/ayzen/public", u.pathname); if (fs.existsSync(f)) { res.setHeader("content-type", "image/png"); return res.end(fs.readFileSync(f)); } }
+  if (isPortal(current) && ["/login", "/register"].includes(u.pathname)) { res.setHeader("content-type", "text/html"); return res.end(u.pathname === "/login" ? designedLoginHtml(current) : designedRegisterHtml(current)); }
   if (["/login", "/register"].includes(u.pathname) || MODULES.some((m) => m.homePath === u.pathname)) { res.setHeader("content-type", "text/html"); return res.end(`<!doctype html><title>SPA ${u.pathname}</title><body>spa</body>`); }
   res.statusCode = 404; res.end("nf");
 });
@@ -87,8 +89,9 @@ for (const m of MODULES) {
   { const { ctx, page } = await mk({ width: 1280, height: 800 });
     await page.goto(origin + "/"); await page.waitForTimeout(500);
     const hrefs = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
-    check(!hrefs.some((h) => /^#(login|signin|signup|register)$|login\/index|login\.html/.test(h)), `${m.id}: no anchor points at the design's demo auth`);
-    check(hrefs.some((h) => h === "/login") || (await page.locator("[data-go],[data-signin]").count()) > 0, `${m.id}: a way in exists`);
+    if (isPortal(m.id)) check(hrefs.some((h) => /^#(\/?(login|in))/.test(h)) || (await page.locator("[data-go],[data-login]").count()) > 0, `${m.id}: a way into the embedded portal exists`);
+    else check(!hrefs.some((h) => /^#(login|signin|signup|register)$|login\/index|login\.html/.test(h)), `${m.id}: no anchor points at the design's demo auth`);
+    if (!isPortal(m.id)) check(hrefs.some((h) => h === "/login") || (await page.locator("[data-go],[data-signin]").count()) > 0, `${m.id}: a way in exists`);
     await ctx.close(); }
   // header sign-in buttons that are rendered by the design's own script (verve: [data-signin])
   { const { ctx, page } = await mk({ width: 1280, height: 800 });
@@ -97,8 +100,21 @@ for (const m of MODULES) {
     if (await btn.count()) { await btn.click(); await page.waitForURL((u) => u.pathname === "/login", { timeout: 4000 }).catch(() => {}); check(new URL(page.url()).pathname === "/login", `${m.id}: [data-signin] -> /login`); }
     await ctx.close(); }
   // deep links + token
+  if (isPortal(m.id)) {
+    const P = { ryft: ["/#login", "/#signup", "#pg-auth"], zynth: ["/#login", "/#login", "#p-auth"], skarn: ["/#/in/cred", "/#/up/cred", "#portal-host"] }[m.id];
+    for (const [name, url] of [["sign-in deep link", P[0]], ["sign-up deep link", P[1]]]) {
+      const { ctx, page } = await mk({ width: 1280, height: 800 }); await page.goto(origin + url); await page.waitForTimeout(900);
+      check(new URL(page.url()).pathname === "/" && (await page.locator(P[2]).first().isVisible()), `${m.id}: ${name} opens the embedded portal`);
+      await ctx.close();
+    }
+    for (const [name, url, hash] of [["/login", "/login?next=/x", m.id === "skarn" ? "#/in/cred" : "#login"], ["/register", "/register", m.id === "skarn" ? "#/up/cred" : "#signup"]]) {
+      const { ctx, page } = await mk({ width: 1280, height: 800 }); await page.goto(origin + url); await page.waitForTimeout(900);
+      check(new URL(page.url()).pathname === "/" && new URL(page.url()).hash.startsWith(hash.slice(0, 3)), `${m.id}: ${name} redirects into the portal (${page.url().replace(origin, "")})`);
+      await ctx.close();
+    }
+  }
   for (const [name, url, init, want] of [
-    ["#login", "/#login", null, "/login"], ["#signup", "/#signup", null, "/register"],
+    ...(isPortal(m.id) ? [] : [["#login", "/#login", null, "/login"], ["#signup", "/#signup", null, "/register"]]),
     ["token", "/", () => localStorage.setItem("ayzen_token", "t"), m.homePath],
   ]) {
     const { ctx, page } = await mk({ width: 1280, height: 800 }, init);

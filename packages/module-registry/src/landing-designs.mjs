@@ -20,13 +20,18 @@ export const designRoot = () => process.env.MODULE_LANDINGS_DIR || DEFAULT_ROOT;
 export const LANDING_ASSET_PREFIX = "/landing-assets";
 /** verve ships a multi-page static site; its pages resolve relative links through a <base>. */
 const BASE_DESIGNS = new Set(["verve"]);
+/** Designs whose sign-in/sign-up lives INSIDE the landing (hash routes #login, #signup, #reset) and talks to /api/auth/module/v2.
+ *  /login and /register are thin redirects into that portal; the landing keeps its own auth links. */
+const PORTAL_DESIGNS = new Set(["ryft", "zynth", "skarn"]);
+export const isPortal = (id) => PORTAL_DESIGNS.has(id);
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 export const designFile = (id) => path.join(designRoot(), id, "index.html");
 /** A module's OWN sign-in page (landings/<id>/login.html). Only a design that talks to the real /api/auth routes may be shipped here. */
 export const loginFile = (id) => path.join(designRoot(), id, "login.html");
-export const hasLogin = (id) => fs.existsSync(loginFile(id));
+export const hasLogin = (id) => isPortal(id) || fs.existsSync(loginFile(id));
 export const loginIds = () => designIds().filter((d) => hasLogin(d));
+export const portalIds = () => designIds().filter((d) => isPortal(d));
 export const hasDesign = (id) => fs.existsSync(designFile(id));
 export const designIds = () => (fs.existsSync(designRoot()) ? fs.readdirSync(designRoot()).filter((d) => hasDesign(d)) : []);
 
@@ -45,6 +50,9 @@ export function designAssets(id) {
   return out;
 }
 
+const apiShim = (api) => `(function(A){var f=window.fetch;window.fetch=function(u,i){if(typeof u==="string"&&u.indexOf("/api/")===0){u=A+u;i=Object.assign({},i,{credentials:i&&i.credentials==="omit"?"omit":"include"})}return f.call(this,u,i)}})(${JSON.stringify(api)});`;
+/** Portal landings: only the "already signed in" hop; hash routes stay in the page. */
+const portalGuard = (c) => `<script>window.__AYZEN_HOME=${JSON.stringify(c.homePath)};(function(){try{var t=null;try{t=localStorage.getItem("ayzen_token")||sessionStorage.getItem("ayzen_token")}catch(e){}if(t&&!/^#\\/?(in|up|rst|oidc|login|signup|reset)/.test(location.hash)&&!/[?&]code=/.test(location.search))location.replace(${JSON.stringify(c.homePath)})}catch(e){}})()</script>`;
 const guardScript = (c) => `<script>(function(){try{var h=location.hash.replace(/^#\\/?/,"");if(/^(up|signup|register)(\\/|$)/.test(h)){location.replace("/register");return}if(/^(in|login|signin|rst|oidc|welcome)(\\/|$)/.test(h)){location.replace("/login");return}var t=null;try{t=localStorage.getItem("ayzen_token")||sessionStorage.getItem("ayzen_token")}catch(e){}if(t)location.replace(${JSON.stringify(c.homePath)})}catch(e){}})()</script>`;
 
 /** Designs that open their demo sign-in from a button (skarn: data-go) go to the real routes instead. */
@@ -64,7 +72,7 @@ export function designedLandingHtml(id, opts = {}) {
   let html = fs.readFileSync(designFile(id), "utf8");
 
   // 1) sign-in/up entries -> the real SPA routes (never the design's demo auth)
-  html = html
+  if (!isPortal(id)) html = html
     .replace(/href="#(?:\/)?(?:up|signup|register)(?:\/[^"]*)?"/g, 'href="/register"')
     .replace(/href="#(?:\/)?(?:in|login|signin|rst|oidc|welcome)(?:\/[^"]*)?"/g, 'href="/login"')
     .replace(/(<a\b[^>]*?) data-login\b/g, "$1")
@@ -103,11 +111,11 @@ export function designedLandingHtml(id, opts = {}) {
     `<link rel="alternate" type="text/markdown" href="/llms-full.txt" title="${esc(c.label)} for AI assistants" />`,
   ].join("\n");
   if (!/<html[^>]*\blang=/i.test(html)) html = html.replace(/<html/i, '<html lang="en"');
-  html = html.replace(/<head[^>]*>/i, (m) => `${m}\n${guardScript(c)}\n${baseTag}\n${seo}`);
+  html = html.replace(/<head[^>]*>/i, (m) => `${m}\n${isPortal(id) ? portalGuard(c) + (opts.apiOrigin ? `<script>${apiShim(String(opts.apiOrigin).replace(/\/+$/, ""))}</script>` : "") : guardScript(c)}\n${baseTag}\n${seo}`);
 
   // 4) every design must offer a way in
-  if (!BASE_DESIGNS.has(id) && !/href="\/login"|data-go="in\./.test(html)) html = html.replace(/<\/body>/i, `${PILL}\n</body>`);
-  html = html.replace(/<\/body>/i, `${ABOUT_LINK(c)}\n${CTA_SCRIPT}\n</body>`);
+  if (!isPortal(id) && !BASE_DESIGNS.has(id) && !/href="\/login"|data-go="in\./.test(html)) html = html.replace(/<\/body>/i, `${PILL}\n</body>`);
+  html = html.replace(/<\/body>/i, `${ABOUT_LINK(c)}\n${isPortal(id) ? "" : CTA_SCRIPT}\n</body>`);
   return html;
 }
 
@@ -118,7 +126,16 @@ export function designedLandingHtml(id, opts = {}) {
  *    lib/api-routing.ts applies inside the SPA) and the OIDC issuer is that origin.
  * Brand/back links "/<id>/" point at "/". The page is noindex (a sign-in form has no search value).
  */
+/** /login and /register of a portal design: straight into the landing's own flow, keeping ?next= (same-origin paths only). */
+export function portalRedirectHtml(id, mode = "login") {
+  if (!isPortal(id)) return null;
+  const hash = id === "skarn" ? (mode === "signup" ? "#/up/cred" : "#/in/cred") : mode === "signup" ? "#signup" : "#login";
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow"><title>Redirecting…</title><script>(function(){var n=new URLSearchParams(location.search).get("next");var q=n&&/^\\/(?!\\/)/.test(n)?"?next="+encodeURIComponent(n):"";location.replace("/"+q+"${hash}")})()</script><noscript><meta http-equiv="refresh" content="0;url=/${hash}"></noscript></head><body><a href="/${hash}">Continue</a></body></html>`;
+}
+export const designedRegisterHtml = (id) => portalRedirectHtml(id, "signup");
+
 export function designedLoginHtml(id, opts = {}) {
+  if (isPortal(id)) return portalRedirectHtml(id, "login");
   if (!hasLogin(id)) return null;
   const m = getModule(id);
   const P = id.toUpperCase();
@@ -143,6 +160,8 @@ export function emitModuleSite(id, dir, opts = {}) {
   w("index.html", designedLandingHtml(id, opts));
   const login = designedLoginHtml(id, opts);
   if (login) w("login/index.html", login);
+  const reg = designedRegisterHtml(id);
+  if (reg) w("register/index.html", reg);
   w("robots.txt", robotsTxt(id, opts));
   w("sitemap.xml", sitemapXml(id, opts));
   w("llms.txt", llmsTxt(id, opts));
