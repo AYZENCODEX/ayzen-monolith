@@ -20,3 +20,8 @@
 - `POST /auth/module/v2/totp/enrol` + `/totp/confirm` (two-step, session required); ryft/zynth/verve toggle opens a setup dialog.
 - `POST /auth/module/v2/workspace/check`; slug uniqueness re-checked under an advisory lock in `completeSignup` (no schema change).
 - Tests: +2 DB tests (23 v2), e2e covers authenticator enrolment + totp sign-in (ryft); W3 validator +1 rule / +4 mutants.
+
+## Follow-up: passkeys for module accounts
+- Migration 130 `module_passkeys` (+ boot mirror), service functions and routes (`passkey/*`, `login/passkey/*`); login offers `passkey` when enrolled.
+- ryft, zynth, verve: passkey toggle at sign-up + "Use passkey" at sign-in. Tests: DB (25 v2), chromium e2e with a virtual authenticator (zynth), W3 validator (+1 rule, +6 mutants).
+- The signature maths is the real library's job; this sandbox has no `@simplewebauthn/server`, so tests use `webauthn-test-double.ts` (checks challenge, origin, ceremony, credential id). Run once in CI/Codespace with the real package.

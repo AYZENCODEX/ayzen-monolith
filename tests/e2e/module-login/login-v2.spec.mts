@@ -15,8 +15,10 @@ import { chromium } from "playwright";
 import { designedLoginHtml, designedLandingHtml, designedRegisterHtml, isPortal, designRoot } from "../../../packages/module-registry/src/landing-designs.mjs";
 import { poolAuthDb, signupWithPassword, loginWithPassword } from "../../../artifacts/api-server/src/lib/module-auth-service";
 import { totpGenerate } from "../../../artifacts/api-server/src/lib/totp";
+import { FAKE_WA } from "../../../artifacts/api-server/src/lib/webauthn-test-double";
 import * as V2 from "../../../artifacts/api-server/src/lib/module-auth-v2-service";
 
+V2.setWebAuthnForTests(FAKE_WA); // the real signature checks live in @simplewebauthn/server (not installed in this sandbox)
 const adminUrl = process.env.MODULE_AUTH_TEST_DATABASE_URL;
 if (!adminUrl) { console.log("SKIP MODULE_AUTH_TEST_DATABASE_URL not set"); process.exit(0); }
 const fail = (m: string): never => { console.error("FAIL " + m); process.exit(1); };
@@ -36,12 +38,12 @@ await pool.query(`CREATE TABLE users (id SERIAL PRIMARY KEY, username TEXT NOT N
   device_label TEXT NOT NULL DEFAULT 'Unknown device', ip TEXT, user_agent TEXT, created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   last_seen_at TIMESTAMP NOT NULL DEFAULT NOW(), revoked_at TIMESTAMP, expires_at TIMESTAMP NOT NULL, origin_client_id TEXT NULL);
   CREATE UNIQUE INDEX idx_user_sessions_jti ON user_sessions(jti);`);
-for (const m of ["125_module_accounts.sql", "126_module_credentials_sessions.sql", "127_module_oidc_audit_events.sql", "128_module_external_identities.sql", "129_module_auth_v2.sql"]) await pool.query(mig(m));
+for (const m of ["125_module_accounts.sql", "126_module_credentials_sessions.sql", "127_module_oidc_audit_events.sql", "128_module_external_identities.sql", "129_module_auth_v2.sql", "130_module_passkeys.sql"]) await pool.query(mig(m));
 
 // ── API stand-in (one per module; same service calls and JSON contract as routes/module-auth-v2.ts) ──
 const CLIENT = { ip: "127.0.0.1", userAgent: "e2e", deviceLabel: "e2e" };
 const ok = (res: http.ServerResponse, code: number, body: unknown) => { res.statusCode = code; res.setHeader("content-type", "application/json"); res.end(JSON.stringify(body)); };
-const STATUS: Record<string, number> = { WORKSPACE_TAKEN: 409, TOTP_NOT_STARTED: 409, INVALID_CODE: 400, CHALLENGE_INVALID: 400, INVALID_CREDENTIALS: 401, TOO_MANY_CODES: 429, USERNAME_TAKEN: 409, MAIL_TAKEN: 409 };
+const STATUS: Record<string, number> = { PASSKEY_INVALID: 401, WORKSPACE_TAKEN: 409, TOTP_NOT_STARTED: 409, INVALID_CODE: 400, CHALLENGE_INVALID: 400, INVALID_CREDENTIALS: 401, TOO_MANY_CODES: 429, USERNAME_TAKEN: 409, MAIL_TAKEN: 409 };
 const bad = (res: http.ServerResponse, f: any) => ok(res, STATUS[f.code] ?? 400, { error: "Request rejected", code: f.code, solution: f.code === "PASSWORD_TOO_SHORT" ? "Use at least 10 characters." : undefined });
 const sess = (s: any, email?: string) => ({ token: "tok." + s.jti, account: { module: s.module, moduleUid: s.moduleUid, identifier: email } });
 type Served = { origin: string; outbox: Array<{ to: string; code: string; what: string }>; hits: string[]; close: () => void };
@@ -76,6 +78,18 @@ async function serve(MODULE: any): Promise<Served> {
           const jti = String(req.headers.authorization ?? "").replace("Bearer tok.", ""); const a = (await pool.query("SELECT module_account_id FROM user_sessions WHERE jti=$1 AND revoked_at IS NULL", [jti])).rows[0];
           if (!a) return ok(res, 401, { error: "Unauthorized" });
           return ok(res, 200, { profile: await V2.getProfile(db.query, a.module_account_id) });
+        }
+        if (p === "/login/passkey/options" || p === "/login/passkey/verify") {
+          const o = new URL(String(req.headers.origin)); const rp = { rpID: o.hostname, rpName: "AYZEN", origin: o.origin };
+          if (p.endsWith("options")) { const r: any = await V2.passkeyLoginOptions(db, { module: MODULE, challenge: b.challenge, rp }); return r.ok ? ok(res, 200, { options: r.options, token: r.token }) : bad(res, r); }
+          const r: any = await V2.passkeyLoginVerify(db, { module: MODULE, challenge: b.challenge, token: b.token, response: b.response, rp, client: CLIENT }); return r.ok ? ok(res, 200, sess(r)) : bad(res, r);
+        }
+        if (p === "/passkey/register/options" || p === "/passkey/register/verify") {
+          const jti = String(req.headers.authorization ?? "").replace("Bearer tok.", ""); const a = (await pool.query("SELECT module_account_id FROM user_sessions WHERE jti=$1 AND revoked_at IS NULL", [jti])).rows[0];
+          if (!a) return ok(res, 401, { error: "Unauthorized" });
+          const o = new URL(String(req.headers.origin)); const rp = { rpID: o.hostname, rpName: "AYZEN", origin: o.origin };
+          if (p.endsWith("options")) { const r: any = await V2.passkeyRegisterOptions(db, { module: MODULE, moduleAccountId: a.module_account_id, rp }); return r.ok ? ok(res, 200, { options: r.options, token: r.token }) : bad(res, r); }
+          const r: any = await V2.passkeyRegisterVerify(db, { module: MODULE, moduleAccountId: a.module_account_id, rp, token: b.token, response: b.response, name: b.name, client: CLIENT }); return r.ok ? ok(res, 201, { id: r.id, name: r.name }) : bad(res, r);
         }
         if (p === "/workspace/check") { const r: any = await V2.isWorkspaceSlugFree(db.query, MODULE, b.slug); return r.ok ? ok(res, 200, { available: r.available }) : bad(res, r); }
         if (p === "/totp/enrol" || p === "/totp/confirm") {
@@ -262,6 +276,26 @@ try {
     // social buttons never fake a login
     const c4 = await browser.newContext(); const p4 = await c4.newPage(); await p4.goto(`${verve.origin}/login#signin`); await p4.click('[data-act="oa"][data-p="Google"]'); await p4.waitForSelector("text=not enabled");
     if (await tokenOf(p4)) fail("verve: Google button created a session"); await c4.close();
+    { // passkey: toggle at sign-up creates one (virtual authenticator), sign-in then offers the passkey button
+      const base = verve.origin.replace("127.0.0.1", "localhost"), em2 = `vp.${randomBytes(3).toString("hex")}@example.test`;
+      const mkCtx = async () => { const c = await browser.newContext(); const pg = await c.newPage(); const cdp = await c.newCDPSession(pg); await cdp.send("WebAuthn.enable");
+        const { authenticatorId } = await cdp.send("WebAuthn.addVirtualAuthenticator", { options: { protocol: "ctap2", transport: "internal", hasResidentKey: true, hasUserVerification: true, isUserVerified: true, automaticPresenceSimulation: true } }); return { c, pg, cdp, authenticatorId }; };
+      const A1 = await mkCtx(); const pg1 = A1.pg;
+      await pg1.goto(`${base}/login?next=/marketplace/hub#signup`);
+      await pg1.fill("#e", em2); await pg1.fill("#p", STRONG); await pg1.check("#tc"); await pg1.click("#sb"); await pg1.waitForSelector("#rc");
+      await pg1.fill("#rc", "AYZVRV01"); await pg1.fill("#cq", await sol(pg1)); await pg1.click("#nx"); await pg1.waitForSelector("text=Verify your email");
+      await digits(pg1, lastCode(em2, "signup", verve)); await pg1.click("#vb"); await pg1.waitForSelector(".mo button"); await pg1.click(".mo button");
+      await pg1.waitForSelector("#u"); await pg1.fill("#fn", "Pk"); await pg1.fill("#ln", "User"); await pg1.fill("#u", "verve.pk"); await pg1.waitForSelector("#uh.ok"); await pg1.click("#nx");
+      await pg1.waitForSelector("text=Connect your tools"); await pg1.click('[data-act="to"][data-s="prof"] >> nth=1'); await pg1.waitForSelector("#dn");
+      await pg1.check("#s2"); await pg1.click("#fm .b1"); await pg1.waitForFunction(() => location.pathname === "/marketplace/hub", null, { timeout: 8000 });
+      const creds = (await A1.cdp.send("WebAuthn.getCredentials", { authenticatorId: A1.authenticatorId })).credentials; if (creds.length !== 1) fail("verve: no passkey was created");
+      if (!(await pool.query("SELECT 1 FROM module_passkeys WHERE module='verve'")).rows.length) fail("verve: passkey row missing");
+      const A2 = await mkCtx(); await A2.cdp.send("WebAuthn.addCredential", { authenticatorId: A2.authenticatorId, credential: creds[0] });
+      await A2.pg.goto(`${base}/login?next=/marketplace/hub#signin`); await A2.pg.fill("#e", em2); await A2.pg.fill("#p", STRONG); await A2.pg.click("#fm .b1");
+      await A2.pg.waitForSelector('[data-act="pk"]'); if (await tokenOf(A2.pg)) fail("verve: token before the passkey"); await A2.pg.click('[data-act="pk"]');
+      await A2.pg.waitForFunction(() => location.pathname === "/marketplace/hub", null, { timeout: 8000 }); if (!String(await tokenOf(A2.pg)).startsWith("tok.")) fail("verve: no token after the passkey");
+      await A1.c.close(); await A2.c.close();
+    }
     console.log("ok  verve: sign-up (referral, captcha, emailed code, username, profile), sign-in with code, forgot-password");
   }
   // 4) the design never talks to the legacy central auth API
@@ -274,12 +308,13 @@ try {
     const ctxFor = async () => { const c = await browser.newContext(); await c.route(/fonts\.(googleapis|gstatic)\.com|api\.binance|coingecko/, (r) => r.abort()); return c; };
     await pool.query("INSERT INTO users (username,email,password_hash,referral_code) VALUES ('refp','refp@x.test','h','AYZPRT01')");
     for (const [sv, name] of [[ryft, "ryft"], [zynth, "zynth"]] as const) {
-      const em = `${name}.${randomBytes(3).toString("hex")}@example.test`, un = `${name}.ada`; let totpSecret = "";
+      const em = `${name}.${randomBytes(3).toString("hex")}@example.test`, un = `${name}.ada`; let totpSecret = ""; const base = name === "zynth" ? sv.origin.replace("127.0.0.1", "localhost") : sv.origin; let pkCreds: any[] = [];
+      const attach = async (ctx: any, pg: any) => { const cdp = await ctx.newCDPSession(pg); await cdp.send("WebAuthn.enable"); const { authenticatorId } = await cdp.send("WebAuthn.addVirtualAuthenticator", { options: { protocol: "ctap2", transport: "internal", hasResidentKey: true, hasUserVerification: true, isUserVerified: true, automaticPresenceSimulation: true } }); return { cdp, authenticatorId }; };
       // redirect pages keep ?next=
       { const c = await ctxFor(); const pg = await c.newPage(); await pg.goto(`${sv.origin}/login?next=/portal/next`); await pg.waitForFunction(() => location.hash === "#login" && location.search.includes("next=%2Fportal%2Fnext")); await c.close(); }
       // sign-up
-      const c1 = await ctxFor(); const page = await c1.newPage();
-      await page.goto(`${sv.origin}/?next=/portal/next#login`);
+      const c1 = await ctxFor(); const page = await c1.newPage(); const auth1 = name === "zynth" ? await attach(c1, page) : null;
+      await page.goto(`${base}/?next=/portal/next#login`);
       if (name === "zynth") await page.click('[data-w="up"]'); else await page.click('[data-act="tab"][data-v="up"]');
       await page.fill("#e", em); await page.fill("#p", STRONG); await page.check(name === "ryft" ? "#tos" : "#tc"); await page.click("#sb");
       await page.waitForSelector("#rc");
@@ -299,18 +334,20 @@ try {
         const sec = (await page.locator(".mo p").nth(1).innerText()).trim(); totpSecret = sec;
         await page.fill("#tqc", totpGenerate(sec)); await page.click("#tqb"); await page.waitForSelector("text=Account created"); await page.click(".mo button");
       }
-      else { await page.waitForSelector("text=Connect your tools"); await page.click('[data-act="to"][data-s="prof"] >> nth=1'); await page.waitForSelector("#dn"); await page.fill("#hl", "Founder"); await page.fill("#bio", "Hello"); await page.click("#fm .b1"); }
+      else { await page.waitForSelector("text=Connect your tools"); await page.click('[data-act="to"][data-s="prof"] >> nth=1'); await page.waitForSelector("#dn"); await page.fill("#hl", "Founder"); await page.fill("#bio", "Hello"); await page.check("#s2"); await page.click("#fm .b1"); await page.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 }); pkCreds = (await auth1!.cdp.send("WebAuthn.getCredentials", { authenticatorId: auth1!.authenticatorId })).credentials; if (pkCreds.length !== 1) fail("zynth: no passkey was created"); }
       await page.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 });
       const row = (await pool.query("SELECT first_name,last_name,extra,referral_code_used,mail_local FROM module_profiles WHERE username_norm=$1 AND module=$2", [un, name])).rows[0];
       if (!row || row.first_name !== "Ada" || row.referral_code_used !== "AYZPRT01" || row.mail_local !== un) fail(`${name}: profile row wrong ` + JSON.stringify(row));
       if (name === "ryft" && row.extra.country !== "Bangladesh") fail("ryft: country not stored");
       if (name === "ryft" && !(await pool.query("SELECT 1 FROM module_credentials WHERE identifier_norm=$1 AND mfa_enabled", [em])).rows.length) fail("ryft: authenticator not enabled after confirm");
       if (name === "zynth" && row.extra.headline !== "Founder") fail("zynth: headline not stored");
+      if (name === "zynth" && !(await pool.query("SELECT 1 FROM module_passkeys WHERE module='zynth'")).rows.length) fail("zynth: passkey row missing");
       const cr = (await pool.query("SELECT identifier_verified_at FROM module_credentials WHERE identifier_norm=$1", [em])).rows[0]; if (!cr?.identifier_verified_at) fail(`${name}: mailbox not verified`);
       await c1.close();
       // sign-in: wrong password, then password + (ryft: slider) + emailed code
       const c2 = await ctxFor(); const p2 = await c2.newPage();
-      await p2.goto(`${sv.origin}/?next=/portal/next#login`); if (name === "zynth") await p2.click('[data-w="in"]');
+      if (name === "zynth") { const a2 = await attach(c2, p2); await a2.cdp.send("WebAuthn.addCredential", { authenticatorId: a2.authenticatorId, credential: pkCreds[0] }); }
+      await p2.goto(`${base}/?next=/portal/next#login`); if (name === "zynth") await p2.click('[data-w="in"]');
       await p2.fill("#e", em); await p2.fill("#p", "wrong-password-123");
       if (name === "ryft") { await p2.click("#fm .b1"); await p2.waitForSelector("#sk"); const b = (await p2.locator("#sk").boundingBox())!, t = (await p2.locator("#sl").boundingBox())!; await p2.mouse.move(b.x + 5, b.y + 5); await p2.mouse.down(); await p2.mouse.move(t.x + t.width, b.y + 5, { steps: 12 }); await p2.mouse.up(); }
       else await p2.click("#fm .b1");
@@ -319,7 +356,8 @@ try {
       if (name === "ryft") { await p2.click("#fm .b1"); await p2.waitForSelector("#sk"); const b = (await p2.locator("#sk").boundingBox())!, t = (await p2.locator("#sl").boundingBox())!; await p2.mouse.move(b.x + 5, b.y + 5); await p2.mouse.down(); await p2.mouse.move(t.x + t.width, b.y + 5, { steps: 12 }); await p2.mouse.up(); }
       else await p2.click("#fm .b1");
       await p2.waitForSelector(".fx"); if (await tokenOf(p2)) fail(`${name}: token before the code`);
-      await digits(p2, totpSecret ? totpGenerate(totpSecret) : lastCode(em, "login", sv)); await p2.waitForSelector(".fx.ok"); await p2.click("#vb");
+      if (name === "zynth") { await p2.waitForSelector('[data-act="pk"]'); await p2.click('[data-act="pk"]'); }
+      else { await digits(p2, totpSecret ? totpGenerate(totpSecret) : lastCode(em, "login", sv)); await p2.waitForSelector(".fx.ok"); await p2.click("#vb"); }
       await p2.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 });
       if (!String(await tokenOf(p2)).startsWith("tok.")) fail(`${name}: no token after the code`);
       await c2.close();

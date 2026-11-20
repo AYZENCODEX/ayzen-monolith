@@ -10,7 +10,7 @@ import pg from "pg";
 import { poolAuthDb, loginWithPassword, type AuthDb, type ClientInfo } from "./module-auth-service";
 import {
   checkCaptcha, completeCodeReset, completeLogin, completeSignup, getProfile, isReferralValid, isUsernameFree, newCaptcha, normalizeUsername,
-  captchaModules, beginTotpEnrol, confirmTotpEnrol, isWorkspaceSlugFree, sendLoginEmailCode, checkSignupCode, isMailLocalFree, startCodeReset, startLogin, startSignup, updateProfile, OTP_MAX_ATTEMPTS,
+  captchaModules, deletePasskey, listPasskeys, passkeyLoginOptions, passkeyLoginVerify, passkeyRegisterOptions, passkeyRegisterVerify, setWebAuthnForTests, beginTotpEnrol, confirmTotpEnrol, isWorkspaceSlugFree, sendLoginEmailCode, checkSignupCode, isMailLocalFree, startCodeReset, startLogin, startSignup, updateProfile, OTP_MAX_ATTEMPTS,
 } from "./module-auth-v2-service";
 import { generateBase32Secret, totpGenerate } from "./totp";
 
@@ -41,7 +41,7 @@ before(async () => {
              device_label TEXT NOT NULL DEFAULT 'Unknown device', ip TEXT, user_agent TEXT, created_at TIMESTAMP NOT NULL DEFAULT NOW(),
              last_seen_at TIMESTAMP NOT NULL DEFAULT NOW(), revoked_at TIMESTAMP, expires_at TIMESTAMP NOT NULL, origin_client_id TEXT NULL);
            CREATE UNIQUE INDEX idx_user_sessions_jti ON user_sessions(jti);`);
-  for (const m of ["125_module_accounts.sql", "126_module_credentials_sessions.sql", "127_module_oidc_audit_events.sql", "128_module_external_identities.sql", "129_module_auth_v2.sql"]) await q(migration(m));
+  for (const m of ["125_module_accounts.sql", "126_module_credentials_sessions.sql", "127_module_oidc_audit_events.sql", "128_module_external_identities.sql", "129_module_auth_v2.sql", "130_module_passkeys.sql"]) await q(migration(m));
 });
 after(async () => { if (skip) return; await pool.end(); await admin.query(`DROP DATABASE ${dbName}`); await admin.end(); });
 
@@ -55,7 +55,7 @@ async function register(module = "fyra", extra: Record<string, unknown> = {}) {
   return { e, username, r, code: s.send.code };
 }
 
-test("migration 129 applies twice", { skip }, async () => { await q(migration("129_module_auth_v2.sql")); await q(migration("129_module_auth_v2.sql")); });
+test("migrations 129 and 130 apply twice", { skip }, async () => { for (const m of ["129_module_auth_v2.sql", "130_module_passkeys.sql"]) { await q(migration(m)); await q(migration(m)); } });
 
 test("captcha: right answer passes; wrong, expired, other module, tampered all fail", { skip }, () => {
   const c = newCaptcha("fyra", { env: ENV, now: 1_000_000 });
@@ -294,4 +294,64 @@ test("authenticator enrolment: pending secret does not change login; a wrong cod
   assert.equal(((await beginTotpEnrol(db, { module: "skarn", moduleAccountId: r.moduleAccountId, client: CLIENT })) as any).code, "TOTP_ALREADY_ENABLED");
   const done: any = await completeLogin(db, { module: "skarn", challenge: ch.stepUp.challenge, code: totpGenerate(b.secret), client: CLIENT, env: ENV });
   assert.equal(done.ok, true);
+});
+
+// ── passkeys: the real @simplewebauthn/server does the signature maths (proven by routes/passkey.ts); these tests use a
+// stand-in for it that still checks challenge + origin + credential id, so the binding/limits/counter/session logic is exercised.
+const b64u = (x: string | Buffer) => Buffer.from(x).toString("base64url");
+const RP = { rpID: "fyra.test", rpName: "AYZEN", origin: "https://fyra.test" };
+import { FAKE_WA } from "./webauthn-test-double";
+const regResponse = (cid: string, challenge: string, origin = RP.origin) => ({ id: cid, rawId: cid, type: "public-key", response: { clientDataJSON: b64u(JSON.stringify({ type: "webauthn.create", challenge, origin })), attestationObject: b64u("pk-" + cid) } });
+const getResponse = (cid: string, challenge: string, origin = RP.origin) => ({ id: cid, rawId: cid, type: "public-key", response: { clientDataJSON: b64u(JSON.stringify({ type: "webauthn.get", challenge, origin })), authenticatorData: "x", signature: "y" } });
+const newAccount = async (m: any = "fyra") => { const e = email(); const s: any = await startSignup(db, { module: m, email: e, captchaId: undefined, captchaAnswer: undefined, client: CLIENT, env: ENV });
+  const r: any = await completeSignup(db, { module: m, email: e, code: s.send.code, password: PW, username: uname(), client: CLIENT, env: ENV }); assert.equal(r.ok, true, JSON.stringify(r)); return { e, id: r.moduleAccountId as number }; };
+
+test("passkey: register (challenge-bound), list, login needs the passkey, counter moves, delete restores direct login", { skip }, async () => {
+  setWebAuthnForTests(FAKE_WA);
+  try {
+    const { e, id } = await newAccount(); const cid = "cred-" + randomBytes(6).toString("hex");
+    const o: any = await passkeyRegisterOptions(db, { module: "fyra", moduleAccountId: id, rp: RP, env: ENV }); assert.ok(o.ok && o.token);
+    const other = await newAccount();
+    assert.equal(((await passkeyRegisterVerify(db, { module: "fyra", moduleAccountId: other.id, rp: RP, token: o.token, response: regResponse(cid, o.options.challenge), client: CLIENT, env: ENV })) as any).code, "CHALLENGE_INVALID", "token is bound to the account");
+    assert.equal(((await passkeyRegisterVerify(db, { module: "fyra", moduleAccountId: id, rp: { ...RP, rpID: "evil.test" }, token: o.token, response: regResponse(cid, o.options.challenge), client: CLIENT, env: ENV })) as any).code, "CHALLENGE_INVALID", "token is bound to the relying party");
+    assert.equal(((await passkeyRegisterVerify(db, { module: "fyra", moduleAccountId: id, rp: RP, token: o.token, response: regResponse(cid, "wrong-challenge"), client: CLIENT, env: ENV })) as any).code, "PASSKEY_INVALID");
+    assert.equal(((await passkeyRegisterVerify(db, { module: "fyra", moduleAccountId: id, rp: RP, token: o.token, response: regResponse(cid, o.options.challenge, "https://evil.test"), client: CLIENT, env: ENV })) as any).code, "PASSKEY_INVALID", "origin is checked");
+    const saved: any = await passkeyRegisterVerify(db, { module: "fyra", moduleAccountId: id, rp: RP, token: o.token, response: regResponse(cid, o.options.challenge), name: "My laptop", client: CLIENT, env: ENV });
+    assert.ok(saved.ok, JSON.stringify(saved));
+    assert.deepEqual((await listPasskeys(db.query, { module: "fyra", moduleAccountId: id })).map((p) => p.name), ["My laptop"]);
+    assert.equal(((await passkeyRegisterVerify(db, { module: "fyra", moduleAccountId: id, rp: RP, token: o.token, response: regResponse(cid, o.options.challenge), client: CLIENT, env: ENV })) as any).code, "PASSKEY_INVALID", "same credential cannot be added twice");
+
+    const st: any = await startLogin(db, { module: "fyra", email: e, password: PW, client: CLIENT, env: ENV });
+    assert.ok(st.ok && st.stepUp && st.stepUp.methods[0] === "passkey" && st.stepUp.methods.includes("email") && st.stepUp.send === null, "an account with a passkey is challenged, nothing is mailed");
+    const lo: any = await passkeyLoginOptions(db, { module: "fyra", challenge: st.stepUp.challenge, rp: RP, env: ENV }); assert.ok(lo.ok);
+    assert.deepEqual(lo.options.allowCredentials.map((c: any) => c.id), [cid]);
+    const bad1: any = await passkeyLoginVerify(db, { module: "fyra", challenge: st.stepUp.challenge, token: lo.token, response: getResponse("not-mine", lo.options.challenge), rp: RP, client: CLIENT, env: ENV });
+    assert.equal(bad1.code, "PASSKEY_INVALID");
+    const bad2: any = await passkeyLoginVerify(db, { module: "fyra", challenge: st.stepUp.challenge, token: lo.token, response: getResponse(cid, "wrong"), rp: RP, client: CLIENT, env: ENV });
+    assert.equal(bad2.code, "PASSKEY_INVALID");
+    const st2: any = await startLogin(db, { module: "fyra", email: (await newAccount()).e, password: PW, client: CLIENT, env: ENV, requireCode: true });
+    const mixed: any = await passkeyLoginVerify(db, { module: "fyra", challenge: st2.stepUp.challenge, token: lo.token, response: getResponse(cid, lo.options.challenge), rp: RP, client: CLIENT, env: ENV });
+    assert.equal(mixed.code, "CHALLENGE_INVALID", "options token and step-up challenge must belong together");
+    const ok: any = await passkeyLoginVerify(db, { module: "fyra", challenge: st.stepUp.challenge, token: lo.token, response: getResponse(cid, lo.options.challenge), rp: RP, client: CLIENT, env: ENV });
+    assert.ok(ok.ok && ok.moduleUid, JSON.stringify(ok));
+    assert.equal((await pool.query("SELECT counter FROM module_passkeys WHERE credential_id=$1", [cid])).rows[0].counter, "1");
+    assert.equal(((await passkeyLoginOptions(db, { module: "wisp", challenge: st.stepUp.challenge, rp: RP, env: ENV })) as any).code, "CHALLENGE_INVALID", "module-bound");
+
+    assert.equal(((await deletePasskey(db, { module: "fyra", moduleAccountId: other.id, id: saved.id, client: CLIENT })) as any).code, "PASSKEY_INVALID", "only the owner can delete");
+    assert.ok(((await deletePasskey(db, { module: "fyra", moduleAccountId: id, id: saved.id, client: CLIENT })) as any).ok);
+    const direct: any = await startLogin(db, { module: "fyra", email: e, password: PW, client: CLIENT, env: ENV });
+    assert.ok(direct.ok && !direct.stepUp, "no passkey left: direct sign-in again");
+  } finally { setWebAuthnForTests(null); }
+});
+
+test("passkey: at most MAX_PASSKEYS per account", { skip }, async () => {
+  setWebAuthnForTests(FAKE_WA);
+  try {
+    const { id } = await newAccount();
+    for (let i = 0; i < 10; i++) {
+      const o: any = await passkeyRegisterOptions(db, { module: "fyra", moduleAccountId: id, rp: RP, env: ENV });
+      assert.ok(((await passkeyRegisterVerify(db, { module: "fyra", moduleAccountId: id, rp: RP, token: o.token, response: regResponse("lim-" + id + "-" + i, o.options.challenge), client: CLIENT, env: ENV })) as any).ok);
+    }
+    assert.equal(((await passkeyRegisterOptions(db, { module: "fyra", moduleAccountId: id, rp: RP, env: ENV })) as any).code, "PASSKEY_LIMIT");
+  } finally { setWebAuthnForTests(null); }
 });

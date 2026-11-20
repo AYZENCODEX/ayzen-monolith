@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const FILES = {
-  sql: "migrations/129_module_auth_v2.sql", boot: "artifacts/api-server/src/lib/schema-migrations.ts",
+  sql: "migrations/129_module_auth_v2.sql", sql130: "migrations/130_module_passkeys.sql", boot: "artifacts/api-server/src/lib/schema-migrations.ts",
   svc: "artifacts/api-server/src/lib/module-auth-v2-service.ts", route: "artifacts/api-server/src/routes/module-auth-v2.ts",
   index: "artifacts/api-server/src/routes/index.ts", adapters: "packages/module-registry/src/login-adapters.mjs",
   designs: "packages/module-registry/src/landing-designs.mjs", wisp: "packages/module-registry/landings/wisp/login.html", verve: "packages/module-registry/landings/verve/assets/js/pages/login.js", ci: ".github/workflows/ci.yml", pkg: "artifacts/api-server/package.json",
@@ -27,8 +27,8 @@ const RULES = [
   ["codes are single-use with an attempt cap and an hourly issue cap", (t) => /OTP_MAX_ATTEMPTS/.test(t.svc) && /OTP_MAX_PER_HOUR/.test(t.svc) && /used_at = NOW\(\)/.test(t.svc) ? null : "caps or single-use missing"],
   ["sign-up checks cheap inputs before consuming the code, and creates account+profile in one transaction", (t) => /afterCreate/.test(t.svc) && t.svc.indexOf("checkPasswordPolicy") < t.svc.indexOf("consume: false") ? null : "order or atomicity broken"],
   ["every v2 route is module-gated, JSON-only and rate limited", (t) => {
-    const routes = t.route.match(/router\.(get|post|put)\("\/auth\/module\/v2[^\n]*/g) ?? [];
-    const bad = routes.filter((r) => !/moduleGate/.test(r) || (/router\.(post|put)/.test(r) && !/jsonOnly/.test(r)) || !/(authLimiter|otpLimiter)/.test(r) && !/profile"/.test(r) && !/captcha/.test(r));
+    const routes = t.route.match(/router\.(get|post|put|delete)\("\/auth\/module\/v2[^\n]*/g) ?? [];
+    const bad = routes.filter((r) => !/moduleGate/.test(r) || (/router\.(post|put)/.test(r) && !/jsonOnly/.test(r)) || !/(authLimiter|otpLimiter)/.test(r) && !/profile"/.test(r) && !/captcha/.test(r) && !/router\.get\("\/auth\/module\/v2\/passkey"/.test(r));
     return routes.length >= 11 && !bad.length ? null : `${routes.length} routes; unguarded: ${bad.join(" | ")}`;
   }],
   ["the module is never read from the request body in v2 routes", (t) => /req\.body\??\.module|req\.query\??\.module|req\.headers\[["']x-module/i.test(t.route) ? "module taken from the client" : null],
@@ -50,6 +50,17 @@ const RULES = [
     if (!/totpVerify\(/.test(c) || !/mfa_enabled=TRUE/.test(c) || c.indexOf("totpVerify(") > c.indexOf("mfa_enabled=TRUE")) return "confirm does not verify a code before enabling";
     for (const r of ["totp/enrol", "totp/confirm"]) { const l = new RegExp(`router\\.post\\("/auth/module/v2/${r}"[\\s\\S]*?\\n}\\);`).exec(t.route)?.[0] ?? ""; if (!/principalOf\(/.test(l) || !/moduleGate/.test(l)) return `${r} is not session-protected`; }
     return /pg_advisory_xact_lock\(hashtext\(\$1\)\)`, \[`ws:\$\{module\}/.test(t.svc) && /WORKSPACE_TAKEN/.test(t.svc) ? null : "workspace slug uniqueness lock missing";
+  }],
+  ["passkeys: per-module table mirrored at boot; ceremonies bind module, account and relying party; registration/list/delete need a session; the test double never reaches production code", (t) => {
+    if (!/CREATE TABLE IF NOT EXISTS module_passkeys/.test(t.sql130) || !/FOREIGN KEY \(module_account_id, module\)\s+REFERENCES module_accounts/.test(t.sql130) || !/module_passkeys_credential_idx ON module_passkeys\(module, credential_id\)/.test(t.sql130)) return "migration 130 lacks the table, composite FK or per-module unique credential";
+    if (!norm(t.boot).includes("CREATE TABLE IF NOT EXISTS module_passkeys") || !norm(t.boot).includes("module_passkeys_credential_idx")) return "boot mirror lacks module_passkeys";
+    for (const k of ["pkreg", "pklogin"]) if (!new RegExp(`sign\\("${k}", [^;]*rp: `).test(t.svc) && !new RegExp(`sign\\("${k}"[^;]*\\brp\\b`).test(t.svc)) return `${k} challenge is not bound to the relying party`;
+    if (!/p\.a !== input\.moduleAccountId \|\| p\.rp !== input\.rp\.rpID/.test(t.svc)) return "registration token is not checked against account and relying party";
+    if (!/pk\.a !== st\.a \|\| pk\.c !== st\.c \|\| pk\.rp !== input\.rp\.rpID/.test(t.svc)) return "login options token is not tied to the step-up challenge";
+    if ((t.svc.match(/expectedOrigin: input\.rp\.origin, expectedRPID: input\.rp\.rpID/g) ?? []).length < 2) return "origin and RP ID are not enforced";
+    for (const r of ["passkey\"", "passkey/:id", "passkey/register/options", "passkey/register/verify"]) { const l = new RegExp(`router\\.(get|post|delete)\\("/auth/module/v2/${r}[\\s\\S]*?\\n}\\);`).exec(t.route)?.[0] ?? ""; if (!/principalOf\(/.test(l) || !/moduleGate/.test(l)) return `${r.replace(/\\"/g, "")} is not session-protected`; }
+    if (/webauthn-test-double/.test(t.svc) || /webauthn-test-double/.test(t.route)) return "the test double is imported by production code";
+    return /passkey\)\.rows\.length|SELECT 1 FROM module_passkeys/.test(t.svc) && /methods: Array<"passkey"/.test(t.svc) ? null : "login does not offer or require the passkey";
   }],
   ["CI runs this validator, its self-test and the v2 DB tests", (t) => /validate-w3-auth-v2\.mjs --self-test/.test(t.ci) && /module-auth-v2-service\.db\.test/.test(t.pkg) ? null : "CI step missing"],
 ];
@@ -75,6 +86,12 @@ const MUTANTS = [
   ["confirm skips the code check", { svc: (s) => s.replace("!totpVerify(code, String(c.mfa_secret))", "false") }],
   ["totp enrol without session", { route: (s) => s.replace('router.post("/auth/module/v2/totp/enrol", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {\n  const p = await principalOf(req, res);', 'router.post("/auth/module/v2/totp/enrol", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {\n  const p = { moduleAccountId: 1 };') }],
   ["no workspace lock", { svc: (s) => s.replace("[`ws:${module}", "[`x:${module}") }],
+  ["passkey register token not bound to rp", { svc: (s) => s.replace("|| p.rp !== input.rp.rpID) return bad(\"CHALLENGE_INVALID\");\n  if (!input.response", ") return bad(\"CHALLENGE_INVALID\");\n  if (!input.response") }],
+  ["passkey login token not tied to step-up", { svc: (s) => s.replace("|| pk.c !== st.c ", "") }],
+  ["passkey origin unchecked", { svc: (s) => s.replace("expectedOrigin: input.rp.origin, expectedRPID: input.rp.rpID,\n      credential", "expectedRPID: input.rp.rpID,\n      credential") }],
+  ["passkey register without session", { route: (s) => s.replace('router.post("/auth/module/v2/passkey/register/options", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {\n  const p = await principalOf(req, res);', 'router.post("/auth/module/v2/passkey/register/options", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {\n  const p = { moduleAccountId: 1 };') }],
+  ["test double in production", { svc: (s) => 'import "./webauthn-test-double";\n' + s }],
+  ["no module_passkeys in boot mirror", { boot: (s) => s.replace(/module_passkeys/g, "module_pk_x") }],
   ["CI step removed", { ci: (s) => s.replace(/validate-w3-auth-v2\.mjs --self-test/g, "nothing") }],
 ];
 

@@ -9,9 +9,10 @@ import { authLimiter, otpLimiter } from "../middlewares/security";
 import { moduleCookieName } from "../lib/module-session-policy";
 import { poolAuthDb } from "../lib/module-auth-service";
 import {
-  beginTotpEnrol, confirmTotpEnrol, isWorkspaceSlugFree, checkSignupCode, completeCodeReset, completeLogin, completeSignup, getProfile, isMailLocalFree, isReferralValid, isUsernameFree, newCaptcha, sendLoginEmailCode,
+  beginTotpEnrol, confirmTotpEnrol, deletePasskey, listPasskeys, passkeyLoginOptions, passkeyLoginVerify, passkeyRegisterOptions, passkeyRegisterVerify, isWorkspaceSlugFree, checkSignupCode, completeCodeReset, completeLogin, completeSignup, getProfile, isMailLocalFree, isReferralValid, isUsernameFree, newCaptcha, sendLoginEmailCode,
   startCodeReset, startLogin, startSignup, updateProfile, OTP_TTL_MINUTES, type V2Fail,
 } from "../lib/module-auth-v2-service";
+import { getWebAuthnConfig, rpName } from "../lib/passkey";
 import { clientInfo, fail as baseFail, issue, jsonOnly, moduleGate, moduleOf, publicAccount } from "./module-auth";
 
 /**
@@ -40,14 +41,14 @@ const ACK = { message: "If that address can be used, a code is on its way." };
 const V2_STATUS: Record<string, number> = {
   INVALID_CAPTCHA: 400, INVALID_CODE: 400, TOO_MANY_CODES: 429, USERNAME_INVALID: 400, USERNAME_TAKEN: 409,
   REFERRAL_INVALID: 400, CHALLENGE_INVALID: 400, PROFILE_INVALID: 404, MAIL_INVALID: 400, MAIL_TAKEN: 409,
-  WORKSPACE_INVALID: 400, WORKSPACE_TAKEN: 409, TOTP_ALREADY_ENABLED: 409, TOTP_NOT_STARTED: 409,
+  WORKSPACE_INVALID: 400, WORKSPACE_TAKEN: 409, TOTP_ALREADY_ENABLED: 409, TOTP_NOT_STARTED: 409, PASSKEY_INVALID: 401, PASSKEY_LIMIT: 409,
 };
 const V2_SOLUTION: Record<string, string> = {
   INVALID_CAPTCHA: "Solve the check again.", INVALID_CODE: "That code is wrong or expired. Request a new one.",
   TOO_MANY_CODES: "Too many codes requested. Try again in an hour.", USERNAME_INVALID: "Use 3-30 letters, numbers or underscores.",
   USERNAME_TAKEN: "That username is taken.", REFERRAL_INVALID: "That referral code is not valid.",
   CHALLENGE_INVALID: "This sign-in step expired. Start again.", MAIL_INVALID: "Use 3-30 letters, numbers, dots, dashes or underscores.", MAIL_TAKEN: "That address is taken.",
-  WORKSPACE_INVALID: "Use 3-32 letters, numbers or dashes.", WORKSPACE_TAKEN: "That workspace URL is taken.", TOTP_ALREADY_ENABLED: "An authenticator is already set up.", TOTP_NOT_STARTED: "Start the authenticator setup first.",
+  WORKSPACE_INVALID: "Use 3-32 letters, numbers or dashes.", WORKSPACE_TAKEN: "That workspace URL is taken.", TOTP_ALREADY_ENABLED: "An authenticator is already set up.", TOTP_NOT_STARTED: "Start the authenticator setup first.", PASSKEY_INVALID: "That passkey could not be verified.", PASSKEY_LIMIT: "You already have the maximum number of passkeys.",
 };
 function fail(res: Response, f: V2Fail): void {
   if (f.code in V2_STATUS) {
@@ -190,12 +191,60 @@ router.post("/auth/module/v2/totp/enrol", moduleGate, authLimiter, jsonOnly, asy
   res.json({ secret: r.secret, uri: r.uri });
 });
 
-router.post("/auth/module/v2/totp/confirm", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+router.post("/auth/module/v2/totp/confirm", "/auth/module/v2/passkey", "/auth/module/v2/passkey/register/options", "/auth/module/v2/passkey/register/verify", "/auth/module/v2/login/passkey/options", "/auth/module/v2/login/passkey/verify", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
   const p = await principalOf(req, res);
   if (!p) { res.status(401).json({ error: "Unauthorized", code: "INVALID_TOKEN" }); return; }
   const r = await confirmTotpEnrol(authDb, { module: moduleOf(res), moduleAccountId: p.moduleAccountId!, code: req.body?.code, client: clientInfo(req) });
   if (!r.ok) { fail(res, r); return; }
   res.json({ enabled: true });
+});
+
+const rpOf = (req: Request) => ({ ...getWebAuthnConfig(req), rpName });
+
+router.get("/auth/module/v2/passkey", moduleGate, async (req, res): Promise<void> => {
+  const p = await principalOf(req, res);
+  if (!p) { res.status(401).json({ error: "Unauthorized", code: "INVALID_TOKEN" }); return; }
+  res.json({ passkeys: await listPasskeys(authDb.query, { module: moduleOf(res), moduleAccountId: p.moduleAccountId! }) });
+});
+
+router.delete("/auth/module/v2/passkey/:id", moduleGate, authLimiter, async (req, res): Promise<void> => {
+  const p = await principalOf(req, res);
+  if (!p) { res.status(401).json({ error: "Unauthorized", code: "INVALID_TOKEN" }); return; }
+  const r = await deletePasskey(authDb, { module: moduleOf(res), moduleAccountId: p.moduleAccountId!, id: Number(req.params.id), client: clientInfo(req) });
+  if (!r.ok) { fail(res, r); return; }
+  res.json({ deleted: true });
+});
+
+router.post("/auth/module/v2/passkey/register/options", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+  const p = await principalOf(req, res);
+  if (!p) { res.status(401).json({ error: "Unauthorized", code: "INVALID_TOKEN" }); return; }
+  const r = await passkeyRegisterOptions(authDb, { module: moduleOf(res), moduleAccountId: p.moduleAccountId!, rp: rpOf(req) });
+  if (!r.ok) { fail(res, r); return; }
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ options: r.options, token: r.token });
+});
+
+router.post("/auth/module/v2/passkey/register/verify", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+  const p = await principalOf(req, res);
+  if (!p) { res.status(401).json({ error: "Unauthorized", code: "INVALID_TOKEN" }); return; }
+  const r = await passkeyRegisterVerify(authDb, { module: moduleOf(res), moduleAccountId: p.moduleAccountId!, rp: rpOf(req), token: req.body?.token, response: req.body?.response, name: req.body?.name, client: clientInfo(req) });
+  if (!r.ok) { fail(res, r); return; }
+  res.status(201).json({ id: r.id, name: r.name });
+});
+
+router.post("/auth/module/v2/login/passkey/options", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+  const r = await passkeyLoginOptions(authDb, { module: moduleOf(res), challenge: req.body?.challenge, rp: rpOf(req) });
+  if (!r.ok) { fail(res, r); return; }
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ options: r.options, token: r.token });
+});
+
+router.post("/auth/module/v2/login/passkey/verify", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+  const module = moduleOf(res);
+  const r = await passkeyLoginVerify(authDb, { module, challenge: req.body?.challenge, token: req.body?.token, response: req.body?.response, rp: rpOf(req), client: clientInfo(req) });
+  if (!r.ok) { fail(res, r); return; }
+  const token = await issue(req, res, r, { stepUpAt: new Date().toISOString() });
+  res.json({ token, account: publicAccount(r) });
 });
 
 export const MODULE_AUTH_V2_ROUTE_PATHS = [
