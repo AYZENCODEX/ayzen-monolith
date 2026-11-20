@@ -10,7 +10,7 @@ import pg from "pg";
 import { poolAuthDb, loginWithPassword, type AuthDb, type ClientInfo } from "./module-auth-service";
 import {
   checkCaptcha, completeCodeReset, completeLogin, completeSignup, getProfile, isReferralValid, isUsernameFree, newCaptcha, normalizeUsername,
-  captchaModules, sendLoginEmailCode, checkSignupCode, isMailLocalFree, startCodeReset, startLogin, startSignup, updateProfile, OTP_MAX_ATTEMPTS,
+  captchaModules, beginTotpEnrol, confirmTotpEnrol, isWorkspaceSlugFree, sendLoginEmailCode, checkSignupCode, isMailLocalFree, startCodeReset, startLogin, startSignup, updateProfile, OTP_MAX_ATTEMPTS,
 } from "./module-auth-v2-service";
 import { generateBase32Secret, totpGenerate } from "./totp";
 
@@ -262,4 +262,36 @@ test("mail alias: unique per module, validated, stored with the profile; extra l
   assert.deepEqual([p.mail, p.extra], [mail, { x: "@ada", telegram: "ada_t" }]);
   assert.deepEqual(await updateProfile(db, { module: "wisp", moduleAccountId: r.moduleAccountId, profile: { extra: { discord: "ada#1" } }, client: CLIENT }), { ok: true });
   assert.deepEqual(((await getProfile(pool.query.bind(pool), r.moduleAccountId)) as any).extra, { discord: "ada#1" });
+});
+
+test("workspace slug (skarn) is unique per module: checked up front and again under a lock at sign-up", { skip }, async () => {
+  const slug = `acme-${randomBytes(3).toString("hex")}`;
+  assert.equal(((await isWorkspaceSlugFree(db.query, "skarn", "a")) as any).code, "WORKSPACE_INVALID");
+  assert.equal(((await isWorkspaceSlugFree(db.query, "skarn", slug)) as any).available, true);
+  const mk = async (m: any) => { const e = email(); const s: any = await startSignup(db, { module: m, email: e, captchaId: undefined, captchaAnswer: undefined, client: CLIENT, env: ENV });
+    return completeSignup(db, { module: m, email: e, code: s.send.code, password: PW, username: uname(), client: CLIENT, env: ENV, profile: { extra: { workspaceSlug: slug } } }) as Promise<any>; };
+  assert.equal((await mk("skarn")).ok, true);
+  assert.equal(((await isWorkspaceSlugFree(db.query, "skarn", slug)) as any).available, false);
+  assert.equal((await mk("skarn")).code, "WORKSPACE_TAKEN");
+  assert.equal((await mk("fyra")).ok, true, "per module");
+  const both = await Promise.all([mk("skarn"), mk("skarn")].map((p) => p.catch((e) => ({ ok: false, code: String(e) }))));
+  assert.equal(both.filter((r: any) => r.ok).length, 0, "slug already taken, a race cannot create a second one");
+});
+
+test("authenticator enrolment: pending secret does not change login; a wrong code keeps it off; a right code turns the challenge on", { skip }, async () => {
+  const e = email(); const s: any = await startSignup(db, { module: "skarn", email: e, captchaId: undefined, captchaAnswer: undefined, client: CLIENT, env: ENV });
+  const r: any = await completeSignup(db, { module: "skarn", email: e, code: s.send.code, password: PW, username: uname(), client: CLIENT, env: ENV });
+  assert.equal(r.ok, true);
+  assert.equal(((await confirmTotpEnrol(db, { module: "skarn", moduleAccountId: r.moduleAccountId, code: "123456", client: CLIENT })) as any).code, "TOTP_NOT_STARTED");
+  const b: any = await beginTotpEnrol(db, { module: "skarn", moduleAccountId: r.moduleAccountId, client: CLIENT });
+  assert.ok(b.ok && /^[A-Z2-7]+$/.test(b.secret) && b.uri.startsWith("otpauth://totp/"));
+  const direct: any = await startLogin(db, { module: "skarn", email: e, password: PW, client: CLIENT, env: ENV });
+  assert.ok(direct.ok && !direct.stepUp, "pending secret does not challenge login");
+  assert.equal(((await confirmTotpEnrol(db, { module: "skarn", moduleAccountId: r.moduleAccountId, code: "000000", client: CLIENT })) as any).code, "INVALID_CODE");
+  assert.equal(((await confirmTotpEnrol(db, { module: "skarn", moduleAccountId: r.moduleAccountId, code: totpGenerate(b.secret), client: CLIENT })) as any).ok, true);
+  const ch: any = await startLogin(db, { module: "skarn", email: e, password: PW, client: CLIENT, env: ENV });
+  assert.ok(ch.ok && ch.stepUp && ch.stepUp.methods.includes("totp"), "enabled authenticator is challenged");
+  assert.equal(((await beginTotpEnrol(db, { module: "skarn", moduleAccountId: r.moduleAccountId, client: CLIENT })) as any).code, "TOTP_ALREADY_ENABLED");
+  const done: any = await completeLogin(db, { module: "skarn", challenge: ch.stepUp.challenge, code: totpGenerate(b.secret), client: CLIENT, env: ENV });
+  assert.equal(done.ok, true);
 });

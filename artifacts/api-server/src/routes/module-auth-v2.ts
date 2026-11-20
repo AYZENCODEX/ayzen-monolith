@@ -9,7 +9,7 @@ import { authLimiter, otpLimiter } from "../middlewares/security";
 import { moduleCookieName } from "../lib/module-session-policy";
 import { poolAuthDb } from "../lib/module-auth-service";
 import {
-  checkSignupCode, completeCodeReset, completeLogin, completeSignup, getProfile, isMailLocalFree, isReferralValid, isUsernameFree, newCaptcha, sendLoginEmailCode,
+  beginTotpEnrol, confirmTotpEnrol, isWorkspaceSlugFree, checkSignupCode, completeCodeReset, completeLogin, completeSignup, getProfile, isMailLocalFree, isReferralValid, isUsernameFree, newCaptcha, sendLoginEmailCode,
   startCodeReset, startLogin, startSignup, updateProfile, OTP_TTL_MINUTES, type V2Fail,
 } from "../lib/module-auth-v2-service";
 import { clientInfo, fail as baseFail, issue, jsonOnly, moduleGate, moduleOf, publicAccount } from "./module-auth";
@@ -40,12 +40,14 @@ const ACK = { message: "If that address can be used, a code is on its way." };
 const V2_STATUS: Record<string, number> = {
   INVALID_CAPTCHA: 400, INVALID_CODE: 400, TOO_MANY_CODES: 429, USERNAME_INVALID: 400, USERNAME_TAKEN: 409,
   REFERRAL_INVALID: 400, CHALLENGE_INVALID: 400, PROFILE_INVALID: 404, MAIL_INVALID: 400, MAIL_TAKEN: 409,
+  WORKSPACE_INVALID: 400, WORKSPACE_TAKEN: 409, TOTP_ALREADY_ENABLED: 409, TOTP_NOT_STARTED: 409,
 };
 const V2_SOLUTION: Record<string, string> = {
   INVALID_CAPTCHA: "Solve the check again.", INVALID_CODE: "That code is wrong or expired. Request a new one.",
   TOO_MANY_CODES: "Too many codes requested. Try again in an hour.", USERNAME_INVALID: "Use 3-30 letters, numbers or underscores.",
   USERNAME_TAKEN: "That username is taken.", REFERRAL_INVALID: "That referral code is not valid.",
   CHALLENGE_INVALID: "This sign-in step expired. Start again.", MAIL_INVALID: "Use 3-30 letters, numbers, dots, dashes or underscores.", MAIL_TAKEN: "That address is taken.",
+  WORKSPACE_INVALID: "Use 3-32 letters, numbers or dashes.", WORKSPACE_TAKEN: "That workspace URL is taken.", TOTP_ALREADY_ENABLED: "An authenticator is already set up.", TOTP_NOT_STARTED: "Start the authenticator setup first.",
 };
 function fail(res: Response, f: V2Fail): void {
   if (f.code in V2_STATUS) {
@@ -173,10 +175,33 @@ router.put("/auth/module/v2/profile", moduleGate, authLimiter, jsonOnly, async (
   res.json({ profile: await getProfile(authDb.query, p.moduleAccountId!) });
 });
 
+router.post("/auth/module/v2/workspace/check", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+  const r = await isWorkspaceSlugFree(authDb.query, moduleOf(res), req.body?.slug);
+  if (!r.ok) { fail(res, r); return; }
+  res.json({ available: r.available });
+});
+
+router.post("/auth/module/v2/totp/enrol", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+  const p = await principalOf(req, res);
+  if (!p) { res.status(401).json({ error: "Unauthorized", code: "INVALID_TOKEN" }); return; }
+  const r = await beginTotpEnrol(authDb, { module: moduleOf(res), moduleAccountId: p.moduleAccountId!, client: clientInfo(req) });
+  if (!r.ok) { fail(res, r); return; }
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ secret: r.secret, uri: r.uri });
+});
+
+router.post("/auth/module/v2/totp/confirm", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+  const p = await principalOf(req, res);
+  if (!p) { res.status(401).json({ error: "Unauthorized", code: "INVALID_TOKEN" }); return; }
+  const r = await confirmTotpEnrol(authDb, { module: moduleOf(res), moduleAccountId: p.moduleAccountId!, code: req.body?.code, client: clientInfo(req) });
+  if (!r.ok) { fail(res, r); return; }
+  res.json({ enabled: true });
+});
+
 export const MODULE_AUTH_V2_ROUTE_PATHS = [
   "/auth/module/v2/captcha", "/auth/module/v2/username/check", "/auth/module/v2/referral/check", "/auth/module/v2/mail/check", "/auth/module/v2/signup/verify", "/auth/module/v2/signup/start",
   "/auth/module/v2/signup/complete", "/auth/module/v2/login", "/auth/module/v2/login/email-code", "/auth/module/v2/login/verify",
-  "/auth/module/v2/reset/request", "/auth/module/v2/reset/confirm", "/auth/module/v2/profile",
+  "/auth/module/v2/reset/request", "/auth/module/v2/reset/confirm", "/auth/module/v2/profile", "/auth/module/v2/workspace/check", "/auth/module/v2/totp/enrol", "/auth/module/v2/totp/confirm",
 ] as const;
 
 export default router;

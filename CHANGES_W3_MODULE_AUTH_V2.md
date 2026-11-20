@@ -15,3 +15,8 @@
 - New profile extras `country`, `workspace`, `workspaceSlug`, `teamSize`; captcha default list adds ryft, zynth.
 - Fixed a design bug in skarn's reset screen (OTP binding also swallowed the password field).
 - Tests: login-v2 e2e (ryft, zynth, skarn), designed.spec portal checks, W2-P4 portal rule (+11 mutants), DB test.
+
+## Follow-up: authenticator enrolment + skarn workspace uniqueness
+- `POST /auth/module/v2/totp/enrol` + `/totp/confirm` (two-step, session required); ryft/zynth/verve toggle opens a setup dialog.
+- `POST /auth/module/v2/workspace/check`; slug uniqueness re-checked under an advisory lock in `completeSignup` (no schema change).
+- Tests: +2 DB tests (23 v2), e2e covers authenticator enrolment + totp sign-in (ryft); W3 validator +1 rule / +4 mutants.

@@ -45,6 +45,7 @@ These three landings carry their own sign-in (3 steps) and sign-up (5 steps) **i
 - **Sign-up:** credentials → referral + captcha (ryft, zynth) → emailed code → name/username (+ country for ryft; workspace for skarn) → optional extras → session.
 - **/login and /register** are thin redirect pages into the portal (`/?next=…#login` / `#signup`), served by Express (before static) and as static files (`login/index.html`, `register/index.html`, Vercel rewrites).
 - Removed: demo accounts/codes, "Demo inbox", fake Google/GitHub login, simulated OIDC. "Login with AYZEN" uses the shared `/oidc/callback` transaction (`ayzen_sylo_oidc_pending`, `returnToPath`).
-- Not available yet (UI says so): passkey, authenticator enrolment, social connections.
-- Profile extras stored: `country` (ryft); `workspace`, `workspaceSlug`, `teamSize` (skarn; no workspace registry yet, slug is not checked for uniqueness).
+- Authenticator (TOTP): `POST totp/enrol` (session) returns a pending secret + otpauth URI, `POST totp/confirm` verifies a code and only then switches it on (sign-in then asks for the authenticator code). Wired in ryft, zynth and verve (the "Authenticator app 2FA" toggle); wisp, fyra and skarn have no toggle yet.
+- Not available yet (UI says so): passkey (WebAuthn) and social connections (need provider credentials / a WebAuthn decision).
+- Profile extras stored: `country` (ryft); `workspace`, `workspaceSlug`, `teamSize` (skarn). Workspace URLs are unique per module: `POST workspace/check` up front, re-checked under an advisory lock at sign-up (`WORKSPACE_TAKEN`).
 - Captcha modules default: `wisp,verve,ryft,zynth`.

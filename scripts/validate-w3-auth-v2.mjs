@@ -43,6 +43,14 @@ const RULES = [
     }
     return /function oauth\(p\)\{toast\(/.test(t.verve) ? null : "verve social buttons are not neutralised";
   }],
+  ["authenticator enrolment is two-step: begin stores a pending secret only, confirm verifies a code before enabling; both routes need a session; workspace slugs are unique under a lock", (t) => {
+    const b = /export async function beginTotpEnrol[\s\S]*?\n}\n/.exec(t.svc)?.[0] ?? "", c = /export async function confirmTotpEnrol[\s\S]*?\n}\n/.exec(t.svc)?.[0] ?? "";
+    if (!b || !c) return "enrolment functions missing";
+    if (/mfa_enabled\s*=\s*TRUE/i.test(b)) return "begin switches the authenticator on";
+    if (!/totpVerify\(/.test(c) || !/mfa_enabled=TRUE/.test(c) || c.indexOf("totpVerify(") > c.indexOf("mfa_enabled=TRUE")) return "confirm does not verify a code before enabling";
+    for (const r of ["totp/enrol", "totp/confirm"]) { const l = new RegExp(`router\\.post\\("/auth/module/v2/${r}"[\\s\\S]*?\\n}\\);`).exec(t.route)?.[0] ?? ""; if (!/principalOf\(/.test(l) || !/moduleGate/.test(l)) return `${r} is not session-protected`; }
+    return /pg_advisory_xact_lock\(hashtext\(\$1\)\)`, \[`ws:\$\{module\}/.test(t.svc) && /WORKSPACE_TAKEN/.test(t.svc) ? null : "workspace slug uniqueness lock missing";
+  }],
   ["CI runs this validator, its self-test and the v2 DB tests", (t) => /validate-w3-auth-v2\.mjs --self-test/.test(t.ci) && /module-auth-v2-service\.db\.test/.test(t.pkg) ? null : "CI step missing"],
 ];
 
@@ -63,6 +71,10 @@ const MUTANTS = [
   ["verve demo accounts left in", { verve: (s) => s + "\nlocalStorage.getItem('verve-demo-accounts')" }],
   ["verve fake social login", { verve: (s) => s.replace("function oauth(p){toast(", "function oauth(p){A.d={email:p};go('up','oa');toast(") }],
   ["wisp not calling the API", { wisp: (s) => s.replace(/\/api\/auth\/module\/v2/g, "/x") }],
+  ["begin enables the authenticator", { svc: (s) => s.replace("SET mfa_secret=$3, updated_at=NOW()", "SET mfa_secret=$3, mfa_enabled=TRUE, updated_at=NOW()") }],
+  ["confirm skips the code check", { svc: (s) => s.replace("!totpVerify(code, String(c.mfa_secret))", "false") }],
+  ["totp enrol without session", { route: (s) => s.replace('router.post("/auth/module/v2/totp/enrol", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {\n  const p = await principalOf(req, res);', 'router.post("/auth/module/v2/totp/enrol", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {\n  const p = { moduleAccountId: 1 };') }],
+  ["no workspace lock", { svc: (s) => s.replace("[`ws:${module}", "[`x:${module}") }],
   ["CI step removed", { ci: (s) => s.replace(/validate-w3-auth-v2\.mjs --self-test/g, "nothing") }],
 ];
 

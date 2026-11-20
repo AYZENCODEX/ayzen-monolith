@@ -14,6 +14,7 @@ import pg from "pg";
 import { chromium } from "playwright";
 import { designedLoginHtml, designedLandingHtml, designedRegisterHtml, isPortal, designRoot } from "../../../packages/module-registry/src/landing-designs.mjs";
 import { poolAuthDb, signupWithPassword, loginWithPassword } from "../../../artifacts/api-server/src/lib/module-auth-service";
+import { totpGenerate } from "../../../artifacts/api-server/src/lib/totp";
 import * as V2 from "../../../artifacts/api-server/src/lib/module-auth-v2-service";
 
 const adminUrl = process.env.MODULE_AUTH_TEST_DATABASE_URL;
@@ -40,7 +41,7 @@ for (const m of ["125_module_accounts.sql", "126_module_credentials_sessions.sql
 // ── API stand-in (one per module; same service calls and JSON contract as routes/module-auth-v2.ts) ──
 const CLIENT = { ip: "127.0.0.1", userAgent: "e2e", deviceLabel: "e2e" };
 const ok = (res: http.ServerResponse, code: number, body: unknown) => { res.statusCode = code; res.setHeader("content-type", "application/json"); res.end(JSON.stringify(body)); };
-const STATUS: Record<string, number> = { INVALID_CODE: 400, CHALLENGE_INVALID: 400, INVALID_CREDENTIALS: 401, TOO_MANY_CODES: 429, USERNAME_TAKEN: 409, MAIL_TAKEN: 409 };
+const STATUS: Record<string, number> = { WORKSPACE_TAKEN: 409, TOTP_NOT_STARTED: 409, INVALID_CODE: 400, CHALLENGE_INVALID: 400, INVALID_CREDENTIALS: 401, TOO_MANY_CODES: 429, USERNAME_TAKEN: 409, MAIL_TAKEN: 409 };
 const bad = (res: http.ServerResponse, f: any) => ok(res, STATUS[f.code] ?? 400, { error: "Request rejected", code: f.code, solution: f.code === "PASSWORD_TOO_SHORT" ? "Use at least 10 characters." : undefined });
 const sess = (s: any, email?: string) => ({ token: "tok." + s.jti, account: { module: s.module, moduleUid: s.moduleUid, identifier: email } });
 type Served = { origin: string; outbox: Array<{ to: string; code: string; what: string }>; hits: string[]; close: () => void };
@@ -75,6 +76,13 @@ async function serve(MODULE: any): Promise<Served> {
           const jti = String(req.headers.authorization ?? "").replace("Bearer tok.", ""); const a = (await pool.query("SELECT module_account_id FROM user_sessions WHERE jti=$1 AND revoked_at IS NULL", [jti])).rows[0];
           if (!a) return ok(res, 401, { error: "Unauthorized" });
           return ok(res, 200, { profile: await V2.getProfile(db.query, a.module_account_id) });
+        }
+        if (p === "/workspace/check") { const r: any = await V2.isWorkspaceSlugFree(db.query, MODULE, b.slug); return r.ok ? ok(res, 200, { available: r.available }) : bad(res, r); }
+        if (p === "/totp/enrol" || p === "/totp/confirm") {
+          const jti = String(req.headers.authorization ?? "").replace("Bearer tok.", ""); const a = (await pool.query("SELECT module_account_id FROM user_sessions WHERE jti=$1 AND revoked_at IS NULL", [jti])).rows[0];
+          if (!a) return ok(res, 401, { error: "Unauthorized" });
+          if (p === "/totp/enrol") { const r: any = await V2.beginTotpEnrol(db, { module: MODULE, moduleAccountId: a.module_account_id, client: CLIENT }); return r.ok ? ok(res, 200, { secret: r.secret, uri: r.uri }) : bad(res, r); }
+          const r: any = await V2.confirmTotpEnrol(db, { module: MODULE, moduleAccountId: a.module_account_id, code: b.code, client: CLIENT }); return r.ok ? ok(res, 200, { enabled: true }) : bad(res, r);
         }
         ok(res, 404, { error: "no route " + req.url });
       } catch (e) { console.error(e); ok(res, 500, { error: "boom" }); }
@@ -266,7 +274,7 @@ try {
     const ctxFor = async () => { const c = await browser.newContext(); await c.route(/fonts\.(googleapis|gstatic)\.com|api\.binance|coingecko/, (r) => r.abort()); return c; };
     await pool.query("INSERT INTO users (username,email,password_hash,referral_code) VALUES ('refp','refp@x.test','h','AYZPRT01')");
     for (const [sv, name] of [[ryft, "ryft"], [zynth, "zynth"]] as const) {
-      const em = `${name}.${randomBytes(3).toString("hex")}@example.test`, un = `${name}.ada`;
+      const em = `${name}.${randomBytes(3).toString("hex")}@example.test`, un = `${name}.ada`; let totpSecret = "";
       // redirect pages keep ?next=
       { const c = await ctxFor(); const pg = await c.newPage(); await pg.goto(`${sv.origin}/login?next=/portal/next`); await pg.waitForFunction(() => location.hash === "#login" && location.search.includes("next=%2Fportal%2Fnext")); await c.close(); }
       // sign-up
@@ -285,12 +293,18 @@ try {
       if (name === "ryft") await page.selectOption("#co", "Bangladesh");
       await page.waitForSelector("#uh.ok"); await page.click("#nx");
       await page.waitForFunction(() => String(localStorage.getItem("ayzen_token") || "").startsWith("tok."), null, { timeout: 8000 }).catch(() => fail(`${name}: sign-up stored no token`));
-      if (name === "ryft") { await page.waitForSelector("#s1"); await page.click('[data-act="finish"] >> nth=0'); await page.waitForSelector(".mo button"); await page.click(".mo button"); }
+      if (name === "ryft") {
+        await page.waitForSelector("#s1"); await page.check("#s1"); await page.click('[data-act="finish"][data-save="1"]'); await page.waitForSelector("#tqc");
+        await page.fill("#tqc", "000000"); await page.click("#tqb"); await page.waitForTimeout(1500); await page.waitForSelector("#tqe:not(:empty)");
+        const sec = (await page.locator(".mo p").nth(1).innerText()).trim(); totpSecret = sec;
+        await page.fill("#tqc", totpGenerate(sec)); await page.click("#tqb"); await page.waitForSelector("text=Account created"); await page.click(".mo button");
+      }
       else { await page.waitForSelector("text=Connect your tools"); await page.click('[data-act="to"][data-s="prof"] >> nth=1'); await page.waitForSelector("#dn"); await page.fill("#hl", "Founder"); await page.fill("#bio", "Hello"); await page.click("#fm .b1"); }
       await page.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 });
       const row = (await pool.query("SELECT first_name,last_name,extra,referral_code_used,mail_local FROM module_profiles WHERE username_norm=$1 AND module=$2", [un, name])).rows[0];
       if (!row || row.first_name !== "Ada" || row.referral_code_used !== "AYZPRT01" || row.mail_local !== un) fail(`${name}: profile row wrong ` + JSON.stringify(row));
       if (name === "ryft" && row.extra.country !== "Bangladesh") fail("ryft: country not stored");
+      if (name === "ryft" && !(await pool.query("SELECT 1 FROM module_credentials WHERE identifier_norm=$1 AND mfa_enabled", [em])).rows.length) fail("ryft: authenticator not enabled after confirm");
       if (name === "zynth" && row.extra.headline !== "Founder") fail("zynth: headline not stored");
       const cr = (await pool.query("SELECT identifier_verified_at FROM module_credentials WHERE identifier_norm=$1", [em])).rows[0]; if (!cr?.identifier_verified_at) fail(`${name}: mailbox not verified`);
       await c1.close();
@@ -305,7 +319,7 @@ try {
       if (name === "ryft") { await p2.click("#fm .b1"); await p2.waitForSelector("#sk"); const b = (await p2.locator("#sk").boundingBox())!, t = (await p2.locator("#sl").boundingBox())!; await p2.mouse.move(b.x + 5, b.y + 5); await p2.mouse.down(); await p2.mouse.move(t.x + t.width, b.y + 5, { steps: 12 }); await p2.mouse.up(); }
       else await p2.click("#fm .b1");
       await p2.waitForSelector(".fx"); if (await tokenOf(p2)) fail(`${name}: token before the code`);
-      await digits(p2, lastCode(em, "login", sv)); await p2.waitForSelector(".fx.ok"); await p2.click("#vb");
+      await digits(p2, totpSecret ? totpGenerate(totpSecret) : lastCode(em, "login", sv)); await p2.waitForSelector(".fx.ok"); await p2.click("#vb");
       await p2.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 });
       if (!String(await tokenOf(p2)).startsWith("tok.")) fail(`${name}: no token after the code`);
       await c2.close();
@@ -330,7 +344,7 @@ try {
       await D("#er:not(:empty)").waitFor();
       const code = lastCode(em, "signup", sv); for (let i = 0; i < 6; i++) await D(".otp input").nth(i).fill(code[i]);
       await D("#u").waitFor(); await D("#fn").fill("Ada"); await D("#ln").fill("Lovelace"); await D("#u").fill("skarn.ada"); await D("#uh.ok").waitFor(); await D("#nx").click();
-      await D("#wn").waitFor(); await D("#wn").fill("Acme Product Team"); await D("#nx:not([disabled])").waitFor(); await D("#nx").click();
+      await D("#wn").waitFor(); await D("#wn").fill("Acme Product Team"); await D("#wh.ok").waitFor(); await D("#nx:not([disabled])").waitFor(); await D("#nx").click();
       await page.waitForFunction(() => location.pathname === "/portal/next" || !!document.querySelector("#portal-host") , null, { timeout: 8000 });
       await page.waitForFunction(() => String(localStorage.getItem("ayzen_token") || "").startsWith("tok."), null, { timeout: 8000 }).catch(() => fail("skarn: sign-up stored no token"));
       await page.waitForFunction(() => location.pathname === "/portal/next", null, { timeout: 8000 });

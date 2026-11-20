@@ -14,7 +14,7 @@ import {
 } from "./module-auth-service";
 import { isKnownModuleId } from "./module-session-policy";
 import { checkPasswordPolicy, hashModulePassword } from "./module-password";
-import { totpVerify } from "./totp";
+import { generateBase32Secret, totpUri, totpVerify } from "./totp";
 
 export const OTP_TTL_MINUTES = 10;
 export const OTP_MAX_ATTEMPTS = 5;
@@ -24,7 +24,7 @@ export const USERNAME_RE = /^[a-z0-9._]{3,30}$/;
 
 export type V2ErrorCode =
   | "INVALID_CAPTCHA" | "INVALID_CODE" | "TOO_MANY_CODES" | "USERNAME_INVALID" | "USERNAME_TAKEN" | "REFERRAL_INVALID"
-  | "CHALLENGE_INVALID" | "PROFILE_INVALID" | "MAIL_INVALID" | "MAIL_TAKEN";
+  | "CHALLENGE_INVALID" | "PROFILE_INVALID" | "MAIL_INVALID" | "MAIL_TAKEN" | "WORKSPACE_INVALID" | "WORKSPACE_TAKEN" | "TOTP_ALREADY_ENABLED" | "TOTP_NOT_STARTED";
 export type V2Fail = { ok: false; code: V2ErrorCode | Fail["code"] };
 const bad = (code: V2Fail["code"]): V2Fail => ({ ok: false, code });
 
@@ -138,6 +138,19 @@ export async function isUsernameFree(q: Query, module: ModuleId, raw: unknown): 
   return { ok: true, available: r.rows.length === 0, username };
 }
 
+export const normalizeWorkspaceSlug = (raw: unknown): string | null => {
+  if (typeof raw !== "string") return null;
+  const v = raw.trim().toLowerCase();
+  return /^[a-z0-9](?:[a-z0-9-]{1,30})[a-z0-9]$/.test(v) ? v : null;
+};
+/** Workspace URLs (skarn) are unique per module. Stored in profile.extra.workspaceSlug; completeSignup re-checks under an advisory lock. */
+export async function isWorkspaceSlugFree(q: Query, module: ModuleId, raw: unknown): Promise<{ ok: true; available: boolean; slug: string } | V2Fail> {
+  const slug = normalizeWorkspaceSlug(raw);
+  if (!slug) return bad("WORKSPACE_INVALID");
+  const r = await q(`SELECT 1 FROM module_profiles WHERE module=$1 AND extra->>'workspaceSlug'=$2`, [module, slug]);
+  return { ok: true, available: r.rows.length === 0, slug };
+}
+
 export const normalizeMailLocal = (raw: unknown): string | null => {
   if (typeof raw !== "string") return null;
   const v = raw.trim().toLowerCase();
@@ -234,6 +247,12 @@ export async function completeSignup(
     mail = m.mail;
   }
   const profile = cleanProfile(input.profile);
+  if (profile.extra.workspaceSlug !== undefined) {
+    const ws = await isWorkspaceSlugFree(db.query, module, profile.extra.workspaceSlug);
+    if (!ws.ok) return ws;
+    if (!ws.available) return bad("WORKSPACE_TAKEN");
+    profile.extra.workspaceSlug = ws.slug;
+  }
 
   // The code is checked-and-burned only together with the account creation: if creation fails, the code survives.
   let codeOk = false;
@@ -241,6 +260,11 @@ export async function completeSignup(
     const r = await db.transaction(async (q) => {
       codeOk = await checkOtp(q, { module, purpose: "signup", identifier, code: input.code, consume: false, env: input.env });
       if (!codeOk) return { ok: false, code: "INVALID_CODE" } as V2Fail;
+      if (profile.extra.workspaceSlug) { // race-free uniqueness without a schema change: serialise on the slug, then look again
+        await q(`SELECT pg_advisory_xact_lock(hashtext($1))`, [`ws:${module}:${profile.extra.workspaceSlug}`]);
+        const again = await q(`SELECT 1 FROM module_profiles WHERE module=$1 AND extra->>'workspaceSlug'=$2`, [module, profile.extra.workspaceSlug]);
+        if (again.rows.length) return { ok: false, code: "WORKSPACE_TAKEN" } as V2Fail;
+      }
       const s = await signupWithPassword(
         { query: q, transaction: (fn) => fn(q) },
         {
@@ -417,6 +441,40 @@ export async function updateProfile(
     );
     if (!u.rowCount) return bad("PROFILE_INVALID");
     await audit(q, input.module, input.moduleAccountId, "profile_updated", "success", input.client);
+    return { ok: true } as const;
+  });
+}
+
+
+// ─── authenticator (TOTP) enrolment for module accounts ────────────────────────
+// Two steps so a mistyped scan never locks anyone out: begin stores a PENDING secret (mfa_enabled stays false, so login is
+// unaffected), confirm proves the app produces a valid code and only then switches it on. Login already challenges enabled accounts.
+
+export async function beginTotpEnrol(
+  db: AuthDb, input: { module: ModuleId; moduleAccountId: number; client: ClientInfo },
+): Promise<{ ok: true; secret: string; uri: string } | V2Fail> {
+  return db.transaction(async (q) => {
+    const c = (await q(`SELECT identifier, mfa_enabled FROM module_credentials WHERE module_account_id=$1 AND module=$2 FOR UPDATE`, [input.moduleAccountId, input.module])).rows[0];
+    if (!c) return bad("PROFILE_INVALID");
+    if (c.mfa_enabled) return bad("TOTP_ALREADY_ENABLED");
+    const secret = generateBase32Secret();
+    await q(`UPDATE module_credentials SET mfa_secret=$3, updated_at=NOW() WHERE module_account_id=$1 AND module=$2`, [input.moduleAccountId, input.module, secret]);
+    return { ok: true, secret, uri: totpUri(secret, String(c.identifier), "AYZEN") } as const;
+  });
+}
+
+export async function confirmTotpEnrol(
+  db: AuthDb, input: { module: ModuleId; moduleAccountId: number; code: unknown; client: ClientInfo },
+): Promise<{ ok: true } | V2Fail> {
+  const code = typeof input.code === "string" ? input.code.trim() : "";
+  return db.transaction(async (q) => {
+    const c = (await q(`SELECT mfa_enabled, mfa_secret FROM module_credentials WHERE module_account_id=$1 AND module=$2 FOR UPDATE`, [input.moduleAccountId, input.module])).rows[0];
+    if (!c) return bad("PROFILE_INVALID");
+    if (c.mfa_enabled) return bad("TOTP_ALREADY_ENABLED");
+    if (!c.mfa_secret) return bad("TOTP_NOT_STARTED");
+    if (!/^\d{6}$/.test(code) || !totpVerify(code, String(c.mfa_secret))) return bad("INVALID_CODE");
+    await q(`UPDATE module_credentials SET mfa_enabled=TRUE, mfa_enrolled_at=NOW(), updated_at=NOW() WHERE module_account_id=$1 AND module=$2`, [input.moduleAccountId, input.module]);
+    await audit(q, input.module, input.moduleAccountId, "profile_updated", "success", input.client); // no new audit event type: schema stays as migration 129
     return { ok: true } as const;
   });
 }
