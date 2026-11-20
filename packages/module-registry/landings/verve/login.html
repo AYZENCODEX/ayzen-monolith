@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+
+<title>Sign in · Verve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap">
+<script>(function(){try{var t=localStorage.getItem('verve-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/auth.css">
+</head>
+<body class="auth">
+<div class="auth__bg" id="auth-motion" aria-hidden="true"></div>
+<a class="bk" href="/">← Back to Verve</a>
+<button class="icon-btn auth__theme" type="button" data-theme-toggle></button>
+<main class="auth__stage" id="main">
+<section class="aw" id="aw">
+  <div class="lgx" id="lgx"></div>
+  <span class="chip-note">AYZEN account</span>
+  <h1>Welcome to Verve</h1>
+  <p>Sign in to buy, sell and track orders across accounts, subscriptions, game credit and P2P.</p>
+  <div class="aw__actions"><button class="btn btn--primary btn--lg" type="button" data-w="up">Sign up</button><button class="btn btn--lg" type="button" data-w="in">Log in</button></div>
+  <p class="cl">Secured by Clerk · powered auth</p>
+</section>
+<section class="ac" id="ac" hidden>
+  <aside class="al"><div><a class="brand" href="/"><span class="brand__mark" aria-hidden="true">v</span>verve</a><h2>One AYZEN account for every listing.</h2><p>Accounts, subscriptions, game credit and peer-to-peer exchange, in one calm catalogue.</p></div>
+  <ul><li>One sign-in across AYZEN apps</li><li>Orders tracked from your account</li><li>Your username becomes your @ayzen.tech mail</li></ul></aside>
+  <section class="ar"><div id="av"></div></section>
+</section>
+</main>
+<script src="assets/js/icons.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/motion.js"></script>
+<script src="assets/js/pages/login.js"></script>
+</body>
+</html>

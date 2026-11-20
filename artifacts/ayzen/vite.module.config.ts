@@ -13,8 +13,7 @@
  *
  * The full/central build (vite.config.ts) is unchanged.
  */
-import { robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, getLandingContent } from '@ayzen/module-registry/landing';
-import { designedLandingHtml, designAssets, LANDING_ASSET_PREFIX } from '@ayzen/module-registry/landing-designs';
+import { emitModuleSite, emitLandingAssets } from '@ayzen/module-registry/landing-designs';
 import fs from 'fs';
 import path from 'path';
 import react from '@vitejs/plugin-react';
@@ -70,18 +69,9 @@ function moduleBuildPlugin(): Plugin {
       const out = path.join(root, 'dist/modules', moduleId);
       if (!fs.existsSync(out)) return;
       fs.renameSync(path.join(out, 'index.html'), path.join(out, 'app.html'));
-      fs.writeFileSync(path.join(out, 'index.html'), designedLandingHtml(moduleId)!);
-      for (const a of designAssets(moduleId)) {
-        const dest = path.join(out, LANDING_ASSET_PREFIX.slice(1), moduleId, a.rel);
-        fs.mkdirSync(path.dirname(dest), { recursive: true });
-        fs.copyFileSync(a.abs, dest);
-      }
-      fs.writeFileSync(path.join(out, 'robots.txt'), robotsTxt(moduleId));
-      fs.writeFileSync(path.join(out, 'sitemap.xml'), sitemapXml(moduleId));
-      fs.writeFileSync(path.join(out, 'llms.txt'), llmsTxt(moduleId));
-      fs.writeFileSync(path.join(out, 'llms-full.txt'), llmsFullTxt(moduleId));
-      fs.mkdirSync(path.join(out, 'about'), { recursive: true });
-      fs.writeFileSync(path.join(out, 'about/index.html'), aboutDocument(getLandingContent(moduleId)!));
+      // landing, the module's own login (when it has a real one), about, robots/sitemap/llms; API calls of the login page go to VITE_API_URL
+      emitModuleSite(moduleId, out, { apiOrigin: process.env.VITE_API_URL || undefined });
+      emitLandingAssets(moduleId, out);
     },
     generateBundle(_options, bundle) {
 

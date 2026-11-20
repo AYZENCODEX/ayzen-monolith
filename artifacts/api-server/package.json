@@ -13,7 +13,7 @@
     "test:mega-engine": "node --test --import tsx src/lib/mega-engine/*.test.ts",
     "test:new-engines": "node --test --import tsx src/lib/new-engines/*.test.ts",
     "test:module-auth": "node --test --import tsx src/lib/module-session-policy.test.ts src/lib/module-request-context.test.ts src/lib/module-password.test.ts",
-    "test:module-auth-db": "node --test --import tsx src/lib/module-auth-service.db.test.ts src/lib/module-clerk-service.db.test.ts",
+    "test:module-auth-db": "node --test --import tsx src/lib/module-auth-service.db.test.ts src/lib/module-auth-v2-service.db.test.ts src/lib/module-clerk-service.db.test.ts",
     "test:module-host-guard": "node --test --import tsx src/lib/module-host-guard.test.ts",
     "test:clerk": "node --test --import tsx src/lib/clerk.test.ts",
     "test:auth-signup": "node --test --import tsx src/lib/signup-validation.test.ts",

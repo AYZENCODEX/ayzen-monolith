@@ -10,7 +10,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getLandingContent, landingDocument, landingHead } from "./landing.mjs";
+import { getModule } from "./index.mjs";
+import { loginAdapterScript } from "./login-adapters.mjs";
+import { aboutDocument, getLandingContent, landingDocument, landingHead, llmsFullTxt, llmsTxt, robotsTxt, sitemapXml } from "./landing.mjs";
 
 const DEFAULT_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "landings");
 /** Read lazily: a bundled server (esbuild) cannot locate the folder from import.meta.url, so it sets MODULE_LANDINGS_DIR. */
@@ -18,9 +20,18 @@ export const designRoot = () => process.env.MODULE_LANDINGS_DIR || DEFAULT_ROOT;
 export const LANDING_ASSET_PREFIX = "/landing-assets";
 /** verve ships a multi-page static site; its pages resolve relative links through a <base>. */
 const BASE_DESIGNS = new Set(["verve"]);
+/** Designs whose sign-in/sign-up lives INSIDE the landing (hash routes #login, #signup, #reset) and talks to /api/auth/module/v2.
+ *  /login and /register are thin redirects into that portal; the landing keeps its own auth links. */
+const PORTAL_DESIGNS = new Set(["ryft", "zynth", "skarn"]);
+export const isPortal = (id) => PORTAL_DESIGNS.has(id);
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 export const designFile = (id) => path.join(designRoot(), id, "index.html");
+/** A module's OWN sign-in page (landings/<id>/login.html). Only a design that talks to the real /api/auth routes may be shipped here. */
+export const loginFile = (id) => path.join(designRoot(), id, "login.html");
+export const hasLogin = (id) => isPortal(id) || fs.existsSync(loginFile(id));
+export const loginIds = () => designIds().filter((d) => hasLogin(d));
+export const portalIds = () => designIds().filter((d) => isPortal(d));
 export const hasDesign = (id) => fs.existsSync(designFile(id));
 export const designIds = () => (fs.existsSync(designRoot()) ? fs.readdirSync(designRoot()).filter((d) => hasDesign(d)) : []);
 
@@ -32,13 +43,16 @@ export function designAssets(id) {
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
       const abs = path.join(d, e.name);
       if (e.isDirectory()) walk(abs);
-      else { const rel = path.relative(root, abs).split(path.sep).join("/"); if (rel !== "index.html") out.push({ rel, abs }); }
+      else { const rel = path.relative(root, abs).split(path.sep).join("/"); if (rel !== "index.html" && rel !== "login.html") out.push({ rel, abs }); }
     }
   };
   if (fs.existsSync(root)) walk(root);
   return out;
 }
 
+const apiShim = (api) => `(function(A){var f=window.fetch;window.fetch=function(u,i){if(typeof u==="string"&&u.indexOf("/api/")===0){u=A+u;i=Object.assign({},i,{credentials:i&&i.credentials==="omit"?"omit":"include"})}return f.call(this,u,i)}})(${JSON.stringify(api)});`;
+/** Portal landings: only the "already signed in" hop; hash routes stay in the page. */
+const portalGuard = (c) => `<script>window.__AYZEN_HOME=${JSON.stringify(c.homePath)};(function(){try{var t=null;try{t=localStorage.getItem("ayzen_token")||sessionStorage.getItem("ayzen_token")}catch(e){}if(t&&!/^#\\/?(in|up|rst|oidc|login|signup|reset)/.test(location.hash)&&!/[?&]code=/.test(location.search))location.replace(${JSON.stringify(c.homePath)})}catch(e){}})()</script>`;
 const guardScript = (c) => `<script>(function(){try{var h=location.hash.replace(/^#\\/?/,"");if(/^(up|signup|register)(\\/|$)/.test(h)){location.replace("/register");return}if(/^(in|login|signin|rst|oidc|welcome)(\\/|$)/.test(h)){location.replace("/login");return}var t=null;try{t=localStorage.getItem("ayzen_token")||sessionStorage.getItem("ayzen_token")}catch(e){}if(t)location.replace(${JSON.stringify(c.homePath)})}catch(e){}})()</script>`;
 
 /** Designs that open their demo sign-in from a button (skarn: data-go) go to the real routes instead. */
@@ -58,7 +72,7 @@ export function designedLandingHtml(id, opts = {}) {
   let html = fs.readFileSync(designFile(id), "utf8");
 
   // 1) sign-in/up entries -> the real SPA routes (never the design's demo auth)
-  html = html
+  if (!isPortal(id)) html = html
     .replace(/href="#(?:\/)?(?:up|signup|register)(?:\/[^"]*)?"/g, 'href="/register"')
     .replace(/href="#(?:\/)?(?:in|login|signin|rst|oidc|welcome)(?:\/[^"]*)?"/g, 'href="/login"')
     .replace(/(<a\b[^>]*?) data-login\b/g, "$1")
@@ -97,10 +111,69 @@ export function designedLandingHtml(id, opts = {}) {
     `<link rel="alternate" type="text/markdown" href="/llms-full.txt" title="${esc(c.label)} for AI assistants" />`,
   ].join("\n");
   if (!/<html[^>]*\blang=/i.test(html)) html = html.replace(/<html/i, '<html lang="en"');
-  html = html.replace(/<head[^>]*>/i, (m) => `${m}\n${guardScript(c)}\n${baseTag}\n${seo}`);
+  html = html.replace(/<head[^>]*>/i, (m) => `${m}\n${isPortal(id) ? portalGuard(c) + (opts.apiOrigin ? `<script>${apiShim(String(opts.apiOrigin).replace(/\/+$/, ""))}</script>` : "") : guardScript(c)}\n${baseTag}\n${seo}`);
 
   // 4) every design must offer a way in
-  if (!BASE_DESIGNS.has(id) && !/href="\/login"|data-go="in\./.test(html)) html = html.replace(/<\/body>/i, `${PILL}\n</body>`);
-  html = html.replace(/<\/body>/i, `${ABOUT_LINK(c)}\n${CTA_SCRIPT}\n</body>`);
+  if (!isPortal(id) && !BASE_DESIGNS.has(id) && !/href="\/login"|data-go="in\./.test(html)) html = html.replace(/<\/body>/i, `${PILL}\n</body>`);
+  html = html.replace(/<\/body>/i, `${ABOUT_LINK(c)}\n${isPortal(id) ? "" : CTA_SCRIPT}\n</body>`);
   return html;
+}
+
+/**
+ * The module's own sign-in page, exactly as designed, plus a runtime prelude:
+ *  - always: the module's OIDC client id (the design reads window.<ID>_OIDC_CLIENT_ID);
+ *  - when the API lives on another origin (static hosting, opts.apiOrigin): "/api/..." fetches go to that origin (the same rewrite
+ *    lib/api-routing.ts applies inside the SPA) and the OIDC issuer is that origin.
+ * Brand/back links "/<id>/" point at "/". The page is noindex (a sign-in form has no search value).
+ */
+/** /login and /register of a portal design: straight into the landing's own flow, keeping ?next= (same-origin paths only). */
+export function portalRedirectHtml(id, mode = "login") {
+  if (!isPortal(id)) return null;
+  const hash = id === "skarn" ? (mode === "signup" ? "#/up/cred" : "#/in/cred") : mode === "signup" ? "#signup" : "#login";
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow"><title>Redirecting…</title><script>(function(){var n=new URLSearchParams(location.search).get("next");var q=n&&/^\\/(?!\\/)/.test(n)?"?next="+encodeURIComponent(n):"";location.replace("/"+q+"${hash}")})()</script><noscript><meta http-equiv="refresh" content="0;url=/${hash}"></noscript></head><body><a href="/${hash}">Continue</a></body></html>`;
+}
+export const designedRegisterHtml = (id) => portalRedirectHtml(id, "signup");
+
+export function designedLoginHtml(id, opts = {}) {
+  if (isPortal(id)) return portalRedirectHtml(id, "login");
+  if (!hasLogin(id)) return null;
+  const m = getModule(id);
+  const P = id.toUpperCase();
+  const api = opts.apiOrigin ? String(opts.apiOrigin).replace(/\/+$/, "") : "";
+  const prelude = [
+    `window.${P}_OIDC_CLIENT_ID=${JSON.stringify(m.oidcClientId)};`,
+    api
+      ? `window.${P}_OIDC_ISSUER=${JSON.stringify(api)};(function(A){var f=window.fetch;window.fetch=function(u,i){if(typeof u==="string"&&u.indexOf("/api/")===0){u=A+u;i=Object.assign({},i,{credentials:i&&i.credentials==="omit"?"omit":"include"})}return f.call(this,u,i)}})(${JSON.stringify(api)});`
+      : "",
+    loginAdapterScript(id),
+  ].join("");
+  let html = fs.readFileSync(loginFile(id), "utf8").replace(/href="\/[a-z]+\/"/g, 'href="/"');
+  // Multi-page designs (verve) resolve their relative css/js through a <base>, exactly like their landing.
+  const baseTag = BASE_DESIGNS.has(id) ? `<base href="${LANDING_ASSET_PREFIX}/${id}/">` : "";
+  html = html.replace(/<head[^>]*>/i, (h) => `${h}<meta name="robots" content="noindex, nofollow"><script>${prelude}</script>${baseTag}`);
+  return html;
+}
+
+/** Everything a module serves besides the SPA: landing, own login, about, robots/sitemap/llms. Used by the module build (dir = dist root) and the central build (dir = dist/m/<id>). */
+export function emitModuleSite(id, dir, opts = {}) {
+  const w = (rel, body) => { const f = path.join(dir, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, body); };
+  w("index.html", designedLandingHtml(id, opts));
+  const login = designedLoginHtml(id, opts);
+  if (login) w("login/index.html", login);
+  const reg = designedRegisterHtml(id);
+  if (reg) w("register/index.html", reg);
+  w("robots.txt", robotsTxt(id, opts));
+  w("sitemap.xml", sitemapXml(id, opts));
+  w("llms.txt", llmsTxt(id, opts));
+  w("llms-full.txt", llmsFullTxt(id, opts));
+  w("about/index.html", aboutDocument(getLandingContent(id), opts));
+}
+
+/** Design assets under <outRoot>/landing-assets/<id>/ (the prefix the landing HTML refers to). */
+export function emitLandingAssets(id, outRoot) {
+  for (const a of designAssets(id)) {
+    const dest = path.join(outRoot, LANDING_ASSET_PREFIX.slice(1), id, a.rel);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(a.abs, dest);
+  }
 }

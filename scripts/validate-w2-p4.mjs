@@ -11,19 +11,27 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { LANDINGS, getLandingContent, landingDocument, landingIds, robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, AI_CRAWLERS } from "../packages/module-registry/src/landing.mjs";
 import { MODULES } from "../packages/module-registry/src/index.mjs";
-import { designedLandingHtml, designAssets, designIds, hasDesign } from "../packages/module-registry/src/landing-designs.mjs";
+import { designedLandingHtml, designedLoginHtml, designedRegisterHtml, designAssets, designIds, hasDesign, isPortal, portalIds, loginIds, loginFile } from "../packages/module-registry/src/landing-designs.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (f) => readFileSync(join(ROOT, f), "utf8");
 const WIRING = ["artifacts/ayzen/src/main.tsx", "artifacts/ayzen/src/lib/module-landing-gate.ts", "artifacts/ayzen/src/pages/modules/landing.tsx",
-  "artifacts/ayzen/vite.module.config.ts", "artifacts/api-server/src/app.ts", "scripts/gen-module-deploy.mjs", "deploy/modules/fyra/vercel.json", ".github/workflows/ci.yml", "packages/module-registry/package.json", "artifacts/ayzen/index.html"];
+  "artifacts/ayzen/vite.module.config.ts", "artifacts/ayzen/vite.config.ts", "packages/module-registry/src/landing-designs.mjs", "artifacts/api-server/src/app.ts", "scripts/gen-module-deploy.mjs", "deploy/modules/fyra/vercel.json", ".github/workflows/ci.yml", "packages/module-registry/package.json", "artifacts/ayzen/index.html"];
 
 function load(over = {}) {
   const ids = over.ids ?? landingIds();
   const docs = Object.fromEntries(ids.map((id) => [id, landingDocument(getLandingContent(id))]));
   return { ids, docs: { ...docs, ...over.docs }, prod: { ...Object.fromEntries(ids.map((id) => [id, designedLandingHtml(id)])), ...over.prod }, designs: over.designs ?? designIds(), assets: over.assets ?? Object.fromEntries(designIds().map((id) => [id, designAssets(id).map((a) => a.rel)])), files: { ...Object.fromEntries(WIRING.map((f) => [f, read(f)])), ...over.files },
     og: over.og ?? Object.fromEntries(ids.map((id) => [id, existsSync(join(ROOT, `artifacts/ayzen/public/og/${id}.png`)) ? statSync(join(ROOT, `artifacts/ayzen/public/og/${id}.png`)).size : 0])),
-    shell: over.shell ?? read("artifacts/ayzen/index.html"), llms: over.llms, abouts: over.abouts, fulls: over.fulls, robots: over.robots, landings: over.landings };
+    shell: over.shell ?? read("artifacts/ayzen/index.html"), llms: over.llms, abouts: over.abouts, fulls: over.fulls, robots: over.robots, landings: over.landings,
+    ...portalData(over),
+    logins: over.logins ?? Object.fromEntries(loginIds().filter((id) => !isPortal(id)).map((id) => { const js = join(dirname(loginFile(id)), "assets/js/pages/login.js"); return [id, readFileSync(loginFile(id), "utf8") + (existsSync(js) ? readFileSync(js, "utf8") : "")]; })) };
+}
+function portalData(over = {}) {
+  const ids = portalIds();
+  return { portals: over.portals ?? Object.fromEntries(ids.map((id) => [id, readFileSync(join(ROOT, `packages/module-registry/landings/${id}/index.html`), "utf8")])),
+    redirects: over.redirects ?? Object.fromEntries(ids.map((id) => [id, { login: designedLoginHtml(id), register: designedRegisterHtml(id) }])),
+    v2: over.v2 ?? read("artifacts/api-server/src/lib/module-auth-v2-service.ts"), deploys: over.deploys ?? Object.fromEntries(ids.map((id) => [id, read(`deploy/modules/${id}/vercel.json`)])) };
 }
 const text = (h) => h.replace(/<style[\s\S]*?<\/style>/g, "").replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
 const eachDoc = (t, fn) => { const bad = []; for (const [id, d] of Object.entries(t.docs)) { const m = fn(d, id); if (m) bad.push(`${id}: ${m}`); } return bad.length ? bad.join("; ") : null; };
@@ -107,7 +115,7 @@ const RULES = [
     return have === want && hasDesign("sylo") ? null : `designs: ${have}`;
   }],
   ["demo auth is neutralised: no anchor/form/button reaches a design's demo sign-in; sign-in goes to /login and /register", (t) => {
-    for (const id of t.ids.filter((i) => t.designs.includes(i))) {
+    for (const id of t.ids.filter((i) => t.designs.includes(i) && !isPortal(i))) {
       const o = t.prod[id];
       if (/href="#\/?(login|signin|signup|register|in|up|rst|oidc|welcome)\b[^"]*"/.test(o)) return `${id}: anchor to a demo auth route`;
       if (/<a\b[^>]*\bdata-login\b/.test(o)) return `${id}: data-login anchor still opens the demo portal`;
@@ -115,7 +123,29 @@ const RULES = [
       if (!/hash|location\.hash/.test(o) || !/location\.replace\("\/login"\)/.test(o) || !/location\.replace\("\/register"\)/.test(o)) return `${id}: hash deep links are not redirected`;
       if (!/stopImmediatePropagation/.test(o)) return `${id}: data-go click redirect missing`;
     }
-    const v = t.assets.verve ?? []; if (v.some((r) => /login|auth\.css/.test(r))) return "verve ships a demo login asset";
+    const v = t.assets.verve ?? []; if (v.some((r) => /(^|\/)login\.html$/.test(r))) return "verve ships a demo login asset";
+    return null;
+  }],
+  ["embedded-portal designs (ryft, zynth, skarn): the in-page sign-up/sign-in call /api/auth/module/v2 (no demo accounts, codes, inbox or fake social login), /login and /register redirect into the portal", (t) => {
+    const ids = Object.keys(t.portals); if (ids.join(",") !== "ryft,skarn,zynth") return `portal designs: ${ids.join(",")}`;
+    for (const [id, h] of Object.entries(t.portals)) {
+      if (!/AUTHB\s*=\s*'\/api\/auth\/module\/v2'/.test(h)) return `${id}: portal does not use /api/auth/module/v2`;
+      for (const r of ["/login", "/login/verify", "/signup/complete", "/reset/confirm", "/username/check"]) if (!h.includes(`'${r}'`)) return `${id}: portal never calls ${r}`;
+      if (!/\/signup\/(start|verify)|startSignup|checkSignup/.test(h)) return `${id}: sign-up code step not wired`;
+      if (/MEM\[|persist\(\)|ryft-demo|zynth-demo|Demo code|Demo inbox|Demo account|Demo:|authenticator 123456|'123456'|demo@ayzen\.tech|DB\.users|DB\.code|Skarn!Demo|Ryft!Demo|Zynth!Demo/.test(h)) return `${id}: demo accounts/codes still in the portal`;
+      if (/await wait\(900\)|Connecting to ['"`+$]|setTimeout\(\(\)=>MEM/.test(h)) return `${id}: fake social / OIDC tail still in the portal`;
+      if (!/pendingKey:\s*'ayzen_sylo_oidc_pending'/.test(h) || !/returnToPath:\s*NEXT/.test(h.replace(/returnToPath:NEXT/g, "returnToPath: NEXT"))) return `${id}: OIDC must use the shared /oidc/callback transaction`;
+      if (/session-exchange/.test(h)) return `${id}: portal runs its own OIDC callback`;
+      if (!/stepUp/.test(h) || !/requireCode/.test(h)) return `${id}: sign-in does not require the emailed/step-up code`;
+      const rd = t.redirects[id]; if (!rd?.login || !rd?.register || !/location\.replace\("\/"\+q\+"#/.test(rd.login) || !/location\.replace\("\/"\+q\+"#/.test(rd.register) || rd.login === rd.register) return `${id}: /login and /register do not redirect into the portal`;
+      if (!/\/\^\\\/\(\?!\\\/\)\//.test(rd.login)) return `${id}: redirect does not restrict ?next to same-origin paths`;
+      const o = t.prod[id]; if (!/__AYZEN_HOME/.test(o) || /stopImmediatePropagation/.test(o) || /data-ayzen-signin/.test(o)) return `${id}: production landing still treats the portal as demo auth`;
+      if (!/"\/register"/.test(t.deploys[id]) || !/"\/login"/.test(t.deploys[id])) return `${id}: deploy config does not serve /login and /register`;
+    }
+    const a = t.files["artifacts/api-server/src/app.ts"];
+    if (!/designedRegisterHtml/.test(a) || !/app\.get\(\["\/register", "\/register\/"\]/.test(a) || a.indexOf('app.get(["/register", "/register/"]') > a.indexOf("app.use(express.static(distPath))")) return "server does not serve /register before express.static";
+    if (!/MODULE_SIGNUP_CAPTCHA_MODULES \?\? "wisp,verve,ryft,zynth"/.test(t.v2)) return "ryft and zynth sign-up (captcha step) are not in the captcha module list";
+    if (!/EXTRA_KEYS = \[[^\]]*"country"[^\]]*"workspace"/.test(t.v2)) return "profile extras country/workspace are not whitelisted";
     return null;
   }],
   ["design assets: relative urls are rewritten (no bare assets/ fonts/ refs except under <base>), shipped files exist", (t) => {
@@ -212,10 +242,11 @@ const RULES = [
   ["module build: closeBundle makes the landing index.html and the SPA app.html; assets copied; deploy rewrite targets app.html", (t) => {
     const v = t.files["artifacts/ayzen/vite.module.config.ts"], g = t.files["scripts/gen-module-deploy.mjs"], d = JSON.parse(t.files["deploy/modules/fyra/vercel.json"]);
     if (!/closeBundle\(\)/.test(v) || !/renameSync\(path\.join\(out, 'index\.html'\), path\.join\(out, 'app\.html'\)\)/.test(v)) return "SPA shell is not moved to app.html";
-    if (!/writeFileSync\(path\.join\(out, 'index\.html'\), designedLandingHtml\(moduleId\)/.test(v)) return "landing is not written as index.html";
-    if (!/designAssets\(moduleId\)/.test(v) || !/robots\.txt/.test(v) || !/sitemap\.xml/.test(v) || !/llms\.txt/.test(v) || !/llms-full\.txt/.test(v) || !/about\/index\.html/.test(v)) return "assets/robots/sitemap/llms.txt/llms-full.txt/about not emitted";
+    if (!/emitModuleSite\(moduleId, out/.test(v)) return "landing is not written as index.html";
+    const e = t.files["packages/module-registry/src/landing-designs.mjs"];
+    if (!/emitLandingAssets\(moduleId, out\)/.test(v) || !/w\("index\.html"/.test(e) || !/robots\.txt/.test(e) || !/sitemap\.xml/.test(e) || !/llms\.txt/.test(e) || !/llms-full\.txt/.test(e) || !/about\/index\.html/.test(e)) return "assets/robots/sitemap/llms.txt/llms-full.txt/about not emitted";
     if (/transformIndexHtml/.test(v)) return "the SPA shell must stay clean (no landing injected)";
-    return /destination: "\/app\.html"/.test(g) && d.rewrites[0].destination === "/app.html" ? null : "deploy rewrite is not /app.html";
+    return /destination: "\/app\.html"/.test(g) && d.rewrites.at(-1).destination === "/app.html" ? null : "deploy rewrite is not /app.html";
   }],
   ["server: MODULE_LANDING_ENABLED, '/' answered before express.static, asset allow-list, bundle-safe landings dir", (t) => {
     const a = t.files["artifacts/api-server/src/app.ts"], pk = JSON.parse(t.files["packages/module-registry/package.json"]);
@@ -227,6 +258,18 @@ const RULES = [
     if (!/app\.get\("\/llms\.txt"/.test(a) || !/app\.get\("\/robots\.txt"/.test(a) || !/app\.get\("\/sitemap\.xml"/.test(a)) return "server robots/sitemap/llms.txt routes missing";
     if (!/process\.env\.MODULE_LANDINGS_DIR \?\?=/.test(a)) return "bundled server does not set MODULE_LANDINGS_DIR";
     return pk.exports?.["./landing"] && pk.exports?.["./landing-designs"] ? null : "registry exports missing";
+  }],
+  ["module-own login: a design login must hit the real /api/auth routes (no demo), be served at /login by Express, the module build and the central build, and the central SPA hands module hosts over", (t) => {
+    const a = t.files["artifacts/api-server/src/app.ts"], vc = t.files["artifacts/ayzen/vite.config.ts"], g = t.files["artifacts/ayzen/src/lib/module-landing-gate.ts"], m = t.files["artifacts/ayzen/src/main.tsx"], d = JSON.parse(t.files["deploy/modules/fyra/vercel.json"]);
+    for (const [id, html] of Object.entries(t.logins ?? {})) {
+      if (!/\/api\/auth\/login|\/api\/auth\/module\/v2/.test(html)) return `${id}: login design does not call the auth API (a mock login must not ship)`;
+      if (/any 6-digit code|Design preview, not connected|verve-demo-accounts|Demo code|demo: any 6 digits/i.test(html)) return `${id}: login design is a demo`;
+    }
+    if (!/designedLoginHtml\(c\.id\)/.test(a) || !/app\.get\(\["\/login", "\/login\/"\]/.test(a)) return "server does not serve the module login at /login";
+    if (a.indexOf('app.get(["/login", "/login/"]') > a.indexOf("app.use(express.static(distPath))")) return "/login must be registered before express.static";
+    if (!/emitModuleSite\(id, path\.join\(out, 'm', id\)/.test(vc) || !/VITE_LANDING_DESIGNS/.test(vc) || !/VITE_LOGIN_DESIGNS/.test(vc)) return "central build does not emit /m/<id>/ or define the design lists";
+    if (!/export function designHandoff/.test(g) || !/\/m\/\$\{input\.build\}\/login\//.test(g) || !/designHandoff\(/.test(m)) return "central SPA hand-over to the module landing/login missing";
+    return d.rewrites[0].source === "/login" && d.rewrites[0].destination === "/login/index.html" ? null : "fyra deploy config does not serve /login/index.html";
   }],
   ["SPA fallback gate still exists for non-prerendered hosting (landing component, no I/O)", (t) => {
     const m = t.files["artifacts/ayzen/src/main.tsx"];
@@ -263,8 +306,8 @@ if (process.argv.includes("--self-test")) {
     ["links to auth endpoint", { docs: { sylo: doc.replace('href="/register"', 'href="/api/auth/login"') } }, "login is separate"],
     ["prod landing: second canonical", { prod: { ryft: base.prod.ryft.replace("</head>", '<link rel="canonical" href="https://x/" /></head>') } }, "production landing"],
     ["prod landing: guard removed", { prod: { fyra: base.prod.fyra.replace(/location\.replace\("\/vault"\)|location\.replace\("\/finance[^"]*"\)/, "void 0") } }, "production landing"],
-    ["demo anchor leaks", { prod: { ryft: base.prod.ryft.replace('href="/login"', 'href="#login"') } }, "demo auth"],
-    ["data-login anchor leaks", { prod: { skarn: base.prod.skarn.replace('href="/login"', 'href="/login" data-login') } }, "demo auth"],
+    ["demo anchor leaks", { prod: { sylo: base.prod.sylo.replace('href="/login"', 'href="#login"') } }, "demo auth"],
+    ["data-login anchor leaks", { prod: { warde: base.prod.warde.replace('href="/login"', 'href="/login" data-login') } }, "demo auth"],
     ["login.html link leaks", { prod: { wisp: base.prod.wisp.replace('action="/login"', 'action="login/index.html"') } }, "demo auth"],
     ["verve ships demo login", { assets: { ...base.assets, verve: [...base.assets.verve, "login.html"] } }, "demo auth"],
     ["unrewritten asset url", { prod: { wisp: base.prod.wisp.replace("/landing-assets/wisp/fonts/", "fonts/") } }, "design assets"],
@@ -272,7 +315,7 @@ if (process.argv.includes("--self-test")) {
     ["llms.txt without summary", { llms: Object.fromEntries(base.ids.map((i) => [i, llmsTxt(i).replace(/^# [^\n]*\n\n> /, "# x\n\n")])) }, "llms.txt per module"],
     ["llms.txt links off-host", { llms: { ...Object.fromEntries(base.ids.map((i) => [i, llmsTxt(i)])), ryft: llmsTxt("ryft").replace("https://ryft.ayzen.tech/login", "https://evil.example/login") } }, "llms.txt per module"],
     ["llms.txt route removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('app.get("/llms.txt"', 'app.get("/llms-x.txt"') } }, "server:"],
-    ["llms.txt not emitted by build", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts").replace(/llms\.txt/g, "x.txt") } }, "module build:"],
+    ["llms.txt not emitted by build", { files: { "packages/module-registry/src/landing-designs.mjs": f("packages/module-registry/src/landing-designs.mjs").replace(/llms\.txt/g, "x.txt") } }, "module build:"],
     ["about: FAQPage out of sync", { abouts: { ...Object.fromEntries(base.ids.map((i) => [i, aboutDocument(getLandingContent(i))])), wisp: aboutDocument(getLandingContent("wisp")).replace("<details>", "<details data-x>").replace(/<details data-x>[\s\S]*?<\/details>/, "") } }, "/about page"],
     ["about: canonical wrong", { abouts: { ...Object.fromEntries(base.ids.map((i) => [i, aboutDocument(getLandingContent(i))])), fyra: aboutDocument(getLandingContent("fyra")).replace('/about" />', '/" />') } }, "/about page"],
     ["about: loads a script", { abouts: { ...Object.fromEntries(base.ids.map((i) => [i, aboutDocument(getLandingContent(i))])), zynth: aboutDocument(getLandingContent("zynth")).replace("</body>", '<script src="/x.js"></script></body>') } }, "/about page"],
@@ -287,13 +330,31 @@ if (process.argv.includes("--self-test")) {
     ["main.tsx imports App statically", { files: { "artifacts/ayzen/src/main.tsx": 'import App from "./App";\n' + f("artifacts/ayzen/src/main.tsx") } }, "SPA gate"],
     ["gate ignores token", { files: { "artifacts/ayzen/src/lib/module-landing-gate.ts": f("artifacts/ayzen/src/lib/module-landing-gate.ts").replace("p === \"\" && !input.hasToken", 'p === ""') } }, "gate logic"],
     ["landing page fetches", { files: { "artifacts/ayzen/src/pages/modules/landing.tsx": f("artifacts/ayzen/src/pages/modules/landing.tsx") + "\nvoid fetch('/api/me');\n" } }, "gate logic"],
-    ["landing not written as index.html", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts").replace("designedLandingHtml(moduleId)!", "''") } }, "module build:"],
+    ["landing not written as index.html", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts").replace("emitModuleSite(moduleId, out", "noop(moduleId, out") } }, "module build:"],
     ["shell injected again", { files: { "artifacts/ayzen/vite.module.config.ts": f("artifacts/ayzen/vite.module.config.ts") + "\n// transformIndexHtml(html)\n" } }, "module build:"],
     ["deploy rewrite back to index.html", { files: { "deploy/modules/fyra/vercel.json": f("deploy/modules/fyra/vercel.json").replace("/app.html", "/index.html") } }, "module build:"],
     ["server switch removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('MODULE_LANDING_ENABLED !== "0"', "false") } }, "server:"],
     ["static before landing route", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('app.use(express.static(distPath));\n  app.get("/{*splat}"', 'app.get("/{*splat}"').replace('app.get("/", (req, res, next) => {\n    const landing', 'app.use(express.static(distPath));\n  app.get("/", (req, res, next) => {\n    const landing') } }, "server:"],
     ["asset allow-list removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace("LANDING_ASSET_FILES.get(key)", "key") } }, "server:"],
     ["SPA gate removed", { files: { "artifacts/ayzen/src/main.tsx": f("artifacts/ayzen/src/main.tsx").replace("shouldShowModuleLanding(", "noop(") } }, "SPA fallback gate"],
+    ["portal: demo accounts back", { portals: { ...base.portals, ryft: base.portals.ryft + "MEM['demo@ayzen.tech']" } }, "embedded-portal"],
+    ["portal: not on the module API", { portals: { ...base.portals, zynth: base.portals.zynth.replaceAll("/api/auth/module/v2", "/api/x") } }, "embedded-portal"],
+    ["portal: demo inbox back", { portals: { ...base.portals, skarn: base.portals.skarn + "Demo inbox" } }, "embedded-portal"],
+    ["portal: fake social login back", { portals: { ...base.portals, ryft: base.portals.ryft + "toast('Connecting to '+p+'…')" } }, "embedded-portal"],
+    ["portal: own OIDC callback", { portals: { ...base.portals, zynth: base.portals.zynth + "fetch(OIDC.issuer+'/api/auth/session-exchange')" } }, "embedded-portal"],
+    ["portal: sign-in without the code step", { portals: { ...base.portals, skarn: base.portals.skarn.replaceAll("requireCode", "rc") } }, "embedded-portal"],
+    ["portal: /register does not redirect", { redirects: { ...base.redirects, ryft: { ...base.redirects.ryft, register: "<html></html>" } } }, "embedded-portal"],
+    ["portal: open redirect via ?next", { redirects: { ...base.redirects, zynth: { ...base.redirects.zynth, login: base.redirects.zynth.login.replace("(?!\\/)", "") } } }, "embedded-portal"],
+    ["portal: captcha list without ryft", { v2: base.v2.replace("wisp,verve,ryft,zynth", "wisp,verve") }, "embedded-portal"],
+    ["portal: country extra dropped", { v2: base.v2.replace('"country", ', "") }, "embedded-portal"],
+    ["portal: /register rewrite missing", { deploys: { ...base.deploys, skarn: base.deploys.skarn.replace('"/register"', '"/x"') } }, "embedded-portal"],
+    ["demo login shipped", { logins: { wisp: "<html>Design preview, not connected to a server: any 6-digit code works.</html>" } }, "module-own login"],
+    ["verve demo accounts leak into login", { logins: { verve: "<html>/api/auth/module/v2 localStorage.getItem('verve-demo-accounts')</html>" } }, "module-own login"],
+    ["login not calling real API", { logins: { fyra: "<html>no api</html>" } }, "module-own login"],
+    ["server login route removed", { files: { "artifacts/api-server/src/app.ts": f("artifacts/api-server/src/app.ts").replace('app.get(["/login", "/login/"]', 'app.get(["/x", "/x/"]') } }, "module-own login"],
+    ["central build stops emitting /m/<id>", { files: { "artifacts/ayzen/vite.config.ts": f("artifacts/ayzen/vite.config.ts").replace("emitModuleSite(id, path.join(out, 'm', id)", "noop(id, path.join(out, 'm', id)") } }, "module-own login"],
+    ["central hand-over removed", { files: { "artifacts/ayzen/src/main.tsx": f("artifacts/ayzen/src/main.tsx").replace("designHandoff(", "noop(") } }, "module-own login"],
+    ["fyra deploy /login rewrite removed", { files: { "deploy/modules/fyra/vercel.json": f("deploy/modules/fyra/vercel.json").replace("/login/index.html", "/app.html") } }, "module-own login"],
     ["CI wiring removed", { files: { ".github/workflows/ci.yml": f(".github/workflows/ci.yml").replace(/validate-w2-p4\.mjs/g, "x") } }, "CI runs"],
   ];
   let survivors = 0;

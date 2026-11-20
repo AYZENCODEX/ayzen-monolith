@@ -1,0 +1,612 @@
+/**
+ * module-auth-v2-service.ts — the extra steps of the designed module login flows (email code, captcha, username,
+ * referral, step-up, code-based reset, profile), on top of module-auth-service.ts. Same style: pure functions over an
+ * injected AuthDb, no Express, so they run against a throwaway Postgres in module-auth-v2-service.db.test.ts.
+ *
+ * Nothing here trusts the client: codes are stored only as HMAC hashes, are single-use with an attempt cap, and the
+ * captcha / step-up challenges are stateless HMAC blobs that carry their own expiry and are bound to the module.
+ */
+import { createHmac, randomInt, timingSafeEqual } from "node:crypto";
+import type { ModuleId } from "@ayzen/module-registry";
+import {
+  audit, finishPasswordLogin, normalizeIdentifier, signupWithPassword, verifyLoginCredentials,
+  type AuthDb, type ClientInfo, type Fail, type IssuedModuleSession, type Query,
+} from "./module-auth-service";
+import { isKnownModuleId } from "./module-session-policy";
+import { checkPasswordPolicy, hashModulePassword } from "./module-password";
+import { generateBase32Secret, totpUri, totpVerify } from "./totp";
+
+export const OTP_TTL_MINUTES = 10;
+export const OTP_MAX_ATTEMPTS = 5;
+export const OTP_MAX_PER_HOUR = 5;
+export const CHALLENGE_TTL_SECONDS = 300;
+export const USERNAME_RE = /^[a-z0-9._]{3,30}$/;
+
+export type V2ErrorCode =
+  | "INVALID_CAPTCHA" | "INVALID_CODE" | "TOO_MANY_CODES" | "USERNAME_INVALID" | "USERNAME_TAKEN" | "REFERRAL_INVALID"
+  | "CHALLENGE_INVALID" | "PROFILE_INVALID" | "MAIL_INVALID" | "MAIL_TAKEN" | "WORKSPACE_INVALID" | "WORKSPACE_TAKEN" | "TOTP_ALREADY_ENABLED" | "TOTP_NOT_STARTED" | "PASSKEY_INVALID" | "PASSKEY_LIMIT";
+export type V2Fail = { ok: false; code: V2ErrorCode | Fail["code"] };
+const bad = (code: V2Fail["code"]): V2Fail => ({ ok: false, code });
+
+const secretOf = (env: NodeJS.ProcessEnv = process.env) =>
+  env.MODULE_AUTH_HMAC_SECRET || env.AYZEN_JWT_SECRET || env.JWT_SECRET || "ayzen-dev-only-module-auth-secret";
+const hmac = (secret: string, s: string) => createHmac("sha256", secret).update(s, "utf8").digest("hex");
+const safeEq = (a: string, b: string) => a.length === b.length && timingSafeEqual(Buffer.from(a), Buffer.from(b));
+
+/** Modules whose sign-up page has the captcha step (wisp, verve) (their design asks for it); the others rely on the per-address and per-IP limits. */
+export const captchaModules = (env: NodeJS.ProcessEnv = process.env): Set<string> =>
+  new Set((env.MODULE_SIGNUP_CAPTCHA_MODULES ?? "wisp,verve,ryft,zynth").split(",").map((x) => x.trim()).filter(Boolean));
+
+/** Step-up at login: off (default) = only accounts with an enrolled authenticator are challenged; email = everyone gets an emailed code. */
+export type StepUpMode = "off" | "email";
+export const stepUpMode = (env: NodeJS.ProcessEnv = process.env): StepUpMode => (env.MODULE_LOGIN_STEP_UP === "email" ? "email" : "off");
+
+// ─── stateless signed blobs (captcha + step-up challenge) ────────────────────────────────────────
+
+function sign(kind: string, module: ModuleId, payload: Record<string, unknown>, ttlSec: number, secret: string, now = Date.now()): string {
+  const body = Buffer.from(JSON.stringify({ k: kind, m: module, e: Math.floor(now / 1000) + ttlSec, ...payload })).toString("base64url");
+  return `${body}.${hmac(secret, `${kind}.${body}`)}`;
+}
+function open(kind: string, module: ModuleId, blob: unknown, secret: string, now = Date.now()): Record<string, any> | null {
+  if (typeof blob !== "string" || blob.length > 1000) return null;
+  const [body, mac] = blob.split(".");
+  if (!body || !mac || !safeEq(mac, hmac(secret, `${kind}.${body}`))) return null;
+  try {
+    const p = JSON.parse(Buffer.from(body, "base64url").toString("utf8"));
+    if (p.k !== kind || p.m !== module || typeof p.e !== "number" || p.e < Math.floor(now / 1000)) return null;
+    return p;
+  } catch { return null; }
+}
+
+/** A small arithmetic question; the answer only lives (HMAC-bound) inside the blob. Cheap bot speed bump, not a fraud product. */
+export function newCaptcha(module: ModuleId, opts: { env?: NodeJS.ProcessEnv; now?: number } = {}) {
+  const a = randomInt(2, 10), b = randomInt(2, 10);
+  const secret = secretOf(opts.env);
+  const salt = randomInt(1, 2 ** 31).toString(36);
+  return { id: sign("captcha", module, { h: hmac(secret, `${salt}:${a + b}`), s: salt }, CHALLENGE_TTL_SECONDS, secret, opts.now), question: `${a} + ${b}` };
+}
+export function checkCaptcha(module: ModuleId, id: unknown, answer: unknown, opts: { env?: NodeJS.ProcessEnv; now?: number } = {}): boolean {
+  const secret = secretOf(opts.env);
+  const p = open("captcha", module, id, secret, opts.now);
+  const n = typeof answer === "number" ? answer : typeof answer === "string" && /^\d{1,3}$/.test(answer.trim()) ? Number(answer) : NaN;
+  return !!p && Number.isInteger(n) && safeEq(String(p.h), hmac(secret, `${p.s}:${n}`));
+}
+
+// ─── email codes ─────────────────────────────────────────────────────────────────────────────────
+
+export type OtpPurpose = "signup" | "login" | "reset";
+const codeHash = (secret: string, module: string, purpose: string, idn: string, code: string) => hmac(secret, `otp:${module}:${purpose}:${idn}:${code}`);
+
+/** Issues a fresh 6-digit code (older unused ones are voided). Returns null when rate-limited. The code is returned only so the caller can email it. */
+export async function issueOtp(
+  db: AuthDb,
+  input: { module: ModuleId; purpose: OtpPurpose; identifier: string; ip: string | null; env?: NodeJS.ProcessEnv },
+): Promise<{ code: string } | null> {
+  const secret = secretOf(input.env);
+  return db.transaction(async (q) => {
+    // Serialise per (module, identifier) so the hourly cap cannot be raced past.
+    await q(`SELECT pg_advisory_xact_lock(hashtextextended($1, 0))`, [`otp:${input.module}:${input.identifier}`]);
+    const recent = await q(
+      `SELECT count(*)::int n FROM module_otps WHERE module=$1 AND identifier_norm=$2 AND created_at > NOW() - INTERVAL '1 hour'`,
+      [input.module, input.identifier],
+    );
+    if (recent.rows[0].n >= OTP_MAX_PER_HOUR) return null;
+    await q(`UPDATE module_otps SET used_at = NOW() WHERE module=$1 AND identifier_norm=$2 AND purpose=$3 AND used_at IS NULL`, [input.module, input.identifier, input.purpose]);
+    const code = String(randomInt(0, 1_000_000)).padStart(6, "0");
+    await q(
+      `INSERT INTO module_otps (module, purpose, identifier_norm, code_hash, expires_at, requested_ip)
+       VALUES ($1,$2,$3,$4, NOW() + make_interval(mins => $5::int), $6)`,
+      [input.module, input.purpose, input.identifier, codeHash(secret, input.module, input.purpose, input.identifier, code), OTP_TTL_MINUTES, input.ip],
+    );
+    return { code };
+  });
+}
+
+/** Checks a code and, when `consume`, burns it atomically. Wrong guesses count against the newest live code. */
+export async function checkOtp(
+  q: Query,
+  input: { module: ModuleId; purpose: OtpPurpose; identifier: string; code: unknown; consume: boolean; env?: NodeJS.ProcessEnv },
+): Promise<boolean> {
+  if (typeof input.code !== "string" || !/^\d{6}$/.test(input.code.trim())) return false;
+  const secret = secretOf(input.env);
+  const r = await q(
+    `SELECT id, code_hash FROM module_otps
+      WHERE module=$1 AND purpose=$2 AND identifier_norm=$3 AND used_at IS NULL AND expires_at > NOW() AND attempts < $4
+      ORDER BY id DESC LIMIT 1 FOR UPDATE`,
+    [input.module, input.purpose, input.identifier, OTP_MAX_ATTEMPTS],
+  );
+  const row = r.rows[0];
+  if (!row) return false;
+  const ok = safeEq(row.code_hash, codeHash(secret, input.module, input.purpose, input.identifier, input.code.trim()));
+  if (!ok) { await q(`UPDATE module_otps SET attempts = attempts + 1 WHERE id = $1`, [row.id]); return false; }
+  if (input.consume) await q(`UPDATE module_otps SET used_at = NOW() WHERE id = $1`, [row.id]);
+  return true;
+}
+
+// ─── username / referral ─────────────────────────────────────────────────────────────────────────
+
+export const normalizeUsername = (raw: unknown): string | null => {
+  if (typeof raw !== "string") return null;
+  const v = raw.trim().replace(/^@/, "").toLowerCase();
+  return USERNAME_RE.test(v) ? v : null;
+};
+
+export async function isUsernameFree(q: Query, module: ModuleId, raw: unknown): Promise<{ ok: true; available: boolean; username: string } | V2Fail> {
+  const username = normalizeUsername(raw);
+  if (!username) return bad("USERNAME_INVALID");
+  const r = await q(`SELECT 1 FROM module_profiles WHERE module=$1 AND username_norm=$2`, [module, username]);
+  return { ok: true, available: r.rows.length === 0, username };
+}
+
+export const normalizeWorkspaceSlug = (raw: unknown): string | null => {
+  if (typeof raw !== "string") return null;
+  const v = raw.trim().toLowerCase();
+  return /^[a-z0-9](?:[a-z0-9-]{1,30})[a-z0-9]$/.test(v) ? v : null;
+};
+/** Workspace URLs (skarn) are unique per module. Stored in profile.extra.workspaceSlug; completeSignup re-checks under an advisory lock. */
+export async function isWorkspaceSlugFree(q: Query, module: ModuleId, raw: unknown): Promise<{ ok: true; available: boolean; slug: string } | V2Fail> {
+  const slug = normalizeWorkspaceSlug(raw);
+  if (!slug) return bad("WORKSPACE_INVALID");
+  const r = await q(`SELECT 1 FROM module_profiles WHERE module=$1 AND extra->>'workspaceSlug'=$2`, [module, slug]);
+  return { ok: true, available: r.rows.length === 0, slug };
+}
+
+export const normalizeMailLocal = (raw: unknown): string | null => {
+  if (typeof raw !== "string") return null;
+  const v = raw.trim().toLowerCase();
+  return /^[a-z0-9._-]{3,30}$/.test(v) ? v : null;
+};
+
+/** Mail-style modules (wisp) let people claim a local part; unique per module, independent of the username. */
+export async function isMailLocalFree(q: Query, module: ModuleId, raw: unknown): Promise<{ ok: true; available: boolean; mail: string } | V2Fail> {
+  const mail = normalizeMailLocal(raw);
+  if (!mail) return bad("MAIL_INVALID");
+  const r = await q(`SELECT 1 FROM module_profiles WHERE module=$1 AND mail_local=$2`, [module, mail]);
+  return { ok: true, available: r.rows.length === 0, mail };
+}
+
+/** Looks at the emailed sign-up code without consuming it (wrong guesses still count toward the cap). */
+export async function checkSignupCode(
+  db: AuthDb, input: { module: unknown; email: unknown; code: unknown; env?: NodeJS.ProcessEnv },
+): Promise<{ ok: true } | V2Fail> {
+  if (!isKnownModuleId(input.module)) return bad("INVALID_MODULE");
+  const identifier = normalizeIdentifier(input.email);
+  if (!identifier) return bad("INVALID_CODE");
+  const module = input.module;
+  const good = await db.transaction((q) => checkOtp(q, { module, purpose: "signup", identifier, code: input.code, consume: false, env: input.env }));
+  return good ? { ok: true } : bad("INVALID_CODE");
+}
+
+/** A referral code is an existing AYZEN user's code. Only validity is revealed, never whose it is. */
+export async function isReferralValid(q: Query, raw: unknown): Promise<boolean> {
+  if (typeof raw !== "string" || !/^[A-Za-z0-9_-]{3,40}$/.test(raw.trim())) return false;
+  const r = await q(`SELECT 1 FROM users WHERE referral_code = $1 AND status = 'active'`, [raw.trim()]);
+  return r.rows.length > 0;
+}
+
+// ─── sign-up (email code → account) ──────────────────────────────────────────────────────────────
+
+/** Step 1. Answers the same whether or not the email is already registered (no account enumeration); returns a code to mail only for a free email. */
+export async function startSignup(
+  db: AuthDb,
+  input: { module: unknown; email: unknown; captchaId: unknown; captchaAnswer: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv; now?: number },
+): Promise<{ ok: true; send: { to: string; code: string } | null } | V2Fail> {
+  if (!isKnownModuleId(input.module)) return bad("INVALID_MODULE");
+  const module = input.module;
+  const identifier = normalizeIdentifier(input.email);
+  if (!identifier) return bad("INVALID_IDENTIFIER");
+  if (captchaModules(input.env).has(module) && !checkCaptcha(module, input.captchaId, input.captchaAnswer, { env: input.env, now: input.now })) return bad("INVALID_CAPTCHA");
+  const taken = await db.query(`SELECT 1 FROM module_credentials WHERE module=$1 AND identifier_norm=$2`, [module, identifier]);
+  if (taken.rows.length) return { ok: true, send: null };
+  const otp = await issueOtp(db, { module, purpose: "signup", identifier, ip: input.client.ip, env: input.env });
+  if (!otp) return bad("TOO_MANY_CODES");
+  return { ok: true, send: { to: identifier, code: otp.code } };
+}
+
+export interface ProfileInput { firstName?: unknown; lastName?: unknown; location?: unknown; bio?: unknown; links?: unknown; extra?: unknown }
+const EXTRA_KEYS = ["x", "telegram", "discord", "headline", "country", "workspace", "workspaceSlug", "teamSize"] as const;
+const clip = (v: unknown, max: number): string | null => (typeof v === "string" && v.trim() ? v.trim().slice(0, max) : null);
+export function cleanProfile(p: ProfileInput | undefined) {
+  const links = Array.isArray(p?.links) ? (p!.links as unknown[]).filter((l): l is string => typeof l === "string" && /^https?:\/\//i.test(l)).slice(0, 5).map((l) => l.slice(0, 300)) : [];
+  const extra: Record<string, string> = {};
+  const rawExtra = (p?.extra && typeof p.extra === "object" ? p.extra : {}) as Record<string, unknown>;
+  for (const k of EXTRA_KEYS) { const v = clip(rawExtra[k], 100); if (v) extra[k] = v; }
+  return { firstName: clip(p?.firstName, 60), lastName: clip(p?.lastName, 60), location: clip(p?.location, 120), bio: clip(p?.bio, 500), links, extra };
+}
+
+/** Step 2. Proves the mailbox with the code, then creates account + credential (identifier verified) + profile in one transaction. */
+export async function completeSignup(
+  db: AuthDb,
+  input: {
+    module: unknown; email: unknown; code: unknown; password: unknown; username: unknown; referral?: unknown; profile?: ProfileInput; mail?: unknown;
+    client: ClientInfo; env?: NodeJS.ProcessEnv;
+  },
+): Promise<({ ok: true } & IssuedModuleSession) | V2Fail> {
+  if (!isKnownModuleId(input.module)) return bad("INVALID_MODULE");
+  const module = input.module;
+  const identifier = normalizeIdentifier(input.email);
+  if (!identifier) return bad("INVALID_IDENTIFIER");
+  const username = normalizeUsername(input.username);
+  if (!username) return bad("USERNAME_INVALID");
+  // Cheap checks first so a typo in the password or username does not burn the emailed code.
+  const policy = checkPasswordPolicy(input.password, identifier);
+  if (!policy.ok) return bad(policy.code);
+  let referral: string | null = null;
+  if (typeof input.referral === "string" && input.referral.trim()) {
+    if (!(await isReferralValid(db.query, input.referral))) return bad("REFERRAL_INVALID");
+    referral = input.referral.trim();
+  }
+  const free = await isUsernameFree(db.query, module, username);
+  if (!free.ok) return free;
+  if (!free.available) return bad("USERNAME_TAKEN");
+  let mail: string | null = null;
+  if (input.mail !== undefined && input.mail !== null && input.mail !== "") {
+    const m = await isMailLocalFree(db.query, module, input.mail);
+    if (!m.ok) return m;
+    if (!m.available) return bad("MAIL_TAKEN");
+    mail = m.mail;
+  }
+  const profile = cleanProfile(input.profile);
+  if (profile.extra.workspaceSlug !== undefined) {
+    const ws = await isWorkspaceSlugFree(db.query, module, profile.extra.workspaceSlug);
+    if (!ws.ok) return ws;
+    if (!ws.available) return bad("WORKSPACE_TAKEN");
+    profile.extra.workspaceSlug = ws.slug;
+  }
+
+  // The code is checked-and-burned only together with the account creation: if creation fails, the code survives.
+  let codeOk = false;
+  try {
+    const r = await db.transaction(async (q) => {
+      codeOk = await checkOtp(q, { module, purpose: "signup", identifier, code: input.code, consume: false, env: input.env });
+      if (!codeOk) return { ok: false, code: "INVALID_CODE" } as V2Fail;
+      if (profile.extra.workspaceSlug) { // race-free uniqueness without a schema change: serialise on the slug, then look again
+        await q(`SELECT pg_advisory_xact_lock(hashtext($1))`, [`ws:${module}:${profile.extra.workspaceSlug}`]);
+        const again = await q(`SELECT 1 FROM module_profiles WHERE module=$1 AND extra->>'workspaceSlug'=$2`, [module, profile.extra.workspaceSlug]);
+        if (again.rows.length) return { ok: false, code: "WORKSPACE_TAKEN" } as V2Fail;
+      }
+      const s = await signupWithPassword(
+        { query: q, transaction: (fn) => fn(q) },
+        {
+          module, identifier, password: input.password, client: input.client, verified: true,
+          afterCreate: async (tq, acct) => {
+            await tq(
+              `INSERT INTO module_profiles (module_account_id, module, username, username_norm, first_name, last_name, display_name, location, bio, links, extra, referral_code_used, mail_local)
+               VALUES ($1,$2,$3,$3,$4,$5,$6,$7,$8,$9::jsonb,$10::jsonb,$11,$12)`,
+              [acct.id, module, username, profile.firstName, profile.lastName, [profile.firstName, profile.lastName].filter(Boolean).join(" ") || username,
+               profile.location, profile.bio, JSON.stringify(profile.links), JSON.stringify(profile.extra), referral, mail],
+            );
+          },
+        },
+      );
+      if (!s.ok) return s as V2Fail;
+      await q(`UPDATE module_otps SET used_at = NOW() WHERE module=$1 AND purpose='signup' AND identifier_norm=$2 AND used_at IS NULL`, [module, identifier]);
+      return s;
+    });
+    return r;
+  } catch (e) {
+    if ((e as any)?.code === "23505" && /username/.test(String((e as any).constraint))) return bad("USERNAME_TAKEN");
+    if ((e as any)?.code === "23505" && /mail/.test(String((e as any).constraint))) return bad("MAIL_TAKEN");
+    throw e;
+  }
+}
+
+// ─── login with optional step-up ─────────────────────────────────────────────────────────────────
+
+export type LoginResult =
+  | ({ ok: true; stepUp?: undefined } & IssuedModuleSession)
+  | { ok: true; stepUp: { challenge: string; methods: Array<"passkey" | "totp" | "email">; send: { to: string; code: string } | null } }
+  | V2Fail;
+
+/** Password check, then either a session (default) or a short-lived challenge when an extra factor is required. */
+export async function startLogin(
+  db: AuthDb,
+  input: { module: unknown; email: unknown; password: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv; now?: number; requireCode?: boolean },
+): Promise<LoginResult> {
+  const v = await verifyLoginCredentials(db, { module: input.module, identifier: input.email, password: input.password, client: input.client, env: input.env });
+  if (!v.ok) return v;
+  const mode = input.requireCode ? "email" : stepUpMode(input.env);
+  const totp = v.row.mfa_enabled && !!v.row.mfa_secret;
+  const passkey = (await db.query(`SELECT 1 FROM module_passkeys WHERE module_account_id=$1 AND module=$2 LIMIT 1`, [v.row.module_account_id, v.module])).rows.length > 0;
+  if (!totp && !passkey && mode === "off") return finishPasswordLogin(db, v, input.client);
+  const methods: Array<"passkey" | "totp" | "email"> = [...(passkey ? ["passkey" as const] : []), ...(totp ? ["totp" as const] : []), "email"];
+  const secret = secretOf(input.env);
+  const challenge = sign("stepup", v.module, { a: v.row.module_account_id, c: v.row.cred_id }, CHALLENGE_TTL_SECONDS, secret, input.now);
+  // The emailed code goes out at once when it is the only way through; with an authenticator it is sent on request.
+  let send: { to: string; code: string } | null = null;
+  if (!totp && !passkey) {
+    const otp = await issueOtp(db, { module: v.module, purpose: "login", identifier: normalizeIdentifier(input.email)!, ip: input.client.ip, env: input.env });
+    if (!otp) return bad("TOO_MANY_CODES");
+    send = { to: v.row.identifier, code: otp.code };
+  }
+  return { ok: true, stepUp: { challenge, methods, send } };
+}
+
+/** Sends the emailed fallback for an authenticator account (explicit user action). */
+export async function sendLoginEmailCode(
+  db: AuthDb, input: { module: unknown; challenge: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv; now?: number },
+): Promise<{ ok: true; send: { to: string; code: string } } | V2Fail> {
+  if (!isKnownModuleId(input.module)) return bad("INVALID_MODULE");
+  const p = open("stepup", input.module, input.challenge, secretOf(input.env), input.now);
+  if (!p) return bad("CHALLENGE_INVALID");
+  const r = await db.query(
+    `SELECT identifier, identifier_norm FROM module_credentials WHERE id=$1 AND module_account_id=$2 AND module=$3`,
+    [p.c, p.a, input.module],
+  );
+  const row = r.rows[0];
+  if (!row) return bad("CHALLENGE_INVALID");
+  const otp = await issueOtp(db, { module: input.module, purpose: "login", identifier: row.identifier_norm, ip: input.client.ip, env: input.env });
+  if (!otp) return bad("TOO_MANY_CODES");
+  return { ok: true, send: { to: row.identifier, code: otp.code } };
+}
+
+/** Second step: a TOTP code or the emailed code opens the session. The challenge is bound to the module and expires in 5 minutes. */
+export async function completeLogin(
+  db: AuthDb,
+  input: { module: unknown; challenge: unknown; code: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv; now?: number },
+): Promise<({ ok: true } & IssuedModuleSession) | V2Fail> {
+  if (!isKnownModuleId(input.module)) return bad("INVALID_MODULE");
+  const module = input.module;
+  const p = open("stepup", module, input.challenge, secretOf(input.env), input.now);
+  if (!p) return bad("CHALLENGE_INVALID");
+  const found = await db.query(
+    `SELECT c.id AS cred_id, c.module_account_id, c.password_hash, c.mfa_enabled, c.mfa_secret, c.identifier, c.identifier_norm,
+            a.user_id, a.status, a.module_uid, u.status AS user_status
+       FROM module_credentials c JOIN module_accounts a ON a.id=c.module_account_id JOIN users u ON u.id=a.user_id
+      WHERE c.id=$1 AND c.module_account_id=$2 AND c.module=$3`,
+    [p.c, p.a, module],
+  );
+  const row = found.rows[0];
+  const dead = !row || row.status !== "active" || row.user_status === "banned" || row.user_status === "suspended";
+  if (dead) return bad("CHALLENGE_INVALID");
+  const code = typeof input.code === "string" ? input.code.trim() : "";
+  let ok = false;
+  if (row.mfa_enabled && row.mfa_secret && /^\d{6}$/.test(code)) ok = totpVerify(code, row.mfa_secret);
+  if (!ok) {
+    // Receiving the emailed code proves the mailbox, so a successful one also verifies the identifier.
+    ok = await db.transaction(async (q) => {
+      const good = await checkOtp(q, { module, purpose: "login", identifier: row.identifier_norm, code, consume: true, env: input.env });
+      if (good) await q(`UPDATE module_credentials SET identifier_verified_at = COALESCE(identifier_verified_at, NOW()) WHERE id=$1`, [row.cred_id]);
+      return good;
+    });
+  }
+  if (!ok) {
+    await audit(db.query, module, row.module_account_id, "step_up", "failure", input.client).catch(() => {});
+    return bad("INVALID_CODE");
+  }
+  await audit(db.query, module, row.module_account_id, "step_up", "success", input.client).catch(() => {});
+  return finishPasswordLogin(db, { module, password: "", row } as any, input.client);
+}
+
+// ─── code-based password reset ───────────────────────────────────────────────────────────────────
+
+/** Always answers the same; a code is returned for mailing only when an active account exists. */
+export async function startCodeReset(
+  db: AuthDb, input: { module: unknown; email: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv },
+): Promise<{ send: { to: string; code: string } | null }> {
+  if (!isKnownModuleId(input.module)) return { send: null };
+  const idn = normalizeIdentifier(input.email);
+  if (!idn) return { send: null };
+  const r = await db.query(
+    `SELECT c.identifier FROM module_credentials c JOIN module_accounts a ON a.id=c.module_account_id WHERE c.module=$1 AND c.identifier_norm=$2 AND a.status='active'`,
+    [input.module, idn],
+  );
+  if (!r.rows[0]) return { send: null };
+  const otp = await issueOtp(db, { module: input.module, purpose: "reset", identifier: idn, ip: input.client.ip, env: input.env });
+  return { send: otp ? { to: r.rows[0].identifier as string, code: otp.code } : null };
+}
+
+export async function completeCodeReset(
+  db: AuthDb, input: { module: unknown; email: unknown; code: unknown; newPassword: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv },
+): Promise<{ ok: true } | V2Fail> {
+  if (!isKnownModuleId(input.module)) return bad("INVALID_MODULE");
+  const module = input.module;
+  const idn = normalizeIdentifier(input.email);
+  if (!idn) return bad("INVALID_CODE");
+  const policy = checkPasswordPolicy(input.newPassword, idn);
+  if (!policy.ok) return bad(policy.code);
+  const hash = await hashModulePassword(input.newPassword as string);
+  return db.transaction(async (q) => {
+    if (!(await checkOtp(q, { module, purpose: "reset", identifier: idn, code: input.code, consume: true, env: input.env }))) return bad("INVALID_CODE");
+    const u = await q(
+      `UPDATE module_credentials SET password_hash=$3, password_updated_at=NOW(), failed_attempts=0, locked_until=NULL,
+              identifier_verified_at=COALESCE(identifier_verified_at, NOW()), updated_at=NOW()
+        WHERE module=$1 AND identifier_norm=$2 RETURNING module_account_id`,
+      [module, idn, hash],
+    );
+    if (!u.rows[0]) return bad("INVALID_CODE");
+    await q(`UPDATE user_sessions SET revoked_at=NOW() WHERE module_account_id=$1 AND revoked_at IS NULL`, [u.rows[0].module_account_id]);
+    await audit(q, module, u.rows[0].module_account_id, "password_reset_completed", "success", input.client, { via: "code" });
+    return { ok: true } as const;
+  });
+}
+
+// ─── profile ─────────────────────────────────────────────────────────────────────────────────────
+
+export async function getProfile(q: Query, moduleAccountId: number) {
+  const r = await q(`SELECT username, first_name, last_name, display_name, location, bio, links, extra, mail_local FROM module_profiles WHERE module_account_id=$1`, [moduleAccountId]);
+  const p = r.rows[0];
+  return p ? { username: p.username as string, firstName: p.first_name as string | null, lastName: p.last_name as string | null, displayName: p.display_name as string | null, location: p.location as string | null, bio: p.bio as string | null, links: (p.links ?? []) as string[], extra: (p.extra ?? {}) as Record<string, string>, mail: p.mail_local as string | null } : null;
+}
+
+export async function updateProfile(
+  db: AuthDb, input: { module: ModuleId; moduleAccountId: number; profile: ProfileInput; client: ClientInfo },
+): Promise<{ ok: true } | V2Fail> {
+  const p = cleanProfile(input.profile);
+  return db.transaction(async (q) => {
+    const u = await q(
+      `UPDATE module_profiles SET first_name=$3, last_name=$4, display_name=COALESCE(NULLIF(trim(concat_ws(' ', $3::text, $4::text)), ''), username),
+              location=$5, bio=$6, links=$7::jsonb, extra=$8::jsonb, updated_at=NOW()
+        WHERE module_account_id=$1 AND module=$2`,
+      [input.moduleAccountId, input.module, p.firstName, p.lastName, p.location, p.bio, JSON.stringify(p.links), JSON.stringify(p.extra)],
+    );
+    if (!u.rowCount) return bad("PROFILE_INVALID");
+    await audit(q, input.module, input.moduleAccountId, "profile_updated", "success", input.client);
+    return { ok: true } as const;
+  });
+}
+
+
+// ─── authenticator (TOTP) enrolment for module accounts ────────────────────────
+// Two steps so a mistyped scan never locks anyone out: begin stores a PENDING secret (mfa_enabled stays false, so login is
+// unaffected), confirm proves the app produces a valid code and only then switches it on. Login already challenges enabled accounts.
+
+export async function beginTotpEnrol(
+  db: AuthDb, input: { module: ModuleId; moduleAccountId: number; client: ClientInfo },
+): Promise<{ ok: true; secret: string; uri: string } | V2Fail> {
+  return db.transaction(async (q) => {
+    const c = (await q(`SELECT identifier, mfa_enabled FROM module_credentials WHERE module_account_id=$1 AND module=$2 FOR UPDATE`, [input.moduleAccountId, input.module])).rows[0];
+    if (!c) return bad("PROFILE_INVALID");
+    if (c.mfa_enabled) return bad("TOTP_ALREADY_ENABLED");
+    const secret = generateBase32Secret();
+    await q(`UPDATE module_credentials SET mfa_secret=$3, updated_at=NOW() WHERE module_account_id=$1 AND module=$2`, [input.moduleAccountId, input.module, secret]);
+    return { ok: true, secret, uri: totpUri(secret, String(c.identifier), "AYZEN") } as const;
+  });
+}
+
+export async function confirmTotpEnrol(
+  db: AuthDb, input: { module: ModuleId; moduleAccountId: number; code: unknown; client: ClientInfo },
+): Promise<{ ok: true } | V2Fail> {
+  const code = typeof input.code === "string" ? input.code.trim() : "";
+  return db.transaction(async (q) => {
+    const c = (await q(`SELECT mfa_enabled, mfa_secret FROM module_credentials WHERE module_account_id=$1 AND module=$2 FOR UPDATE`, [input.moduleAccountId, input.module])).rows[0];
+    if (!c) return bad("PROFILE_INVALID");
+    if (c.mfa_enabled) return bad("TOTP_ALREADY_ENABLED");
+    if (!c.mfa_secret) return bad("TOTP_NOT_STARTED");
+    if (!/^\d{6}$/.test(code) || !totpVerify(code, String(c.mfa_secret))) return bad("INVALID_CODE");
+    await q(`UPDATE module_credentials SET mfa_enabled=TRUE, mfa_enrolled_at=NOW(), updated_at=NOW() WHERE module_account_id=$1 AND module=$2`, [input.moduleAccountId, input.module]);
+    await audit(q, input.module, input.moduleAccountId, "profile_updated", "success", input.client); // no new audit event type: schema stays as migration 129
+    return { ok: true } as const;
+  });
+}
+
+
+// ─── passkeys (WebAuthn) for module accounts ───────────────────────────────────
+// Same library and credential shape as the core routes/passkey.ts (@simplewebauthn/server), keyed to module_accounts.
+// Challenges are stateless HMAC blobs (bound to module, account and relying party, 5 minutes) so no process memory is needed.
+// A passkey is a sign-in factor after the password step: login lists "passkey" in stepUp.methods and login/passkey/* finishes it.
+
+export interface RelyingParty { rpID: string; rpName: string; origin: string }
+export const MAX_PASSKEYS = 10;
+let waOverride: any = null;
+/** Tests inject fakes; production loads the real library lazily (it is a regular dependency of the API server). */
+export const setWebAuthnForTests = (o: unknown) => { waOverride = o; };
+const wa = async (): Promise<any> => waOverride ?? (await import("@simplewebauthn/server"));
+const transportsOf = (t: unknown): string[] | undefined => (typeof t === "string" && t ? t.split(",") : undefined);
+
+export async function passkeyRegisterOptions(
+  db: AuthDb, input: { module: ModuleId; moduleAccountId: number; rp: RelyingParty; env?: NodeJS.ProcessEnv; now?: number },
+): Promise<{ ok: true; options: any; token: string } | V2Fail> {
+  const c = (await db.query(`SELECT identifier FROM module_credentials WHERE module_account_id=$1 AND module=$2`, [input.moduleAccountId, input.module])).rows[0];
+  if (!c) return bad("PROFILE_INVALID");
+  const existing = (await db.query(`SELECT credential_id, transports FROM module_passkeys WHERE module_account_id=$1 AND module=$2`, [input.moduleAccountId, input.module])).rows;
+  if (existing.length >= MAX_PASSKEYS) return bad("PASSKEY_LIMIT");
+  const lib = await wa();
+  const options = await lib.generateRegistrationOptions({
+    rpName: input.rp.rpName, rpID: input.rp.rpID, userName: String(c.identifier), userDisplayName: String(c.identifier),
+    userID: new TextEncoder().encode(`${input.module}:${input.moduleAccountId}`), attestationType: "none",
+    excludeCredentials: existing.map((r) => ({ id: r.credential_id as string, transports: transportsOf(r.transports) })),
+    authenticatorSelection: { residentKey: "preferred", userVerification: "preferred" },
+  });
+  const token = sign("pkreg", input.module, { a: input.moduleAccountId, ch: options.challenge, rp: input.rp.rpID }, CHALLENGE_TTL_SECONDS, secretOf(input.env), input.now);
+  return { ok: true, options, token };
+}
+
+export async function passkeyRegisterVerify(
+  db: AuthDb, input: { module: ModuleId; moduleAccountId: number; rp: RelyingParty; token: unknown; response: any; name?: unknown; client: ClientInfo; env?: NodeJS.ProcessEnv; now?: number },
+): Promise<{ ok: true; id: number; name: string } | V2Fail> {
+  const p = open("pkreg", input.module, input.token, secretOf(input.env), input.now);
+  if (!p || p.a !== input.moduleAccountId || p.rp !== input.rp.rpID) return bad("CHALLENGE_INVALID");
+  if (!input.response || typeof input.response !== "object") return bad("PASSKEY_INVALID");
+  let info: any;
+  try {
+    const v = await (await wa()).verifyRegistrationResponse({ response: input.response, expectedChallenge: p.ch, expectedOrigin: input.rp.origin, expectedRPID: input.rp.rpID });
+    if (!v.verified || !v.registrationInfo) return bad("PASSKEY_INVALID");
+    info = v.registrationInfo;
+  } catch { return bad("PASSKEY_INVALID"); }
+  const name = clip(input.name, 60) ?? "Passkey";
+  return db.transaction(async (q) => {
+    const n = (await q(`SELECT count(*)::int AS n FROM module_passkeys WHERE module_account_id=$1 AND module=$2`, [input.moduleAccountId, input.module])).rows[0].n as number;
+    if (n >= MAX_PASSKEYS) return bad("PASSKEY_LIMIT");
+    const dup = await q(`SELECT 1 FROM module_passkeys WHERE module=$1 AND credential_id=$2`, [input.module, info.credential.id]);
+    if (dup.rows.length) return bad("PASSKEY_INVALID");
+    const r = await q(
+      `INSERT INTO module_passkeys (module_account_id, module, credential_id, public_key, counter, device_type, backed_up, transports, name)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id`,
+      [input.moduleAccountId, input.module, info.credential.id, Buffer.from(info.credential.publicKey).toString("base64url"), info.credential.counter ?? 0,
+       info.credentialDeviceType ?? "singleDevice", !!info.credentialBackedUp, info.credential.transports?.join(",") ?? null, name],
+    );
+    await audit(q, input.module, input.moduleAccountId, "profile_updated", "success", input.client); // no new audit event type: schema stays as migration 129
+    return { ok: true, id: r.rows[0].id as number, name } as const;
+  });
+}
+
+export async function listPasskeys(q: Query, input: { module: ModuleId; moduleAccountId: number }) {
+  const r = await q(`SELECT id, name, device_type, backed_up, created_at, last_used_at FROM module_passkeys WHERE module_account_id=$1 AND module=$2 ORDER BY id`, [input.moduleAccountId, input.module]);
+  return r.rows.map((x) => ({ id: x.id as number, name: x.name as string, deviceType: x.device_type as string, backedUp: !!x.backed_up, createdAt: x.created_at, lastUsedAt: x.last_used_at }));
+}
+
+export async function deletePasskey(db: AuthDb, input: { module: ModuleId; moduleAccountId: number; id: number; client: ClientInfo }): Promise<{ ok: true } | V2Fail> {
+  return db.transaction(async (q) => {
+    const r = await q(`DELETE FROM module_passkeys WHERE id=$1 AND module_account_id=$2 AND module=$3`, [input.id, input.moduleAccountId, input.module]);
+    if (!r.rowCount) return bad("PASSKEY_INVALID");
+    await audit(q, input.module, input.moduleAccountId, "profile_updated", "success", input.client);
+    return { ok: true } as const;
+  });
+}
+
+/** Assertion options for the account named by a step-up challenge (the password was already checked). */
+export async function passkeyLoginOptions(
+  db: AuthDb, input: { module: unknown; challenge: unknown; rp: RelyingParty; env?: NodeJS.ProcessEnv; now?: number },
+): Promise<{ ok: true; options: any; token: string } | V2Fail> {
+  if (!isKnownModuleId(input.module)) return bad("INVALID_MODULE");
+  const module = input.module;
+  const st = open("stepup", module, input.challenge, secretOf(input.env), input.now);
+  if (!st) return bad("CHALLENGE_INVALID");
+  const creds = (await db.query(`SELECT credential_id, transports FROM module_passkeys WHERE module_account_id=$1 AND module=$2`, [st.a, module])).rows;
+  if (!creds.length) return bad("PASSKEY_INVALID");
+  const options = await (await wa()).generateAuthenticationOptions({
+    rpID: input.rp.rpID, userVerification: "preferred",
+    allowCredentials: creds.map((r) => ({ id: r.credential_id as string, transports: transportsOf(r.transports) })),
+  });
+  const token = sign("pklogin", module, { a: st.a, c: st.c, ch: options.challenge, rp: input.rp.rpID }, CHALLENGE_TTL_SECONDS, secretOf(input.env), input.now);
+  return { ok: true, options, token };
+}
+
+export async function passkeyLoginVerify(
+  db: AuthDb,
+  input: { module: unknown; challenge: unknown; token: unknown; response: any; rp: RelyingParty; client: ClientInfo; env?: NodeJS.ProcessEnv; now?: number },
+): Promise<({ ok: true } & IssuedModuleSession) | V2Fail> {
+  if (!isKnownModuleId(input.module)) return bad("INVALID_MODULE");
+  const module = input.module;
+  const st = open("stepup", module, input.challenge, secretOf(input.env), input.now);
+  const pk = open("pklogin", module, input.token, secretOf(input.env), input.now);
+  if (!st || !pk || pk.a !== st.a || pk.c !== st.c || pk.rp !== input.rp.rpID) return bad("CHALLENGE_INVALID");
+  const credId = typeof input.response?.id === "string" ? input.response.id : "";
+  const cred = credId ? (await db.query(`SELECT id, credential_id, public_key, counter, transports FROM module_passkeys WHERE module=$1 AND credential_id=$2 AND module_account_id=$3`, [module, credId, st.a])).rows[0] : null;
+  if (!cred) { await audit(db.query, module, st.a, "step_up", "failure", input.client).catch(() => {}); return bad("PASSKEY_INVALID"); }
+  let newCounter = 0;
+  try {
+    const v = await (await wa()).verifyAuthenticationResponse({
+      response: input.response, expectedChallenge: pk.ch, expectedOrigin: input.rp.origin, expectedRPID: input.rp.rpID,
+      credential: { id: cred.credential_id as string, publicKey: new Uint8Array(Buffer.from(cred.public_key as string, "base64url")), counter: Number(cred.counter), transports: transportsOf(cred.transports) },
+    });
+    if (!v.verified) throw new Error("not verified");
+    newCounter = v.authenticationInfo.newCounter;
+  } catch {
+    await audit(db.query, module, st.a, "step_up", "failure", input.client).catch(() => {});
+    return bad("PASSKEY_INVALID");
+  }
+  const found = await db.query(
+    `SELECT c.id AS cred_id, c.module_account_id, c.password_hash, c.mfa_enabled, c.mfa_secret, c.identifier, c.identifier_norm,
+            a.user_id, a.status, a.module_uid, u.status AS user_status
+       FROM module_credentials c JOIN module_accounts a ON a.id=c.module_account_id JOIN users u ON u.id=a.user_id
+      WHERE c.id=$1 AND c.module_account_id=$2 AND c.module=$3`,
+    [st.c, st.a, module],
+  );
+  const row = found.rows[0];
+  if (!row || row.status !== "active" || row.user_status === "banned" || row.user_status === "suspended") return bad("CHALLENGE_INVALID");
+  await db.query(`UPDATE module_passkeys SET counter=$2, last_used_at=NOW() WHERE id=$1`, [cred.id, newCounter]);
+  await audit(db.query, module, row.module_account_id, "step_up", "success", input.client).catch(() => {});
+  return finishPasswordLogin(db, { module, password: "", row } as any, input.client);
+}
