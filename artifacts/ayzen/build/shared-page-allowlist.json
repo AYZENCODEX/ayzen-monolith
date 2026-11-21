@@ -1,0 +1,21 @@
+{
+  "comment": "Pages that carry a route owned by one module but must stay in other modules' builds, because a page that IS in those builds imports them. Keep this list short: each entry is a coupling to remove. scripts/check-module-bundles.mjs fails if an entry is stale or a new leak appears.",
+  "pages": [
+    {
+      "page": "pages/user/project-entities",
+      "ownedBy": "sylo",
+      "why": "imported by pages/user/project-dashboard and pages/user/enroll-entities, which every module build includes"
+    }
+  ],
+  "minOwnedPages": {
+    "comment": "Ratchet: pages whose routes a module owns (route path under its registry prefix). A route moved out of its prefix silently turns its page into a shared one that ships in every build; this stops that. Raise the numbers when more pages are assigned; never lower them to make the check pass.",
+    "sylo": 41,
+    "ryft": 4,
+    "fyra": 29,
+    "verve": 14,
+    "skarn": 11,
+    "warde": 4,
+    "wisp": 5,
+    "zynth": 3
+  }
+}
