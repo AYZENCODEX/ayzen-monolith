@@ -54,7 +54,8 @@ function moduleBuildPlugin(): Plugin {
     enforce: 'pre',
     async resolveId(source, importer, options) {
       if (source.startsWith(STUB_PREFIX)) return source;
-      if (!importer || !(source.startsWith('@/') || source.startsWith('.'))) return null;
+      // Vite's alias plugin runs BEFORE this one, so '@/pages/x' normally arrives here already rewritten to an absolute path; accept all three forms.
+      if (!importer || !(source.startsWith('@/') || source.startsWith('.') || path.isAbsolute(source))) return null;
       const resolved = await this.resolve(source, importer, { ...options, skipSelf: true });
       const rel = resolved && excludedAbs.get(clean(resolved.id));
       return rel ? STUB_PREFIX + rel : null;
