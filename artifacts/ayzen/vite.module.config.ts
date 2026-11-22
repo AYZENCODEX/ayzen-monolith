@@ -54,7 +54,8 @@ function moduleBuildPlugin(): Plugin {
     enforce: 'pre',
     async resolveId(source, importer, options) {
       if (source.startsWith(STUB_PREFIX)) return source;
-      if (!importer || !(source.startsWith('@/') || source.startsWith('.'))) return null;
+      // Vite's alias plugin runs BEFORE this one, so '@/pages/x' normally arrives here already rewritten to an absolute path; accept all three forms.
+      if (!importer || !(source.startsWith('@/') || source.startsWith('.') || path.isAbsolute(source))) return null;
       const resolved = await this.resolve(source, importer, { ...options, skipSelf: true });
       const rel = resolved && excludedAbs.get(clean(resolved.id));
       return rel ? STUB_PREFIX + rel : null;
@@ -67,7 +68,8 @@ function moduleBuildPlugin(): Plugin {
     // target, see scripts/gen-module-deploy.mjs). Landing assets go to /landing-assets/<id>/. Written AFTER Vite copies public/.
     closeBundle() {
       const out = path.join(root, 'dist/modules', moduleId);
-      if (!fs.existsSync(out)) return;
+      // When the bundle failed earlier (e.g. the cross-module guard), index.html was never written; return so Vite reports the REAL error instead of this ENOENT.
+      if (!fs.existsSync(path.join(out, 'index.html'))) return;
       fs.renameSync(path.join(out, 'index.html'), path.join(out, 'app.html'));
       // landing, the module's own login (when it has a real one), about, robots/sitemap/llms; API calls of the login page go to VITE_API_URL
       emitModuleSite(moduleId, out, { apiOrigin: process.env.VITE_API_URL || undefined });

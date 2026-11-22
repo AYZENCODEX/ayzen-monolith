@@ -135,7 +135,8 @@ export function portalRedirectHtml(id, mode = "login") {
 export const designedRegisterHtml = (id) => portalRedirectHtml(id, "signup");
 
 export function designedLoginHtml(id, opts = {}) {
-  if (isPortal(id)) return portalRedirectHtml(id, "login");
+  // A portal design with its own login page serves it; without one, /login falls back to the landing's embedded sign-in.
+  if (isPortal(id) && !fs.existsSync(loginFile(id))) return portalRedirectHtml(id, "login");
   if (!hasLogin(id)) return null;
   const m = getModule(id);
   const P = id.toUpperCase();
