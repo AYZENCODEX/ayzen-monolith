@@ -879,6 +879,9 @@ importers:
       '@ayzen/config':
         specifier: workspace:*
         version: link:../packages/config
+      '@ayzen/module-registry':
+        specifier: workspace:*
+        version: link:../packages/module-registry
       '@workspace/db':
         specifier: workspace:*
         version: link:../lib/db

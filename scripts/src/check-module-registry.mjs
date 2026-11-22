@@ -101,9 +101,10 @@ async function main() {
   }
 
   // Other id-keyed registries must cover exactly the same modules.
-  const seedIds = [...read("scripts/src/seed-oidc-clients.ts").matchAll(/seedClient\("([a-z]+)"/g)].map((m) => m[1]).sort();
-  if (JSON.stringify(seedIds) !== JSON.stringify(ids)) {
-    errors.push(`scripts/src/seed-oidc-clients.ts seedClient ids [${seedIds}] != registry [${ids}]`);
+  // The OIDC seed list is derived from the registry (no hand-kept id list to drift).
+  const seedSrc = read("scripts/src/oidc-seed-clients-data.ts");
+  if (!/from "\.\.\/\.\.\/packages\/module-registry\/src\/index\.mjs"/.test(seedSrc) || !/MODULES/.test(seedSrc) || /seedClient\("/.test(read("scripts/src/seed-oidc-clients.ts"))) {
+    errors.push("scripts/src/oidc-seed-clients-data.ts must derive the OIDC clients from packages/module-registry (no hardcoded seedClient ids)");
   }
   // Parsed from source (not imported) so this check needs no `pnpm install` in CI.
   const tgSrc = read("packages/telegram/src/index.mjs");

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "registryId": "frontend-registry",
-  "generatedAt": "2026-11-08",
+  "generatedAt": "2026-11-22",
   "generatedBy": "tools/ui-circuit-validator/build.mjs",
   "schema": "schemas/ui-circuit/frontend-route-entry.v1.json",
   "sourceRegistries": [
@@ -12,11 +12,11 @@
     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
   ],
   "completeness": {
-    "totalRoutes": 193,
-    "resolvedToPage": 193,
-    "totalPageFiles": 189,
-    "deadPages": 10,
-    "routesWithNoApiCalls": 129,
+    "totalRoutes": 194,
+    "resolvedToPage": 194,
+    "totalPageFiles": 191,
+    "deadPages": 11,
+    "routesWithNoApiCalls": 130,
     "routesWithOrphanCalls": 0,
     "routesOk": 64
   },
@@ -732,6 +732,12 @@
     {
       "severity": "warning",
       "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/clerk/callback",
+      "pageFile": "pages/clerk-callback.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
       "path": "/oidc/consent",
       "pageFile": "pages/oidc-consent.tsx"
     },
@@ -799,6 +805,11 @@
       "severity": "warning",
       "code": "DEAD_PAGE",
       "pageFile": "pages/admin/theme-palette-builder.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/modules/landing.tsx"
     },
     {
       "severity": "warning",
@@ -5795,83 +5806,11 @@
           },
           {
             "method": "POST",
-            "path": "/api/auth/register",
-            "raw": "/api/auth/register",
-            "backend": {
-              "method": "POST",
-              "path": "/api/auth/register"
-            }
-          },
-          {
-            "method": "POST",
-            "path": "/api/auth/send-otp",
-            "raw": "/api/auth/send-otp",
-            "backend": {
-              "method": "POST",
-              "path": "/api/auth/send-otp"
-            }
-          },
-          {
-            "method": "POST",
-            "path": "/api/auth/send-otp",
-            "raw": "/api/auth/send-otp",
-            "backend": {
-              "method": "POST",
-              "path": "/api/auth/send-otp"
-            }
-          },
-          {
-            "method": "POST",
-            "path": "/api/auth/magic-link/verify",
-            "raw": "/api/auth/magic-link/verify",
-            "backend": {
-              "method": "POST",
-              "path": "/api/auth/magic-link/verify"
-            }
-          },
-          {
-            "method": "POST",
-            "path": "/api/auth/send-otp",
-            "raw": "/api/auth/send-otp",
-            "backend": {
-              "method": "POST",
-              "path": "/api/auth/send-otp"
-            }
-          },
-          {
-            "method": "POST",
-            "path": "/api/auth/verify-otp",
-            "raw": "/api/auth/verify-otp",
-            "backend": {
-              "method": "POST",
-              "path": "/api/auth/verify-otp"
-            }
-          },
-          {
-            "method": "POST",
-            "path": "/api/auth/send-otp",
-            "raw": "/api/auth/send-otp",
-            "backend": {
-              "method": "POST",
-              "path": "/api/auth/send-otp"
-            }
-          },
-          {
-            "method": "POST",
             "path": "/api/auth/login/step-up/verify",
             "raw": "/api/auth/login/step-up/verify",
             "backend": {
               "method": "POST",
               "path": "/api/auth/login/step-up/verify"
-            }
-          },
-          {
-            "method": "POST",
-            "path": "/api/auth/magic-link",
-            "raw": "/api/auth/magic-link",
-            "backend": {
-              "method": "POST",
-              "path": "/api/auth/magic-link"
             }
           }
         ],
@@ -5990,6 +5929,19 @@
       "allowedRoles": [],
       "source": "App.tsx (public)",
       "pageFile": "pages/oidc-callback.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/clerk/callback",
+      "component": "ClerkCallback",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "App.tsx (public)",
+      "pageFile": "pages/clerk-callback.tsx",
       "resolution": {
         "status": "resolved",
         "apiCalls": [],
@@ -6142,6 +6094,7 @@
   ],
   "deadPages": [
     "pages/admin/theme-palette-builder.tsx",
+    "pages/modules/landing.tsx",
     "pages/not-found.tsx",
     "pages/user/marketplace-nft.tsx",
     "pages/user/nft-marketplace.tsx",
