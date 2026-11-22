@@ -137,8 +137,9 @@ const RULES = [
       if (!/pendingKey:\s*'ayzen_sylo_oidc_pending'/.test(h) || !/returnToPath:\s*NEXT/.test(h.replace(/returnToPath:NEXT/g, "returnToPath: NEXT"))) return `${id}: OIDC must use the shared /oidc/callback transaction`;
       if (/session-exchange/.test(h)) return `${id}: portal runs its own OIDC callback`;
       if (!/stepUp/.test(h) || !/requireCode/.test(h)) return `${id}: sign-in does not require the emailed/step-up code`;
-      const rd = t.redirects[id]; if (!rd?.login || !rd?.register || !/location\.replace\("\/"\+q\+"#/.test(rd.login) || !/location\.replace\("\/"\+q\+"#/.test(rd.register) || rd.login === rd.register) return `${id}: /login and /register do not redirect into the portal`;
-      if (!/\/\^\\\/\(\?!\\\/\)\//.test(rd.login)) return `${id}: redirect does not restrict ?next to same-origin paths`;
+      const rd = t.redirects[id]; if (!rd?.login || !rd?.register || !/location\.replace\("\/"\+q\+"#/.test(rd.register) || rd.login === rd.register) return `${id}: /register does not redirect into the portal`;
+      if (/location\.replace\("\/"\+q\+"#/.test(rd.login)) { if (!/\/\^\\\/\(\?!\\\/\)\//.test(rd.login)) return `${id}: redirect does not restrict ?next to same-origin paths`; } else if (!/\/api\/auth\/module\/v2/.test(rd.login) || !/<title>Sign in/i.test(rd.login)) return `${id}: /login is neither a portal redirect nor a dedicated v2 login page`;
+      if (!/\/\^\\\/\(\?!\\\/\)\//.test(rd.register)) return `${id}: redirect does not restrict ?next to same-origin paths`;
       const o = t.prod[id]; if (!/__AYZEN_HOME/.test(o) || /stopImmediatePropagation/.test(o) || /data-ayzen-signin/.test(o)) return `${id}: production landing still treats the portal as demo auth`;
       if (!/"\/register"/.test(t.deploys[id]) || !/"\/login"/.test(t.deploys[id])) return `${id}: deploy config does not serve /login and /register`;
     }

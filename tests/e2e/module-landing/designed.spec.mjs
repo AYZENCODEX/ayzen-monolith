@@ -107,7 +107,10 @@ for (const m of MODULES) {
       check(new URL(page.url()).pathname === "/" && (await page.locator(P[2]).first().isVisible()), `${m.id}: ${name} opens the embedded portal`);
       await ctx.close();
     }
-    for (const [name, url, hash] of [["/login", "/login?next=/x", m.id === "skarn" ? "#/in/cred" : "#login"], ["/register", "/register", m.id === "skarn" ? "#/up/cred" : "#signup"]]) {
+    { const { ctx, page } = await mk({ width: 1280, height: 800 }); await page.goto(origin + "/login?next=/x"); await page.waitForTimeout(900);
+      check(new URL(page.url()).pathname === "/login" && /^Sign in/i.test(await page.title()), `${m.id}: /login serves its own dedicated designed page (${page.url().replace(origin, "")})`);
+      await ctx.close(); }
+    for (const [name, url, hash] of [["/register", "/register", m.id === "skarn" ? "#/up/cred" : "#signup"]]) {
       const { ctx, page } = await mk({ width: 1280, height: 800 }); await page.goto(origin + url); await page.waitForTimeout(900);
       check(new URL(page.url()).pathname === "/" && new URL(page.url()).hash.startsWith(hash.slice(0, 3)), `${m.id}: ${name} redirects into the portal (${page.url().replace(origin, "")})`);
       await ctx.close();

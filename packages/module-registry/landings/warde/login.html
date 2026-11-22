@@ -7,9 +7,9 @@
   --bg:#f4f1e9; --fg:#17251f; --muted:rgba(23,37,31,.64); --dim:rgba(23,37,31,.44);
   --line:rgba(23,37,31,.12); --line-strong:rgba(23,37,31,.28);
   --teal:#214d3b; --violet:#153b2d; --pink:#d86743; --danger:#ff8a8a; --ok:#7fe3a8;
-  --glass:rgba(251,250,246,.86); --field:rgba(23,37,31,.045);
+  --glass:rgba(251,250,246,.9); --field:rgba(23,37,31,.045);
   --iri:linear-gradient(100deg,var(--teal),var(--violet) 55%,var(--pink));
-  --serif:Georgia,"Times New Roman",serif; --sans:system-ui,-apple-system,"Segoe UI",sans-serif; --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  --serif:Georgia,serif; --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   position:relative;isolation:isolate;min-height:100svh;overflow:clip;background:var(--bg);color:var(--fg);
   font:400 15px/1.5 var(--sans);-webkit-font-smoothing:antialiased;color-scheme:light;
   display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
@@ -80,7 +80,7 @@
 /* checkbox */
 .zp-check{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.85rem;cursor:pointer;width:fit-content;background:none;border:0;padding:0;font-family:inherit}
 .zp-check b{width:18px;height:18px;border-radius:5px;border:1px solid var(--line-strong);display:grid;place-items:center;transition:background .15s,border-color .15s}
-.zp-check[aria-checked=true] b{background:var(--fg);border-color:var(--fg);color:#f4f1e9}
+.zp-check[aria-checked=true] b{background:var(--fg);border-color:var(--fg);color:#c9f36b}
 .zp-check svg{width:12px;height:12px;stroke-width:3}
 
 /* buttons */
@@ -90,8 +90,8 @@
 .zp-btn:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
 .zp-btn:disabled{opacity:.55;cursor:not-allowed}
 .zp-block{width:100%}
-.zp-solid{background:#153b2d;color:#f4f1e9}
-.zp-solid:not(:disabled):hover{transform:translateY(-1px);filter:brightness(1.12)}
+.zp-solid{background:#153b2d;color:#c9f36b}
+.zp-solid:not(:disabled):hover{transform:translateY(-1px);filter:brightness(1.1)}
 .zp-ghost{border-color:var(--line);background:rgba(23,37,31,.03)}
 .zp-ghost:not(:disabled):hover{border-color:var(--line-strong);background:rgba(23,37,31,.07)}
 .zp-text{height:auto;padding:0;border-radius:6px;color:var(--muted);font-size:.8rem}
@@ -130,7 +130,7 @@
 .zp-account:hover{border-color:var(--line-strong);background:rgba(23,37,31,.04)}
 .zp-account>button:first-child{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:8px;border:0;background:none;color:inherit;text-align:left;cursor:pointer;border-radius:9px;font:inherit}
 .zp-account>button:focus-visible{outline:2px solid var(--teal);outline-offset:-2px}
-.zp-avatar{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--iri);color:#f4f1e9;font:600 .85rem var(--sans);text-transform:uppercase}
+.zp-avatar{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--iri);color:#c9f36b;font:600 .85rem var(--sans);text-transform:uppercase}
 .zp-account strong{display:block;font:500 .9rem var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .zp-account small{display:block;font-size:.76rem;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .zp-account .zp-x{flex:none;width:34px;height:34px;display:grid;place-items:center;border:0;background:none;color:var(--dim);border-radius:8px;cursor:pointer}
@@ -189,43 +189,17 @@
 .zp-toast.bad{border-color:rgba(255,138,138,.4)}
 .zp-ok-screen{display:grid;place-items:center;text-align:center;gap:12px;padding:30px 0}
 .zp-ok-screen svg{width:44px;height:44px;color:var(--ok)}
-</style></head>
+.wc{margin:auto 0;width:min(100%,430px);display:grid;gap:12px}.wc .av{display:flex}.wc .av b{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#fbfaf6;font:700 .85rem var(--sans);border:3px solid var(--bg);margin-left:-10px}.wc .av b:first-child{margin-left:0}
+.bub{margin:0;padding:12px 16px;border-radius:18px;max-width:78%;font-size:.92rem;background:#fbfaf6;border:1px solid var(--line);box-shadow:0 8px 24px -14px rgba(21,59,45,.4)}.bub.l{border-bottom-left-radius:4px}.bub.r{justify-self:end;background:#153b2d;color:#c9f36b;border-bottom-right-radius:4px}
+.mis{padding:16px;border-radius:16px;background:#fbfaf6;border:1px solid var(--line)}.mis span{font:600 .85rem var(--sans)}.mis div{height:8px;border-radius:99px;background:#ebe7dc;margin:10px 0 6px;overflow:hidden}.mis i{display:block;height:100%;background:#c9f36b;border-right:2px solid #153b2d;animation:gr 1.4s cubic-bezier(.2,.8,.2,1) both}@keyframes gr{from{width:0!important}}.mis small{color:var(--dim)}
+.zp-logo span{font:800 1.25rem var(--sans);letter-spacing:.16em;color:var(--violet)}.zp-pitch h1{font:800 clamp(2.3rem,4.5vw,3.9rem)/1 var(--sans);letter-spacing:-.03em}.zp-pitch h1 em{font-style:normal;color:#d86743}
+.zp-panel{border-radius:16px;box-shadow:0 30px 70px -36px rgba(21,59,45,.5)}.zp-panel::before{background:linear-gradient(90deg,#153b2d,#c9f36b)}.zp-btn{font-weight:700}.zp-heading h2{font:800 1.7rem var(--sans);letter-spacing:-.01em}
+@media(max-width:899px){.wc{display:none}}@media(prefers-reduced-motion:reduce){.mis i{animation:none}}</style></head>
 <body style="margin:0;background:#f4f1e9">
 <div class="zp">
-<canvas id="bg" class="zp-canvas" aria-hidden="true"></canvas>
-<section class="zp-brand" aria-label="About AYZEN"><a class="zp-logo" href="/"><span>WARDE</span><small>AYZEN teams</small></a>
-<div class="zp-pitch"><h1>Teams that<br><em>move together.</em></h1><p>Sign in to your farming teams, chat and missions. Your AYZEN account works across every module.</p><div class="zp-status">Passkeys, email codes and new-location checks</div></div></section>
+<section class="zp-brand" aria-label="About Warde"><a class="zp-logo" href="/"><span>WARDE</span><small>teams that move together</small></a><div class="wc" aria-hidden="true"><div class="av"><b style="--c:#d86743">A</b><b style="--c:#214d3b">R</b><b style="--c:#c9f36b;color:#153b2d">M</b><b style="--c:#65716a">+4</b></div><p class="bub l">Mission 12 is live. Who is in? 🌱</p><p class="bub r">Locked in. Wallets ready.</p><div class="mis"><span>Weekly missions</span><div><i style="width:72%"></i></div><small>18 / 25 done</small></div></div><div class="zp-pitch"><h1>Teams that<br><em>move together.</em></h1><p>Sign in to your farming teams, chat and missions. Your AYZEN account works across every module.</p><div class="zp-status">Passkeys, email codes and new-location checks</div></div></section>
 <main class="zp-stage"><div class="zp-panel" id="panel"></div></main>
 </div>
-<script>
-(function(){
-const nodes=[["sylo","#5FE3D6"],["skarn","#8F7CFF"],["warde","#7CC4FF"],["wisp","#FF6FB5"],["ryft","#FFB86B"],["fyra","#9BE37C"],["verve","#C58CFF"],["zynth","#17251f"]];
-const cv=document.getElementById("bg"),ctx=cv.getContext("2d"),TAU=Math.PI*2,CORE="#17251f";
-const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-const rgba=(h,a)=>{const n=parseInt(h.slice(1),16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`};
-const spr=new Map();const sprite=h=>{let s=spr.get(h);if(!s){s=document.createElement("canvas");s.width=s.height=96;const g=s.getContext("2d"),r=g.createRadialGradient(48,48,0,48,48,48);r.addColorStop(0,rgba(h,.95));r.addColorStop(.18,rgba(h,.55));r.addColorStop(1,rgba(h,0));g.fillStyle=r;g.fillRect(0,0,96,96);spr.set(h,s)}return s};
-const n=nodes.length;const base=nodes.map((_,i)=>{const a=i/n*TAU;return{x:Math.cos(a),y:(i%2?.34:-.34)+Math.sin(a*2)*.1,z:Math.sin(a)}});
-const packets=[];const spawn=()=>packets.push({s:Math.floor(Math.random()*n),t:0,v:.12+Math.random()*.16,d:Math.random()<.5?1:-1});
-for(let i=0;i<5;i++){spawn();packets[i].t=Math.random()}
-const dust=Array.from({length:70},()=>({x:Math.random()*2-1,y:Math.random()*2-1,z:Math.random(),s:.4+Math.random()*1.1}));
-let w,h,dpr;const resize=()=>{dpr=Math.min(devicePixelRatio||1,2);w=cv.clientWidth;h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)};
-const ptr={x:0,y:0,tx:0,ty:0};addEventListener("pointermove",e=>{ptr.tx=(e.clientX/innerWidth-.5)*2;ptr.ty=(e.clientY/innerHeight-.5)*2},{passive:true});
-let spin=.6,last=0,run=false,raf=0;
-function draw(yaw,tilt,dt){ctx.clearRect(0,0,w,h);const wide=w>=900,cx=wide?w*.36:w*.5,cy=h*(wide?.38:.21),R=wide?Math.min(w*.24,h*.27):Math.min(w*.34,h*.13),P=3.2;
-ctx.fillStyle="rgba(23,37,31,.5)";for(const d of dust){if(!reduce){d.y-=dt*.004*(.4+d.z);if(d.y<-1.05)d.y=1.05}ctx.globalAlpha=.1+d.z*.35;ctx.fillRect(w*.5+(d.x+ptr.x*.03*d.z)*w*.52,h*.5+d.y*h*.52,d.s,d.s)}ctx.globalAlpha=1;
-const cY=Math.cos(yaw),sY=Math.sin(yaw),cX=Math.cos(.42+tilt),sX=Math.sin(.42+tilt);
-const pr=base.map(p=>{const x1=p.x*cY-p.z*sY,z1=p.x*sY+p.z*cY,y2=p.y*cX-z1*sX,z2=p.y*sX+z1*cX,k=P/(P+z2);return{sx:cx+x1*R*k,sy:cy+y2*R*k,z:z2}});
-ctx.lineWidth=1;for(let i=0;i<n;i++){const a=pr[i],b=pr[(i+1)%n];ctx.strokeStyle="rgba(23,37,31,.07)";ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();const g=ctx.createLinearGradient(cx,cy,a.sx,a.sy);g.addColorStop(0,"rgba(23,37,31,.22)");g.addColorStop(1,rgba(nodes[i][1],.16+(1-(a.z+1)/2)*.1));ctx.strokeStyle=g;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(a.sx,a.sy);ctx.stroke()}
-if(!reduce)for(let i=packets.length-1;i>=0;i--){const p=packets[i];p.t+=dt*p.v;if(p.t>=1){packets.splice(i,1);spawn()}}
-for(const p of packets){const a=pr[p.s],t=p.d===1?p.t:1-p.t;ctx.globalAlpha=Math.sin(p.t*Math.PI);ctx.drawImage(sprite(nodes[p.s][1]),cx+(a.sx-cx)*t-9,cy+(a.sy-cy)*t-9,18,18)}ctx.globalAlpha=1;
-const pu=reduce?1:1+Math.sin(performance.now()/900)*.06;ctx.drawImage(sprite(CORE),cx-34*pu,cy-34*pu,68*pu,68*pu);ctx.fillStyle=CORE;ctx.beginPath();ctx.arc(cx,cy,3.4,0,TAU);ctx.fill();
-ctx.font="500 11px 'JetBrains Mono',monospace";ctx.textBaseline="middle";
-for(const i of pr.map((_,i)=>i).sort((i,j)=>pr[j].z-pr[i].z)){const p=pr[i],dp=1-(p.z+1)/2,W=nodes[i][0]==="warde",sz=(30+dp*26)*(W?1.7:1);ctx.globalAlpha=.45+dp*.55;ctx.drawImage(sprite(nodes[i][1]),p.sx-sz/2,p.sy-sz/2,sz,sz);ctx.fillStyle=nodes[i][1];ctx.beginPath();ctx.arc(p.sx,p.sy,2.2+dp*2,0,TAU);ctx.fill();ctx.fillStyle=W?"#D86743":"rgba(23,37,31,.78)";if(W)ctx.font="600 13px 'JetBrains Mono',monospace";ctx.fillText(nodes[i][0],p.sx+12+dp*4,p.sy);if(W)ctx.font="500 11px 'JetBrains Mono',monospace"}ctx.globalAlpha=1}
-function frame(now){const dt=last?Math.min((now-last)/1e3,.05):0;last=now;if(!reduce){spin+=dt*.09;ptr.x+=(ptr.tx-ptr.x)*Math.min(1,dt*3);ptr.y+=(ptr.ty-ptr.y)*Math.min(1,dt*3)}draw(spin+ptr.x*.12,ptr.y*.08,dt);if(run)raf=requestAnimationFrame(frame)}
-const start=()=>{if(run||reduce||document.hidden)return;run=true;last=0;raf=requestAnimationFrame(frame)},stop=()=>{run=false;cancelAnimationFrame(raf)};
-new ResizeObserver(()=>{resize();if(!run)draw(spin,0,0)}).observe(cv);resize();draw(spin,0,0);document.addEventListener("visibilitychange",()=>document.hidden?stop():start());start();
-})();
-</script>
 <script>
 (function(){
 const $=(s,r=document)=>r.querySelector(s);const root=$("#panel");
@@ -249,7 +223,7 @@ function tabs(){return `<div class="zp-tabs" role="tablist" style="--i:${S.tab==
 function stepper(){return `<nav class="zp-stepper"><ol>${STEPS.map((l,i)=>`<li class="${i<S.su?"is-done":i===S.su?"is-now":""}"></li>`).join("")}</ol><p>Step ${S.su+1} of 5: ${STEPS[S.su]}</p></nav>`}
 const passBtn=(id)=>`<button type="button" class="zp-trail" id="${id}" aria-label="Show password">${eye}</button>`;
 function bindPass(id,inp){const b=$("#"+id),i=$("#"+inp);b.onclick=()=>{i.type=i.type==="password"?"text":"password"}}
-function view(html,showTabs){root.innerHTML=(showTabs?tabs():"")+`<div class="zp-view">${html}</div>`+(S.li&&S.li.step?"":`<p class="zp-foot">${S.tab==="in"?'New to AYZEN? <button data-tab="up">Sign up</button>':'Already have an account? <button data-tab="in">Sign in</button>'}</p>`);root.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;S.li=null;S.rs=0;render()});}
+function view(html,showTabs){root.innerHTML=(showTabs?tabs():"")+`<div class="zp-view">${html}</div>`+(S.li&&S.li.step?"":`<p class="zp-foot">${S.tab==="in"?'New to AYZEN? <button data-tab="up">Sign up</button>':'Already have an account? <button data-tab="in">Sign in</button>'}</p>`);root.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{if(b.dataset.tab==="up"){location.assign("/register"+(NX&&NEXT===NX?"?next="+encodeURIComponent(NX):""));return}S.tab=b.dataset.tab;S.li=null;S.rs=0;render()});}
 const val=id=>$("#"+id).value;
 function render(){S.rs?reset():S.tab==="in"?(S.li&&S.li.step?stepup():signin()):signup()}
 /* ---- authenticator + passkeys (module account security) ---- */
