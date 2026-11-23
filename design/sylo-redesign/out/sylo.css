@@ -107,3 +107,10 @@ svg text{font-family:var(--mono)}
 .note{display:block;padding:12px 14px;border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);background:rgba(224,178,90,.06);border-radius:6px;color:var(--tx);line-height:1.5}.note b{color:var(--warn);font-weight:500;margin-right:4px}
 .code{color:var(--tx);font:500 14px var(--mono);letter-spacing:.08em;padding:9px 12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);display:flex;justify-content:space-between}
 .row .g .code span{display:inline;color:var(--tx);font:500 13px var(--mono);overflow:visible}
+
+.nav .subnav{margin:2px 0 6px 17px;padding-left:10px;border-left:1px solid var(--line2)}
+.nav .subnav a{height:28px;padding:0 10px;font-size:12.5px}
+.nav .subnav a .d{display:none}
+.nav .subnav a.on::before{left:-11px;top:5px;bottom:5px}
+.nav a .chev{font:400 14px var(--mono);color:var(--mu)}
+a.card:hover{border-color:var(--ac)}
