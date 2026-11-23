@@ -115,3 +115,25 @@ svg text{font-family:var(--mono)}
 .nav a .chev{font:400 14px var(--mono);color:var(--mu)}
 a.card:hover{border-color:var(--ac)}
 .nav{padding:6px 10px 10px}.nav a{height:28px}.nav .subnav{margin:1px 0 4px 17px}.nav .subnav a{height:26px;font-size:12.5px}.ws{margin:10px 12px 2px;padding:7px 11px}.lock{margin:6px 12px 10px;padding:9px 12px}
+
+.back{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;font:500 12px var(--mono);color:var(--mu);letter-spacing:.04em}.back:hover{color:var(--tx)}
+[data-href]{cursor:pointer}tr[data-href]:hover td,.card[data-href]:hover{background:var(--s2)}.card[data-href]:hover{border-color:var(--ac)}
+.row.go::after{content:"›";font:400 18px var(--mono);color:var(--di);margin-left:6px}
+.mbar{display:none}
+.jump{position:sticky;top:0;z-index:5;display:flex;gap:6px;padding:10px 0;margin-bottom:12px;background:var(--bg);border-bottom:1px solid var(--line)}
+.jump a{flex:1;text-align:center;padding:8px 0;border:1px solid var(--line2);border-radius:6px;font:500 12px var(--mono);color:var(--mu)}.jump a.on{border-color:var(--ac);color:var(--ac);background:var(--ac-d)}
+.stack{max-width:760px}
+@media(max-width:900px){
+ body{display:block}.rail{display:none}
+ .top{padding:0 16px}.search{display:none}.crumb{overflow:hidden;white-space:nowrap}
+ .page{padding:18px 16px 96px}
+ .ph{flex-direction:column;align-items:flex-start;gap:14px}.ph h1{font-size:26px}.acts{flex-wrap:wrap}
+ .grid,.g2,.g3,.g4,.g-8-4,.g-7-5,.g-5-7{grid-template-columns:1fr!important}
+ .kpis{grid-template-columns:1fr 1fr}.kpi{border-bottom:1px solid var(--line)}.kpi strong{font-size:30px}
+ .card{overflow-x:auto}.card table{min-width:620px}
+ .card table.lt{min-width:0}.lt thead{display:none}.lt td:nth-child(n+2):not(:has(.pill)){display:none}.lt td:has(.pill){text-align:right}.lt td{padding:14px 16px}
+ .tabs{overflow-x:auto;white-space:nowrap}
+ .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--s1);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+ .mbar a{flex:1;text-align:center;padding:13px 0 12px;font:500 11px var(--mono);color:var(--mu);letter-spacing:.04em}.mbar a.on{color:var(--ac)}
+ .stack{max-width:none}
+}
