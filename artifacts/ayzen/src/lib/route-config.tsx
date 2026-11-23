@@ -96,6 +96,10 @@ const UserTasks         = lazy(() => import("@/pages/user/tasks"));
 const UserDeveloper     = lazy(() => import("@/pages/user/developer"));
 const SyloConsole       = lazy(() => import("@/pages/sylo/console"));
 const SyloAccount       = lazy(() => import("@/pages/sylo/account"));
+const SyloConnectors    = lazy(() => import("@/pages/sylo/connectors"));
+const SyloAccessList    = lazy(() => import("@/pages/sylo/access-list"));
+const SyloAccountNew    = lazy(() => import("@/pages/sylo/account-new"));
+const SyloKycDataNew    = lazy(() => import("@/pages/sylo/kyc-data-new"));
 const VaultHubRedirect  = lazy(() => import("@/pages/sylo/redirects"));
 const VaultEntityDetail = lazy(() => import("@/pages/user/vault-entity-detail"));
 const VaultEntityAccess = lazy(() => import("@/pages/user/vault-entity-access"));
@@ -274,6 +278,9 @@ export const USER_ROUTES: RouteConfig[] = [
   // Per-module Settings (Phase 5). Listed before every /<module>/:param route so
   // "/projects/settings" and "/mailbox/settings" are not captured as an :id.
   { path: "/vault/settings",       component: ModuleSettings },
+  { path: "/vault/settings/connectors", component: SyloConnectors },
+  // Access: pick an entity / local account / KYC entry, then open its mailbox + 2FA + backup codes.
+  { path: "/vault/access/:kind",   component: SyloAccessList },
   { path: "/wallet/settings",      component: ModuleSettings },
   { path: "/finance/settings",     component: ModuleSettings },
   { path: "/marketplace/settings", component: ModuleSettings },
@@ -298,6 +305,8 @@ export const USER_ROUTES: RouteConfig[] = [
   // Retired Vault Hub card grid → Console.
   { path: "/vault/hub",          component: VaultHubRedirect },
   // Account sections: /vault/account/:section[/:view]
+  // Create-as-a-page (must precede the :view route so "new" is not read as a view).
+  { path: "/vault/account/:section/new",   component: SyloAccountNew },
   { path: "/vault/account/:section",       component: SyloAccount },
   { path: "/vault/account/:section/:view", component: SyloAccount },
   // Wallet Hub — rename/expansion of the old flat "Wallet" access item into
@@ -335,6 +344,7 @@ export const USER_ROUTES: RouteConfig[] = [
   { path: "/vault/entity/:id/access", component: VaultEntityAccess },
   { path: "/vault/entity/:id",   component: VaultEntityDetail },
   { path: "/vault/local/:id",    component: VaultLocalDetail },
+  { path: "/vault/kyc/data/new",      component: SyloKycDataNew },
   { path: "/vault/kyc/data/overview", component: VaultKycDataOverview },
   { path: "/vault/kyc/data/used",     component: VaultKycDataUsed },
   { path: "/vault/kyc/data/unused",   component: VaultKycDataUnused },

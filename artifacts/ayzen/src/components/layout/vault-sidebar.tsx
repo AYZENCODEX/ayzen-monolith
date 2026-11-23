@@ -341,10 +341,8 @@ export function VaultSectionPage({
         <p className="text-muted-foreground font-mono text-xs mt-1 pl-0.5">{description}</p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-5 min-h-0">
-        <VaultSidebar />
-        <div className="flex-1 min-w-0">{children}</div>
-      </div>
+      {/* Navigation now lives in the Sylo shell rail (components/sylo/shell). */}
+      <div className="min-w-0">{children}</div>
     </div>
   );
 }

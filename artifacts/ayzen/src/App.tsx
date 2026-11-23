@@ -28,7 +28,7 @@ import { VaultUnlockGate } from "@/components/vault/vault-unlock-gate";
 import { useRealtime } from "@/hooks/use-realtime";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { ErrorBoundary } from "@/components/error-boundary";
-import { FullScreenLoader, PageSkeleton } from "@/components/console";
+import { ErrorByCode, FullScreenLoader, PageSkeleton } from "@/components/console";
 import { ADMIN_ROUTES, USER_ROUTES } from "@/lib/route-config";
 import type { RouteConfig } from "@/lib/route-config";
 import { getCurrentSubdomainApp, isPathInSubdomainScope } from "@/lib/subdomain-app";
@@ -247,6 +247,8 @@ function Router() {
       <Route path="/register"        component={Register} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/status"          component={StatusPage} />
+      {/* Linkable preview of every error surface: /error/401|expired|403|404|429|500|503|offline */}
+      <Route path="/error/:code">{(params) => <ErrorByCode code={params.code} />}</Route>
       {/* OIDC Roadmap — Season 3, Phase 5b-b: Callback Route. Outside
           ProtectedRoute entirely, same tier as /login — the whole point of
           this route is to establish the session, so it can't require one

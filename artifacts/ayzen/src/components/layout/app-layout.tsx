@@ -9,7 +9,8 @@ import { NotificationBell } from "@/components/notification-bell";
 import { GlobalSearch } from "@/components/global-search";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
+import { SyloShell } from "@/components/sylo/shell/sylo-shell";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -184,6 +185,13 @@ export function AppLayout({ children }: AppLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, token } = useAuth();
   const isAdmin = user?.role === "admin";
+  const [location] = useLocation();
+
+  // Every /vault route (Sylo) lives in the Sylo shell: tree rail, top bar and a
+  // bottom tab bar on mobile. See components/sylo/shell.
+  if (location === "/vault" || location.startsWith("/vault/")) {
+    return <SyloShell>{children}</SyloShell>;
+  }
 
   return (
     <div className="flex h-screen bg-background overflow-hidden selection:bg-primary/30">

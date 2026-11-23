@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "registryId": "frontend-registry",
-  "generatedAt": "2026-11-22",
+  "generatedAt": "2026-11-23",
   "generatedBy": "tools/ui-circuit-validator/build.mjs",
   "schema": "schemas/ui-circuit/frontend-route-entry.v1.json",
   "sourceRegistries": [
@@ -12,11 +12,11 @@
     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
   ],
   "completeness": {
-    "totalRoutes": 194,
-    "resolvedToPage": 194,
-    "totalPageFiles": 191,
+    "totalRoutes": 198,
+    "resolvedToPage": 198,
+    "totalPageFiles": 195,
     "deadPages": 11,
-    "routesWithNoApiCalls": 130,
+    "routesWithNoApiCalls": 134,
     "routesWithOrphanCalls": 0,
     "routesOk": 64
   },
@@ -150,6 +150,18 @@
     {
       "severity": "warning",
       "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/settings/connectors",
+      "pageFile": "pages/sylo/connectors.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/access/:kind",
+      "pageFile": "pages/sylo/access-list.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
       "path": "/wallet/settings",
       "pageFile": "pages/user/module-settings.tsx"
     },
@@ -212,6 +224,12 @@
       "code": "MOCK_OR_STATIC_PAGE",
       "path": "/vault/hub",
       "pageFile": "pages/sylo/redirects.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/account/:section/new",
+      "pageFile": "pages/sylo/account-new.tsx"
     },
     {
       "severity": "warning",
@@ -368,6 +386,12 @@
       "code": "MOCK_OR_STATIC_PAGE",
       "path": "/vault/entity/:id/access",
       "pageFile": "pages/user/vault-entity-access.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/kyc/data/new",
+      "pageFile": "pages/sylo/kyc-data-new.tsx"
     },
     {
       "severity": "warning",
@@ -3243,6 +3267,32 @@
       }
     },
     {
+      "path": "/vault/settings/connectors",
+      "component": "SyloConnectors",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/connectors.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/access/:kind",
+      "component": "SyloAccessList",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/access-list.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
       "path": "/wallet/settings",
       "component": "ModuleSettings",
       "adminOnly": false,
@@ -3552,6 +3602,19 @@
       "allowedRoles": [],
       "source": "USER_ROUTES",
       "pageFile": "pages/sylo/redirects.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/account/:section/new",
+      "component": "SyloAccountNew",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/account-new.tsx",
       "resolution": {
         "status": "resolved",
         "apiCalls": [],
@@ -3940,6 +4003,19 @@
           }
         ],
         "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/kyc/data/new",
+      "component": "SyloKycDataNew",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/kyc-data-new.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
       }
     },
     {

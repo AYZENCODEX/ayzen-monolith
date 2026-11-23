@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { Link } from "wouter";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useInSylo } from "@/components/sylo/shell/context";
 
 export interface Crumb { label: string; href?: string }
 
@@ -20,6 +21,19 @@ export function PageHeader({
   breadcrumbs?: readonly Crumb[];
   className?: string;
 }) {
+  // Inside the Sylo shell the breadcrumb lives in the top bar; the header uses the Sylo type scale.
+  if (useInSylo()) {
+    return (
+      <div className={cn("ph", className)}>
+        <div>
+          {eyebrow && <div className="eb">{eyebrow}</div>}
+          <h1>{title}</h1>
+          {description && <p>{description}</p>}
+        </div>
+        {actions && <div className="acts">{actions}</div>}
+      </div>
+    );
+  }
   return (
     <header className={cn("space-y-3 font-ui", className)}>
       {breadcrumbs && breadcrumbs.length > 0 && (

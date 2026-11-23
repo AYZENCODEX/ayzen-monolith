@@ -10,7 +10,7 @@
  * App.tsx, so nothing here re-implements it.
  */
 import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
-import { Redirect, useParams } from "wouter";
+import { Link, Redirect, useParams } from "wouter";
 import { NotFoundPage, PageHeader, StatGridSkeleton, WidgetSkeleton } from "@/components/console";
 import { SECTION_META, SECTION_VIEWS, VIEW_META } from "@/components/sylo/sections";
 import { SectionTabs } from "@/components/sylo/section-tabs";
@@ -82,6 +82,7 @@ export default function AccountSectionPage() {
         eyebrow="Account"
         title={meta.label}
         description={meta.description}
+        actions={<Link href={`/vault/account/${section}/new`} className="btn p">+ Add {meta.label.toLowerCase()}</Link>}
         breadcrumbs={[
           { label: "Sylo", href: SYLO_HOME },
           { label: "Account" },

@@ -7,6 +7,7 @@
 import type { ReactNode } from "react";
 import { Link } from "wouter";
 import type { LucideIcon } from "lucide-react";
+import { useInSylo } from "@/components/sylo/shell/context";
 import { cn } from "@/lib/utils";
 import { StatTileSkeleton } from "./skeletons";
 
@@ -43,7 +44,14 @@ export interface StatTileProps {
 }
 
 export function StatTile({ label, value, icon: Icon, tone = "neutral", hint, href, loading }: StatTileProps) {
+  const sylo = useInSylo();
   if (loading) return <StatTileSkeleton />;
+  if (sylo) {
+    const kpi = (
+      <div className="kpi solo"><label>{label}</label><strong>{value}</strong>{hint ? <small>{hint}</small> : <small>&nbsp;</small>}</div>
+    );
+    return href ? <Link href={href} className="block">{kpi}</Link> : kpi;
+  }
 
   const body = (
     <>

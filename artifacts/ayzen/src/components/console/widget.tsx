@@ -7,6 +7,7 @@ import { useId, type ReactNode } from "react";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useInSylo } from "@/components/sylo/shell/context";
 
 export function Widget({
   title, description, action, footer, padded = true, className, children,
@@ -21,6 +22,15 @@ export function Widget({
   children: ReactNode;
 }) {
   const titleId = useId();
+  if (useInSylo()) {
+    return (
+      <section aria-labelledby={titleId} className={cn("card", className)}>
+        <header><h3 id={titleId}>{title}</h3><span>{action ?? description ?? ""}</span></header>
+        {padded ? <div className="body">{children}</div> : children}
+        {footer && <footer style={{ borderTop: "1px solid var(--line)", padding: "10px 18px" }}>{footer}</footer>}
+      </section>
+    );
+  }
   return (
     <section
       aria-labelledby={titleId}
