@@ -345,7 +345,7 @@ if (process.argv.includes("--self-test")) {
     ["portal: own OIDC callback", { portals: { ...base.portals, zynth: base.portals.zynth + "fetch(OIDC.issuer+'/api/auth/session-exchange')" } }, "embedded-portal"],
     ["portal: sign-in without the code step", { portals: { ...base.portals, skarn: base.portals.skarn.replaceAll("requireCode", "rc") } }, "embedded-portal"],
     ["portal: /register does not redirect", { redirects: { ...base.redirects, ryft: { ...base.redirects.ryft, register: "<html></html>" } } }, "embedded-portal"],
-    ["portal: open redirect via ?next", { redirects: { ...base.redirects, zynth: { ...base.redirects.zynth, login: base.redirects.zynth.login.replace("(?!\\/)", "") } } }, "embedded-portal"],
+    ["portal: open redirect via ?next", { redirects: { ...base.redirects, zynth: { ...base.redirects.zynth, register: base.redirects.zynth.register.replace("(?!\\/)", "") } } }, "embedded-portal"],
     ["portal: captcha list without ryft", { v2: base.v2.replace("wisp,verve,ryft,zynth", "wisp,verve") }, "embedded-portal"],
     ["portal: country extra dropped", { v2: base.v2.replace('"country", ', "") }, "embedded-portal"],
     ["portal: /register rewrite missing", { deploys: { ...base.deploys, skarn: base.deploys.skarn.replace('"/register"', '"/x"') } }, "embedded-portal"],

@@ -67,6 +67,7 @@
   },
   "dependencies": {
     "@ayzen/config": "workspace:*",
+    "@ayzen/module-registry": "workspace:*",
     "@workspace/db": "workspace:*",
     "drizzle-orm": "catalog:",
     "express": "^5.2.1"
