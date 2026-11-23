@@ -2,11 +2,12 @@
 import fs from "node:fs";
 const NAV = [
   ["", [["console", "Console", "brass"]]],
-  ["", [["accounts", "Accounts", "brass", "", [["entity", "Entity", "38", "brass"], ["local", "Local accounts", "124", "patina"], ["kyc", "KYC", "17", "copper"], ["game", "Game accounts", "9", "slate"], ["enrollment", "Enrollment", "14", "slate"]], "entity.html"]]],
+  ["", [["accounts", "Accounts", "brass", "", [["entity", "Entity", "38", "brass"], ["local", "Local accounts", "124", "patina"], ["game", "Game accounts", "9", "slate"], ["enrollment", "Enrollment", "14", "slate"]], "entity.html"]]],
+  ["", [["kyc", "KYC", "copper", "", [["kyc", "KYC entries", "17", "copper"], ["kyc-data", "Data entity", "12", "copper"]], "kyc.html"]]],
   ["", [["access", "Access", "patina", "", [["access-entity", "Entity", "38", "brass"], ["access-local", "Local accounts", "124", "patina"], ["access-kyc", "KYC", "17", "copper"]]]]],
   ["", [["records", "Records", "brass", "", [["activity", "Activity log", "", "brass"], ["shared", "Shared", "6", "brass"], ["data", "Import / export", "", "brass"], ["compliance", "Compliance", "", "brass"]], "activity.html"]]],
   ["", [["other", "Other", "patina", "", [["2fa", "Two-factor", "", "patina"], ["wallet", "Wallet hub", "26", "moss"], ["backup", "Backup codes", "", "patina"], ["emergency", "Emergency access", "", "patina"]], "2fa.html"]]],
-  ["", [["settings", "Settings", "slate", "", [["security", "Security", "", "patina"], ["devkeys", "Developer keys", "4", "slate"]], "security.html"]]],
+  ["", [["settings", "Settings", "slate", "", [["security", "Security", "", "patina"], ["connectors", "Connectors", "4", "slate"], ["devkeys", "Developer keys", "4", "slate"]], "settings.html"]]],
 ];
 const COL = { brass: "var(--brass)", patina: "var(--patina)", copper: "var(--copper)", slate: "var(--slate)", moss: "var(--moss)", rose: "var(--rose)" };
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
@@ -386,9 +387,44 @@ P["game-detail"] = () => fullDetail({ id: "game", theme: "slate", listLabel: "Ga
     ["Email", "", dl([["Email", mono("mira@northgate.io")], ["Email password", sec()], ["Email 2FA", sec()], ["Email backup code", sec()]])],
     ["Info", "", dl([["Rank", "Immortal"], ["Level", "120"], ["Account age", "3 years"], ["Tags", pill("#inventory", "ac") + " " + pill("#prime", "ac")]])]] });
 
+/* ===== KYC > Data entity, Settings > Connectors ===== */
+P["kyc-data"] = () => shell({ id: "kyc-data", theme: "copper", crumbs: ["Sylo", "KYC", "Data entity"], body:
+  head("KYC · Data entity", "Data entities", "Identity records that KYC entries link to: name, NID, birth date and photos.", btn(ic.plus + " Add data entity", "p").replace("<a ", '<a href="kyc-data-new.html" ')) + tabs([["Overview"], ["All", 1, "12"], ["Used", 0, "8"], ["Unused", 0, "4"]]) +
+  kpis([["Data entities", "12", "3 added this month", "copper"], ["Used", "8", "linked to a KYC entry", "copper"], ["Unused", "4", "ready to link", "copper"], ["Missing photo", "2", "<span class=dn>add both photos</span>", "copper"]]) +
+  card("All data entities", "12", `<table><thead><tr><th>Name</th><th>NID</th><th>Birth date</th><th>Photos</th><th>Linked KYC</th></tr></thead><tbody>${[["Northgate Limited", "•••• 9203", "2008-04-11", "2/2", "KYC · Binance", "ok"], ["A. Karim", "•••• 4410", "1994-09-02", "2/2", "KYC · Bybit", "ok"], ["M. Rowe", "•••• 7781", "1991-01-23", "1/2", "Unused", "warn"], ["Halcyon Collective", "•••• 1156", "2015-06-30", "2/2", "KYC · Bitget", "ok"], ["S. Rahman", "•••• 3345", "1989-12-05", "0/2", "Unused", "bad"]].map((r) => `<tr><td><div class="id">${mk(r[0][0])}<b style="font-weight:500">${r[0]}</b></div></td><td class="mono">${r[1]}</td><td class="mono">${r[2]}</td><td>${pill(r[3], r[5])}</td><td>${r[4] === "Unused" ? pill("Unused", "") : pill(r[4], "ac")}</td></tr>`).join("")}</tbody></table>`, false) });
+P["kyc-data-new"] = () => form({ id: "kyc-data", theme: "copper", listLabel: "Data entity", listHref: "kyc-data.html", crumbs: ["Sylo", "KYC", "Data entity", "Add"], eyebrow: "KYC · Data entity · Add", title: "Add data entity", sub: "Identity details a KYC entry can link to.", cta: "Save data entity", sections: [
+  ["Identity", "", fld("Name", "", { val: "A. Karim" }) + fld("Father's name", "") + `<div class="two">${fld("NID number", "", { val: "•••• 4410" })}${fld("Birthdate", "", { val: "1994-09-02" })}</div>`],
+  ["Photos", "encrypted", `<div class="two"><div style="border:1px dashed var(--line2);border-radius:8px;padding:26px 12px;text-align:center;background:var(--bg)"><div class="mono" style="color:var(--mu)">Photo 1</div><div class="mono" style="color:var(--di);font-size:11.5px;margin-top:4px">Tap to add</div></div><div style="border:1px dashed var(--line2);border-radius:8px;padding:26px 12px;text-align:center;background:var(--bg)"><div class="mono" style="color:var(--mu)">Photo 2</div><div class="mono" style="color:var(--di);font-size:11.5px;margin-top:4px">Tap to add</div></div></div>`],
+  ["Notes", "", fld("Notes", "Anything worth remembering", { opt: 1 })]] });
+P["kyc-data-detail"] = () => fullDetail({ id: "kyc-data", theme: "copper", listLabel: "Data entity", listHref: "kyc-data.html", crumbs: ["Sylo", "KYC", "Data entity", "A. Karim"], eyebrow: "KYC · Data entity", title: "A. Karim", sub: "Used by 1 KYC entry.", pillT: "Used", pillK: "ok", access: "kyc-detail.html",
+  kp: [["Linked KYC", "1", "Binance", "copper"], ["Photos", "2/2", "complete", "copper"], ["Born", "1994", "", "copper"], ["Added", "2026-08", "", "copper"]],
+  sections: [["Identity", "", dl([["Name", "A. Karim"], ["Father's name", "R. Karim"], ["NID number", sec()], ["Birthdate", sec()]])],
+    ["Photos", "2", `<div class="two"><div style="height:120px;border-radius:8px;background:var(--s3);display:flex;align-items:center;justify-content:center" class="mono">PHOTO 1</div><div style="height:120px;border-radius:8px;background:var(--s3);display:flex;align-items:center;justify-content:center" class="mono">PHOTO 2</div></div>`],
+    ["Linked KYC entries", "1", `<div class="row go" data-href="kyc-detail.html"><span class="mk">NK</span><div class="g"><b>northgate.kyc</b><span>Binance · Paid</span></div>${pill("Healthy", "ok")}</div>`, false],
+    ["Notes", "", "Verified in person, originals kept offline."]] });
+
+const conn = (m, name, desc, st, k, href) => `<div class="row ${href ? "go" : ""}" ${href ? `data-href="${href}"` : ""} style="padding:14px 18px"><span class="mk">${m}</span><div class="g"><b>${name}</b><span style="font-family:var(--sans)">${desc}</span></div>${pill(st, k)}</div>`;
+P.connectors = () => shell({ id: "connectors", theme: "slate", crumbs: ["Sylo", "Settings", "Connectors"], body:
+  head("Settings · Connectors", "Connectors", "Link Sylo to bots, apps and other modules. Each link can be paused or removed at any time.", btn(ic.plus + " Add connector", "p")) +
+  kpis([["Connected", "4", "of 8 available", "slate"], ["Needs attention", "1", "<span class=dn>Gmail token expired</span>", "slate"], ["Last sync", "6m", "Google Drive", "slate"], ["Webhooks today", "128", "", "slate"]]) +
+  `<div class="stack">` + card("Messaging", "1", conn("TG", "Telegram bot", "Alerts, code requests and quick lookups from chat.", "Connected", "ok", "connector-telegram.html"), false) +
+  card("Apps", "3", conn("GD", "Google Drive", "Encrypted vault backups to a folder you choose.", "Connected", "ok", "connector-drive.html") + conn("GM", "Gmail", "Read verification mail into the mailbox view.", "Reconnect", "bad", "") + conn("GH", "GitHub", "Store deploy keys and sign-in recovery codes.", "Not connected", "", ""), false) +
+  card("Modules", "2", conn("SK", "Skarn", "Share entities and sign in with your vault identity.", "Connected", "ok", "") + conn("WA", "Warde", "Use vault credentials inside Warde.", "Connected", "ok", ""), false) + `</div>` });
+P["connector-telegram"] = () => fullDetail({ id: "connectors", theme: "slate", listLabel: "Connectors", listHref: "connectors.html", crumbs: ["Sylo", "Settings", "Connectors", "Telegram bot"], eyebrow: "Connector · Messaging", title: "Telegram bot", sub: "@sylo_vault_bot · linked to 2 chats.", pillT: "Connected", pillK: "ok", access: "connectors.html",
+  kp: [["Chats", "2", "you + ops group", "slate"], ["Messages 24h", "37", "", "slate"], ["Last event", "6m", "code request", "slate"], ["Token", "Valid", "rotated 41d ago", "slate"]],
+  sections: [["Bot", "", dl([["Bot username", mono("@sylo_vault_bot")], ["Bot token", sec()], ["Webhook", mono("https://api.sylo.app/tg/hook") + " " + pill("Active", "ok")]])],
+    ["Linked chats", "2", [["Mira R.", "Private chat", "Owner"], ["Northgate Ops", "Group · 4 members", "Alerts only"]].map((c) => `<div class="row"><span class="mk">${c[0][0]}</span><div class="g"><b>${c[0]}</b><span>${c[1]}</span></div>${pill(c[2], "ac")}</div>`).join(""), false],
+    ["Notifications", "", toggle("Login alerts", "A sign-in or new device on the vault", 1) + toggle("2FA code requests", "Reply with a live code on request", 1) + toggle("Backup code low", "When a set drops below 3", 1) + toggle("Expiry reminders", "KYC and subscriptions", 0)],
+    ["Commands", "", dl([["/code &lt;name&gt;", "Send a live 2FA code"], ["/find &lt;text&gt;", "Search accounts"], ["/lock", "Lock the vault now"]])],
+    ["Danger zone", "", `<div class="row" style="padding:0"><div class="g"><b>Disconnect bot</b><span style="font-family:var(--sans)">Chats stop receiving alerts.</span></div>${btn("Disconnect")}</div>`]] });
+P["connector-drive"] = () => fullDetail({ id: "connectors", theme: "slate", listLabel: "Connectors", listHref: "connectors.html", crumbs: ["Sylo", "Settings", "Connectors", "Google Drive"], eyebrow: "Connector · Storage", title: "Google Drive", sub: "mira@northgate.io · folder Sylo-Backups.", pillT: "Connected", pillK: "ok", access: "connectors.html",
+  kp: [["Last backup", "6m", "18.4 MB", "slate"], ["Backups kept", "14", "30 day window", "slate"], ["Encryption", "On", "client-side", "slate"], ["Next run", "02:00", "daily", "slate"]],
+  sections: [["Account", "", dl([["Google account", mono("mira@northgate.io")], ["Folder", mono("Sylo-Backups")], ["Scope", "Files created by Sylo only"]])],
+    ["Schedule", "", toggle("Daily encrypted backup", "Runs at 02:00 local time", 1) + toggle("Back up before import", "Snapshot first when importing data", 1)],
+    ["Recent backups", "3", hist([["vault-full-2026-11-23", "18.4 MB", "6m"], ["vault-full-2026-11-22", "18.3 MB", "1d"], ["vault-full-2026-11-21", "18.3 MB", "2d"]]), false]] });
 fs.mkdirSync("out", { recursive: true });
 fs.writeFileSync("out/sylo.css", fs.readFileSync("sylo.css","utf8").replaceAll("../../packages","../../../packages"));
-const LINKS = { entity: ["<tr><td>", "entity-detail"], local: ["<tr><td", "local-detail"], kyc: ["<tr><td>", "kyc-detail"], game: ["<tr><td>", "game-detail"], wallet: ["<tr><td>", "wallet-detail"], shared: ["<tr><td>", "shared-detail"], activity: ["<tr><td", "activity-detail"], data: ["<tr><td>", "data-detail"], compliance: ["<tr><td>", "compliance-detail"] };
+const LINKS = { entity: ["<tr><td>", "entity-detail"], local: ["<tr><td", "local-detail"], kyc: ["<tr><td>", "kyc-detail"], "kyc-data": ["<tr><td>", "kyc-data-detail"], game: ["<tr><td>", "game-detail"], wallet: ["<tr><td>", "wallet-detail"], shared: ["<tr><td>", "shared-detail"], activity: ["<tr><td", "activity-detail"], data: ["<tr><td>", "data-detail"], compliance: ["<tr><td>", "compliance-detail"] };
 for (const [k, f] of Object.entries(P)) { let h = f(); const L = LINKS[k]; if (L) { const to = L[1]; h = h.replace("<table>", '<table class="lt">'); h = h.replace(/<tbody>([\s\S]*?)<\/tbody>/, (m, inner) => "<tbody>" + inner.split("<tr><td").join(`<tr data-href="${to}.html"><td`) + "</tbody>"); }
   if (k === "2fa") h = h.split('<section class="card"><div class="body" style="display:flex').join('<section class="card" data-href="2fa-detail.html"><div class="body" style="display:flex');
   if (k === "backup") h = h.split('<section class="card">').join('<section class="card" data-href="backup-detail.html">');
