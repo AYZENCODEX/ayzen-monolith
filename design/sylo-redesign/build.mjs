@@ -284,7 +284,7 @@ P["game-new"] = () => form({ id: "game", theme: "slate", listLabel: "Game accoun
   ["Account", "", fld("Username", "", { val: "mira_prime" }) + fld("Email", "", { val: "mira@northgate.io" }) + fld("Password", "", { val: "••••••••••••", end: "GENERATE" })],
   ["Entries", "optional", fld("First entry", "e.g. CS2 inventory", { opt: 1 }) + `<div class="two">${fld("Items", "0", { opt: 1 })}${fld("Value (USD)", "0.00", { opt: 1 })}</div>`]] });
 
-const sheetHtml = ({ mark, name, sub, pillT, pillK, facts, actions, open }) => `<div class="scrim"></div><div class="sheet"><div class="grab"></div><div style="display:flex;gap:12px;align-items:center;margin:8px 0 14px"><span class="mk" style="width:44px;height:44px;font-size:15px">${mark}</span><div style="flex:1;min-width:0"><b style="font:500 20px var(--serif)">${name}</b><span class="sub mono" style="display:block;color:var(--di);font-size:11.5px">${sub}</span></div>${pill(pillT, pillK)}</div><div class="facts">${facts.map((f) => `<div><label>${f[0]}</label><b>${f[1]}</b></div>`).join("")}</div><div class="qa">${actions.map((a) => `<a class="btn">${a}</a>`).join("")}</div><a class="btn p" href="${open}" style="width:100%;justify-content:center;height:44px;margin-top:12px">Open full details</a></div>`;
+const sheetHtml = ({ mark, name, sub, pillT, pillK, facts, actions, open, extra = "" }) => `<div class="scrim"></div><div class="sheet"><div class="grab"></div><div style="display:flex;gap:12px;align-items:center;margin:8px 0 14px"><span class="mk" style="width:44px;height:44px;font-size:15px">${mark}</span><div style="flex:1;min-width:0"><b style="font:500 20px var(--serif)">${name}</b><span class="sub mono" style="display:block;color:var(--di);font-size:11.5px">${sub}</span></div>${pill(pillT, pillK)}</div><div class="facts">${facts.map((f) => `<div><label>${f[0]}</label><b>${f[1]}</b></div>`).join("")}</div>${extra}<div class="qa">${actions.map((a) => `<a class="btn">${a}</a>`).join("")}</div><a class="btn p" href="${open}" style="width:100%;justify-content:center;height:44px;margin-top:12px">Open full details</a></div>`;
 const quick = (listKey, spec) => () => P[listKey]().replace('<nav class="mbar">', sheetHtml(spec) + '<nav class="mbar">');
 P["entity-quick"] = quick("entity", { mark: "AL", name: "Aurelia Labs", sub: "ENT-0142 · 7 identities", pillT: "Active", pillK: "ok", facts: [["Worth", "$82,410"], ["Health", "Fix 2"], ["2FA", "5 of 7"], ["Updated", "2d ago"]], actions: ["Open access", "Share", "Copy ID"], open: "entity-detail.html" });
 P["local-quick"] = quick("local", { mark: "MR", name: "m.rowe.trade", sub: "LOC-0871 · Binance", pillT: "2FA on", pillK: "ok", facts: [["Value", "$18,240"], ["Backup", "4 left"], ["Tags", "trading"], ["Updated", "2d ago"]], actions: ["Open access", "Copy username", "Share"], open: "local-detail.html" });
@@ -305,6 +305,86 @@ P["game-detail"] = () => fullDetail({ id: "game", theme: "slate", listLabel: "Ga
   sections: [["Details", "", dl([["Platform", "Steam"], ["Username", '<span class="mono">mira_prime</span>'], ["Email", '<span class="mono">mira@northgate.io</span>'], ["Created", '<span class="mono">11 Jan 2024</span>']])],
     ["Entries", "14", [["CS2 inventory", "212 items", "$2,180"], ["Dota 2 cosmetics", "58 items", "$610"], ["Steam wallet", "balance", "$84"], ["Rust skins", "31 items", "$546"]].map((e) => `<div class="row go"><div class="g"><b>${e[0]}</b><span>${e[1]}</span></div><span class="num">${e[2]}</span></div>`).join(""), false],
     ["History", "last 3", hist([["Entry added", "mira", "3d"], ["Value refreshed", "auto", "1w"], ["Opened", "mira", "1w"]]), false]] });
+
+/* ===== Real-schema pages (fields taken from artifacts/ayzen config/fields/*.ts and the live pages) ===== */
+const mono = (s) => `<span class="mono">${s}</span>`;
+const sec = (v) => `${mono("••••••••••")} <a class="mono" style="color:var(--ac);font-size:11px;margin-left:8px">REVEAL</a>`;
+const grp = (t) => `<div class="eb" style="margin:18px 0 8px">${t}</div>`;
+const pw = (label, o = {}) => fld(label, "••••••••", o);
+const sub = (name) => `<div style="display:flex;gap:8px;margin-bottom:14px">${["Main", "Info", "Recovery"].map((s) => `<span class="chip ${s === name ? "on" : ""}">${s}</span>`).join("")}</div>`;
+const tagIn = (tags) => `<div class="fld"><label>Tags <span style="color:var(--di);text-transform:none;letter-spacing:0">type and press space</span></label><div class="in" style="gap:6px;flex-wrap:wrap">${tags.map((t) => pill("#" + t, "ac")).join("")}</div></div>`;
+const rows = (a) => `<div class="facts" style="grid-template-columns:1fr">${a.map((r) => `<div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><label style="margin:0">${r[0]}</label><b style="font-weight:500;overflow:hidden;text-overflow:ellipsis">${r[1]}</b></div>`).join("")}</div>`;
+const hidden = `<div class="mono" style="color:var(--di);font-size:11px;margin:10px 0 0">🔒 Passwords hidden — open full details to reveal</div>`;
+const cr = (a) => dl(a.map(([k, v, s]) => [k, s ? sec() : mono(v)]));
+
+/* ---------- ENTITY ---------- */
+P["entity-new"] = () => form({ id: "entity", theme: "brass", listLabel: "Entity", listHref: "entity.html", crumbs: ["Sylo", "Entity", "Add"], eyebrow: "Entity · Add", title: "Add entity", sub: "Name it, then fill each platform's credentials.", cta: "Save entity", sections: [
+  ["Entity", "", fld("Entity name", "Protocol / Project name", { val: "Aurelia Labs" }) + fld("Score (0–10)", "", { val: "8.4", opt: 1 }) + tagIn(["priority", "airdrop"])],
+  ["Platform", "pick one to edit", chips(["Email", "Twitter", "Discord", "Telegram", "Wallet", "Other"], "Twitter")],
+  ["Twitter · Main", "", sub("Main") + fld("Username", "", { val: "@aurelialabs" }) + pw("Password", { val: "••••••••••••", end: "GENERATE" }) + fld("Email", "", { val: "ops@aurelia.io" }) + pw("Email password") + `<div class="two">${fld("Acct. 2FA secret", "TOTP secret…")}${fld("Acct. backup code", "backup code…")}</div><div class="two">${fld("Email 2FA secret", "TOTP secret…")}${fld("Email backup code", "backup code…")}</div>` + fld("Notes", "Any additional info…", { opt: 1 })],
+  ["Twitter · Info", "", `<div class="two">${fld("Last login", "", { val: "2026-11-18" })}${fld("Buy date", "", { opt: 1 })}</div><div class="two">${fld("Create date", "", { opt: 1 })}${fld("Followers", "e.g. 1200")}</div><div class="two">${fld("Account age", "e.g. 3 years")}${fld("Worth ($)", "0.00")}</div>${fld("Buy value ($)", "0.00")}`],
+  ["Twitter · Recovery", "optional", fld("Recovery email", "recovery@mail.com", { opt: 1 }) + pw("Recovery email pass") + `<div class="two">${fld("Recovery 2FA secret", "TOTP…")}${fld("Recovery backup code", "code…")}</div>`],
+  ["Wallet", "manual", fld("Wallet addresses", "one per line", { opt: 1 }) + fld("Backup codes", "one per line", { opt: 1 })]] });
+P["entity-quick"] = quick("entity", { mark: "AL", name: "Aurelia Labs", sub: "ENT-0142 · Rank A · 8.4", pillT: "$82,410", pillK: "ac", facts: [["Health", "Fix 2"], ["Projects", "3 · 2 active"]],
+  extra: `<div style="display:flex;gap:6px;margin:12px 0">${pill("#priority", "ac")}${pill("#airdrop", "ac")}${pill("No 2FA", "bad")}${pill("▲ 6.2% worth", "ok")}</div>` + rows([["Email", "ops@aurelia.io"], ["Twitter", "@aurelialabs"], ["Discord", "aurelia#0001"], ["Telegram", "@aurelia_hq"]]) + hidden, actions: ["Access", "Share"], open: "entity-detail.html" });
+P["entity-detail"] = () => fullDetail({ id: "entity", theme: "brass", listLabel: "Entity", listHref: "entity.html", crumbs: ["Sylo", "Entity", "Aurelia Labs"], eyebrow: "Entity · ENT-0142", title: "Aurelia Labs", sub: "Rank A · enrolled in 3 projects, 2 active.", pillT: "Fix 2", pillK: "warn", access: "access-entity-detail.html",
+  kp: [["Worth", "$82,410", "<span class=up>▲ 6.2%</span>", "brass"], ["Buy value", "$51,000", "profit +$31,410", "brass"], ["Score", "8.4", "Rank A", "brass"], ["Projects", "3", "2 active", "brass"]],
+  sections: [["Overview", "", dl([["Serial", mono("ENT-0142")], ["Tags", pill("#priority", "ac") + " " + pill("#airdrop", "ac")], ["Status", pill("No 2FA on Telegram", "bad") + " " + pill("Weak recovery", "warn")], ["Created", mono("14 Mar 2025")], ["PIN gate", "On"]])],
+    ["Credentials", "email", dl([["Email", mono("ops@aurelia.io")], ["Email password", sec()], ["Email 2FA", sec()], ["Backup code", sec()], ["Recovery email", mono("recovery@aurelia.io")], ["Recovery 2FA", sec()]])],
+    ["Twitter", "", dl([["Username", mono("@aurelialabs")], ["Password", sec()], ["Acct. 2FA", sec()], ["Followers", "12,400"], ["Account age", "3 years"], ["Worth / Buy", "$18,200 / $11,000"], ["Last login", mono("2026-11-18")]])],
+    ["Discord", "", dl([["Username", mono("aurelia#0001")], ["Password", sec()], ["Acct. 2FA", sec()], ["Followers", "4,100"], ["Worth / Buy", "$9,400 / $6,000"]])],
+    ["Telegram", "", dl([["Username", mono("@aurelia_hq")], ["Phone", mono("+44 7700 900123")], ["Password", sec()], ["Acct. 2FA", pill("None", "bad")], ["Worth / Buy", "$6,100 / $3,500"]])],
+    ["Wallet", "3 addresses", dl([["Address 1", mono("0x7a3f…c91e")], ["Address 2", mono("0x2b88…04d2")], ["Address 3", mono("9xQe…Rk4A")], ["Backup codes", sec()]])],
+    ["Gas", "", dl([["ETH", "0.42 · low"], ["SOL", "3.1"], ["Reserve", "$1,980"]])],
+    ["Other", "2 accounts", dl([["Notion", mono("aurelia.so")], ["Figma", mono("team@aurelia.io")]])]] });
+
+/* ---------- LOCAL ---------- */
+P["local-new"] = () => form({ id: "local", theme: "patina", listLabel: "Local accounts", listHref: "local.html", crumbs: ["Sylo", "Local accounts", "Add"], eyebrow: "Local · Add", title: "Add account", sub: "Pick a platform, then add credentials, dates and value.", cta: "Save account", sections: [
+  ["Platform", "", chips(["Facebook", "GitHub", "Google", "Twitter", "Discord", "LinkedIn", "+ Custom"], "Twitter") + `<div style="height:14px"></div>` + fld("Followers", "e.g. 1200", { opt: 1, hint: "Metric changes with the platform. Tips: age 6+ months for airdrops · keep bio and avatar set." })],
+  ["Credentials", "", fld("Username", "", { val: "@m_rowe" }) + pw("Password", { val: "••••••••••••", end: "GENERATE" }) + fld("Email", "", { val: "m.rowe@northgate.io" }) + pw("Email password") + fld("Recovery email", "recovery@mail.com", { opt: 1 }) + pw("Recovery pass") + `<div class="two">${fld("2FA secret", "TOTP secret…")}${fld("Recovery 2FA", "TOTP…")}</div>` + fld("Backup codes", "one per line", { opt: 1 })],
+  ["Dates & label", "", fld("Label / nickname", "e.g. Main acc, farming1…", { val: "Main acc" }) + `<div class="two">${fld("Create date", "")}${fld("Buy date", "")}</div>` + fld("Last login date", "")],
+  ["Value", "", `<div class="two">${fld("Account worth ($)", "0.00")}${fld("Buy price ($)", "0.00")}</div>`]] });
+P["local-quick"] = quick("local", { mark: "MA", name: "Main acc", sub: "Twitter · Rank B", pillT: "ROI +62%", pillK: "ok", facts: [["Worth", "$1,620"], ["Followers", "1,200"]],
+  extra: rows([["Username", "@m_rowe"], ["Email", "m.rowe@northgate.io"], ["2FA", "Set"], ["Last login", "3d ago"]]) + hidden, actions: ["Access", "Share"], open: "local-detail.html" });
+P["local-detail"] = () => fullDetail({ id: "local", theme: "patina", listLabel: "Local accounts", listHref: "local.html", crumbs: ["Sylo", "Local accounts", "Main acc"], eyebrow: "Local · Twitter", title: "Main acc", sub: "@m_rowe · Rank B", pillT: "2FA set", pillK: "ok", access: "access-local-detail.html",
+  kp: [["Worth", "$1,620", "<span class=up>ROI +62%</span>", "patina"], ["Buy price", "$1,000", "", "patina"], ["Followers", "1,200", "", "patina"], ["Last login", "3d", "", "patina"]],
+  sections: [["Credentials", "", dl([["Username", mono("@m_rowe")], ["Email", mono("m.rowe@northgate.io")], ["Password", sec()], ["Recovery email", mono("recovery@mail.com")], ["Recovery pass", sec()], ["2FA", sec()], ["Recovery 2FA", sec()], ["Backups", sec()]])],
+    ["Health", "", [["Authenticator", "2FA secret saved", "ok", "On"], ["Recovery email", "set", "ok", "Set"], ["Backup codes", "none saved", "warn", "Missing"]].map((r) => `<div class="row"><div class="g"><b>${r[0]}</b><span>${r[1]}</span></div>${pill(r[3], r[2])}</div>`).join(""), false],
+    ["Stats & value", "", dl([["Worth", "$1,620"], ["Buy price", "$1,000"], ["ROI", pill("+62%", "ok")], ["Followers", "1,200"]])],
+    ["Dates", "", dl([["Created", mono("2024-03-02")], ["Bought", mono("2025-01-14")], ["Last login", mono("2026-11-20")]])],
+    ["Points", "log", hist([["+120 followers", "added", "5d"], ["+80 followers", "added", "3w"]]), false]] });
+
+/* ---------- KYC ---------- */
+P["kyc-new"] = () => form({ id: "kyc", theme: "copper", listLabel: "KYC", listHref: "kyc.html", crumbs: ["Sylo", "KYC", "Add"], eyebrow: "KYC · Add", title: "Add KYC entry", sub: "Pick the exchange, then account, identity link and seller.", cta: "Save entry", sections: [
+  ["Exchange", "", chips(["Bitget", "Binance", "KuCoin", "Gate.io", "RedotPay", "Fasset", "MePass", "Bybit", "Avalanche", "Other"], "Binance")],
+  ["Account · Main", "", sub("Main") + fld("Username", "", { val: "northgate.kyc" }) + pw("Account password", { val: "••••••••••••", end: "GENERATE" }) + fld("Email", "", { val: "kyc@northgate.io" }) + pw("Email password") + `<div class="two">${fld("Account 2FA secret", "TOTP…")}${fld("Account backup code", "code…")}</div><div class="two">${fld("Email 2FA secret", "TOTP…")}${fld("Email backup code", "code…")}</div>` + fld("Notes", "", { opt: 1 })],
+  ["Account · Info", "", `<div class="two">${fld("Last login", "")}${fld("Buy date", "")}</div>${fld("Create date", "")}<div class="two">${fld("Buy price ($)", "0.00")}${fld("Worth ($)", "0.00")}</div>${fld("Followers / metric", "", { opt: 1 })}`],
+  ["Account · Recovery", "optional", fld("Recovery email", "", { opt: 1 }) + pw("Recovery email password") + `<div class="two">${fld("Recovery 2FA secret", "")}${fld("Recovery backup code", "")}</div>`],
+  ["Identity", "linked", `<div class="row go" style="padding:0"><span class="mk">ID</span><div class="g"><b>Choose a Data entity</b><span style="font-family:var(--sans)">Name, NID, birth date and photos live on the Data entity.</span></div><span class="mono" style="color:var(--ac)">PICK ›</span></div>`],
+  ["Seller", "", fld("Platform", "", { val: "Telegram" }) + `<div class="two">${fld("Seller name", "")}${fld("Contact number", "")}</div><div class="two">${fld("Location", "")}${fld("Connection", "")}</div><div class="two">${fld("Buy price ($)", "0.00")}${fld("Buy date", "")}</div>${fld("Social account", "", { opt: 1 })}` + toggle("Paid", "Mark once the seller has been paid", 0)]] });
+P["kyc-quick"] = quick("kyc", { mark: "NK", name: "northgate.kyc", sub: "Binance · KYC", pillT: "Paid", pillK: "ok", facts: [["Worth", "$1,150"], ["Buy price", "$900"], ["Health", "Healthy"], ["Seller", "Telegram"]],
+  extra: rows([["Email", "kyc@northgate.io"], ["Identity", "Linked · Data #12"], ["Bought", "2026-09-02"]]) + hidden, actions: ["Access", "Share"], open: "kyc-detail.html" });
+P["kyc-detail"] = () => fullDetail({ id: "kyc", theme: "copper", listLabel: "KYC", listHref: "kyc.html", crumbs: ["Sylo", "KYC", "northgate.kyc"], eyebrow: "KYC · Binance", title: "northgate.kyc", sub: "Health 86 · identity linked.", pillT: "Paid", pillK: "ok", access: "access-kyc-detail.html",
+  kp: [["Worth", "$1,150", "<span class=up>▲ $250</span>", "copper"], ["Buy price", "$900", "paid", "copper"], ["Health", "86", "Healthy", "copper"], ["Bought", "2026-09-02", "", "copper"]],
+  sections: [["Overview", "", dl([["Exchange", "Binance"], ["Health", pill("Healthy 86", "ok")], ["Identity", pill("Linked", "ok") + " Data #12"], ["Payment", pill("Done", "ok")]])],
+    ["Credentials", "", dl([["Username", mono("northgate.kyc")], ["Email", mono("kyc@northgate.io")], ["Account password", sec()], ["Email 2FA", sec()], ["Account 2FA", sec()], ["Backup code", sec()], ["Recovery 2FA", sec()]])],
+    ["KYC info", "from Data entity", dl([["Full name", "Northgate Limited"], ["NID number", sec()], ["Birth date", sec()], ["Contact", mono("+44 7700 900123")]])],
+    ["Purchase", "", dl([["Platform", "Telegram"], ["Seller", "A. Karim"], ["Location", "Dhaka"], ["Connection", "Referral"], ["Buy price", "$900"], ["Buy date", mono("2026-09-02")], ["Paid", pill("Yes", "ok")]])],
+    ["Profile", "", dl([["Worth", "$1,150"], ["Followers / metric", "—"], ["Created", mono("2026-08-20")], ["Last login", mono("2026-11-19")]])]] });
+
+/* ---------- GAME ---------- */
+P["game-new"] = () => form({ id: "game", theme: "slate", listLabel: "Game accounts", listHref: "game.html", crumbs: ["Sylo", "Game accounts", "Add"], eyebrow: "Game · Add", title: "Add game account", sub: "Pick the platform, then account, email and info.", cta: "Save account", sections: [
+  ["Platform", "", chips(["Steam", "Epic Games", "PlayStation", "Xbox", "Riot Games", "Mobile Legends", "Free Fire", "PUBG Mobile", "Roblox", "Other"], "Steam")],
+  ["Account", "", fld("Username", "account username / handle", { val: "mira_prime" }) + pw("Account password", { val: "••••••••••••", end: "GENERATE" }) + fld("Notes", "Any additional info about this game account…", { opt: 1 })],
+  ["Email", "", fld("Email", "account@email.com", { val: "mira@northgate.io" }) + pw("Email password") + `<div class="two">${fld("Email 2FA secret", "TOTP secret…")}${fld("Email backup code", "backup code…")}</div>`],
+  ["Info", "", `<div class="two">${fld("Rank", "e.g. Immortal, Mythic Glory")}${fld("Level", "e.g. 120")}</div>${fld("Account age", "e.g. 3 years")}` + tagIn(["inventory", "prime"])]] });
+P["game-quick"] = quick("game", { mark: "ST", name: "mira_prime", sub: "Steam · Immortal · Lv.120 · 3 years", pillT: "Active", pillK: "ok", facts: [["Rank", "Immortal"], ["Level", "120"]],
+  extra: `<div style="display:flex;gap:6px;margin:12px 0">${pill("ACCOUNT", "ac")}${pill("EMAIL", "ac")}${pill("#inventory", "ac")}${pill("#prime", "ac")}</div>` + rows([["Email", "mira@northgate.io"], ["Account age", "3 years"]]) + hidden, actions: ["Edit", "Share", "Ban"], open: "game-detail.html" });
+P["game-detail"] = () => fullDetail({ id: "game", theme: "slate", listLabel: "Game accounts", listHref: "game.html", crumbs: ["Sylo", "Game accounts", "mira_prime"], eyebrow: "Game · Steam", title: "mira_prime", sub: "Immortal · Lv.120 · 3 years", pillT: "Active", pillK: "ok", access: "access-entity-detail.html",
+  kp: [["Rank", "Immortal", "", "slate"], ["Level", "120", "", "slate"], ["Age", "3y", "", "slate"], ["Tags", "2", "#inventory #prime", "slate"]],
+  sections: [["Account", "", dl([["Username", mono("mira_prime")], ["Password", sec()], ["Notes", "Main Steam account."]])],
+    ["Email", "", dl([["Email", mono("mira@northgate.io")], ["Email password", sec()], ["Email 2FA", sec()], ["Email backup code", sec()]])],
+    ["Info", "", dl([["Rank", "Immortal"], ["Level", "120"], ["Account age", "3 years"], ["Tags", pill("#inventory", "ac") + " " + pill("#prime", "ac")]])]] });
 
 fs.mkdirSync("out", { recursive: true });
 fs.writeFileSync("out/sylo.css", fs.readFileSync("sylo.css","utf8").replaceAll("../../packages","../../../packages"));

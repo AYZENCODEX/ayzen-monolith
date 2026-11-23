@@ -145,3 +145,5 @@ a.card:hover{border-color:var(--ac)}
 .facts{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden}.facts div{padding:11px 14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}.facts div:nth-child(2n){border-right:0}.facts div:nth-last-child(-n+2){border-bottom:0}.facts label{display:block;font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--di)}.facts b{font-weight:500;font-size:15px}
 .qa{display:flex;gap:8px;margin-top:12px}.qa .btn{flex:1;justify-content:center;height:38px;font-size:12px;padding:0 6px}
 @media(max-width:900px){.actionbar{bottom:46px}.sheet{bottom:0;padding-bottom:26px}.two{grid-template-columns:1fr}}
+
+.sheet{max-height:88vh;overflow:auto}.facts>div{min-width:0}
