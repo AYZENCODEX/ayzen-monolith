@@ -7,6 +7,7 @@
 import { type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
+import { getCurrentSubdomainApp, getModuleForPath, moduleUrl, centralUrl } from "@/lib/subdomain-app";
 import { GlobalSearch } from "@/components/global-search";
 import { NAV, MOBILE_BAR, MOBILE_GROUP_ALIAS, activeLeaf, type Tone } from "./nav";
 import { InSylo } from "./context";
@@ -16,6 +17,26 @@ const COL: Record<Tone, string> = {
   brass: "var(--brass)", patina: "var(--patina)", copper: "var(--copper)",
   slate: "var(--slate)", moss: "var(--moss)", rose: "var(--rose)",
 };
+
+/**
+ * Resolve a nav href. Inside a module host, a page owned by another module
+ * (Zynth, Fyra…) or by the central app (credits, subscription) needs a full
+ * navigation — the scope guard would bounce a client-side one back to /vault.
+ */
+function resolve(path: string): { href: string; external: boolean } {
+  const current = getCurrentSubdomainApp();
+  if (!current) return { href: path, external: false };
+  const owner = getModuleForPath(path);
+  if (owner === current.id) return { href: path, external: false };
+  return { href: owner ? moduleUrl(owner, path) : centralUrl(path), external: true };
+}
+
+function NavLink({ to, className, style, children }: { to: string; className?: string; style?: React.CSSProperties; children: ReactNode }) {
+  const r = resolve(to);
+  return r.external
+    ? <a href={r.href} className={className} style={style}>{children}</a>
+    : <Link href={r.href} className={className} style={style}>{children}</Link>;
+}
 
 function crumbsFor(path: string): string[] {
   const { group, leaf } = activeLeaf(path);
@@ -45,16 +66,16 @@ export function SyloShell({ children }: { children: ReactNode }) {
         <nav className="nav">
           {NAV.map((g) => (
             <div key={g.key}>
-              <Link href={g.href} className={group?.key === g.key && !leaf ? "on" : ""} style={{ ["--c" as string]: COL[g.tone] }}>
+              <NavLink to={g.href} className={group?.key === g.key && !leaf ? "on" : ""} style={{ ["--c" as string]: COL[g.tone] }}>
                 <span className="d" />{g.label}
-                {g.kids && <em className="chev">⌄</em>}
-              </Link>
+                {g.kids ? <em className="chev">⌄</em> : g.key === "zynth" ? <em>AI</em> : null}
+              </NavLink>
               {g.kids && (
                 <div className="subnav">
                   {g.kids.map((k) => (
-                    <Link key={k.key} href={k.href} className={leaf?.key === k.key ? "on" : ""} style={{ ["--c" as string]: COL[k.tone ?? g.tone] }}>
+                    <NavLink key={k.key} to={k.href} className={leaf?.key === k.key ? "on" : ""} style={{ ["--c" as string]: COL[k.tone ?? g.tone] }}>
                       {k.label}<em />
-                    </Link>
+                    </NavLink>
                   ))}
                 </div>
               )}
@@ -79,7 +100,7 @@ export function SyloShell({ children }: { children: ReactNode }) {
 
       <nav className="mbar" aria-label="Sylo tabs">
         {MOBILE_BAR.map((t) => (
-          <Link key={t.group} href={t.href} className={mobileGroup === t.group ? "on" : ""}>{t.label}</Link>
+          <NavLink key={t.group} to={t.href} className={mobileGroup === t.group ? "on" : ""}>{t.label}</NavLink>
         ))}
       </nav>
     </div>

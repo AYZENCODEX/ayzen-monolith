@@ -57,6 +57,15 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
+    key: "credit", label: "Credit", tone: "moss", href: "/credits", match: ["/credits"],
+    kids: [
+      { key: "orders", label: "Order", href: "/marketplace/order-history", tone: "moss", match: ["/marketplace/order-history"] },
+      { key: "subscription", label: "Subscription", href: "/subscription", tone: "moss", match: ["/subscription"] },
+      { key: "payment-methods", label: "Payment method", href: "/finance/payment-methods", tone: "moss", match: ["/finance/payment-methods"] },
+    ],
+  },
+  { key: "zynth", label: "Zynth AI", tone: "patina", href: "/assistant", match: ["/assistant"] },
+  {
     key: "settings", label: "Settings", tone: "slate", href: "/vault/settings", match: ["="],
     kids: [
       { key: "security", label: "Security", href: "/vault/security", tone: "patina", match: ["/vault/security"] },
@@ -74,6 +83,9 @@ export function activeLeaf(path: string): { group: NavGroup | null; leaf: NavLea
   let best: { group: NavGroup | null; leaf: NavLeaf | null; len: number } = { group: null, leaf: null, len: -1 };
   for (const g of NAV) {
     if (g.match.includes("=") && path === g.href && g.href.length > best.len) best = { group: g, leaf: null, len: g.href.length };
+    for (const m of g.match) {
+      if (m !== "=" && hit(path, m) && m.length > best.len) best = { group: g, leaf: null, len: m.length };
+    }
     for (const k of g.kids ?? []) {
       for (const m of k.match) {
         if (hit(path, m) && m.length > best.len) best = { group: g, leaf: k, len: m.length };
@@ -92,4 +104,4 @@ export const MOBILE_BAR: { label: string; href: string; group: string }[] = [
 ];
 
 /** Groups that light the same mobile tab (KYC is reached through Accounts on mobile). */
-export const MOBILE_GROUP_ALIAS: Record<string, string> = { kyc: "accounts", other: "records" };
+export const MOBILE_GROUP_ALIAS: Record<string, string> = { kyc: "accounts", other: "records", credit: "settings", zynth: "settings" };
