@@ -4,8 +4,8 @@ const NAV = [
   ["", [["console", "Console", "brass"]]],
   ["", [["accounts", "Accounts", "brass", "", [["entity", "Entity", "38", "brass"], ["local", "Local accounts", "124", "patina"], ["kyc", "KYC", "17", "copper"], ["game", "Game accounts", "9", "slate"], ["enrollment", "Enrollment", "14", "slate"]], "entity.html"]]],
   ["", [["access", "Access", "patina", "", [["access-entity", "Entity", "38", "brass"], ["access-local", "Local accounts", "124", "patina"], ["access-kyc", "KYC", "17", "copper"]]]]],
-  ["Records", [["data", "Import / export", "brass"], ["shared", "Shared", "brass", "6"], ["activity", "Activity log", "brass"], ["compliance", "Compliance", "brass"]]],
-  ["Other", [["2fa", "Two-factor", "patina"], ["backup", "Backup codes", "patina"], ["wallet", "Wallet hub", "moss", "26"], ["emergency", "Emergency access", "patina"]]],
+  ["", [["records", "Records", "brass", "", [["activity", "Activity log", "", "brass"], ["shared", "Shared", "6", "brass"], ["data", "Import / export", "", "brass"], ["compliance", "Compliance", "", "brass"]], "activity.html"]]],
+  ["", [["other", "Other", "patina", "", [["2fa", "Two-factor", "", "patina"], ["wallet", "Wallet hub", "26", "moss"], ["backup", "Backup codes", "", "patina"], ["emergency", "Emergency access", "", "patina"]], "2fa.html"]]],
   ["", [["settings", "Settings", "slate", "", [["security", "Security", "", "patina"], ["devkeys", "Developer keys", "4", "slate"]], "security.html"]]],
 ];
 const COL = { brass: "var(--brass)", patina: "var(--patina)", copper: "var(--copper)", slate: "var(--slate)", moss: "var(--moss)", rose: "var(--rose)" };

@@ -114,3 +114,4 @@ svg text{font-family:var(--mono)}
 .nav .subnav a.on::before{left:-11px;top:5px;bottom:5px}
 .nav a .chev{font:400 14px var(--mono);color:var(--mu)}
 a.card:hover{border-color:var(--ac)}
+.nav{padding:6px 10px 10px}.nav a{height:28px}.nav .subnav{margin:1px 0 4px 17px}.nav .subnav a{height:26px;font-size:12.5px}.ws{margin:10px 12px 2px;padding:7px 11px}.lock{margin:6px 12px 10px;padding:9px 12px}
