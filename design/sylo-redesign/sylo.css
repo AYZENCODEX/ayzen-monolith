@@ -93,7 +93,7 @@ td.r,th.r{text-align:right}td .sub,.id .sub{display:block;color:var(--di);font:4
 .chip{height:28px;padding:0 11px;border:1px solid var(--line2);border-radius:14px;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mu)}.chip.on{border-color:var(--ac);color:var(--ac);background:var(--ac-d)}
 /* list */
 .row{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--line)}.row:last-child{border:0}
-.row .g{flex:1;min-width:0}.row .g b{font-weight:500;display:block}.row .g span{color:var(--di);font:400 11.5px var(--mono)}
+.row .g{flex:1;min-width:0}.row .g b{font-weight:500;display:block}.row .g span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--di);font:400 11.5px var(--mono)}
 .tl{position:relative;padding:4px 0}.tl .ev{display:grid;grid-template-columns:70px 14px 1fr auto;gap:12px;padding:10px 18px;align-items:start}
 .tl .ev time{font:400 11.5px var(--mono);color:var(--di);padding-top:2px}
 .tl .ev i{width:9px;height:9px;border-radius:50%;border:2px solid var(--c,var(--ac));margin-top:6px;background:var(--bg);position:relative}
@@ -105,4 +105,5 @@ svg text{font-family:var(--mono)}
 .cb{width:15px;height:15px;border:1px solid var(--line2);border-radius:3px;display:inline-block;vertical-align:middle}.cb.on{background:var(--ac);border-color:var(--ac)}
 .seg{display:inline-flex;border:1px solid var(--line2);border-radius:6px;overflow:hidden}.seg a{padding:5px 11px;font:500 11.5px var(--mono);color:var(--mu);border-right:1px solid var(--line2)}.seg a:last-child{border:0}.seg a.on{background:var(--s3);color:var(--tx)}
 .note{display:block;padding:12px 14px;border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);background:rgba(224,178,90,.06);border-radius:6px;color:var(--tx);line-height:1.5}.note b{color:var(--warn);font-weight:500;margin-right:4px}
-.code{font:500 14px var(--mono);letter-spacing:.08em;padding:9px 12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);display:flex;justify-content:space-between}
+.code{color:var(--tx);font:500 14px var(--mono);letter-spacing:.08em;padding:9px 12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);display:flex;justify-content:space-between}
+.row .g .code span{display:inline;color:var(--tx);font:500 13px var(--mono);overflow:visible}
