@@ -176,7 +176,10 @@ test("an expired lock restarts the count at 1 instead of re-locking on the first
 
 test("20 concurrent bad guesses are all counted (atomic increment, no lost updates)", { skip }, async () => {
   const { e, r } = await signup("zynth");
-  await Promise.all(Array.from({ length: 20 }, (_, i) => loginWithPassword(db, { module: "zynth", identifier: e, password: `bad-password-${i}`, client: CLIENT })));
+  // Raise the threshold above 20: once the lock engages, later guesses are refused before counting (by design),
+  // so with the default 5 the final count depends on timing. This test is about lost updates, not lockout.
+  const env = { ...process.env, MODULE_LOGIN_MAX_FAILURES: "50" };
+  await Promise.all(Array.from({ length: 20 }, (_, i) => loginWithPassword(db, { module: "zynth", identifier: e, password: `bad-password-${i}`, client: CLIENT, env })));
   const c = (await q("SELECT failed_attempts FROM module_credentials WHERE module_account_id=$1", [r.moduleAccountId])).rows[0];
   assert.equal(c.failed_attempts, 20);
 });
