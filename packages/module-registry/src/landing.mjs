@@ -10,6 +10,10 @@
 import { getModule } from "./index.mjs";
 
 import { CONTENT } from "./landing-content.mjs";
+import { hasDocs, docsSitemapUrls, docsLlmsLinks, docsMarkdown, docsDocument, docsFiles, docsPaths, findDocsPage } from "./sylo-docs.mjs";
+
+/** Public documentation pages (currently Sylo only): /docs, /docs/<chapter>, /docs/<chapter>/<topic>. */
+export { hasDocs, docsDocument, docsFiles, docsPaths, findDocsPage };
 
 /** Copy, brand tokens and facts per module live in landing-content.mjs (grounded in the supplied designs). */
 export const LANDINGS = CONTENT;
@@ -123,12 +127,12 @@ export function injectLandingIntoHtml(html, id, opts = {}) {
 
 /** AI search / answer / assistant crawlers that are explicitly allowed on the public pages (same rules as everyone else). */
 export const AI_CRAWLERS = Object.freeze(["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "Bingbot", "DuckAssistBot", "meta-externalagent", "Amazonbot", "cohere-ai", "MistralAI-User"]);
-export const PUBLIC_PATHS = Object.freeze(["/about", "/llms.txt", "/llms-full.txt"]);
+export const PUBLIC_PATHS = Object.freeze(["/about", "/docs", "/llms.txt", "/llms-full.txt"]);
 
 export function robotsTxt(id, opts = {}) {
   const c = getLandingContent(id);
   const base = c ? origin(c, opts.origin) : "";
-  const rules = `Allow: /$\nAllow: /about$\nAllow: /og/\nAllow: /landing-assets/\nAllow: /llms.txt\nAllow: /llms-full.txt\nDisallow: /\n`;
+  const rules = `Allow: /$\nAllow: /about$\n${hasDocs(id) ? "Allow: /docs\n" : ""}Allow: /og/\nAllow: /landing-assets/\nAllow: /llms.txt\nAllow: /llms-full.txt\nDisallow: /\n`;
   return `# ${c ? c.label : "AYZEN module"}: the public pages are open to search engines and AI search/answer crawlers; the signed-in app is not.\nUser-agent: *\n${rules}\n${AI_CRAWLERS.map((u) => `User-agent: ${u}`).join("\n")}\n${rules}${base ? `\nSitemap: ${base}/sitemap.xml\n` : ""}`;
 }
 
@@ -136,7 +140,7 @@ export function sitemapXml(id, opts = {}) {
   const c = getLandingContent(id);
   if (!c) return "";
   const base = origin(c, opts.origin);
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${["/", "/about"].map((u) => `  <url><loc>${esc(base)}${u}</loc></url>`).join("\n")}\n</urlset>\n`;
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...["/", "/about"].map((u) => `${base}${u}`), ...(hasDocs(id) ? docsSitemapUrls(opts) : [])].map((u) => `  <url><loc>${esc(u)}</loc></url>`).join("\n")}\n</urlset>\n`;
 }
 
 const bullets = (a) => a.map((x) => `- ${x}`).join("\n");
@@ -158,7 +162,7 @@ ${c.label} is a module of AYZEN, with its own account, session and data. Categor
 - [${c.label} home](${base}/): overview, features and FAQ
 - [About ${c.label}](${base}/about): full details, how it works, use cases, limits and FAQ
 - [Full text for AI assistants](${base}/llms-full.txt): everything on this site as one markdown file
-- [Sign in](${base}/login): sign in to ${c.label}
+${hasDocs(id) ? docsLlmsLinks(opts) + "\n" : ""}- [Sign in](${base}/login): sign in to ${c.label}
 - [Create account](${base}/register): create a ${c.label} account
 
 ## What you get
@@ -232,11 +236,11 @@ export function llmsFullTxt(id, opts = {}) {
   if (!c) return "";
   const base = origin(c, opts.origin);
   return `${moduleMarkdown(id, opts, 1)}
-## Links
+${hasDocs(id) ? docsMarkdown(opts, 1) + "\n" : ""}## Links
 
 - Home: ${base}/
 - About: ${base}/about
-- Sign in: ${base}/login
+${hasDocs(id) ? `- Documentation: ${base}/docs\n` : ""}- Sign in: ${base}/login
 - Create account: ${base}/register
 - Short version: ${base}/llms.txt
 `;
@@ -260,7 +264,7 @@ export function aboutHead(c, opts = {}) {
 export function aboutBody(c) {
   const L = esc(c.label);
   return `<div class="ml" data-module-about="${esc(c.id)}">
-<header class="ml-h"><a class="ml-brand" href="/" aria-label="${L} home">${L}</a><nav aria-label="Primary"><a href="/">Home</a><a href="#features">Features</a><a href="#detail">In detail</a><a href="#faq">FAQ</a><a href="/login">Sign in</a></nav></header>
+<header class="ml-h"><a class="ml-brand" href="/" aria-label="${L} home">${L}</a><nav aria-label="Primary"><a href="/">Home</a><a href="#features">Features</a><a href="#detail">In detail</a><a href="#faq">FAQ</a>${hasDocs(c.id) ? '<a href="/docs">Docs</a>' : ""}<a href="/login">Sign in</a></nav></header>
 <main>
 <nav class="ml-crumbs" aria-label="Breadcrumb"><a href="/">${L}</a> / <span aria-current="page">About</span></nav>
 <section class="ml-hero" aria-labelledby="ab-h1"><p class="ml-eyebrow">${esc(c.category)}</p><h1 id="ab-h1">About ${L}: ${esc(c.tagline.replace(/\.$/, ""))}</h1><p class="ml-lead">${esc(c.hero.lead)}</p><div class="ml-cta"><a class="ml-btn" href="/register">Create your ${L} account</a><a class="ml-btn ml-ghost" href="/login">Sign in</a></div></section>

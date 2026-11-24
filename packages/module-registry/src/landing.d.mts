@@ -18,3 +18,8 @@ export function aboutBody(c: ModuleLandingContent): string;
 export function aboutDocument(c: ModuleLandingContent, opts?: { origin?: string }): string;
 export const AI_CRAWLERS: readonly string[];
 export const PUBLIC_PATHS: readonly string[];
+export function hasDocs(id: string): boolean;
+export function docsDocument(page: { kind: string; path: string }, opts?: { origin?: string }): string;
+export function docsFiles(opts?: { origin?: string }): Record<string, string>;
+export function docsPaths(): string[];
+export function findDocsPage(pathname: string): { kind: string; path: string } | null;

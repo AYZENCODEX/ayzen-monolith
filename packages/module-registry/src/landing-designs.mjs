@@ -12,7 +12,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getModule } from "./index.mjs";
 import { loginAdapterScript } from "./login-adapters.mjs";
-import { aboutDocument, getLandingContent, landingDocument, landingHead, llmsFullTxt, llmsTxt, robotsTxt, sitemapXml } from "./landing.mjs";
+import { docsFiles, hasDocs, aboutDocument, getLandingContent, landingDocument, landingHead, llmsFullTxt, llmsTxt, robotsTxt, sitemapXml } from "./landing.mjs";
 
 const DEFAULT_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "landings");
 /** Read lazily: a bundled server (esbuild) cannot locate the folder from import.meta.url, so it sets MODULE_LANDINGS_DIR. */
@@ -168,6 +168,7 @@ export function emitModuleSite(id, dir, opts = {}) {
   w("llms.txt", llmsTxt(id, opts));
   w("llms-full.txt", llmsFullTxt(id, opts));
   w("about/index.html", aboutDocument(getLandingContent(id), opts));
+  if (hasDocs(id)) for (const [rel, html] of Object.entries(docsFiles(opts))) w(rel, html);
 }
 
 /** Design assets under <outRoot>/landing-assets/<id>/ (the prefix the landing HTML refers to). */
