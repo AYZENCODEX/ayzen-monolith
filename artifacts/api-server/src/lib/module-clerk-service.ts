@@ -21,7 +21,7 @@ const CLERK_ID = /^user_[A-Za-z0-9]{8,64}$/;
 interface Profile { email?: string | null; emailVerified?: boolean }
 
 /** Creates the backing user + module account + backing link + identity row. Caller holds the transaction. */
-async function createAccount(q: Query, module: ModuleId, clerkUserId: string, profile: Profile) {
+async function createModuleAccount(q: Query, module: ModuleId, clerkUserId: string, profile: Profile) {
   const tag = randomBytes(12).toString("hex");
   // Same non-deliverable, un-loginable backing row as a password signup (lib/module-auth-service.ts signupWithPassword).
   const u = await q(
@@ -78,7 +78,7 @@ export async function clerkSignIn(
         return { ok: false, code: "EMAIL_ACCOUNT_EXISTS" } as Fail;
       }
     }
-    const a = await createAccount(q, module, clerkUserId, { email: input.email, emailVerified: input.emailVerified });
+    const a = await createModuleAccount(q, module, clerkUserId, { email: input.email, emailVerified: input.emailVerified });
     const session = await insertSession(q, { userId: a.userId, moduleAccountId: a.accountId, module, moduleUid: a.moduleUid }, input.client);
     await audit(q, module, a.accountId, "clerk_login", "success", input.client, { created: true });
     return { ok: true, created: true, ...session } as const;
@@ -101,7 +101,7 @@ export async function clerkUserCreated(
   const module = input.module, clerkUserId = input.clerkUserId;
   const attempt = () => db.transaction(async (q) => {
     if ((await findIdentity(q, module, clerkUserId)).rows[0]) return { ok: true, created: false } as const;
-    const a = await createAccount(q, module, clerkUserId, { email: input.email, emailVerified: input.emailVerified });
+    const a = await createModuleAccount(q, module, clerkUserId, { email: input.email, emailVerified: input.emailVerified });
     await audit(q, module, a.accountId, "clerk_user_created", "success", null, {});
     return { ok: true, created: true } as const;
   });
