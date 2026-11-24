@@ -103,6 +103,7 @@ const SyloAccountNew    = lazy(() => import("@/pages/sylo/account-new"));
 const SyloKycDataNew    = lazy(() => import("@/pages/sylo/kyc-data-new"));
 const SyloLocalDetail    = lazy(() => import("@/pages/sylo/local-detail"));
 const SyloKycDetail      = lazy(() => import("@/pages/sylo/kyc-detail"));
+const SyloEntityDetail   = lazy(() => import("@/pages/sylo/entity-detail"));
 const SyloGameDetail     = lazy(() => import("@/pages/sylo/game-detail"));
 const SyloCredit        = lazy(() => import("@/pages/sylo/credit"));
 const SyloCreditOrders  = lazy(() => import("@/pages/sylo/credit-orders"));
@@ -360,7 +361,8 @@ export const USER_ROUTES: RouteConfig[] = [
   { path: "/vault/emergency-access",  component: VaultEmergencyAccess },
   { path: "/vault/projects",     component: UserProjectEntities },
   { path: "/vault/entity/:id/access", component: VaultEntityAccess },
-  { path: "/vault/entity/:id",   component: VaultEntityDetail },
+  { path: "/vault/entity/:id/manage", component: VaultEntityDetail },
+  { path: "/vault/entity/:id",   component: SyloEntityDetail },
   { path: "/vault/local/:id/manage", component: VaultLocalDetail },
   { path: "/vault/local/:id",    component: SyloLocalDetail },
   { path: "/vault/game/:id",     component: SyloGameDetail },

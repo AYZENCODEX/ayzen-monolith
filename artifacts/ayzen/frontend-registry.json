@@ -12,11 +12,11 @@
     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
   ],
   "completeness": {
-    "totalRoutes": 208,
-    "resolvedToPage": 208,
-    "totalPageFiles": 208,
+    "totalRoutes": 209,
+    "resolvedToPage": 209,
+    "totalPageFiles": 209,
     "deadPages": 14,
-    "routesWithNoApiCalls": 144,
+    "routesWithNoApiCalls": 145,
     "routesWithOrphanCalls": 0,
     "routesOk": 64
   },
@@ -428,6 +428,12 @@
       "code": "MOCK_OR_STATIC_PAGE",
       "path": "/vault/entity/:id/access",
       "pageFile": "pages/user/vault-entity-access.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/entity/:id",
+      "pageFile": "pages/sylo/entity-detail.tsx"
     },
     {
       "severity": "warning",
@@ -4126,7 +4132,7 @@
       }
     },
     {
-      "path": "/vault/entity/:id",
+      "path": "/vault/entity/:id/manage",
       "component": "VaultEntityDetail",
       "adminOnly": false,
       "allowedRoles": [],
@@ -4146,6 +4152,19 @@
           }
         ],
         "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/entity/:id",
+      "component": "SyloEntityDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/entity-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
       }
     },
     {
