@@ -4,7 +4,7 @@
 @font-face{font-family:"IBM Plex Mono";font-weight:500;src:url(../assets/sylo-fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2")}
 @font-face{font-family:"Newsreader";font-weight:400;src:url(../assets/sylo-fonts/newsreader-latin-400-normal.woff2) format("woff2")}
 @font-face{font-family:"Newsreader";font-weight:500;src:url(../assets/sylo-fonts/newsreader-latin-500-normal.woff2) format("woff2")}
-.sx{
+.sx,body.sx-portal{
   --bg:#0d1011;--s1:#13181a;--s2:#192022;--s3:#202a2c;--line:#262f31;--line2:#323d40;
   --tx:#e9e3d3;--mu:#a1a597;--di:#6e746d;
   --brass:#c9a45c;--patina:#74bba5;--copper:#d9805a;--slate:#8fa8cc;--moss:#a9bd6e;--rose:#cf94a4;--ok:#7fcf9f;--warn:#e0b25a;--bad:#e5806f;
@@ -183,7 +183,7 @@
 .sx .facts>div{min-width:0}
 
 /* Legacy Tailwind/shadcn pages inside the Sylo shell inherit the Sylo palette. */
-.sx{--background:195 13% 6%;--foreground:44 33% 87%;--card:197 16% 9%;--card-foreground:44 33% 87%;--card-border:191 13% 17%;--popover:197 16% 9%;--popover-foreground:44 33% 87%;--primary:40 50% 57%;--primary-foreground:195 13% 6%;--secondary:190 16% 15%;--secondary-foreground:44 33% 87%;--muted:190 16% 15%;--muted-foreground:77 7% 62%;--accent:193 15% 12%;--accent-foreground:44 33% 87%;--destructive:9 69% 67%;--border:191 13% 17%;--input:197 16% 9%;--ring:40 50% 57%;--success:144 45% 65%;--warning:39 68% 62%;--danger:9 69% 67%;--ui-font-sans:'IBM Plex Mono',ui-monospace,monospace;--ui-font-mono:'IBM Plex Mono',ui-monospace,monospace;--ui-font-ui:ui-sans-serif,-apple-system,'Segoe UI',Roboto,sans-serif}
+.sx,body.sx-portal{--background:195 13% 6%;--foreground:44 33% 87%;--card:197 16% 9%;--card-foreground:44 33% 87%;--card-border:191 13% 17%;--popover:197 16% 9%;--popover-foreground:44 33% 87%;--primary:40 50% 57%;--primary-foreground:195 13% 6%;--secondary:190 16% 15%;--secondary-foreground:44 33% 87%;--muted:190 16% 15%;--muted-foreground:77 7% 62%;--accent:193 15% 12%;--accent-foreground:44 33% 87%;--destructive:9 69% 67%;--border:191 13% 17%;--input:197 16% 9%;--ring:40 50% 57%;--success:144 45% 65%;--warning:39 68% 62%;--danger:9 69% 67%;--ui-font-sans:'IBM Plex Mono',ui-monospace,monospace;--ui-font-mono:'IBM Plex Mono',ui-monospace,monospace;--ui-font-ui:ui-sans-serif,-apple-system,'Segoe UI',Roboto,sans-serif}
 
 /* ── Error screens ─────────────────────────────────────────────────────── */
 .sx.sx-solo{display:block;min-height:100vh}
@@ -212,3 +212,11 @@
 .sx .fld.bad .in{border-color:var(--bad)}
 .sx .fld .err-msg{margin-top:5px;font:400 11.5px var(--mono);color:var(--bad)}
 .sx .kpi.solo{border:1px solid var(--line);border-radius:8px;background:var(--s1)}
+
+/* Radix portals (dialogs, menus, selects) render on <body>, outside .sx */
+body.sx-portal [role=dialog],body.sx-portal [role=menu],body.sx-portal [role=listbox]{background:var(--s1);color:var(--tx);border-color:var(--line2);font-family:var(--mono)}
+body.sx-portal [data-radix-popper-content-wrapper]{font-family:var(--mono)}
+.sx .more-btn{display:none}
+@media(max-width:900px){.sx .mbar .more-btn{display:block;flex:1;background:none;border:0;padding:13px 0 12px;font:500 11px var(--mono);color:var(--mu);letter-spacing:.04em}.sx .mbar .more-btn.on{color:var(--ac)}
+.sx .more-sheet{position:fixed;left:0;right:0;bottom:calc(46px + env(safe-area-inset-bottom));z-index:19;background:var(--s1);border-top:1px solid var(--line2);display:flex;flex-direction:column}
+.sx .more-sheet a{padding:15px 18px;border-bottom:1px solid var(--line);font:500 12px var(--mono);color:var(--tx)}.sx .more-sheet a.on{color:var(--ac)}}

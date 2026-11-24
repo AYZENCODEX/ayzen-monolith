@@ -12,11 +12,11 @@
     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
   ],
   "completeness": {
-    "totalRoutes": 205,
-    "resolvedToPage": 205,
-    "totalPageFiles": 203,
+    "totalRoutes": 206,
+    "resolvedToPage": 206,
+    "totalPageFiles": 204,
     "deadPages": 12,
-    "routesWithNoApiCalls": 141,
+    "routesWithNoApiCalls": 142,
     "routesWithOrphanCalls": 0,
     "routesOk": 64
   },
@@ -428,6 +428,12 @@
       "code": "MOCK_OR_STATIC_PAGE",
       "path": "/vault/entity/:id/access",
       "pageFile": "pages/user/vault-entity-access.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/game/:id",
+      "pageFile": "pages/sylo/game-detail.tsx"
     },
     {
       "severity": "warning",
@@ -4141,6 +4147,19 @@
           }
         ],
         "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/game/:id",
+      "component": "SyloGameDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/game-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
       }
     },
     {

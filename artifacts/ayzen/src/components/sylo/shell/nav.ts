@@ -19,7 +19,7 @@ export const NAV: NavGroup[] = [
     kids: [
       { key: "entity", label: "Entity", href: accountPath("entity", "management"), tone: "brass", match: ["/vault/account/entity", "/vault/entity"] },
       { key: "local", label: "Local accounts", href: accountPath("local", "management"), tone: "patina", match: ["/vault/account/local", "/vault/local"] },
-      { key: "game", label: "Game accounts", href: accountPath("game", "management"), tone: "slate", match: ["/vault/account/game"] },
+      { key: "game", label: "Game accounts", href: accountPath("game", "management"), tone: "slate", match: ["/vault/account/game", "/vault/game"] },
       { key: "enrollment", label: "Enrollment", href: "/vault/enrollment/overview", tone: "slate", match: ["/vault/enrollment", "/vault/projects"] },
     ],
   },
@@ -102,6 +102,15 @@ export const MOBILE_BAR: { label: string; href: string; group: string }[] = [
   { label: "Access", href: "/vault/access/entity", group: "access" },
   { label: "Records", href: "/vault/activity", group: "records" },
   { label: "Settings", href: "/vault/settings", group: "settings" },
+];
+
+/** Items behind the mobile "More" button — everything the 5 tabs don't reach. */
+export const MORE_ITEMS: { label: string; href: string; group: string }[] = [
+  { label: "Credit · Orders", href: "/vault/credit", group: "credit" },
+  { label: "Credit · Payment methods", href: "/vault/credit/payment-methods", group: "credit" },
+  { label: "Credit · Usage", href: "/vault/credit/usage", group: "credit" },
+  { label: "Subscription", href: "/subscription", group: "credit" },
+  { label: "Zynth AI", href: "/assistant", group: "zynth" },
 ];
 
 /** Groups that light the same mobile tab (KYC is reached through Accounts on mobile). */

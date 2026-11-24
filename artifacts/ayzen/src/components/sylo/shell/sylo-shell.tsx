@@ -4,12 +4,12 @@
  * below 900px. Pages render inside `.page`. Styling lives in styles/sylo-ui.css
  * and is scoped under `.sx`, so nothing here leaks to the rest of the app.
  */
-import { type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { getCurrentSubdomainApp, getModuleForPath, moduleUrl, centralUrl } from "@/lib/subdomain-app";
 import { GlobalSearch } from "@/components/global-search";
-import { NAV, MOBILE_BAR, MOBILE_GROUP_ALIAS, activeLeaf, type Tone } from "./nav";
+import { NAV, MOBILE_BAR, MORE_ITEMS, MOBILE_GROUP_ALIAS, activeLeaf, type Tone } from "./nav";
 import { InSylo } from "./context";
 import "@/styles/sylo-ui.css";
 
@@ -53,6 +53,12 @@ export function SyloShell({ children }: { children: ReactNode }) {
   const tone: Tone = leaf?.tone ?? group?.tone ?? "brass";
   const crumbs = crumbsFor(path);
   const initials = (user?.username ?? "SY").slice(0, 2).toUpperCase();
+  const [more, setMore] = useState(false);
+  useEffect(() => {
+    document.body.classList.add("sx-portal");
+    return () => document.body.classList.remove("sx-portal");
+  }, []);
+  useEffect(() => setMore(false), [path]);
   const mobileGroup = group ? (MOBILE_GROUP_ALIAS[group.key] ?? group.key) : "console";
 
   return (
@@ -98,10 +104,16 @@ export function SyloShell({ children }: { children: ReactNode }) {
         <div className="page"><InSylo.Provider value={true}>{children}</InSylo.Provider></div>
       </div>
 
+      {more && (
+        <div className="more-sheet" role="menu">
+          {MORE_ITEMS.map((i) => <NavLink key={i.href} to={i.href} className={mobileGroup === i.group ? "on" : ""}>{i.label}</NavLink>)}
+        </div>
+      )}
       <nav className="mbar" aria-label="Sylo tabs">
         {MOBILE_BAR.map((t) => (
           <NavLink key={t.group} to={t.href} className={mobileGroup === t.group ? "on" : ""}>{t.label}</NavLink>
         ))}
+        <button type="button" className={`more-btn${mobileGroup === "credit" || mobileGroup === "zynth" ? " on" : ""}`} aria-expanded={more} onClick={() => setMore((v) => !v)}>More</button>
       </nav>
     </div>
   );
