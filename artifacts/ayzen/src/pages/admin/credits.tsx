@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Coins, Check, X, Loader2, RefreshCw, Clock, Tag, TrendingUp } from "lucide-react";
+import { Link } from "wouter";
 import { cn } from "@/lib/utils";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
@@ -194,6 +195,7 @@ export default function AdminCreditsPage() {
             {tab === "approvals"
               ? `${pending.length} pending verification${pending.length !== 1 ? "s" : ""}`
               : "Reprice or waive any metered action — takes effect on the very next request"}
+            {" · "}<Link href="/admin/sylo-credit" className="underline">Sylo AZN orders</Link>
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={tab === "approvals" ? fetchPending : fetchRates} disabled={tab === "approvals" ? loading : ratesLoading} className="font-mono text-xs gap-2">

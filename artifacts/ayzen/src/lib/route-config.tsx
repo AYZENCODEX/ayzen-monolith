@@ -48,6 +48,7 @@ const AdminKyc           = lazy(() => import("@/pages/admin/kyc"));
 const AdminEmergencyAccess = lazy(() => import("@/pages/admin/emergency-access"));
 const AdminReferrals     = lazy(() => import("@/pages/admin/referrals"));
 const AdminCreditsPage   = lazy(() => import("@/pages/admin/credits"));
+const AdminSyloCredit    = lazy(() => import("@/pages/admin/sylo-credit"));
 const AdminSubscriptions = lazy(() => import("@/pages/admin/subscriptions"));
 const AdminActivity      = lazy(() => import("@/pages/admin/activity"));
 const AdminCategories    = lazy(() => import("@/pages/admin/categories"));
@@ -96,6 +97,17 @@ const UserTasks         = lazy(() => import("@/pages/user/tasks"));
 const UserDeveloper     = lazy(() => import("@/pages/user/developer"));
 const SyloConsole       = lazy(() => import("@/pages/sylo/console"));
 const SyloAccount       = lazy(() => import("@/pages/sylo/account"));
+const SyloConnectors    = lazy(() => import("@/pages/sylo/connectors"));
+const SyloAccessList    = lazy(() => import("@/pages/sylo/access-list"));
+const SyloAccountNew    = lazy(() => import("@/pages/sylo/account-new"));
+const SyloKycDataNew    = lazy(() => import("@/pages/sylo/kyc-data-new"));
+const SyloGameDetail     = lazy(() => import("@/pages/sylo/game-detail"));
+const SyloCredit        = lazy(() => import("@/pages/sylo/credit"));
+const SyloCreditOrders  = lazy(() => import("@/pages/sylo/credit-orders"));
+const SyloCreditOrder   = lazy(() => import("@/pages/sylo/credit-order-detail"));
+const SyloCreditMethods = lazy(() => import("@/pages/sylo/credit-payment-methods"));
+const SyloCreditMethodNew = lazy(() => import("@/pages/sylo/credit-payment-method-new"));
+const SyloCreditUsage   = lazy(() => import("@/pages/sylo/credit-usage"));
 const VaultHubRedirect  = lazy(() => import("@/pages/sylo/redirects"));
 const VaultEntityDetail = lazy(() => import("@/pages/user/vault-entity-detail"));
 const VaultEntityAccess = lazy(() => import("@/pages/user/vault-entity-access"));
@@ -232,6 +244,7 @@ export const ADMIN_ROUTES: RouteConfig[] = [
   { path: "/admin/emergency-access", component: AdminEmergencyAccess, adminOnly: true },
   { path: "/admin/referrals",       component: AdminReferrals,     adminOnly: true },
   { path: "/admin/credits",         component: AdminCreditsPage,   adminOnly: true },
+  { path: "/admin/sylo-credit",     component: AdminSyloCredit,    adminOnly: true },
   { path: "/admin/subscriptions",   component: AdminSubscriptions, adminOnly: true },
   { path: "/admin/activity",        component: AdminActivity,      adminOnly: true },
   { path: "/admin/categories",      component: AdminCategories,    adminOnly: true },
@@ -274,6 +287,16 @@ export const USER_ROUTES: RouteConfig[] = [
   // Per-module Settings (Phase 5). Listed before every /<module>/:param route so
   // "/projects/settings" and "/mailbox/settings" are not captured as an :id.
   { path: "/vault/settings",       component: ModuleSettings },
+  { path: "/vault/settings/connectors", component: SyloConnectors },
+  // Access: pick an entity / local account / KYC entry, then open its mailbox + 2FA + backup codes.
+  { path: "/vault/access/:kind",   component: SyloAccessList },
+  // Sylo credit storefront: buy AZN, orders, saved payment methods, usage (backend: routes/sylo-credit.ts).
+  { path: "/vault/credit",                         component: SyloCredit },
+  { path: "/vault/credit/orders",                  component: SyloCreditOrders },
+  { path: "/vault/credit/orders/:id",              component: SyloCreditOrder },
+  { path: "/vault/credit/payment-methods/new",     component: SyloCreditMethodNew },
+  { path: "/vault/credit/payment-methods",         component: SyloCreditMethods },
+  { path: "/vault/credit/usage",                   component: SyloCreditUsage },
   { path: "/wallet/settings",      component: ModuleSettings },
   { path: "/finance/settings",     component: ModuleSettings },
   { path: "/marketplace/settings", component: ModuleSettings },
@@ -298,6 +321,8 @@ export const USER_ROUTES: RouteConfig[] = [
   // Retired Vault Hub card grid → Console.
   { path: "/vault/hub",          component: VaultHubRedirect },
   // Account sections: /vault/account/:section[/:view]
+  // Create-as-a-page (must precede the :view route so "new" is not read as a view).
+  { path: "/vault/account/:section/new",   component: SyloAccountNew },
   { path: "/vault/account/:section",       component: SyloAccount },
   { path: "/vault/account/:section/:view", component: SyloAccount },
   // Wallet Hub — rename/expansion of the old flat "Wallet" access item into
@@ -335,6 +360,8 @@ export const USER_ROUTES: RouteConfig[] = [
   { path: "/vault/entity/:id/access", component: VaultEntityAccess },
   { path: "/vault/entity/:id",   component: VaultEntityDetail },
   { path: "/vault/local/:id",    component: VaultLocalDetail },
+  { path: "/vault/game/:id",     component: SyloGameDetail },
+  { path: "/vault/kyc/data/new",      component: SyloKycDataNew },
   { path: "/vault/kyc/data/overview", component: VaultKycDataOverview },
   { path: "/vault/kyc/data/used",     component: VaultKycDataUsed },
   { path: "/vault/kyc/data/unused",   component: VaultKycDataUnused },

@@ -133,6 +133,8 @@ const KIND_TONE: Record<ErrorKind, string> = {
 
 export interface ErrorScreenProps {
   kind?: ErrorKind;
+  /** Big numeral, e.g. "404". Falls back to a glyph for non-HTTP states. */
+  code?: string;
   /** Small label above the title, e.g. "Error 404". */
   eyebrow?: string;
   title: string;
@@ -144,36 +146,29 @@ export interface ErrorScreenProps {
   embedded?: boolean;
 }
 
+/** Sylo accent per failure so each screen reads differently at a glance. */
+const KIND_THEME: Record<ErrorKind, string> = {
+  unauthorized: "t-brass", forbidden: "t-copper", "not-found": "t-slate",
+  "rate-limited": "t-moss", server: "t-rose", network: "t-patina", unknown: "t-rose",
+};
+
 export function ErrorScreen({
-  kind = "unknown", eyebrow, title, description, actions, reference, embedded = false,
+  kind = "unknown", code, eyebrow, title, description, actions, reference, embedded = false,
 }: ErrorScreenProps) {
-  const Icon = KIND_ICON[kind];
-  return (
-    <div
-      role="alert"
-      className={cn(
-        "flex w-full items-center justify-center bg-background px-6 font-ui text-foreground",
-        embedded ? "min-h-[60vh] py-12" : "min-h-screen",
-      )}
-    >
-      <div className="w-full max-w-md text-center">
-        <div className={cn("mx-auto flex size-12 items-center justify-center rounded-xl ring-1", KIND_TONE[kind])}>
-          <Icon className="size-6" aria-hidden="true" />
-        </div>
-        {eyebrow && (
-          <p className="mt-5 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{eyebrow}</p>
-        )}
-        <h1 className={cn("text-xl font-semibold tracking-tight", eyebrow ? "mt-1.5" : "mt-5")}>{title}</h1>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
-        {actions && <div className="mt-6 flex flex-wrap items-center justify-center gap-2">{actions}</div>}
-        {reference && (
-          <p className="mt-6 text-xs text-muted-foreground/70">
-            Reference <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-foreground/80">{reference}</code>
-          </p>
-        )}
+  const body = (
+    <div role="alert" className={cn("err", !embedded && "full")}>
+      <div className="box">
+        <div className="code" aria-hidden="true">{code ?? "!"}</div>
+        {eyebrow && <div className="eb">{eyebrow}</div>}
+        <h1>{title}</h1>
+        <p>{description}</p>
+        {actions && <div className="acts">{actions}</div>}
+        {reference && <div className="ref">Reference <code>{reference}</code></div>}
       </div>
     </div>
   );
+  // Embedded inside the Sylo shell the .sx scope already exists; standalone it must bring its own.
+  return embedded ? body : <div className={cn("sx sx-solo", KIND_THEME[kind])}>{body}</div>;
 }
 
 /** Where "Go home" should land: the module's own home inside a subdomain app, else the root. */
@@ -183,29 +178,52 @@ function homeHref(): string {
 
 function BackButton() {
   return (
-    <Button variant="outline" onClick={() => window.history.back()}>
-      <ArrowLeft aria-hidden="true" /> Go back
-    </Button>
+    <button type="button" className="btn" onClick={() => window.history.back()}>
+      <ArrowLeft size={14} aria-hidden="true" /> Go back
+    </button>
   );
 }
 
 function HomeButton({ label = "Go home" }: { label?: string }) {
   return (
-    <Button asChild>
-      <Link href={homeHref()}><Home aria-hidden="true" /> {label}</Link>
-    </Button>
+    <Link href={homeHref()} className="btn p">
+      <Home size={14} aria-hidden="true" /> {label}
+    </Link>
   );
 }
 
 export function NotFoundPage({ embedded = false }: { embedded?: boolean }) {
   return (
     <ErrorScreen
-      kind="not-found"
-      eyebrow="Error 404"
-      title="Page not found"
+      kind="not-found" code="404" eyebrow="Error 404" title="Page not found"
       description="The page you’re looking for doesn’t exist or has moved. Check the address, or head back to where you were."
       embedded={embedded}
       actions={<><BackButton /><HomeButton /></>}
+    />
+  );
+}
+
+export function UnauthorizedPage({ embedded = false }: { embedded?: boolean }) {
+  return (
+    <ErrorScreen
+      kind="unauthorized" code="401" eyebrow="Error 401" title="Sign in to continue"
+      description="This area needs a signed-in account. Sign in and we’ll bring you straight back here."
+      embedded={embedded}
+      actions={<>
+        <Link href="/login" className="btn p"><LockKeyhole size={14} aria-hidden="true" /> Sign in</Link>
+        <HomeButton label="Go home" />
+      </>}
+    />
+  );
+}
+
+export function SessionExpiredPage({ embedded = false }: { embedded?: boolean }) {
+  const d = COPY.unauthorized;
+  return (
+    <ErrorScreen
+      kind="unauthorized" code="401" eyebrow="Session expired" title={d.title} description={d.description}
+      embedded={embedded}
+      actions={<Link href="/login" className="btn p"><LockKeyhole size={14} aria-hidden="true" /> Sign in again</Link>}
     />
   );
 }
@@ -214,12 +232,23 @@ export function ForbiddenPage({ embedded = false }: { embedded?: boolean }) {
   const d = COPY.forbidden;
   return (
     <ErrorScreen
-      kind="forbidden"
-      eyebrow="Error 403"
-      title={d.title}
-      description={d.description}
+      kind="forbidden" code="403" eyebrow="Error 403" title={d.title} description={d.description}
       embedded={embedded}
       actions={<><BackButton /><HomeButton /></>}
+    />
+  );
+}
+
+export function RateLimitedPage({ embedded = false, onRetry }: { embedded?: boolean; onRetry?: () => void }) {
+  const d = COPY["rate-limited"];
+  return (
+    <ErrorScreen
+      kind="rate-limited" code="429" eyebrow="Error 429" title={d.title} description={d.description}
+      embedded={embedded}
+      actions={<>
+        {onRetry && <button type="button" className="btn p" onClick={onRetry}><RefreshCw size={14} aria-hidden="true" /> Try again</button>}
+        <HomeButton />
+      </>}
     />
   );
 }
@@ -228,20 +257,50 @@ export function ServerErrorPage({ embedded = false, onRetry, reference }: { embe
   const d = COPY.server;
   return (
     <ErrorScreen
-      kind="server"
-      eyebrow="Error 500"
-      title={d.title}
-      description={d.description}
-      embedded={embedded}
-      reference={reference}
-      actions={
-        <>
-          {onRetry && <Button onClick={onRetry}><RefreshCw aria-hidden="true" /> Try again</Button>}
-          <Button variant="outline" asChild><Link href={homeHref()}><Home aria-hidden="true" /> Go home</Link></Button>
-        </>
-      }
+      kind="server" code="500" eyebrow="Error 500" title={d.title} description={d.description}
+      embedded={embedded} reference={reference}
+      actions={<>
+        {onRetry && <button type="button" className="btn p" onClick={onRetry}><RefreshCw size={14} aria-hidden="true" /> Try again</button>}
+        <HomeButton />
+      </>}
     />
   );
+}
+
+export function MaintenancePage({ embedded = false }: { embedded?: boolean }) {
+  return (
+    <ErrorScreen
+      kind="server" code="503" eyebrow="Maintenance" title="Back in a few minutes"
+      description="Sylo is being updated. Your data is safe and nothing is lost. Try again shortly."
+      embedded={embedded}
+      actions={<button type="button" className="btn p" onClick={() => window.location.reload()}><RefreshCw size={14} aria-hidden="true" /> Reload</button>}
+    />
+  );
+}
+
+export function OfflinePage({ embedded = false }: { embedded?: boolean }) {
+  const d = COPY.network;
+  return (
+    <ErrorScreen
+      kind="network" code="···" eyebrow="Offline" title={d.title} description={d.description}
+      embedded={embedded}
+      actions={<button type="button" className="btn p" onClick={() => window.location.reload()}><RefreshCw size={14} aria-hidden="true" /> Try again</button>}
+    />
+  );
+}
+
+/** /error/:code — direct, linkable preview of every error surface. */
+export function ErrorByCode({ code }: { code?: string }) {
+  switch (code) {
+    case "401": return <UnauthorizedPage />;
+    case "expired": return <SessionExpiredPage />;
+    case "403": return <ForbiddenPage />;
+    case "429": return <RateLimitedPage onRetry={() => window.history.back()} />;
+    case "500": return <ServerErrorPage onRetry={() => window.location.reload()} reference="demo-0000" />;
+    case "503": return <MaintenancePage />;
+    case "offline": return <OfflinePage />;
+    default: return <NotFoundPage />;
+  }
 }
 
 /* ─── Inline surface (widgets, tables, panels) ───────────────────────────── */

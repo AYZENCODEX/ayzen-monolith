@@ -1,0 +1,2 @@
+# Test fixture, not a secret: fake idempotencyKey in the api-contracts unit test.
+aa8350d30fd7d2b7f0fa751fd88d831521fbc92e:packages/api-contracts/test/index.test.mjs:generic-api-key:6

@@ -125,6 +125,9 @@ jobs:
         with:
           version: 10.26.1
       - run: pnpm install --frozen-lockfile --filter @workspace/scripts...
+      # module-build:test imports artifacts/ayzen/src/lib/build-module.ts, which needs the ayzen workspace deps
+      # (@ayzen/module-registry) linked into artifacts/ayzen/node_modules.
+      - run: pnpm install --frozen-lockfile --filter @workspace/ayzen...
       - run: pnpm --filter @workspace/scripts module-build:test
       - run: pnpm install --frozen-lockfile --filter @workspace/ayzen...
         continue-on-error: true

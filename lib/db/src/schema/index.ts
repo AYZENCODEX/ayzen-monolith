@@ -61,3 +61,4 @@ export * from "./service-boundaries";
 export * from "./idempotency";
 export * from "./module-accounts";
 export * from "./module-credentials";
+export * from "./sylo-credit";

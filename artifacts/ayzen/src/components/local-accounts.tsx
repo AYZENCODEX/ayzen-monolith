@@ -1241,7 +1241,7 @@ export default function LocalAccounts() {
                                 <div
                                   key={acc.id}
                                   className="flex items-center justify-between bg-card border border-border/30 rounded-lg px-3 py-2 cursor-pointer hover:border-primary/40 transition-all group"
-                                  onClick={() => { setViewAccount(acc); setViewDialogOpen(true); }}
+                                  onClick={() => navigate(`/vault/local/${acc.id}`)}
                                 >
                                   <div className="min-w-0">
                                     <div className="font-mono text-xs font-bold text-foreground truncate">
@@ -1398,12 +1398,6 @@ export default function LocalAccounts() {
         onShared={clearSelection}
       />
       <ManageSharesDialog open={managingShares} onClose={() => setManagingShares(false)} entityType="local" />
-      <AccountViewDialog
-        account={viewAccount}
-        open={viewDialogOpen}
-        onClose={() => { setViewDialogOpen(false); setViewAccount(null); }}
-        onEdit={a => { setViewDialogOpen(false); setViewAccount(null); setEditAccount(a); setFormOpen(true); }}
-      />
 
       <AccountFormDialog
         open={formOpen}

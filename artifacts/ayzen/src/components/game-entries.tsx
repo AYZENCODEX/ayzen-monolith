@@ -14,6 +14,7 @@ import { customFetch } from "@workspace/api-client-react";
 import { SchemaForm } from "@/components/schema/SchemaForm";
 import { GAME_FIELDS } from "@/config/fields/game-create";
 import { GAME_CATEGORIES, getGameCategoryMeta } from "@/config/vault-game";
+import { useModuleAwareNavigate } from "@/components/module-link";
 import { ShareEntityDialog, type ShareTarget } from "@/components/vault/share-entity-dialog";
 import { ManageSharesDialog } from "@/components/vault/manage-shares-dialog";
 
@@ -282,6 +283,7 @@ function GameDialog({ open, editEntry, onClose, onSaved }: {
 
 // ─── Main list ───────────────────────────────────────────────────────────────
 export default function GameEntries() {
+  const navigate = useModuleAwareNavigate();
   const [entries, setEntries] = useState<GameEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -383,13 +385,13 @@ export default function GameEntries() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
           {filtered.map(e => (
-            <div key={e.id} className={cn("bg-card border rounded-xl p-4 hover:border-primary/30 transition-all group relative", selectedIds.has(e.id) ? "border-primary/50" : "border-card-border")}>
+            <div key={e.id} onClick={() => navigate(`/vault/game/${e.id}`)} className={cn("bg-card border rounded-xl p-4 hover:border-primary/30 transition-all group relative cursor-pointer", selectedIds.has(e.id) ? "border-primary/50" : "border-card-border")}>
               <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" onClick={ev => ev.stopPropagation()}>
                   <Checkbox checked={selectedIds.has(e.id)} onCheckedChange={() => toggleSelected(e.id)} />
                   <CategoryBadge category={e.category} />
                 </div>
-                <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity relative">
+                <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity relative" onClick={ev => ev.stopPropagation()}>
                   <button
                     onClick={() => setOpenMenuId(openMenuId === e.id ? null : e.id)}
                     className="p-1 rounded text-muted-foreground/40 hover:text-foreground hover:bg-muted/40 transition-colors"

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "registryId": "frontend-registry",
-  "generatedAt": "2026-11-22",
+  "generatedAt": "2026-11-24",
   "generatedBy": "tools/ui-circuit-validator/build.mjs",
   "schema": "schemas/ui-circuit/frontend-route-entry.v1.json",
   "sourceRegistries": [
@@ -12,11 +12,11 @@
     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
   ],
   "completeness": {
-    "totalRoutes": 194,
-    "resolvedToPage": 194,
-    "totalPageFiles": 191,
-    "deadPages": 11,
-    "routesWithNoApiCalls": 130,
+    "totalRoutes": 206,
+    "resolvedToPage": 206,
+    "totalPageFiles": 204,
+    "deadPages": 12,
+    "routesWithNoApiCalls": 142,
     "routesWithOrphanCalls": 0,
     "routesOk": 64
   },
@@ -68,6 +68,12 @@
       "code": "MOCK_OR_STATIC_PAGE",
       "path": "/admin/emergency-access",
       "pageFile": "pages/admin/emergency-access.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/sylo-credit",
+      "pageFile": "pages/admin/sylo-credit.tsx"
     },
     {
       "severity": "warning",
@@ -150,6 +156,54 @@
     {
       "severity": "warning",
       "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/settings/connectors",
+      "pageFile": "pages/sylo/connectors.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/access/:kind",
+      "pageFile": "pages/sylo/access-list.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/credit",
+      "pageFile": "pages/sylo/credit.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/credit/orders",
+      "pageFile": "pages/sylo/credit-orders.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/credit/orders/:id",
+      "pageFile": "pages/sylo/credit-order-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/credit/payment-methods/new",
+      "pageFile": "pages/sylo/credit-payment-method-new.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/credit/payment-methods",
+      "pageFile": "pages/sylo/credit-payment-methods.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/credit/usage",
+      "pageFile": "pages/sylo/credit-usage.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
       "path": "/wallet/settings",
       "pageFile": "pages/user/module-settings.tsx"
     },
@@ -212,6 +266,12 @@
       "code": "MOCK_OR_STATIC_PAGE",
       "path": "/vault/hub",
       "pageFile": "pages/sylo/redirects.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/account/:section/new",
+      "pageFile": "pages/sylo/account-new.tsx"
     },
     {
       "severity": "warning",
@@ -368,6 +428,18 @@
       "code": "MOCK_OR_STATIC_PAGE",
       "path": "/vault/entity/:id/access",
       "pageFile": "pages/user/vault-entity-access.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/game/:id",
+      "pageFile": "pages/sylo/game-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/kyc/data/new",
+      "pageFile": "pages/sylo/kyc-data-new.tsx"
     },
     {
       "severity": "warning",
@@ -815,6 +887,11 @@
       "severity": "warning",
       "code": "DEAD_PAGE",
       "pageFile": "pages/not-found.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/sylo/credit-ui.tsx"
     },
     {
       "severity": "warning",
@@ -1743,6 +1820,19 @@
           }
         ],
         "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/sylo-credit",
+      "component": "AdminSyloCredit",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/sylo-credit.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
       }
     },
     {
@@ -3243,6 +3333,110 @@
       }
     },
     {
+      "path": "/vault/settings/connectors",
+      "component": "SyloConnectors",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/connectors.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/access/:kind",
+      "component": "SyloAccessList",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/access-list.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/credit",
+      "component": "SyloCredit",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/credit.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/credit/orders",
+      "component": "SyloCreditOrders",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/credit-orders.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/credit/orders/:id",
+      "component": "SyloCreditOrder",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/credit-order-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/credit/payment-methods/new",
+      "component": "SyloCreditMethodNew",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/credit-payment-method-new.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/credit/payment-methods",
+      "component": "SyloCreditMethods",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/credit-payment-methods.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/credit/usage",
+      "component": "SyloCreditUsage",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/credit-usage.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
       "path": "/wallet/settings",
       "component": "ModuleSettings",
       "adminOnly": false,
@@ -3552,6 +3746,19 @@
       "allowedRoles": [],
       "source": "USER_ROUTES",
       "pageFile": "pages/sylo/redirects.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/account/:section/new",
+      "component": "SyloAccountNew",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/account-new.tsx",
       "resolution": {
         "status": "resolved",
         "apiCalls": [],
@@ -3940,6 +4147,32 @@
           }
         ],
         "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/game/:id",
+      "component": "SyloGameDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/game-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/kyc/data/new",
+      "component": "SyloKycDataNew",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/kyc-data-new.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
       }
     },
     {
@@ -6096,6 +6329,7 @@
     "pages/admin/theme-palette-builder.tsx",
     "pages/modules/landing.tsx",
     "pages/not-found.tsx",
+    "pages/sylo/credit-ui.tsx",
     "pages/user/marketplace-nft.tsx",
     "pages/user/nft-marketplace.tsx",
     "pages/user/vault-entity-dashboard.tsx",
