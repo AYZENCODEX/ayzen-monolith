@@ -207,6 +207,10 @@ jobs:
       - run: pnpm validate:finance-boundaries
       # R-11: Finance static suite (domain, route security, ledger ownership, AI parsing, async-error guards).
       - run: pnpm --filter @workspace/api-server test:finance-static
+        env:
+          # The static suite imports finance-ai, which pulls in the db module; that only needs a URL to construct a
+          # lazy pool (no connection is made), so a placeholder keeps the suite DB-free.
+          APP_DATABASE_URL: postgres://static:static@127.0.0.1:5432/static
       # PRJ-01: Projects boundaries, frozen route surface and the Vault/Finance cross-module contract. Blocking.
       - run: pnpm validate:projects-boundaries:self-test
       - run: pnpm validate:projects-boundaries
