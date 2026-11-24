@@ -55,44 +55,18 @@ function TrashRow({
   purging: boolean;
 }) {
   const countdown = daysLeft(entry.purgeAt);
+  const name = entry.projectName || entry.username || `Entity #${entry.id}`;
+  const busy = restoring || purging;
   return (
-    <div className="flex items-center gap-3 bg-card border border-border/40 rounded-lg px-3 py-2.5">
-      <div className="w-6 h-6 rounded-md bg-red-400/10 border border-red-400/20 flex items-center justify-center flex-shrink-0">
-        <Trash2 className="w-3 h-3 text-red-400" />
+    <div className="row" style={{ padding: "14px 18px", gap: 12, flexWrap: "wrap" }}>
+      <span className="mk">{(name.trim().slice(0, 2) || "··").toUpperCase()}</span>
+      <div className="g" style={{ minWidth: 0 }}>
+        <b>{name}</b>
+        <span>{entry.entitySerial ?? entry.category ?? `#${entry.id}`} · Trashed {new Date(entry.deletedAt).toLocaleDateString()}</span>
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="font-mono text-xs font-bold text-foreground truncate">
-          {entry.projectName || entry.username || `Entity #${entry.id}`}
-        </p>
-        <p className="font-mono text-[9px] text-muted-foreground/50 truncate">
-          {entry.entitySerial ?? entry.category ?? `#${entry.id}`} · Trashed {new Date(entry.deletedAt).toLocaleDateString()}
-        </p>
-      </div>
-      <Badge
-        variant="outline"
-        className={cn(
-          "font-mono text-[8px] uppercase tracking-wider px-1.5 flex-shrink-0 gap-1",
-          countdown.urgent ? "text-red-400 border-red-400/30 bg-red-400/5" : "text-muted-foreground/60 border-border/40"
-        )}
-      >
-        <Clock className="w-2.5 h-2.5" /> {countdown.label}
-      </Badge>
-      <Button
-        variant="outline" size="sm"
-        onClick={onRestore} disabled={restoring || purging}
-        className="font-mono text-[10px] h-7 gap-1 flex-shrink-0"
-      >
-        {restoring ? <Loader2 className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3" />}
-        Restore
-      </Button>
-      <Button
-        variant="ghost" size="sm"
-        onClick={onPurge} disabled={restoring || purging}
-        className="font-mono text-[10px] h-7 w-7 p-0 flex-shrink-0 text-red-400/70 hover:text-red-400 hover:bg-red-400/10"
-        title="Delete forever"
-      >
-        {purging ? <Loader2 className="w-3 h-3 animate-spin" /> : <X className="w-3.5 h-3.5" />}
-      </Button>
+      <span className={`pill${countdown.urgent ? " bad" : ""}`}>{countdown.label}</span>
+      <button type="button" className="btn sm" onClick={onRestore} disabled={busy}>{restoring ? "Restoring…" : "Restore"}</button>
+      <button type="button" className="btn sm g" onClick={onPurge} disabled={busy} title="Delete forever" aria-label={`Delete ${name} forever`}>{purging ? "…" : "Delete forever"}</button>
     </div>
   );
 }
@@ -191,7 +165,7 @@ export default function VaultTrash() {
           note="Delete an entity from Vault → Entity and it'll land here, recoverable for 30 days before it's permanently purged."
         />
       ) : (
-        <div className="space-y-1.5">
+        <div className="card">
           {entries.map(entry => (
             <TrashRow
               key={entry.id}

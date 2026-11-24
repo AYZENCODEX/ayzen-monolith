@@ -28,50 +28,30 @@ type EntryAny = any;
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function PlatformHeader({ icon: Icon, label, count, color = "red" }: {
-  icon: React.ElementType; label: string; count: number; color?: string;
+function PlatformHeader({ label, count }: {
+  icon?: React.ElementType; label: string; count: number; color?: string;
 }) {
-  const colorMap: Record<string, string> = {
-    red:    "text-red-400 border-red-400/30 bg-red-400/10",
-    blue:   "text-blue-400 border-blue-400/30 bg-blue-400/10",
-    indigo: "text-indigo-400 border-indigo-400/30 bg-indigo-400/10",
-    cyan:   "text-cyan-400 border-cyan-400/30 bg-cyan-400/10",
-    zinc:   "text-zinc-400 border-zinc-400/30 bg-zinc-400/10",
-  };
-  const c = colorMap[color] ?? colorMap.red;
   return (
-    <div className={cn("flex items-center gap-2 px-3 py-2 rounded-lg border", c)}>
-      <Icon className="w-3.5 h-3.5 flex-shrink-0" />
-      <span className="font-mono text-[10px] font-bold uppercase tracking-widest flex-1">{label}</span>
-      <span className="font-mono text-[9px] opacity-70">{count} banned</span>
+    <div className="tool" style={{ borderTop: "1px solid var(--line)" }}>
+      <b className="mono" style={{ flex: 1, fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--mu)", fontWeight: 500 }}>{label}</b>
+      <span className="mono" style={{ color: "var(--di)", fontSize: 11 }}>{count} banned</span>
     </div>
   );
 }
 
-function BannedRow({ icon: Icon, title, subtitle, onClick }: {
-  icon: React.ElementType; title: string; subtitle?: string; onClick?: () => void;
+function BannedRow({ title, subtitle, onClick }: {
+  icon?: React.ElementType; title: string; subtitle?: string; onClick?: () => void;
 }) {
-  return (
-    <div
-      onClick={onClick}
-      className={cn(
-        "flex items-center gap-3 bg-card border border-border/40 rounded-lg px-3 py-2.5 ml-3",
-        onClick && "cursor-pointer hover:border-red-400/30 transition-colors"
-      )}
-    >
-      <div className="w-6 h-6 rounded-md bg-red-400/10 border border-red-400/20 flex items-center justify-center flex-shrink-0">
-        <Icon className="w-3 h-3 text-red-400" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="font-mono text-xs font-bold text-foreground truncate">{title}</p>
-        {subtitle && <p className="font-mono text-[9px] text-muted-foreground/50 truncate">{subtitle}</p>}
-      </div>
-      <Badge variant="outline" className="font-mono text-[8px] uppercase tracking-wider px-1.5 text-red-400 border-red-400/30 bg-red-400/5 flex-shrink-0">
-        Banned
-      </Badge>
-      {onClick && <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/30 flex-shrink-0" />}
-    </div>
+  const body = (
+    <>
+      <span className="mk">{(title.trim().slice(0, 2) || "··").toUpperCase()}</span>
+      <div className="g"><b>{title}</b>{subtitle && <span>{subtitle}</span>}</div>
+      <span className="pill bad">Banned</span>
+    </>
   );
+  return onClick
+    ? <div className="row go" role="link" tabIndex={0} onClick={onClick} onKeyDown={(e) => { if (e.key === "Enter") onClick(); }} style={{ padding: "14px 18px", cursor: "pointer" }}>{body}</div>
+    : <div className="row" style={{ padding: "14px 18px" }}>{body}</div>;
 }
 
 // ─── Platform groups ──────────────────────────────────────────────────────────
@@ -219,9 +199,9 @@ export default function VaultBanned() {
           note="Ban an entity, local account, KYC entity, or an individual linked platform account and it'll show up here, grouped by platform."
         />
       ) : (
-        <div className="space-y-4">
+        <div className="card">
           {groups.map(g => (
-            <div key={g.id} className="space-y-1.5">
+            <div key={g.id} style={{ display: "contents" }}>
               <PlatformHeader icon={g.icon} label={g.label} count={g.rows.length} color={g.color} />
               {g.rows.map(row => (
                 <BannedRow
