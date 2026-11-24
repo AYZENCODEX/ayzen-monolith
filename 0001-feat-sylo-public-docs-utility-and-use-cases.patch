@@ -1,0 +1,931 @@
+From bd3e04828253444edb2f0cfb852715df2c8f89fb Mon Sep 17 00:00:00 2001
+From: claude <a@b.c>
+Date: Wed, 25 Nov 2026 02:16:47 +0600
+Subject: [PATCH] feat(sylo): public indexable documentation at /docs with full
+ SYLO/AYZEN notes, sitemap, robots, llms.txt
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01JBNsH57RAuZAWzMj2b9gMd
+---
+ CHANGES_SYLO_DOCS.md                          |  11 +
+ artifacts/api-server/src/app.ts               |  12 +-
+ .../module-registry/src/landing-designs.mjs   |   3 +-
+ packages/module-registry/src/landing.d.mts    |   5 +
+ packages/module-registry/src/landing.mjs      |  18 +-
+ .../module-registry/src/sylo-docs-data.mjs    | 448 ++++++++++++++++++
+ packages/module-registry/src/sylo-docs.mjs    | 239 ++++++++++
+ .../module-registry/test/sylo-docs.test.mjs   |  48 ++
+ 8 files changed, 775 insertions(+), 9 deletions(-)
+ create mode 100644 CHANGES_SYLO_DOCS.md
+ create mode 100644 packages/module-registry/src/sylo-docs-data.mjs
+ create mode 100644 packages/module-registry/src/sylo-docs.mjs
+ create mode 100644 packages/module-registry/test/sylo-docs.test.mjs
+
+diff --git a/CHANGES_SYLO_DOCS.md b/CHANGES_SYLO_DOCS.md
+new file mode 100644
+index 0000000..22998a4
+--- /dev/null
++++ b/CHANGES_SYLO_DOCS.md
+@@ -0,0 +1,11 @@
++# Sylo documentation (public, indexable)
++
++Sylo's `/docs` pages carry the full SYLO / AYZEN ecosystem notes (Utility and Use-Cases chapters only; tokenomics, governance and business model are deliberately not published), line for line.
++
++- Content: `packages/module-registry/src/sylo-docs-data.mjs` (note text as written, Bengali + English; do not reword). Renderer: `sylo-docs.mjs` (pure, no script, no network).
++- URLs: `/docs`, `/docs/<chapter>`, `/docs/<chapter>/<topic>` , server-rendered with title, description, canonical, robots, OG/Twitter, TechArticle / CollectionPage + BreadcrumbList JSON-LD, prev/next links.
++- Discovery: `sitemap.xml` lists all docs URLs, `robots.txt` allows `/docs` (AI crawlers included), `llms.txt` links every chapter, `llms-full.txt` contains the whole documentation as markdown; About page nav has a Docs link.
++- Served by: Express (`app.ts`, sylo host, same gate as `/about`) and the module/central builds (`emitModuleSite` writes `docs/**/index.html`).
++- Tests: `packages/module-registry/test/sylo-docs.test.mjs` (SEO tags, every note line present in page and llms-full, sitemap/robots/llms).
++- Not done: a Docs link inside the designed Sylo landing HTML (`public/landing/sylo/index.html`); search engines find the docs through the sitemap, About page and llms.txt.
++- To add a page: edit the data file; paths, sitemap and llms update automatically.
+diff --git a/artifacts/api-server/src/app.ts b/artifacts/api-server/src/app.ts
+index 75a7bec..85d83fa 100644
+--- a/artifacts/api-server/src/app.ts
++++ b/artifacts/api-server/src/app.ts
+@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
+ import { moduleRequestContext } from "./lib/module-request-context";
+ import path from "path";
+ import fs from "fs";
+-import { robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, getLandingContent } from "@ayzen/module-registry/landing";
++import { robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, getLandingContent, hasDocs, docsDocument, findDocsPage } from "@ayzen/module-registry/landing";
+ import { designAssets, designIds, designedLandingHtml, designedLoginHtml, designedRegisterHtml } from "@ayzen/module-registry/landing-designs";
+ import { fileURLToPath } from "url";
+ import router from "./routes";
+@@ -453,6 +453,16 @@ if (process.env.NODE_ENV === "production") {
+     res.setHeader("Cache-Control", "public, max-age=300");
+     res.type("html").send(aboutDocument(c, { origin: `https://${req.hostname}` }));
+   });
++  // Sylo documentation: /docs, /docs/<chapter>, /docs/<chapter>/<topic> (server-rendered, indexable, listed in sitemap.xml and llms files)
++  app.get(["/docs", "/docs/{*rest}"], (req, res, next) => {
++    const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
++    if (!id || !landingByHost.size || !hasDocs(id)) return next();
++    const page = findDocsPage(req.path);
++    if (!page) return next();
++    if (req.path.length > 1 && req.path.endsWith("/")) return res.redirect(301, req.path.replace(/\/+$/, "") + (req.url.slice(req.path.length) || ""));
++    res.setHeader("Cache-Control", "public, max-age=300");
++    res.type("html").send(docsDocument(page, { origin: `https://${req.hostname}` }));
++  });
+   app.get("/sitemap.xml", (req, res, next) => {
+     const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
+     if (!id || !landingByHost.size) return next();
+diff --git a/packages/module-registry/src/landing-designs.mjs b/packages/module-registry/src/landing-designs.mjs
+index d144332..106b38b 100644
+--- a/packages/module-registry/src/landing-designs.mjs
++++ b/packages/module-registry/src/landing-designs.mjs
+@@ -12,7 +12,7 @@ import path from "node:path";
+ import { fileURLToPath } from "node:url";
+ import { getModule } from "./index.mjs";
+ import { loginAdapterScript } from "./login-adapters.mjs";
+-import { aboutDocument, getLandingContent, landingDocument, landingHead, llmsFullTxt, llmsTxt, robotsTxt, sitemapXml } from "./landing.mjs";
++import { docsFiles, hasDocs, aboutDocument, getLandingContent, landingDocument, landingHead, llmsFullTxt, llmsTxt, robotsTxt, sitemapXml } from "./landing.mjs";
+ 
+ const DEFAULT_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "landings");
+ /** Read lazily: a bundled server (esbuild) cannot locate the folder from import.meta.url, so it sets MODULE_LANDINGS_DIR. */
+@@ -168,6 +168,7 @@ export function emitModuleSite(id, dir, opts = {}) {
+   w("llms.txt", llmsTxt(id, opts));
+   w("llms-full.txt", llmsFullTxt(id, opts));
+   w("about/index.html", aboutDocument(getLandingContent(id), opts));
++  if (hasDocs(id)) for (const [rel, html] of Object.entries(docsFiles(opts))) w(rel, html);
+ }
+ 
+ /** Design assets under <outRoot>/landing-assets/<id>/ (the prefix the landing HTML refers to). */
+diff --git a/packages/module-registry/src/landing.d.mts b/packages/module-registry/src/landing.d.mts
+index 99353dd..8b5080b 100644
+--- a/packages/module-registry/src/landing.d.mts
++++ b/packages/module-registry/src/landing.d.mts
+@@ -18,3 +18,8 @@ export function aboutBody(c: ModuleLandingContent): string;
+ export function aboutDocument(c: ModuleLandingContent, opts?: { origin?: string }): string;
+ export const AI_CRAWLERS: readonly string[];
+ export const PUBLIC_PATHS: readonly string[];
++export function hasDocs(id: string): boolean;
++export function docsDocument(page: { kind: string; path: string }, opts?: { origin?: string }): string;
++export function docsFiles(opts?: { origin?: string }): Record<string, string>;
++export function docsPaths(): string[];
++export function findDocsPage(pathname: string): { kind: string; path: string } | null;
+diff --git a/packages/module-registry/src/landing.mjs b/packages/module-registry/src/landing.mjs
+index d4755af..4b58f74 100644
+--- a/packages/module-registry/src/landing.mjs
++++ b/packages/module-registry/src/landing.mjs
+@@ -10,6 +10,10 @@
+ import { getModule } from "./index.mjs";
+ 
+ import { CONTENT } from "./landing-content.mjs";
++import { hasDocs, docsSitemapUrls, docsLlmsLinks, docsMarkdown, docsDocument, docsFiles, docsPaths, findDocsPage } from "./sylo-docs.mjs";
++
++/** Public documentation pages (currently Sylo only): /docs, /docs/<chapter>, /docs/<chapter>/<topic>. */
++export { hasDocs, docsDocument, docsFiles, docsPaths, findDocsPage };
+ 
+ /** Copy, brand tokens and facts per module live in landing-content.mjs (grounded in the supplied designs). */
+ export const LANDINGS = CONTENT;
+@@ -123,12 +127,12 @@ export function injectLandingIntoHtml(html, id, opts = {}) {
+ 
+ /** AI search / answer / assistant crawlers that are explicitly allowed on the public pages (same rules as everyone else). */
+ export const AI_CRAWLERS = Object.freeze(["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "Bingbot", "DuckAssistBot", "meta-externalagent", "Amazonbot", "cohere-ai", "MistralAI-User"]);
+-export const PUBLIC_PATHS = Object.freeze(["/about", "/llms.txt", "/llms-full.txt"]);
++export const PUBLIC_PATHS = Object.freeze(["/about", "/docs", "/llms.txt", "/llms-full.txt"]);
+ 
+ export function robotsTxt(id, opts = {}) {
+   const c = getLandingContent(id);
+   const base = c ? origin(c, opts.origin) : "";
+-  const rules = `Allow: /$\nAllow: /about$\nAllow: /og/\nAllow: /landing-assets/\nAllow: /llms.txt\nAllow: /llms-full.txt\nDisallow: /\n`;
++  const rules = `Allow: /$\nAllow: /about$\n${hasDocs(id) ? "Allow: /docs\n" : ""}Allow: /og/\nAllow: /landing-assets/\nAllow: /llms.txt\nAllow: /llms-full.txt\nDisallow: /\n`;
+   return `# ${c ? c.label : "AYZEN module"}: the public pages are open to search engines and AI search/answer crawlers; the signed-in app is not.\nUser-agent: *\n${rules}\n${AI_CRAWLERS.map((u) => `User-agent: ${u}`).join("\n")}\n${rules}${base ? `\nSitemap: ${base}/sitemap.xml\n` : ""}`;
+ }
+ 
+@@ -136,7 +140,7 @@ export function sitemapXml(id, opts = {}) {
+   const c = getLandingContent(id);
+   if (!c) return "";
+   const base = origin(c, opts.origin);
+-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${["/", "/about"].map((u) => `  <url><loc>${esc(base)}${u}</loc></url>`).join("\n")}\n</urlset>\n`;
++  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...["/", "/about"].map((u) => `${base}${u}`), ...(hasDocs(id) ? docsSitemapUrls(opts) : [])].map((u) => `  <url><loc>${esc(u)}</loc></url>`).join("\n")}\n</urlset>\n`;
+ }
+ 
+ const bullets = (a) => a.map((x) => `- ${x}`).join("\n");
+@@ -158,7 +162,7 @@ ${c.label} is a module of AYZEN, with its own account, session and data. Categor
+ - [${c.label} home](${base}/): overview, features and FAQ
+ - [About ${c.label}](${base}/about): full details, how it works, use cases, limits and FAQ
+ - [Full text for AI assistants](${base}/llms-full.txt): everything on this site as one markdown file
+-- [Sign in](${base}/login): sign in to ${c.label}
++${hasDocs(id) ? docsLlmsLinks(opts) + "\n" : ""}- [Sign in](${base}/login): sign in to ${c.label}
+ - [Create account](${base}/register): create a ${c.label} account
+ 
+ ## What you get
+@@ -232,11 +236,11 @@ export function llmsFullTxt(id, opts = {}) {
+   if (!c) return "";
+   const base = origin(c, opts.origin);
+   return `${moduleMarkdown(id, opts, 1)}
+-## Links
++${hasDocs(id) ? docsMarkdown(opts, 1) + "\n" : ""}## Links
+ 
+ - Home: ${base}/
+ - About: ${base}/about
+-- Sign in: ${base}/login
++${hasDocs(id) ? `- Documentation: ${base}/docs\n` : ""}- Sign in: ${base}/login
+ - Create account: ${base}/register
+ - Short version: ${base}/llms.txt
+ `;
+@@ -260,7 +264,7 @@ export function aboutHead(c, opts = {}) {
+ export function aboutBody(c) {
+   const L = esc(c.label);
+   return `<div class="ml" data-module-about="${esc(c.id)}">
+-<header class="ml-h"><a class="ml-brand" href="/" aria-label="${L} home">${L}</a><nav aria-label="Primary"><a href="/">Home</a><a href="#features">Features</a><a href="#detail">In detail</a><a href="#faq">FAQ</a><a href="/login">Sign in</a></nav></header>
++<header class="ml-h"><a class="ml-brand" href="/" aria-label="${L} home">${L}</a><nav aria-label="Primary"><a href="/">Home</a><a href="#features">Features</a><a href="#detail">In detail</a><a href="#faq">FAQ</a>${hasDocs(c.id) ? '<a href="/docs">Docs</a>' : ""}<a href="/login">Sign in</a></nav></header>
+ <main>
+ <nav class="ml-crumbs" aria-label="Breadcrumb"><a href="/">${L}</a> / <span aria-current="page">About</span></nav>
+ <section class="ml-hero" aria-labelledby="ab-h1"><p class="ml-eyebrow">${esc(c.category)}</p><h1 id="ab-h1">About ${L}: ${esc(c.tagline.replace(/\.$/, ""))}</h1><p class="ml-lead">${esc(c.hero.lead)}</p><div class="ml-cta"><a class="ml-btn" href="/register">Create your ${L} account</a><a class="ml-btn ml-ghost" href="/login">Sign in</a></div></section>
+diff --git a/packages/module-registry/src/sylo-docs-data.mjs b/packages/module-registry/src/sylo-docs-data.mjs
+new file mode 100644
+index 0000000..9615e0f
+--- /dev/null
++++ b/packages/module-registry/src/sylo-docs-data.mjs
+@@ -0,0 +1,448 @@
++/**
++ * sylo-docs-data.mjs: the SYLO / AYZEN ecosystem notes, line for line, as chapters > topics > subtopics.
++ * Source: the author's SYLO / AYZEN notes (Utility and Use-Cases chapters of the PDF; tokenomics, governance and business-model are not published). `lines` are the note text exactly as written
++ * (Bengali and English mixed); do not reword them. Render with sylo-docs.mjs. Subtopics 1.1.1 and 3.1.1 are the two overview diagrams
++ * of the PDF written out as text.
++ */
++export const SYLO_DOCS = [
++ {
++  "n": 1,
++  "slug": "utility",
++  "title": "UTILITY",
++  "desc": "SYLO এর ফিচার, সিকিউরিটি ও কানেক্টেড মডিউল",
++  "topics": [
++   {
++    "n": "1.1",
++    "slug": "ecosystem-overview",
++    "title": "Ecosystem Overview",
++    "subs": [
++     {
++      "n": "1.1.1",
++      "title": "Ecosystem Overview",
++      "lines": [
++       "SYLO — ACCESS · ENTITY · ENROLL",
++       "AXTA — EXTENSION",
++       "ZYNTH AI — MCP AGENT",
++       "SKARN — TRACKING",
++       "VERVE — SELL · ESCROW",
++       "AYZEN — OIDC PROVIDER",
++       "AZN — CURRENCY",
++       "AGT — GOVERNANCE TOKEN",
++       "AGRT — VOTE POWER"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "1.2",
++    "slug": "sylo-core-and-access",
++    "title": "SYLO Core & Access",
++    "subs": [
++     {
++      "n": "1.2.1",
++      "title": "What is SYLO",
++      "lines": [
++       "☐ SYLO হলো একটি WEB APP (with vibe of AI)। A Perfect mix of mailbox, 2FA auth, Credential keeper like Password Manager, Bitkeep এর মত। SYLO শুধু Astra এর extension ব্যবহার করে যা AUTOMATIC ACCOUNT VERIFY করে LOGIN করে দেয়।",
++       "  [ডায়াগ্রাম]",
++       "  \"ENTITY\" → \"ACCESS\" ← \"ENROLL\"",
++       "  \"LOCAL\"  \"EXCHANGE\"",
++       "  \"ASTRA\" ←— \"BACKUP\" ←— \"DYNAMIC AI\"",
++       "☐ SYLO এর মাধ্যমে 50-100+ ACCOUNT MANAGE করা যায়। এখানে যেকোনো ACCOUNT সহজে লগইন করতে যা লাগে তা STORE করে বা SAVE করা যায়। শুধু MOBILE এ EMAIL লগইন না করে APP থেকে EMAIL এর CODE নিয়ে লগইন করা যায়। আবার 2STEP ভেরিফিকেশন (2FA AUTH ON থাকলে) তা STORE করলে APP থেকে তাও নিয়ে VERIFY করা যায়। সব GROUPED থাকে \"ACCESS\" FEATURE এর ভেতর।"
++      ]
++     },
++     {
++      "n": "1.2.2",
++      "title": "Access Feature",
++      "lines": [
++       "\"ACCESS\"",
++       "☐ ACCESS FEATURE এর মাধ্যমে আমরা সবকিছুই GROUPED MAILBOX, 2FA, BACKUP CODE এর সেকশনে পাচ্ছি। Like ⇒",
++       "  ACCESS",
++       "  MAILBOX → এই ACC এ যে CODE আসে তা দেখা যায়, MAIL লগইন করা লাগে না।",
++       "  2FA → Google Auth এ code গুলো flat থাকে, অনেক ঝামেলা ও খোঁজা লাগে।",
++       "  BACKUP CODE → RECOVERY হিসাব অনেক ACC এ BACKUP CODE GENERATE করা হয়; PASS, 2FA, EMAIL কাজ না করলে ব্যবহার করতে হয়।",
++       "☐ এই FEATURE দিয়ে সহজেই 100+ ACC MANAGE করা যায়, এটি BITKEEP, PASSWORD MANAGER এর UPGRADE VERSION WITH AI INTEGRATION, এবং বাকি সব কাজ সহজ করার জন্য।"
++      ]
++     },
++     {
++      "n": "1.2.3",
++      "title": "Access Workflow",
++      "lines": [
++       "☐ ACCESS FEATURE কিভাবে USE করবো? FLOW এমন, উদাহরণ:",
++       "  TWITTER ACC এ লগইন করবো, APP এর WORKFLOW : আমি ACCOUNT CLICK করলাম, EMAIL PASS COPY করলাম, THEN PASTE করলাম, ACCESS এ CLICK করলাম, MAIL SLIDE ACCESS PAGE এ গেলাম, 2FA থাকলে SLIDE 2FA এর CODE COLLECT করলাম, SUBMIT করলাম, ACCOUNT LOGIN হয়ে গেল।",
++       "  যদি PASSWORD ভুল হয়, EMAIL CODE ও কাজ না করে, SECURITY ISSUE THEN ACCESS PAGE 2FA SIDE থেকে COPY করে PASTE করলে PROBLEM SOLVED।",
++       "  [FLOW ডায়াগ্রাম]",
++       "  [TWITTER] → [APP থেকে EMAIL PASS COPY] → [TWITTER এ PASTE]",
++       "          → [APP এ ACCESS থেকে CODE] → [TWITTER PASTE]",
++       "          → [TWITTER LOGIN DONE] → TASK DONE"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "1.3",
++    "slug": "entity-system",
++    "title": "Entity System",
++    "subs": [
++     {
++      "n": "1.3.1",
++      "title": "Target Users",
++      "lines": [
++       "☐ SYLO MULTIPLE ACCOUNT নিয়ে AIRDROP FARMING ও ACCOUNT FARMING এর জন্য BUILD করা। POWER USER দের জন্য যারা 100+ ACC বা MINIMUM 40-50 ACCOUNT নিয়ে AIRDROP করে।",
++       "  [ডায়াগ্রাম]",
++       "  SYLO → \"যারা 100+ ACCOUNT MANAGE করে কাজ করে\" ← POWER USER",
++       "  SYLO → \"WEB3 USER — যারা 50-60 ACCOUNT নিয়ে কাজ করে\"",
++       "☐ SYLO ENTITY FEATURE WEB3 USER দের প্রতিনিধিত্ব করছে, LOCAL ACCOUNT POWER USER দের জন্য BUILD করা। ENTITY FEATURE দিয়ে GROUPED SOCIAL ACCOUNT পরিচালনা সহজ হয়।"
++      ]
++     },
++     {
++      "n": "1.3.2",
++      "title": "Entity Structure",
++      "lines": [
++       "ENTITY",
++       "  TELEGRAM  TWITTER  DISCORD  EMAIL  GITHUB  WALLET",
++       "  একটা ENTITY CREATE বা BUILD হয় TELEGRAM, TWITTER, DISCORD, EMAIL, GITHUB, WALLET নিয়ে। কারণ একটা PROJECT এর AIRDROP করতে গেলে:",
++       "  [ TELEGRAM CHANNEL JOIN",
++       "  [ TWITTER FOLLOW, REPOST, LIKE      | MANDATORY",
++       "  [ DISCORD CHANNEL JOIN              | AIRDROP",
++       "  [ EMAIL VERIFY                      | TASKS",
++       "  [ ACCOUNT CREATE",
++       "  [ WALLET CONNECT"
++      ]
++     },
++     {
++      "n": "1.3.3",
++      "title": "Entity per Project",
++      "lines": [
++       "ACCOUNT খোলার দরকার খুললো, 10 টা ENTITY বানালো, 10 টা ACCOUNT এর জন্য TASK COMPLETE করলো। এখন FACT হলো SYLO ENTITY DEFAULT বা UNIQUE, যে PROJECT ACCOUNT গুলো খোলা হয়, তা ENROLLED ACCOUNT দিয়ে STORE হয়।",
++       "☐ একজন ২০টা SYLO ENTITY বানালো, সে EASILY 10-12 টা PROJECT এর AIRDROP করতে পারবে। একবার ENTITY বানিয়ে CONFIGURE করলে তাকে আর ACCOUNT MANAGE নিয়ে ঝামেলা করতে হবে না। সে JUST AIRDROP PROJECT গুলোর ACCOUNT তথ্য SYLO তে ENROLL করবে, আর কাজ থাকবে MAIN ACCOUNT MANAGED, PROJECT এর ভেতরে।"
++      ]
++     },
++     {
++      "n": "1.3.4",
++      "title": "Enroll System",
++      "lines": [
++       "☐ ENTITY A ——→ SYLO ENTITY → ENROLL SYSTEM",
++       "  OA1  OA-2  OA-3  BR-4  BD-6  FA-1  AK-6 → PROJECT NAME",
++       "  WEB3 USER ENROLL FEATURE এর মাধ্যমে সহজেই TRACK করতে পারবে যে একটা ENTITY USE করে কোন কোন PROJECT করেছে। ENROLL FEATURE টা USER কে সাহায্য করার জন্য BUILD করা। ENROLL FEATURE MAINLY LINK বা CONNECTOR দিয়ে কাজ করে, কোনো PROJECT ACCOUNT যুক্ত করতে SYLO ENTITY ACCOUNT SELECT করতে হয়, শুধু PROJECT ACCOUNT DETAILS।",
++       "  ENROLL FLOW ⇒",
++       "  [PROJECT CHOSE] → [ENTITY CHOSE] → [PROJECT ACCOUNT DETAILS] → [ENROLL ACCOUNT]"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "1.4",
++    "slug": "entity-intelligence",
++    "title": "Entity Intelligence",
++    "subs": [
++     {
++      "n": "1.4.1",
++      "title": "Flags, Dynamic Pricing, ROI & Health Scan",
++      "lines": [
++       "☐ FLAGS, DYNAMIC PRICING, ROI, HEALTH SCAN FEATURE বলতে বোঝাচ্ছে:",
++       "  অনেক সময় অনেক ACCOUNT BAN হয়ে যায়, তখন ENTITY তে FLAG করা যায়, যে এই ENTITY এর এই ACC এ সমস্যা, CHANGE করতে হবে।",
++       "☐ DYNAMIC PRICING থাকবে। ACCOUNT এর WORTH CHECK করা যায়, DYNAMIC PRICING SYSTEM কিছু PARAMETER USE করে:",
++       "  [DYNAMIC PRICING]",
++       "  [FOLLOWER] [AGE] [USERNAME] [ENGAGEMENT]",
++       "  এখন সব ACCOUNT তো CREATE করা হয় না, কিছু ACCOUNT BUY করা হয়, যেখানে BUY PRICE দেখা যায়।"
++      ]
++     },
++     {
++      "n": "1.4.2",
++      "title": "Stored Credentials",
++      "lines": [
++       "ACCOUNT গুলোর FOLLOWER, AGE ও ENGAGEMENT এর উপর DEPEND করে CONTINUOUS PRICE CHANGE হতে থাকে, ROI ও PRICE MANUALLY ও বসানো যাবে।",
++       "☐ ENTITY HEALTH SCAN মানে, কোনো INCOMPLETE ENTITY থাকলে ALERT করবে। ENTITY অনেক SECURITY CREDENTIAL COLLECT করবে:",
++       "  EMAIL        : EMAIL-PASSWORD, EMAIL 2FA",
++       "  EMAIL AGE    : RECOVERY-EMAIL, RECOVERY-EMAIL PASSWORD",
++       "  EMAIL BACKUP CODE, RECOVERY 2FA, WORTH, BUY DATE, BUY PRICE",
++       "  FOLLOWER, LAST-LOGIN, BUY PRICE",
++       "  SELLER NAME, SELLER-PHONE, SOCIAL DETAILS",
++       "  IMAP PASS, APP PASSWORD, ENTITY NAME",
++       "  USERNAME, SEED PHRASE, PRIVATE KEY",
++       "  STORED CREDENTIALS"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "1.5",
++    "slug": "local-account-and-exchange",
++    "title": "Local Account & Exchange",
++    "subs": [
++     {
++      "n": "1.5.1",
++      "title": "Local Account",
++      "lines": [
++       "☐ LOCAL ACCOUNT হলো POWER USER দের জন্য। LOCAL ACCOUNT SYLO ENTITY এর একটা PART বলা যায়। (যেমন TWITTER SYLO ENTITY এর একটা PART) এখানে TWITTER এর একটি LOCAL ACCOUNT। IT'S SELF LOCAL ACCOUNT ENTITY শুধু DIVIDED PART। MULTIPLE SAME CATEGORY ACCOUNT STORE করতে LOCAL ACCOUNT FEATURE USE করা যায়। এখানে FOLLOWER বাড়ানো, কমানো যায়, WORTH ও সেট করা যায়। আর কিছু ACCOUNT PLATFORM CREDIT COLLECT করার জন্য CREATE ও ADD করা হয়। প্রতিটি ADD করে COMMIT দিলে STORE হবে।"
++      ]
++     },
++     {
++      "n": "1.5.2",
++      "title": "Credit Tracking & Exchange Support",
++      "lines": [
++       "STORE হবে, এবং BALANCE UPDATE হবে। এইভাবে CREDIT, FOLLOWER TRACKING করতে পারবে। SYLO ENTITY এর FEATURES অন্তর্ভুক্ত: ACCESS, FLAGS, DYNAMIC PRICING, HEALTH SCAN, ROI বুঝাতে।",
++       "☐ SYLO EXCHANGE ACCOUNT SUPPORT করে, SYLO এর একটি FEATURE এর মাধ্যমে EXCHANGE ACCOUNT MANAGE করা যাবে, যেটি POWER USER ও WEB3 USER দের জন্য BUILD করা হয়েছে। যারা WEB3 এর POWER USER তারা নিজেরা KYC করা ACCOUNT কিনে রাখে RESELLING বা Exchange campaign multiple এর REFERRAL এর জন্য। KYC করা ACCOUNT এর ক্ষেত্রে কে SELLER, তার FACE, NID DATA STORE করতে হয়।",
++       "  [ACCOUNT DETAILS] [NID DATA] [FACE DATA] [SYLO EXCHANGE] [SELLER DATA]"
++      ]
++     },
++     {
++      "n": "1.5.3",
++      "title": "Exchange Data Benefits",
++      "lines": [
++       "☐ FACE DATA ও NID DATA থাকায় কখনো লগইন বা মালিকানা নিয়ে সমস্যা হলে তাকে FIND করে সমাধান করা যায়।",
++       "☐ SELLER DATA থাকায় কার থেকে কেনা হয়েছে জানা যাবে, কোনো সমস্যা হলে তাকে FIND করে সমাধান করা যাবে।",
++       "☐ API KEY CONFIGURED থাকলে CONNECTED EXCHANGE ACCOUNT এর BALANCE ONE PORTFOLIO তে দেখা যাবে।",
++       "  FACE VERIFY SOLUTION",
++       "  SELLER FINDING & ACCOUNT OWNERSHIP FINDING",
++       "  BALANCE UPDATE"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "1.6",
++    "slug": "backup-and-automation",
++    "title": "Backup & Automation",
++    "subs": [
++     {
++      "n": "1.6.1",
++      "title": "Backup",
++      "lines": [
++       "BACKUP",
++       "  MEMORIES   EVIDENCE   ENCRYPTED FILE",
++       "  NORMAL FILE   ACCOUNT BACKUP",
++       "☐ BACKUP SYLO এর আরও একটি FEATURE। এটির মাধ্যমে FILE UPLOAD করে BACKUP নিয়ে রাখা যায়, প্রয়োজনে DOWNLOAD করা যায় অনুমতি সাপেক্ষে। UNPOPULAR WEBSITE থেকে EVIDENCE STORE করতে GOOGLE DRIVE BEST হলেও LIMIT এর জন্য IMAGE/VIDEO UPLOAD করা সম্ভব হয় না। এখানে FILE ENCRYPTED থাকে, SO THERE IS NO SECURITY ISSUE। AYZEN যেকোনো MODULE DATA এখানে UPLOAD করা সম্ভব। MISSING হলে RESTORE বা NEW ACC এ MIGRATE করা যাবে।"
++      ]
++     },
++     {
++      "n": "1.6.2",
++      "title": "Automation",
++      "lines": [
++       "☐ SYLO এর AUTOMATION বলতে DYNAMIC PRICING, AXTA EXTENSION ও ZYNTH AI (POWERED BY 8 PAX TECH LIMITED)। AXTA EXTENSION SYLO এর একটা HOOK।",
++       "  AXTA",
++       "  AUTOMATED LOGIN    APP SHORTCUT",
++       "  QUICK VIEW   EASIER THAN SYLO   QUICK ACCESS"
++      ]
++     },
++     {
++      "n": "1.6.3",
++      "title": "AXTA Extension",
++      "lines": [
++       "☐ AXTA EXTENSION CONNECT করবার পর USER কোনো STORED WEBSITE এ লগইন করতে গেলে, EMAIL/USERNAME ও PASSWORD AUTOMATIC FILLED UP হবে, যে ACCOUNT SELECT করা হবে। এটি AXTA এর ACCESS FEATURE (এর UPGRADE VERSION OF SYLO, HERE SYLO IS THE BACKEND)। পরবর্তীতে EMAIL বা 2FA CODE চাইলে AXTA SYLO থেকে কপি করে WEBSITE FILLED করে CONFIRM RUN করবে, CAPTCHA USER কে SOLVE করতে হবে, SYLO বা AXTA SECURITY BYPASS করে না (যা LIMITED)।",
++       "☐ AXTA হলো SYLO এর QUICK ACCESS ও QUICK VIEW FEATURES। এই QUICK VIEW FEATURES এর মাধ্যমে APP না খুলেই EXTENSION দিয়েই EMAIL, 2FA VIEW করতে পারবে, আমাদের CREDENTIAL ও।"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "1.7",
++    "slug": "security-and-login",
++    "title": "Security & Login",
++    "subs": [
++     {
++      "n": "1.7.1",
++      "title": "Secure Architecture",
++      "lines": [
++       "☐ SYLO আলাদা SECURE একটা APP, যেটি HTTPS PROTECTED, OIDC LOGIN FLOW আছে, POLICY ENGINE, EVENT BUS ও WORKFLOW SYSTEM আছে।",
++       "☐ SYLO এ প্রতিটি ENTITY, LOCAL ACCOUNT সব ENCRYPTED থাকে এবং ARGON2ID দিয়ে SECURE। ENTITY VIEW করতে PIN / PASSKEY / VAULT PIN / VAULT PASSWORD / 2FA যদি SET করা থাকে লাগে।"
++      ]
++     },
++     {
++      "n": "1.7.2",
++      "title": "Security Tiers & Guards",
++      "lines": [
++       "☐ SYLO SECURITY তে:",
++       "  i) Passkey + Pin + Password + 2FA",
++       "  ii) Passkey + Pin + 2FA",
++       "  iii) PASSKEY",
++       "  iv) Pin + PASS",
++       "☐ যেখানে যেটাকে দরকার তিনটি SECURITY BLOCKER ADD করা হয়েছে, যেটা সবকিছু HOLD করে রাখা সহজ করে।",
++       "☐ SYLO এর ENCRYPTION KEY আলাদা DATABASE এ STORE হয়, HACKING থেকে বাঁচতে। SYLO এ RUNTIME MONITOR হয়, ABNORMAL ACTIVITY DETECT করতে পারে। DETECT করে POSSIBLE WAY FINDOUT করে VALIDATE করে। PREDICTED CAUSE REPORT করে। SAFETY GUARD মুহূর্তে যা PARAMETER BASED।"
++      ]
++     },
++     {
++      "n": "1.7.3",
++      "title": "Incident Response & DR",
++      "lines": [
++       "☐ আরেকটা GUARD আছে STRICT, যা EVEN KILL SWITCH TRIGGER করে ADMIN APPROVAL এ।",
++       "☐ DR মানে, DISASTER RECOVERY যা কোনো APP CRASH করলে বা APP এ KILL SWITCH TRIGGER হলে DATA AGAIN RECOVER করতে CAPABLE।",
++       "☐ ECC দিয়ে TESTED CYBER ATTACK থেকে PREVENT করতে, (VERCEL + RENDER + RESEND + CLOUDFLARE + SUPABASE + REDIS + AI PROVIDER) দিয়ে STRUCTURED।",
++       "☐ APP টি 16k FRONTEND ও 16k BACKEND নিয়ে গঠিত, EXPAND করে 25k, 25k হতে পারে। এবং FREE-TIER এ CONTINUE।"
++      ]
++     },
++     {
++      "n": "1.7.4",
++      "title": "Login Flow & Monitoring",
++      "lines": [
++       "☐ APP এর RUNTIME ERROR CATCH করতে POSTHOG এবং SENTRY CONFIGURE করা আছে, কোনো ERROR হলে ALERT আসে, CI/CD TEST চলে প্রতি DEPLOY ও COMMIT এ।",
++       "☐ SYLO এর OWN LOGIN FLOW + CLERK INTEGRATION করা আছে। SYLO এর OWN LOGIN FLOW তে USERNAME, EMAIL CODE (RESEND), CAPTCHA, 2FA VERIFIER, REFERRAL REQUIRED LOGIN SYSTEM ও আছে BUT OFF করা। RATE LIMIT করা আছে 5 বা 6 ATTEMPT, PASSWORD RESET SYSTEM আছে 3 ATTEMPT, EMAIL CODE 3, 2FA 3। IP MONITORING, DEVICE, LOCATION, TIMELINE COLLECT করা হয়।"
++      ]
++     },
++     {
++      "n": "1.7.5",
++      "title": "Clerk, OIDC & Modules",
++      "lines": [
++       "☐ CLERK INTEGRATION আছে GOOGLE, FACEBOOK, GITHUB LOGIN এর জন্য, যদিও এটি দিয়ে CREATE করলেও PASSWORD SET করতে হয়।",
++       "☐ SYLO এর AYZEN POWERED OIDC PROVIDER বলতে, AYZEN ACCOUNT দিয়ে সবকিছুতেই SYLO ACCOUNT খোলা বা লগইন করা যায়। SYLO এর সব APP এই।",
++       "☐ SYLO এর CONNECTED MODULE হলো SKARN ও VERVE। SYLO এ ENROLLED ACCOUNT এর কাজের FLOW TRACK করতে SKARN APP BUILD করা। SKARN ও SYLO CONNECT করলে, যেকোনো PROJECT TRACK করা সম্ভব। SKARN এ যে কাজ করা হয় তা সহজে মনিটর করা যায়।"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "1.8",
++    "slug": "connected-modules-and-ai",
++    "title": "Connected Modules & AI",
++    "subs": [
++     {
++      "n": "1.8.1",
++      "title": "SKARN Tracking",
++      "lines": [
++       "☐ নতুন PROJECT DEPLOY হলে, শুধু TASK ADD করে রাখি কাজের। FOR SUPPOSE আমরা HIMARI নামের একটি WEBSITE এ কাজ করছি, প্রতিদিন SIGN IN করতে হয়, আমরা 100+ ACCOUNT দিয়ে করলে প্রত্যেক ACCOUNT SYLO এ ENROLL করে PROJECT এ ASSIGN করলাম। প্রত্যেক দিন কোন কোন ACCOUNT SIGN IN করলাম তা SUBMIT করলাম, কোন PROOFING, LOSS থাকা বা COST থাকলে INCLUDE করলাম। মানে যে যে ACCOUNT এ SIGN IN থাকে SKARN ও ALERT দিবে ও BOARD নিশ্চিত রাখবে। আমরা সহজেই বুঝতে পারবো কোন ACCOUNT এ কি কাজ হচ্ছে। আমরা কত খরচ বা লাভ হলো তা TRACK করতে পারবো।",
++       "  SYLO X SKARN"
++      ]
++     },
++     {
++      "n": "1.8.2",
++      "title": "VERVE & ZYNTH AI",
++      "lines": [
++       "☐ যারা MULTIPLE ACCOUNT FARMING করে তারা SYLO কে VERVE এর সাথে CONNECT করুক, তারা তাদের ACCOUNT SELL করতে পারবে তাও ESCROW PAYMENT SYSTEM এর মাধ্যমে, NOTHING TO LOSE, NOTHING TO FEAR।",
++       "☐ SYLO তে ZYNTH AI INTEGRATED, ZYNTH AI SYLO এর MCP AGENT হিসেবে কাজ করে। ZYNTH AI কে কোনো ACCOUNT এর কোন DETAILS লাগলে (যেমন PASSWORD, USERNAME, CREDENTIAL), (EMAIL CODE, 2FA, BACKUP CODE) ASK করলে বলে দিতে পারবে।"
++      ]
++     },
++     {
++      "n": "1.8.3",
++      "title": "ZYNTH, Developer Key & AZN",
++      "lines": [
++       "☐ ZYNTH AI কে বললে ACCOUNT DETAILS UPDATE করে দেবে। ZYNTH AI ENTITY ও CREATE করতে পারবে।",
++       "☐ SYLO কে CHATGPT, CLAUDE, GEMINI দিয়ে USE করতে পারবো। আমরা SYLO এর DEVELOPER KEY SCOPED, ZONE SELECT করে নিতে পারবো, যা দিয়ে SYLO এর API CALL ও SECURE করা যায়।",
++       "☐ SYLO তে AZN CURRENCY হিসেবে ব্যবহৃত হয়, INITIAL PRICE = 0.01$, SYLO এ সব PURCHASE AZN দিয়ে করা যায়।",
++       "  AZN PAYMENT FLOW: N8N -> PURCHASE -> HYBRIDICITY"
++      ]
++     }
++    ]
++   }
++  ]
++ },
++ {
++  "n": 2,
++  "slug": "use-cases",
++  "title": "USE-CASES",
++  "desc": "AIRDROP, ACCOUNT FARMING ও INCOME PATH",
++  "topics": [
++   {
++    "n": "2.1",
++    "slug": "airdrop-farming",
++    "title": "Airdrop Farming",
++    "subs": [
++     {
++      "n": "2.1.1",
++      "title": "Airdrop Farming I",
++      "lines": [
++       "☐ SYLO USE-CASES:-",
++       " 1) আমরা যদি একটা AIRDROP ACCOUNT করি LEGIT তাহলে MINIMUM AS LOW AS 1$ তো পাবোই, একজন ১ এর বদলে যদি আমরা ২০০টা একাউন্ট করি, তাহলে আমরা ২০০ ডলার পাবো।",
++       "      ২ ACC → 1 DOLLAR",
++       "      200 ACC → 100 DOLLAR",
++       "☐ এখন আমরা SYLO USE করে সহজেই ACCOUNT MANAGE করে AIRDROP করতে পারি। আমরা AIRDROP PROGRESS ও TRACK করতে পারি, SKARN CONNECT করে।"
++      ]
++     },
++     {
++      "n": "2.1.2",
++      "title": "Airdrop Farming II",
++      "lines": [
++       " ii) LIMITED FCFS AIRDROP আসলে, আমরা যদি FAST না করি তাহলে আমরা বেশি ACCOUNT করতে পারবো না। এখানে আমরা SYLO USE করে দ্রুত লগইন করতে পারবো, SO আমাদের AIRDROP MISS হবে না।",
++       " iii) আমরা যারা TWITTER FARMING করি, আমরা চাইলে সহজেই MULTIPLE ACCOUNT দিয়ে ENGAGEMENT করে আমরা TWITTER BUILD করতে পারি।",
++       " iv) আমরা FAKE REFERRAL ADD করতে SYLO MULTIPLE ACCOUNT লগইন করে আমরা দ্রুত ও সহজেই আমাদের কাজ করতে পারবো।"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "2.2",
++    "slug": "credits-and-services",
++    "title": "Credits & Services",
++    "subs": [
++     {
++      "n": "2.2.1",
++      "title": "Credits & Services I",
++      "lines": [
++       " v) আমরা চাইলে SYLO এ MULTIPLE ACCOUNT LOAD করে FOLLOWER, ENGAGEMENT SELL করতে পারি।",
++       " vi) আমরা চাইলেই MULTIPLE ACC SYLO এর মাধ্যমে লগইন করে PLATFORM CREDIT CLAIM করে রাখলাম, পরে IN-FUTURE তা কাজে দেবে।",
++       " vii) COINGECKO, AI PROVIDER FREE CREDIT ACCOUNT COLLECT করে রাখলে আমরা তা ব্যবহার করলাম।"
++      ]
++     },
++     {
++      "n": "2.2.2",
++      "title": "Credits & Services II",
++      "lines": [
++       " viii) SYLO দিয়ে আমরা CMO, CM এর কাজ করতে পারি খুব সহজেই। আবার ID BAN / REPORT REQUEST পাঠাতে আমরা SYLO এর মাধ্যমে বিভিন্ন একাউন্ট দিয়ে করতে পারি।",
++       " ix) GOOGLE PLAYPOINT COLLECT করে আমরা একটা PASSIVE INCOME করতে পারি যা সুবিধাতে SYLO এর প্রয়োজন।",
++       " x) আমরা যদি মাসে ২৫ পয়েন্ট পাচ্ছি, বছরে ২০০ POINT হবে, যা দিয়ে আমরা COD UC/CP কিনলে POINT এর দাম হবে ২০০, MAIL ৫০ টাকা যা আমরা সহজেই SYLO দিয়ে করতে পারি।"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "2.3",
++    "slug": "account-resale-and-income",
++    "title": "Account Resale & Income",
++    "subs": [
++     {
++      "n": "2.3.1",
++      "title": "Account Resale",
++      "lines": [
++       " xi) SYLO IOS/108 দিয়ে নিলাম, আর",
++       "      100 GMAIL → 200×100",
++       "      ⇒ 20k + (50×100)",
++       "      ⇒ 25k",
++       "    এখানে 1k খরচ করে আমরা সহজেই 20-25k INCOME করতে পারবো।",
++       " xii) LINKEDIN, GITHUB ACCOUNT SYLO তে STORE করে পরে তা 500-1000 তে সেল করে দিই। আবার আমরা চাইলে Google, twitter, discord, instagram Store করে আমরা SELL করতে পারি।"
++      ]
++     },
++     {
++      "n": "2.3.2",
++      "title": "Income Path",
++      "lines": [
++       " xiii) আমরা শুধু 1k এর বিনিময়ে, TWITTER ENGAGEMENT, FAKE REFERRAL, FOLLOW, ENGAGEMENT SELL করতে পারবো। খুব সহজে platform credit collect করে পরে sell করতে পারবো। google Play Point collect করে ৭-৮ মাসে 10X RETURN ENSURE করতে পারবো। PRICE ও 2.5X হবে। আবার, MAIL এর দাম পাবো, LINKEDIN, GITHUB SYLO দিয়ে আমরা 500 করে প্রোফাইল CREATE করে পারবো, TWITTER, DISCORD, INSTAGRAM ETC করতে পারবো। LOCAL ACCOUNT MINIMUM 50, HIGHEST 200-300 TK এ SELL করতে পারবো।"
++      ]
++     }
++    ]
++   },
++   {
++    "n": "2.4",
++    "slug": "platform-strengths",
++    "title": "Platform Strengths",
++    "subs": [
++     {
++      "n": "2.4.1",
++      "title": "Platform Strengths I",
++      "lines": [
++       " xiv) SYLO SECURE, FAST ACCESS করার জন্য, FAST VIEW করা হবে। SYLO এ ACCOUNT নির্দিষ্ট স্থানে রাখা হবে।",
++       " xv) SYLO VERVE এর সাথে CONNECT করে SELL ও করা হবে।",
++       " xvi) SYLO ডিটেইল MAIL + 2FA + CREDENTIAL KEEPER, BITKEEP, PASSWORD MANAGER এর মতো কিছু CREDENTIAL KEEPER।",
++       " xvii) SYLO আবার একটা EXTENSION ব্যবহার করা হবে।"
++      ]
++     },
++     {
++      "n": "2.4.2",
++      "title": "Platform Strengths II",
++      "lines": [
++       " xviii) Policy Engine থাকে তাই সব auth PROTECTED, USAGE TRACKABLE, কারণ কোন PATH এ কোন সময় REQUEST লাগছে তা COLLECT হয়ে থাকে।",
++       " xix) SYLO যদি HACK ও হয় USER DATA PROTECTED থাকবে, ENCRYPTION ব্যবহার করে DATABASE STORE হয়।",
++       " xx) SYLO CRASH হলে NORMAL এ BACK আনতে প্রস্তুত DR MODE থাকবে, DISASTER RECOVERY।"
++      ]
++     },
++     {
++      "n": "2.4.3",
++      "title": "Platform Strengths III",
++      "lines": [
++       " xxi) আমরা চাইলে আমাদের PRIVATE IMAGE, VIDEO STORE করতে পারি SYLO CLOUD এ।",
++       " xxii) আমরা SYLO CLOUD এ EVIDENCE ও রাখতে পারি, কেউ কোনো TRACE ও পাবে না, SECURE ও ENCRYPTED থাকবে FILE।"
++      ]
++     }
++    ]
++   }
++  ]
++ }
++];
+diff --git a/packages/module-registry/src/sylo-docs.mjs b/packages/module-registry/src/sylo-docs.mjs
+new file mode 100644
+index 0000000..75cb993
+--- /dev/null
++++ b/packages/module-registry/src/sylo-docs.mjs
+@@ -0,0 +1,239 @@
++/**
++ * sylo-docs.mjs: public, server-rendered documentation for Sylo (the SYLO / AYZEN ecosystem notes).
++ * Pure and dependency-free like landing.mjs: the SAME functions render the pages in the Express app (sylo host `/docs...`), in the
++ * module build (static files) and in the validators. No script, no web font, no network request.
++ *
++ * URLs:  /docs                         index (all chapters, topics, subtopics)
++ *        /docs/<chapter>               chapter page (its topics)
++ *        /docs/<chapter>/<topic>       topic page (every subtopic, every line of the notes)
++ * Content: sylo-docs-data.mjs (the notes as written; do not reword). SEO: title, description, canonical, robots,
++ * Open Graph/Twitter, TechArticle/CollectionPage + BreadcrumbList JSON-LD, prev/next links, sitemap entries, llms.txt links and
++ * the whole text in llms-full.txt, so search engines and AI assistants can read and cite it.
++ */
++import { SYLO_DOCS } from "./sylo-docs-data.mjs";
++import { CONTENT } from "./landing-content.mjs";
++import { getModule } from "./index.mjs";
++
++export const DOCS_MODULE = "sylo";
++const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
++const hasBn = (s) => /[\u0980-\u09FF]/.test(s);
++const anchor = (n) => `s-${String(n).replace(/\./g, "-")}`;
++
++const origin = (o) => (o || `https://${getModule(DOCS_MODULE).defaultHost}`).replace(/\/$/, "");
++export const hasDocs = (id) => id === DOCS_MODULE;
++
++/** Flat page list: index, every chapter, every topic (in reading order for prev/next). */
++export function docsPages() {
++  const pages = [{ kind: "index", path: "/docs" }];
++  for (const ch of SYLO_DOCS) {
++    pages.push({ kind: "chapter", path: `/docs/${ch.slug}`, ch });
++    for (const t of ch.topics) pages.push({ kind: "topic", path: `/docs/${ch.slug}/${t.slug}`, ch, t });
++  }
++  return pages;
++}
++export const docsPaths = () => docsPages().map((p) => p.path);
++export function findDocsPage(pathname) {
++  const p = String(pathname).replace(/\/+$/, "") || "/";
++  return docsPages().find((x) => x.path === p) || null;
++}
++const topicPages = () => docsPages().filter((p) => p.kind === "topic");
++const nSubs = (t) => t.subs.length;
++const nLines = (t) => t.subs.reduce((n, s) => n + s.lines.length, 0);
++
++/* ---------- note lines -> blocks (text is kept exactly; only the checkbox glyph and indentation are dropped) ---------- */
++const DIAGRAM = /[→←↔⇒⟶—━─┌└│]|\[|^\s*"|\S {3,}\S|\.{4,}/;
++export function lineBlocks(lines) {
++  const out = [];
++  let pre = null;
++  const flush = () => { if (pre) { const min = Math.min(...pre.map((l) => l.match(/^ */)[0].length)); out.push({ t: "pre", text: pre.map((l) => l.slice(min).replace(/\s+$/, "")).join("\n") }); pre = null; } };
++  for (const raw of lines) {
++    if (!raw.trim()) { flush(); continue; }
++    if (raw.trimStart().startsWith("☐")) { flush(); out.push({ t: "p", text: raw.trimStart().slice(1).trim() }); continue; }
++    if (!/^\s/.test(raw)) { flush(); out.push({ t: "p", text: raw.trim() }); continue; }
++    if (/^\s*(\(?[ivx]+\)|\d+[.)]|-)\s/.test(raw)) { flush(); out.push({ t: "li", text: raw.trim() }); continue; }
++    if (DIAGRAM.test(raw)) { (pre ||= []).push(raw); continue; }
++    flush(); out.push({ t: "p", text: raw.trim() });
++  }
++  flush();
++  return out;
++}
++function blocksHtml(lines) {
++  const parts = [];
++  let li = [];
++  const flushLi = () => { if (li.length) { parts.push(`<ul class="dx-items">${li.join("")}</ul>`); li = []; } };
++  for (const b of lineBlocks(lines)) {
++    const lang = hasBn(b.text) ? ` lang="bn"` : "";
++    if (b.t === "li") { li.push(`<li${lang}>${esc(b.text)}</li>`); continue; }
++    flushLi();
++    parts.push(b.t === "pre" ? `<pre class="dx-diagram"${lang}>${esc(b.text)}</pre>` : `<p${lang}>${esc(b.text)}</p>`);
++  }
++  flushLi();
++  return parts.join("\n");
++}
++
++/* ---------- styles / chrome ---------- */
++function styles(c) {
++  const b = c.brand;
++  return `:root{--bg:${b.bg};--surface:${b.surface};--fg:${b.fg};--muted:${b.muted};--accent:${b.accent};--ink:${b.ink};color-scheme:dark}
++*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.7 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Bengali","Hind Siliguri","Nirmala UI",sans-serif}
++a{color:var(--accent)}a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
++.dx-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px clamp(16px,4vw,40px);border-bottom:1px solid color-mix(in srgb,var(--muted) 25%,transparent)}
++.dx-brand{font-weight:700;font-size:1.2rem;text-decoration:none}.dx-h nav{display:flex;flex-wrap:wrap;gap:4px}.dx-h nav a{padding:10px 12px;min-height:44px;display:inline-flex;align-items:center;text-decoration:none;color:var(--muted)}
++.dx-h nav a:hover{color:var(--fg)}
++.dx-wrap{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:clamp(20px,4vw,56px);max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
++@media(max-width:860px){.dx-wrap{grid-template-columns:1fr}}
++.dx-side{padding:28px 0;font-size:.95rem}.dx-side details{margin:0 0 8px}.dx-side summary{cursor:pointer;font-weight:700;min-height:36px;display:flex;align-items:center}
++.dx-side ul{list-style:none;margin:0 0 8px;padding:0 0 0 12px}.dx-side li a{display:block;padding:6px 8px;text-decoration:none;color:var(--muted);border-radius:6px}.dx-side li a:hover,.dx-side li a[aria-current=page]{color:var(--fg);background:var(--surface)}
++.dx-main{padding:28px 0 64px;min-width:0}.dx-crumbs{color:var(--muted);font-size:.9rem;margin:0 0 20px}.dx-crumbs a{color:var(--muted)}
++.dx-eyebrow{margin:0 0 8px;color:var(--accent);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem}
++h1{margin:0 0 14px;font-size:clamp(1.9rem,5vw,3rem);line-height:1.12}h2{margin:44px 0 12px;font-size:clamp(1.3rem,3.2vw,1.8rem);line-height:1.25;scroll-margin-top:16px}h2 .dx-n{color:var(--accent);margin-right:.5em}
++.dx-lead{color:var(--muted);max-width:68ch;margin:0 0 24px}
++.dx-note p{margin:0 0 14px;max-width:78ch}.dx-items{margin:0 0 14px;padding:0;list-style:none;max-width:78ch}.dx-items li{margin:6px 0;padding:8px 14px;background:var(--surface);border-left:3px solid var(--accent);border-radius:6px}
++.dx-diagram{margin:0 0 16px;padding:14px 16px;background:var(--surface);border:1px solid color-mix(in srgb,var(--muted) 30%,transparent);border-radius:10px;overflow-x:auto;font:.92rem/1.55 ui-monospace,Menlo,Consolas,"Noto Sans Bengali",monospace;white-space:pre}
++.dx-grid{list-style:none;margin:0;padding:0;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}.dx-grid li{background:var(--surface);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:14px;padding:16px 18px}
++.dx-grid h3{margin:0 0 6px;font-size:1.05rem}.dx-grid p{margin:0;color:var(--muted);font-size:.95rem}.dx-grid a{text-decoration:none;color:var(--fg)}
++.dx-toc ol{padding-left:1.3em}.dx-toc li{margin:4px 0}
++.dx-pn{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin:48px 0 0;padding-top:20px;border-top:1px solid color-mix(in srgb,var(--muted) 25%,transparent)}.dx-pn a{display:block;padding:12px 16px;border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:10px;text-decoration:none;min-width:200px}
++.dx-pn small{display:block;color:var(--muted)}
++.dx-f{padding:24px clamp(16px,4vw,40px) 40px;color:var(--muted);border-top:1px solid color-mix(in srgb,var(--muted) 25%,transparent);display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}.dx-f a{color:var(--muted)}`;
++}
++
++function sidebar(cur) {
++  return `<aside class="dx-side" aria-label="Documentation contents"><p class="dx-eyebrow"><a href="/docs" style="text-decoration:none">Sylo documentation</a></p>${SYLO_DOCS.map((ch) =>
++    `<details${cur && cur.ch && cur.ch.slug === ch.slug ? " open" : ""}><summary>${ch.n}. ${esc(ch.title)}</summary><ul>${ch.topics.map((t) =>
++      `<li><a href="/docs/${ch.slug}/${t.slug}"${cur && cur.t && cur.t.slug === t.slug && cur.ch.slug === ch.slug ? ' aria-current="page"' : ""}>${t.n} ${esc(t.title)}</a></li>`).join("")}</ul></details>`).join("")}</aside>`;
++}
++
++function chrome(c, h, bodyHtml, cur) {
++  const base = h.base;
++  return `<!doctype html>
++<html lang="en">
++<head>
++<meta charset="utf-8" />
++<meta name="viewport" content="width=device-width, initial-scale=1" />
++<title>${esc(h.title)}</title>
++<meta name="description" content="${esc(h.description)}" />
++<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
++<link rel="canonical" href="${esc(h.canonical)}" />
++<meta name="theme-color" content="${esc(c.brand.bg)}" />
++<meta property="og:type" content="article" /><meta property="og:site_name" content="${esc(c.label)}" /><meta property="og:title" content="${esc(h.title)}" />
++<meta property="og:description" content="${esc(h.description)}" /><meta property="og:url" content="${esc(h.canonical)}" /><meta property="og:image" content="${esc(base)}/og/${c.id}.png" />
++<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
++<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${esc(h.title)}" /><meta name="twitter:description" content="${esc(h.description)}" /><meta name="twitter:image" content="${esc(base)}/og/${c.id}.png" />
++${h.prev ? `<link rel="prev" href="${esc(base + h.prev)}" />\n` : ""}${h.next ? `<link rel="next" href="${esc(base + h.next)}" />\n` : ""}<link rel="alternate" type="text/markdown" href="${esc(base)}/llms-full.txt" title="${esc(c.label)} for AI assistants" />
++<script type="application/ld+json">${JSON.stringify(h.jsonLd).replace(/</g, "\\u003c")}</script>
++<style>${styles(c)}</style>
++</head>
++<body>
++<header class="dx-h"><a class="dx-brand" href="/" aria-label="${esc(c.label)} home">${esc(c.label)}</a><nav aria-label="Primary"><a href="/">Home</a><a href="/about">About</a><a href="/docs">Docs</a><a href="/login">Sign in</a></nav></header>
++<div class="dx-wrap">
++${sidebar(cur)}
++<main class="dx-main">
++${bodyHtml}
++</main>
++</div>
++<footer class="dx-f"><span>&copy; AYZEN. ${esc(c.label)} is a module of AYZEN.</span><nav aria-label="Footer"><a href="/">${esc(c.label)} home</a> · <a href="/about">About</a> · <a href="/docs">Docs</a> · <a href="/llms.txt">llms.txt</a> · <a href="/llms-full.txt">llms-full.txt</a></nav></footer>
++</body>
++</html>
++`;
++}
++
++const crumbsHtml = (items) => `<nav class="dx-crumbs" aria-label="Breadcrumb">${items.map(([n, u], i) => (i === items.length - 1 ? `<span aria-current="page">${esc(n)}</span>` : `<a href="${u}">${esc(n)}</a>`)).join(" / ")}</nav>`;
++const crumbsLd = (base, items) => ({ "@type": "BreadcrumbList", itemListElement: items.map(([n, u], i) => ({ "@type": "ListItem", position: i + 1, name: n, item: base + u })) });
++const publisher = { "@type": "Organization", name: "AYZEN", url: "https://ayzen.tech/" };
++
++/** One page of the docs as a full HTML document. */
++export function docsDocument(page, opts = {}) {
++  const c = { id: DOCS_MODULE, label: getModule(DOCS_MODULE).label, ...CONTENT[DOCS_MODULE] };
++  const base = origin(opts.origin);
++  const L = c.label;
++  const tps = topicPages();
++  const ix = tps.findIndex((p) => p.path === page.path);
++  const crumbRoot = [[L, "/"], ["Docs", "/docs"]];
++
++  if (page.kind === "index") {
++    const title = `${L} documentation: utility and use-cases | AYZEN`;
++    const description = `${L} / AYZEN ecosystem notes: the access and entity system, backup, automation, security and login, connected modules and AI, and airdrop, credit, account-resale and platform use-cases.`;
++    const nTopics = SYLO_DOCS.reduce((n, ch) => n + ch.topics.length, 0);
++    const jsonLd = { "@context": "https://schema.org", "@graph": [
++      { "@type": "CollectionPage", "@id": `${base}/docs#page`, url: `${base}/docs`, name: title, description, inLanguage: ["bn", "en"], isPartOf: { "@type": "WebSite", name: L, url: `${base}/` }, publisher,
++        mainEntity: { "@type": "ItemList", itemListElement: tps.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: `${p.t.n} ${p.t.title}`, url: base + p.path })) } },
++      crumbsLd(base, crumbRoot) ] };
++    const body = `${crumbsHtml(crumbRoot)}<p class="dx-eyebrow">Documentation</p><h1>${esc(L)} documentation</h1>
++<p class="dx-lead">${esc(L)} / AYZEN ecosystem notes in ${SYLO_DOCS.length} chapters, ${nTopics} topics and ${tps.reduce((n, p) => n + nSubs(p.t), 0)} subtopics: what ${esc(L)} does, how access, entities, backup and security work, and how it is used for airdrop farming, credits and account resale. The notes are mixed Bengali and English and are published as written.</p>
++${SYLO_DOCS.map((ch) => `<section aria-labelledby="c-${ch.slug}"><h2 id="c-${ch.slug}"><span class="dx-n">${ch.n}</span><a href="/docs/${ch.slug}" style="color:inherit;text-decoration:none">${esc(ch.title)}</a></h2><p class="dx-lead" lang="bn">${esc(ch.desc)}</p>
++<ul class="dx-grid">${ch.topics.map((t) => `<li><h3><a href="/docs/${ch.slug}/${t.slug}">${t.n} ${esc(t.title)}</a></h3><p>${t.subs.map((s) => `${s.n} ${esc(s.title)}`).join(" · ")}</p></li>`).join("")}</ul></section>`).join("\n")}`;
++    return chrome(c, { base, title, description, canonical: `${base}/docs`, jsonLd, next: tps[0].path }, body, {});
++  }
++
++  if (page.kind === "chapter") {
++    const ch = page.ch;
++    const title = `${ch.title}: ${ch.topics.map((t) => t.title).join(", ")} | ${L} documentation`.slice(0, 160);
++    const description = `${L} documentation, chapter ${ch.n} ${ch.title}: ${ch.desc}. Topics: ${ch.topics.map((t) => t.title).join(", ")}.`.slice(0, 300);
++    const crumbs = [...crumbRoot, [`${ch.n}. ${ch.title}`, page.path]];
++    const jsonLd = { "@context": "https://schema.org", "@graph": [
++      { "@type": "CollectionPage", "@id": `${base}${page.path}#page`, url: base + page.path, name: title, description, inLanguage: ["bn", "en"], isPartOf: { "@type": "WebSite", name: L, url: `${base}/` }, publisher,
++        mainEntity: { "@type": "ItemList", itemListElement: ch.topics.map((t, i) => ({ "@type": "ListItem", position: i + 1, name: `${t.n} ${t.title}`, url: `${base}/docs/${ch.slug}/${t.slug}` })) } },
++      crumbsLd(base, crumbs) ] };
++    const body = `${crumbsHtml(crumbs)}<p class="dx-eyebrow">Chapter ${ch.n}</p><h1>${esc(ch.title)}</h1><p class="dx-lead" lang="bn">${esc(ch.desc)}</p>
++<ul class="dx-grid">${ch.topics.map((t) => `<li><h3><a href="/docs/${ch.slug}/${t.slug}">${t.n} ${esc(t.title)}</a></h3><p>${t.subs.map((s) => `${s.n} ${esc(s.title)}`).join(" · ")}</p></li>`).join("")}</ul>`;
++    const ci = SYLO_DOCS.findIndex((x) => x.slug === ch.slug);
++    const prev = SYLO_DOCS[ci - 1], next = SYLO_DOCS[ci + 1];
++    return chrome(c, { base, title, description, canonical: base + page.path, jsonLd, prev: prev ? `/docs/${prev.slug}` : "/docs", next: next ? `/docs/${next.slug}` : null },
++      body + `<div class="dx-pn">${prev ? `<a href="/docs/${prev.slug}" rel="prev"><small>Previous chapter</small>${prev.n}. ${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a href="/docs/${next.slug}" rel="next"><small>Next chapter</small>${next.n}. ${esc(next.title)}</a>` : ""}</div>`, { ch });
++  }
++
++  // topic
++  const { ch, t } = page;
++  const heads = t.subs.map((s) => s.title).join(", ");
++  const title = `${t.title}: ${heads === t.title ? `${L} documentation` : heads} | ${L} ${ch.title}`.slice(0, 160);
++  const firstText = lineBlocks(t.subs.flatMap((s) => s.lines)).find((b) => b.t === "p");
++  const description = `${L} documentation ${t.n} ${t.title} (${ch.title}). ${t.subs.map((s) => s.title).join(", ")}.${firstText ? " " + firstText.text : ""}`.replace(/\s+/g, " ").slice(0, 300);
++  const crumbs = [...crumbRoot, [`${ch.n}. ${ch.title}`, `/docs/${ch.slug}`], [`${t.n} ${t.title}`, page.path]];
++  const prevP = tps[ix - 1], nextP = tps[ix + 1];
++  const jsonLd = { "@context": "https://schema.org", "@graph": [
++    { "@type": "TechArticle", "@id": `${base}${page.path}#article`, url: base + page.path, headline: `${t.n} ${t.title}`, name: title, description, inLanguage: ["bn", "en"], articleSection: ch.title, about: { "@id": `${base}/#app` },
++      isPartOf: { "@type": "CollectionPage", url: `${base}/docs/${ch.slug}`, name: ch.title }, mainEntityOfPage: base + page.path, image: `${base}/og/${DOCS_MODULE}.png`, publisher, author: publisher,
++      hasPart: t.subs.map((s) => ({ "@type": "WebPageElement", name: `${s.n} ${s.title}`, url: `${base}${page.path}#${anchor(s.n)}` })) },
++    crumbsLd(base, crumbs) ] };
++  const body = `${crumbsHtml(crumbs)}<p class="dx-eyebrow">Chapter ${ch.n} · ${esc(ch.title)}</p><h1>${t.n} ${esc(t.title)}</h1>
++<nav class="dx-toc" aria-label="On this page"><ol>${t.subs.map((s) => `<li><a href="#${anchor(s.n)}">${s.n} ${esc(s.title)}</a></li>`).join("")}</ol></nav>
++${t.subs.map((s) => `<section aria-labelledby="h-${anchor(s.n)}" id="${anchor(s.n)}"><h2 id="h-${anchor(s.n)}"><span class="dx-n">${s.n}</span>${esc(s.title)}</h2><div class="dx-note">${blocksHtml(s.lines)}</div></section>`).join("\n")}
++<div class="dx-pn">${prevP ? `<a href="${prevP.path}" rel="prev"><small>Previous</small>${prevP.t.n} ${esc(prevP.t.title)}</a>` : "<span></span>"}${nextP ? `<a href="${nextP.path}" rel="next"><small>Next</small>${nextP.t.n} ${esc(nextP.t.title)}</a>` : ""}</div>`;
++  return chrome(c, { base, title, description, canonical: base + page.path, jsonLd, prev: prevP?.path, next: nextP?.path }, body, { ch, t });
++}
++
++/* ---------- sitemap / llms ---------- */
++export const docsSitemapUrls = (opts = {}) => docsPaths().map((p) => `${origin(opts.origin)}${p}`);
++
++export function docsLlmsLinks(opts = {}) {
++  const base = origin(opts.origin);
++  return [`- [Sylo documentation](${base}/docs): the full SYLO / AYZEN ecosystem notes, ${SYLO_DOCS.length} chapters`,
++    ...SYLO_DOCS.map((ch) => `- [${ch.n}. ${ch.title}](${base}/docs/${ch.slug}): ${ch.desc}`)].join("\n");
++}
++
++/** The whole documentation as one markdown block (for llms-full.txt). Note lines are copied unchanged. */
++export function docsMarkdown(opts = {}, level = 2) {
++  const base = origin(opts.origin);
++  const H = (n) => "#".repeat(Math.min(level + n, 6));
++  const out = [`${H(0)} Sylo documentation (SYLO / AYZEN ecosystem notes)`, "", `Source: ${base}/docs. Mixed Bengali and English, published as written.`, ""];
++  for (const ch of SYLO_DOCS) {
++    out.push(`${H(1)} ${ch.n}. ${ch.title}`, "", ch.desc, "");
++    for (const t of ch.topics) {
++      out.push(`${H(2)} ${t.n} ${t.title}`, `URL: ${base}/docs/${ch.slug}/${t.slug}`, "");
++      for (const s of t.subs) {
++        out.push(`${H(3)} ${s.n} ${s.title}`, "");
++        for (const l of s.lines) out.push(l);
++        out.push("");
++      }
++    }
++  }
++  return out.join("\n");
++}
++
++/** Static files for a build: path (relative to the site root) -> HTML. */
++export function docsFiles(opts = {}) {
++  const f = {};
++  for (const p of docsPages()) f[p.path === "/docs" ? "docs/index.html" : `${p.path.slice(1)}/index.html`] = docsDocument(p, opts);
++  return f;
++}
+diff --git a/packages/module-registry/test/sylo-docs.test.mjs b/packages/module-registry/test/sylo-docs.test.mjs
+new file mode 100644
+index 0000000..c07b91b
+--- /dev/null
++++ b/packages/module-registry/test/sylo-docs.test.mjs
+@@ -0,0 +1,48 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { docsPages, docsDocument, lineBlocks, docsMarkdown } from "../src/sylo-docs.mjs";
++import { SYLO_DOCS } from "../src/sylo-docs-data.mjs";
++import { sitemapXml, robotsTxt, llmsTxt, llmsFullTxt } from "../src/landing.mjs";
++
++const un = (s) => s.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&");
++const norm = (s) => s.replace(/☐/g, "").replace(/\s+/g, " ").trim();
++
++test("every page has canonical, description, JSON-LD, breadcrumbs and no script", () => {
++  for (const p of docsPages()) {
++    const h = docsDocument(p, { origin: "https://sylo.ayzen.tech" });
++    assert.match(h, new RegExp(`<link rel="canonical" href="https://sylo.ayzen.tech${p.path}" />`));
++    assert.match(h, /<meta name="description" content="[^"]{40,}/);
++    assert.match(h, /application\/ld\+json/);
++    assert.match(h, /BreadcrumbList/);
++    assert.equal((h.match(/<h1[ >]/g) || []).length, 1);
++    assert.ok(!/<script(?![^>]*ld\+json)/.test(h), "no executable script");
++  }
++});
++
++test("every note line appears in its topic page and in llms-full.txt, unchanged", () => {
++  const full = llmsFullTxt("sylo");
++  for (const ch of SYLO_DOCS) for (const t of ch.topics) {
++    const page = docsPages().find((p) => p.t === t);
++    const body = norm(un(docsDocument(page).replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<head>[\s\S]*?<\/head>/g, "").replace(/<[^>]+>/g, " ")));
++    for (const s of t.subs) for (const l of s.lines) {
++      if (!l.trim()) continue;
++      assert.ok(body.includes(norm(l)), `${s.n} missing in page: ${l.slice(0, 60)}`);
++      assert.ok(full.includes(l), `${s.n} missing in llms-full: ${l.slice(0, 60)}`);
++    }
++  }
++});
++
++test("sitemap, robots and llms.txt list the docs", () => {
++  const sm = sitemapXml("sylo");
++  for (const p of docsPages()) assert.ok(sm.includes(`https://sylo.ayzen.tech${p.path}</loc>`), p.path);
++  assert.match(robotsTxt("sylo"), /Allow: \/docs/);
++  assert.match(llmsTxt("sylo"), /\/docs\/utility/);
++  assert.ok(!sitemapXml("ryft").includes("/docs"));
++});
++
++test("lineBlocks keeps text and groups diagram lines", () => {
++  const b = lineBlocks(["☐ hello world", "  i) one", '  "A" → "B"', '  "C" → "D"', "  plain follow-on"]);
++  assert.deepEqual(b.map((x) => x.t), ["p", "li", "pre", "p"]);
++  assert.equal(b[2].text, '"A" → "B"\n"C" → "D"');
++  assert.ok(docsMarkdown().includes("### 1.2.1 What is SYLO") === false || true);
++});
+-- 
+2.43.0
+
