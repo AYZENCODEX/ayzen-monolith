@@ -26,6 +26,7 @@
  */
 import { useEffect, useState } from "react";
 import { Link, useLocation, useSearch } from "wouter";
+import { activeLeaf } from "@/components/sylo/shell/nav";
 import {
   Wallet, ShieldCheck, Mail, BookKey,
   LayoutDashboard, FolderGit2, Link2,
@@ -318,30 +319,29 @@ export function VaultSidebar() {
 
 // ─── Shared page shell ────────────────────────────────────────────────────────
 export function VaultSectionPage({
-  title, description, icon: Icon, children, headerExtra,
+  title, description, children, headerExtra,
 }: {
   title: string;
   description: string;
-  icon: React.ElementType;
+  icon?: React.ElementType;
   children: React.ReactNode;
   headerExtra?: React.ReactNode;
 }) {
+  // Sylo page frame: eyebrow (section), serif title, description, actions on the right.
+  // Navigation lives in the Sylo shell rail (components/sylo/shell).
+  const [path] = useLocation();
+  const { group, leaf } = activeLeaf(path);
+  const eyebrow = [group && group.key !== "console" ? group.label : null, leaf?.label].filter(Boolean).join(" · ") || "Sylo";
   return (
-    <div className="space-y-5 page-enter">
-      <div>
-        <div className="flex items-start justify-between gap-2 flex-wrap">
-          <h1 className="text-2xl font-bold font-mono tracking-tighter uppercase flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-              <Icon className="w-4 h-4 text-primary" />
-            </div>
-            {title}
-          </h1>
-          {headerExtra && <div className="flex-shrink-0 mt-1">{headerExtra}</div>}
+    <div className="stack page-enter">
+      <div className="ph">
+        <div>
+          <div className="eb">{eyebrow}</div>
+          <h1>{title}</h1>
+          <p>{description}</p>
         </div>
-        <p className="text-muted-foreground font-mono text-xs mt-1 pl-0.5">{description}</p>
+        {headerExtra && <div className="acts">{headerExtra}</div>}
       </div>
-
-      {/* Navigation now lives in the Sylo shell rail (components/sylo/shell). */}
       <div className="min-w-0">{children}</div>
     </div>
   );
@@ -349,19 +349,18 @@ export function VaultSectionPage({
 
 // Generic empty state used by pages that haven't loaded real data yet.
 export function VaultSectionEmptyState({
-  icon: Icon, title, note,
+  title, note,
 }: {
-  icon: React.ElementType;
+  icon?: React.ElementType;
   title: string;
   note: string;
 }) {
   return (
-    <div className="text-center py-20 space-y-3 border border-dashed border-border/40 rounded-xl">
-      <div className="w-14 h-14 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center mx-auto">
-        <Icon className="w-6 h-6 text-primary/40" />
+    <div className="card">
+      <div className="row" style={{ padding: "26px 18px", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+        <b style={{ fontWeight: 500 }}>{title}</b>
+        <span style={{ fontFamily: "var(--sans)" }}>{note}</span>
       </div>
-      <p className="font-mono text-sm text-muted-foreground/60">{title}</p>
-      <p className="font-mono text-[10px] text-muted-foreground/40 max-w-xs mx-auto leading-relaxed">{note}</p>
     </div>
   );
 }
@@ -383,26 +382,10 @@ export function CategoryTabBar({
   tabs: readonly CategoryTab[];
 }) {
   return (
-    <div className="flex gap-1.5 flex-wrap border-b border-border/20 pb-3">
-      {tabs.map(tab => {
-        const Icon = tab.icon;
-        const isActive = tab.id === active;
-        return (
-          <Link key={tab.id} href={`${basePath}/${tab.id}`}>
-            <div
-              className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono text-[11px] uppercase tracking-wider border cursor-pointer transition-all",
-                isActive
-                  ? "bg-primary/10 text-primary border-primary/25 font-bold"
-                  : "text-muted-foreground/60 border-transparent hover:bg-muted/20 hover:text-foreground hover:border-border/30"
-              )}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              {tab.label}
-            </div>
-          </Link>
-        );
-      })}
+    <div className="tabs">
+      {tabs.map((tab) => (
+        <Link key={tab.id} href={`${basePath}/${tab.id}`} className={tab.id === active ? "on" : ""}>{tab.label}</Link>
+      ))}
     </div>
   );
 }
