@@ -4,7 +4,7 @@
  * Pick one account to open its mailbox, 2FA codes and backup codes together.
  * Selecting a row opens that account's own page (mobile-first: a new page,
  * never a pane or modal). The target pages already exist:
- *   entity → /vault/entity/:id/access   local → /vault/local/:id   kyc → /vault/kyc/:id
+ *   entity → /vault/entity/:id/access   local → /vault/local/:id/manage   kyc → /vault/kyc/:id/manage
  */
 import { useMemo, useState } from "react";
 import { Link, Redirect, useParams } from "wouter";
@@ -42,13 +42,13 @@ function useItems(kind: Kind) {
     if (kind === "local") {
       const rows = (local.data ?? []).map((a): Item => {
         const name = a.label || a.username || a.email || `Account #${a.id}`;
-        return { id: a.id, mark: initials(name), name, sub: a.category ?? "Local", href: `/vault/local/${a.id}` };
+        return { id: a.id, mark: initials(name), name, sub: a.category ?? "Local", href: `/vault/local/${a.id}/manage` };
       });
       return { rows, isPending: local.isPending, error: local.error, refetch: local.refetch };
     }
     const rows = (kyc.data ?? []).map((k): Item => {
       const name = k.username || k.email || `Entry #${k.id}`;
-      return { id: k.id, mark: initials(name), name, sub: k.category ?? "KYC", href: `/vault/kyc/${k.id}` };
+      return { id: k.id, mark: initials(name), name, sub: k.category ?? "KYC", href: `/vault/kyc/${k.id}/manage` };
     });
     return { rows, isPending: kyc.isPending, error: kyc.error, refetch: kyc.refetch };
   }, [kind, entities.data, entities.isPending, entities.error, local.data, local.isPending, local.error, kyc.data, kyc.isPending, kyc.error]);

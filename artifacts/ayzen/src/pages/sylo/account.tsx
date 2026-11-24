@@ -10,7 +10,8 @@
  * App.tsx, so nothing here re-implements it.
  */
 import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
-import { Link, Redirect, useParams } from "wouter";
+import { Link, Redirect, useParams, useSearch } from "wouter";
+import { ManageList } from "./manage-list";
 import { NotFoundPage, PageHeader, StatGridSkeleton, WidgetSkeleton } from "@/components/console";
 import { SECTION_META, SECTION_VIEWS, VIEW_META } from "@/components/sylo/sections";
 import { SectionTabs } from "@/components/sylo/section-tabs";
@@ -56,7 +57,8 @@ function BodyFallback() {
   );
 }
 
-function ViewBody({ section, view }: { section: AccountSection; view: AccountView }) {
+function ViewBody({ section, view, legacy }: { section: AccountSection; view: AccountView; legacy: boolean }) {
+  if (view === "management" && !legacy) return <ManageList section={section} />;
   if (section !== "game" && view === "home") return <SectionHome section={section} />;
   if (section !== "game" && view === "analysis") return <SectionAnalysis section={section} />;
   const Body = view === "dashboard" || view === "management" ? PLAIN[section][view] : undefined;
@@ -64,6 +66,7 @@ function ViewBody({ section, view }: { section: AccountSection; view: AccountVie
 }
 
 export default function AccountSectionPage() {
+  const legacy = new URLSearchParams(useSearch()).get("legacy") === "1";
   const { section, view } = useParams<{ section: string; view?: string }>();
 
   if (!isAccountSection(section)) return <NotFoundPage embedded />;
@@ -92,7 +95,7 @@ export default function AccountSectionPage() {
       />
       <SectionTabs section={section} active={view} />
       <Suspense fallback={<BodyFallback />}>
-        <ViewBody section={section} view={view} />
+        <ViewBody section={section} view={view} legacy={legacy} />
       </Suspense>
     </div>
   );

@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useLocation } from "wouter";
 import { useListVaultEntries, customFetch } from "@workspace/api-client-react";
-import { ArrowLeft, Shield, Smartphone, ShieldCheck, Gamepad2, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Shield, Smartphone, ShieldCheck, Gamepad2 } from "lucide-react";
 import { TOTPCard } from "@/components/vault/totp-card";
 import { useModuleAwareNavigate } from "@/components/module-link";
 
@@ -64,27 +63,21 @@ export default function VaultTwoFaEntity() {
   const isLoading = category === "entity" ? vaultLoading : loading;
 
   return (
-    <div className="space-y-5 page-enter">
-      <div className="flex items-center gap-3">
-        <Button variant="outline" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => navigate(`/vault/2fa/${category}`)}>
-          <ArrowLeft className="w-4 h-4" />
-        </Button>
-        <div className="min-w-0">
-          <h1 className="text-lg font-bold font-mono tracking-tighter truncate flex items-center gap-2">
-            <meta.icon className="w-4 h-4 text-primary flex-shrink-0" />
-            {name || "…"}
-          </h1>
-          <p className="text-muted-foreground font-mono text-[10px] mt-0.5">2FA · {meta.label}</p>
+    <div className="stack t-brass page-enter">
+      <button type="button" className="back" onClick={() => navigate(`/vault/2fa/${category}`)}>‹ 2FA</button>
+      <div className="ph">
+        <div>
+          <div className="eb">2FA · {meta.label}</div>
+          <h1>{name || "…"}</h1>
         </div>
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-12"><Loader2 className="w-5 h-5 animate-spin text-primary" /></div>
+        <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 space-y-2">
-          <meta.icon className="w-8 h-8 text-muted-foreground/30 mx-auto" />
-          <p className="font-mono text-xs text-muted-foreground/50">No 2FA codes found for this entity</p>
-        </div>
+        <div className="card"><div className="row" style={{ padding: "26px 18px", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+          <b style={{ fontWeight: 500 }}>No 2FA codes found for this entity</b>
+        </div></div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {items.map(item => (

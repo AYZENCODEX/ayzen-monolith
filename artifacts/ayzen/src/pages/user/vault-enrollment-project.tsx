@@ -65,9 +65,7 @@ export default function VaultEnrollmentProject() {
       icon={FolderGit2}
     >
       {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-5 h-5 text-primary animate-spin" />
-        </div>
+        <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>
       ) : projects.length === 0 ? (
         <VaultSectionEmptyState
           icon={FolderGit2}
@@ -75,44 +73,18 @@ export default function VaultEnrollmentProject() {
           note="Enroll your entities into projects to see them here."
         />
       ) : (
-        <div className="space-y-2">
+        <div className="card">
           {projects.map(project => {
-            const StatusIcon = STATUS_ICON[project.status ?? "active"] ?? Activity;
             const statusKey = project.status ?? "active";
+            const tone = statusKey === "active" ? " ok" : statusKey === "completed" ? " warn" : statusKey === "disqualified" || statusKey === "banned" ? " bad" : "";
+            const open = () => navigate(`/vault/enrollment/project/${project.id}`);
             return (
-              <button
-                key={project.id}
-                onClick={() => navigate(`/vault/enrollment/project/${project.id}`)}
-                className="w-full bg-card border border-card-border rounded-xl p-3.5 flex items-center gap-3 hover:border-primary/30 hover:bg-primary/5 transition-all text-left group"
-              >
-                <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/15 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 group-hover:border-primary/30 transition-colors">
-                  <FolderGit2 className="w-4 h-4 text-primary/70 group-hover:text-primary transition-colors" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-mono text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">
-                    {project.name}
-                  </p>
-                  <p className="font-mono text-[9px] text-muted-foreground/50 mt-0.5">
-                    {project.category ?? "Uncategorized"}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <div className="flex items-center gap-1 text-muted-foreground/50">
-                    <Users className="w-3 h-3" />
-                    <span className="font-mono text-[9px]">{project.enrolled_count}</span>
-                  </div>
-                  <div className={cn("flex items-center gap-1", STATUS_BADGE[statusKey])}>
-                    <StatusIcon className="w-3 h-3" />
-                    <Badge
-                      variant="outline"
-                      className={cn("font-mono text-[8px]", STATUS_BADGE[statusKey])}
-                    >
-                      {statusKey}
-                    </Badge>
-                  </div>
-                </div>
-                <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/20 group-hover:text-primary/40 flex-shrink-0 transition-colors" />
-              </button>
+              <div key={project.id} className="row go" role="link" tabIndex={0} onClick={open}
+                onKeyDown={(e) => { if (e.key === "Enter") open(); }} style={{ padding: "14px 18px", cursor: "pointer" }}>
+                <span className="mk">{(project.name.trim().slice(0, 2) || "··").toUpperCase()}</span>
+                <div className="g"><b>{project.name}</b><span>{project.category ?? "Uncategorized"} · {project.enrolled_count} enrolled</span></div>
+                <span className={`pill${tone}`}>{statusKey}</span>
+              </div>
             );
           })}
         </div>

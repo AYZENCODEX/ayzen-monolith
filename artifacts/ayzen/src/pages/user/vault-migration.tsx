@@ -74,95 +74,57 @@ export default function VaultMigration() {
       description="Move Vault entries in from another tool, or out to a CSV/JSON file"
       icon={ArrowDownToLine}
     >
-      <div className="space-y-4">
-        {/* ── Export ──────────────────────────────────────────────────── */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-mono uppercase tracking-wide flex items-center gap-2">
-              <ArrowDownToLine className="w-4 h-4 text-primary/70" /> Export Vault
-            </CardTitle>
-            <CardDescription className="font-mono text-xs">
+      <div className="stack">
+        <div className="card">
+          <header><h3>Export vault</h3><span>CSV · JSON</span></header>
+          <div className="body">
+            <p style={{ margin: "0 0 14px", color: "var(--mu)", fontFamily: "var(--sans)" }}>
               Download your active Vault entries in a portable, unencrypted format —
               for a fully encrypted full-vault backup, use Snapshot Backup instead.
-            </CardDescription>
-          </CardHeader>
-          <CardFooter className="flex gap-2 flex-wrap">
-            <Button
-              variant="outline" size="sm" className="font-mono text-xs gap-1.5"
-              disabled={exporting !== null}
-              onClick={() => handleExport("csv")}
-            >
-              {exporting === "csv" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileSpreadsheet className="w-3.5 h-3.5" />}
-              Export as CSV
-            </Button>
-            <Button
-              variant="outline" size="sm" className="font-mono text-xs gap-1.5"
-              disabled={exporting !== null}
-              onClick={() => handleExport("json")}
-            >
-              {exporting === "json" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileJson className="w-3.5 h-3.5" />}
-              Export as JSON
-            </Button>
-          </CardFooter>
-        </Card>
+            </p>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <button type="button" className="btn" disabled={exporting !== null} onClick={() => handleExport("csv")}>
+                {exporting === "csv" ? "Preparing…" : "Export as CSV"}
+              </button>
+              <button type="button" className="btn" disabled={exporting !== null} onClick={() => handleExport("json")}>
+                {exporting === "json" ? "Preparing…" : "Export as JSON"}
+              </button>
+            </div>
+          </div>
+        </div>
 
-        {/* ── Import ──────────────────────────────────────────────────── */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-mono uppercase tracking-wide flex items-center gap-2">
-              <ArrowUpFromLine className="w-4 h-4 text-primary/70" /> Import Into Vault
-            </CardTitle>
-            <CardDescription className="font-mono text-xs">
+        <div className="card">
+          <header><h3>Import into vault</h3><span>additive</span></header>
+          <div className="body">
+            <p style={{ margin: "0 0 14px", color: "var(--mu)", fontFamily: "var(--sans)" }}>
               Imports are additive — new entries are created, nothing existing is overwritten.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="space-y-1.5">
-              <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">Source</Label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            </p>
+            <div className="fld">
+              <label>Source</label>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {IMPORT_SOURCES.map(s => (
-                  <button
-                    key={s.id}
-                    onClick={() => setSource(s.id)}
-                    className={`text-left px-3 py-2 rounded-lg border font-mono text-xs transition-colors ${
-                      source === s.id
-                        ? "bg-primary/10 border-primary/30 text-primary font-bold"
-                        : "border-border/30 text-muted-foreground/70 hover:border-border/50 hover:text-foreground"
-                    }`}
-                  >
+                  <button key={s.id} type="button" className={`btn sm${source === s.id ? " p" : ""}`} aria-pressed={source === s.id} onClick={() => setSource(s.id)}>
                     {s.label}
                   </button>
                 ))}
               </div>
-              <p className="font-mono text-[10px] text-muted-foreground/45">
-                {IMPORT_SOURCES.find(s => s.id === source)?.hint}
-              </p>
+              <div className="hint">{IMPORT_SOURCES.find(s => s.id === source)?.hint}</div>
             </div>
 
             {result && (
-              <div className="rounded-lg border border-border/30 bg-muted/10 p-3 space-y-2">
-                <div className="flex items-center gap-2 font-mono text-xs">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>{result.imported} imported</span>
-                  {result.skipped > 0 && (
-                    <span className="text-amber-400 flex items-center gap-1">
-                      <AlertTriangle className="w-3.5 h-3.5" /> {result.skipped} skipped
-                    </span>
-                  )}
-                </div>
+              <div className={result.skipped > 0 || result.errors.length > 0 ? "note" : "card"} role="status" style={{ marginBottom: 14, padding: result.skipped > 0 ? undefined : "12px 14px" }}>
+                <b>{result.imported} imported</b>
+                {result.skipped > 0 && <span>{result.skipped} skipped</span>}
                 {result.errors.length > 0 && (
-                  <div className="space-y-1 max-h-40 overflow-y-auto">
+                  <div style={{ maxHeight: 160, overflowY: "auto", marginTop: 8 }}>
                     {result.errors.map((e, i) => (
-                      <p key={i} className="font-mono text-[10px] text-muted-foreground/60">
-                        Row {e.row ?? e.index}: {e.reason}
-                      </p>
+                      <div key={i} className="mono" style={{ fontSize: 11, color: "var(--mu)" }}>Row {e.row ?? e.index}: {e.reason}</div>
                     ))}
                   </div>
                 )}
               </div>
             )}
-          </CardContent>
-          <CardFooter>
+
             <input
               ref={fileInputRef}
               type="file"
@@ -170,16 +132,11 @@ export default function VaultMigration() {
               className="hidden"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFilePicked(f); }}
             />
-            <Button
-              size="sm" className="font-mono text-xs gap-1.5"
-              disabled={importing}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              {importing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
-              Choose File & Import
-            </Button>
-          </CardFooter>
-        </Card>
+            <button type="button" className="btn p" disabled={importing} onClick={() => fileInputRef.current?.click()}>
+              {importing ? "Importing…" : "Choose file & import"}
+            </button>
+          </div>
+        </div>
       </div>
     </VaultSectionPage>
   );

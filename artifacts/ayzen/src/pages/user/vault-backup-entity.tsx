@@ -11,8 +11,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useLocation } from "wouter";
 import { useListVaultEntries, customFetch } from "@workspace/api-client-react";
-import { ArrowLeft, Shield, Smartphone, ShieldCheck, Gamepad2, Loader2, Copy, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Shield, Smartphone, ShieldCheck, Gamepad2, Copy, Check } from "lucide-react";
 import { splitCodes } from "@/pages/user/vault-backup";
 import { useModuleAwareNavigate } from "@/components/module-link";
 
@@ -36,29 +35,27 @@ function CopyButton({ value, label }: { value: string; label?: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 1500);
       }}
-      className="flex items-center gap-1 font-mono text-[10px] text-muted-foreground/60 hover:text-primary transition-colors flex-shrink-0"
+      className="btn sm"
     >
-      {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-      {label && <span className={copied ? "text-emerald-400" : ""}>{copied ? "Copied" : label}</span>}
+      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+      {label && <span>{copied ? "Copied" : label}</span>}
     </button>
   );
 }
 
 function CodeGroupCard({ group }: { group: CodeGroup }) {
   return (
-    <div className="border border-border/30 rounded-lg overflow-hidden">
-      <div className="flex items-center justify-between px-3 py-2 bg-muted/20">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">{group.label}</p>
+    <div className="card">
+      <div className="tool">
+        <span className="mono" style={{ flex: 1, fontSize: 11, color: "var(--mu)", letterSpacing: ".08em", textTransform: "uppercase" }}>{group.label}</span>
         {group.codes.length > 1 && <CopyButton value={group.codes.join("\n")} label="Copy all" />}
       </div>
-      <div className="divide-y divide-border/20">
-        {group.codes.map((code, i) => (
-          <div key={i} className="flex items-center justify-between gap-3 px-3 py-2 bg-card">
-            <span className="font-mono text-xs text-foreground/80 truncate">{code}</span>
-            <CopyButton value={code} label="Copy" />
-          </div>
-        ))}
-      </div>
+      {group.codes.map((code, i) => (
+        <div key={i} className="row" style={{ padding: "12px 18px" }}>
+          <div className="g"><span className="mono" style={{ color: "var(--tx)", overflowWrap: "anywhere" }}>{code}</span></div>
+          <CopyButton value={code} label="Copy" />
+        </div>
+      ))}
     </div>
   );
 }
@@ -114,29 +111,23 @@ export default function VaultBackupEntity() {
   const isLoading = category === "entity" ? vaultLoading : loading;
 
   return (
-    <div className="space-y-5 page-enter">
-      <div className="flex items-center gap-3">
-        <Button variant="outline" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => navigate(`/vault/backup/${category}`)}>
-          <ArrowLeft className="w-4 h-4" />
-        </Button>
-        <div className="min-w-0">
-          <h1 className="text-lg font-bold font-mono tracking-tighter truncate flex items-center gap-2">
-            <meta.icon className="w-4 h-4 text-primary flex-shrink-0" />
-            {name || "…"}
-          </h1>
-          <p className="text-muted-foreground font-mono text-[10px] mt-0.5">Backup · {meta.label}</p>
+    <div className="stack t-brass page-enter">
+      <button type="button" className="back" onClick={() => navigate(`/vault/backup/${category}`)}>‹ Backup codes</button>
+      <div className="ph">
+        <div>
+          <div className="eb">Backup · {meta.label}</div>
+          <h1>{name || "…"}</h1>
         </div>
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-12"><Loader2 className="w-5 h-5 animate-spin text-primary" /></div>
+        <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>
       ) : groups.length === 0 ? (
-        <div className="text-center py-16 space-y-2">
-          <meta.icon className="w-8 h-8 text-muted-foreground/30 mx-auto" />
-          <p className="font-mono text-xs text-muted-foreground/50">No backup codes found for this account</p>
-        </div>
+        <div className="card"><div className="row" style={{ padding: "26px 18px", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+          <b style={{ fontWeight: 500 }}>No backup codes found for this account</b>
+        </div></div>
       ) : (
-        <div className="space-y-3">
+        <div style={{ display: "grid", gap: 14 }}>
           {groups.map(group => <CodeGroupCard key={group.id} group={group} />)}
         </div>
       )}

@@ -1,13 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { cn } from "@/lib/utils";
-import {
-  Mail, Inbox, Loader2, RefreshCw, AlertCircle, ChevronLeft,
-  MailOpen, Circle, Wifi, Server, Settings,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useModuleAwareNavigate } from "@/components/module-link";
 
 const BASE = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
@@ -94,23 +87,16 @@ export default function VaultMailInbox() {
   const goBack = () => navigate("/vault?tab=mail&view=mail");
 
   if (accountLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-6 h-6 text-primary animate-spin" />
-      </div>
-    );
+    return <div className="stack"><div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div></div>;
   }
 
   if (!account) {
     return (
-      <div className="space-y-4">
-        <Button variant="ghost" size="sm" onClick={goBack} className="font-mono text-xs gap-1.5">
-          <ChevronLeft className="w-3.5 h-3.5" /> Back to Mail Hub
-        </Button>
-        <div className="text-center py-20">
-          <Mail className="w-10 h-10 text-muted-foreground/20 mx-auto mb-3" />
-          <p className="font-mono text-sm text-muted-foreground/60">Mail account not found</p>
-        </div>
+      <div className="stack">
+        <button type="button" className="back" onClick={goBack}>‹ Mail Hub</button>
+        <div className="card"><div className="row" style={{ padding: "26px 18px", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+          <b style={{ fontWeight: 500 }}>Mail account not found</b>
+        </div></div>
       </div>
     );
   }
@@ -118,108 +104,64 @@ export default function VaultMailInbox() {
   const notConfigured = !account.imapHost;
 
   return (
-    <div className="space-y-4 page-enter">
-      <div className="flex items-start justify-between gap-4 flex-wrap">
+    <div className="stack t-brass page-enter">
+      <button type="button" className="back" onClick={goBack}>‹ Mail Hub</button>
+      <div className="ph">
         <div>
-          <Button variant="ghost" size="sm" onClick={goBack} className="font-mono text-xs gap-1.5 -ml-2 mb-2">
-            <ChevronLeft className="w-3.5 h-3.5" /> Back to Mail Hub
-          </Button>
-          <h1 className="text-xl font-bold font-mono tracking-tighter flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-              <Mail className="w-4 h-4 text-primary" />
-            </div>
-            <span className="truncate">{account.emailAddress}</span>
-            {account.imapHost && (
-              <span className="flex items-center gap-0.5 font-mono text-[9px] px-1.5 py-0.5 rounded bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 flex-shrink-0">
-                <Wifi className="w-2.5 h-2.5" /> IMAP
-              </span>
-            )}
-          </h1>
-          <p className="font-mono text-[10px] text-muted-foreground/50 mt-1 pl-0.5">
-            {account.label} · {account.provider ?? "custom"}{account.imapHost ? ` · ${account.imapHost}` : ""}
-          </p>
+          <div className="eb">Mail · {account.label}</div>
+          <h1 style={{ overflowWrap: "anywhere" }}>{account.emailAddress}</h1>
+          <p>{account.provider ?? "custom"}{account.imapHost ? ` · ${account.imapHost}` : ""}</p>
         </div>
-        {!notConfigured && (
-          <Button size="sm" variant="outline" onClick={fetchInbox} disabled={loading} className="font-mono text-xs gap-1.5">
-            <RefreshCw className={cn("w-3.5 h-3.5", loading && "animate-spin")} />
-            {loading ? "Fetching…" : "Refresh"}
-          </Button>
-        )}
+        <div className="acts">
+          {account.imapHost && <span className="pill ok">IMAP</span>}
+          {!notConfigured && (
+            <button type="button" className="btn" onClick={fetchInbox} disabled={loading}>{loading ? "Fetching…" : "Refresh"}</button>
+          )}
+        </div>
       </div>
 
       {notConfigured ? (
-        <div className="text-center py-20 space-y-3 bg-card border border-dashed border-border/40 rounded-xl">
-          <Server className="w-8 h-8 text-muted-foreground/20 mx-auto" />
-          <p className="font-mono text-sm text-muted-foreground/60">This account isn't connected yet</p>
-          <Button size="sm" variant="outline" onClick={() => navigate("/vault?tab=mail&view=settings")} className="font-mono text-xs gap-1.5">
-            <Settings className="w-3.5 h-3.5" /> Configure IMAP/SMTP
-          </Button>
-        </div>
+        <div className="card"><div className="row" style={{ padding: "26px 18px", flexDirection: "column", alignItems: "flex-start", gap: 10 }}>
+          <b style={{ fontWeight: 500 }}>This account isn't connected yet</b>
+          <button type="button" className="btn" onClick={() => navigate("/vault?tab=mail&view=settings")}>Configure IMAP/SMTP</button>
+        </div></div>
       ) : (
-        <div className="bg-card border border-card-border rounded-xl overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border/20">
-            <Inbox className="w-3.5 h-3.5 text-violet-400" />
-            <span className="font-mono text-[10px] font-bold text-violet-400 uppercase tracking-wide">Inbox</span>
-            {total > 0 && <span className="font-mono text-[9px] text-muted-foreground/40">({total} total)</span>}
-            {unread > 0 && <Badge className="ml-1 text-[8px] px-1 py-0 bg-red-500/15 border-red-500/30 text-red-400">{unread} unread</Badge>}
+        <div className="card">
+          <div className="tool">
+            <span className="mono" style={{ flex: 1, fontSize: 11, color: "var(--mu)", letterSpacing: ".08em", textTransform: "uppercase" }}>
+              Inbox{total > 0 ? ` · ${total} total` : ""}
+            </span>
+            {unread > 0 && <span className="pill warn">{unread} unread</span>}
           </div>
 
           {error && (
-            <div className="px-4 py-3 flex items-start gap-2 text-red-400 bg-red-500/5">
-              <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-              <div>
-                <p className="font-mono text-[10px] font-bold">Connection failed</p>
-                <p className="font-mono text-[9px] text-muted-foreground/60 mt-0.5">{error}</p>
-                <p className="font-mono text-[9px] text-muted-foreground/40 mt-1">Tip: Gmail requires an App Password (not your main password). Enable IMAP in Gmail Settings first.</p>
-              </div>
+            <div className="note" role="alert" style={{ margin: 14 }}>
+              <b>Connection failed.</b> {error}
+              <div style={{ marginTop: 6, color: "var(--mu)" }}>Tip: Gmail requires an App Password (not your main password). Enable IMAP in Gmail Settings first.</div>
             </div>
           )}
 
-          {loading && (
-            <div className="px-4 py-14 flex items-center justify-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin text-primary" />
-              <span className="font-mono text-[10px] text-muted-foreground/50">Connecting to IMAP…</span>
-            </div>
-          )}
+          {loading && <div className="row" style={{ padding: "18px" }} role="status"><div className="g"><b>Connecting to IMAP…</b></div></div>}
 
           {!loading && !error && loaded && messages.length === 0 && (
-            <div className="px-4 py-14 text-center">
-              <Inbox className="w-6 h-6 text-muted-foreground/20 mx-auto mb-2" />
-              <p className="font-mono text-[10px] text-muted-foreground/40">No messages in this mailbox</p>
-            </div>
+            <div className="row" style={{ padding: "26px 18px" }}><div className="g"><b style={{ fontWeight: 500 }}>No messages in this mailbox</b></div></div>
           )}
 
-          {!loading && messages.length > 0 && (
-            <div className="divide-y divide-border/10">
-              {messages.map(msg => {
-                const from = formatFrom(msg.from);
-                return (
-                  <button
-                    key={msg.uid}
-                    onClick={() => navigate(`/vault/mail/${accountId}/${msg.seqno}`)}
-                    className={cn("w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-muted/10 transition-colors", !msg.seen && "bg-primary/3")}
-                  >
-                    <div className="flex-shrink-0 mt-1">
-                      {msg.seen
-                        ? <MailOpen className="w-3.5 h-3.5 text-muted-foreground/30" />
-                        : <Circle className="w-3.5 h-3.5 text-primary fill-primary/40" />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-baseline gap-2">
-                        <span className={cn("font-mono text-xs truncate flex-1", msg.seen ? "text-muted-foreground/60" : "font-bold text-foreground")}>
-                          {from.name || from.email || msg.from}
-                        </span>
-                        <span className="font-mono text-[9px] text-muted-foreground/30 flex-shrink-0">{formatDate(msg.date)}</span>
-                      </div>
-                      <p className={cn("font-mono text-[10px] truncate mt-0.5", msg.seen ? "text-muted-foreground/40" : "text-foreground/70")}>
-                        {msg.subject}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )}
+          {!loading && messages.map(msg => {
+            const from = formatFrom(msg.from);
+            const open = () => navigate(`/vault/mail/${accountId}/${msg.seqno}`);
+            return (
+              <div key={msg.uid} className="row go" role="link" tabIndex={0} onClick={open}
+                onKeyDown={(e) => { if (e.key === "Enter") open(); }} style={{ padding: "14px 18px", cursor: "pointer" }}>
+                <span className="mk">{msg.seen ? "·" : "●"}</span>
+                <div className="g">
+                  <b style={{ fontWeight: msg.seen ? 400 : 500 }}>{from.name || from.email || msg.from}</b>
+                  <span>{msg.subject}</span>
+                </div>
+                <span className="mono" style={{ color: "var(--di)", fontSize: 11 }}>{formatDate(msg.date)}</span>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

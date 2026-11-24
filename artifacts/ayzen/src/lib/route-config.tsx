@@ -101,6 +101,9 @@ const SyloConnectors    = lazy(() => import("@/pages/sylo/connectors"));
 const SyloAccessList    = lazy(() => import("@/pages/sylo/access-list"));
 const SyloAccountNew    = lazy(() => import("@/pages/sylo/account-new"));
 const SyloKycDataNew    = lazy(() => import("@/pages/sylo/kyc-data-new"));
+const SyloLocalDetail    = lazy(() => import("@/pages/sylo/local-detail"));
+const SyloKycDetail      = lazy(() => import("@/pages/sylo/kyc-detail"));
+const SyloEntityDetail   = lazy(() => import("@/pages/sylo/entity-detail"));
 const SyloGameDetail     = lazy(() => import("@/pages/sylo/game-detail"));
 const SyloCredit        = lazy(() => import("@/pages/sylo/credit"));
 const SyloCreditOrders  = lazy(() => import("@/pages/sylo/credit-orders"));
@@ -358,8 +361,10 @@ export const USER_ROUTES: RouteConfig[] = [
   { path: "/vault/emergency-access",  component: VaultEmergencyAccess },
   { path: "/vault/projects",     component: UserProjectEntities },
   { path: "/vault/entity/:id/access", component: VaultEntityAccess },
-  { path: "/vault/entity/:id",   component: VaultEntityDetail },
-  { path: "/vault/local/:id",    component: VaultLocalDetail },
+  { path: "/vault/entity/:id/manage", component: VaultEntityDetail },
+  { path: "/vault/entity/:id",   component: SyloEntityDetail },
+  { path: "/vault/local/:id/manage", component: VaultLocalDetail },
+  { path: "/vault/local/:id",    component: SyloLocalDetail },
   { path: "/vault/game/:id",     component: SyloGameDetail },
   { path: "/vault/kyc/data/new",      component: SyloKycDataNew },
   { path: "/vault/kyc/data/overview", component: VaultKycDataOverview },
@@ -367,7 +372,8 @@ export const USER_ROUTES: RouteConfig[] = [
   { path: "/vault/kyc/data/unused",   component: VaultKycDataUnused },
   { path: "/vault/kyc/data/:id",      component: VaultKycDataDetail },
   { path: "/vault/kyc/enrolled",      component: VaultKycEnrolled },
-  { path: "/vault/kyc/:id",      component: VaultKycDetail },
+  { path: "/vault/kyc/:id/manage", component: VaultKycDetail },
+  { path: "/vault/kyc/:id",      component: SyloKycDetail },
   { path: "/vault/2fa/:category/:id", component: VaultTwoFaEntity },
   { path: "/vault/2fa/:category",     component: VaultTwoFaCategory },
   { path: "/vault/mail-hub/:category/:id/mail/:msgId", component: VaultMailMessageDetail },

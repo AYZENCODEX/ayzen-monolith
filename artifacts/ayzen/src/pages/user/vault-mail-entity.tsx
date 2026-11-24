@@ -38,17 +38,12 @@ export default function VaultMailEntity() {
   const meta = CATEGORY_META[category] ?? CATEGORY_META.entity;
 
   return (
-    <div className="space-y-5 page-enter">
-      <div className="flex items-center gap-3">
-        <Button variant="outline" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => navigate(`/vault/mail-hub/${category}`)}>
-          <ArrowLeft className="w-4 h-4" />
-        </Button>
-        <div className="min-w-0 flex-1">
-          <h1 className="text-lg font-bold font-mono tracking-tighter truncate flex items-center gap-2">
-            <meta.icon className="w-4 h-4 text-primary flex-shrink-0" />
-            <MailEntityName category={category} id={id} fallback={meta.label} />
-          </h1>
-          <p className="text-muted-foreground font-mono text-[10px] mt-0.5">Mail Hub · {meta.label}</p>
+    <div className="stack page-enter t-patina">
+      <button type="button" className="back" onClick={() => navigate(`/vault/mail-hub/${category}`)}>‹ Mail hub · {meta.label}</button>
+      <div className="ph">
+        <div>
+          <div className="eb">Mail hub · {meta.label}</div>
+          <h1><MailEntityName category={category} id={id} fallback={meta.label} /></h1>
         </div>
       </div>
       <VaultMailEntityBody category={category} id={id} />
@@ -190,19 +185,12 @@ export function VaultMailEntityBody({ category, id }: { category: MailCategory; 
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-2">
-        <div className="flex items-center gap-1 bg-muted/20 rounded-lg p-1 w-fit">
-          <button onClick={() => setTab("overview")} className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", tab === "overview" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}>
-            <LayoutDashboard className="w-3 h-3" /> Overview
-          </button>
-          <button onClick={() => setTab("email")} className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all", tab === "email" ? "bg-card text-primary shadow-sm font-bold" : "text-muted-foreground/60 hover:text-muted-foreground")}>
-            <Inbox className="w-3 h-3" /> Mail
-          </button>
-        </div>
-        <Button size="sm" variant="outline" onClick={syncNow} disabled={syncing || linkedAccounts.length === 0} className="font-mono text-[10px] gap-1.5 flex-shrink-0 ml-auto">
-          {syncing ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
-          Sync
-        </Button>
+      <div className="tabs" style={{ display: "flex", alignItems: "center" }}>
+        <button type="button" className={tab === "overview" ? "on" : ""} onClick={() => setTab("overview")}>Overview</button>
+        <button type="button" className={tab === "email" ? "on" : ""} onClick={() => setTab("email")}>Mail</button>
+        <button type="button" className="btn sm" style={{ marginLeft: "auto", marginBottom: 6 }} onClick={syncNow} disabled={syncing || linkedAccounts.length === 0}>
+          {syncing ? "Syncing…" : "Sync"}
+        </button>
       </div>
 
       {items.length === 0 && !isLoading ? (
@@ -313,14 +301,10 @@ export function VaultMailEntityBody({ category, id }: { category: MailCategory; 
 
 function MailRow({ m, onClick }: { m: StoredMessage; onClick: () => void }) {
   return (
-    <button onClick={onClick} className="w-full flex items-center gap-3 px-4 py-2.5 bg-card border border-card-border rounded-lg hover:border-primary/30 transition-colors text-left">
-      <Mail className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-      <div className="min-w-0 flex-1">
-        <p className="font-mono text-[11px] font-bold truncate">{m.subject || "(no subject)"}</p>
-        <p className="font-mono text-[9px] text-muted-foreground/45 truncate">{m.from} · {m.accountEmail}</p>
-      </div>
-      <span className="font-mono text-[9px] text-muted-foreground/40 flex-shrink-0">{m.date ? new Date(m.date).toLocaleDateString() : ""}</span>
-      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/30 flex-shrink-0" />
-    </button>
+    <div className="row go" role="link" tabIndex={0} onClick={onClick} onKeyDown={(e) => { if (e.key === "Enter") onClick(); }}
+      style={{ padding: "12px 18px", cursor: "pointer", border: "1px solid var(--line)", borderRadius: 8, background: "var(--s1)" }}>
+      <div className="g"><b>{m.subject || "(no subject)"}</b><span>{m.from} · {m.accountEmail}</span></div>
+      <span className="mono" style={{ fontSize: 11, color: "var(--di)" }}>{m.date ? new Date(m.date).toLocaleDateString() : ""}</span>
+    </div>
   );
 }

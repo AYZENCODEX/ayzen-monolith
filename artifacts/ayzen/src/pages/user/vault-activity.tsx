@@ -12,14 +12,9 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { History, Eye, PlusCircle, Pencil, Trash2, KeyRound, Wallet, RefreshCw, ChevronRight, ChevronLeft } from "lucide-react";
-import { useLocation } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/vault-sidebar";
+import { Link } from "wouter";
+import { InlineError } from "@/components/console";
 import { getVaultActivity, type VaultActivityEntry } from "@/lib/vault-security-api";
-import { VaultLoading } from "@/components/vault/vault-loading";
-import { cn } from "@/lib/utils";
-import { useModuleAwareNavigate } from "@/components/module-link";
 
 const ACTION_META: Record<string, { label: string; icon: React.ElementType; color: string }> = {
   viewed:          { label: "Viewed",          icon: Eye,        color: "text-primary bg-primary/10 border-primary/20" },
@@ -51,54 +46,11 @@ function formatWhen(iso: string): { date: string; time: string; relative: string
   };
 }
 
-function ActivityRow({ entry, onOpenEntity }: { entry: VaultActivityEntry; onOpenEntity: () => void }) {
-  const meta = metaFor(entry.action);
-  const Icon = meta.icon;
-  const { date, time, relative } = formatWhen(entry.createdAt);
-
-  return (
-    <div className="flex items-start gap-3 bg-card border border-border/40 rounded-lg px-3 py-2.5">
-      <div className={cn("w-7 h-7 rounded-md border flex items-center justify-center flex-shrink-0", meta.color)}>
-        <Icon className="w-3.5 h-3.5" />
-      </div>
-      <div className="min-w-0 flex-1 space-y-0.5">
-        <div className="flex items-center gap-2 flex-wrap">
-          <Badge variant="outline" className={cn("font-mono text-[9px] uppercase tracking-wider px-1.5", meta.color)}>
-            {meta.label}
-          </Badge>
-          {entry.entitySerial && (
-            <span className="font-mono text-xs font-bold text-foreground truncate">{entry.entitySerial}</span>
-          )}
-          {!entry.entitySerial && entry.entityId && (
-            <span className="font-mono text-xs text-muted-foreground/70">Entity #{entry.entityId}</span>
-          )}
-        </div>
-        {entry.detail && (
-          <p className="font-mono text-[10px] text-muted-foreground/60 truncate">{entry.detail}</p>
-        )}
-        <p className="font-mono text-[9px] text-muted-foreground/40">
-          {date} · {time} ({relative})
-        </p>
-      </div>
-      {entry.entityId && (
-        <button
-          onClick={onOpenEntity}
-          className="flex-shrink-0 text-muted-foreground/40 hover:text-foreground transition-colors"
-          aria-label="Open entity"
-        >
-          <ChevronRight className="w-3.5 h-3.5" />
-        </button>
-      )}
-    </div>
-  );
-}
-
 export default function VaultActivity() {
-  const navigate = useModuleAwareNavigate();
   const [page, setPage] = useState(1);
   const limit = 30;
 
-  const { data, isLoading, isFetching, refetch } = useQuery({
+  const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ["vault-activity", page],
     queryFn: () => getVaultActivity(page, limit),
   });
@@ -108,59 +60,52 @@ export default function VaultActivity() {
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
   return (
-    <VaultSectionPage
-      title="Activity Log"
-      description="Everything you've done inside Vault — what happened, when, and where"
-      icon={History}
-      headerExtra={
-        <Button variant="outline" size="sm" className="font-mono text-xs gap-1.5" onClick={() => refetch()} disabled={isFetching}>
-          <RefreshCw className={cn("w-3.5 h-3.5", isFetching && "animate-spin")} /> Refresh
-        </Button>
-      }
-    >
-      {isLoading ? (
-        <VaultLoading title="Loading activity log" done={!isLoading} />
-      ) : entries.length === 0 ? (
-        <VaultSectionEmptyState
-          icon={History}
-          title="No activity yet"
-          note="Every time you view, create, edit, or change an entity's status inside Vault, it'll show up here with the exact time and which entity was touched."
-        />
-      ) : (
-        <div className="space-y-4">
-          <div className="space-y-1.5">
-            {entries.map(entry => (
-              <ActivityRow
-                key={entry.id}
-                entry={entry}
-                onOpenEntity={() => entry.entityId && navigate(`/vault/entity/${entry.entityId}`)}
-              />
-            ))}
-          </div>
-
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between pt-2">
-              <p className="font-mono text-[10px] text-muted-foreground/50">
-                Page {page} of {totalPages} · {total.toLocaleString()} events
-              </p>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline" size="sm" className="font-mono text-xs gap-1"
-                  disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" /> Prev
-                </Button>
-                <Button
-                  variant="outline" size="sm" className="font-mono text-xs gap-1"
-                  disabled={page >= totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                >
-                  Next <ChevronRight className="w-3.5 h-3.5" />
-                </Button>
-              </div>
-            </div>
-          )}
+    <div className="stack t-brass">
+      <div className="ph">
+        <div>
+          <div className="eb">Records · Activity</div>
+          <h1>Activity log</h1>
+          <p>Everything you've done inside Sylo — what happened, when, and where.</p>
         </div>
-      )}
-    </VaultSectionPage>
+        <div className="acts">
+          <button type="button" className="btn" onClick={() => void refetch()} disabled={isFetching}>{isFetching ? "Refreshing…" : "Refresh"}</button>
+        </div>
+      </div>
+      <div className="card">
+        {isLoading && <div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div>}
+        {!isLoading && error ? <InlineError error={error} onRetry={() => void refetch()} /> : null}
+        {!isLoading && !error && entries.length === 0 && (
+          <div className="row" style={{ padding: "26px 18px", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+            <b style={{ fontWeight: 500 }}>No activity yet</b>
+            <span style={{ fontFamily: "var(--sans)" }}>Viewing, creating or editing an entity shows up here with the exact time.</span>
+          </div>
+        )}
+        {entries.map((entry) => {
+          const meta = metaFor(entry.action);
+          const { date, time, relative } = formatWhen(entry.createdAt);
+          const label = entry.entitySerial ?? (entry.entityId ? `Entity #${entry.entityId}` : "Vault");
+          const body = (
+            <>
+              <span className="mk">{meta.label.slice(0, 2).toUpperCase()}</span>
+              <div className="g">
+                <b>{label}</b>
+                <span>{entry.detail ? `${entry.detail} · ` : ""}{date} · {time} ({relative})</span>
+              </div>
+              <span className="pill">{meta.label}</span>
+            </>
+          );
+          return entry.entityId
+            ? <Link key={entry.id} href={`/vault/entity/${entry.entityId}`} className="row go" style={{ padding: "14px 18px" }}>{body}</Link>
+            : <div key={entry.id} className="row" style={{ padding: "14px 18px" }}>{body}</div>;
+        })}
+        {totalPages > 1 && (
+          <div className="tool" style={{ borderBottom: 0, borderTop: "1px solid var(--line)" }}>
+            <span className="mono" style={{ color: "var(--di)", fontSize: 11, flex: 1 }}>Page {page} of {totalPages} · {total.toLocaleString()} events</span>
+            <button type="button" className="btn sm" disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>Prev</button>
+            <button type="button" className="btn sm" disabled={page >= totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))}>Next</button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

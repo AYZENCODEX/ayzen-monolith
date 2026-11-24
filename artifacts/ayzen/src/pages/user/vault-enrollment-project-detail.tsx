@@ -95,55 +95,30 @@ export default function VaultEnrollmentProjectDetail() {
       description="Entities enrolled in this project — click to view details"
       icon={FolderGit2}
     >
-      {/* Back nav */}
-      <div className="mb-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate("/vault/enrollment/project")}
-          className="font-mono text-xs text-muted-foreground/60 hover:text-foreground gap-1.5 pl-1"
-        >
-          <ChevronLeft className="w-3.5 h-3.5" />
-          All Projects
-        </Button>
-      </div>
+      <button type="button" className="back" onClick={() => navigate("/vault/enrollment/project")}>‹ All projects</button>
 
       {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-5 h-5 text-primary animate-spin" />
-        </div>
+        <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>
       ) : error ? (
-        <div className="flex flex-col items-center justify-center py-20 gap-3">
-          <AlertCircle className="w-8 h-8 text-red-400/50" />
-          <p className="font-mono text-xs text-muted-foreground/50">Failed to load project</p>
-          <Button variant="outline" size="sm" onClick={load} className="font-mono text-xs">
-            Retry
-          </Button>
+        <div className="card">
+          <div className="row" style={{ padding: "18px" }} role="alert">
+            <div className="g"><b>Failed to load project</b><span>Check your connection and try again.</span></div>
+            <button type="button" className="btn sm" onClick={load}>Retry</button>
+          </div>
         </div>
       ) : (
-        <div className="space-y-4">
-          {/* Project header card */}
+        <div className="stack">
           {project && (
-            <div className="bg-card border border-primary/20 rounded-xl p-4 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center flex-shrink-0">
-                <FolderGit2 className="w-5 h-5 text-primary" />
+            <div className="kpis">
+              <div className="kpi" style={{ ["--c" as string]: "var(--ac)" }}>
+                <label>Status</label><strong style={{ fontSize: 22 }}>{project.status ?? "active"}</strong><small>{project.category ?? "Uncategorized"}</small>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-mono text-sm font-bold text-foreground truncate">{project.name}</p>
-                <p className="font-mono text-[10px] text-muted-foreground/50 mt-0.5">
-                  {project.category ?? "Uncategorized"} · {project.enrolled_count} entit{project.enrolled_count === 1 ? "y" : "ies"} enrolled
-                </p>
+              <div className="kpi" style={{ ["--c" as string]: "var(--ac)" }}>
+                <label>Enrolled</label><strong>{project.enrolled_count}</strong><small>{project.enrolled_count === 1 ? "entity" : "entities"}</small>
               </div>
-              <Badge
-                variant="outline"
-                className={cn("font-mono text-[9px] flex-shrink-0", STATUS_BADGE[project.status ?? "active"] ?? STATUS_BADGE.active)}
-              >
-                {project.status ?? "active"}
-              </Badge>
             </div>
           )}
 
-          {/* Entity list */}
           {entities.length === 0 ? (
             <VaultSectionEmptyState
               icon={Users}
@@ -151,50 +126,23 @@ export default function VaultEnrollmentProjectDetail() {
               note="Enroll vault entities into this project to see them here."
             />
           ) : (
-            <div className="space-y-2">
-              <p className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/40 px-1">
-                {entities.length} Enrolled {entities.length === 1 ? "Entity" : "Entities"}
-              </p>
+            <div className="card">
+              <div className="tool">
+                <span className="mono" style={{ flex: 1, fontSize: 11, color: "var(--mu)", letterSpacing: ".08em", textTransform: "uppercase" }}>
+                  {entities.length} enrolled {entities.length === 1 ? "entity" : "entities"}
+                </span>
+              </div>
               {entities.map(entity => {
-                const EnrollIcon =
-                  entity.enrollment_status === "active" ? Activity :
-                  entity.enrollment_status === "completed" ? CheckCircle2 :
-                  XCircle;
-                const enrollColor =
-                  entity.enrollment_status === "active" ? "text-emerald-400" :
-                  entity.enrollment_status === "completed" ? "text-amber-400" :
-                  "text-red-400/60";
-
+                const name = entity.project_name || `Entity #${entity.id}`;
+                const tone = entity.enrollment_status === "active" ? " ok" : entity.enrollment_status === "completed" ? " warn" : " bad";
+                const open = () => navigate(`/vault/entity/${entity.id}`);
                 return (
-                  <button
-                    key={entity.id}
-                    onClick={() => navigate(`/vault/entity/${entity.id}`)}
-                    className="w-full bg-card border border-card-border rounded-lg p-3.5 flex items-center gap-3 hover:border-primary/30 hover:bg-primary/5 transition-all text-left group"
-                  >
-                    <div className="w-9 h-9 rounded-lg bg-muted/20 border border-border/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/10 group-hover:border-primary/20 transition-colors">
-                      <Shield className="w-4 h-4 text-muted-foreground/50 group-hover:text-primary/70 transition-colors" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-mono text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">
-                        {entity.project_name || `Entity #${entity.id}`}
-                      </p>
-                      <p className="font-mono text-[9px] text-muted-foreground/50 truncate mt-0.5">
-                        {entitySub(entity)}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <div className={cn("flex items-center gap-1", enrollColor)}>
-                        <EnrollIcon className="w-3 h-3" />
-                        <Badge
-                          variant="outline"
-                          className={cn("font-mono text-[8px]", STATUS_BADGE[entity.enrollment_status] ?? STATUS_BADGE.active)}
-                        >
-                          {entity.enrollment_status}
-                        </Badge>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/20 group-hover:text-primary/40 flex-shrink-0 transition-colors" />
-                  </button>
+                  <div key={entity.id} className="row go" role="link" tabIndex={0} onClick={open}
+                    onKeyDown={(e) => { if (e.key === "Enter") open(); }} style={{ padding: "14px 18px", cursor: "pointer" }}>
+                    <span className="mk">{(name.trim().slice(0, 2) || "··").toUpperCase()}</span>
+                    <div className="g"><b>{name}</b><span>{entitySub(entity)}</span></div>
+                    <span className={`pill${tone}`}>{entity.enrollment_status}</span>
+                  </div>
                 );
               })}
             </div>

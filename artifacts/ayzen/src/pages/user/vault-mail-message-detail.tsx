@@ -33,23 +33,14 @@ export default function VaultMailMessage() {
   }, [params.msgId, token]);
 
   return (
-    <div className="space-y-5 page-enter max-w-2xl">
-      <div className="flex items-center gap-3">
-        <Button variant="outline" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => navigate(`/vault/mail-hub/${params.category}/${params.id}`)}>
-          <ArrowLeft className="w-4 h-4" />
-        </Button>
-        <h1 className="text-lg font-bold font-mono tracking-tighter flex items-center gap-2">
-          <Mail className="w-4 h-4 text-primary" /> Email
-        </h1>
-      </div>
+    <div className="stack page-enter">
+      <button type="button" className="back" onClick={() => navigate(`/vault/mail-hub/${params.category}/${params.id}`)}>‹ Mail hub</button>
+      <div className="ph"><div><div className="eb">Mail hub</div><h1>Email</h1></div></div>
 
       {loading ? (
-        <div className="flex justify-center py-16"><Loader2 className="w-5 h-5 animate-spin text-primary" /></div>
+        <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>
       ) : error || !msg ? (
-        <div className="text-center py-16 space-y-2">
-          <Mail className="w-8 h-8 text-muted-foreground/30 mx-auto" />
-          <p className="font-mono text-xs text-muted-foreground/50">{error ?? "Message not found"}</p>
-        </div>
+        <div className="card"><div className="row" style={{ padding: "26px 18px" }} role="alert"><div className="g"><b>{error ?? "Message not found"}</b></div></div></div>
       ) : (
         <div className="bg-card border border-card-border rounded-xl p-5 space-y-4">
           <div className="space-y-1.5">

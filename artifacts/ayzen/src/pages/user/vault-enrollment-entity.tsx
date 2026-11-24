@@ -107,46 +107,31 @@ export default function VaultEnrollmentEntity() {
   return (
     <VaultSectionPage title={meta.title} description={meta.description} icon={meta.icon}>
       {loading ? (
-        <div className="flex items-center justify-center py-16"><Loader2 className="w-5 h-5 text-primary animate-spin" /></div>
+        <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>
       ) : filtered.length === 0 ? (
         <VaultSectionEmptyState icon={meta.icon} title={meta.empty} note={meta.note} />
       ) : (
-        <div className="space-y-2">
+        <div className="card">
           {filtered.map(e => {
             const shownProjects = view === "overview"
               ? e.projects
               : e.projects.filter(p =>
                   view === "ongoing" ? ONGOING_STATUSES.has(p.projectStatus ?? "active") : PAST_STATUSES.has(p.projectStatus ?? "active")
                 );
+            const name = e.entityName || `Entity #${e.vaultEntryId}`;
             return (
-              <div key={e.vaultEntryId} className="bg-card border border-card-border rounded-lg p-3">
-                <div className="flex items-center gap-3">
-                  <Shield className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-mono text-xs font-bold truncate">{e.entityName || `Entity #${e.vaultEntryId}`}</p>
-                    <p className="font-mono text-[9px] text-muted-foreground/50 truncate">{e.entitySerial}</p>
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className="font-mono text-[9px] flex-shrink-0 text-emerald-400 border-emerald-400/30 bg-emerald-400/5"
-                  >
-                    {e.projects.length} project{e.projects.length !== 1 ? "s" : ""}
-                  </Badge>
+              <div key={e.vaultEntryId} style={{ borderBottom: "1px solid var(--line)" }}>
+                <div className="row" style={{ padding: "14px 18px", borderBottom: 0 }}>
+                  <span className="mk">{(name.trim().slice(0, 2) || "··").toUpperCase()}</span>
+                  <div className="g"><b>{name}</b><span>{e.entitySerial ?? ""}</span></div>
+                  <span className="pill ok">{e.projects.length} project{e.projects.length !== 1 ? "s" : ""}</span>
                 </div>
                 {shownProjects.length > 0 && (
-                  <div className="mt-2 pl-6 flex flex-wrap gap-1.5">
+                  <div style={{ padding: "0 18px 14px 18px", display: "flex", flexWrap: "wrap", gap: 6 }}>
                     {shownProjects.map(p => (
-                      <Link key={p.projectId} href={`/vault/enrollment/project/${p.projectId}`}>
-                        <span
-                          className={cn(
-                            "font-mono text-[9px] px-2 py-0.5 rounded-full border cursor-pointer transition-colors",
-                            ONGOING_STATUSES.has(p.projectStatus ?? "active")
-                              ? "border-emerald-400/30 text-emerald-400 hover:bg-emerald-400/10"
-                              : "border-border/40 text-muted-foreground/60 hover:bg-muted/20"
-                          )}
-                        >
-                          {p.projectName} · {p.projectStatus ?? "active"}
-                        </span>
+                      <Link key={p.projectId} href={`/vault/enrollment/project/${p.projectId}`}
+                        className={`pill${ONGOING_STATUSES.has(p.projectStatus ?? "active") ? " ok" : ""}`}>
+                        {p.projectName} · {p.projectStatus ?? "active"}
                       </Link>
                     ))}
                   </div>

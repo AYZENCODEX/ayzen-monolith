@@ -32,10 +32,10 @@ function CopyButton({ value, label }: { value: string; label?: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 1500);
       }}
-      className="flex items-center gap-1 font-mono text-[10px] text-muted-foreground/60 hover:text-primary transition-colors flex-shrink-0"
+      className="btn sm"
     >
-      {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-      {label && <span className={copied ? "text-emerald-400" : ""}>{copied ? "Copied" : label}</span>}
+      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+      {label && <span>{copied ? "Copied" : label}</span>}
     </button>
   );
 }
@@ -54,14 +54,9 @@ export function EntityBackupDetail({ entity, onBack }: { entity: any; onBack?: (
         </button>
       )}
 
-      <div className="flex items-center gap-2.5">
-        <Shield className="w-4 h-4 text-primary/70 flex-shrink-0" />
-        <div className="min-w-0">
-          <p className="font-mono text-sm font-bold truncate">{entity.projectName || `Entity #${entity.id}`}</p>
-          <p className="font-mono text-[9px] text-muted-foreground/50">
-            {entity.entitySerial}
-          </p>
-        </div>
+      <div className="mono" style={{ fontSize: 11, color: "var(--mu)" }}>
+        <b style={{ color: "var(--tx)", fontWeight: 500 }}>{entity.projectName || `Entity #${entity.id}`}</b>
+        {entity.entitySerial ? ` · ${entity.entitySerial}` : ""}
       </div>
 
       {codes.length === 0 ? (
@@ -71,21 +66,19 @@ export function EntityBackupDetail({ entity, onBack }: { entity: any; onBack?: (
           note="Add backup codes from the entity's Wallet · Manual tab in the Vault Entity list."
         />
       ) : (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50">
+        <div className="card">
+          <div className="tool">
+            <span className="mono" style={{ flex: 1, fontSize: 11, color: "var(--mu)", letterSpacing: ".08em", textTransform: "uppercase" }}>
               {codes.length} backup code{codes.length !== 1 ? "s" : ""}
-            </p>
+            </span>
             <CopyButton value={codes.join("\n")} label="Copy all" />
           </div>
-          <div className="border border-border/30 rounded-lg divide-y divide-border/20 overflow-hidden">
-            {codes.map((code, i) => (
-              <div key={i} className="flex items-center justify-between gap-3 px-3 py-2 bg-card">
-                <span className="font-mono text-xs text-foreground/80 truncate">{code}</span>
-                <CopyButton value={code} label="Copy" />
-              </div>
-            ))}
-          </div>
+          {codes.map((code, i) => (
+            <div key={i} className="row" style={{ padding: "12px 18px" }}>
+              <div className="g"><span className="mono" style={{ color: "var(--tx)", overflowWrap: "anywhere" }}>{code}</span></div>
+              <CopyButton value={code} label="Copy" />
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -139,6 +132,17 @@ function computeRows(category: Exclude<Category, "overview">, vaultData: any[], 
     .filter(r => r.count > 0);
 }
 
+
+function BackupRow({ name, sub, mark, onOpen }: { name: string; sub: string; mark: string; onOpen: () => void }) {
+  return (
+    <div className="row go" role="link" tabIndex={0} onClick={onOpen} onKeyDown={(e) => { if (e.key === "Enter") onOpen(); }}
+      style={{ padding: "14px 18px", cursor: "pointer" }}>
+      <span className="mk">{(mark.trim().slice(0, 2) || "··").toUpperCase()}</span>
+      <div className="g"><b>{name}</b><span>{sub}</span></div>
+    </div>
+  );
+}
+
 // ─── Category → account list (kyc / local / entity / game) ────────────────────
 function EntityBackupList({ category }: { category: Exclude<Category, "overview"> }) {
   const navigate = useModuleAwareNavigate();
@@ -166,30 +170,16 @@ function EntityBackupList({ category }: { category: Exclude<Category, "overview"
 
   if (rows.length === 0) {
     return (
-      <div className="text-center py-16 space-y-2">
-        <Icon className="w-8 h-8 text-muted-foreground/30 mx-auto" />
-        <p className="font-mono text-xs text-muted-foreground/50">No {CATEGORY_META[category].label} accounts with backup codes yet</p>
-      </div>
+      <VaultSectionEmptyState icon={Icon} title={`No ${CATEGORY_META[category].label} accounts with backup codes yet`} note="Codes you save on an account show up here." />
     );
   }
 
   return (
-    <div className="space-y-2">
+    <div className="card">
       {rows.map(row => (
-        <button
-          key={row.id}
-          onClick={() => navigate(`/vault/backup/${category}/${row.id}`)}
-          className="w-full flex items-center gap-3 px-4 py-3 bg-card border border-card-border rounded-xl hover:border-primary/30 transition-colors text-left"
-        >
-          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-            <Icon className="w-4 h-4 text-primary" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="font-mono text-xs font-bold truncate">{row.name}</p>
-            <p className="font-mono text-[9px] text-muted-foreground/45">{row.count} backup code{row.count !== 1 ? "s" : ""}</p>
-          </div>
-          <ChevronRight className="w-4 h-4 text-muted-foreground/30 flex-shrink-0" />
-        </button>
+        <BackupRow key={row.id} name={row.name} mark={row.name}
+          sub={`${row.count} backup code${row.count !== 1 ? "s" : ""}`}
+          onOpen={() => navigate(`/vault/backup/${category}/${row.id}`)} />
       ))}
     </div>
   );
@@ -230,39 +220,22 @@ function OverviewBackupList() {
 
   if (rows.length === 0) {
     return (
-      <div className="text-center py-16 space-y-2">
-        <LayoutDashboard className="w-8 h-8 text-muted-foreground/30 mx-auto" />
-        <p className="font-mono text-xs text-muted-foreground/50">No backup codes stored yet</p>
-      </div>
+      <VaultSectionEmptyState icon={LayoutDashboard} title="No backup codes stored yet" note="Codes you save on an account show up here." />
     );
   }
 
   return (
-    <div className="space-y-2">
-      <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 px-1">
-        {rows.length} account{rows.length !== 1 ? "s" : ""} · {totalCodes} backup code{totalCodes !== 1 ? "s" : ""}
-      </p>
-      {rows.map(row => {
-        const Icon = CATEGORY_META[row.category].icon;
-        return (
-          <button
-            key={`${row.category}-${row.id}`}
-            onClick={() => navigate(`/vault/backup/${row.category}/${row.id}`)}
-            className="w-full flex items-center gap-3 px-4 py-3 bg-card border border-card-border rounded-xl hover:border-primary/30 transition-colors text-left"
-          >
-            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-              <Icon className="w-4 h-4 text-primary" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="font-mono text-xs font-bold truncate">{row.name}</p>
-              <p className="font-mono text-[9px] text-muted-foreground/45">
-                {CATEGORY_META[row.category].label} · {row.count} backup code{row.count !== 1 ? "s" : ""}
-              </p>
-            </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground/30 flex-shrink-0" />
-          </button>
-        );
-      })}
+    <div className="card">
+      <div className="tool">
+        <span className="mono" style={{ flex: 1, fontSize: 11, color: "var(--mu)", letterSpacing: ".08em", textTransform: "uppercase" }}>
+          {rows.length} account{rows.length !== 1 ? "s" : ""} · {totalCodes} backup code{totalCodes !== 1 ? "s" : ""}
+        </span>
+      </div>
+      {rows.map(row => (
+        <BackupRow key={`${row.category}-${row.id}`} name={row.name} mark={row.name}
+          sub={`${CATEGORY_META[row.category].label} · ${row.count} backup code${row.count !== 1 ? "s" : ""}`}
+          onOpen={() => navigate(`/vault/backup/${row.category}/${row.id}`)} />
+      ))}
     </div>
   );
 }

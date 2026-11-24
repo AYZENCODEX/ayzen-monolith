@@ -17,9 +17,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "wouter";
 import { customFetch } from "@workspace/api-client-react";
-import { VaultSectionPage, VaultSectionEmptyState } from "@/components/layout/vault-sidebar";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
+import { VaultSectionPage } from "@/components/layout/vault-sidebar";
 import {
   ArrowLeftRight, IdCard, FolderGit2, Loader2,
   CheckCircle2, ShieldAlert, Ban, XCircle, Users,
@@ -57,6 +55,8 @@ const STATUS_COLOR: Record<string, string> = {
   cancelled: "border-border text-muted-foreground",
 };
 
+const PILL: Record<string, string> = { active: " ok", completed: " ok", disqualified: " warn", banned: " bad", cancelled: "" };
+
 const STATUS_META: Record<string, { label: string; icon: React.ElementType; color: string }> = {
   active: { label: "Active", icon: CheckCircle2, color: "text-emerald-400" },
   completed: { label: "Completed", icon: CheckCircle2, color: "text-primary" },
@@ -89,20 +89,26 @@ function useEnrollmentData() {
   return { rows, kycEntries, loading };
 }
 
-function StatCard({ label, value, icon: Icon, color }: { label: string; value: string; icon: React.ElementType; color: string }) {
+function StatCard({ label, value }: { label: string; value: string; icon?: React.ElementType; color?: string }) {
   return (
-    <div className="bg-card border border-card-border rounded-xl p-3.5 flex items-start gap-3">
-      <Icon className={cn("w-5 h-5 mt-0.5 flex-shrink-0", color)} />
-      <div className="min-w-0">
-        <p className={cn("text-lg font-bold font-mono truncate", color)}>{value}</p>
-        <p className="text-[10px] text-muted-foreground/60 font-mono">{label}</p>
-      </div>
+    <div className="kpi" style={{ ["--c" as string]: "var(--ac)" }}>
+      <label>{label}</label><strong>{value}</strong><small>{" "}</small>
     </div>
   );
 }
 
+const Loading = () => <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>;
+const Empty = ({ title, note }: { title: string; note: string }) => (
+  <div className="card">
+    <div className="row" style={{ padding: "26px 18px", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+      <b style={{ fontWeight: 500 }}>{title}</b><span style={{ fontFamily: "var(--sans)" }}>{note}</span>
+    </div>
+  </div>
+);
+const mk = (s: string) => (s.trim().slice(0, 2) || "··").toUpperCase();
+
 function OverviewTab({ rows, kycEntries, loading }: { rows: EnrolledRow[]; kycEntries: KycEntryRow[]; loading: boolean }) {
-  if (loading) return <div className="flex items-center justify-center py-16"><Loader2 className="w-5 h-5 text-primary animate-spin" /></div>;
+  if (loading) return <Loading />;
 
   const enrolledEntryIds = new Set(rows.map(r => r.kyc_entry_id));
   const statusCounts: Record<string, number> = {};
@@ -110,49 +116,31 @@ function OverviewTab({ rows, kycEntries, loading }: { rows: EnrolledRow[]; kycEn
 
   if (kycEntries.length === 0) {
     return (
-      <VaultSectionEmptyState
-        icon={IdCard}
-        title="No KYC entities yet"
-        note="Add a KYC entity to Vault and it'll show up here, flagged Enrolled once it's used on a project."
-      />
+      <Empty title="No KYC entities yet" note="Add a KYC entity to Vault and it'll show up here, flagged Enrolled once it's used on a project." />
     );
   }
 
   return (
-    <div className="space-y-4">
-      {/* Dashboard — enrollment stats across every KYC entity */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <StatCard label="KYC Entities" value={String(kycEntries.length)} icon={IdCard} color="text-primary" />
-        <StatCard label="Enrolled" value={String(enrolledEntryIds.size)} icon={Users} color="text-cyan-400" />
-        <StatCard label="Not Enrolled" value={String(kycEntries.length - enrolledEntryIds.size)} icon={XCircle} color="text-muted-foreground" />
+    <div className="stack" style={{ maxWidth: "none" }}>
+      <div className="kpis">
+        <StatCard label="KYC entities" value={String(kycEntries.length)} />
+        <StatCard label="Enrolled" value={String(enrolledEntryIds.size)} />
+        <StatCard label="Not enrolled" value={String(kycEntries.length - enrolledEntryIds.size)} />
         {Object.entries(statusCounts).map(([status, count]) => {
           const meta = STATUS_META[status] ?? STATUS_META.cancelled;
-          return <StatCard key={status} label={meta.label} value={String(count)} icon={meta.icon} color={meta.color} />;
+          return <StatCard key={status} label={meta.label} value={String(count)} />;
         })}
       </div>
 
-      {/* Every KYC entity, flagged Enrolled/Not enrolled */}
-      <div className="space-y-2">
+      <div className="card">
         {kycEntries.map(k => {
           const enrolled = enrolledEntryIds.has(k.id);
+          const name = k.name || k.username || `KYC #${k.id}`;
           return (
-            <Link key={k.id} href={`/vault/kyc/${k.id}`}>
-              <div className="bg-card border border-card-border rounded-lg p-3 flex items-center gap-3 hover:border-primary/40 transition-colors cursor-pointer">
-                <IdCard className="w-3.5 h-3.5 text-primary/70 flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-mono text-xs font-bold truncate">{k.name || k.username || `KYC #${k.id}`}</p>
-                  <p className="font-mono text-[9px] text-muted-foreground/50 truncate">{k.platform ?? k.category}</p>
-                </div>
-                <Badge
-                  variant="outline"
-                  className={cn(
-                    "font-mono text-[9px] flex-shrink-0",
-                    enrolled ? "text-emerald-400 border-emerald-400/30 bg-emerald-400/5" : "text-muted-foreground/40 border-border/30"
-                  )}
-                >
-                  {enrolled ? "Enrolled" : "Not enrolled"}
-                </Badge>
-              </div>
+            <Link key={k.id} href={`/vault/kyc/${k.id}`} className="row go" style={{ padding: "14px 18px" }}>
+              <span className="mk">{mk(name)}</span>
+              <div className="g"><b>{name}</b><span>{k.platform ?? k.category}</span></div>
+              <span className={`pill${enrolled ? " ok" : ""}`}>{enrolled ? "Enrolled" : "Not enrolled"}</span>
             </Link>
           );
         })}
@@ -162,38 +150,24 @@ function OverviewTab({ rows, kycEntries, loading }: { rows: EnrolledRow[]; kycEn
 }
 
 function ActiveTab({ rows, loading }: { rows: EnrolledRow[]; loading: boolean }) {
-  if (loading) return <div className="flex items-center justify-center py-16"><Loader2 className="w-5 h-5 text-primary animate-spin" /></div>;
+  if (loading) return <Loading />;
 
   if (rows.length === 0) {
     return (
-      <VaultSectionEmptyState
-        icon={ArrowLeftRight}
-        title="No KYC-entity enrollments yet"
-        note='Enroll into a Binance/Bitget/Kucoin/Bybit project using "KYC Entity" (not Manual) and it will show up here.'
-      />
+      <Empty title="No KYC-entity enrollments yet" note={'Enroll into a Binance/Bitget/Kucoin/Bybit project using "KYC Entity" (not Manual) and it will show up here.'} />
     );
   }
 
   return (
-    <div className="space-y-2">
+    <div className="card">
       {rows.map(r => (
-        <Link key={r.enrollment_id} href={`/vault/projects?project=${r.project_id}`}>
-          <div className="bg-card border border-card-border rounded-lg p-3 flex items-center gap-3 hover:border-primary/40 transition-colors cursor-pointer">
-            <FolderGit2 className="w-4 h-4 text-primary/70 flex-shrink-0" />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <p className="font-mono text-xs font-bold truncate">{r.project_name}</p>
-                <Badge variant="outline" className={cn("font-mono text-[9px]", STATUS_COLOR[r.status] ?? STATUS_COLOR.cancelled)}>
-                  {r.status}
-                </Badge>
-              </div>
-              <p className="font-mono text-[9px] text-muted-foreground/50 flex items-center gap-1.5 mt-0.5">
-                <IdCard className="w-2.5 h-2.5" /> {r.kyc_platform ?? "—"} · {r.kyc_username || `#${r.kyc_entry_id}`}
-                <span className="text-muted-foreground/30">·</span>
-                entity: {r.vault_entry_name || `#${r.vault_entry_id}`}
-              </p>
-            </div>
+        <Link key={r.enrollment_id} href={`/vault/projects?project=${r.project_id}`} className="row go" style={{ padding: "14px 18px" }}>
+          <span className="mk">{mk(r.project_name)}</span>
+          <div className="g">
+            <b>{r.project_name}</b>
+            <span>{r.kyc_platform ?? "—"} · {r.kyc_username || `#${r.kyc_entry_id}`} · entity: {r.vault_entry_name || `#${r.vault_entry_id}`}</span>
           </div>
+          <span className={`pill${PILL[r.status] ?? ""}`}>{r.status}</span>
         </Link>
       ))}
     </div>
@@ -202,6 +176,7 @@ function ActiveTab({ rows, loading }: { rows: EnrolledRow[]; loading: boolean })
 
 export default function VaultKycEnrolled() {
   const { rows, kycEntries, loading } = useEnrollmentData();
+  const [tab, setTab] = useState<"overview" | "active">("overview");
 
   return (
     <VaultSectionPage
@@ -209,18 +184,11 @@ export default function VaultKycEnrolled() {
       description="Every KYC entity, plus the exchange projects enrolled straight from one"
       icon={ArrowLeftRight}
     >
-      <Tabs defaultValue="overview" className="space-y-3">
-        <TabsList className="bg-muted/20">
-          <TabsTrigger value="overview" className="font-mono text-xs">Overview</TabsTrigger>
-          <TabsTrigger value="active" className="font-mono text-xs">Active</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview">
-          <OverviewTab rows={rows} kycEntries={kycEntries} loading={loading} />
-        </TabsContent>
-        <TabsContent value="active">
-          <ActiveTab rows={rows} loading={loading} />
-        </TabsContent>
-      </Tabs>
+      <div className="tabs">
+        <button type="button" className={tab === "overview" ? "on" : ""} onClick={() => setTab("overview")}>Overview</button>
+        <button type="button" className={tab === "active" ? "on" : ""} onClick={() => setTab("active")}>Active</button>
+      </div>
+      {tab === "overview" ? <OverviewTab rows={rows} kycEntries={kycEntries} loading={loading} /> : <ActiveTab rows={rows} loading={loading} />}
     </VaultSectionPage>
   );
 }

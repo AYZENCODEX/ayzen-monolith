@@ -87,9 +87,7 @@ export default function VaultEnrollmentLinked() {
       icon={Link2}
     >
       {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-5 h-5 text-primary animate-spin" />
-        </div>
+        <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>
       ) : grouped.size === 0 ? (
         <VaultSectionEmptyState
           icon={Link2}
@@ -97,45 +95,22 @@ export default function VaultEnrollmentLinked() {
           note="Link entities from an entity's detail page — mark alts, shared wallets, shared IPs, and more."
         />
       ) : (
-        <div className="space-y-2">
-          {[...grouped.entries()].map(([entityId, { name, category, links: eLinks }]) => (
-            <button
-              key={entityId}
-              onClick={() => navigate(`/vault/enrollment/linked/${entityId}`)}
-              className="w-full bg-card border border-card-border rounded-xl p-3.5 flex items-center gap-3 hover:border-primary/30 hover:bg-primary/5 transition-all text-left group"
-            >
-              <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/15 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 group-hover:border-primary/30 transition-colors">
-                <Shield className="w-4 h-4 text-primary/70 group-hover:text-primary transition-colors" />
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <p className="font-mono text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">
-                  {name}
-                </p>
-                <p className="font-mono text-[9px] text-muted-foreground/50 mt-0.5">{category}</p>
-                {/* Relation type preview pills */}
-                <div className="flex flex-wrap gap-2 mt-1.5">
-                  {eLinks.slice(0, 3).map(l => (
-                    <RelationPill key={l.id} relation_type={l.relation_type} />
-                  ))}
-                  {eLinks.length > 3 && (
-                    <span className="font-mono text-[8px] text-muted-foreground/40">
-                      +{eLinks.length - 3} more
-                    </span>
-                  )}
+        <div className="card">
+          {[...grouped.entries()].map(([entityId, { name, category, links: eLinks }]) => {
+            const open = () => navigate(`/vault/enrollment/linked/${entityId}`);
+            const kinds = eLinks.slice(0, 3).map(l => (RELATION_META[l.relation_type] ?? RELATION_META.other).label).join(" · ");
+            return (
+              <div key={entityId} className="row go" role="link" tabIndex={0} onClick={open}
+                onKeyDown={(e) => { if (e.key === "Enter") open(); }} style={{ padding: "14px 18px", cursor: "pointer" }}>
+                <span className="mk">{(name.trim().slice(0, 2) || "··").toUpperCase()}</span>
+                <div className="g">
+                  <b>{name}</b>
+                  <span>{category}{kinds ? ` · ${kinds}` : ""}{eLinks.length > 3 ? ` · +${eLinks.length - 3} more` : ""}</span>
                 </div>
+                <span className="pill">{eLinks.length} link{eLinks.length === 1 ? "" : "s"}</span>
               </div>
-
-              <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
-                <Badge variant="outline" className="font-mono text-[9px] text-primary/70 border-primary/20 bg-primary/5">
-                  {eLinks.length} link{eLinks.length === 1 ? "" : "s"}
-                </Badge>
-                <span className="font-mono text-[8px] text-muted-foreground/30 flex items-center gap-0.5">
-                  View map <ChevronRight className="w-2.5 h-2.5" />
-                </span>
-              </div>
-            </button>
-          ))}
+            );
+          })}
         </div>
       )}
     </VaultSectionPage>
