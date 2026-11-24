@@ -80,6 +80,7 @@ import pluginsRouter from "./plugins";
 import subscriptionsRouter from "./subscriptions";
 import paymentsRouter from "./payments";
 import creditsRouter from "./credits";
+import syloCreditRouter from "./sylo-credit";
 // PHASE 5 — admin credit console: view/reprice/enable-disable metered
 // actions + usage stats. Mounted right next to creditsRouter since it's
 // the admin-facing surface on top of the same credits/credit_transactions
@@ -204,6 +205,7 @@ router.use(referralsRouter);
 router.use(subscriptionsRouter);
 router.use(paymentsRouter);
 router.use(creditsRouter);
+router.use(syloCreditRouter);
 router.use(adminCreditConsoleRouter);
 router.use(telemetryStreamRouter);
 router.use(localAccountsRouter);

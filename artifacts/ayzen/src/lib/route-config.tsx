@@ -100,6 +100,12 @@ const SyloConnectors    = lazy(() => import("@/pages/sylo/connectors"));
 const SyloAccessList    = lazy(() => import("@/pages/sylo/access-list"));
 const SyloAccountNew    = lazy(() => import("@/pages/sylo/account-new"));
 const SyloKycDataNew    = lazy(() => import("@/pages/sylo/kyc-data-new"));
+const SyloCredit        = lazy(() => import("@/pages/sylo/credit"));
+const SyloCreditOrders  = lazy(() => import("@/pages/sylo/credit-orders"));
+const SyloCreditOrder   = lazy(() => import("@/pages/sylo/credit-order-detail"));
+const SyloCreditMethods = lazy(() => import("@/pages/sylo/credit-payment-methods"));
+const SyloCreditMethodNew = lazy(() => import("@/pages/sylo/credit-payment-method-new"));
+const SyloCreditUsage   = lazy(() => import("@/pages/sylo/credit-usage"));
 const VaultHubRedirect  = lazy(() => import("@/pages/sylo/redirects"));
 const VaultEntityDetail = lazy(() => import("@/pages/user/vault-entity-detail"));
 const VaultEntityAccess = lazy(() => import("@/pages/user/vault-entity-access"));
@@ -281,6 +287,13 @@ export const USER_ROUTES: RouteConfig[] = [
   { path: "/vault/settings/connectors", component: SyloConnectors },
   // Access: pick an entity / local account / KYC entry, then open its mailbox + 2FA + backup codes.
   { path: "/vault/access/:kind",   component: SyloAccessList },
+  // Sylo credit storefront: buy AZN, orders, saved payment methods, usage (backend: routes/sylo-credit.ts).
+  { path: "/vault/credit",                         component: SyloCredit },
+  { path: "/vault/credit/orders",                  component: SyloCreditOrders },
+  { path: "/vault/credit/orders/:id",              component: SyloCreditOrder },
+  { path: "/vault/credit/payment-methods/new",     component: SyloCreditMethodNew },
+  { path: "/vault/credit/payment-methods",         component: SyloCreditMethods },
+  { path: "/vault/credit/usage",                   component: SyloCreditUsage },
   { path: "/wallet/settings",      component: ModuleSettings },
   { path: "/finance/settings",     component: ModuleSettings },
   { path: "/marketplace/settings", component: ModuleSettings },

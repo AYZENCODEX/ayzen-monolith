@@ -57,11 +57,12 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
-    key: "credit", label: "Credit", tone: "moss", href: "/credits", match: ["/credits"],
+    key: "credit", label: "Credit", tone: "moss", href: "/vault/credit", match: ["="],
     kids: [
-      { key: "orders", label: "Order", href: "/marketplace/order-history", tone: "moss", match: ["/marketplace/order-history"] },
+      { key: "orders", label: "Order", href: "/vault/credit/orders", tone: "moss", match: ["/vault/credit/orders"] },
       { key: "subscription", label: "Subscription", href: "/subscription", tone: "moss", match: ["/subscription"] },
-      { key: "payment-methods", label: "Payment method", href: "/finance/payment-methods", tone: "moss", match: ["/finance/payment-methods"] },
+      { key: "payment-methods", label: "Payment method", href: "/vault/credit/payment-methods", tone: "moss", match: ["/vault/credit/payment-methods"] },
+      { key: "usage", label: "Usage", href: "/vault/credit/usage", tone: "moss", match: ["/vault/credit/usage"] },
     ],
   },
   { key: "zynth", label: "Zynth AI", tone: "patina", href: "/assistant", match: ["/assistant"] },
