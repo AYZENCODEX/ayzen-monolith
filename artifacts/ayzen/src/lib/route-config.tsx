@@ -48,6 +48,7 @@ const AdminKyc           = lazy(() => import("@/pages/admin/kyc"));
 const AdminEmergencyAccess = lazy(() => import("@/pages/admin/emergency-access"));
 const AdminReferrals     = lazy(() => import("@/pages/admin/referrals"));
 const AdminCreditsPage   = lazy(() => import("@/pages/admin/credits"));
+const AdminSyloCredit    = lazy(() => import("@/pages/admin/sylo-credit"));
 const AdminSubscriptions = lazy(() => import("@/pages/admin/subscriptions"));
 const AdminActivity      = lazy(() => import("@/pages/admin/activity"));
 const AdminCategories    = lazy(() => import("@/pages/admin/categories"));
@@ -242,6 +243,7 @@ export const ADMIN_ROUTES: RouteConfig[] = [
   { path: "/admin/emergency-access", component: AdminEmergencyAccess, adminOnly: true },
   { path: "/admin/referrals",       component: AdminReferrals,     adminOnly: true },
   { path: "/admin/credits",         component: AdminCreditsPage,   adminOnly: true },
+  { path: "/admin/sylo-credit",     component: AdminSyloCredit,    adminOnly: true },
   { path: "/admin/subscriptions",   component: AdminSubscriptions, adminOnly: true },
   { path: "/admin/activity",        component: AdminActivity,      adminOnly: true },
   { path: "/admin/categories",      component: AdminCategories,    adminOnly: true },

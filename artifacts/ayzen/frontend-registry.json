@@ -12,11 +12,11 @@
     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
   ],
   "completeness": {
-    "totalRoutes": 204,
-    "resolvedToPage": 204,
-    "totalPageFiles": 202,
+    "totalRoutes": 205,
+    "resolvedToPage": 205,
+    "totalPageFiles": 203,
     "deadPages": 12,
-    "routesWithNoApiCalls": 140,
+    "routesWithNoApiCalls": 141,
     "routesWithOrphanCalls": 0,
     "routesOk": 64
   },
@@ -68,6 +68,12 @@
       "code": "MOCK_OR_STATIC_PAGE",
       "path": "/admin/emergency-access",
       "pageFile": "pages/admin/emergency-access.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/admin/sylo-credit",
+      "pageFile": "pages/admin/sylo-credit.tsx"
     },
     {
       "severity": "warning",
@@ -1808,6 +1814,19 @@
           }
         ],
         "classification": "OK"
+      }
+    },
+    {
+      "path": "/admin/sylo-credit",
+      "component": "AdminSyloCredit",
+      "adminOnly": true,
+      "allowedRoles": [],
+      "source": "ADMIN_ROUTES",
+      "pageFile": "pages/admin/sylo-credit.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
       }
     },
     {
