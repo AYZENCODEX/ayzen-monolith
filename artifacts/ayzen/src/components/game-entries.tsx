@@ -137,7 +137,7 @@ function TagInput({ value, onChange }: { value: string[]; onChange: (tags: strin
 }
 
 // ─── Create / Edit dialog ───────────────────────────────────────────────────
-function GameDialog({ open, editEntry, onClose, onSaved }: {
+export function GameDialog({ open, editEntry, onClose, onSaved }: {
   open: boolean; editEntry: GameEntry | null; onClose: () => void; onSaved: () => void;
 }) {
   const [step, setStep] = useState<"category" | "form">("category");

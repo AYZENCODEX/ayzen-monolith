@@ -467,7 +467,7 @@ function toFormState(a?: LocalAccount) {
 }
 
 // ─── Account Form Dialog ──────────────────────────────────────────────────────
-function AccountFormDialog({
+export function AccountFormDialog({
   open, onClose, editAccount, selectedCategory, allCategories, onSaved,
 }: {
   open: boolean;
@@ -957,7 +957,7 @@ function AccountFormDialog({
 }
 
 // ─── Add Category Dialog ──────────────────────────────────────────────────────
-function AddCategoryDialog({ open, onClose, onAdded }: { open: boolean; onClose: () => void; onAdded: () => void }) {
+export function AddCategoryDialog({ open, onClose, onAdded }: { open: boolean; onClose: () => void; onAdded: () => void }) {
   const { toast } = useToast();
   const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
