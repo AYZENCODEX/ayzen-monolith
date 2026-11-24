@@ -50,35 +50,28 @@ export default function VaultMailCategory() {
 
   return (
     <VaultSectionPage title={`Mail Hub · ${meta.label}`} description={meta.desc} icon={meta.icon}>
-      {isLoading ? (
-        <div className="flex justify-center py-12"><Loader2 className="w-5 h-5 animate-spin text-primary" /></div>
-      ) : summaries.length === 0 ? (
-        <div className="text-center py-16 space-y-2">
-          <AtSign className="w-8 h-8 text-muted-foreground/30 mx-auto" />
-          <p className="font-mono text-xs text-muted-foreground/50">No {meta.label} entities with an email yet</p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {summaries.map(s => (
-            <button
-              key={`${s.category}-${s.entityId}`}
-              onClick={() => navigate(`/vault/mail-hub/${category}/${s.entityId}`)}
-              className="w-full flex items-center gap-3 px-4 py-3 bg-card border border-card-border rounded-xl hover:border-primary/30 transition-colors text-left"
-            >
-              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                <meta.icon className="w-4 h-4 text-primary" />
+      <div className="card">
+        {isLoading && <div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div>}
+        {!isLoading && summaries.length === 0 && (
+          <div className="row" style={{ padding: "26px 18px", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+            <b style={{ fontWeight: 500 }}>No {meta.label} entities with an email yet</b>
+            <span style={{ fontFamily: "var(--sans)" }}>Addresses saved on an account show up here.</span>
+          </div>
+        )}
+        {!isLoading && summaries.map(s => {
+          const open = () => navigate(`/vault/mail-hub/${category}/${s.entityId}`);
+          return (
+            <div key={`${s.category}-${s.entityId}`} className="row go" role="link" tabIndex={0} onClick={open}
+              onKeyDown={(e) => { if (e.key === "Enter") open(); }} style={{ padding: "14px 18px", cursor: "pointer" }}>
+              <span className="mk">{(s.entityName.trim().slice(0, 2) || "··").toUpperCase()}</span>
+              <div className="g">
+                <b>{s.entityName}</b>
+                <span>{s.items.length} address{s.items.length !== 1 ? "es" : ""} · {s.items.map(i => i.email).join(", ")}</span>
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="font-mono text-xs font-bold truncate">{s.entityName}</p>
-                <p className="font-mono text-[9px] text-muted-foreground/45 truncate">
-                  {s.items.length} address{s.items.length !== 1 ? "es" : ""} · {s.items.map(i => i.email).join(", ")}
-                </p>
-              </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground/30 flex-shrink-0" />
-            </button>
-          ))}
-        </div>
-      )}
+            </div>
+          );
+        })}
+      </div>
     </VaultSectionPage>
   );
 }

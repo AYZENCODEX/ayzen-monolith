@@ -47,46 +47,32 @@ export default function VaultCompliance() {
       description="Export your account & Vault activity for a date range as CSV or PDF"
       icon={FileBarChart}
     >
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm font-mono uppercase tracking-wide flex items-center gap-2">
-            <FileBarChart className="w-4 h-4 text-primary/70" /> Activity Report
-          </CardTitle>
-          <CardDescription className="font-mono text-xs">
+      <div className="card">
+        <header><h3>Activity report</h3><span>CSV or PDF</span></header>
+        <div className="body">
+          <p style={{ margin: "0 0 14px", color: "var(--mu)", fontFamily: "var(--sans)" }}>
             Combines your account activity log and Vault entity activity log into one timeline.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid sm:grid-cols-2 gap-3 max-w-md">
-            <div className="space-y-1.5">
-              <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">From</Label>
-              <Input type="date" value={from} onChange={e => setFrom(e.target.value)} className="font-mono text-sm" />
+          </p>
+          <div className="g2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, maxWidth: 440 }}>
+            <div className="fld">
+              <label htmlFor="rep-from">From</label>
+              <span className="in"><input id="rep-from" type="date" value={from} onChange={e => setFrom(e.target.value)} /></span>
             </div>
-            <div className="space-y-1.5">
-              <Label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">To</Label>
-              <Input type="date" value={to} onChange={e => setTo(e.target.value)} className="font-mono text-sm" />
+            <div className="fld">
+              <label htmlFor="rep-to">To</label>
+              <span className="in"><input id="rep-to" type="date" value={to} onChange={e => setTo(e.target.value)} /></span>
             </div>
           </div>
-        </CardContent>
-        <CardFooter className="flex gap-2 flex-wrap">
-          <Button
-            variant="outline" size="sm" className="font-mono text-xs gap-1.5"
-            disabled={downloading !== null}
-            onClick={() => handleDownload("csv")}
-          >
-            {downloading === "csv" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileSpreadsheet className="w-3.5 h-3.5" />}
-            Download CSV
-          </Button>
-          <Button
-            size="sm" className="font-mono text-xs gap-1.5"
-            disabled={downloading !== null}
-            onClick={() => handleDownload("pdf")}
-          >
-            {downloading === "pdf" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
-            Download PDF
-          </Button>
-        </CardFooter>
-      </Card>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 16 }}>
+            <button type="button" className="btn" disabled={downloading !== null} onClick={() => handleDownload("csv")}>
+              {downloading === "csv" ? "Preparing…" : "Download CSV"}
+            </button>
+            <button type="button" className="btn p" disabled={downloading !== null} onClick={() => handleDownload("pdf")}>
+              {downloading === "pdf" ? "Preparing…" : "Download PDF"}
+            </button>
+          </div>
+        </div>
+      </div>
     </VaultSectionPage>
   );
 }
