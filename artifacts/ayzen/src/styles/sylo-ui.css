@@ -231,3 +231,13 @@ body.sx-portal [data-radix-popper-content-wrapper]{font-family:var(--mono)}
 .sx .tabs button{background:none;border:0;padding:9px 14px;color:var(--mu);font:inherit;font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer}
 .sx .tabs button.on{color:var(--tx);border-color:var(--ac)}
 .sx button.back{background:none;border:0;padding:0;cursor:pointer;font:inherit}
+
+/* shadcn <Card> inside Sylo → the design's .card (header strip, mono eyebrow title) */
+.sx .ui-card{background:var(--s1);border:1px solid var(--line);border-radius:8px;box-shadow:none;color:var(--tx)}
+.sx .ui-card-header{padding:14px 18px;gap:4px;border-bottom:1px solid var(--line)}
+.sx .ui-card-title{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mu);line-height:1.3}
+.sx .ui-card-title *{font:inherit;letter-spacing:inherit;text-transform:inherit}
+.sx .ui-card-desc{font:400 12.5px var(--sans);color:var(--mu);text-transform:none;letter-spacing:0}
+.sx .ui-card-content{padding:16px 18px}
+.sx .ui-card-header+.ui-card-content{padding-top:16px}
+.sx .ui-card-footer{padding:14px 18px;border-top:1px solid var(--line)}

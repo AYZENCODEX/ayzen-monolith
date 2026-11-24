@@ -26,7 +26,7 @@ export function Reveal({ value }: { value: string }) {
 
 export function EntryDetail(props: {
   backHref: string; backLabel: string; eyebrow: string; title: string; sub?: string;
-  badge?: ReactNode; manageHref: string; kpis: [string, ReactNode, ReactNode?][];
+  badge?: ReactNode; manageHref: string; manageLabel?: string; kpis: [string, ReactNode, ReactNode?][];
   sections: DetailSection[]; extra?: ReactNode;
   onDelete: () => void; deleting: boolean; deleteError?: string | null; tone?: string;
 }) {
@@ -35,7 +35,7 @@ export function EntryDetail(props: {
     <div className={`stack ${props.tone ?? "t-patina"}`}>
       <Back href={props.backHref} label={props.backLabel} />
       <Head eyebrow={props.eyebrow} title={props.title} sub={props.sub}
-        acts={<>{props.badge}<Link href={props.manageHref} className="btn p">Edit &amp; mail / 2FA</Link></>} />
+        acts={<>{props.badge}<Link href={props.manageHref} className="btn p">{props.manageLabel ?? "Edit & mail / 2FA"}</Link></>} />
       <Kpis items={props.kpis} />
       {props.sections.map((s) => {
         const rows = s.rows.filter((r) => r.value !== null && r.value !== undefined && r.value !== "");
