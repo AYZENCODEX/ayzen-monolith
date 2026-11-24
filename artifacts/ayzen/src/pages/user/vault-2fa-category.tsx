@@ -46,6 +46,30 @@ function computeRows(category: Exclude<Category, "overview" | "other">, vaultDat
     .map(e => ({ id: e.id, name: e.name ?? e.username ?? e.platform ?? e.category ?? `#${e.id}`, count: 1 }));
 }
 
+
+function TwoFaRow({ name, sub, onOpen }: { name: string; sub: string; onOpen: () => void }) {
+  return (
+    <div className="row go" role="link" tabIndex={0} onClick={onOpen} onKeyDown={(e) => { if (e.key === "Enter") onOpen(); }}
+      style={{ padding: "14px 18px", cursor: "pointer" }}>
+      <span className="mk">{(name.trim().slice(0, 2) || "··").toUpperCase()}</span>
+      <div className="g"><b>{name}</b><span>{sub}</span></div>
+    </div>
+  );
+}
+
+function Empty({ title, note }: { title: string; note: string }) {
+  return (
+    <div className="card">
+      <div className="row" style={{ padding: "26px 18px", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+        <b style={{ fontWeight: 500 }}>{title}</b>
+        <span style={{ fontFamily: "var(--sans)" }}>{note}</span>
+      </div>
+    </div>
+  );
+}
+
+const Loading = () => <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>;
+
 // ─── Other (flat, no entity drill-down) ────────────────────────────────────────
 interface OtherEntry { id: number; label: string; secret: string; notes: string | null; created_at: string; }
 
@@ -93,7 +117,7 @@ function OtherTwoFaList() {
     setDeleteId(null);
   };
 
-  if (loading) return <div className="flex justify-center py-10"><Loader2 className="w-5 h-5 animate-spin text-primary" /></div>;
+  if (loading) return <Loading />;
 
   return (
     <div className="space-y-4">
@@ -104,10 +128,7 @@ function OtherTwoFaList() {
         </Button>
       </div>
       {entries.length === 0 ? (
-        <div className="text-center py-16 space-y-2">
-          <QrCode className="w-8 h-8 text-muted-foreground/30 mx-auto" />
-          <p className="font-mono text-xs text-muted-foreground/50">No manual 2FA entries</p>
-        </div>
+        <Empty title="No manual 2FA entries" note="Add a TOTP secret to see a live code here." />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {entries.map(e => (
@@ -179,34 +200,19 @@ function EntityTwoFaList({ category }: { category: Exclude<Category, "overview" 
   const isLoading = category === "entity" ? vaultLoading : loading;
   const Icon = CATEGORY_META[category].icon;
 
-  if (isLoading) return <div className="flex justify-center py-12"><Loader2 className="w-5 h-5 animate-spin text-primary" /></div>;
+  if (isLoading) return <Loading />;
 
   if (rows.length === 0) {
     return (
-      <div className="text-center py-16 space-y-2">
-        <Icon className="w-8 h-8 text-muted-foreground/30 mx-auto" />
-        <p className="font-mono text-xs text-muted-foreground/50">No {CATEGORY_META[category].label} entities with 2FA yet</p>
-      </div>
+      <Empty title={`No ${CATEGORY_META[category].label} entities with 2FA yet`} note="2FA secrets you save on an account show up here." />
     );
   }
 
   return (
-    <div className="space-y-2">
+    <div className="card">
       {rows.map(row => (
-        <button
-          key={row.id}
-          onClick={() => navigate(`/vault/2fa/${category}/${row.id}`)}
-          className="w-full flex items-center gap-3 px-4 py-3 bg-card border border-card-border rounded-xl hover:border-primary/30 transition-colors text-left"
-        >
-          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-            <Icon className="w-4 h-4 text-primary" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="font-mono text-xs font-bold truncate">{row.name}</p>
-            <p className="font-mono text-[9px] text-muted-foreground/45">{row.count} 2FA code{row.count !== 1 ? "s" : ""}</p>
-          </div>
-          <ChevronRight className="w-4 h-4 text-muted-foreground/30 flex-shrink-0" />
-        </button>
+        <TwoFaRow key={row.id} name={row.name} sub={`${row.count} 2FA code${row.count !== 1 ? "s" : ""}`}
+          onOpen={() => navigate(`/vault/2fa/${category}/${row.id}`)} />
       ))}
     </div>
   );
@@ -243,43 +249,26 @@ function OverviewTwoFaList() {
   const isLoading = vaultLoading || loading;
   const totalCodes = rows.reduce((sum, r) => sum + r.count, 0);
 
-  if (isLoading) return <div className="flex justify-center py-12"><Loader2 className="w-5 h-5 animate-spin text-primary" /></div>;
+  if (isLoading) return <Loading />;
 
   if (rows.length === 0) {
     return (
-      <div className="text-center py-16 space-y-2">
-        <LayoutDashboard className="w-8 h-8 text-muted-foreground/30 mx-auto" />
-        <p className="font-mono text-xs text-muted-foreground/50">No 2FA codes stored yet</p>
-      </div>
+      <Empty title="No 2FA codes stored yet" note="2FA secrets you save on an account show up here." />
     );
   }
 
   return (
-    <div className="space-y-2">
-      <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/50 px-1">
-        {rows.length} account{rows.length !== 1 ? "s" : ""} · {totalCodes} 2FA code{totalCodes !== 1 ? "s" : ""}
-      </p>
-      {rows.map(row => {
-        const Icon = CATEGORY_META[row.category].icon;
-        return (
-          <button
-            key={`${row.category}-${row.id}`}
-            onClick={() => navigate(`/vault/2fa/${row.category}/${row.id}`)}
-            className="w-full flex items-center gap-3 px-4 py-3 bg-card border border-card-border rounded-xl hover:border-primary/30 transition-colors text-left"
-          >
-            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-              <Icon className="w-4 h-4 text-primary" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="font-mono text-xs font-bold truncate">{row.name}</p>
-              <p className="font-mono text-[9px] text-muted-foreground/45">
-                {CATEGORY_META[row.category].label} · {row.count} 2FA code{row.count !== 1 ? "s" : ""}
-              </p>
-            </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground/30 flex-shrink-0" />
-          </button>
-        );
-      })}
+    <div className="card">
+      <div className="tool">
+        <span className="mono" style={{ flex: 1, fontSize: 11, color: "var(--mu)", letterSpacing: ".08em", textTransform: "uppercase" }}>
+          {rows.length} account{rows.length !== 1 ? "s" : ""} · {totalCodes} 2FA code{totalCodes !== 1 ? "s" : ""}
+        </span>
+      </div>
+      {rows.map(row => (
+        <TwoFaRow key={`${row.category}-${row.id}`} name={row.name}
+          sub={`${CATEGORY_META[row.category].label} · ${row.count} 2FA code${row.count !== 1 ? "s" : ""}`}
+          onOpen={() => navigate(`/vault/2fa/${row.category}/${row.id}`)} />
+      ))}
     </div>
   );
 }
