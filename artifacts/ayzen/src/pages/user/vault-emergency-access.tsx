@@ -78,106 +78,60 @@ export default function VaultEmergencyAccess() {
       title="Emergency Access"
       description="Nominate a trusted contact who can request access if you go inactive"
       icon={HeartPulse}
-      headerExtra={
-        <Button size="sm" className="font-mono text-xs gap-1.5" onClick={() => setAddOpen(true)}>
-          <Plus className="w-3.5 h-3.5" /> Add Contact
-        </Button>
-      }
+      headerExtra={<button type="button" className="btn p" onClick={() => setAddOpen(true)}>+ Add contact</button>}
     >
       {loading ? (
-        <div className="flex items-center justify-center py-20"><Loader2 className="w-6 h-6 text-primary animate-spin" /></div>
+        <div className="card"><div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div></div>
       ) : (
-        <div className="space-y-4">
-          {pendingGrants.length > 0 && (
-            <div className="space-y-2">
-              {pendingGrants.map(g => {
-                const contact = contacts.find(c => c.id === g.contactId);
-                return (
-                  <div key={g.id} className="bg-amber-500/5 border border-amber-500/25 rounded-lg p-3 flex items-start justify-between gap-3 flex-wrap">
-                    <div className="flex items-start gap-2.5">
-                      <ShieldAlert className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="font-mono text-xs text-amber-400 font-bold">Emergency access triggered</p>
-                        <p className="font-mono text-[10px] text-muted-foreground/60 mt-0.5">
-                          {contact?.contactName ?? "A nominated contact"} is eligible after inactivity. Triggered {new Date(g.triggeredAt).toLocaleString()}.
-                          Still needs admin approval — cancel below if you're okay.
-                        </p>
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline" size="sm" className="font-mono text-xs gap-1.5 border-amber-500/30 text-amber-400 flex-shrink-0"
-                      onClick={() => handleCancelGrant(g.id)}
-                    >
-                      <XCircle className="w-3.5 h-3.5" /> I'm here — cancel
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-mono uppercase tracking-wide flex items-center gap-2">
-                <HeartPulse className="w-4 h-4 text-primary/70" /> Trusted Contacts
-              </CardTitle>
-              <CardDescription className="font-mono text-xs">
-                If you're inactive past a contact's wait period, they become eligible to request vault
-                access — final access still requires admin approval.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {contacts.length === 0 ? (
-                <VaultSectionEmptyState
-                  icon={HeartPulse}
-                  title="No trusted contacts yet"
-                  note="Add a contact so someone you trust can request access if something happens to you."
-                />
-              ) : (
-                <div className="space-y-2">
-                  {contacts.map(c => (
-                    <div key={c.id} className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-border/30 bg-card">
-                      <div className="min-w-0 flex items-center gap-2.5">
-                        <Mail className="w-4 h-4 text-muted-foreground/50 flex-shrink-0" />
-                        <div className="min-w-0">
-                          <p className="font-mono text-xs font-bold truncate">{c.contactName}</p>
-                          <p className="font-mono text-[10px] text-muted-foreground/50 truncate">{c.contactEmail}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2.5 flex-shrink-0">
-                        <span className="font-mono text-[10px] text-muted-foreground/60 flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> {c.waitDays}d
-                        </span>
-                        <span className={`font-mono text-[9px] uppercase px-1.5 py-0.5 rounded ${c.confirmedAt ? "bg-emerald-500/10 text-emerald-400" : "bg-muted/30 text-muted-foreground/50"}`}>
-                          {c.confirmedAt ? "Confirmed" : "Awaiting confirmation"}
-                        </span>
-                        {c.status === "active" && (
-                          <button onClick={() => handleRevoke(c.id)} className="text-muted-foreground/40 hover:text-red-400 transition-colors">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+        <div className="stack">
+          {pendingGrants.map(g => {
+            const contact = contacts.find(c => c.id === g.contactId);
+            return (
+              <div key={g.id} className="note" role="alert" style={{ display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
+                <div style={{ flex: 1, minWidth: 220 }}>
+                  <b>Emergency access triggered</b>
+                  {contact?.contactName ?? "A nominated contact"} is eligible after inactivity. Triggered {new Date(g.triggeredAt).toLocaleString()}.
+                  Still needs admin approval — cancel below if you're okay.
                 </div>
-              )}
-            </CardContent>
-          </Card>
+                <button type="button" className="btn sm" onClick={() => handleCancelGrant(g.id)}>I'm here — cancel</button>
+              </div>
+            );
+          })}
+
+          <div className="card">
+            <header><h3>Trusted contacts</h3><span>{contacts.length}</span></header>
+            <p style={{ margin: 0, padding: "12px 18px", color: "var(--mu)", fontFamily: "var(--sans)", borderBottom: "1px solid var(--line)" }}>
+              If you're inactive past a contact's wait period, they become eligible to request vault
+              access — final access still requires admin approval.
+            </p>
+            {contacts.length === 0 ? (
+              <VaultSectionEmptyState
+                icon={HeartPulse}
+                title="No trusted contacts yet"
+                note="Add a contact so someone you trust can request access if something happens to you."
+              />
+            ) : contacts.map(c => (
+              <div key={c.id} className="row" style={{ padding: "14px 18px", gap: 12, flexWrap: "wrap" }}>
+                <span className="mk">{(c.contactName.trim().slice(0, 2) || "··").toUpperCase()}</span>
+                <div className="g"><b>{c.contactName}</b><span>{c.contactEmail} · waits {c.waitDays}d</span></div>
+                <span className={`pill${c.confirmedAt ? " ok" : ""}`}>{c.confirmedAt ? "Confirmed" : "Awaiting confirmation"}</span>
+                {c.status === "active" && (
+                  <button type="button" className="btn sm g" onClick={() => handleRevoke(c.id)} aria-label={`Revoke ${c.contactName}`}>Revoke</button>
+                )}
+              </div>
+            ))}
+          </div>
 
           {otherGrants.length > 0 && (
-            <Card className="border-dashed border-border/40 bg-muted/10">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-mono uppercase tracking-wide">Past Requests</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-1.5">
-                {otherGrants.map(g => (
-                  <div key={g.id} className="flex items-center justify-between font-mono text-[10px] text-muted-foreground/60">
-                    <span>{new Date(g.triggeredAt).toLocaleDateString()}</span>
-                    <span>{GRANT_STATUS_LABEL[g.status]}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
+            <div className="card">
+              <header><h3>Past requests</h3><span>{otherGrants.length}</span></header>
+              {otherGrants.map(g => (
+                <div key={g.id} className="row" style={{ padding: "12px 18px" }}>
+                  <div className="g"><span>{new Date(g.triggeredAt).toLocaleDateString()}</span></div>
+                  <span className="pill">{GRANT_STATUS_LABEL[g.status]}</span>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       )}

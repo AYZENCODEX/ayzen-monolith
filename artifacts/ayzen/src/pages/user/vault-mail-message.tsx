@@ -53,19 +53,17 @@ export default function VaultMailMessage() {
   const codes = msg ? extractVerificationCodes(msg.body || "") : [];
 
   return (
-    <div className="space-y-4 page-enter max-w-3xl">
-      <Button variant="ghost" size="sm" onClick={goBack} className="font-mono text-xs gap-1.5 -ml-2">
-        <ChevronLeft className="w-3.5 h-3.5" /> Back to Inbox
-      </Button>
+    <div className="stack page-enter">
+      <button type="button" className="back" onClick={goBack}>‹ Back to inbox</button>
 
       {loading && (
         <div className="flex items-center justify-center min-h-[40vh]">
-          <Loader2 className="w-6 h-6 text-primary animate-spin" />
+          <span className="mono" role="status" style={{ color: "var(--mu)" }}>Loading…</span>
         </div>
       )}
 
       {!loading && error && (
-        <div className="flex items-start gap-2 text-red-400 bg-red-500/5 border border-red-500/20 rounded-xl px-4 py-3">
+        <div className="note" role="alert">
           <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
           <div>
             <p className="font-mono text-xs font-bold">Couldn't load this email</p>
