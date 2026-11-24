@@ -4,7 +4,7 @@
  * Add opens the create page. The previous manager (bulk share, selection,
  * category editing) stays one click away via ?legacy=1.
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
@@ -46,6 +46,52 @@ const CFG: Record<AccountSection, Cfg> = {
 
 const mark = (s: string) => (s.trim().slice(0, 2) || "··").toUpperCase();
 
+
+/** Quick view: the few facts you check most, in a bottom sheet. Secrets are never shown here. */
+function quickRows(section: AccountSection, r: any): [string, string | null][] {
+  const v = (x: unknown) => (x === null || x === undefined || x === "" ? null : String(x));
+  const d = (x: unknown) => (x ? new Date(String(x)).toISOString().slice(0, 10) : null);
+  const money = (x: unknown) => (x === null || x === undefined ? null : `$${Number(x).toLocaleString()}`);
+  switch (section) {
+    case "entity": return [["Serial", v(r.entitySerial)], ["Email", v(r.email)], ["Twitter", v(r.twitterUsername)], ["Discord", v(r.discordUsername)], ["Telegram", v(r.telegramUsername)], ["Wallets", String((r.walletAddresses ?? []).length)], ["Added", d(r.createdAt)]];
+    case "local": return [["Platform", v(r.category)], ["Username", v(r.username)], ["Email", v(r.email)], ["Worth", money(r.account_worth)], ["Buy price", money(r.buy_price)], ["Followers", v(r.followers)], ["2FA", r.twofa ? "Saved" : "Missing"], ["Last login", d(r.account_last_login_date)]];
+    case "kyc": return [["Platform", v(r.platform ?? r.category)], ["Name", v(r.name)], ["Username", v(r.username)], ["Email", v(r.email)], ["Worth", money(r.account_worth)], ["Last login", d(r.last_login_at)], ["Status", v(r.status)]];
+    default: return [["Platform", v(r.category)], ["Username", v(r.username)], ["Email", v(r.email)], ["Rank", v(r.rank)], ["Level", v(r.level)], ["Account age", v(r.account_age)]];
+  }
+}
+
+function QuickView({ section, row, onClose, onEdit }: { section: AccountSection; row: Row; onClose: () => void; onEdit: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  const rows = quickRows(section, row.raw).filter(([, val]) => val);
+  return (
+    <>
+      <div className="scrim" onClick={onClose} aria-hidden="true" />
+      <div className="sheet" role="dialog" aria-modal="true" aria-label={`Quick view: ${row.name}`}>
+        <div className="mono" style={{ fontSize: 10, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--ac)" }}>Quick view · {row.cat}</div>
+        <h2 style={{ margin: "6px 0 14px", fontFamily: "var(--serif)", fontWeight: 400, fontSize: 24 }}>{row.name}</h2>
+        {rows.map(([k, val]) => (
+          <div className="row" key={k} style={{ padding: "10px 0" }}>
+            <span className="mono" style={{ width: 110, flex: "none", color: "var(--di)", fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase" }}>{k}</span>
+            <span className="mono" style={{ color: "var(--tx)", overflowWrap: "anywhere" }}>{val}</span>
+          </div>
+        ))}
+        <p style={{ margin: "12px 0 0", color: "var(--di)", fontSize: 12 }}>Passwords and codes aren’t shown here — open the full page to reveal them.</p>
+        <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
+          <Link href={row.href} className="btn p">Open full page</Link>
+          {section === "entity"
+            ? <Link href={`/vault/entity/${row.id}/manage`} className="btn">Edit</Link>
+            : <button type="button" className="btn" onClick={onEdit}>Edit</button>}
+          <button type="button" className="btn g" onClick={onClose}>Close</button>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function ManageList({ section }: { section: AccountSection }) {
   const cfg = CFG[section];
   const { toast } = useToast();
@@ -57,6 +103,7 @@ export function ManageList({ section }: { section: AccountSection }) {
   const [share, setShare] = useState<{ items: ShareTarget[]; label?: string } | null>(null);
   const [managing, setManaging] = useState(false);
   const [editing, setEditing] = useState<any | null>(null);
+  const [quick, setQuick] = useState<Row | null>(null);
   const [addCat, setAddCat] = useState(false);
   const query = useQuery({ queryKey: ["sylo", "manage", section], queryFn: () => customFetch<any[]>(cfg.url) });
   const cats = useQuery({
@@ -146,6 +193,7 @@ export function ManageList({ section }: { section: AccountSection }) {
           </div>
           {open === r.id && (
             <div className="tool" style={{ borderBottom: 0, paddingTop: 0, flexWrap: "wrap" }}>
+              <button type="button" className="btn sm" onClick={() => setQuick(r)}>Quick view</button>
               {section === "entity"
                 ? <Link href={`/vault/entity/${r.id}/manage`} className="btn sm">Edit</Link>
                 : <button type="button" className="btn sm" onClick={() => setEditing(r.raw)}>Edit</button>}
@@ -159,6 +207,7 @@ export function ManageList({ section }: { section: AccountSection }) {
         </div>
       ))}
 
+      {quick && <QuickView section={section} row={quick} onClose={() => setQuick(null)} onEdit={() => { setEditing(quick.raw); setQuick(null); }} />}
       <ShareEntityDialog open={share !== null} onClose={() => setShare(null)} items={share?.items ?? []} entityLabel={share?.label} onShared={() => setPicked(new Set())} />
       <ManageSharesDialog open={managing} onClose={() => setManaging(false)} entityType={section} />
       {section === "local" && (
