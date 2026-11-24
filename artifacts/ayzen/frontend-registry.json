@@ -12,11 +12,11 @@
     "reports/lineage/lineage.json (Phase 04 -- backend endpoint resolution)"
   ],
   "completeness": {
-    "totalRoutes": 206,
-    "resolvedToPage": 206,
-    "totalPageFiles": 204,
-    "deadPages": 12,
-    "routesWithNoApiCalls": 142,
+    "totalRoutes": 208,
+    "resolvedToPage": 208,
+    "totalPageFiles": 208,
+    "deadPages": 14,
+    "routesWithNoApiCalls": 144,
     "routesWithOrphanCalls": 0,
     "routesOk": 64
   },
@@ -432,6 +432,12 @@
     {
       "severity": "warning",
       "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/local/:id",
+      "pageFile": "pages/sylo/local-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
       "path": "/vault/game/:id",
       "pageFile": "pages/sylo/game-detail.tsx"
     },
@@ -474,8 +480,14 @@
     {
       "severity": "warning",
       "code": "MOCK_OR_STATIC_PAGE",
-      "path": "/vault/kyc/:id",
+      "path": "/vault/kyc/:id/manage",
       "pageFile": "pages/user/vault-kyc-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "MOCK_OR_STATIC_PAGE",
+      "path": "/vault/kyc/:id",
+      "pageFile": "pages/sylo/kyc-detail.tsx"
     },
     {
       "severity": "warning",
@@ -892,6 +904,16 @@
       "severity": "warning",
       "code": "DEAD_PAGE",
       "pageFile": "pages/sylo/credit-ui.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/sylo/entry-detail.tsx"
+    },
+    {
+      "severity": "warning",
+      "code": "DEAD_PAGE",
+      "pageFile": "pages/sylo/manage-list.tsx"
     },
     {
       "severity": "warning",
@@ -4127,7 +4149,7 @@
       }
     },
     {
-      "path": "/vault/local/:id",
+      "path": "/vault/local/:id/manage",
       "component": "VaultLocalDetail",
       "adminOnly": false,
       "allowedRoles": [],
@@ -4147,6 +4169,19 @@
           }
         ],
         "classification": "OK"
+      }
+    },
+    {
+      "path": "/vault/local/:id",
+      "component": "SyloLocalDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/local-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
       }
     },
     {
@@ -4241,12 +4276,25 @@
       }
     },
     {
-      "path": "/vault/kyc/:id",
+      "path": "/vault/kyc/:id/manage",
       "component": "VaultKycDetail",
       "adminOnly": false,
       "allowedRoles": [],
       "source": "USER_ROUTES",
       "pageFile": "pages/user/vault-kyc-detail.tsx",
+      "resolution": {
+        "status": "resolved",
+        "apiCalls": [],
+        "classification": "MOCK_OR_STATIC_PAGE"
+      }
+    },
+    {
+      "path": "/vault/kyc/:id",
+      "component": "SyloKycDetail",
+      "adminOnly": false,
+      "allowedRoles": [],
+      "source": "USER_ROUTES",
+      "pageFile": "pages/sylo/kyc-detail.tsx",
       "resolution": {
         "status": "resolved",
         "apiCalls": [],
@@ -6330,6 +6378,8 @@
     "pages/modules/landing.tsx",
     "pages/not-found.tsx",
     "pages/sylo/credit-ui.tsx",
+    "pages/sylo/entry-detail.tsx",
+    "pages/sylo/manage-list.tsx",
     "pages/user/marketplace-nft.tsx",
     "pages/user/nft-marketplace.tsx",
     "pages/user/vault-entity-dashboard.tsx",
