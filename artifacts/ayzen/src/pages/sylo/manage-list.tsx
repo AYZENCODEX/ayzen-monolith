@@ -28,7 +28,7 @@ interface Cfg {
 const CFG: Record<AccountSection, Cfg> = {
   entity: {
     url: "/api/vault", label: "entity", del: (id) => `/api/vault/${id}`, href: (id) => `/vault/entity/${id}`,
-    map: (e) => ({ id: e.id, name: e.projectName || `Entity #${e.id}`, sub: e.entitySerial || "Entity", cat: e.status && e.status !== "active" ? e.status : "active", tag: e.status && e.status !== "active" ? e.status : undefined }),
+    map: (e) => ({ id: e.id, name: e.projectName || `Entity #${e.id}`, sub: e.entitySerial || "Entity", cat: e.status && e.status !== "active" ? e.status : "active", tag: e.status && e.status !== "active" ? e.status : undefined, banned: e.status === "banned" }),
   },
   local: {
     url: "/api/local-accounts", label: "account", del: (id) => `/api/local-accounts/${id}`, status: (id) => `/api/local-accounts/${id}/status`, href: (id) => `/vault/local/${id}`,
@@ -105,6 +105,7 @@ export function ManageList({ section }: { section: AccountSection }) {
   const [editing, setEditing] = useState<any | null>(null);
   const [quick, setQuick] = useState<Row | null>(null);
   const [addCat, setAddCat] = useState(false);
+  const [bulkTag, setBulkTag] = useState("");
   const query = useQuery({ queryKey: ["sylo", "manage", section], queryFn: () => customFetch<any[]>(cfg.url) });
   const cats = useQuery({
     queryKey: ["sylo", "manage", "local-cats"], enabled: section === "local",
@@ -133,7 +134,22 @@ export function ManageList({ section }: { section: AccountSection }) {
     try { await customFetch(cfg.del(id), { method: "DELETE" }); toast({ title: "Deleted" }); setConfirmDel(null); setOpen(null); refresh(); }
     catch { toast({ variant: "destructive", title: "Delete failed" }); }
   }
+  /** Entity only: /api/vault/bulk-action (tag add/remove or status), per-id results. */
+  async function bulk(body: Record<string, unknown>, done: string) {
+    const ids = Array.from(picked);
+    try {
+      const out = await customFetch<{ results?: { ok: boolean }[] }>("/api/vault/bulk-action", { method: "PATCH", body: JSON.stringify({ ids, ...body }) });
+      const ok = out?.results ? out.results.filter((x) => x.ok).length : ids.length;
+      toast({ title: `${done}: ${ok} of ${ids.length}` });
+      setBulkTag(""); setPicked(new Set()); refresh();
+    } catch { toast({ variant: "destructive", title: "Bulk action failed" }); }
+  }
   async function ban(r: Row) {
+    if (section === "entity") {
+      try { await customFetch("/api/vault/bulk-action", { method: "PATCH", body: JSON.stringify({ ids: [r.id], action: "status", status: r.banned ? "active" : "banned" }) }); toast({ title: r.banned ? "Unbanned" : "Banned" }); refresh(); }
+      catch { toast({ variant: "destructive", title: "Couldn’t update ban status" }); }
+      return;
+    }
     if (!cfg.status) return;
     const next = r.banned ? "active" : "banned";
     try { await customFetch(cfg.status(r.id), { method: "PATCH", body: JSON.stringify({ status: next }) }); toast({ title: next === "banned" ? "Banned — now under Banned" : "Unbanned" }); refresh(); }
@@ -163,13 +179,24 @@ export function ManageList({ section }: { section: AccountSection }) {
         {section === "local" && <button type="button" className="btn sm" onClick={() => setAddCat(true)}>+ Category</button>}
         {customSel && <button type="button" className="btn sm" onClick={() => void removeCategory()}>Remove “{customSel.name}”</button>}
         <button type="button" className="btn sm" onClick={() => setManaging(true)}>Manage shares</button>
-        <Link href="?legacy=1" className="btn sm g" title="Previous manager: bulk tag/status, import and more">Advanced</Link>
+        <Link href="?legacy=1" className="btn sm g" title="Previous manager (includes import)">Advanced</Link>
       </div>
       {picked.size > 0 && (
         <div className="tool">
           <span className="mono" style={{ flex: 1, color: "var(--mu)", fontSize: 12 }}>{picked.size} selected</span>
           <button type="button" className="btn sm p" onClick={() => setShare({ items: shareTargets(Array.from(picked)) })}>Share selected</button>
           <button type="button" className="btn sm g" onClick={() => setPicked(new Set())}>Clear</button>
+        </div>
+      )}
+      {section === "entity" && picked.size > 0 && (
+        <div className="tool" style={{ flexWrap: "wrap" }}>
+          <input className="in" style={{ flex: 1, minWidth: 120 }} placeholder="Tag" value={bulkTag} onChange={(e) => setBulkTag(e.target.value)} aria-label="Tag" />
+          <button type="button" className="btn sm" disabled={!bulkTag.trim()} onClick={() => void bulk({ action: "tag", tag: bulkTag, tagAction: "add" }, "Tag added")}>Add tag</button>
+          <button type="button" className="btn sm" disabled={!bulkTag.trim()} onClick={() => void bulk({ action: "tag", tag: bulkTag, tagAction: "remove" }, "Tag removed")}>Remove tag</button>
+          <select className="in" defaultValue="" aria-label="Set status" onChange={(e) => { const v = e.target.value; e.target.value = ""; if (v) void bulk({ action: "status", status: v }, `Status ${v}`); }}>
+            <option value="">Set status…</option>
+            {["active", "warning", "suspended", "banned"].map((x) => <option key={x} value={x}>{x}</option>)}
+          </select>
         </div>
       )}
       {query.isPending && <div className="row" style={{ padding: "14px 18px" }} role="status"><div className="g"><b>Loading…</b></div></div>}
@@ -198,7 +225,7 @@ export function ManageList({ section }: { section: AccountSection }) {
                 ? <Link href={`/vault/entity/${r.id}/manage`} className="btn sm">Edit</Link>
                 : <button type="button" className="btn sm" onClick={() => setEditing(r.raw)}>Edit</button>}
               <button type="button" className="btn sm" onClick={() => setShare({ items: shareTargets([r.id]), label: r.name })}>Share</button>
-              {cfg.status && <button type="button" className="btn sm" onClick={() => void ban(r)}>{r.banned ? "Unban" : "Ban"}</button>}
+              {(cfg.status || section === "entity") && <button type="button" className="btn sm" onClick={() => void ban(r)}>{r.banned ? "Unban" : "Ban"}</button>}
               <button type="button" className="btn sm" onClick={() => (confirmDel === r.id ? void remove(r.id) : setConfirmDel(r.id))}>
                 {confirmDel === r.id ? "Confirm delete" : "Delete"}
               </button>
