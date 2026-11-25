@@ -241,3 +241,13 @@ body.sx-portal [data-radix-popper-content-wrapper]{font-family:var(--mono)}
 .sx .ui-card-content{padding:16px 18px}
 .sx .ui-card-header+.ui-card-content{padding-top:16px}
 .sx .ui-card-footer{padding:14px 18px;border-top:1px solid var(--line)}
+
+/* Dense legacy bodies (Security, Snapshot, Wallet seed): mobile-comfortable sizing without touching their logic */
+.sx [class*="text-[9px]"],.sx [class*="text-[10px]"]{font-size:11.5px!important;line-height:1.5}
+.sx .text-xs{font-size:13px;line-height:1.55}
+.sx input:not([type=checkbox]):not([type=radio]),.sx select,.sx textarea,.sx [role=combobox]{min-height:42px;font-size:14px}
+.sx button[class*="h-7"],.sx button[class*="h-8"],.sx button[class*="h-9"]{min-height:38px}
+.sx [role=switch]{flex-shrink:0}
+.sx pre,.sx code{overflow-wrap:anywhere;white-space:pre-wrap}
+.sx .grid.sm\:grid-cols-2,.sx .grid.sm\:grid-cols-3{gap:14px}
+@media(max-width:640px){.sx .ui-card,.sx [class*="rounded-lg"][class*="border"]{border-radius:14px}.sx .flex.items-center.justify-between.gap-2{flex-wrap:wrap}}
