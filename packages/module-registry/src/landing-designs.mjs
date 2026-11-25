@@ -61,6 +61,17 @@ const CTA_SCRIPT = `<script>document.addEventListener("click",function(e){var b=
 /** A plain crawlable link from the landing to the long-form /about page (and the AI text files). */
 const ABOUT_LINK = (c) => `<p data-about-link style="text-align:center;margin:0;padding:18px 16px;font:14px/1.5 system-ui,sans-serif;opacity:.75"><a href="/about" style="color:inherit">About ${esc(c.label)}: features, how it works and FAQ</a> · <a href="/llms.txt" style="color:inherit">llms.txt</a></p>`;
 
+/** Sylo public menu: fixed top-right 3-bar button -> slide-in sidebar (Login, Sign up, public account pages, Access, Docs, About). Only for modules with docs. */
+const MENU_LINKS = [
+  ["Login", "/login"], ["Sign up", "/register"], null,
+  ["Entity", "/docs/utility/entity-system"], ["Local", "/docs/utility/local-account-and-exchange"], ["KYC", "/docs"], ["Game", "/docs"], null,
+  ["Access", "/docs/utility/sylo-core-and-access"], ["Docs", "/docs"], ["About", "/about"],
+];
+const SITE_MENU = `<style>#sx-mb{position:fixed;top:14px;right:14px;z-index:2147483001;width:44px;height:44px;border-radius:12px;border:1px solid rgba(128,128,128,.35);background:rgba(20,20,20,.85);color:#fff;display:grid;place-content:center;gap:5px;cursor:pointer}#sx-mb i{display:block;width:20px;height:2px;background:currentColor;border-radius:2px}#sx-sc{position:fixed;inset:0;z-index:2147483002;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s}#sx-sd{position:fixed;top:0;right:0;bottom:0;width:min(300px,84vw);z-index:2147483003;background:#111;color:#fff;font:15px/1.4 system-ui,sans-serif;padding:70px 20px 24px;transform:translateX(100%);transition:transform .22s;overflow:auto;display:flex;flex-direction:column;gap:2px}#sx-sd a{color:inherit;text-decoration:none;padding:12px 10px;border-radius:10px}#sx-sd a:hover,#sx-sd a:focus-visible{background:rgba(255,255,255,.1)}#sx-sd hr{border:0;border-top:1px solid rgba(255,255,255,.15);margin:8px 0}#sx-sd small{opacity:.55;padding:6px 10px;text-transform:uppercase;letter-spacing:.08em;font-size:11px}body.sx-open #sx-sc{opacity:1;pointer-events:auto}body.sx-open #sx-sd{transform:none}@media(prefers-reduced-motion:reduce){#sx-sd,#sx-sc{transition:none}}</style>
+<button id="sx-mb" type="button" aria-label="Menu" aria-expanded="false" aria-controls="sx-sd"><i></i><i></i><i></i></button><div id="sx-sc"></div>
+<nav id="sx-sd" aria-label="Menu">${MENU_LINKS.map((l, i) => (l ? (i === 3 ? "<small>Accounts</small>" : "") + `<a href="${l[1]}">${l[0]}</a>` : "<hr>")).join("")}</nav>
+<script>(function(){var b=document.getElementById("sx-mb"),d=document.body;function t(o){d.classList.toggle("sx-open",o);b.setAttribute("aria-expanded",o)}b.onclick=function(){t(!d.classList.contains("sx-open"))};document.getElementById("sx-sc").onclick=function(){t(false)};document.addEventListener("keydown",function(e){if(e.key==="Escape")t(false)});document.getElementById("sx-sd").addEventListener("click",function(e){if(e.target.closest("a"))t(false)})})()</script>`;
+
 const PILL = `<a href="/login" data-ayzen-signin style="position:fixed;right:16px;bottom:16px;z-index:2147483000;padding:12px 20px;border-radius:999px;background:#111;color:#fff;font:600 14px/1 system-ui,sans-serif;text-decoration:none;box-shadow:0 6px 24px rgba(0,0,0,.3)">Sign in</a>`;
 
 /** The production HTML for a module's landing at "/". */
@@ -115,7 +126,7 @@ export function designedLandingHtml(id, opts = {}) {
 
   // 4) every design must offer a way in
   if (!isPortal(id) && !BASE_DESIGNS.has(id) && !/href="\/login"|data-go="in\./.test(html)) html = html.replace(/<\/body>/i, `${PILL}\n</body>`);
-  html = html.replace(/<\/body>/i, `${ABOUT_LINK(c)}\n${isPortal(id) ? "" : CTA_SCRIPT}\n</body>`);
+  html = html.replace(/<\/body>/i, `${hasDocs(id) ? SITE_MENU + "\n" : ""}${ABOUT_LINK(c)}\n${isPortal(id) ? "" : CTA_SCRIPT}\n</body>`);
   return html;
 }
 
