@@ -22,4 +22,8 @@ export function hasDocs(id: string): boolean;
 export function docsDocument(page: { kind: string; path: string }, opts?: { origin?: string }): string;
 export function docsFiles(opts?: { origin?: string }): Record<string, string>;
 export function docsPaths(): string[];
+export function publicPaths(): string[];
+export function publicFiles(opts?: { origin?: string }): Record<string, string>;
+export function publicDocument(page: object, opts?: { origin?: string }): string;
+export function findPublicPage(pathname: string): object | null;
 export function findDocsPage(pathname: string): { kind: string; path: string } | null;

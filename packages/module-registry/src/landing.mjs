@@ -10,9 +10,11 @@
 import { getModule } from "./index.mjs";
 
 import { CONTENT } from "./landing-content.mjs";
+import { publicPaths, publicSitemapUrls, publicFiles, publicDocument, findPublicPage } from "./sylo-public.mjs";
 import { hasDocs, docsSitemapUrls, docsLlmsLinks, docsMarkdown, docsDocument, docsFiles, docsPaths, findDocsPage } from "./sylo-docs.mjs";
 
 /** Public documentation pages (currently Sylo only): /docs, /docs/<chapter>, /docs/<chapter>/<topic>. */
+export { publicPaths, publicFiles, publicDocument, findPublicPage };
 export { hasDocs, docsDocument, docsFiles, docsPaths, findDocsPage };
 
 /** Copy, brand tokens and facts per module live in landing-content.mjs (grounded in the supplied designs). */
@@ -127,12 +129,12 @@ export function injectLandingIntoHtml(html, id, opts = {}) {
 
 /** AI search / answer / assistant crawlers that are explicitly allowed on the public pages (same rules as everyone else). */
 export const AI_CRAWLERS = Object.freeze(["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended", "Bingbot", "DuckAssistBot", "meta-externalagent", "Amazonbot", "cohere-ai", "MistralAI-User"]);
-export const PUBLIC_PATHS = Object.freeze(["/about", "/docs", "/llms.txt", "/llms-full.txt"]);
+export const PUBLIC_PATHS = Object.freeze(["/about", "/docs", "/explore", "/llms.txt", "/llms-full.txt"]);
 
 export function robotsTxt(id, opts = {}) {
   const c = getLandingContent(id);
   const base = c ? origin(c, opts.origin) : "";
-  const rules = `Allow: /$\nAllow: /about$\n${hasDocs(id) ? "Allow: /docs\n" : ""}Allow: /og/\nAllow: /landing-assets/\nAllow: /llms.txt\nAllow: /llms-full.txt\nDisallow: /\n`;
+  const rules = `Allow: /$\nAllow: /about$\n${hasDocs(id) ? "Allow: /docs\nAllow: /explore\n" : ""}Allow: /og/\nAllow: /landing-assets/\nAllow: /llms.txt\nAllow: /llms-full.txt\nDisallow: /\n`;
   return `# ${c ? c.label : "AYZEN module"}: the public pages are open to search engines and AI search/answer crawlers; the signed-in app is not.\nUser-agent: *\n${rules}\n${AI_CRAWLERS.map((u) => `User-agent: ${u}`).join("\n")}\n${rules}${base ? `\nSitemap: ${base}/sitemap.xml\n` : ""}`;
 }
 
@@ -140,7 +142,7 @@ export function sitemapXml(id, opts = {}) {
   const c = getLandingContent(id);
   if (!c) return "";
   const base = origin(c, opts.origin);
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...["/", "/about"].map((u) => `${base}${u}`), ...(hasDocs(id) ? docsSitemapUrls(opts) : [])].map((u) => `  <url><loc>${esc(u)}</loc></url>`).join("\n")}\n</urlset>\n`;
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...["/", "/about"].map((u) => `${base}${u}`), ...(hasDocs(id) ? [...docsSitemapUrls(opts), ...publicSitemapUrls(opts)] : [])].map((u) => `  <url><loc>${esc(u)}</loc></url>`).join("\n")}\n</urlset>\n`;
 }
 
 const bullets = (a) => a.map((x) => `- ${x}`).join("\n");

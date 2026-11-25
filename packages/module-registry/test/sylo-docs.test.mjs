@@ -46,3 +46,19 @@ test("lineBlocks keeps text and groups diagram lines", () => {
   assert.equal(b[2].text, '"A" → "B"\n"C" → "D"');
   assert.ok(docsMarkdown().includes("### 1.2.1 What is SYLO") === false || true);
 });
+
+import { publicPaths, publicDocument, findPublicPage } from "../src/landing.mjs";
+test("sylo public /explore pages: sidebar, login-gated actions, sitemap", () => {
+  assert.equal(publicPaths().length, 8);
+  for (const p of publicPaths()) {
+    const html = publicDocument(findPublicPage(p), {});
+    for (const s of ["Entity", "Local", "KYC", "Game", "Access", "Pricing"]) assert.ok(html.includes(`>${s}</a>`), `${p} sidebar ${s}`);
+    assert.ok(!/<script src=/.test(html));
+  }
+  assert.ok(publicDocument(findPublicPage("/explore/pricing"), {}).includes("/api/sylo/credit/pricing"));
+  assert.ok(publicDocument(findPublicPage("/explore/game"), {}).includes('href="/vault/account/game/new"'));
+  assert.equal(findPublicPage("/explore/nope"), null);
+  assert.ok(sitemapXml("sylo", {}).includes("/explore/pricing"));
+  assert.ok(robotsTxt("sylo", {}).includes("Allow: /explore"));
+  assert.ok(!sitemapXml("zynth", {}).includes("/explore"));
+});

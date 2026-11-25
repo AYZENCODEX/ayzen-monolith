@@ -12,7 +12,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getModule } from "./index.mjs";
 import { loginAdapterScript } from "./login-adapters.mjs";
-import { docsFiles, hasDocs, aboutDocument, getLandingContent, landingDocument, landingHead, llmsFullTxt, llmsTxt, robotsTxt, sitemapXml } from "./landing.mjs";
+import { docsFiles, publicFiles, hasDocs, aboutDocument, getLandingContent, landingDocument, landingHead, llmsFullTxt, llmsTxt, robotsTxt, sitemapXml } from "./landing.mjs";
 
 const DEFAULT_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "landings");
 /** Read lazily: a bundled server (esbuild) cannot locate the folder from import.meta.url, so it sets MODULE_LANDINGS_DIR. */
@@ -64,8 +64,8 @@ const ABOUT_LINK = (c) => `<p data-about-link style="text-align:center;margin:0;
 /** Sylo public menu: fixed top-right 3-bar button -> slide-in sidebar (Login, Sign up, public account pages, Access, Docs, About). Only for modules with docs. */
 const MENU_LINKS = [
   ["Login", "/login"], ["Sign up", "/register"], null,
-  ["Entity", "/docs/utility/entity-system"], ["Local", "/docs/utility/local-account-and-exchange"], ["KYC", "/docs"], ["Game", "/docs"], null,
-  ["Access", "/docs/utility/sylo-core-and-access"], ["Docs", "/docs"], ["About", "/about"],
+  ["Entity", "/explore/entity"], ["Local", "/explore/local"], ["KYC", "/explore/kyc"], ["Game", "/explore/game"], null,
+  ["Access", "/explore/access"], ["Public", "/explore/public"], ["Pricing", "/explore/pricing"], null, ["Docs", "/docs"], ["About", "/about"],
 ];
 const SITE_MENU = `<style>#sx-mb{position:fixed;top:14px;right:14px;z-index:2147483001;width:44px;height:44px;border-radius:12px;border:1px solid rgba(128,128,128,.35);background:rgba(20,20,20,.85);color:#fff;display:grid;place-content:center;gap:5px;cursor:pointer}#sx-mb i{display:block;width:20px;height:2px;background:currentColor;border-radius:2px}#sx-sc{position:fixed;inset:0;z-index:2147483002;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s}#sx-sd{position:fixed;top:0;right:0;bottom:0;width:min(300px,84vw);z-index:2147483003;background:#111;color:#fff;font:15px/1.4 system-ui,sans-serif;padding:70px 20px 24px;transform:translateX(100%);transition:transform .22s;overflow:auto;display:flex;flex-direction:column;gap:2px}#sx-sd a{color:inherit;text-decoration:none;padding:12px 10px;border-radius:10px}#sx-sd a:hover,#sx-sd a:focus-visible{background:rgba(255,255,255,.1)}#sx-sd hr{border:0;border-top:1px solid rgba(255,255,255,.15);margin:8px 0}#sx-sd small{opacity:.55;padding:6px 10px;text-transform:uppercase;letter-spacing:.08em;font-size:11px}body.sx-open #sx-sc{opacity:1;pointer-events:auto}body.sx-open #sx-sd{transform:none}@media(prefers-reduced-motion:reduce){#sx-sd,#sx-sc{transition:none}}</style>
 <button id="sx-mb" type="button" aria-label="Menu" aria-expanded="false" aria-controls="sx-sd"><i></i><i></i><i></i></button><div id="sx-sc"></div>
@@ -179,7 +179,7 @@ export function emitModuleSite(id, dir, opts = {}) {
   w("llms.txt", llmsTxt(id, opts));
   w("llms-full.txt", llmsFullTxt(id, opts));
   w("about/index.html", aboutDocument(getLandingContent(id), opts));
-  if (hasDocs(id)) for (const [rel, html] of Object.entries(docsFiles(opts))) w(rel, html);
+  if (hasDocs(id)) for (const [rel, html] of Object.entries({ ...docsFiles(opts), ...publicFiles(opts) })) w(rel, html);
 }
 
 /** Design assets under <outRoot>/landing-assets/<id>/ (the prefix the landing HTML refers to). */

@@ -19,7 +19,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const hasBn = (s) => /[\u0980-\u09FF]/.test(s);
 const anchor = (n) => `s-${String(n).replace(/\./g, "-")}`;
 
-const origin = (o) => (o || `https://${getModule(DOCS_MODULE).defaultHost}`).replace(/\/$/, "");
+export const origin = (o) => (o || `https://${getModule(DOCS_MODULE).defaultHost}`).replace(/\/$/, "");
 export const hasDocs = (id) => id === DOCS_MODULE;
 
 /** Flat page list: index, every chapter, every topic (in reading order for prev/next). */
@@ -72,7 +72,7 @@ function blocksHtml(lines) {
 }
 
 /* ---------- styles / chrome ---------- */
-function styles(c) {
+export function styles(c) {
   const b = c.brand;
   return `:root{--bg:${b.bg};--surface:${b.surface};--fg:${b.fg};--muted:${b.muted};--accent:${b.accent};--ink:${b.ink};color-scheme:dark}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.7 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Bengali","Hind Siliguri","Nirmala UI",sans-serif}
@@ -104,7 +104,7 @@ function sidebar(cur) {
       `<li><a href="/docs/${ch.slug}/${t.slug}"${cur && cur.t && cur.t.slug === t.slug && cur.ch.slug === ch.slug ? ' aria-current="page"' : ""}>${t.n} ${esc(t.title)}</a></li>`).join("")}</ul></details>`).join("")}</aside>`;
 }
 
-function chrome(c, h, bodyHtml, cur) {
+export function chrome(c, h, bodyHtml, cur) {
   const base = h.base;
   return `<!doctype html>
 <html lang="en">
@@ -127,7 +127,7 @@ ${h.prev ? `<link rel="prev" href="${esc(base + h.prev)}" />\n` : ""}${h.next ? 
 <body>
 <header class="dx-h"><a class="dx-brand" href="/" aria-label="${esc(c.label)} home">${esc(c.label)}</a><nav aria-label="Primary"><a href="/">Home</a><a href="/about">About</a><a href="/docs">Docs</a><a href="/login">Sign in</a></nav></header>
 <div class="dx-wrap">
-${sidebar(cur)}
+${h.side ?? sidebar(cur)}
 <main class="dx-main">
 ${bodyHtml}
 </main>
@@ -138,9 +138,9 @@ ${bodyHtml}
 `;
 }
 
-const crumbsHtml = (items) => `<nav class="dx-crumbs" aria-label="Breadcrumb">${items.map(([n, u], i) => (i === items.length - 1 ? `<span aria-current="page">${esc(n)}</span>` : `<a href="${u}">${esc(n)}</a>`)).join(" / ")}</nav>`;
-const crumbsLd = (base, items) => ({ "@type": "BreadcrumbList", itemListElement: items.map(([n, u], i) => ({ "@type": "ListItem", position: i + 1, name: n, item: base + u })) });
-const publisher = { "@type": "Organization", name: "AYZEN", url: "https://ayzen.tech/" };
+export const crumbsHtml = (items) => `<nav class="dx-crumbs" aria-label="Breadcrumb">${items.map(([n, u], i) => (i === items.length - 1 ? `<span aria-current="page">${esc(n)}</span>` : `<a href="${u}">${esc(n)}</a>`)).join(" / ")}</nav>`;
+export const crumbsLd = (base, items) => ({ "@type": "BreadcrumbList", itemListElement: items.map(([n, u], i) => ({ "@type": "ListItem", position: i + 1, name: n, item: base + u })) });
+export const publisher = { "@type": "Organization", name: "AYZEN", url: "https://ayzen.tech/" };
 
 /** One page of the docs as a full HTML document. */
 export function docsDocument(page, opts = {}) {

@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import { moduleRequestContext } from "./lib/module-request-context";
 import path from "path";
 import fs from "fs";
-import { robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, getLandingContent, hasDocs, docsDocument, findDocsPage } from "@ayzen/module-registry/landing";
+import { robotsTxt, sitemapXml, llmsTxt, llmsFullTxt, aboutDocument, getLandingContent, hasDocs, docsDocument, findDocsPage, publicDocument, findPublicPage } from "@ayzen/module-registry/landing";
 import { designAssets, designIds, designedLandingHtml, designedLoginHtml, designedRegisterHtml } from "@ayzen/module-registry/landing-designs";
 import { fileURLToPath } from "url";
 import router from "./routes";
@@ -462,6 +462,16 @@ if (process.env.NODE_ENV === "production") {
     if (req.path.length > 1 && req.path.endsWith("/")) return res.redirect(301, req.path.replace(/\/+$/, "") + (req.url.slice(req.path.length) || ""));
     res.setHeader("Cache-Control", "public, max-age=300");
     res.type("html").send(docsDocument(page, { origin: `https://${req.hostname}` }));
+  });
+  // Sylo public information pages: /explore, /explore/<entity|local|kyc|game|access|public|pricing>
+  app.get(["/explore", "/explore/{*rest}"], (req, res, next) => {
+    const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
+    if (!id || !landingByHost.size || !hasDocs(id)) return next();
+    const page = findPublicPage(req.path);
+    if (!page) return next();
+    if (req.path.length > 1 && req.path.endsWith("/")) return res.redirect(301, req.path.replace(/\/+$/, ""));
+    res.setHeader("Cache-Control", "public, max-age=300");
+    res.type("html").send(publicDocument(page, { origin: `https://${req.hostname}` }));
   });
   app.get("/sitemap.xml", (req, res, next) => {
     const id = SPLIT_APP_ID_BY_HOST.get(req.hostname);
