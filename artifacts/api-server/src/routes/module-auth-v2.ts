@@ -191,7 +191,7 @@ router.post("/auth/module/v2/totp/enrol", moduleGate, authLimiter, jsonOnly, asy
   res.json({ secret: r.secret, uri: r.uri });
 });
 
-router.post("/auth/module/v2/totp/confirm", "/auth/module/v2/passkey", "/auth/module/v2/passkey/register/options", "/auth/module/v2/passkey/register/verify", "/auth/module/v2/login/passkey/options", "/auth/module/v2/login/passkey/verify", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
+router.post("/auth/module/v2/totp/confirm", moduleGate, authLimiter, jsonOnly, async (req, res): Promise<void> => {
   const p = await principalOf(req, res);
   if (!p) { res.status(401).json({ error: "Unauthorized", code: "INVALID_TOKEN" }); return; }
   const r = await confirmTotpEnrol(authDb, { module: moduleOf(res), moduleAccountId: p.moduleAccountId!, code: req.body?.code, client: clientInfo(req) });
