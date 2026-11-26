@@ -13,6 +13,7 @@ import { requireAuth, requireAdmin, getRequestUser } from "../middlewares/auth";
  * payment methods, order history and usage, kept apart from the AYZEN-wide
  * /credits routes (those keep serving the other modules untouched).
  *
+ *   GET    /sylo/credit/pricing                 public: current AZN price (no auth)
  *   GET    /sylo/credit/summary                 balances, price list, where to send payment
  *   GET    /sylo/credit/payment-methods         saved bKash / Nagad / Binance / wallet
  *   POST   /sylo/credit/payment-methods
@@ -88,6 +89,12 @@ function orderJson(o: typeof syloCreditOrdersTable.$inferSelect) {
     status: o.status, adminNote: o.adminNote, approvedAt: o.approvedAt, createdAt: o.createdAt,
   };
 }
+
+// ─── Public price (numbers only, no auth) ─────────────────────────────────────
+router.get("/sylo/credit/pricing", async (_req, res): Promise<void> => {
+  res.setHeader("Cache-Control", "public, max-age=60");
+  res.json(await getPricing());
+});
 
 // ─── Summary ─────────────────────────────────────────────────────────────────
 router.get("/sylo/credit/summary", requireAuth, async (req, res): Promise<void> => {

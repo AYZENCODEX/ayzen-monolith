@@ -35,6 +35,14 @@ function pickExportColumns(row: Record<string, unknown>): Record<string, unknown
   return out;
 }
 
+const SYSTEM_COLUMNS = ["id", "userId", "entitySerial", "createdAt", "updatedAt", "deletedAt"];
+/** Full-fidelity row for JSON export: every entity field (decrypted), minus identity/system columns the import never accepts. */
+function fullExportRow(row: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(row)) if (!SYSTEM_COLUMNS.includes(k) && v !== null && v !== undefined && v !== "") out[k] = v;
+  return out;
+}
+
 /** GET /vault/export?format=csv|json — portable dump of the caller's own active entries. */
 export async function exportVault(userId: number, formatQuery: unknown): Promise<MigrationResult> {
   const format = String(formatQuery ?? "csv").toLowerCase();
@@ -56,7 +64,7 @@ export async function exportVault(userId: number, formatQuery: unknown): Promise
     return {
       status: 200,
       headers: { "Content-Disposition": `attachment; filename="ayzen-vault-export-${Date.now()}.json"` },
-      body: { exportedAt: new Date().toISOString(), count: decrypted.length, entries: decrypted.map(pickExportColumns) },
+      body: { exportedAt: new Date().toISOString(), count: decrypted.length, entries: decrypted.map(fullExportRow) },
     };
   }
 
