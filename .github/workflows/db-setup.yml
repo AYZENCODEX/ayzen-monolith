@@ -1,0 +1,39 @@
+name: DB setup (manual)
+
+# One-off / repeatable: applies the Drizzle schema, then migrations/*.sql, to the database in the
+# APP_DATABASE_URL repository secret (Render Postgres External Database URL). Run from the Actions tab.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --no-frozen-lockfile
+      - name: Check the secret is present
+        env:
+          APP_DATABASE_URL: ${{ secrets.APP_DATABASE_URL }}
+        run: test -n "$APP_DATABASE_URL" || { echo "Add the APP_DATABASE_URL repository secret first"; exit 1; }
+      - name: Drizzle schema push (core tables)
+        env:
+          APP_DATABASE_URL: ${{ secrets.APP_DATABASE_URL }}
+        run: |
+          case "$APP_DATABASE_URL" in *sslmode=*) ;; *\?*) APP_DATABASE_URL="$APP_DATABASE_URL&sslmode=require";; *) APP_DATABASE_URL="$APP_DATABASE_URL?sslmode=require";; esac
+          export APP_DATABASE_URL
+          pnpm --filter @workspace/db exec drizzle-kit push --force --config ./drizzle.config.ts
+      - name: SQL migrations
+        env:
+          APP_DATABASE_URL: ${{ secrets.APP_DATABASE_URL }}
+        run: node scripts/run-migrations.mjs
