@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { exportVault as exportVaultFile, importVault as importVaultFile, fileToText } from "@/lib/vault-migration-api";
 import { useLocation, useSearch } from "wouter";
 import { useListVaultEntries, useDeleteVaultEntry, customFetch } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
@@ -751,35 +752,26 @@ export function EntityManager() {
     URL.revokeObjectURL(url);
   };
 
-  const exportVault = () => {
-    const blob = new Blob([JSON.stringify(allEntries, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `vault-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+  // Export/import use the server's canonical migration endpoints (full-fidelity JSON, AYZEN CSV), so a file exported here
+  // imports back here and in Settings > Import/Export. Old files that are a plain JSON array still import.
+  const exportVault = async () => {
+    try { await exportVaultFile("json"); toast({ title: "Export ready" }); }
+    catch { toast({ variant: "destructive", title: "Export failed" }); }
   };
 
   const importVault = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = "";
     if (!file) return;
     try {
-      const text = await file.text();
-      const entries = JSON.parse(text);
-      if (!Array.isArray(entries)) { toast({ variant: "destructive", title: "Invalid file — expected a JSON array" }); return; }
-      let count = 0;
-      for (const entry of entries) {
-        const { id: _id, createdAt: _c, updatedAt: _u, userId: _uid, entitySerial: _s, ...rest } = entry;
-        await createMutation.mutateAsync({ data: rest, idempotencyKey: newIdempotencyKey() });
-        count++;
-      }
-      toast({ title: `✅ Imported ${count} ${count === 1 ? "entity" : "entities"}` });
+      const text = await fileToText(file);
+      const res = await importVaultFile(/\.csv$/i.test(file.name) ? "ayzen_csv" : "ayzen_json", text);
+      if (res.imported > 0) toast({ title: `Imported ${res.imported} ${res.imported === 1 ? "entity" : "entities"}`, description: res.skipped ? `${res.skipped} skipped${res.errors[0] ? `: ${res.errors[0].reason}` : ""}` : undefined });
+      else toast({ variant: "destructive", title: "Nothing imported", description: res.errors[0]?.reason ?? "Check the file is an AYZEN export." });
       queryClient.invalidateQueries();
     } catch {
-      toast({ variant: "destructive", title: "Import failed", description: "File must be a valid vault JSON export" });
+      toast({ variant: "destructive", title: "Import failed", description: "File must be an AYZEN JSON or CSV export" });
     }
-    e.target.value = "";
   };
 
   const buildPayload = () => {
