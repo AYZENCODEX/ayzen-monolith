@@ -115,6 +115,7 @@ export function chrome(c, h, bodyHtml, cur) {
 <meta name="description" content="${esc(h.description)}" />
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
 <link rel="canonical" href="${esc(h.canonical)}" />
+<link rel="icon" type="image/svg+xml" href="/landing-assets/sylo/icon.svg" /><link rel="icon" type="image/png" sizes="48x48" href="/landing-assets/sylo/icon-48.png" /><link rel="icon" type="image/png" sizes="192x192" href="/landing-assets/sylo/icon-192.png" /><link rel="apple-touch-icon" href="/landing-assets/sylo/icon-180.png" />
 <meta name="theme-color" content="${esc(c.brand.bg)}" />
 <meta property="og:type" content="article" /><meta property="og:site_name" content="${esc(c.label)}" /><meta property="og:title" content="${esc(h.title)}" />
 <meta property="og:description" content="${esc(h.description)}" /><meta property="og:url" content="${esc(h.canonical)}" /><meta property="og:image" content="${esc(base)}/og/${c.id}.png" />

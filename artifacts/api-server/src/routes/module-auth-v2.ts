@@ -1,8 +1,9 @@
 import { Router, type Request, type Response } from "express";
 import { pool } from "@workspace/db";
-import { getModule, type ModuleId } from "@ayzen/module-registry";
+import { type ModuleId } from "@ayzen/module-registry";
 import { getUserFromToken } from "../lib/auth-utils";
 import { sendEmail } from "../lib/email";
+import { moduleCodeEmail, type ModuleMailKind } from "../lib/module-email";
 import { logger } from "../lib/logger";
 import { clearModuleSessionCookie } from "../lib/session-cookie";
 import { authLimiter, otpLimiter } from "../middlewares/security";
@@ -59,15 +60,10 @@ function fail(res: Response, f: V2Fail): void {
 }
 
 const str = (v: unknown) => (typeof v === "string" ? v : undefined);
-const brand = (m: ModuleId) => getModule(m)?.label ?? m;
 
-function mail(module: ModuleId, to: string, code: string, what: string): void {
-  const label = brand(module);
-  void sendEmail({
-    to, subject: `${code} is your ${label} ${what} code`,
-    html: `<p>Your ${label} ${what} code is <b style="font-size:20px;letter-spacing:3px">${code}</b>.</p><p>It expires in ${OTP_TTL_MINUTES} minutes and works once. If you did not ask for it, ignore this email.</p>`,
-    text: `Your ${label} ${what} code: ${code}\nIt expires in ${OTP_TTL_MINUTES} minutes and works once. If you did not ask for it, ignore this email.`,
-  }).catch((err) => logger.warn({ err, module }, "module.auth_v2.email_failed"));
+function mail(module: ModuleId, to: string, code: string, what: ModuleMailKind): void {
+  void sendEmail({ to, ...moduleCodeEmail(module, what, code, OTP_TTL_MINUTES) })
+    .catch((err) => logger.warn({ err, module }, "module.auth_v2.email_failed"));
 }
 
 async function principalOf(req: Request, res: Response) {

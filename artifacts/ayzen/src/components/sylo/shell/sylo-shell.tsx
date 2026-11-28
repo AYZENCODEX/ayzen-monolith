@@ -1,7 +1,7 @@
 /**
  * SyloShell — the app frame for every /vault route: brand rail with the
- * hierarchical tree, top bar with breadcrumb + search, and a bottom tab bar
- * below 900px. Pages render inside `.page`. Styling lives in styles/sylo-ui.css
+ * hierarchical tree, top bar with breadcrumb + search. Below 900px the rail
+ * becomes a left drawer opened by a 3-bar button at the top-left corner. Pages render inside `.page`. Styling lives in styles/sylo-ui.css
  * and is scoped under `.sx`, so nothing here leaks to the rest of the app.
  */
 import { useEffect, useState, type ReactNode } from "react";
@@ -9,7 +9,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { getCurrentSubdomainApp, getModuleForPath, moduleUrl, centralUrl } from "@/lib/subdomain-app";
 import { GlobalSearch } from "@/components/global-search";
-import { NAV, MOBILE_BAR, MORE_ITEMS, MOBILE_GROUP_ALIAS, activeLeaf, type Tone } from "./nav";
+import { NAV, activeLeaf, type Tone } from "./nav";
 import { InSylo } from "./context";
 import "@/styles/sylo-ui.css";
 
@@ -53,17 +53,21 @@ export function SyloShell({ children }: { children: ReactNode }) {
   const tone: Tone = leaf?.tone ?? group?.tone ?? "brass";
   const crumbs = crumbsFor(path);
   const initials = (user?.username ?? "SY").slice(0, 2).toUpperCase();
-  const [more, setMore] = useState(false);
+  const [menu, setMenu] = useState(false);
   useEffect(() => {
     document.body.classList.add("sx-portal");
     return () => document.body.classList.remove("sx-portal");
   }, []);
-  useEffect(() => setMore(false), [path]);
-  const mobileGroup = group ? (MOBILE_GROUP_ALIAS[group.key] ?? group.key) : "console";
+  useEffect(() => setMenu(false), [path]);
+  useEffect(() => {
+    if (!menu) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMenu(false); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [menu]);
 
-  return (
-    <div className={`sx t-${tone}`}>
-      <aside className="rail" aria-label="Sylo navigation">
+  const railBody = (
+    <>
         <div className="brand"><i /><b>SYLO</b></div>
         <div className="ws">
           <div>{user?.username ?? "Workspace"}<small>VAULT · PRIVATE</small></div>
@@ -89,10 +93,22 @@ export function SyloShell({ children }: { children: ReactNode }) {
           ))}
         </nav>
         <div className="lock"><p>Vault unlocked</p><small>Protected by your vault PIN</small></div>
+    </>
+  );
+
+  return (
+    <div className={`sx t-${tone}`}>
+      <aside className="rail" aria-label="Sylo navigation">
+        {railBody}
+      </aside>
+      <div className={`drawer-scrim${menu ? " open" : ""}`} onClick={() => setMenu(false)} aria-hidden="true" />
+      <aside className={`rail drawer${menu ? " open" : ""}`} aria-label="Sylo menu" aria-hidden={!menu}>
+        {railBody}
       </aside>
 
       <div className="main">
         <div className="top">
+          <button type="button" className="menu-btn" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}><i /><i /><i /></button>
           <div className="crumb">
             {crumbs.map((c, i) => i === crumbs.length - 1
               ? <b key={i}>{c}</b>
@@ -103,18 +119,6 @@ export function SyloShell({ children }: { children: ReactNode }) {
         </div>
         <div className="page"><InSylo.Provider value={true}>{children}</InSylo.Provider></div>
       </div>
-
-      {more && (
-        <div className="more-sheet" role="menu">
-          {MORE_ITEMS.map((i) => <NavLink key={i.href} to={i.href} className={mobileGroup === i.group ? "on" : ""}>{i.label}</NavLink>)}
-        </div>
-      )}
-      <nav className="mbar" aria-label="Sylo tabs">
-        {MOBILE_BAR.map((t) => (
-          <NavLink key={t.group} to={t.href} className={mobileGroup === t.group ? "on" : ""}>{t.label}</NavLink>
-        ))}
-        <button type="button" className={`more-btn${mobileGroup === "credit" || mobileGroup === "zynth" ? " on" : ""}`} aria-expanded={more} onClick={() => setMore((v) => !v)}>More</button>
-      </nav>
     </div>
   );
 }
