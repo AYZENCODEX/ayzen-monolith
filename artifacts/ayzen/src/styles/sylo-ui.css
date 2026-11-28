@@ -251,3 +251,17 @@ body.sx-portal [data-radix-popper-content-wrapper]{font-family:var(--mono)}
 .sx pre,.sx code{overflow-wrap:anywhere;white-space:pre-wrap}
 .sx .grid.sm\:grid-cols-2,.sx .grid.sm\:grid-cols-3{gap:14px}
 @media(max-width:640px){.sx .ui-card,.sx [class*="rounded-lg"][class*="border"]{border-radius:14px}.sx .flex.items-center.justify-between.gap-2{flex-wrap:wrap}}
+
+/* Mobile: left drawer (solid) opened by a 3-bar button at the top-left; no bottom tab bar */
+.sx .menu-btn,.sx .drawer,.sx .drawer-scrim{display:none}
+@media(max-width:900px){
+  .sx .menu-btn{display:grid;place-content:center;gap:4px;width:40px;height:40px;flex:none;border:1px solid var(--line2);border-radius:8px;background:var(--s1);color:var(--tx);cursor:pointer}
+  .sx .menu-btn i{display:block;width:18px;height:2px;background:currentColor;border-radius:2px}
+  .sx .drawer{display:flex!important;position:fixed;left:0;top:0;bottom:0;height:100%;width:min(320px,86vw);z-index:60;background:#13181a;border-right:1px solid var(--line2);transform:translateX(-100%);transition:transform .22s;overflow:hidden}
+  .sx .drawer.open{transform:none}
+  .sx .drawer-scrim{display:block;position:fixed;inset:0;z-index:59;background:rgba(0,0,0,.62);opacity:0;pointer-events:none;transition:opacity .2s}
+  .sx .drawer-scrim.open{opacity:1;pointer-events:auto}
+  .sx .mbar,.sx .more-sheet{display:none!important}
+  .sx .page{padding-bottom:28px}
+}
+@media(prefers-reduced-motion:reduce){.sx .drawer,.sx .drawer-scrim{transition:none}}
