@@ -74,7 +74,7 @@ export function landingHead(c, opts = {}) {
   const title = `${c.label} — ${c.category} | AYZEN`;
   const desc = c.summary;
   const image = `${base}/og/${c.id}.png`;
-  const ld = { "@context": "https://schema.org", "@type": "SoftwareApplication", name: c.label, description: c.summary, applicationCategory: "BusinessApplication", applicationSubCategory: c.category, operatingSystem: "Web", url: `${base}/`, image, featureList: c.features.map((f) => f.title), publisher: { "@type": "Organization", name: "AYZEN", url: "https://ayzen.tech/" }, isPartOf: { "@type": "WebSite", name: "AYZEN", url: "https://ayzen.tech/" } };
+  const ld = { "@context": "https://schema.org", "@type": "SoftwareApplication", ...(hasDocs(c.id) ? { logo: `${base}/landing-assets/sylo/icon-512.png`, image: `${base}/landing-assets/sylo/icon-512.png`, alternateName: ["Sylo vault", "Sylo AYZEN"] } : {}), name: c.label, description: c.summary, applicationCategory: "BusinessApplication", applicationSubCategory: c.category, operatingSystem: "Web", url: `${base}/`, image, featureList: c.features.map((f) => f.title), publisher: { "@type": "Organization", name: "AYZEN", url: "https://ayzen.tech/" }, isPartOf: { "@type": "WebSite", name: "AYZEN", url: "https://ayzen.tech/" } };
   return { title, description: desc, canonical: `${base}/`, image, jsonLd: ld, themeColor: c.brand.bg, base };
 }
 

@@ -67,6 +67,11 @@ const MENU_LINKS = [
   ["Entity", "/explore/entity"], ["Local", "/explore/local"], ["KYC", "/explore/kyc"], ["Game", "/explore/game"], null,
   ["Access", "/explore/access"], ["Public", "/explore/public"], ["Pricing", "/explore/pricing"], null, ["Docs", "/docs"], ["About", "/about"],
 ];
+/** Sylo logo (keyhole mark) as favicon / touch icon, linked from the head so search engines and browsers pick it up. */
+const SYLO_ICONS = `<link rel="icon" type="image/svg+xml" href="${LANDING_ASSET_PREFIX}/sylo/icon.svg" />
+<link rel="icon" type="image/png" sizes="48x48" href="${LANDING_ASSET_PREFIX}/sylo/icon-48.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="${LANDING_ASSET_PREFIX}/sylo/icon-192.png" />
+<link rel="apple-touch-icon" href="${LANDING_ASSET_PREFIX}/sylo/icon-180.png" />`;
 const SITE_MENU = `<style>#sx-mb{position:fixed;top:12px;right:12px;z-index:2147483001;width:44px;height:44px;border-radius:12px;border:1px solid rgba(128,128,128,.35);background:#141414;color:#fff;display:grid;place-content:center;gap:5px;cursor:pointer}#sx-mb i{display:block;width:20px;height:2px;background:currentColor;border-radius:2px}#sx-sc{position:fixed;inset:0;z-index:2147483002;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s}#sx-sd{position:fixed;top:0;right:0;bottom:0;width:min(300px,84vw);z-index:2147483003;background:#111;color:#fff;font:15px/1.4 system-ui,sans-serif;padding:70px 20px 24px;transform:translateX(100%);transition:transform .22s;overflow:auto;display:flex;flex-direction:column;gap:2px}#sx-sd a{color:inherit;text-decoration:none;padding:12px 10px;border-radius:10px}#sx-sd a:hover,#sx-sd a:focus-visible{background:rgba(255,255,255,.1)}#sx-sd hr{border:0;border-top:1px solid rgba(255,255,255,.15);margin:8px 0}#sx-sd small{opacity:.55;padding:6px 10px;text-transform:uppercase;letter-spacing:.08em;font-size:11px}@media(max-width:1180px){.top-in{padding-right:64px}}body.sx-open #sx-sc{opacity:1;pointer-events:auto}body.sx-open #sx-sd{transform:none}@media(prefers-reduced-motion:reduce){#sx-sd,#sx-sc{transition:none}}</style>
 <button id="sx-mb" type="button" aria-label="Menu" aria-expanded="false" aria-controls="sx-sd"><i></i><i></i><i></i></button><div id="sx-sc"></div>
 <nav id="sx-sd" aria-label="Menu">${MENU_LINKS.map((l, i) => (l ? (i === 3 ? "<small>Accounts</small>" : "") + `<a href="${l[1]}">${l[0]}</a>` : "<hr>")).join("")}</nav>
@@ -107,6 +112,7 @@ export function designedLandingHtml(id, opts = {}) {
   html = html
     .replace(/<meta\s+(?:name|property)="(?:description|robots|og:[^"]*|twitter:[^"]*)"[^>]*>\s*/gi, "")
     .replace(/<link\s+rel="canonical"[^>]*>\s*/gi, "")
+    .replace(hasDocs(id) ? /<link\s+rel="icon"\s+href="data:[^>]*>\s*/gi : /(?!)/g, "")
     .replace(/<title>[\s\S]*?<\/title>\s*/i, "")
     .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>\s*/g, "");
   const seo = [
@@ -120,6 +126,7 @@ export function designedLandingHtml(id, opts = {}) {
     `<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="${esc(keepTitle ? title : h.title)}" /><meta name="twitter:description" content="${esc(h.description)}" /><meta name="twitter:image" content="${esc(h.image)}" />`,
     `<script type="application/ld+json">${JSON.stringify(h.jsonLd).replace(/</g, "\\u003c")}</script>`,
     `<link rel="alternate" type="text/markdown" href="/llms-full.txt" title="${esc(c.label)} for AI assistants" />`,
+    ...(hasDocs(id) ? [SYLO_ICONS] : []),
   ].join("\n");
   if (!/<html[^>]*\blang=/i.test(html)) html = html.replace(/<html/i, '<html lang="en"');
   html = html.replace(/<head[^>]*>/i, (m) => `${m}\n${isPortal(id) ? portalGuard(c) + (opts.apiOrigin ? `<script>${apiShim(String(opts.apiOrigin).replace(/\/+$/, ""))}</script>` : "") : guardScript(c)}\n${baseTag}\n${seo}`);
